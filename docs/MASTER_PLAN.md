@@ -220,6 +220,14 @@ Each phase: **Goal → Build → Interfaces → Tests → DoD.** Guard tests are
   the true URL when the directory gives none) — the probe covers the reachability direction now.
   PageSpeed/Lighthouse for real load metrics and broken-link crawling are future enrichments; the
   current prober uses cheap, deterministic HTML/HTTP signals.
+- **FINDING — qualification must be deterministic (from a live run).** A live `make demo` flipped
+  The Depot Cafe QUALIFIED↔DISQUALIFIED between runs: `slow_load` (LOW) fired only when the site's
+  fetch happened to exceed 4s, and the original rule treated *any* weakness as a lead. **Fix:** only
+  MEDIUM/HIGH structural weaknesses (no-site, unreachable, no-HTTPS, not-mobile, stale) qualify a
+  site as a lead; a lone LOW signal like `slow_load` is recorded as evidence but is too noisy (a
+  single fetch over a variable network) to flip the verdict. Locked by
+  `test_qualify_low_only_weakness_is_not_a_lead`. Robust load timing (multi-sample / PageSpeed) is
+  the eventual home for a *reliable* slow-site signal.
 - **DoD:** ✅ a location produces a ranked, US-only, deduped qualified list with concrete, evidenced
   weakness lists, fully audited.
 

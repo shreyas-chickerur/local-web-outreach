@@ -171,6 +171,19 @@ def test_qualify_healthy_site_disqualified(session):
     assert session.execute(select(func.count()).select_from(SiteWeakness)).scalar_one() == 0
 
 
+def test_qualify_low_only_weakness_is_not_a_lead(session):
+    # A site whose only issue is a slow load (LOW) must NOT be a lead — this is
+    # the deterministic-qualification fix: transient latency can't flip a healthy
+    # site to QUALIFIED. The weakness is still recorded as evidence.
+    url = "https://slowbutfine.example"
+    biz = _business(session, url=url)
+    qualify(session, biz, prober({url: ok(url=url, ms=9000)}))
+    assert biz.status is S.DISQUALIFIED
+    assert biz.has_site is True
+    issues = [w.issue for w in session.execute(select(SiteWeakness)).scalars()]
+    assert issues == ["slow_load"]  # recorded, but not lead-qualifying
+
+
 def test_qualify_franchise_disqualified_without_probing(session):
     biz = _business(session, name="McDonald's Frisco", url="https://mcdonalds.com")
     qualify(session, biz, prober())  # empty fetcher; must not be consulted

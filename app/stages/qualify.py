@@ -161,14 +161,24 @@ def qualify(session: Session, business: Business, prober: SiteProber) -> Busines
     score = opportunity_score(findings)
     business.opportunity_score = score
 
-    if not findings:
-        advance(
-            session, business, BusinessStatus.DISQUALIFIED,
-            actor=Actor.SYSTEM.value, reason="existing site healthy — not a target",
-        )
-    else:
+    # Only structural problems (MEDIUM/HIGH) make a site a lead. A lone LOW signal
+    # such as slow_load is recorded as evidence but is too noisy — a single slow
+    # fetch over a variable network — to flip a healthy site into a target. This
+    # keeps qualification deterministic across runs.
+    qualifying = [f for f in findings if f.severity in (Severity.MEDIUM, Severity.HIGH)]
+    if qualifying:
         advance(
             session, business, BusinessStatus.QUALIFIED,
             actor=Actor.SYSTEM.value, reason=f"opportunity_score={score}",
+        )
+    else:
+        reason = (
+            "existing site healthy — not a target"
+            if not findings
+            else "only low-severity signals — not a lead"
+        )
+        advance(
+            session, business, BusinessStatus.DISQUALIFIED,
+            actor=Actor.SYSTEM.value, reason=reason,
         )
     return business
