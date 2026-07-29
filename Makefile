@@ -54,6 +54,10 @@ discover:
 research-demo:
 	$(PY) -m app.cli research-demo
 
+# Generate grounded site drafts from bundled Frisco research — no API key.
+site-demo:
+	$(PY) -m app.cli site-demo
+
 # Capability-A eval (research quality / no-hallucination bar).
 evals:
 	$(PY) -m evals.research_eval

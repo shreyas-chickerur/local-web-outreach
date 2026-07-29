@@ -30,6 +30,7 @@ from app.models import (  # noqa: F401  (register metadata)
     SiteWeakness,
 )
 from app.stages.discover import discover
+from app.stages.generate import generate_website
 from app.stages.qualify import SiteProber, qualify
 from app.stages.research import build_dossier
 
@@ -126,6 +127,45 @@ def cmd_research_demo(_args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_site_demo(_args: argparse.Namespace) -> int:
+    """Research the bundled Frisco data, then generate a grounded site draft."""
+    from app.core.enums import BusinessStatus
+
+    tmp = Path(tempfile.mkdtemp()) / "site.db"
+    engine = make_engine(f"sqlite+pysqlite:///{tmp}")
+    Base.metadata.create_all(engine)
+    session = make_session_factory(engine)()
+    extractor = PassthroughExtractor()
+    print("Generating grounded site drafts from bundled Frisco research (no key)...\n")
+    for entry in demo_businesses():
+        sources = entry.pop("sources")
+        biz = Business(status=BusinessStatus.RESEARCHED, **entry)
+        session.add(biz)
+        session.flush()
+        build_dossier(session, biz, sources, extractor, model_version="demo/manual")
+        site = generate_website(session, biz)
+        session.commit()
+
+        content = site.content_json
+        print(f"=== {content['business_name']}  [{content['industry']} template] ===")
+        print(f"preview: {site.preview_url}  (state={site.state.value}, "
+              f"noindex={content['noindex']})")
+        for s in content["sections"]:
+            if s.get("facts"):
+                print(f"  [{s['type']}] {s['heading']}")
+                for f in s["facts"]:
+                    print(f"      - {f['label']}: {f['value']}   ← claim {f['claim_id'][:8]}")
+            else:
+                print(f"  [{s['type']}] {s.get('heading', '')}")
+        if content["needs_confirmation"]:
+            print(f"  needs owner confirmation: {', '.join(content['needs_confirmation'])}")
+        print()
+
+    session.close()
+    engine.dispose()
+    return 0
+
+
 def cmd_discover(args: argparse.Namespace) -> int:
     try:
         source = get_places_source()
@@ -148,6 +188,7 @@ def main(argv: list[str] | None = None) -> int:
 
     sub.add_parser("demo", help="run discovery+qualification on a live Frisco set (no key)")
     sub.add_parser("research-demo", help="run research on bundled Frisco dossiers (no key)")
+    sub.add_parser("site-demo", help="generate grounded site drafts from bundled data (no key)")
 
     p_disc = sub.add_parser("discover", help="discover+qualify a real location (needs API key)")
     p_disc.add_argument("location", help='e.g. "Frisco, TX"')
@@ -158,6 +199,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_demo(args)
     if args.command == "research-demo":
         return cmd_research_demo(args)
+    if args.command == "site-demo":
+        return cmd_site_demo(args)
     return cmd_discover(args)
 
 

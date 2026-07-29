@@ -6,6 +6,18 @@ state-of-the-art sites as private proposals, and runs approved cold outreach →
 reply → payment. See [`docs/MASTER_PLAN.md`](docs/MASTER_PLAN.md) for the full
 architecture, phases, and invariants.
 
+## Phase 4 — Website Generation (built, grounded)
+
+A structured, industry-aware **site content model**, grounded entirely in VERIFIED claims.
+- `app/stages/generate.py` — deterministic generator: every rendered fact carries its `claim_id`;
+  unverified fields are omitted (flagged "needs confirmation"); reviews/testimonials are never
+  fabricated (`validate_site_content` guard). Persists a private DRAFT `Website` (tokenized preview,
+  noindex) and advances the business to `SITE_DRAFTED`.
+
+```bash
+make site-demo   # generate grounded site drafts from bundled Frisco research — no key
+```
+
 ## Phase 3 — Research (built, confidence-gated)
 
 Per business, a dossier of atomic, **sourced, confidence-scored** claims.

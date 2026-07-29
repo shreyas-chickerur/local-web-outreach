@@ -13,6 +13,7 @@ from app.core.audit import verify_chain
 from app.core.enums import BusinessStatus as S
 from app.core.enums import Severity
 from app.core.state_machine import advance  # noqa: F401  (kept for clarity of flow)
+from app.models.audit import AuditEvent
 from app.models.business import Business
 from app.models.site_weakness import SiteWeakness
 from app.stages.qualify import (
@@ -196,3 +197,104 @@ def test_qualify_audit_chain_intact(session):
     qualify(session, biz, prober())
     ok_chain, bad = verify_chain(session)
     assert ok_chain is True and bad is None
+
+
+# ---------------- heavy validation: determinism + the WHY reasons ----------- #
+def _reason(session, biz) -> str:
+    ev = session.execute(
+        select(AuditEvent)
+        .where(AuditEvent.subject_id == biz.id, AuditEvent.action.like("advance:%"))
+        .order_by(AuditEvent.seq.desc())
+        .limit(1)
+    ).scalars().first()
+    return (ev.after or {}).get("reason", "")
+
+
+NO_VIEWPORT = "<html><head></head><body>© 2026</body></html>"  # MEDIUM: not_mobile_responsive
+
+
+@pytest.mark.parametrize("ms", [200, 4001, 9000, 30000])
+def test_healthy_site_disqualified_regardless_of_latency(session, ms):
+    # The determinism guarantee: a healthy site never becomes a lead because a
+    # single fetch was slow. Only the STATUS is asserted (slow_load may or may
+    # not be recorded as evidence depending on ms).
+    url = "https://healthy.example"
+    biz = _business(session, url=url)
+    qualify(session, biz, prober({url: ok(url=url, ms=ms)}))
+    assert biz.status is S.DISQUALIFIED
+
+
+@pytest.mark.parametrize("ms", [200, 9000])
+def test_weak_site_qualified_regardless_of_latency(session, ms):
+    url = "http://weak.example"  # no_https (HIGH) — a structural problem
+    biz = _business(session, url=url)
+    qualify(session, biz, prober({url: ok(url=url, final="http://weak.example", ms=ms)}))
+    assert biz.status is S.QUALIFIED
+
+
+def test_medium_only_weakness_qualifies(session):
+    url = "https://noviewport.example"  # only not_mobile_responsive (MEDIUM)
+    biz = _business(session, url=url)
+    qualify(session, biz, prober({url: ok(url=url, html=NO_VIEWPORT)}))
+    assert biz.status is S.QUALIFIED
+
+
+def test_status_is_always_binary(session):
+    # Property: qualify always lands on exactly QUALIFIED or DISQUALIFIED.
+    for url, resp in [
+        (None, None),
+        ("https://healthy.example", ok(url="https://healthy.example")),
+        ("http://weak.example", ok(url="http://weak.example", final="http://weak.example")),
+    ]:
+        biz = _business(session, url=url)
+        qualify(session, biz, prober({url: resp} if resp else {}))
+        assert biz.status in (S.QUALIFIED, S.DISQUALIFIED)
+
+
+def test_reason_no_site(session):
+    biz = _business(session, url=None)
+    qualify(session, biz, prober())
+    assert _reason(session, biz) == "no website"
+
+
+def test_reason_unreachable(session):
+    biz = _business(session, url="https://dead.example")
+    qualify(session, biz, prober({}))
+    assert _reason(session, biz) == "site listed but does not load"
+
+
+def test_reason_weak_site_lists_issues(session):
+    url = "http://weak.example"  # no_https + stale + no viewport
+    html = "<html><head></head><body>© 2017</body></html>"
+    biz = _business(session, url=url)
+    qualify(session, biz, prober({url: ok(url=url, final="http://weak.example", html=html)}))
+    reason = _reason(session, biz)
+    assert reason.startswith("weak site:")
+    assert "no_https" in reason
+
+
+def test_reason_healthy(session):
+    url = "https://healthy.example"
+    biz = _business(session, url=url)
+    qualify(session, biz, prober({url: ok(url=url)}))
+    assert _reason(session, biz) == "existing site is healthy"
+
+
+def test_reason_low_only_names_the_signal(session):
+    url = "https://slow.example"
+    biz = _business(session, url=url)
+    qualify(session, biz, prober({url: ok(url=url, ms=9000)}))
+    reason = _reason(session, biz)
+    assert "minor signals" in reason and "slow_load" in reason
+
+
+def test_reason_franchise(session):
+    biz = _business(session, name="McDonald's Frisco", url="https://mcdonalds.com")
+    qualify(session, biz, prober())
+    assert "chain/franchise" in _reason(session, biz)
+
+
+def test_no_weakness_persisted_for_franchise(session):
+    biz = _business(session, name="Starbucks Frisco", url="https://starbucks.com")
+    qualify(session, biz, prober())
+    assert session.execute(select(func.count()).select_from(SiteWeakness)).scalar_one() == 0

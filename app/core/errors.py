@@ -39,3 +39,11 @@ class ResearchIntegrityError(SpineError):
 
 class RefusalError(SpineError):
     """Raised when the LLM declines a request (stop_reason == 'refusal')."""
+
+
+class SiteIntegrityError(SpineError):
+    """Raised when generated site content asserts a fact not backed by a VERIFIED
+    claim, or fabricates social proof (reviews/testimonials).
+
+    Enforces invariant #1 on the generated site itself.
+    """

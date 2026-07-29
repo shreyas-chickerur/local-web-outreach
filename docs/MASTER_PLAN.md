@@ -263,7 +263,14 @@ Each phase: **Goal → Build → Interfaces → Tests → DoD.** Guard tests are
 - **DoD:** dossiers meet the eval bar; entity is canonicalized first; no unsourced/fabricated/
   conflicting claim can persist as fact.
 
-### Phase 4 — Website generation
+### Phase 4 — Website generation  — ✅ BUILT (2026-07-29)
+- **Status:** implemented + tested (113 tests total, SQLite + PostgreSQL, ruff/mypy clean). The
+  content model is **deterministic and fully grounded** — it uses only VERIFIED claims, every fact
+  carries its `claim_id`, unverified fields are omitted (surfaced as "needs confirmation"), and
+  social-proof sections are never fabricated. `app/stages/generate.py`, `Website` model, migration
+  `0004`. No-key demo: `python -m app.cli site-demo`. LLM copy-polish is a later optional
+  enhancement that must preserve claim_ids and pass the same validator.
+- (original plan follows)
 - **Goal:** grounded, industry-aware `content_json` → rendered private preview; full fact traceability.
 - **Build:** `ai/site_generator.py` (content model only, every fact carries `claim_id`);
   industry template selector; Next.js renderer; `adapters/hosting.py` publishes to
@@ -511,3 +518,9 @@ Decisions and findings baked into the code:
   PostgreSQL, ruff/mypy clean). Entity resolution + corroboration/conflict/confidence + injectable
   Claude extractor + capability-A eval (5/5). Live LLM extraction + real collectors deferred to
   live wiring (needs `ANTHROPIC_API_KEY`); documented honestly in the build log.
+- **2026-07-29** — Qualification hardened: deterministic across network latency (only MEDIUM/HIGH
+  weaknesses qualify a lead), plain-English WHY on every decision (audit-backed), 31 qualify tests.
+- **2026-07-29** — Phase 4 (website generation) built and tested (113 tests total, SQLite +
+  PostgreSQL, ruff/mypy clean). Grounded content model (every fact → VERIFIED claim_id), no
+  fabricated social proof, private DRAFT preview; advances to SITE_DRAFTED. Ready for a
+  Claude-designed frontend (renderer + operator console).

@@ -86,3 +86,12 @@ class ClaimStatus(StrEnum):
     VERIFIED = "verified"  # >= 2 independent sources agree
     UNVERIFIED = "unverified"  # single source, or below threshold
     CONFLICT = "conflict"  # sources disagree — never ships; ask the owner
+
+
+class WebsiteState(StrEnum):
+    """Lifecycle of a generated website. Stays a private DRAFT until approved."""
+
+    DRAFT = "draft"  # generated; private preview only
+    APPROVED = "approved"  # operator signed off (Gate 1)
+    LIVE = "live"  # published after purchase
+    REJECTED = "rejected"
