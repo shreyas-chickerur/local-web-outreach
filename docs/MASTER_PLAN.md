@@ -268,8 +268,13 @@ Each phase: **Goal → Build → Interfaces → Tests → DoD.** Guard tests are
   content model is **deterministic and fully grounded** — it uses only VERIFIED claims, every fact
   carries its `claim_id`, unverified fields are omitted (surfaced as "needs confirmation"), and
   social-proof sections are never fabricated. `app/stages/generate.py`, `Website` model, migration
-  `0004`. No-key demo: `python -m app.cli site-demo`. LLM copy-polish is a later optional
-  enhancement that must preserve claim_ids and pass the same validator.
+  `0004`. No-key demo: `python -m app.cli site-demo`. **Capability-B eval: 8/8** (grounding, template,
+  no fabrication, unverified-not-rendered — `python -m evals.site_eval`). LLM copy-polish is a later
+  optional enhancement that must preserve claim_ids and pass the same validator.
+- **Deferred within Phase 4:** the actual publish-to-host adapter (deploying the rendered site to a
+  preview host) is coupled to the Claude-designed **renderer** + conversion — it can't be built
+  before the renderer exists, so the DRAFT stores a tokenized `preview_url`/`noindex` now and real
+  publishing lands with the renderer (frontend) and Phase 10/11 (conversion).
 - (original plan follows)
 - **Goal:** grounded, industry-aware `content_json` → rendered private preview; full fact traceability.
 - **Build:** `ai/site_generator.py` (content model only, every fact carries `claim_id`);

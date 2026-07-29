@@ -58,9 +58,10 @@ research-demo:
 site-demo:
 	$(PY) -m app.cli site-demo
 
-# Capability-A eval (research quality / no-hallucination bar).
+# Capability evals: A (research / no-hallucination) + B (site grounding).
 evals:
 	$(PY) -m evals.research_eval
+	$(PY) -m evals.site_eval
 
 clean:
 	rm -rf .pytest_cache .mypy_cache .ruff_cache *.db
