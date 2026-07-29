@@ -14,6 +14,8 @@ from dataclasses import dataclass
 
 import httpx
 
+from app.core import config
+
 
 @dataclass(frozen=True)
 class BusinessCandidate:
@@ -82,3 +84,21 @@ class GooglePlacesSource(PlacesSource):
                 )
             )
         return out
+
+
+def get_places_source(client: httpx.Client | None = None) -> PlacesSource:
+    """Return the configured live places source.
+
+    Raises a clear, actionable error if the required credential is missing —
+    tests use ``StubPlacesSource`` directly and never hit this.
+    """
+    provider = config.places_provider()
+    if provider == "google":
+        key = config.google_places_api_key()
+        if not key:
+            raise RuntimeError(
+                "GOOGLE_PLACES_API_KEY is not set. Copy .env.example to .env and add your "
+                "key (or run `python -m app.cli demo` to try the pipeline with no key)."
+            )
+        return GooglePlacesSource(api_key=key, client=client)
+    raise RuntimeError(f"Unknown PLACES_PROVIDER={provider!r} (supported: 'google').")
