@@ -23,7 +23,12 @@ from app.ai.research_runner import PassthroughExtractor
 from app.core.config import database_url
 from app.core.db import Base, make_engine, make_session_factory
 from app.demo_data import demo_businesses
-from app.models import Business, ResearchClaim, SiteWeakness  # noqa: F401  (register metadata)
+from app.models import (  # noqa: F401  (register metadata)
+    AuditEvent,
+    Business,
+    ResearchClaim,
+    SiteWeakness,
+)
 from app.stages.discover import discover
 from app.stages.qualify import SiteProber, qualify
 from app.stages.research import build_dossier
@@ -42,15 +47,23 @@ FRISCO_DEMO = [
 ]
 
 
+def _latest_reason(session, business_id) -> str:  # noqa: ANN001
+    """The 'why' for a business's current status — read from the audit trail."""
+    event = session.execute(
+        select(AuditEvent)
+        .where(AuditEvent.subject_id == business_id, AuditEvent.action.like("advance:%"))
+        .order_by(AuditEvent.seq.desc())
+        .limit(1)
+    ).scalars().first()
+    return (event.after or {}).get("reason", "—") if event else "—"
+
+
 def _report(session, businesses: list[Business]) -> None:
-    print(f"\n{'BUSINESS':32} {'STATUS':13} {'SCORE':>5}  WEAKNESSES")
-    print("-" * 88)
+    print(f"\n{'BUSINESS':30} {'STATUS':13} {'SCORE':>5}  WHY")
+    print("-" * 92)
     for biz in sorted(businesses, key=lambda b: -(b.opportunity_score or 0)):
-        weaknesses = session.execute(
-            select(SiteWeakness).where(SiteWeakness.business_id == biz.id)
-        ).scalars().all()
-        issues = ", ".join(f"{w.issue}({w.severity.value})" for w in weaknesses) or "—"
-        print(f"{biz.name[:32]:32} {biz.status.value:13} {biz.opportunity_score or 0:>5}  {issues}")
+        why = _latest_reason(session, biz.id)
+        print(f"{biz.name[:30]:30} {biz.status.value:13} {biz.opportunity_score or 0:>5}  {why}")
     print()
 
 

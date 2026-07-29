@@ -144,7 +144,7 @@ def qualify(session: Session, business: Business, prober: SiteProber) -> Busines
         business.opportunity_score = 0
         advance(
             session, business, BusinessStatus.DISQUALIFIED,
-            actor=Actor.SYSTEM.value, reason="franchise/chain",
+            actor=Actor.SYSTEM.value, reason="chain/franchise — won't buy from cold outreach",
         )
         return business
 
@@ -169,16 +169,25 @@ def qualify(session: Session, business: Business, prober: SiteProber) -> Busines
     if qualifying:
         advance(
             session, business, BusinessStatus.QUALIFIED,
-            actor=Actor.SYSTEM.value, reason=f"opportunity_score={score}",
+            actor=Actor.SYSTEM.value, reason=_qualified_reason(qualifying),
         )
     else:
-        reason = (
-            "existing site healthy — not a target"
-            if not findings
-            else "only low-severity signals — not a lead"
-        )
+        if not findings:
+            reason = "existing site is healthy"
+        else:
+            minor = ", ".join(f.issue for f in findings)
+            reason = f"site is fine (only minor signals: {minor})"
         advance(
             session, business, BusinessStatus.DISQUALIFIED,
             actor=Actor.SYSTEM.value, reason=reason,
         )
     return business
+
+
+def _qualified_reason(qualifying: list[WeaknessFinding]) -> str:
+    issues = {f.issue for f in qualifying}
+    if "no_site" in issues:
+        return "no website"
+    if "site_unreachable" in issues:
+        return "site listed but does not load"
+    return "weak site: " + ", ".join(f.issue for f in qualifying)
