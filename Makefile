@@ -3,7 +3,7 @@ PY := .venv/bin/python
 PIP := .venv/bin/pip
 PYTEST := .venv/bin/pytest
 
-.PHONY: venv install test test-unit test-func test-perf test-pg test-all lint typecheck migrate clean demo discover
+.PHONY: venv install test test-unit test-func test-perf test-pg test-all lint typecheck migrate clean demo discover research-demo evals
 
 venv:
 	python3.11 -m venv .venv
@@ -49,6 +49,14 @@ demo:
 # Real run. Usage: make discover LOCATION="Frisco, TX" CATEGORY=restaurant
 discover:
 	$(PY) -m app.cli discover "$(LOCATION)" $(if $(CATEGORY),--category "$(CATEGORY)")
+
+# Research pipeline on bundled real Frisco data — no API key required.
+research-demo:
+	$(PY) -m app.cli research-demo
+
+# Capability-A eval (research quality / no-hallucination bar).
+evals:
+	$(PY) -m evals.research_eval
 
 clean:
 	rm -rf .pytest_cache .mypy_cache .ruff_cache *.db

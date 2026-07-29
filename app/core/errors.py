@@ -28,3 +28,14 @@ class AppendOnlyError(SpineError):
 
     Enforces invariant #3: the audit ledger and approvals are immutable.
     """
+
+
+class ResearchIntegrityError(SpineError):
+    """Raised when a research claim would persist without a source_url.
+
+    Enforces invariant #1: no fact ships without provenance.
+    """
+
+
+class RefusalError(SpineError):
+    """Raised when the LLM declines a request (stop_reason == 'refusal')."""

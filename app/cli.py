@@ -19,11 +19,14 @@ from sqlalchemy import select
 
 from app.adapters.places import BusinessCandidate, StubPlacesSource, get_places_source
 from app.adapters.site_fetch import HttpSiteFetcher
+from app.ai.research_runner import PassthroughExtractor
 from app.core.config import database_url
 from app.core.db import Base, make_engine, make_session_factory
-from app.models import Business, SiteWeakness  # noqa: F401  (register metadata)
+from app.demo_data import demo_businesses
+from app.models import Business, ResearchClaim, SiteWeakness  # noqa: F401  (register metadata)
 from app.stages.discover import discover
 from app.stages.qualify import SiteProber, qualify
+from app.stages.research import build_dossier
 
 # A few real Frisco, TX businesses for the no-key demo (websites are their
 # real/claimed URLs; the demo fetches them live to classify).
@@ -73,6 +76,43 @@ def cmd_demo(_args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_research_demo(_args: argparse.Namespace) -> int:
+    """Run the research pipeline on the bundled real Frisco data (no API key)."""
+    from app.core.enums import BusinessStatus
+
+    tmp = Path(tempfile.mkdtemp()) / "research.db"
+    engine = make_engine(f"sqlite+pysqlite:///{tmp}")
+    Base.metadata.create_all(engine)
+    session = make_session_factory(engine)()
+    extractor = PassthroughExtractor()
+    print("Building research dossiers from bundled, hand-verified Frisco data (no key)...\n")
+    for entry in demo_businesses():
+        sources = entry.pop("sources")
+        biz = Business(status=BusinessStatus.RESEARCHED, **entry)
+        session.add(biz)
+        session.flush()
+        dossier = build_dossier(session, biz, sources, extractor, model_version="demo/manual")
+        session.commit()
+
+        print(f"=== {biz.name} ({biz.location}) ===")
+        print(f"{'FIELD':14} {'STATUS':11} {'CONF':>4}  VALUE")
+        print("-" * 78)
+        for c in sorted(dossier.claims, key=lambda c: c.field):
+            print(f"{c.field:14} {c.status.value:11} {c.confidence:>4.2f}  {(c.value or '')[:44]}")
+        if dossier.questions:
+            print("\nOpen questions for the owner (gaps — not fabricated):")
+            for q in dossier.questions:
+                print(f"  • {q}")
+        if dossier.rejected_sources:
+            names = ", ".join(sorted({s.entity_name for s in dossier.rejected_sources}))
+            print(f"\nSources NOT merged (entity resolution): {names}")
+        print()
+
+    session.close()
+    engine.dispose()
+    return 0
+
+
 def cmd_discover(args: argparse.Namespace) -> int:
     try:
         source = get_places_source()
@@ -93,7 +133,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="app.cli")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    sub.add_parser("demo", help="run the pipeline on a live Frisco demo set (no key needed)")
+    sub.add_parser("demo", help="run discovery+qualification on a live Frisco set (no key)")
+    sub.add_parser("research-demo", help="run research on bundled Frisco dossiers (no key)")
 
     p_disc = sub.add_parser("discover", help="discover+qualify a real location (needs API key)")
     p_disc.add_argument("location", help='e.g. "Frisco, TX"')
@@ -102,6 +143,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.command == "demo":
         return cmd_demo(args)
+    if args.command == "research-demo":
+        return cmd_research_demo(args)
     return cmd_discover(args)
 
 

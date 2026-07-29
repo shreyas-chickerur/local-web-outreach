@@ -223,7 +223,12 @@ Each phase: **Goal → Build → Interfaces → Tests → DoD.** Guard tests are
 - **DoD:** ✅ a location produces a ranked, US-only, deduped qualified list with concrete, evidenced
   weakness lists, fully audited.
 
-### Phase 3 — Research (confidence-gated)
+### Phase 3 — Research (confidence-gated)  — ✅ BUILT (2026-07-29)
+- **Status:** implemented + tested (83 tests total, SQLite + PostgreSQL, ruff/mypy clean). The
+  Claude extraction path is unit-tested with a mocked client; its **live** behavior needs an
+  `ANTHROPIC_API_KEY` to fully exercise (see Build log). A **no-key `research-demo`** runs the full
+  corroboration/conflict/entity-resolution pipeline on bundled, hand-verified Frisco data and a
+  **capability-A eval** scores it against known truth (5/5, bar 100%).
 - **Goal:** per business, a dossier of atomic, sourced, confidence-scored claims. Enforces invariant #1.
 - **PREREQUISITE — entity resolution (finding from the M0 demo):** aggregators routinely
   split/merge local businesses (the Galena landscaper surfaced as "Kane's Landscaping" vs "Dan
@@ -460,6 +465,30 @@ Decisions and findings baked into the code:
   currently bind `subject_id` to the business id; when Website/Email tables land they should bind to
   those rows instead.
 
+### Phase 3 build (research)
+- **AI boundary is injectable.** `app/ai/research_runner.py` defines `ClaimExtractor`;
+  `ClaudeClaimExtractor` (Claude, `claude-opus-5`) takes an injectable `client`, so tests use a
+  fake (no network, no key) and the live path reads `ANTHROPIC_API_KEY`. The extractor **stamps
+  `source_url` from the owning source** — the model never supplies provenance, so a claim can't
+  lack one; `app/ai/validators.py` enforces it as a hard guard regardless.
+- **Corroboration engine** (`app/stages/research.py`): group by field → group by normalized value →
+  ≥2 distinct `source_url`s = VERIFIED (conf ≥0.85), 1 = UNVERIFIED (0.5), disagreeing values =
+  CONFLICT (value carries both candidates, conf 0.3, never ships). Required fields without a
+  VERIFIED claim become owner questions — gaps surfaced, never fabricated.
+- **Entity resolution first** (`app/stages/entity_resolution.py`): conservative triangulation —
+  a source is kept only on a phone/address match or high name-similarity with no conflicting phone;
+  a disagreeing phone is a hard reject. Guards against the Kane's/Amigos merge trap.
+- **HONEST LIMIT:** the live Claude extraction and real source collectors (GBP/Yelp/etc. fetching)
+  are **not** exercised end-to-end here — no key in this environment, and web collectors are
+  deferred (ToS + scope). What's proven: the deterministic core (resolution/corroboration/conflict/
+  validators/persistence) on real data, and the extractor's prompt-build + parse logic under mock.
+  The `research-demo` bundles the *actual* Frisco research (the extraction a human/Claude did in
+  M0) so the pipeline runs and is eval-scored with no key. Live wiring = drop in `ANTHROPIC_API_KEY`
+  + a real `SourceCollector`.
+- **Verified live:** `python -m app.cli research-demo` → Depot Cafe address+phone VERIFIED (2
+  sources), single-source facts UNVERIFIED, owner→question, J.S.M. Lawn Care rejected by entity
+  resolution. `python -m evals.research_eval` → 5/5.
+
 ## Changelog
 - **2026-07-29** — Initial master plan created (architecture, phases 0–12, tests, invariants).
 - **2026-07-29** — M0 research demo run (Galena IL); added entity-resolution prerequisite to Phase 3.
@@ -470,3 +499,7 @@ Decisions and findings baked into the code:
   unreliable — folded into Phase 2 as the "verify, don't trust" core rule + guard.
 - **2026-07-29** — Phase 2 (discovery & qualification) built and tested (64 tests total, SQLite +
   PostgreSQL, ruff/mypy clean); site presence is probe-determined; weaknesses persisted as evidence.
+- **2026-07-29** — Phase 3 (research, confidence-gated) built and tested (83 tests total, SQLite +
+  PostgreSQL, ruff/mypy clean). Entity resolution + corroboration/conflict/confidence + injectable
+  Claude extractor + capability-A eval (5/5). Live LLM extraction + real collectors deferred to
+  live wiring (needs `ANTHROPIC_API_KEY`); documented honestly in the build log.

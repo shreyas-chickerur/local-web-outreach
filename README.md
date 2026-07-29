@@ -6,6 +6,23 @@ state-of-the-art sites as private proposals, and runs approved cold outreach →
 reply → payment. See [`docs/MASTER_PLAN.md`](docs/MASTER_PLAN.md) for the full
 architecture, phases, and invariants.
 
+## Phase 3 — Research (built, confidence-gated)
+
+Per business, a dossier of atomic, **sourced, confidence-scored** claims.
+- `app/stages/entity_resolution.py` — canonicalize the target first; refuse to merge look-alikes.
+- `app/stages/research.py` — corroboration engine: ≥2 independent sources → VERIFIED, 1 →
+  UNVERIFIED, disagreeing → CONFLICT; unknown required fields → owner questions (never fabricated).
+- `app/ai/research_runner.py` — injectable `ClaimExtractor`; `ClaudeClaimExtractor` (`claude-opus-5`)
+  for live extraction, `PassthroughExtractor` for the bundled demo.
+- `app/ai/validators.py` — hard guard: no claim persists without a `source_url`.
+
+```bash
+make research-demo   # runs the pipeline on real Frisco data — no API key
+make evals           # capability-A eval: verified facts correct + no fabrication
+```
+
+Live extraction needs `ANTHROPIC_API_KEY` in `.env` and a real source collector (deferred).
+
 ## Phase 2 — Discovery & Qualification (built)
 
 Location in → scored, geo-gated, de-duplicated qualified leads out.

@@ -63,3 +63,26 @@ class Severity(StrEnum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
+
+
+class SourceType(StrEnum):
+    """Where a research claim was sourced from."""
+
+    GBP = "gbp"  # Google Business Profile
+    YELP = "yelp"
+    FACEBOOK = "facebook"
+    EXISTING_SITE = "existing_site"
+    NEWS = "news"
+    DIRECTORY = "directory"
+    OTHER = "other"
+
+
+class ClaimStatus(StrEnum):
+    """Confidence disposition of a research claim after corroboration.
+
+    Only VERIFIED claims may ship as fact on a generated site (invariant #1).
+    """
+
+    VERIFIED = "verified"  # >= 2 independent sources agree
+    UNVERIFIED = "unverified"  # single source, or below threshold
+    CONFLICT = "conflict"  # sources disagree — never ships; ask the owner
