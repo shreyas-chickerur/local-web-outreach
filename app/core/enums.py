@@ -55,3 +55,11 @@ class Actor(StrEnum):
     SYSTEM = "system"
     HUMAN = "human"
     WORKER = "worker"
+
+
+class Severity(StrEnum):
+    """Severity of a detected website weakness."""
+
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"

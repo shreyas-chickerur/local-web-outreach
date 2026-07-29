@@ -186,19 +186,42 @@ Each phase: **Goal → Build → Interfaces → Tests → DoD.** Guard tests are
   - `test_state_machine_happy_path.py` — full legal path DISCOVERED→WON.
 - **DoD:** can create a business, advance it through legal states, and produce a verifiable audit trail.
 
-### Phase 2 — Discovery & qualification
+### Phase 2 — Discovery & qualification  — ✅ BUILT (2026-07-29)
 - **Goal:** location in → scored, geo-gated, deduped qualified leads out.
-- **Build:** `adapters/places.py` (interface `PlacesSource.search(location, category) -> [Business]`,
-  impls: Outscraper/Apify/Places API/OSM); `stages/qualify.py` (weakness prober via PageSpeed +
-  checks: HTTPS, mobile-responsive, load time, stale copyright year, broken links, SSL);
-  `opportunity_score()`; geo-gate (US-only initially).
-- **Tests:**
-  - `test_places_adapter_contract.py` — each impl returns the `Business` shape (mocked HTTP).
-  - `test_qualify_no_site_flagged_high.py` — null/social-only website → high priority.
-  - `test_qualify_weakness_detection.py` — fixture sites (no-HTTPS, non-responsive, stale) → correct weaknesses.
-  - `test_guard_geo_gate_excludes_ca_eu.py` — CA/EU businesses are excluded/flagged, never advanced to SENT.
-  - `test_dedup_by_place_id.py` — same business from two sources dedupes.
-- **DoD:** a real location produces a ranked, US-only, deduped qualified list with concrete weakness lists.
+- **CORE RULE (Frisco finding):** site presence and quality are decided by **independently probing
+  the live site**, never by trusting the source's "has website" field. The directory's signal is
+  unreliable in both directions (a "Facebook-only" business may have a real site → not a lead; a
+  listed URL may be dead → a lead). `has_site` is set from the probe result only.
+- **Built:**
+  - `adapters/places.py` — `PlacesSource` ABC + `BusinessCandidate`; `StubPlacesSource`
+    (fixture-backed, deterministic) and `GooglePlacesSource` (httpx, real).
+  - `adapters/site_fetch.py` — `SiteFetcher` protocol + `HttpSiteFetcher` (httpx, timed, follows
+    redirects so http→https is observable); injected into the prober for testability.
+  - `stages/discover.py` — geo-gate (US-only), dedup by `place_id` (batch + DB), persist as
+    DISCOVERED, audit each creation.
+  - `stages/qualify.py` — `SiteProber` (no_site / site_unreachable / no_https /
+    not_mobile_responsive / stale_content / slow_load), `opportunity_score()` (0–10, severity-
+    weighted), franchise/chain exclusion; advances DISCOVERED→QUALIFIED or →DISQUALIFIED via the
+    spine, persisting `SiteWeakness` evidence rows.
+  - Models: `Business` extended (place_id, address, phone, existing_site_url, has_site,
+    opportunity_score); new `SiteWeakness`; migration `0002_discovery`.
+- **Tests (30 added, 64 total):**
+  - `test_places_adapter.py` — `GooglePlacesSource` + `HttpSiteFetcher` contract (respx-mocked).
+  - `test_discover.py::test_guard_geo_gate_excludes_non_us` — non-US never persisted.
+  - `test_discover.py` — batch + DB dedup by `place_id`, audited creation.
+  - `test_qualify.py::test_guard_site_presence_probed_not_trusted` — **the Frisco rule as a guard.**
+  - `test_qualify.py` — each weakness type, healthy-site→DISQUALIFIED, franchise→DISQUALIFIED,
+    monotonic scoring, audit chain intact.
+  - `test_discovery_flow.py` — full Frisco batch end-to-end (SQLite + Postgres).
+  - `test_migration_0002.py` — up/down (SQLite + Postgres) + migration-built schema accepts ORM
+    writes and enforces the severity CHECK.
+  - `test_qualify_perf.py` — throughput guardrail (~500 businesses/s).
+- **Deferred (noted):** the "source hid a real site" direction needs a search-enrichment step (find
+  the true URL when the directory gives none) — the probe covers the reachability direction now.
+  PageSpeed/Lighthouse for real load metrics and broken-link crawling are future enrichments; the
+  current prober uses cheap, deterministic HTML/HTTP signals.
+- **DoD:** ✅ a location produces a ranked, US-only, deduped qualified list with concrete, evidenced
+  weakness lists, fully audited.
 
 ### Phase 3 — Research (confidence-gated)
 - **Goal:** per business, a dossier of atomic, sourced, confidence-scored claims. Enforces invariant #1.
@@ -442,3 +465,8 @@ Decisions and findings baked into the code:
 - **2026-07-29** — M0 research demo run (Galena IL); added entity-resolution prerequisite to Phase 3.
 - **2026-07-29** — Phase 1 built and tested (34 tests, SQLite + PostgreSQL, ruff/mypy clean);
   recorded the enum name-vs-value finding and the migration-schema test lesson.
+- **2026-07-29** — M0 research demo run for Frisco TX; confirmed that in affluent markets
+  qualification (not research) is the filter, and that aggregator "no website" signals are
+  unreliable — folded into Phase 2 as the "verify, don't trust" core rule + guard.
+- **2026-07-29** — Phase 2 (discovery & qualification) built and tested (64 tests total, SQLite +
+  PostgreSQL, ruff/mypy clean); site presence is probe-determined; weaknesses persisted as evidence.

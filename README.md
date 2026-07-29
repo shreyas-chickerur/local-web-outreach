@@ -6,7 +6,17 @@ state-of-the-art sites as private proposals, and runs approved cold outreach →
 reply → payment. See [`docs/MASTER_PLAN.md`](docs/MASTER_PLAN.md) for the full
 architecture, phases, and invariants.
 
-## Phase 1 — Data & Audit Spine (this repo, so far)
+## Phase 2 — Discovery & Qualification (built)
+
+Location in → scored, geo-gated, de-duplicated qualified leads out.
+- `app/adapters/places.py` — places sources (`StubPlacesSource`, `GooglePlacesSource`).
+- `app/adapters/site_fetch.py` — the live-site fetcher (`HttpSiteFetcher`).
+- `app/stages/discover.py` — geo-gate + dedup + persist as DISCOVERED (audited).
+- `app/stages/qualify.py` — **independently probes the live site** (never trusts the source's
+  "has website" field), records evidenced weaknesses, scores the opportunity, and advances to
+  QUALIFIED / DISQUALIFIED via the spine.
+
+## Phase 1 — Data & Audit Spine (built)
 
 The durable backbone everything else hangs on:
 

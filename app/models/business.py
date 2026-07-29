@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from datetime import UTC, datetime
 
-from sqlalchemy import DateTime, String
+from sqlalchemy import Boolean, DateTime, Integer, String
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -25,6 +25,16 @@ class Business(Base):
     name: Mapped[str] = mapped_column(String(255))
     location: Mapped[str] = mapped_column(String(255))
     category: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    # Discovery/qualification fields (Phase 2).
+    place_id: Mapped[str | None] = mapped_column(String(255), unique=True, nullable=True)
+    address: Mapped[str | None] = mapped_column(String(400), nullable=True)
+    phone: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    # What the source *claimed* as a website (unverified; may be social/None).
+    existing_site_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    # Whether a real, reachable site was verified by probing (never copied from
+    # the source's claim — see app/stages/qualify.py).
+    has_site: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    opportunity_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
     status: Mapped[BusinessStatus] = mapped_column(
         SAEnum(
             BusinessStatus,
