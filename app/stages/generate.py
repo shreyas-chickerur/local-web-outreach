@@ -21,7 +21,6 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.core.approvals import hash_content
-from app.core.audit import record_event  # noqa: F401  (advance audits; kept for clarity)
 from app.core.enums import Actor, BusinessStatus, ClaimStatus, WebsiteState
 from app.core.errors import SiteIntegrityError
 from app.core.state_machine import advance

@@ -146,3 +146,15 @@ def verify_chain(session: Session) -> tuple[bool, int | None]:
             return False, event.seq
         prev = event.hash
     return True, None
+
+
+def latest_transition_reason(session: Session, subject_id: uuid.UUID) -> str:
+    """The reason recorded on the most recent state transition for a subject —
+    the plain-English 'why' the console shows — or '—' if there is none yet."""
+    event = session.execute(
+        select(AuditEvent)
+        .where(AuditEvent.subject_id == subject_id, AuditEvent.action.like("advance:%"))
+        .order_by(AuditEvent.seq.desc())
+        .limit(1)
+    ).scalar_one_or_none()
+    return (event.after or {}).get("reason", "—") if event else "—"

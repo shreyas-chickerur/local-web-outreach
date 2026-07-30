@@ -10,17 +10,14 @@ chain. ``seq`` gives a total order; it is assigned under a chain lock in
 from __future__ import annotations
 
 import uuid
-from datetime import UTC, datetime
+from datetime import datetime
 
 from sqlalchemy import JSON, BigInteger, DateTime, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
+from app.core.clock import utcnow
 from app.core.db import Base
 from app.core.types import GUID
-
-
-def _utcnow() -> datetime:
-    return datetime.now(UTC)
 
 
 class AuditEvent(Base):
@@ -41,7 +38,7 @@ class AuditEvent(Base):
     prev_hash: Mapped[str] = mapped_column(String(64), nullable=False)
     hash: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=_utcnow, nullable=False
+        DateTime(timezone=True), default=utcnow, nullable=False
     )
     # Reserved for future free-text; kept nullable so hashing ignores it.
     note: Mapped[str | None] = mapped_column(Text, nullable=True)

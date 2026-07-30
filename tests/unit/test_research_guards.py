@@ -79,6 +79,19 @@ def test_conflict_flagged_not_guessed():
     assert "815-777-9110" in resolved.value and "815-994-3647" in resolved.value
 
 
+def test_corroborate_empty_returns_empty():
+    assert corroborate([]) == []
+
+
+def test_confidence_caps_at_098():
+    # many agreeing sources must not push confidence past the ceiling
+    claims = [_claim("address", "1 Main St", f"https://src{i}") for i in range(8)]
+    resolved = corroborate(claims)[0]
+    assert resolved.status is ClaimStatus.VERIFIED
+    assert resolved.confidence <= 0.98
+    assert resolved.corroborations == 8
+
+
 # --------------------------- entity resolution ----------------------------- #
 def _source(name, phone=None, address=None):
     return SourceRecord(

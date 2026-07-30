@@ -8,7 +8,7 @@ from sqlalchemy import select
 from app.core.audit import verify_chain
 from app.core.enums import BusinessStatus as S
 from app.core.enums import ClaimStatus, WebsiteState
-from app.core.errors import SiteIntegrityError
+from app.core.errors import SiteIntegrityError, TransitionError
 from app.models.business import Business
 from app.models.research_claim import ResearchClaim
 from app.stages.generate import (
@@ -143,3 +143,13 @@ def test_thin_business_generates_grounded_draft_without_fabricating(session):
     assert _all_facts(site.content_json) == []
     assert set(site.content_json["needs_confirmation"])  # non-empty
     assert biz.status is S.SITE_DRAFTED
+
+
+def test_generate_from_wrong_state_raises(session):
+    # generation only advances RESEARCHED -> SITE_DRAFTED; any other source
+    # state is an illegal transition and must be refused by the spine.
+    biz = _biz(session)
+    biz.status = S.DISCOVERED
+    session.flush()
+    with pytest.raises(TransitionError):
+        generate_website(session, biz)

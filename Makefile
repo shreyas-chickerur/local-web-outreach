@@ -3,7 +3,7 @@ PY := .venv/bin/python
 PIP := .venv/bin/pip
 PYTEST := .venv/bin/pytest
 
-.PHONY: venv install test test-unit test-func test-perf test-pg test-all lint typecheck migrate clean demo discover research-demo evals api
+.PHONY: venv install test test-unit test-func test-perf test-pg test-all cov lint typecheck migrate clean demo discover research-demo evals api
 
 venv:
 	python3.11 -m venv .venv
@@ -32,6 +32,10 @@ test-all:
 # Force the Postgres-only tests (fails loudly if no server, unlike the skips).
 test-pg:
 	$(PYTEST) -m postgres
+
+# Coverage report (misses highlighted).
+cov:
+	$(PYTEST) --cov=app --cov=evals --cov-report=term-missing
 
 lint:
 	.venv/bin/ruff check app tests

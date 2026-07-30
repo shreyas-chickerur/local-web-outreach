@@ -5,19 +5,16 @@ later, the "why the old site is weak" panel in the approval console."""
 from __future__ import annotations
 
 import uuid
-from datetime import UTC, datetime
+from datetime import datetime
 
 from sqlalchemy import DateTime, ForeignKey, String, Text
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column
 
+from app.core.clock import utcnow
 from app.core.db import Base
 from app.core.enums import Severity
 from app.core.types import GUID, enum_values
-
-
-def _utcnow() -> datetime:
-    return datetime.now(UTC)
 
 
 class SiteWeakness(Base):
@@ -42,7 +39,7 @@ class SiteWeakness(Base):
     )
     evidence: Mapped[str | None] = mapped_column(Text, nullable=True)
     detected_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=_utcnow, nullable=False
+        DateTime(timezone=True), default=utcnow, nullable=False
     )
 
     def __repr__(self) -> str:  # pragma: no cover - convenience only

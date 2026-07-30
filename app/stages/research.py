@@ -31,8 +31,6 @@ from app.stages.entity_resolution import TargetEntity, resolve
 # owner questions.
 REQUIRED_FIELDS = ("address", "phone", "hours", "services", "owner_name")
 
-VERIFIED_THRESHOLD = 0.85
-
 
 @dataclass(frozen=True)
 class ResolvedClaim:

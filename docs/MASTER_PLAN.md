@@ -549,3 +549,11 @@ Decisions and findings baked into the code:
   API TestClient tests + a live uvicorn HTTP smoke; ruff/mypy clean). Read endpoints + Gate-1
   site-decision with stale-content-hash guard; matches the `api.js` contract. Email gate deferred to
   Phase 6.
+- **2026-07-29** — Project audit + cleanup (no behavior change): centralized `utcnow()`
+  (`app/core/clock.py`) replacing 6 duplicated `_utcnow`s; extracted `latest_transition_reason` to
+  `app/core/audit.py` (was duplicated in the CLI and API); removed dead `VERIFIED_THRESHOLD` and an
+  unused import. Test suite strengthened to **139 tests, 96% coverage** (was 87%): added CLI,
+  config, places-factory, and edge-case tests (empty/oversubscribed corroboration, wrong-state
+  generation, the shared reason helper). `pytest-cov` + `make cov` added. Sweep clean: no
+  TODO/FIXME, bare excepts, stray prints, or placeholder bodies. Uncovered remainder is the
+  live-network `demo` and keyed `discover` happy-path (intentionally not unit-tested).

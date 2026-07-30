@@ -3,19 +3,16 @@
 from __future__ import annotations
 
 import uuid
-from datetime import UTC, datetime
+from datetime import datetime
 
 from sqlalchemy import Boolean, DateTime, Integer, String
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column
 
+from app.core.clock import utcnow
 from app.core.db import Base
 from app.core.enums import BusinessStatus
 from app.core.types import GUID, enum_values
-
-
-def _utcnow() -> datetime:
-    return datetime.now(UTC)
 
 
 class Business(Base):
@@ -50,7 +47,7 @@ class Business(Base):
     )
     geo_country: Mapped[str] = mapped_column(String(2), default="US", nullable=False)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=_utcnow, nullable=False
+        DateTime(timezone=True), default=utcnow, nullable=False
     )
 
     def __repr__(self) -> str:  # pragma: no cover - convenience only

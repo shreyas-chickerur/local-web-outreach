@@ -15,11 +15,10 @@ import sys
 import tempfile
 from pathlib import Path
 
-from sqlalchemy import select
-
 from app.adapters.places import BusinessCandidate, StubPlacesSource, get_places_source
 from app.adapters.site_fetch import HttpSiteFetcher
 from app.ai.research_runner import PassthroughExtractor
+from app.core.audit import latest_transition_reason
 from app.core.config import database_url
 from app.core.db import Base, make_engine, make_session_factory
 from app.demo_data import demo_businesses
@@ -48,22 +47,11 @@ FRISCO_DEMO = [
 ]
 
 
-def _latest_reason(session, business_id) -> str:  # noqa: ANN001
-    """The 'why' for a business's current status — read from the audit trail."""
-    event = session.execute(
-        select(AuditEvent)
-        .where(AuditEvent.subject_id == business_id, AuditEvent.action.like("advance:%"))
-        .order_by(AuditEvent.seq.desc())
-        .limit(1)
-    ).scalars().first()
-    return (event.after or {}).get("reason", "—") if event else "—"
-
-
 def _report(session, businesses: list[Business]) -> None:
     print(f"\n{'BUSINESS':30} {'STATUS':13} {'SCORE':>5}  WHY")
     print("-" * 92)
     for biz in sorted(businesses, key=lambda b: -(b.opportunity_score or 0)):
-        why = _latest_reason(session, biz.id)
+        why = latest_transition_reason(session, biz.id)
         print(f"{biz.name[:30]:30} {biz.status.value:13} {biz.opportunity_score or 0:>5}  {why}")
     print()
 

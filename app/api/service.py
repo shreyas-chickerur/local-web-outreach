@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 
 from app.api import schemas
 from app.core.approvals import create_approval
+from app.core.audit import latest_transition_reason
 from app.core.enums import Actor, BusinessStatus, ClaimStatus, Decision, SubjectType, WebsiteState
 from app.core.errors import NotFoundError, StaleContentError, TransitionError
 from app.core.state_machine import advance
@@ -28,21 +29,11 @@ from app.models.website import Website
 _CLAIM_ORDER = {ClaimStatus.VERIFIED: 0, ClaimStatus.CONFLICT: 1, ClaimStatus.UNVERIFIED: 2}
 
 
-def _latest_reason(session: Session, business_id: uuid.UUID) -> str:
-    event = session.execute(
-        select(AuditEvent)
-        .where(AuditEvent.subject_id == business_id, AuditEvent.action.like("advance:%"))
-        .order_by(AuditEvent.seq.desc())
-        .limit(1)
-    ).scalars().first()
-    return (event.after or {}).get("reason", "—") if event else "—"
-
-
 def _summary(session: Session, biz: Business) -> schemas.BusinessSummary:
     return schemas.BusinessSummary(
         id=biz.id, name=biz.name, location=biz.location, category=biz.category,
         status=biz.status.value, opportunity_score=biz.opportunity_score,
-        has_site=biz.has_site, why=_latest_reason(session, biz.id),
+        has_site=biz.has_site, why=latest_transition_reason(session, biz.id),
     )
 
 
@@ -130,7 +121,7 @@ def _review_item(session: Session, biz: Business) -> schemas.ReviewItem:
     needs = website.needs_confirmation if website else []
     return schemas.ReviewItem(
         business=_summary(session, biz), address=biz.address, phone=biz.phone,
-        why=_latest_reason(session, biz.id),
+        why=latest_transition_reason(session, biz.id),
         weaknesses=_weaknesses(session, biz.id), dossier=_claims(session, biz.id),
         questions=_questions(needs), website=website, gate="site",
         transition="SITE_DRAFTED → SITE_APPROVED",
