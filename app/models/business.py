@@ -26,6 +26,9 @@ class Business(Base):
     place_id: Mapped[str | None] = mapped_column(String(255), unique=True, nullable=True)
     address: Mapped[str | None] = mapped_column(String(400), nullable=True)
     phone: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    # Outreach recipient (discovered during research). Suppression is checked
+    # against this at compose time (Phase 6).
+    contact_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
     # What the source *claimed* as a website (unverified; may be social/None).
     existing_site_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     # Whether a real, reachable site was verified by probing (never copied from

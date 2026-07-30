@@ -13,11 +13,15 @@ import uuid
 import pytest
 from sqlalchemy import text
 
+from app.ai.email_composer import TemplateEmailComposer
+from app.core.approvals import create_approval
 from app.core.db import Base, make_engine, make_session_factory
-from app.core.enums import BusinessStatus, ClaimStatus
+from app.core.enums import Actor, BusinessStatus, ClaimStatus, Decision, SubjectType
+from app.core.state_machine import advance
 from app.models import Approval, AuditEvent, Business  # noqa: F401  (register metadata)
 from app.models.research_claim import ResearchClaim
 from app.stages.generate import generate_website
+from app.stages.outreach import compose_email
 
 PG_ADMIN_URL = os.environ.get("TEST_PG_ADMIN_URL", "postgresql+psycopg2:///postgres")
 
@@ -51,6 +55,25 @@ def make_site_drafted(session):
         session.flush()
         site = generate_website(session, biz)
         return biz, site
+    return _make
+
+
+@pytest.fixture
+def make_email_drafted(session, make_site_drafted):
+    """Factory: take a business through Gate-1 site approval and compose an
+    outreach email, leaving it EMAIL_DRAFTED. Returns (business, email)."""
+    def _make(name="Biz", place_id="p", contact_email="owner@example.com"):
+        biz, site = make_site_drafted(name=name, place_id=place_id)
+        biz.contact_email = contact_email
+        session.flush()
+        approval = create_approval(
+            session, subject_type=SubjectType.SITE, subject_id=biz.id,
+            decision=Decision.APPROVE, approver="op", content=site.content_json,
+        )
+        advance(session, biz, BusinessStatus.SITE_APPROVED,
+                actor=Actor.HUMAN.value, approval=approval)
+        email = compose_email(session, biz, TemplateEmailComposer())
+        return biz, email
     return _make
 
 

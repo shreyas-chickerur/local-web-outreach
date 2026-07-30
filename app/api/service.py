@@ -9,6 +9,7 @@ it stays unit-testable; routes map its domain errors to HTTP status codes.
 from __future__ import annotations
 
 import uuid
+from typing import Literal
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -16,12 +17,22 @@ from sqlalchemy.orm import Session
 from app.api import schemas
 from app.core.approvals import create_approval
 from app.core.audit import latest_transition_reason
-from app.core.enums import Actor, BusinessStatus, ClaimStatus, Decision, SubjectType, WebsiteState
+from app.core.enums import (
+    Actor,
+    BusinessStatus,
+    ClaimStatus,
+    Decision,
+    EmailKind,
+    EmailStatus,
+    SubjectType,
+    WebsiteState,
+)
 from app.core.errors import NotFoundError, StaleContentError, TransitionError
 from app.core.state_machine import advance
 from app.models.approval import Approval
 from app.models.audit import AuditEvent
 from app.models.business import Business
+from app.models.email import Email
 from app.models.research_claim import ResearchClaim
 from app.models.site_weakness import SiteWeakness
 from app.models.website import Website
@@ -80,6 +91,24 @@ def _website_out(site: Website) -> schemas.WebsiteOut:
     )
 
 
+def _latest_email(session: Session, business_id: uuid.UUID) -> Email | None:
+    return session.execute(
+        select(Email).where(
+            Email.business_id == business_id,
+            Email.kind == EmailKind.OUTREACH,
+            Email.status == EmailStatus.DRAFT,
+        ).order_by(Email.created_at.desc()).limit(1)
+    ).scalars().first()
+
+
+def _email_out(email: Email) -> schemas.EmailOut:
+    return schemas.EmailOut(
+        id=email.id, kind=email.kind.value, recipient=email.recipient, subject=email.subject,
+        body=email.body, footer=email.footer, status=email.status.value,
+        content_hash=email.content_hash,
+    )
+
+
 def _questions(needs_confirmation: list[str]) -> list[str]:
     return [f"Can you confirm your {f.replace('_', ' ')}?" for f in needs_confirmation]
 
@@ -116,21 +145,31 @@ def get_detail(session: Session, business_id: uuid.UUID) -> schemas.BusinessDeta
 
 
 def _review_item(session: Session, biz: Business) -> schemas.ReviewItem:
+    # The generated site (still the DRAFT record) is shown for both gates: it's
+    # the thing being approved at Gate 1, and context for the email at Gate 2.
     site = _latest_draft(session, biz.id)
     website = _website_out(site) if site else None
-    needs = website.needs_confirmation if website else []
+    gate: Literal["site", "email"]
+    if biz.status is BusinessStatus.EMAIL_DRAFTED:
+        gate, transition = "email", "EMAIL_DRAFTED → EMAIL_APPROVED"
+        email_row = _latest_email(session, biz.id)
+        email = _email_out(email_row) if email_row else None
+    else:
+        gate, transition, email = "site", "SITE_DRAFTED → SITE_APPROVED", None
     return schemas.ReviewItem(
         business=_summary(session, biz), address=biz.address, phone=biz.phone,
         why=latest_transition_reason(session, biz.id),
         weaknesses=_weaknesses(session, biz.id), dossier=_claims(session, biz.id),
-        questions=_questions(needs), website=website, gate="site",
-        transition="SITE_DRAFTED → SITE_APPROVED",
+        questions=_questions(website.needs_confirmation if website else []),
+        website=website, email=email, gate=gate, transition=transition,
     )
 
 
 def list_review_queue(session: Session) -> list[schemas.ReviewItem]:
     rows = session.execute(
-        select(Business).where(Business.status == BusinessStatus.SITE_DRAFTED)
+        select(Business).where(Business.status.in_(
+            [BusinessStatus.SITE_DRAFTED, BusinessStatus.EMAIL_DRAFTED]
+        ))
         .order_by(Business.created_at)
     ).scalars().all()
     return [_review_item(session, b) for b in rows]
@@ -188,6 +227,47 @@ def decide_site(
         advance(session, biz, BusinessStatus.DISQUALIFIED,
                 actor=Actor.HUMAN.value, reason="operator rejected the site")
     # request_changes: no transition; the draft is regenerated and re-reviewed.
+
+    return schemas.DecisionResult(
+        ok=True, business_id=biz.id, new_status=biz.status.value, approval_id=approval.id
+    )
+
+
+def decide_email(
+    session: Session, business_id: uuid.UUID, payload: schemas.EmailDecisionIn
+) -> schemas.DecisionResult:
+    """Gate 2: record a hashed approval bound to the exact reviewed email and
+    advance (approve → EMAIL_APPROVED, reject → DISQUALIFIED, request_changes →
+    no state change). Nothing is sent — sending is Phase 7."""
+    biz = _get_business(session, business_id)
+    if biz.status is not BusinessStatus.EMAIL_DRAFTED:
+        raise TransitionError(
+            f"email decision requires status EMAIL_DRAFTED, got {biz.status.value}"
+        )
+    email = _latest_email(session, biz.id)
+    if email is None:
+        raise NotFoundError(f"no draft email for business {business_id}")
+    if email.content_hash != payload.expected_content_hash:
+        raise StaleContentError(
+            "the email changed since you reviewed it — reload and review the new version"
+        )
+
+    decision = Decision(payload.decision)
+    approval = create_approval(
+        session, subject_type=SubjectType.EMAIL, subject_id=biz.id, decision=decision,
+        approver=payload.approver,
+        content={"subject": email.subject, "body": email.body, "recipient": email.recipient},
+        notes=payload.notes,
+    )
+
+    if decision is Decision.APPROVE:
+        advance(session, biz, BusinessStatus.EMAIL_APPROVED,
+                actor=Actor.HUMAN.value, approval=approval)
+        email.status = EmailStatus.APPROVED  # ready for the send layer (Phase 7)
+    elif decision is Decision.REJECT:
+        advance(session, biz, BusinessStatus.DISQUALIFIED,
+                actor=Actor.HUMAN.value, reason="operator rejected the email")
+    # request_changes: no transition; the email is re-drafted and re-reviewed.
 
     return schemas.DecisionResult(
         ok=True, business_id=biz.id, new_status=biz.status.value, approval_id=approval.id

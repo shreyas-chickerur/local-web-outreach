@@ -59,3 +59,18 @@ class StaleContentError(SpineError):
 
 class NotFoundError(SpineError):
     """Raised when a requested resource does not exist."""
+
+
+class SuppressionError(SpineError):
+    """Raised when composing to a suppressed recipient — no draft is produced.
+
+    Enforces invariant #4: never contact someone who opted out/complained.
+    """
+
+
+class ComplianceError(SpineError):
+    """Raised when an email would ship without a required CAN-SPAM element
+    (physical postal address + working opt-out) or with a deceptive subject.
+
+    Enforces invariant #4.
+    """

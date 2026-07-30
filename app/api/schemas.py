@@ -56,6 +56,17 @@ class AuditItem(BaseModel):
     reason: str | None
 
 
+class EmailOut(BaseModel):
+    id: uuid.UUID
+    kind: str
+    recipient: str
+    subject: str
+    body: str
+    footer: str
+    status: str
+    content_hash: str
+
+
 class ReviewItem(BaseModel):
     business: BusinessSummary
     address: str | None
@@ -65,6 +76,7 @@ class ReviewItem(BaseModel):
     dossier: list[Claim]
     questions: list[str]
     website: WebsiteOut | None
+    email: EmailOut | None
     gate: Literal["site", "email"]
     transition: str  # e.g. "SITE_DRAFTED → SITE_APPROVED"
 
@@ -98,6 +110,13 @@ class SiteDecisionIn(BaseModel):
     # The content hash the operator actually reviewed — must match the current
     # draft, or the approval is rejected as stale.
     expected_content_hash: str
+    notes: str | None = None
+
+
+class EmailDecisionIn(BaseModel):
+    decision: Literal["approve", "reject", "request_changes"]
+    approver: str = "operator"
+    expected_content_hash: str  # must match the current draft email, or 409 stale
     notes: str | None = None
 
 

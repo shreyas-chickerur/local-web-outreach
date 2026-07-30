@@ -84,11 +84,13 @@ def demo_businesses() -> list[dict]:
         {
             "name": _DEPOT, "location": "Frisco, TX", "category": "restaurant",
             "address": _DEPOT_ADDR, "phone": _DEPOT_PHONE, "place_id": "demo-depot",
+            "contact_email": "hello@depotcafefrisco.example",
             "sources": DEPOT_CAFE_SOURCES,
         },
         {
             "name": _JS, "location": "Frisco, TX", "category": "lawn",
             "address": _JS_ADDR, "phone": None, "place_id": "demo-jslawn",
+            "contact_email": "owner@jslawncare.example",
             "sources": JS_LAWN_SOURCES,
         },
     ]

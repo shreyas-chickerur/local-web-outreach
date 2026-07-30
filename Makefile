@@ -3,7 +3,7 @@ PY := .venv/bin/python
 PIP := .venv/bin/pip
 PYTEST := .venv/bin/pytest
 
-.PHONY: venv install test test-unit test-func test-perf test-pg test-all cov lint typecheck migrate clean demo discover research-demo evals api
+.PHONY: venv install test test-unit test-func test-perf test-pg test-all cov lint typecheck migrate clean demo discover research-demo site-demo email-demo evals api
 
 venv:
 	python3.11 -m venv .venv
@@ -62,10 +62,15 @@ research-demo:
 site-demo:
 	$(PY) -m app.cli site-demo
 
-# Capability evals: A (research / no-hallucination) + B (site grounding).
+# Compose outreach emails from bundled Frisco research — no API key.
+email-demo:
+	$(PY) -m app.cli email-demo
+
+# Capability evals: A (research), B (site grounding), C (email compliance).
 evals:
 	$(PY) -m evals.research_eval
 	$(PY) -m evals.site_eval
+	$(PY) -m evals.email_eval
 
 # Operator Console API (Phase 5). Set DATABASE_URL for a real DB; defaults to SQLite.
 api:

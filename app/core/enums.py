@@ -95,3 +95,30 @@ class WebsiteState(StrEnum):
     APPROVED = "approved"  # operator signed off (Gate 1)
     LIVE = "live"  # published after purchase
     REJECTED = "rejected"
+
+
+class EmailKind(StrEnum):
+    """What an email is."""
+
+    OUTREACH = "outreach"  # first-touch cold email
+    REPLY = "reply"  # response in an existing thread (Phase 9)
+
+
+class EmailStatus(StrEnum):
+    """Lifecycle of an email. Stays DRAFT until Gate 2; sending is Phase 7."""
+
+    DRAFT = "draft"
+    APPROVED = "approved"  # operator signed off (Gate 2)
+    QUEUED = "queued"
+    SENT = "sent"
+    BOUNCED = "bounced"
+    FAILED = "failed"
+
+
+class SuppressionReason(StrEnum):
+    """Why a recipient must never be contacted again."""
+
+    UNSUBSCRIBE = "unsubscribe"
+    COMPLAINT = "complaint"
+    BOUNCE = "bounce"
+    MANUAL = "manual"

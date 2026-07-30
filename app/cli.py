@@ -154,6 +154,48 @@ def cmd_site_demo(_args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_email_demo(_args: argparse.Namespace) -> int:
+    """Research → generate → approve site → compose the outreach email (no key)."""
+    from app.ai.email_composer import TemplateEmailComposer
+    from app.core.approvals import create_approval
+    from app.core.enums import Actor, BusinessStatus, Decision, SubjectType
+    from app.core.state_machine import advance
+    from app.stages.outreach import compose_email
+
+    tmp = Path(tempfile.mkdtemp()) / "email.db"
+    engine = make_engine(f"sqlite+pysqlite:///{tmp}")
+    Base.metadata.create_all(engine)
+    session = make_session_factory(engine)()
+    extractor = PassthroughExtractor()
+    composer = TemplateEmailComposer()
+    print("Research → generate → approve site → compose outreach (bundled Frisco, no key)...\n")
+    for entry in demo_businesses():
+        sources = entry.pop("sources")
+        biz = Business(status=BusinessStatus.RESEARCHED, **entry)
+        session.add(biz)
+        session.flush()
+        build_dossier(session, biz, sources, extractor, model_version="demo/manual")
+        site = generate_website(session, biz)
+        approval = create_approval(session, subject_type=SubjectType.SITE, subject_id=biz.id,
+                                   decision=Decision.APPROVE, approver="operator",
+                                   content=site.content_json)
+        advance(session, biz, BusinessStatus.SITE_APPROVED,
+                actor=Actor.HUMAN.value, approval=approval)
+        email = compose_email(session, biz, composer)
+        session.commit()
+
+        print(f"=== {biz.name}  →  {email.recipient} ===")
+        print(f"Subject: {email.subject}\n")
+        print(email.body)
+        print(f"\n[status={email.status.value}, suppression_checked={email.suppression_checked}, "
+              f"hash={email.content_hash[:8]}]")
+        print("-" * 72 + "\n")
+
+    session.close()
+    engine.dispose()
+    return 0
+
+
 def cmd_discover(args: argparse.Namespace) -> int:
     try:
         source = get_places_source()
@@ -177,6 +219,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("demo", help="run discovery+qualification on a live Frisco set (no key)")
     sub.add_parser("research-demo", help="run research on bundled Frisco dossiers (no key)")
     sub.add_parser("site-demo", help="generate grounded site drafts from bundled data (no key)")
+    sub.add_parser("email-demo", help="compose outreach emails from bundled data (no key)")
 
     p_disc = sub.add_parser("discover", help="discover+qualify a real location (needs API key)")
     p_disc.add_argument("location", help='e.g. "Frisco, TX"')
@@ -189,6 +232,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_research_demo(args)
     if args.command == "site-demo":
         return cmd_site_demo(args)
+    if args.command == "email-demo":
+        return cmd_email_demo(args)
     return cmd_discover(args)
 
 

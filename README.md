@@ -6,6 +6,21 @@ state-of-the-art sites as private proposals, and runs approved cold outreach →
 reply → payment. See [`docs/MASTER_PLAN.md`](docs/MASTER_PLAN.md) for the full
 architecture, phases, and invariants.
 
+## Phase 6 — Email Composition + Gate 2 (built)
+
+Compliant, personalized outreach email; the operator approves every one.
+- `app/core/compliance.py` — CAN-SPAM footer (physical address + one-step opt-out), subject/footer
+  validators, suppression-list check (exact email or domain).
+- `app/ai/email_composer.py` — grounded `TemplateEmailComposer` (no key) + injectable `ClaudeEmailComposer`.
+- `app/stages/outreach.py` — `compose_email`: SITE_APPROVED + has-email + not-suppressed + CAN-SPAM
+  guards; persists a DRAFT `Email`, advances to `EMAIL_DRAFTED`. Nothing is sent (that's Phase 7).
+- API: review-queue serves email-gate items; `POST /api/businesses/{id}/email-decision` (Gate 2,
+  stale-hash guarded).
+
+```bash
+make email-demo    # compose outreach emails from bundled Frisco data — no key
+```
+
 ## Phase 5 — Operator Console API (built)
 
 FastAPI backend the console talks to (swap its mock `api.js` for these endpoints — field names match).

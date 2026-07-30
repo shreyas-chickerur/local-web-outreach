@@ -316,7 +316,25 @@ Each phase: **Goal → Build → Interfaces → Tests → DoD.** Guard tests are
   - `test_review_payload_shape.py` — payload includes all five side-by-side elements.
 - **DoD:** operator can approve/edit/reject a site; approvals are immutable and content-bound.
 
-### Phase 6 — Email composition + GATE 2 (email)
+### Phase 6 — Email composition + GATE 2 (email)  — ✅ BUILT (2026-07-29)
+- **Status:** implemented + tested (177 tests total, incl. Phase-6 unit/functional + a live uvicorn
+  email-gate HTTP smoke; ruff/mypy clean). Capability-C eval: 10/10.
+- **Built:** `core/compliance.py` (CAN-SPAM footer builder + subject/footer validators +
+  suppression check), `ai/email_composer.py` (`TemplateEmailComposer` deterministic/grounded +
+  injectable `ClaudeEmailComposer`), `stages/outreach.py` (`compose_email` — guards: SITE_APPROVED
+  only, has contact email, not suppressed, passes CAN-SPAM; persists a DRAFT `Email` and advances
+  SITE_APPROVED→EMAIL_DRAFTED). Models: `Email`, `SuppressionEntry`, `businesses.contact_email`;
+  migration `0005`. API: review-queue now serves email-gate items (`gate:"email"` + the email
+  payload + the approved site for context), and `POST /api/businesses/{id}/email-decision` (Gate 2)
+  binds a hashed approval to the exact reviewed email (stale hash → 409), approve → EMAIL_APPROVED +
+  `email.status=approved` (ready for Phase-7 send), reject → DISQUALIFIED, request_changes → re-draft.
+  CLI `email-demo`; `make evals` now runs A+B+C.
+- **Guarantees (invariant #4):** every draft carries a physical postal address + one-step opt-out;
+  suppressed recipients never get a draft; deceptive subjects are rejected; nothing is sent (that's
+  Phase 7).
+- **Deferred:** the live Claude composer needs `ANTHROPIC_API_KEY` (mock-tested; the deterministic
+  composer is the no-key default). Real `SENDER_POSTAL_ADDRESS`/`SENDER_NAME` must be set before
+  sending (placeholders in dev). The "would a human send this?" quality bar is inherently manual.
 - **Goal:** compliant, personalized outreach email; operator approves every one; enforces invariants #2, #4.
 - **Build:** `ai/email_composer.py` (personalized from dossier, one CTA = preview link);
   `core/compliance.py` footer injector (physical postal address + one-click opt-out); suppression
@@ -565,3 +583,8 @@ Decisions and findings baked into the code:
   advisory lock serializes writers) + `verify_chain` passes. Finding surfaced by the scale test: the
   `/api/pipeline` `why` lookup is per-business (an N+1) — ~1s for 250 leads, fine for a single
   operator, batchable later if the board grows large.
+- **2026-07-29** — Phase 6 (email composition + Gate 2) built and tested (177 tests total; ruff/mypy
+  clean; capability-C eval 10/10; live uvicorn email-gate HTTP smoke). CAN-SPAM compliance (footer
+  address + opt-out, suppression, non-deceptive subject), grounded composer (deterministic +
+  injectable Claude), Email/SuppressionEntry models + migration 0005, the email-decision endpoint,
+  and a CLI `email-demo`. Nothing is sent — sending is Phase 7.

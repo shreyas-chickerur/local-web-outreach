@@ -76,15 +76,10 @@ def create_app() -> FastAPI:
     def approvals(session: Session = Depends(get_session)):
         return service.list_approvals(session)
 
-    @app.post("/api/businesses/{business_id}/site-decision",
-              response_model=schemas.DecisionResult)
-    def site_decision(
-        business_id: uuid.UUID,
-        payload: schemas.SiteDecisionIn,
-        session: Session = Depends(get_session),
-    ):
+    def _run_decision(session: Session, fn, business_id, payload):
+        """Shared error mapping for the two approval gates."""
         try:
-            result = service.decide_site(session, business_id, payload)
+            result = fn(session, business_id, payload)
             session.commit()
             return result
         except NotFoundError as exc:
@@ -96,6 +91,24 @@ def create_app() -> FastAPI:
         except (TransitionError, ApprovalRequiredError) as exc:
             session.rollback()
             raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+    @app.post("/api/businesses/{business_id}/site-decision",
+              response_model=schemas.DecisionResult)
+    def site_decision(
+        business_id: uuid.UUID,
+        payload: schemas.SiteDecisionIn,
+        session: Session = Depends(get_session),
+    ):
+        return _run_decision(session, service.decide_site, business_id, payload)
+
+    @app.post("/api/businesses/{business_id}/email-decision",
+              response_model=schemas.DecisionResult)
+    def email_decision(
+        business_id: uuid.UUID,
+        payload: schemas.EmailDecisionIn,
+        session: Session = Depends(get_session),
+    ):
+        return _run_decision(session, service.decide_email, business_id, payload)
 
     return app
 
