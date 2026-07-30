@@ -6,6 +6,18 @@ state-of-the-art sites as private proposals, and runs approved cold outreach →
 reply → payment. See [`docs/MASTER_PLAN.md`](docs/MASTER_PLAN.md) for the full
 architecture, phases, and invariants.
 
+## Phase 5 — Operator Console API (built)
+
+FastAPI backend the console talks to (swap its mock `api.js` for these endpoints — field names match).
+- Read: `GET /api/pipeline`, `/api/review-queue`, `/api/review/{id}`, `/api/businesses/{id}`, `/api/approvals`.
+- Gate 1: `POST /api/businesses/{id}/site-decision` `{decision, approver, expected_content_hash, notes?}` —
+  binds a hashed approval to the exact reviewed draft (stale hash → 409), then approve →
+  SITE_APPROVED / reject → DISQUALIFIED / request_changes → re-draft, all via the audited state machine.
+
+```bash
+make api    # runs uvicorn on :8090 (DATABASE_URL optional; defaults to SQLite)
+```
+
 ## Phase 4 — Website Generation (built, grounded)
 
 A structured, industry-aware **site content model**, grounded entirely in VERIFIED claims.

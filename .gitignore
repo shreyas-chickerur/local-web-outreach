@@ -15,3 +15,5 @@ __pycache__/
 .DS_Store
 build/
 dist/
+# Frontend design artifacts (managed in Claude design; not source)
+design/

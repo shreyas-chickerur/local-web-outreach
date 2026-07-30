@@ -47,3 +47,15 @@ class SiteIntegrityError(SpineError):
 
     Enforces invariant #1 on the generated site itself.
     """
+
+
+class StaleContentError(SpineError):
+    """Raised when an approval names a content hash that no longer matches the
+    current draft — the operator reviewed a version that has since changed.
+
+    Enforces invariant #2: approval binds to the exact reviewed content.
+    """
+
+
+class NotFoundError(SpineError):
+    """Raised when a requested resource does not exist."""

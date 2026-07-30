@@ -3,7 +3,7 @@ PY := .venv/bin/python
 PIP := .venv/bin/pip
 PYTEST := .venv/bin/pytest
 
-.PHONY: venv install test test-unit test-func test-perf test-pg test-all lint typecheck migrate clean demo discover research-demo evals
+.PHONY: venv install test test-unit test-func test-perf test-pg test-all lint typecheck migrate clean demo discover research-demo evals api
 
 venv:
 	python3.11 -m venv .venv
@@ -62,6 +62,10 @@ site-demo:
 evals:
 	$(PY) -m evals.research_eval
 	$(PY) -m evals.site_eval
+
+# Operator Console API (Phase 5). Set DATABASE_URL for a real DB; defaults to SQLite.
+api:
+	$(PY) -m uvicorn app.api.main:app --reload --port 8090
 
 clean:
 	rm -rf .pytest_cache .mypy_cache .ruff_cache *.db

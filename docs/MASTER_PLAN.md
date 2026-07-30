@@ -289,7 +289,20 @@ Each phase: **Goal → Build → Interfaces → Tests → DoD.** Guard tests are
   - `evals/B` ≥ bar.
 - **DoD:** a business yields a good, fully-traceable private preview; unverified facts cannot render.
 
-### Phase 5 — Approval console + GATE 1 (site)
+### Phase 5 — Approval console + GATE 1 (site)  — ✅ BACKEND BUILT (2026-07-29)
+- **Status:** FastAPI backend implemented + tested (125 tests total, incl. 11 TestClient tests;
+  live uvicorn HTTP smoke passed). `app/api/` — read endpoints (`/api/pipeline`, `/api/review-queue`,
+  `/api/review/{id}`, `/api/businesses/{id}`, `/api/approvals`) + the Gate-1 write endpoint
+  (`POST /api/businesses/{id}/site-decision`). Field names mirror the console's `api.js` contract, so
+  the frontend swaps that one file to go live. `make api` runs it. The **console UI itself is the
+  Claude-designed artifact** (validated separately) — this phase is its backend.
+- **Gate-1 guarantees enforced here:** the decision endpoint binds a hashed `approval` to the exact
+  reviewed draft (`expected_content_hash` must match the current `websites.content_hash`, else 409
+  Stale — "you approved *this* version"); approve advances SITE_DRAFTED→SITE_APPROVED via the spine
+  (hashed approval required by the gate), reject → DISQUALIFIED, request_changes → no state change
+  (re-draft). Illegal-state decisions → 409; missing business → 404.
+- **Deferred to Phase 6:** the email gate (`/email-decision`) — needs the Email model. Auth is a
+  single-operator no-auth localhost dev setup (CORS `*`); real auth + tightened CORS before deploy.
 - **Goal:** operator approves every site with full context; state cannot advance without a signed approval.
 - **Build:** `api/console.py` — `GET /review/site/{id}` returns side-by-side payload:
   **company brief**, **existing-site weakness list** (or "no site today"), **new-site feature
@@ -529,3 +542,10 @@ Decisions and findings baked into the code:
   PostgreSQL, ruff/mypy clean). Grounded content model (every fact → VERIFIED claim_id), no
   fabricated social proof, private DRAFT preview; advances to SITE_DRAFTED. Ready for a
   Claude-designed frontend (renderer + operator console).
+- **2026-07-29** — Operator Console frontend built via Claude design (self-contained artifact);
+  validated (renders, keyboard approve + auto-advance, content-hash confirm, status colors, grounding
+  visualized, light/dark). Wired through a single `api.js` seam.
+- **2026-07-29** — Phase 5 backend (Operator Console API) built and tested (125 tests total, incl. 11
+  API TestClient tests + a live uvicorn HTTP smoke; ruff/mypy clean). Read endpoints + Gate-1
+  site-decision with stale-content-hash guard; matches the `api.js` contract. Email gate deferred to
+  Phase 6.
