@@ -14,9 +14,44 @@ import pytest
 from sqlalchemy import text
 
 from app.core.db import Base, make_engine, make_session_factory
+from app.core.enums import BusinessStatus, ClaimStatus
 from app.models import Approval, AuditEvent, Business  # noqa: F401  (register metadata)
+from app.models.research_claim import ResearchClaim
+from app.stages.generate import generate_website
 
 PG_ADMIN_URL = os.environ.get("TEST_PG_ADMIN_URL", "postgresql+psycopg2:///postgres")
+
+_TWO = [{"source_type": "yelp", "source_url": "https://y"},
+        {"source_type": "directory", "source_url": "https://d"}]
+
+
+@pytest.fixture
+def make_site_drafted(session):
+    """Factory: create a SITE_DRAFTED business (verified address+phone, one
+    unverified field) with a generated draft website. Returns (business, website)."""
+    def _make(name="Biz", place_id="p", category="restaurant", opportunity_score=80):
+        biz = Business(
+            name=name, location="Frisco, TX", category=category,
+            address=f"{place_id} Main St", phone="(972) 555-0148", place_id=place_id,
+            opportunity_score=opportunity_score, status=BusinessStatus.RESEARCHED,
+        )
+        session.add(biz)
+        session.flush()
+        session.add_all([
+            ResearchClaim(business_id=biz.id, field="address", value=f"{place_id} Main St",
+                          status=ClaimStatus.VERIFIED, confidence=0.9, corroborations=2,
+                          sources=_TWO),
+            ResearchClaim(business_id=biz.id, field="phone", value="(972) 555-0148",
+                          status=ClaimStatus.VERIFIED, confidence=0.9, corroborations=2,
+                          sources=_TWO),
+            ResearchClaim(business_id=biz.id, field="services", value="stuff",
+                          status=ClaimStatus.UNVERIFIED, confidence=0.5, corroborations=1,
+                          sources=_TWO[:1]),
+        ])
+        session.flush()
+        site = generate_website(session, biz)
+        return biz, site
+    return _make
 
 
 # --------------------------------------------------------------------------- #

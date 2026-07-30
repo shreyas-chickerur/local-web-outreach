@@ -557,3 +557,11 @@ Decisions and findings baked into the code:
   generation, the shared reason helper). `pytest-cov` + `make cov` added. Sweep clean: no
   TODO/FIXME, bare excepts, stray prints, or placeholder bodies. Uncovered remainder is the
   live-network `demo` and keyed `discover` happy-path (intentionally not unit-tested).
+- **2026-07-29** — Stress tests added to the suite (147 tests total): (a) **scale** — 250 businesses
+  through research→generate, asserting the grounding invariant holds on EVERY site, the ledger
+  verifies, and the board serves fast; (b) **API adversarial/load** — malformed input → 422, a
+  200-request read burst, a 30-approval burst that keeps the hash chain linear; (c) **audit
+  concurrency (Postgres)** — 8 threads × 25 appends, asserting seqs are 1..N gapless (proves the
+  advisory lock serializes writers) + `verify_chain` passes. Finding surfaced by the scale test: the
+  `/api/pipeline` `why` lookup is per-business (an N+1) — ~1s for 250 leads, fine for a single
+  operator, batchable later if the board grows large.
