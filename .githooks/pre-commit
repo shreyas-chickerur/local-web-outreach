@@ -1,0 +1,15 @@
+#!/bin/sh
+# Refuse to commit secrets. Belt-and-braces on top of .gitignore.
+staged=$(git diff --cached --name-only)
+blocked=$(printf '%s\n' "$staged" | grep -E '(^|/)\.env($|\.)' | grep -v '\.env\.example$')
+if [ -n "$blocked" ]; then
+  echo "BLOCKED: attempt to commit an env file containing secrets:" >&2
+  printf '  %s\n' $blocked >&2
+  echo "Remove it with: git restore --staged <file>" >&2
+  exit 1
+fi
+if printf '%s\n' "$staged" | grep -qE '\.(db|sqlite3?)$'; then
+  echo "BLOCKED: attempt to commit a database file." >&2
+  exit 1
+fi
+exit 0

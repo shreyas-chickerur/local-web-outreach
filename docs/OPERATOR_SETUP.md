@@ -11,14 +11,19 @@ those are marked **[LATER]** — set the accounts up now (they have lead time), 
 the software to use them lands in a later phase.
 
 **Your progress so far (2026-08-01):**
-- ☑ `GOOGLE_PLACES_API_KEY` in `.env`
-- ☑ `ANTHROPIC_API_KEY` in `.env`
+- ☑ `GOOGLE_PLACES_API_KEY` + `ANTHROPIC_API_KEY` in `.env` (gitignored, never pushed)
 - ☑ `SENDER_NAME` + `SENDER_POSTAL_ADDRESS` lines present in `.env`
-- ☑ Console wired to the backend — `make seed && make api` → http://127.0.0.1:8090
+- ☑ Console fully wired — all four actions (Approve/Reject/Request changes/Edit)
+- ☑ Live source collection + contact-email scraping (`advance`)
+- ☑ Pre-commit hook blocking any `.env` / `.db` commit
+- ☐ **A2 — create the dedicated project Gmail** (do this first; everything hangs off it)
 - ☐ **Edit `SENDER_POSTAL_ADDRESS` to a real mailing address** (still the placeholder;
-  a send-time guard now refuses to send while it's a placeholder)
-- ☐ Real-data dry run + your review (A8)
-- ☐ Everything in Part B (needed before any send)
+  a send-time guard refuses to send while it's a placeholder)
+- ☐ **A8 — real-data dry run + your review** ← the next real milestone
+- ☐ Everything in Part B (needed before any send; **B4 warmup takes ~4 weeks — start early**)
+
+**Shortest path from here:** A2 (new Gmail) → A8 (dry run, judge the output) →
+B4/B1–B3 (domains + warmup, in parallel, because of the 4-week clock).
 
 **Golden rule:** secrets live in a local `.env` (gitignored). Never commit them,
 never paste them into chat. Use a password manager for every account below.
@@ -33,19 +38,37 @@ never paste them into chat. Use a password manager for every account below.
 3. `cd local-web-outreach && make install`
 4. `make test-all` → expect all green. `make cov` for coverage.
 
+### A1b. Secrets hygiene (already enforced)
+`.env` is gitignored, has never been committed, and is **not** on GitHub (only
+`.env.example` is). A pre-commit hook in `.githooks/pre-commit` additionally
+blocks any commit containing a `.env` or a `.db` file — even `git add -f`.
+If you clone this repo fresh on another machine, re-arm the hook once:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+Never paste real keys into chat, screenshots, or issues.
+
 ### A2. Create the dedicated project Gmail (the "hub" account)
-This one Google account owns everything and is your reply/complaint monitoring
-inbox. **It is NOT what sends cold email** (that's Google Workspace on secondary
-domains — see B2; Gmail's terms forbid bulk cold email from a free @gmail.com and
-Google suspends accounts that do it).
-1. Go to https://accounts.google.com/signup — create a NEW account.
-2. Pick a professional handle tied to the business, not your name
-   (e.g. `hello.<yourbrand>@gmail.com`). Write the exact address down.
-3. Turn on 2-Step Verification and store the password + recovery codes in your
-   password manager.
-4. Use THIS account to log into everything below (GitHub, Google Cloud, the domain
-   registrar, Google Workspace admin, Anthropic, Stripe). One identity, one place
-   to monitor.
+**Why a separate account:** it keeps this business's identity, billing, and
+inbound mail out of your personal Gmail, and gives you one place to watch for
+replies and complaints. **It is NOT what sends cold email** (that's Google
+Workspace on secondary domains — see B2; Gmail's terms forbid bulk cold email
+from a free @gmail.com and Google suspends accounts that do it).
+
+**Do this now — it's the prerequisite for A3/A4 and all of Part B:**
+1. Sign out (or open a private window) → https://accounts.google.com/signup.
+2. Choose **"For my personal use"**.
+3. Pick a professional handle tied to the business, not your name — e.g.
+   `hello.<yourbrand>@gmail.com` or `<yourbrand>.studio@gmail.com`. Write the
+   exact address down.
+4. Add a recovery phone/email so you can't get locked out.
+5. Turn on **2-Step Verification** (myaccount.google.com → Security). Save the
+   password + backup codes in a password manager.
+6. From now on, use **this** account for: Google Cloud (A3), Anthropic (A4), the
+   domain registrar (B1), Google Workspace admin (B2), Postmaster Tools (B3),
+   and Stripe (B8). One identity, one inbox to monitor.
 
 ### A3. Google Places API key (lead discovery) — ☑ DONE (key in `.env`)
 1. Log into https://console.cloud.google.com with the hub Gmail.
@@ -88,47 +111,122 @@ make api     # then open http://127.0.0.1:8090
 (verified in-browser): approving an email advances EMAIL_DRAFTED →
 EMAIL_APPROVED and writes a hashed approval to the log.
 
-**Known gap:** the *Edit* button isn't wired — server-side draft editing needs an
-endpoint that re-generates and re-hashes the draft. Approve / Reject / Request
-changes are fully wired; Edit shows a clear message.
+All four actions are wired: **Approve, Reject, Request changes, and Edit.**
+Editing re-hashes the draft and appends an audit event; it never changes status
+and never records an approval, so you still approve afterwards. An edit cannot
+remove the CAN-SPAM footer (it's re-attached) or set a deceptive subject (400).
 
 ### A8. Real-data dry run + YOUR review (the real quality gate)
-1. `export GOOGLE_PLACES_API_KEY=...` then `make discover LOCATION="Frisco, TX" CATEGORY=restaurant`
-2. Take ~5 real leads all the way to an approved email (via the console).
-3. **Read every generated site and every email yourself.** Only proceed if you'd
-   confidently send each one under your name. Nothing is sent — this is review only.
+
+**Everything below is safe: nothing sends. This is the step where you judge
+whether the output is good enough to put your name on.**
+
+**Step 1 — pull real businesses from Google Places.** Your key is already in
+`.env`, so just run (pick any city and category you like):
+
+```bash
+cd ~/CascadeProjects/local-web-outreach
+.venv/bin/python -m app.cli discover "Frisco, TX" --category restaurant
+```
+
+It prints each business with a status and a WHY. Expect a mix of QUALIFIED (weak
+or missing site — these are leads) and DISQUALIFIED (healthy site — correctly
+skipped). *If everything comes back DISQUALIFIED, that's the system being honest,
+not a bug — try a category more likely to have weak sites (lawn, plumbing,
+locksmith, salon, roofing).*
+
+**Step 2 — check what landed in the database:**
+
+```bash
+.venv/bin/python -m app.cli status
+```
+
+**Step 3 — research → site → email for the qualified leads.** This is one
+command; it walks each QUALIFIED business to a drafted site and (where an email
+address exists) a drafted outreach email:
+
+```bash
+.venv/bin/python -m app.cli advance --limit 5
+```
+
+**Step 4 — open the console and review each one:**
+
+```bash
+make api      # then open http://127.0.0.1:8090
+```
+
+Go to **Review queue**. For each item, read:
+- the **research dossier** — is every VERIFIED fact actually right? Click the
+  source links. Anything wrong here is the thing to fix before scaling.
+- the **generated site** — would a real owner be impressed?
+- the **outreach email** (Gate 2) — does it sound like a person, not a bot?
+
+Then act: **A** approve · **E** edit · **R** request changes · **X** reject.
+
+**Step 5 — the honest judgment.** You're ready to move on only if you'd send
+these emails, as written, under your own name. If not, tell me exactly what felt
+wrong (too salesy, wrong facts, generic) and I'll tune the composer/generator.
+
+**Note on emails:** most discovered businesses won't have a `contact_email` yet
+(Google Places doesn't return one), so they'll stop at the site gate. That's
+expected — see **B6**, which is the decision you make before Phase 7.
 
 ---
 
 ## Part B — Before any real send (start now; multi-week lead time) [LATER to use]
 
 ### B1. Buy secondary sending domains
-- At a registrar (Cloudflare/Namecheap), buy 3–5 brand-adjacent `.com` domains
-  (NOT your main brand domain). Enable WHOIS privacy. Log in with the hub Gmail.
+**Why:** if a cold-email domain gets burned, it must not be the domain your real
+business email runs on. Sacrificial domains protect your primary.
+1. At a registrar (Cloudflare or Namecheap), buy **3–5** domains that look like
+   your brand: `getbrandsites.com`, `brandwebstudio.com`, etc. ~$10/yr each.
+2. Do **not** use your main brand domain.
+3. Enable WHOIS privacy. Register while logged in as the hub Gmail (A2).
 
 ### B2. Google Workspace on the sending domains
-- Sign up for Google Workspace (admin = the hub Gmail). Add each secondary domain.
-- Create 2–3 mailboxes per domain. These are what SEND (10–20 emails/inbox/day max).
+**Why:** these mailboxes do the sending. Free Gmail cannot (it's against their
+terms for bulk cold outreach and gets suspended).
+1. Sign up at workspace.google.com — admin account = the hub Gmail.
+2. Add each secondary domain (Admin console → Domains → Manage domains).
+3. Create **2–3 mailboxes per domain** (e.g. `shreyas@`, `hello@`).
+4. Budget: ~$7/user/month. **Cap: 10–20 emails per inbox per day, forever.**
 
 ### B3. DNS authentication + monitoring
-- For each sending domain set **SPF, DKIM, and DMARC** records (Workspace gives
-  you the values). Verify each domain in **Google Postmaster Tools**.
+**Why:** without SPF/DKIM/DMARC your mail goes straight to spam.
+1. In your registrar's DNS for each sending domain, add the **SPF**, **DKIM**,
+   and **DMARC** records Google Workspace gives you (Admin → Apps → Gmail →
+   Authenticate email). Start DMARC at `p=none`.
+2. Verify each domain at **postmaster.google.com** — this is where you'll watch
+   spam rate and reputation once sending starts.
+3. Check your work at mxtoolbox.com (SPF/DKIM/DMARC lookups).
 
-### B4. Warm the inboxes (3–4 weeks BEFORE sending)
-- Use a warmup tool (or your managed sender) to ramp each mailbox slowly. Sending
-  cold before warmup burns the domain. This is the long pole — start it early.
+### B4. Warm the inboxes — START ~4 WEEKS BEFORE YOU WANT TO SEND
+**Why:** a brand-new domain that suddenly sends cold email gets filtered
+immediately. Warmup builds a sending history.
+1. Connect each mailbox to a warmup tool (Instantly/Smartlead include this).
+2. Let it ramp automatically for **3–4 weeks**. Don't shortcut this.
+3. **This is the long pole — start it before anything else in Part B.**
 
 ### B5. Decide the sending approach
-- **Managed** (Instantly / Smartlead): they handle rotation + warmup + reply
-  capture. Simplest. — OR —
-- **Raw** Google Workspace + the domains above.
-This choice determines the Phase-7 sending adapter I build.
+| | Managed (Instantly / Smartlead) | Raw Google Workspace |
+|---|---|---|
+| Warmup + rotation | built in | you build it |
+| Reply capture | built in | IMAP/Gmail API (Phase 8) |
+| Cost | ~$40–100/mo | ~$7/mailbox/mo |
+| Recommendation | **start here** | later, if you outgrow it |
 
-### B6. Recipient-email sourcing (required — the pipeline doesn't collect emails)
-Discovery gives name/address/phone/website, NOT an email. Decide how you'll fill
-`contact_email`: scrape the business's own site for a contact address, use an
-enrichment provider, or enter them by hand. Prefer specific owner addresses over
-generic `info@` (better deliverability, fewer complaints).
+Tell me which you pick — it determines the Phase-7 sending adapter I build.
+
+### B6. Recipient-email sourcing — ☑ partly solved
+The pipeline now **scrapes the business's own public contact email** from their
+website during `advance` (preferring `info@`/`contact@`/`hello@`). Businesses
+with no website, or no email published on it, will have no address and stop at
+the site gate.
+
+**Your decision:** for those, either (a) skip them, (b) look the address up by
+hand and add it, or (c) pay an enrichment provider. Start with (a)+(b) — it's
+free and higher quality. Note generic `info@` addresses bounce and complain more
+than a real owner address.
 
 ### B7. Production database + hosting [LATER]
 - Managed Postgres (Supabase/Neon/RDS) for `DATABASE_URL`.

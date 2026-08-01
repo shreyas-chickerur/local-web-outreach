@@ -120,6 +120,27 @@ class EmailDecisionIn(BaseModel):
     notes: str | None = None
 
 
+class DraftEditIn(BaseModel):
+    """An operator edit to the draft at the current gate. Not a gate decision:
+    it changes no status and records no approval, but it re-hashes the draft."""
+
+    subject_type: Literal["site", "email"]
+    editor: str = "operator"
+    # site edits
+    heading: str | None = None
+    subheading: str | None = None
+    # email edits
+    subject: str | None = None
+    body: str | None = None
+
+
+class DraftEditResult(BaseModel):
+    ok: bool
+    business_id: uuid.UUID
+    gate: Literal["site", "email"]
+    content_hash: str  # the NEW hash — the operator must approve against this
+
+
 class DecisionResult(BaseModel):
     ok: bool
     business_id: uuid.UUID

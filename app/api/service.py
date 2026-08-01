@@ -9,14 +9,17 @@ it stays unit-testable; routes map its domain errors to HTTP status codes.
 from __future__ import annotations
 
 import uuid
+from copy import deepcopy
 from typing import Literal
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.ai.email_composer import TemplateEmailComposer
 from app.api import schemas
-from app.core.approvals import create_approval
-from app.core.audit import latest_transition_reason
+from app.core.approvals import create_approval, hash_content
+from app.core.audit import latest_transition_reason, record_event
+from app.core.compliance import validate_subject
 from app.core.enums import (
     Actor,
     BusinessStatus,
@@ -27,7 +30,13 @@ from app.core.enums import (
     SubjectType,
     WebsiteState,
 )
-from app.core.errors import NotFoundError, StaleContentError, TransitionError
+from app.core.errors import (
+    ComplianceError,
+    NotFoundError,
+    StaleContentError,
+    SuppressionError,
+    TransitionError,
+)
 from app.core.state_machine import advance
 from app.models.approval import Approval
 from app.models.audit import AuditEvent
@@ -36,6 +45,7 @@ from app.models.email import Email
 from app.models.research_claim import ResearchClaim
 from app.models.site_weakness import SiteWeakness
 from app.models.website import Website
+from app.stages.outreach import compose_email
 
 _CLAIM_ORDER = {ClaimStatus.VERIFIED: 0, ClaimStatus.CONFLICT: 1, ClaimStatus.UNVERIFIED: 2}
 
@@ -223,6 +233,14 @@ def decide_site(
     if decision is Decision.APPROVE:
         advance(session, biz, BusinessStatus.SITE_APPROVED,
                 actor=Actor.HUMAN.value, approval=approval)
+        # Approving the site is what unlocks outreach, so draft the email now —
+        # it appears at Gate 2 for a second, separate approval. If we can't (no
+        # contact email yet, recipient suppressed, non-compliant), the business
+        # simply rests at SITE_APPROVED; that is not an approval failure.
+        try:
+            compose_email(session, biz, TemplateEmailComposer())
+        except (NotFoundError, SuppressionError, ComplianceError, TransitionError):
+            pass
     elif decision is Decision.REJECT:
         advance(session, biz, BusinessStatus.DISQUALIFIED,
                 actor=Actor.HUMAN.value, reason="operator rejected the site")
@@ -230,6 +248,88 @@ def decide_site(
 
     return schemas.DecisionResult(
         ok=True, business_id=biz.id, new_status=biz.status.value, approval_id=approval.id
+    )
+
+
+def edit_draft(
+    session: Session, business_id: uuid.UUID, payload: schemas.DraftEditIn
+) -> schemas.DraftEditResult:
+    """Apply an operator edit to the draft at the current gate, re-hash it, and
+    append an audit event. Editing is NOT a gate decision: it never changes
+    status and never records an approval. Because the content hash changes, any
+    approval the operator had already staged against the old text goes stale —
+    they must re-review, which is the point.
+
+    Only non-factual copy is editable: the site's hero heading/subheading (the
+    fact rows carry claim_ids and stay grounded) and the email's subject/body.
+    The CAN-SPAM footer is re-attached if an edit removed it, and the subject is
+    re-validated, so an edit cannot produce a non-compliant email.
+    """
+    biz = _get_business(session, business_id)
+
+    if payload.subject_type == "site":
+        if biz.status is not BusinessStatus.SITE_DRAFTED:
+            raise TransitionError(
+                f"site edits require status SITE_DRAFTED, got {biz.status.value}"
+            )
+        site = _latest_draft(session, biz.id)
+        if site is None:
+            raise NotFoundError(f"no draft website for business {business_id}")
+        content = deepcopy(site.content_json or {})
+        hero = next((s for s in content.get("sections", []) if s.get("type") == "hero"), None)
+        if hero is None:
+            raise NotFoundError("draft has no hero section to edit")
+        before = {"heading": hero.get("heading"), "subheading": hero.get("subheading")}
+        if payload.heading is not None:
+            hero["heading"] = payload.heading
+        if payload.subheading is not None:
+            hero["subheading"] = payload.subheading
+        site.content_json = content
+        site.content_hash = hash_content(content)
+        session.flush()
+        record_event(
+            session, actor=Actor.HUMAN.value, action="edit",
+            subject_type=SubjectType.SITE.value, subject_id=biz.id,
+            before=before,
+            after={"heading": hero.get("heading"), "subheading": hero.get("subheading"),
+                   "reason": "operator edited site hero copy · re-hashed "
+                             f"{site.content_hash[:12]}"},
+        )
+        return schemas.DraftEditResult(
+            ok=True, business_id=biz.id, gate="site", content_hash=site.content_hash
+        )
+
+    # email
+    if biz.status is not BusinessStatus.EMAIL_DRAFTED:
+        raise TransitionError(
+            f"email edits require status EMAIL_DRAFTED, got {biz.status.value}"
+        )
+    email = _latest_email(session, biz.id)
+    if email is None:
+        raise NotFoundError(f"no draft email for business {business_id}")
+
+    new_subject = payload.subject if payload.subject is not None else email.subject
+    new_body = payload.body if payload.body is not None else email.body
+    validate_subject(new_subject)  # an edit cannot make the subject deceptive
+    if email.footer and email.footer not in new_body:
+        new_body = new_body.rstrip() + email.footer  # never let an edit drop the footer
+
+    before = {"subject": email.subject, "body": email.body}
+    email.subject = new_subject
+    email.body = new_body
+    email.content_hash = hash_content(
+        {"subject": new_subject, "body": new_body, "recipient": email.recipient}
+    )
+    session.flush()
+    record_event(
+        session, actor=Actor.HUMAN.value, action="edit",
+        subject_type=SubjectType.EMAIL.value, subject_id=biz.id,
+        before=before,
+        after={"subject": new_subject,
+               "reason": f"operator edited outreach copy · re-hashed {email.content_hash[:12]}"},
+    )
+    return schemas.DraftEditResult(
+        ok=True, business_id=biz.id, gate="email", content_hash=email.content_hash
     )
 
 

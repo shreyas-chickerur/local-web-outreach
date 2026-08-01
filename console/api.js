@@ -150,14 +150,19 @@ export async function decide({ id, subjectType, decision, contentHash, reason })
 }
 
 /**
- * Editing a draft server-side is not implemented yet (the site draft is
- * generated from verified claims and would need a re-generation + re-hash
- * endpoint; the email likewise). Surface this clearly rather than silently
- * dropping the edit — approve / reject / request-changes are fully wired.
+ * Apply an operator edit to the draft at the current gate. The server re-hashes
+ * the edited content and appends an immutable "edit" audit event; it does NOT
+ * change status or record an approval (editing is not a gate decision). The
+ * caller re-refreshes, which picks up the new hash for the subsequent approval.
  */
-export async function updateDraft(_args) {
-  throw new Error(
-    "Editing drafts isn't wired to the backend yet. Use Approve, Reject, or " +
-    "Request changes. (Server-side draft editing is a planned endpoint.)"
-  );
+export async function updateDraft({ id, subjectType, patch }) {
+  const gate = subjectKind(subjectType);
+  const p = patch || {};
+  const body = gate === "site"
+    ? { subject_type: "site", heading: p.heading, subheading: p.subheading }
+    : { subject_type: "email", subject: p.subject, body: p.body };
+  return http(`/businesses/${id}/edit-draft`, {
+    method: "POST",
+    body: JSON.stringify({ editor: "operator", ...body }),
+  });
 }

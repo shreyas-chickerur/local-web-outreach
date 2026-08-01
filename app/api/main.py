@@ -21,6 +21,7 @@ from app.core.config import database_url
 from app.core.db import make_engine, make_session_factory
 from app.core.errors import (
     ApprovalRequiredError,
+    ComplianceError,
     NotFoundError,
     StaleContentError,
     TransitionError,
@@ -93,6 +94,9 @@ def create_app() -> FastAPI:
         except (TransitionError, ApprovalRequiredError) as exc:
             session.rollback()
             raise HTTPException(status_code=409, detail=str(exc)) from exc
+        except ComplianceError as exc:
+            session.rollback()
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     @app.post("/api/businesses/{business_id}/site-decision",
               response_model=schemas.DecisionResult)
@@ -111,6 +115,15 @@ def create_app() -> FastAPI:
         session: Session = Depends(get_session),
     ):
         return _run_decision(session, service.decide_email, business_id, payload)
+
+    @app.post("/api/businesses/{business_id}/edit-draft",
+              response_model=schemas.DraftEditResult)
+    def edit_draft(
+        business_id: uuid.UUID,
+        payload: schemas.DraftEditIn,
+        session: Session = Depends(get_session),
+    ):
+        return _run_decision(session, service.edit_draft, business_id, payload)
 
     # Serve the Operator Console (static files) at the root, AFTER the /api routes
     # so they take precedence. `html=True` serves console/index.html at "/".

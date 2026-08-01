@@ -252,6 +252,75 @@ def cmd_seed(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_status(_args: argparse.Namespace) -> int:
+    """Counts by status in the configured DB, plus what's waiting on you."""
+    from collections import Counter
+
+    engine = make_engine(database_url())
+    Base.metadata.create_all(engine)
+    session = make_session_factory(engine)()
+    rows = session.query(Business).all()
+    counts = Counter(b.status.value for b in rows)
+    print(f"\n{len(rows)} businesses in {database_url()}\n")
+    for status, n in sorted(counts.items(), key=lambda kv: -kv[1]):
+        print(f"  {status:16} {n:>4}")
+    waiting = counts.get("SITE_DRAFTED", 0) + counts.get("EMAIL_DRAFTED", 0)
+    print(f"\nAwaiting your approval: {waiting}"
+          + ("   → run `make api` and open http://127.0.0.1:8090\n" if waiting else "\n"))
+    session.close()
+    engine.dispose()
+    return 0
+
+
+def cmd_advance(args: argparse.Namespace) -> int:
+    """Walk QUALIFIED businesses → research → site draft → (if we can find an
+    email) outreach draft, so they land at the approval gates."""
+    from app.core.enums import Actor, BusinessStatus
+    from app.core.state_machine import advance
+    from app.stages.collect import collect_sources
+
+    engine = make_engine(database_url())
+    Base.metadata.create_all(engine)
+    session = make_session_factory(engine)()
+    extractor = PassthroughExtractor()
+    fetcher = HttpSiteFetcher()
+
+    pending = (session.query(Business)
+               .filter(Business.status == BusinessStatus.QUALIFIED)
+               .limit(args.limit).all())
+    if not pending:
+        print("No QUALIFIED businesses waiting. Run `discover` first, or check `status`.")
+        session.close()
+        engine.dispose()
+        return 0
+
+    print(f"Advancing {len(pending)} qualified lead(s): research → site draft → outreach\n")
+    n_site = n_email = 0
+    for biz in pending:
+        collected = collect_sources(biz, fetcher)
+        if collected.contact_email and not biz.contact_email:
+            biz.contact_email = collected.contact_email
+        dossier = build_dossier(session, biz, collected.sources, extractor,
+                                model_version="collect/v1")
+        verified = sum(1 for c in dossier.claims if c.status.value == "verified")
+        advance(session, biz, BusinessStatus.RESEARCHED, actor=Actor.SYSTEM.value,
+                reason=f"dossier built: {len(dossier.claims)} claims, {verified} verified")
+        generate_website(session, biz)  # RESEARCHED -> SITE_DRAFTED
+        n_site += 1
+        session.commit()
+        email_note = collected.contact_email or "no public email found — site gate only"
+        print(f"  {biz.name[:34]:34} → SITE_DRAFTED   ({email_note})")
+
+    session.close()
+    engine.dispose()
+    print(f"\n{n_site} site draft(s) awaiting approval"
+          + (f", {n_email} email draft(s)" if n_email else "")
+          + "\nRun `make api` and open http://127.0.0.1:8090 to review.\n")
+    print("Note: the outreach email is drafted automatically when you approve the "
+          "site (Gate 1) — approve one in the console and it appears at Gate 2.")
+    return 0
+
+
 def cmd_discover(args: argparse.Namespace) -> int:
     try:
         source = get_places_source()
@@ -280,6 +349,11 @@ def main(argv: list[str] | None = None) -> int:
     p_seed = sub.add_parser("seed", help="populate the API database with bundled data (no key)")
     p_seed.add_argument("--reset", action="store_true", help="wipe existing rows first")
 
+    sub.add_parser("status", help="counts by status in the configured database")
+
+    p_adv = sub.add_parser("advance", help="research + draft sites for QUALIFIED leads")
+    p_adv.add_argument("--limit", type=int, default=5, help="how many to advance")
+
     p_disc = sub.add_parser("discover", help="discover+qualify a real location (needs API key)")
     p_disc.add_argument("location", help='e.g. "Frisco, TX"')
     p_disc.add_argument("--category", default=None, help="optional category filter")
@@ -289,6 +363,10 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_demo(args)
     if args.command == "seed":
         return cmd_seed(args)
+    if args.command == "status":
+        return cmd_status(args)
+    if args.command == "advance":
+        return cmd_advance(args)
     if args.command == "research-demo":
         return cmd_research_demo(args)
     if args.command == "site-demo":
