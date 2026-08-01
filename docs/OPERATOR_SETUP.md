@@ -27,29 +27,24 @@ B4/B1–B3 (domains + warmup, in parallel, because of the 4-week clock).
 
 ---
 
-## Findings from your first real run (Frisco lawn, 19 businesses)
+## Findings from your first real run (Frisco lawn, 19 businesses) — all addressed
 
-**1. The generated sites are nearly empty — this is the real blocker.**
-All 19 leads have **no website**, which is exactly the segment we target. But
-with no website there is only **one** source (the Google Places record), and a
-fact needs **two independent sources** to become VERIFIED. Result: 2 verified vs
-10 unverified claims, and every site draft reads *"0 verified facts, 5 to
-confirm."* The system is behaving correctly — it refuses to invent corroboration
-— but a near-empty proposal is a weak pitch.
-**Fix:** add a second source for no-website businesses (Yelp, Facebook Pages,
-BBB, YellowPages). That is the deferred "source collector" and it should land
-before you send anything. → *ask me to build this next.*
+**1. Site drafts were empty ("0 verified facts") — root-caused and fixed.**
+All 19 leads have no website, so Google Places was the *only* source, and a fact
+needs **two independent** sources to become VERIFIED. Fixed by adding independent
+directories: **OpenStreetMap** (free, keyless, always on) and **Yelp** (free key
+— see A4b). Verified live: OSM has good storefront coverage but **almost none for
+service-area businesses**, which is why the Yelp key is the one that actually
+matters for your segment. *Set `YELP_API_KEY` before your next run.*
 
-**2. Duplicate businesses.** `JC's Landscaping LLC` was discovered **3×** —
-Google returns the same business under several `place_id`s, and dedup keys on
-`place_id`. Needs name+address fuzzy dedup at discovery.
+**2. Duplicate businesses — fixed.** `JC's Landscaping LLC` was discovered 3×
+because Google returns one business under several `place_id`s. Discovery now
+dedups on a normalized name+address identity (strips punctuation, casing, and
+legal suffixes, so "JC's Landscaping LLC" == "Jc's landscaping"), both within a
+batch and against rows already in the DB. Locked by tests using that exact case.
 
-**3. Only 2 of 19 have an email**, because email scraping reads the business's
-own site and none of these have one. See B6 — for this segment, expect to source
-addresses another way.
-
-**Golden rule:** secrets live in a local `.env` (gitignored). Never commit them,
-never paste them into chat. Use a password manager for every account below.
+**3. Only 2 of 19 had an email.** Email scraping reads the business's own site,
+and none of these have one. Unchanged — see B6 for how to source those.
 
 ---
 
@@ -80,18 +75,18 @@ replies and complaints. **It is NOT what sends cold email** (that's Google
 Workspace on secondary domains — see B2; Gmail's terms forbid bulk cold email
 from a free @gmail.com and Google suspends accounts that do it).
 
-**Do this now — it's the prerequisite for A3/A4 and all of Part B:**
-1. Sign out (or open a private window) → https://accounts.google.com/signup.
-2. Choose **"For my personal use"**.
-3. Pick a professional handle tied to the business, not your name — e.g.
-   `hello.<yourbrand>@gmail.com` or `<yourbrand>.studio@gmail.com`. Write the
-   exact address down.
-4. Add a recovery phone/email so you can't get locked out.
-5. Turn on **2-Step Verification** (myaccount.google.com → Security). Save the
+**☑ DONE — the hub account is `friscooperator@gmail.com`.**
+
+Remaining housekeeping on it:
+1. Add a recovery phone/email so you can't get locked out.
+2. Turn on **2-Step Verification** (myaccount.google.com → Security); save the
    password + backup codes in a password manager.
-6. From now on, use **this** account for: Google Cloud (A3), Anthropic (A4), the
-   domain registrar (B1), Google Workspace admin (B2), Postmaster Tools (B3),
-   and Stripe (B8). One identity, one inbox to monitor.
+3. Use **this** account for everything from here: the Yelp developer key (A4b),
+   the domain registrar (B1), Google Workspace admin (B2), Postmaster Tools
+   (B3), and Stripe (B8). One identity, one inbox to monitor.
+
+(It is also the contact address in the OpenStreetMap client's User-Agent, per
+their usage policy.)
 
 ### A3. Google Places API key (lead discovery) — ☑ DONE (key in `.env`)
 1. Log into https://console.cloud.google.com with the hub Gmail.
@@ -105,6 +100,20 @@ from a free @gmail.com and Google suspends accounts that do it).
 ### A4. Anthropic API key (research + copy) — ☑ DONE (key in `.env`)
 1. Sign up at https://console.anthropic.com with the hub Gmail.
 2. Create an API key; copy it. Add a small credit + a spend limit.
+
+### A4b. Yelp API key — **do this before your next A8 run** (5 minutes, free)
+**Why this matters more than it sounds:** a fact needs **two independent
+sources** to become VERIFIED. Google Places is one. OpenStreetMap is now wired in
+free and keyless — but OSM maps *storefronts*, and it has **almost no coverage of
+service-area businesses** (lawn care, plumbing, locksmiths), which is your
+segment. I verified this live: OSM found Randy's Steakhouse but none of your 19
+lawn-care leads. **Yelp does cover them, with address and phone.** Without it,
+your site drafts stay mostly empty.
+
+1. Go to https://www.yelp.com/developers/v3/manage_app (log in as the hub Gmail).
+2. Create an app — name it anything ("Local Web Outreach"), pick any industry.
+3. Copy the **API Key** into `.env` as `YELP_API_KEY=...`.
+4. Free tier is 500 calls/day, which is far more than this pipeline needs.
 
 ### A5. Physical mailing address (legally required for email)
 CAN-SPAM requires a real postal address in every email footer. Get one you're

@@ -19,6 +19,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+from app.adapters.directory import DirectorySource
 from app.adapters.site_fetch import HttpSiteFetcher
 from app.ai.research_runner import RawClaim, SourceRecord
 from app.core.enums import SourceType
@@ -72,7 +73,11 @@ class Collected:
     contact_email: str | None
 
 
-def collect_sources(business, fetcher: HttpSiteFetcher | None = None) -> Collected:  # noqa: ANN001
+def collect_sources(
+    business,  # noqa: ANN001
+    fetcher: HttpSiteFetcher | None = None,
+    directories: list[DirectorySource] | None = None,
+) -> Collected:
     """Collect the sources we can defend for one discovered business."""
     sources: list[SourceRecord] = []
 
@@ -93,7 +98,30 @@ def collect_sources(business, fetcher: HttpSiteFetcher | None = None) -> Collect
         entity_address=business.address, entity_phone=business.phone, claims=gbp_claims,
     ))
 
-    # Source 2 — the business's own website (independent of the directory).
+    # Sources 2..n — third-party directories (OSM, Yelp). Independent of Google,
+    # so they can actually corroborate; without them a business with no website
+    # has a single source and every fact stays UNVERIFIED forever.
+    for directory in (directories or []):
+        place = directory.lookup(business.name, business.location)
+        if place is None:
+            continue
+        dir_claims = []
+        if place.address:
+            dir_claims.append(RawClaim(field="address", value=place.address,
+                                       source_url=place.source_url,
+                                       source_type=SourceType.DIRECTORY))
+        if place.phone:
+            dir_claims.append(RawClaim(field="phone", value=place.phone,
+                                       source_url=place.source_url,
+                                       source_type=SourceType.DIRECTORY))
+        if dir_claims:
+            sources.append(SourceRecord(
+                source_type=SourceType.DIRECTORY, source_url=place.source_url,
+                entity_name=place.name, entity_address=place.address,
+                entity_phone=place.phone, claims=dir_claims,
+            ))
+
+    # Final source — the business's own website (independent of the directories).
     contact_email = None
     if business.existing_site_url:
         result = (fetcher or HttpSiteFetcher()).fetch(business.existing_site_url)

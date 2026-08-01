@@ -275,6 +275,9 @@ def cmd_status(_args: argparse.Namespace) -> int:
 def cmd_advance(args: argparse.Namespace) -> int:
     """Walk QUALIFIED businesses → research → site draft → (if we can find an
     email) outreach draft, so they land at the approval gates."""
+    from app.adapters.directory import DirectorySource
+    from app.adapters.osm import NominatimSource
+    from app.adapters.yelp import YelpSource, yelp_api_key
     from app.core.enums import Actor, BusinessStatus
     from app.core.state_machine import advance
     from app.stages.collect import collect_sources
@@ -284,6 +287,16 @@ def cmd_advance(args: argparse.Namespace) -> int:
     session = make_session_factory(engine)()
     extractor = PassthroughExtractor()
     fetcher = HttpSiteFetcher()
+    # Independent directories make corroboration possible. OSM is free but
+    # covers storefronts, not service-area businesses; Yelp covers those but
+    # needs a free YELP_API_KEY.
+    directories: list[DirectorySource] = ([] if args.no_directories
+                                          else [NominatimSource()])
+    if not args.no_directories and yelp_api_key():
+        directories.append(YelpSource())
+    if not args.no_directories and not yelp_api_key():
+        print("note: YELP_API_KEY not set — OpenStreetMap only. OSM has poor coverage\n"
+              "      of service businesses, so most facts will stay UNVERIFIED.\n")
 
     pending = (session.query(Business)
                .filter(Business.status == BusinessStatus.QUALIFIED)
@@ -297,7 +310,7 @@ def cmd_advance(args: argparse.Namespace) -> int:
     print(f"Advancing {len(pending)} qualified lead(s): research → site draft → outreach\n")
     n_site = n_email = 0
     for biz in pending:
-        collected = collect_sources(biz, fetcher)
+        collected = collect_sources(biz, fetcher, directories)
         if collected.contact_email and not biz.contact_email:
             biz.contact_email = collected.contact_email
         dossier = build_dossier(session, biz, collected.sources, extractor,
@@ -353,6 +366,8 @@ def main(argv: list[str] | None = None) -> int:
 
     p_adv = sub.add_parser("advance", help="research + draft sites for QUALIFIED leads")
     p_adv.add_argument("--limit", type=int, default=5, help="how many to advance")
+    p_adv.add_argument("--no-directories", action="store_true",
+                       help="skip third-party directory lookups (offline/testing)")
 
     p_disc = sub.add_parser("discover", help="discover+qualify a real location (needs API key)")
     p_disc.add_argument("location", help='e.g. "Frisco, TX"')

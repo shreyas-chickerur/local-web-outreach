@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import pytest
 
+from app.adapters.directory import NullDirectorySource
 from app.adapters.site_fetch import FetchResult
 from app.core.enums import SourceType
 from app.stages.collect import collect_sources, find_contact_email, find_phone, html_to_text
@@ -14,6 +15,7 @@ pytestmark = pytest.mark.unit
 class _Biz:
     def __init__(self, **kw):
         self.name = kw.get("name", "Acme Lawn")
+        self.location = kw.get("location", "Frisco, TX")
         self.place_id = kw.get("place_id", "pid123")
         self.address = kw.get("address", "1 Main St, Frisco, TX")
         self.phone = kw.get("phone", "(972) 555-0148")
@@ -54,7 +56,7 @@ def test_find_phone():
 
 
 def test_collect_uses_gbp_alone_when_there_is_no_site():
-    collected = collect_sources(_Biz(existing_site_url=None), _Fetcher())
+    collected = collect_sources(_Biz(existing_site_url=None), _Fetcher(), [NullDirectorySource()])
     assert len(collected.sources) == 1
     assert collected.sources[0].source_type is SourceType.GBP
     assert {c.field for c in collected.sources[0].claims} == {"address", "phone"}
@@ -63,7 +65,8 @@ def test_collect_uses_gbp_alone_when_there_is_no_site():
 
 def test_collect_adds_the_businesss_own_site_as_a_second_source():
     html = "<p>Acme Lawn — call (972) 555-0148 or email info@acme.com</p>"
-    collected = collect_sources(_Biz(existing_site_url="https://acme.example/"), _Fetcher(html))
+    collected = collect_sources(_Biz(existing_site_url="https://acme.example/"), _Fetcher(html),
+                                [NullDirectorySource()])
 
     types = [s.source_type for s in collected.sources]
     assert types == [SourceType.GBP, SourceType.EXISTING_SITE]
@@ -76,7 +79,7 @@ def test_collect_adds_the_businesss_own_site_as_a_second_source():
 
 def test_collect_tolerates_an_unreachable_site():
     collected = collect_sources(_Biz(existing_site_url="https://down.example/"),
-                                _Fetcher(ok=False))
+                                _Fetcher(ok=False), [NullDirectorySource()])
     assert len(collected.sources) == 1  # only GBP; nothing fabricated
     assert collected.contact_email is None
 
