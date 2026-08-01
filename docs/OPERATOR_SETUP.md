@@ -25,6 +25,29 @@ the software to use them lands in a later phase.
 **Shortest path from here:** A2 (new Gmail) → A8 (dry run, judge the output) →
 B4/B1–B3 (domains + warmup, in parallel, because of the 4-week clock).
 
+---
+
+## Findings from your first real run (Frisco lawn, 19 businesses)
+
+**1. The generated sites are nearly empty — this is the real blocker.**
+All 19 leads have **no website**, which is exactly the segment we target. But
+with no website there is only **one** source (the Google Places record), and a
+fact needs **two independent sources** to become VERIFIED. Result: 2 verified vs
+10 unverified claims, and every site draft reads *"0 verified facts, 5 to
+confirm."* The system is behaving correctly — it refuses to invent corroboration
+— but a near-empty proposal is a weak pitch.
+**Fix:** add a second source for no-website businesses (Yelp, Facebook Pages,
+BBB, YellowPages). That is the deferred "source collector" and it should land
+before you send anything. → *ask me to build this next.*
+
+**2. Duplicate businesses.** `JC's Landscaping LLC` was discovered **3×** —
+Google returns the same business under several `place_id`s, and dedup keys on
+`place_id`. Needs name+address fuzzy dedup at discovery.
+
+**3. Only 2 of 19 have an email**, because email scraping reads the business's
+own site and none of these have one. See B6 — for this segment, expect to source
+addresses another way.
+
 **Golden rule:** secrets live in a local `.env` (gitignored). Never commit them,
 never paste them into chat. Use a password manager for every account below.
 
@@ -207,15 +230,30 @@ immediately. Warmup builds a sending history.
 2. Let it ramp automatically for **3–4 weeks**. Don't shortcut this.
 3. **This is the long pole — start it before anything else in Part B.**
 
-### B5. Decide the sending approach
-| | Managed (Instantly / Smartlead) | Raw Google Workspace |
-|---|---|---|
-| Warmup + rotation | built in | you build it |
-| Reply capture | built in | IMAP/Gmail API (Phase 8) |
-| Cost | ~$40–100/mo | ~$7/mailbox/mo |
-| Recommendation | **start here** | later, if you outgrow it |
+### B5. Decide the sending approach — **recommendation: managed (Instantly or Smartlead)**
 
-Tell me which you pick — it determines the Phase-7 sending adapter I build.
+Both options need the same Google Workspace mailboxes (B2). The question is only
+whether you buy the sending layer or build it.
+
+| | Managed (Instantly / Smartlead) | Raw Workspace + our own code |
+|---|---|---|
+| Mailboxes | Workspace, ~$7/mailbox/mo | same, ~$7/mailbox/mo |
+| Sending layer | ~$37–94/mo | $0 |
+| Warmup | **included** | separate tool, ~$30–50/mo |
+| Inbox rotation | included | I build it |
+| Reply capture | included | I build it (Phase 8) |
+| Deliverability reporting | included | I build it |
+| **Realistic monthly (6 mailboxes)** | **~$80–140** | **~$70–120** |
+| Time to first send | days | weeks |
+
+**Managed is both cheaper in practice and far better here**, because the "free"
+column silently costs a warmup subscription anyway — and warmup is the one part
+you cannot skip or hand-roll safely. It also removes the riskiest custom code
+(rotation + throttling) from a system whose failure mode is a burned domain.
+
+Take raw Workspace only if you later scale past a few hundred sends/day and want
+the margin. The Phase-7 adapter is an interface either way, so switching later is
+a contained change, not a rewrite.
 
 ### B6. Recipient-email sourcing — ☑ partly solved
 The pipeline now **scrapes the business's own public contact email** from their
