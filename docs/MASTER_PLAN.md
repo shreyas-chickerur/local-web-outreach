@@ -359,7 +359,11 @@ Each phase: **Goal → Build → Interfaces → Tests → DoD.** Guard tests are
   - `test_guard_suppression_and_geo_at_send.py` — final send re-checks suppression + geo.
   - `test_rotation_distributes.py` — sends spread across inboxes.
   - `test_warmup_gate.py` — domain younger than warmup window can't send live campaigns.
-- **DoD:** approved emails go out within safe limits; a degrading domain pauses itself.
+  - `test_guard_real_sender_address.py` — send path calls `compliance.assert_real_sender_address`
+    (already built + tested in `test_compliance.py`); a placeholder/empty `SENDER_POSTAL_ADDRESS`
+    raises `ComplianceError` and **no email leaves**. Wire this as the first check in the send path.
+- **DoD:** approved emails go out within safe limits; a degrading domain pauses itself; a placeholder
+  sender address makes sending impossible (not just unlikely).
 
 ### Phase 8 — Reply monitoring & classification
 - **Goal:** capture replies, classify, auto-handle unsubscribes/complaints. Enforces invariant #4.

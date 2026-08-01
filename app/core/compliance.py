@@ -30,6 +30,39 @@ def build_footer(*, sender_name: str, postal_address: str) -> str:
     )
 
 
+# A sender address that still contains any of these is not a real address — it's
+# the config default or the .env template stub. Chosen to never match a genuine
+# street address.
+_PLACEHOLDER_ADDRESS_MARKERS = (
+    "example",
+    "change me",
+    "your real mailing address",
+    "your mailing address",
+    "placeholder",
+    "todo",
+)
+
+
+def is_placeholder_address(postal_address: str) -> bool:
+    """True if the sender's postal address is empty or an obvious placeholder."""
+    a = (postal_address or "").strip().lower()
+    if not a:
+        return True
+    return any(m in a for m in _PLACEHOLDER_ADDRESS_MARKERS)
+
+
+def assert_real_sender_address(postal_address: str) -> None:
+    """Hard send-time guard (invariant #4): refuse to send while the sender's
+    postal address is empty or a placeholder. Every commercial email legally needs
+    a real physical address (CAN-SPAM), so the Phase 7 send path MUST call this
+    before dispatch. Raises ``ComplianceError``."""
+    if is_placeholder_address(postal_address):
+        raise ComplianceError(
+            "SENDER_POSTAL_ADDRESS is empty or a placeholder — set a real physical "
+            "mailing address before sending (CAN-SPAM requires it in every email)."
+        )
+
+
 def validate_subject(subject: str) -> None:
     """Reject empty, shouting, or deceptive subjects."""
     s = (subject or "").strip()

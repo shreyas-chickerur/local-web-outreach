@@ -5,7 +5,9 @@ from __future__ import annotations
 import pytest
 
 from app.core.compliance import (
+    assert_real_sender_address,
     build_footer,
+    is_placeholder_address,
     is_suppressed,
     suppress,
     validate_email,
@@ -64,3 +66,34 @@ def test_is_suppressed_exact_and_domain(session):
     assert is_suppressed(session, "anyone@blocked.com") is True  # domain match
     assert is_suppressed(session, "someone@fine.com") is False
     assert is_suppressed(session, "") is False
+
+
+# --- placeholder-address send guard (blocks non-compliant sends) ------------
+@pytest.mark.parametrize(
+    "addr",
+    [
+        "",
+        "   ",
+        "123 Example St, Frisco, TX 75034",  # config.py default
+        "CHANGE ME — your real mailing address, e.g. 123 Main St, Frisco, TX",  # .env stub
+        "your mailing address here",
+        "TODO",
+    ],
+)
+def test_placeholder_addresses_are_rejected(addr):
+    assert is_placeholder_address(addr) is True
+    with pytest.raises(ComplianceError):
+        assert_real_sender_address(addr)
+
+
+@pytest.mark.parametrize(
+    "addr",
+    [
+        "500 Main St, Frisco, TX 75034",
+        "PO Box 1234, Dallas, TX 75201",
+        "1600 Pennsylvania Ave NW, Washington, DC 20500",
+    ],
+)
+def test_real_addresses_pass(addr):
+    assert is_placeholder_address(addr) is False
+    assert_real_sender_address(addr)  # does not raise
