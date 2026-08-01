@@ -36,7 +36,7 @@
     --shadow:0 1px 2px rgba(0,0,0,.45),0 1px 1px rgba(0,0,0,.3);
     --shadow-lg:0 16px 40px rgba(0,0,0,.6),0 4px 10px rgba(0,0,0,.4);
   }
-  body{background:var(--bg);color:var(--fg);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.45}
+  body{background:var(--bg);color:var(--fg);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-size:18px;line-height:1.45}
   a{color:var(--accent);text-decoration:none}
   a:hover{color:var(--accent);text-decoration:underline}
   ::-webkit-scrollbar{width:10px;height:10px}
@@ -65,40 +65,40 @@
           <div style="width:10px;height:10px;border:2px solid var(--accent-fg);border-radius:2px"></div>
         </div>
         <div style="line-height:1.1">
-          <div style="font-weight:700;font-size:13px;letter-spacing:-.01em">Local Web Outreach</div>
-          <div style="font-size:10.5px;color:var(--fg-faint);letter-spacing:.06em;text-transform:uppercase;margin-top:2px">Operator Console</div>
+          <div style="font-weight:700;font-size:17px;letter-spacing:-.01em">Local Web Outreach</div>
+          <div style="font-size:14.5px;color:var(--fg-faint);letter-spacing:.06em;text-transform:uppercase;margin-top:2px">Operator Console</div>
         </div>
       </div>
     </div>
 
     <div style="padding:8px 10px;display:flex;flex-direction:column;gap:2px">
       <sc-for list="{{ nav }}" as="item" hint-placeholder-count="3">
-        <button onClick="{{ item.onClick }}" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid {{ item.bd }};background:{{ item.bg }};color:{{ item.fg }};width:100%;text-align:left;transition:background .12s,color .12s">
+        <button onClick="{{ item.onClick }}" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;font-size:17px;font-weight:500;cursor:pointer;border:1px solid {{ item.bd }};background:{{ item.bg }};color:{{ item.fg }};width:100%;text-align:left;transition:background .12s,color .12s">
           <span style="width:16px;height:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:{{ item.iconColor }}">
             <span style="width:9px;height:9px;border-radius:{{ item.iconRadius }};border:1.6px solid currentColor;display:block"></span>
           </span>
           <span style="flex:1">{{ item.label }}</span>
           <sc-if value="{{ item.showBadge }}" hint-placeholder-val="{{ false }}">
-            <span class="mono" style="min-width:20px;text-align:center;font-size:11px;font-weight:600;padding:1px 6px;border-radius:20px;background:var(--accent);color:var(--accent-fg)">{{ item.badge }}</span>
+            <span class="mono" style="min-width:20px;text-align:center;font-size:15px;font-weight:600;padding:1px 6px;border-radius:20px;background:var(--accent);color:var(--accent-fg)">{{ item.badge }}</span>
           </sc-if>
         </button>
       </sc-for>
     </div>
 
     <div style="margin-top:auto;padding:12px 14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:12px">
-      <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--fg-muted)">
+      <div style="display:flex;align-items:center;gap:8px;font-size:15px;color:var(--fg-muted)">
         <span style="width:7px;height:7px;border-radius:50%;background:var(--ok);flex-shrink:0"></span>
         <span>Kill switch armed · nothing auto-sends</span>
       </div>
-      <button onClick="{{ toggleTheme }}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg-muted);font-size:12px;cursor:pointer;width:100%">
+      <button onClick="{{ toggleTheme }}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg-muted);font-size:16.5px;cursor:pointer;width:100%">
         <span>Appearance</span>
         <span class="mono" style="font-weight:600;color:var(--fg)">{{ themeLabel }}</span>
       </button>
       <div style="display:flex;align-items:center;gap:9px;padding-top:2px">
-        <div style="width:28px;height:28px;border-radius:50%;background:var(--panel-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--fg-muted)">OP</div>
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--panel-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--fg-muted)">OP</div>
         <div style="line-height:1.2">
-          <div style="font-size:12px;font-weight:600">Operator</div>
-          <div style="font-size:10.5px;color:var(--fg-faint)">sole reviewer</div>
+          <div style="font-size:16.5px;font-weight:600">Operator</div>
+          <div style="font-size:14.5px;color:var(--fg-faint)">sole reviewer</div>
         </div>
       </div>
     </div>
@@ -108,7 +108,7 @@
   <main style="flex:1;height:100%;overflow:hidden;display:flex;flex-direction:column;min-width:0">
 
     <sc-if value="{{ notLoaded }}" hint-placeholder-val="{{ true }}">
-      <div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--fg-faint);font-size:13px">
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--fg-faint);font-size:17px">
         <span class="mono">loading console…</span>
       </div>
     </sc-if>
@@ -117,63 +117,63 @@
     <sc-if value="{{ isBoard }}" hint-placeholder-val="{{ false }}">
       <div style="flex-shrink:0;padding:18px 24px 14px;border-bottom:1px solid var(--border);background:var(--panel);display:flex;align-items:center;justify-content:space-between;gap:16px">
         <div>
-          <h1 style="margin:0;font-size:18px;font-weight:700;letter-spacing:-.01em">Pipeline</h1>
-          <div style="font-size:12px;color:var(--fg-muted);margin-top:3px">{{ boardCount }} businesses · Frisco, TX</div>
+          <h1 style="margin:0;font-size:21.5px;font-weight:700;letter-spacing:-.01em">Pipeline</h1>
+          <div style="font-size:16.5px;color:var(--fg-muted);margin-top:3px">{{ boardCount }} businesses · Frisco, TX</div>
         </div>
         <button onClick="{{ navReview }}" style="display:flex;align-items:center;gap:12px;padding:9px 14px 9px 16px;border-radius:9px;border:1px solid {{ awaitingBd }};background:{{ awaitingBg }};cursor:pointer;box-shadow:var(--shadow)">
           <span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.15">
-            <span style="font-size:11px;color:var(--fg-muted);text-transform:uppercase;letter-spacing:.06em">Awaiting your approval</span>
-            <span style="font-size:13px;font-weight:600;color:{{ awaitingText }}">{{ awaitingLabel }}</span>
+            <span style="font-size:15px;color:var(--fg-muted);text-transform:uppercase;letter-spacing:.06em">Awaiting your approval</span>
+            <span style="font-size:17px;font-weight:600;color:{{ awaitingText }}">{{ awaitingLabel }}</span>
           </span>
-          <span class="mono" style="font-size:20px;font-weight:600;color:{{ awaitingText }};min-width:26px;text-align:center">{{ awaiting }}</span>
+          <span class="mono" style="font-size:24px;font-weight:600;color:{{ awaitingText }};min-width:26px;text-align:center">{{ awaiting }}</span>
         </button>
       </div>
 
       <div style="flex:1;overflow:auto;padding:18px 24px 8px">
         <div style="display:flex;gap:14px;align-items:flex-start;min-height:min-content">
           <sc-for list="{{ columns }}" as="col" hint-placeholder-count="6">
-            <div style="width:262px;flex-shrink:0;display:flex;flex-direction:column;gap:10px">
+            <div style="width:{{ col.width }};flex-shrink:0;display:flex;flex-direction:column;gap:10px">
               <div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px">
-                <div style="display:flex;align-items:center;gap:7px">
-                  <span style="width:7px;height:7px;border-radius:2px;background:{{ col.dot }}"></span>
-                  <span style="font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted)">{{ col.label }}</span>
+                <div style="display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden">
+                  <span style="width:7px;height:7px;border-radius:2px;background:{{ col.dot }};flex-shrink:0"></span>
+                  <span title="{{ col.label }}" style="font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ col.label }}</span>
                 </div>
-                <span class="mono" style="font-size:11px;color:var(--fg-faint)">{{ col.count }}</span>
+                <span class="mono" style="font-size:15px;color:var(--fg-faint);flex-shrink:0;padding-left:6px">{{ col.count }}</span>
               </div>
               <sc-for list="{{ col.cards }}" as="card" hint-placeholder-count="1">
                 <button onClick="{{ card.onOpen }}" style="text-align:left;width:100%;background:var(--panel);border:1px solid {{ card.border }};border-radius:9px;padding:12px;cursor:pointer;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:9px;transition:border-color .12s">
                   <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
-                    <span style="font-size:13.5px;font-weight:600;letter-spacing:-.01em;line-height:1.25">{{ card.name }}</span>
+                    <span style="font-size:17.5px;font-weight:600;letter-spacing:-.01em;line-height:1.25">{{ card.name }}</span>
                     <sc-if value="{{ card.hasScore }}" hint-placeholder-val="{{ false }}">
-                      <span class="mono" style="font-size:12px;font-weight:600;color:var(--fg);flex-shrink:0">{{ card.score }}</span>
+                      <span class="mono" style="font-size:16.5px;font-weight:600;color:var(--fg);flex-shrink:0">{{ card.score }}</span>
                     </sc-if>
                   </div>
-                  <div style="font-size:11px;color:var(--fg-faint)">{{ card.meta }}</div>
+                  <div style="font-size:15px;color:var(--fg-faint)">{{ card.meta }}</div>
                   <sc-if value="{{ card.hasScore }}" hint-placeholder-val="{{ false }}">
                     <div style="height:3px;border-radius:3px;background:var(--inset);overflow:hidden">
                       <div style="height:100%;width:{{ card.scorePct }};background:var(--fg-muted);border-radius:3px"></div>
                     </div>
                   </sc-if>
                   <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;background:var(--panel-2);border:1px solid var(--border)">
-                    <span style="font-size:9px;color:var(--fg-faint);text-transform:uppercase;letter-spacing:.05em;flex-shrink:0">why</span>
-                    <span style="font-size:11px;color:var(--fg-muted);line-height:1.3">{{ card.why }}</span>
+                    <span style="font-size:13px;color:var(--fg-faint);text-transform:uppercase;letter-spacing:.05em;flex-shrink:0">why</span>
+                    <span style="font-size:15px;color:var(--fg-muted);line-height:1.3">{{ card.why }}</span>
                   </div>
                   <sc-if value="{{ card.awaiting }}" hint-placeholder-val="{{ false }}">
-                    <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--accent)">
+                    <div style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:600;color:var(--accent)">
                       <span style="width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>{{ card.gateLabel }}
                     </div>
                   </sc-if>
                 </button>
               </sc-for>
               <sc-if value="{{ col.empty }}" hint-placeholder-val="{{ false }}">
-                <div style="border:1px dashed var(--border);border-radius:9px;padding:14px;text-align:center;font-size:11px;color:var(--fg-faint)">empty</div>
+                <div style="border:1px dashed var(--border);border-radius:9px;padding:14px;text-align:center;font-size:15px;color:var(--fg-faint)">empty</div>
               </sc-if>
             </div>
           </sc-for>
         </div>
 
         <div style="margin-top:18px;border-top:1px solid var(--border);padding-top:14px">
-          <button onClick="{{ toggleClosed }}" style="display:flex;align-items:center;gap:8px;background:transparent;border:none;cursor:pointer;color:var(--fg-muted);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:0">
+          <button onClick="{{ toggleClosed }}" style="display:flex;align-items:center;gap:8px;background:transparent;border:none;cursor:pointer;color:var(--fg-muted);font-size:16.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:0">
             <span style="width:14px;text-align:center">{{ closedCaret }}</span>
             Closed <span class="mono" style="color:var(--fg-faint)">{{ closedCount }}</span>
           </button>
@@ -182,10 +182,10 @@
               <sc-for list="{{ closedCards }}" as="card" hint-placeholder-count="4">
                 <button onClick="{{ card.onOpen }}" style="text-align:left;width:236px;background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:11px;cursor:pointer;display:flex;flex-direction:column;gap:6px">
                   <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-                    <span style="font-size:12.5px;font-weight:600">{{ card.name }}</span>
-                    <span style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-faint);border:1px solid var(--border);border-radius:5px;padding:1px 6px">{{ card.statusLabel }}</span>
+                    <span style="font-size:16px;font-weight:600">{{ card.name }}</span>
+                    <span style="font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-faint);border:1px solid var(--border);border-radius:5px;padding:1px 6px">{{ card.statusLabel }}</span>
                   </div>
-                  <div style="font-size:11px;color:var(--fg-faint)">{{ card.why }}</div>
+                  <div style="font-size:15px;color:var(--fg-faint)">{{ card.why }}</div>
                 </button>
               </sc-for>
             </div>
@@ -198,15 +198,15 @@
     <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
       <div style="flex-shrink:0;padding:14px 24px;border-bottom:1px solid var(--border);background:var(--panel);display:flex;align-items:center;justify-content:space-between;gap:16px">
         <div style="display:flex;align-items:center;gap:14px">
-          <h1 style="margin:0;font-size:18px;font-weight:700;letter-spacing:-.01em">Review queue</h1>
+          <h1 style="margin:0;font-size:21.5px;font-weight:700;letter-spacing:-.01em">Review queue</h1>
           <sc-if value="{{ hasCurrent }}" hint-placeholder-val="{{ false }}">
-            <span class="mono" style="font-size:12px;color:var(--fg-muted);border:1px solid var(--border);border-radius:20px;padding:2px 10px">{{ queuePos }}</span>
+            <span class="mono" style="font-size:16.5px;color:var(--fg-muted);border:1px solid var(--border);border-radius:20px;padding:2px 10px">{{ queuePos }}</span>
           </sc-if>
         </div>
         <sc-if value="{{ hasCurrent }}" hint-placeholder-val="{{ false }}">
           <div style="display:flex;align-items:center;gap:8px">
-            <button onClick="{{ prevItem }}" style="width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg-muted);cursor:pointer;font-size:14px">←</button>
-            <button onClick="{{ nextItem }}" style="width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg-muted);cursor:pointer;font-size:14px">→</button>
+            <button onClick="{{ prevItem }}" style="width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg-muted);cursor:pointer;font-size:18px">←</button>
+            <button onClick="{{ nextItem }}" style="width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg-muted);cursor:pointer;font-size:18px">→</button>
           </div>
         </sc-if>
       </div>
@@ -214,13 +214,13 @@
       <sc-if value="{{ queueEmpty }}" hint-placeholder-val="{{ false }}">
         <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--fg-muted)">
           <div style="width:48px;height:48px;border-radius:12px;border:1px solid var(--ok-border);background:var(--ok-soft);display:flex;align-items:center;justify-content:center">
-            <span style="color:var(--ok);font-size:22px">✓</span>
+            <span style="color:var(--ok);font-size:26.5px">✓</span>
           </div>
           <div style="text-align:center">
-            <div style="font-size:16px;font-weight:600;color:var(--fg)">Queue clear</div>
-            <div style="font-size:13px;margin-top:4px">Nothing is waiting on your approval. Nothing sends on its own.</div>
+            <div style="font-size:19px;font-weight:600;color:var(--fg)">Queue clear</div>
+            <div style="font-size:17px;margin-top:4px">Nothing is waiting on your approval. Nothing sends on its own.</div>
           </div>
-          <button onClick="{{ navBoard }}" style="margin-top:4px;padding:8px 16px;border-radius:8px;border:1px solid var(--accent-border);background:var(--accent-soft);color:var(--accent);font-weight:600;font-size:13px;cursor:pointer">Back to pipeline</button>
+          <button onClick="{{ navBoard }}" style="margin-top:4px;padding:8px 16px;border-radius:8px;border:1px solid var(--accent-border);background:var(--accent-soft);color:var(--accent);font-weight:600;font-size:17px;cursor:pointer">Back to pipeline</button>
         </div>
       </sc-if>
 
@@ -232,26 +232,26 @@
             <div style="overflow:auto;padding:20px 22px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:18px">
               <div>
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-                  <button onClick="{{ cur.onOpenDetail }}" style="font-size:19px;font-weight:700;letter-spacing:-.01em;background:none;border:none;padding:0;color:var(--fg);cursor:pointer;text-align:left">{{ cur.name }}</button>
+                  <button onClick="{{ cur.onOpenDetail }}" style="font-size:23px;font-weight:700;letter-spacing:-.01em;background:none;border:none;padding:0;color:var(--fg);cursor:pointer;text-align:left">{{ cur.name }}</button>
                 </div>
-                <div style="font-size:12.5px;color:var(--fg-muted)">{{ cur.meta }}</div>
+                <div style="font-size:16px;color:var(--fg-muted)">{{ cur.meta }}</div>
                 <div style="margin-top:12px;border:1px solid var(--accent-border);background:var(--accent-soft);border-radius:9px;padding:11px 13px">
-                  <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);font-weight:600;margin-bottom:3px">Why this is a lead</div>
-                  <div style="font-size:13px;color:var(--fg);line-height:1.4">{{ cur.why }}</div>
+                  <div style="font-size:14.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);font-weight:600;margin-bottom:3px">Why this is a lead</div>
+                  <div style="font-size:17px;color:var(--fg);line-height:1.4">{{ cur.why }}</div>
                 </div>
               </div>
 
               <div>
-                <div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:8px">Existing site</div>
+                <div style="font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:8px">Existing site</div>
                 <sc-if value="{{ cur.noSite }}" hint-placeholder-val="{{ false }}">
-                  <div style="font-size:12.5px;color:var(--fg-muted);padding:8px 11px;border:1px dashed var(--border);border-radius:8px">No website today — clean-slate opportunity.</div>
+                  <div style="font-size:16px;color:var(--fg-muted);padding:8px 11px;border:1px dashed var(--border);border-radius:8px">No website today — clean-slate opportunity.</div>
                 </sc-if>
                 <sc-if value="{{ cur.hasWeak }}" hint-placeholder-val="{{ false }}">
                   <div style="display:flex;flex-wrap:wrap;gap:7px">
                     <sc-for list="{{ cur.weaknesses }}" as="w" hint-placeholder-count="3">
                       <div style="{{ w.chipStyle }}" title="{{ w.evidence }}">
                         <span style="{{ w.sevDot }}"></span>
-                        <span style="font-weight:600;font-size:9px;letter-spacing:.04em">{{ w.sevLabel }}</span>
+                        <span style="font-weight:600;font-size:13px;letter-spacing:.04em">{{ w.sevLabel }}</span>
                         <span>{{ w.issue }}</span>
                       </div>
                     </sc-for>
@@ -261,11 +261,11 @@
 
               <div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-                  <div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600">Research dossier</div>
+                  <div style="font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600">Research dossier</div>
                   <div style="display:flex;gap:9px">
-                    <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--fg-muted)"><span style="width:8px;height:8px;border-radius:2px;background:var(--ok)"></span>verified</span>
-                    <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--fg-muted)"><span style="width:8px;height:8px;border-radius:2px;background:var(--warn)"></span>unverified</span>
-                    <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--fg-muted)"><span style="width:8px;height:8px;border-radius:2px;background:var(--bad)"></span>conflict</span>
+                    <span style="display:flex;align-items:center;gap:4px;font-size:14.5px;color:var(--fg-muted)"><span style="width:8px;height:8px;border-radius:2px;background:var(--ok)"></span>verified</span>
+                    <span style="display:flex;align-items:center;gap:4px;font-size:14.5px;color:var(--fg-muted)"><span style="width:8px;height:8px;border-radius:2px;background:var(--warn)"></span>unverified</span>
+                    <span style="display:flex;align-items:center;gap:4px;font-size:14.5px;color:var(--fg-muted)"><span style="width:8px;height:8px;border-radius:2px;background:var(--bad)"></span>conflict</span>
                   </div>
                 </div>
                 <div style="border:1px solid var(--border);border-radius:9px;overflow:hidden">
@@ -275,21 +275,21 @@
                         <span style="width:4px;align-self:stretch;border-radius:3px;background:{{ c.accent }};flex-shrink:0"></span>
                         <div style="flex:1;min-width:0">
                           <div style="display:flex;align-items:center;gap:8px">
-                            <span style="font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-faint)">{{ c.field }}</span>
+                            <span style="font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-faint)">{{ c.field }}</span>
                             <span style="{{ c.badgeStyle }}">{{ c.statusLabel }}</span>
                           </div>
-                          <div style="font-size:13px;color:var(--fg);margin-top:2px;line-height:1.3">{{ c.valueText }}</div>
+                          <div style="font-size:17px;color:var(--fg);margin-top:2px;line-height:1.3">{{ c.valueText }}</div>
                         </div>
                         <div style="text-align:right;flex-shrink:0">
-                          <div class="mono" style="font-size:12px;font-weight:600;color:{{ c.accent }}">{{ c.pct }}</div>
-                          <div style="font-size:9.5px;color:var(--fg-faint)">{{ c.corrLabel }}</div>
+                          <div class="mono" style="font-size:16.5px;font-weight:600;color:{{ c.accent }}">{{ c.pct }}</div>
+                          <div style="font-size:14px;color:var(--fg-faint)">{{ c.corrLabel }}</div>
                         </div>
                       </div>
                       <details style="margin-top:7px;margin-left:14px">
-                        <summary style="font-size:10.5px;color:var(--accent);display:inline-flex;align-items:center;gap:4px">sources ({{ c.sourceCount }})</summary>
+                        <summary style="font-size:14.5px;color:var(--accent);display:inline-flex;align-items:center;gap:4px">sources ({{ c.sourceCount }})</summary>
                         <div style="display:flex;flex-direction:column;gap:3px;margin-top:5px;padding-left:2px">
                           <sc-for list="{{ c.sources }}" as="s" hint-placeholder-count="2">
-                            <a href="{{ s.url }}" target="_blank" rel="noopener" class="mono" style="font-size:10.5px;display:flex;align-items:center;gap:6px;word-break:break-all"><span style="text-transform:uppercase;color:var(--fg-faint);letter-spacing:.04em;flex-shrink:0">{{ s.type }}</span>{{ s.url }}</a>
+                            <a href="{{ s.url }}" target="_blank" rel="noopener" class="mono" style="font-size:14.5px;display:flex;align-items:center;gap:6px;word-break:break-all"><span style="text-transform:uppercase;color:var(--fg-faint);letter-spacing:.04em;flex-shrink:0">{{ s.type }}</span>{{ s.url }}</a>
                           </sc-for>
                         </div>
                       </details>
@@ -300,10 +300,10 @@
 
               <sc-if value="{{ cur.hasQuestions }}" hint-placeholder-val="{{ false }}">
                 <div>
-                  <div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:8px">Needs confirmation from owner</div>
+                  <div style="font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:8px">Needs confirmation from owner</div>
                   <div style="display:flex;flex-direction:column;gap:6px">
                     <sc-for list="{{ cur.questions }}" as="q" hint-placeholder-count="2">
-                      <div style="display:flex;gap:8px;font-size:12.5px;color:var(--fg);padding:8px 11px;border:1px solid var(--warn-border);background:var(--warn-soft);border-radius:7px;line-height:1.35">
+                      <div style="display:flex;gap:8px;font-size:16px;color:var(--fg);padding:8px 11px;border:1px solid var(--warn-border);background:var(--warn-soft);border-radius:7px;line-height:1.35">
                         <span style="color:var(--warn);flex-shrink:0">?</span><span>{{ q }}</span>
                       </div>
                     </sc-for>
@@ -313,15 +313,15 @@
 
               <sc-if value="{{ cur.hasRejected }}" hint-placeholder-val="{{ false }}">
                 <div>
-                  <div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:6px">Look-alikes we did <span style="color:var(--fg)">not</span> merge</div>
+                  <div style="font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:6px">Look-alikes we did <span style="color:var(--fg)">not</span> merge</div>
                   <div style="display:flex;flex-direction:column;gap:5px">
                     <sc-for list="{{ cur.rejected }}" as="r" hint-placeholder-count="1">
-                      <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--fg-muted);padding:7px 11px;border:1px solid var(--border);border-radius:7px;background:var(--panel-2)">
+                      <div style="display:flex;align-items:center;gap:8px;font-size:16.5px;color:var(--fg-muted);padding:7px 11px;border:1px solid var(--border);border-radius:7px;background:var(--panel-2)">
                         <span class="mono" style="color:var(--fg-faint);text-decoration:line-through">rejected</span>{{ r.entity_name }}
                       </div>
                     </sc-for>
                   </div>
-                  <div style="font-size:10.5px;color:var(--fg-faint);margin-top:5px">Proof we didn't confuse this business with a different one.</div>
+                  <div style="font-size:14.5px;color:var(--fg-faint);margin-top:5px">Proof we didn't confuse this business with a different one.</div>
                 </div>
               </sc-if>
             </div>
@@ -332,10 +332,10 @@
               <sc-if value="{{ cur.isSite }}" hint-placeholder-val="{{ false }}">
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
                   <div style="display:flex;align-items:center;gap:9px">
-                    <span style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600">Generated website</span>
-                    <span class="mono" style="font-size:10.5px;color:var(--fg-faint)">v{{ cur.siteVersion }} · {{ cur.siteHash }}</span>
+                    <span style="font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600">Generated website</span>
+                    <span class="mono" style="font-size:14.5px;color:var(--fg-faint)">v{{ cur.siteVersion }} · {{ cur.siteHash }}</span>
                   </div>
-                  <label style="display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--fg-muted);cursor:pointer;user-select:none">
+                  <label style="display:flex;align-items:center;gap:7px;font-size:16px;color:var(--fg-muted);cursor:pointer;user-select:none">
                     <button onClick="{{ toggleTrace }}" style="width:34px;height:19px;border-radius:20px;border:1px solid {{ traceTrackBd }};background:{{ traceTrack }};position:relative;cursor:pointer;padding:0;transition:background .14s">
                       <span style="position:absolute;top:1px;left:{{ traceKnob }};width:15px;height:15px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .14s"></span>
                     </button>
@@ -347,10 +347,10 @@
                 <div style="border:1px solid var(--border-strong);border-radius:11px;overflow:hidden;background:#fff;box-shadow:var(--shadow-lg);position:relative">
                   <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#eef0f3;border-bottom:1px solid #dfe3e8">
                     <span style="display:flex;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#d3d7dd"></span><span style="width:9px;height:9px;border-radius:50%;background:#d3d7dd"></span><span style="width:9px;height:9px;border-radius:50%;background:#d3d7dd"></span></span>
-                    <div class="mono" title="{{ cur.previewUrl }}" style="flex:1 1 0;min-width:0;font-size:10.5px;color:#7a828d;background:#fff;border:1px solid #dfe3e8;border-radius:6px;padding:3px 9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ cur.previewUrl }}</div>
-                    <span style="flex-shrink:0;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:.05em;color:#5a6472;border:1px solid #cfd4da;border-radius:5px;padding:2px 6px" title="Search engines are blocked from indexing this preview">{{ cur.noindexLabel }}</span>
+                    <div class="mono" title="{{ cur.previewUrl }}" style="flex:1 1 0;min-width:0;font-size:14.5px;color:#7a828d;background:#fff;border:1px solid #dfe3e8;border-radius:6px;padding:3px 9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ cur.previewUrl }}</div>
+                    <span style="flex-shrink:0;white-space:nowrap;font-size:13px;font-weight:600;letter-spacing:.05em;color:#5a6472;border:1px solid #cfd4da;border-radius:5px;padding:2px 6px" title="Search engines are blocked from indexing this preview">{{ cur.noindexLabel }}</span>
                   </div>
-                  <div style="position:absolute;top:44px;right:-34px;transform:rotate(45deg);background:#1b2129;color:#fff;font-size:9.5px;font-weight:700;letter-spacing:.08em;padding:4px 40px;z-index:5;box-shadow:0 2px 6px rgba(0,0,0,.3)">DRAFT — PRIVATE</div>
+                  <div style="position:absolute;top:44px;right:-34px;transform:rotate(45deg);background:#1b2129;color:#fff;font-size:14px;font-weight:700;letter-spacing:.08em;padding:4px 40px;z-index:5;box-shadow:0 2px 6px rgba(0,0,0,.3)">DRAFT — PRIVATE</div>
 
                   <!-- rendered site -->
                   <div style="font-family:'IBM Plex Sans',sans-serif;color:#1b2129;background:#fff;max-height:none">
@@ -358,25 +358,25 @@
                       <sc-if value="{{ sec.isHero }}" hint-placeholder-val="{{ false }}">
                         <div style="padding:0">
                           <div style="height:150px;background:repeating-linear-gradient(135deg,#eceef1 0 14px,#f4f5f7 14px 28px);display:flex;align-items:center;justify-content:center;border-bottom:1px solid #e6e9ed">
-                            <span class="mono" style="font-size:11px;color:#9aa1ab;letter-spacing:.04em">[ hero image ]</span>
+                            <span class="mono" style="font-size:15px;color:#9aa1ab;letter-spacing:.04em">[ hero image ]</span>
                           </div>
                           <div style="padding:26px 30px 22px;text-align:center">
-                            <div style="font-size:27px;font-weight:700;letter-spacing:-.02em">{{ sec.heading }}</div>
-                            <div style="font-size:14px;color:#5a6472;margin-top:7px">{{ sec.subheading }}</div>
-                            <div style="margin-top:16px;display:inline-block;background:#1b2129;color:#fff;font-size:12px;font-weight:600;padding:9px 20px;border-radius:7px">Get in touch</div>
+                            <div style="font-size:32.5px;font-weight:700;letter-spacing:-.02em">{{ sec.heading }}</div>
+                            <div style="font-size:18px;color:#5a6472;margin-top:7px">{{ sec.subheading }}</div>
+                            <div style="margin-top:16px;display:inline-block;background:#1b2129;color:#fff;font-size:16.5px;font-weight:600;padding:9px 20px;border-radius:7px">Get in touch</div>
                           </div>
                         </div>
                       </sc-if>
                       <sc-if value="{{ sec.isFacts }}" hint-placeholder-val="{{ false }}">
                         <div style="padding:22px 30px;border-top:1px solid #eef0f3">
-                          <div style="font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px">{{ sec.heading }}</div>
+                          <div style="font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px">{{ sec.heading }}</div>
                           <div style="display:flex;flex-direction:column;gap:9px">
                             <sc-for list="{{ sec.facts }}" as="f" hint-placeholder-count="2">
                               <div onMouseEnter="{{ f.onEnter }}" onMouseLeave="{{ f.onLeave }}" style="{{ f.rowStyle }}">
-                                <span style="font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#9aa1ab;min-width:70px">{{ f.label }}</span>
-                                <span style="font-size:13.5px;color:#1b2129;flex:1">{{ f.value }}</span>
+                                <span style="font-size:14.5px;text-transform:uppercase;letter-spacing:.05em;color:#9aa1ab;min-width:70px">{{ f.label }}</span>
+                                <span style="font-size:17.5px;color:#1b2129;flex:1">{{ f.value }}</span>
                                 <sc-if value="{{ f.showBadge }}" hint-placeholder-val="{{ false }}">
-                                  <span class="mono" style="font-size:9px;color:#3b5bdb;border:1px solid #c4cef5;background:#eef1fe;border-radius:4px;padding:1px 5px;white-space:nowrap">claim: {{ f.field }}</span>
+                                  <span class="mono" style="font-size:13px;color:#3b5bdb;border:1px solid #c4cef5;background:#eef1fe;border-radius:4px;padding:1px 5px;white-space:nowrap">claim: {{ f.field }}</span>
                                 </sc-if>
                               </div>
                             </sc-for>
@@ -385,36 +385,36 @@
                       </sc-if>
                       <sc-if value="{{ sec.isCta }}" hint-placeholder-val="{{ false }}">
                         <div style="padding:26px 30px;background:#f6f7f9;border-top:1px solid #eef0f3;text-align:center">
-                          <div style="font-size:16px;font-weight:700">{{ sec.heading }}</div>
-                          <div style="font-size:13px;color:#5a6472;margin-top:5px">{{ sec.body }}</div>
-                          <div style="margin-top:14px;display:inline-block;background:#1b2129;color:#fff;font-size:12px;font-weight:600;padding:9px 20px;border-radius:7px">Contact us</div>
+                          <div style="font-size:19px;font-weight:700">{{ sec.heading }}</div>
+                          <div style="font-size:17px;color:#5a6472;margin-top:5px">{{ sec.body }}</div>
+                          <div style="margin-top:14px;display:inline-block;background:#1b2129;color:#fff;font-size:16.5px;font-weight:600;padding:9px 20px;border-radius:7px">Contact us</div>
                         </div>
                       </sc-if>
                     </sc-for>
-                    <div style="padding:12px 30px;background:#1b2129;color:#8b95a3;font-size:10.5px;display:flex;justify-content:space-between">
+                    <div style="padding:12px 30px;background:#1b2129;color:#8b95a3;font-size:14.5px;display:flex;justify-content:space-between">
                       <span>© {{ cur.name }}</span><span class="mono">private proposal · not published</span>
                     </div>
                   </div>
                 </div>
-                <div style="font-size:10.5px;color:var(--fg-faint);display:flex;align-items:center;gap:6px">
+                <div style="font-size:14.5px;color:var(--fg-faint);display:flex;align-items:center;gap:6px">
                   <span style="color:var(--ok)">✓</span> Every fact on this page traces to a verified claim. Unverified fields are omitted, not guessed.
                 </div>
               </sc-if>
 
               <sc-if value="{{ cur.isEmail }}" hint-placeholder-val="{{ false }}">
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
-                  <span style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600">Outreach email — Gate 2</span>
-                  <span class="mono" style="font-size:10.5px;color:var(--fg-faint)">{{ cur.emailHash }}</span>
+                  <span style="font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600">Outreach email — Gate 2</span>
+                  <span class="mono" style="font-size:14.5px;color:var(--fg-faint)">{{ cur.emailHash }}</span>
                 </div>
                 <div style="border:1px solid var(--border-strong);border-radius:11px;overflow:hidden;background:var(--panel);box-shadow:var(--shadow-lg)">
                   <div style="padding:14px 18px;border-bottom:1px solid var(--border);background:var(--panel-2)">
-                    <div style="display:flex;gap:10px;font-size:12px;margin-bottom:5px"><span style="color:var(--fg-faint);min-width:52px">To</span><span style="color:var(--fg)">{{ cur.name }}</span></div>
-                    <div style="display:flex;gap:10px;font-size:12px"><span style="color:var(--fg-faint);min-width:52px">Subject</span><span style="color:var(--fg);font-weight:600">{{ cur.emailSubject }}</span></div>
+                    <div style="display:flex;gap:10px;font-size:16.5px;margin-bottom:5px"><span style="color:var(--fg-faint);min-width:52px">To</span><span style="color:var(--fg)">{{ cur.name }}</span></div>
+                    <div style="display:flex;gap:10px;font-size:16.5px"><span style="color:var(--fg-faint);min-width:52px">Subject</span><span style="color:var(--fg);font-weight:600">{{ cur.emailSubject }}</span></div>
                   </div>
-                  <div style="padding:18px 20px;font-size:13px;line-height:1.6;color:var(--fg);white-space:pre-wrap">{{ cur.emailBody }}</div>
-                  <div style="padding:12px 20px;border-top:1px solid var(--border);background:var(--panel-2);font-size:10.5px;color:var(--fg-faint);white-space:pre-wrap;line-height:1.5">{{ cur.emailFooter }}</div>
+                  <div style="padding:18px 20px;font-size:17px;line-height:1.6;color:var(--fg);white-space:pre-wrap">{{ cur.emailBody }}</div>
+                  <div style="padding:12px 20px;border-top:1px solid var(--border);background:var(--panel-2);font-size:14.5px;color:var(--fg-faint);white-space:pre-wrap;line-height:1.5">{{ cur.emailFooter }}</div>
                 </div>
-                <div style="font-size:10.5px;color:var(--fg-faint);display:flex;align-items:center;gap:6px">
+                <div style="font-size:14.5px;color:var(--fg-faint);display:flex;align-items:center;gap:6px">
                   <span style="color:var(--ok)">✓</span> Compliant footer with physical address + one-click opt-out. Nothing sends until you approve.
                 </div>
               </sc-if>
@@ -423,15 +423,15 @@
 
           <!-- ACTION BAR -->
           <div style="flex-shrink:0;border-top:1px solid var(--border);background:var(--panel);padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 -2px 8px rgba(20,28,38,.05)">
-            <div style="font-size:12px;color:var(--fg-muted);display:flex;align-items:center;gap:8px">
+            <div style="font-size:16.5px;color:var(--fg-muted);display:flex;align-items:center;gap:8px">
               <span style="width:7px;height:7px;border-radius:50%;background:var(--accent)"></span>
               Approving advances <span class="mono" style="color:var(--fg)">{{ cur.fromStatus }}</span> → <span class="mono" style="color:var(--fg)">{{ cur.toStatus }}</span>
             </div>
             <div style="display:flex;align-items:center;gap:9px">
-              <button onClick="{{ actApprove }}" style="display:flex;align-items:center;gap:8px;padding:9px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);font-weight:600;font-size:13px;cursor:pointer">Approve <span class="mono" style="font-size:10px;opacity:.8;border:1px solid currentColor;border-radius:4px;padding:0 4px">A</span></button>
-              <button onClick="{{ actEdit }}" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:8px;border:1px solid var(--border-strong);background:var(--panel-2);color:var(--fg);font-weight:600;font-size:13px;cursor:pointer">Edit <span class="mono" style="font-size:10px;color:var(--fg-faint);border:1px solid var(--border);border-radius:4px;padding:0 4px">E</span></button>
-              <button onClick="{{ actRequest }}" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:8px;border:1px solid var(--border-strong);background:var(--panel-2);color:var(--fg);font-weight:600;font-size:13px;cursor:pointer">Request changes <span class="mono" style="font-size:10px;color:var(--fg-faint);border:1px solid var(--border);border-radius:4px;padding:0 4px">R</span></button>
-              <button onClick="{{ actReject }}" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:8px;border:1px solid var(--border-strong);background:transparent;color:var(--fg-muted);font-weight:600;font-size:13px;cursor:pointer">Reject <span class="mono" style="font-size:10px;color:var(--fg-faint);border:1px solid var(--border);border-radius:4px;padding:0 4px">X</span></button>
+              <button onClick="{{ actApprove }}" style="display:flex;align-items:center;gap:8px;padding:9px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);font-weight:600;font-size:17px;cursor:pointer">Approve <span class="mono" style="font-size:14.5px;opacity:.8;border:1px solid currentColor;border-radius:4px;padding:0 4px">A</span></button>
+              <button onClick="{{ actEdit }}" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:8px;border:1px solid var(--border-strong);background:var(--panel-2);color:var(--fg);font-weight:600;font-size:17px;cursor:pointer">Edit <span class="mono" style="font-size:14.5px;color:var(--fg-faint);border:1px solid var(--border);border-radius:4px;padding:0 4px">E</span></button>
+              <button onClick="{{ actRequest }}" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:8px;border:1px solid var(--border-strong);background:var(--panel-2);color:var(--fg);font-weight:600;font-size:17px;cursor:pointer">Request changes <span class="mono" style="font-size:14.5px;color:var(--fg-faint);border:1px solid var(--border);border-radius:4px;padding:0 4px">R</span></button>
+              <button onClick="{{ actReject }}" style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:8px;border:1px solid var(--border-strong);background:transparent;color:var(--fg-muted);font-weight:600;font-size:17px;cursor:pointer">Reject <span class="mono" style="font-size:14.5px;color:var(--fg-faint);border:1px solid var(--border);border-radius:4px;padding:0 4px">X</span></button>
             </div>
           </div>
         </div>
@@ -441,22 +441,22 @@
     <!-- ============ BUSINESS DETAIL ============ -->
     <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
       <div style="flex-shrink:0;padding:14px 24px;border-bottom:1px solid var(--border);background:var(--panel)">
-        <button onClick="{{ navBoard }}" style="background:none;border:none;color:var(--fg-muted);font-size:12px;cursor:pointer;padding:0;margin-bottom:8px">← Pipeline</button>
+        <button onClick="{{ navBoard }}" style="background:none;border:none;color:var(--fg-muted);font-size:16.5px;cursor:pointer;padding:0;margin-bottom:8px">← Pipeline</button>
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
           <div>
             <div style="display:flex;align-items:center;gap:11px">
-              <h1 style="margin:0;font-size:19px;font-weight:700;letter-spacing:-.01em">{{ det.name }}</h1>
-              <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);border:1px solid var(--border-strong);border-radius:6px;padding:2px 8px">{{ det.statusLabel }}</span>
+              <h1 style="margin:0;font-size:23px;font-weight:700;letter-spacing:-.01em">{{ det.name }}</h1>
+              <span style="font-size:14.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);border:1px solid var(--border-strong);border-radius:6px;padding:2px 8px">{{ det.statusLabel }}</span>
             </div>
-            <div style="font-size:12.5px;color:var(--fg-muted);margin-top:4px">{{ det.meta }}</div>
+            <div style="font-size:16px;color:var(--fg-muted);margin-top:4px">{{ det.meta }}</div>
           </div>
           <div style="display:flex;align-items:center;gap:10px">
             <sc-if value="{{ det.awaiting }}" hint-placeholder-val="{{ false }}">
-              <button onClick="{{ navReview }}" style="padding:8px 14px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);font-weight:600;font-size:12.5px;cursor:pointer">Review this →</button>
+              <button onClick="{{ navReview }}" style="padding:8px 14px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);font-weight:600;font-size:16px;cursor:pointer">Review this →</button>
             </sc-if>
             <div style="text-align:right">
-              <div class="mono" style="font-size:18px;font-weight:600">{{ det.score }}</div>
-              <div style="font-size:10px;color:var(--fg-faint);text-transform:uppercase;letter-spacing:.05em">opportunity</div>
+              <div class="mono" style="font-size:21.5px;font-weight:600">{{ det.score }}</div>
+              <div style="font-size:14.5px;color:var(--fg-faint);text-transform:uppercase;letter-spacing:.05em">opportunity</div>
             </div>
           </div>
         </div>
@@ -466,25 +466,25 @@
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
           <div style="border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:15px 17px">
-            <div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:9px">Why this is a lead</div>
-            <div style="font-size:13.5px;line-height:1.45">{{ det.why }}</div>
+            <div style="font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:9px">Why this is a lead</div>
+            <div style="font-size:17.5px;line-height:1.45">{{ det.why }}</div>
             <sc-if value="{{ det.hasExistingSite }}" hint-placeholder-val="{{ false }}">
-              <a href="{{ det.existingSite }}" target="_blank" rel="noopener" class="mono" style="display:inline-block;margin-top:10px;font-size:11.5px">{{ det.existingSite }} ↗</a>
+              <a href="{{ det.existingSite }}" target="_blank" rel="noopener" class="mono" style="display:inline-block;margin-top:10px;font-size:16px">{{ det.existingSite }} ↗</a>
             </sc-if>
           </div>
           <div style="border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:15px 17px">
-            <div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:9px">Existing-site weaknesses</div>
+            <div style="font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:9px">Existing-site weaknesses</div>
             <sc-if value="{{ det.noWeak }}" hint-placeholder-val="{{ false }}">
-              <div style="font-size:12.5px;color:var(--fg-muted)">No website today.</div>
+              <div style="font-size:16px;color:var(--fg-muted)">No website today.</div>
             </sc-if>
             <div style="display:flex;flex-direction:column;gap:6px">
               <sc-for list="{{ det.weaknesses }}" as="w" hint-placeholder-count="2">
-                <div style="display:flex;align-items:flex-start;gap:9px;font-size:12.5px">
+                <div style="display:flex;align-items:flex-start;gap:9px;font-size:16px">
                   <span style="{{ w.sevDot }};margin-top:5px"></span>
                   <div>
-                    <span style="font-weight:600">{{ w.issue }}</span> <span style="font-size:9px;font-weight:600;color:var(--fg-faint);letter-spacing:.04em">{{ w.sevLabel }}</span>
+                    <span style="font-weight:600">{{ w.issue }}</span> <span style="font-size:13px;font-weight:600;color:var(--fg-faint);letter-spacing:.04em">{{ w.sevLabel }}</span>
                     <sc-if value="{{ w.hasEvidence }}" hint-placeholder-val="{{ false }}">
-                      <div style="font-size:11px;color:var(--fg-faint);margin-top:1px">{{ w.evidence }}</div>
+                      <div style="font-size:15px;color:var(--fg-faint);margin-top:1px">{{ w.evidence }}</div>
                     </sc-if>
                   </div>
                 </div>
@@ -494,7 +494,7 @@
         </div>
 
         <div style="border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:15px 17px">
-          <div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:11px">Research dossier</div>
+          <div style="font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:11px">Research dossier</div>
           <div style="border:1px solid var(--border);border-radius:9px;overflow:hidden">
             <sc-for list="{{ det.claims }}" as="c" hint-placeholder-count="3">
               <div style="{{ c.rowStyle }}">
@@ -502,18 +502,18 @@
                   <span style="width:4px;align-self:stretch;border-radius:3px;background:{{ c.accent }};flex-shrink:0"></span>
                   <div style="flex:1;min-width:0">
                     <div style="display:flex;align-items:center;gap:8px">
-                      <span style="font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-faint)">{{ c.field }}</span>
+                      <span style="font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-faint)">{{ c.field }}</span>
                       <span style="{{ c.badgeStyle }}">{{ c.statusLabel }}</span>
                     </div>
-                    <div style="font-size:13px;margin-top:2px">{{ c.valueText }}</div>
+                    <div style="font-size:17px;margin-top:2px">{{ c.valueText }}</div>
                   </div>
-                  <div class="mono" style="font-size:12px;font-weight:600;color:{{ c.accent }};flex-shrink:0">{{ c.pct }}</div>
+                  <div class="mono" style="font-size:16.5px;font-weight:600;color:{{ c.accent }};flex-shrink:0">{{ c.pct }}</div>
                 </div>
                 <details style="margin-top:6px;margin-left:14px">
-                  <summary style="font-size:10.5px;color:var(--accent)">sources ({{ c.sourceCount }})</summary>
+                  <summary style="font-size:14.5px;color:var(--accent)">sources ({{ c.sourceCount }})</summary>
                   <div style="display:flex;flex-direction:column;gap:3px;margin-top:5px">
                     <sc-for list="{{ c.sources }}" as="s" hint-placeholder-count="1">
-                      <a href="{{ s.url }}" target="_blank" rel="noopener" class="mono" style="font-size:10.5px;word-break:break-all"><span style="text-transform:uppercase;color:var(--fg-faint);margin-right:6px">{{ s.type }}</span>{{ s.url }}</a>
+                      <a href="{{ s.url }}" target="_blank" rel="noopener" class="mono" style="font-size:14.5px;word-break:break-all"><span style="text-transform:uppercase;color:var(--fg-faint);margin-right:6px">{{ s.type }}</span>{{ s.url }}</a>
                     </sc-for>
                   </div>
                 </details>
@@ -522,16 +522,16 @@
           </div>
           <sc-if value="{{ det.hasQuestions }}" hint-placeholder-val="{{ false }}">
             <div style="margin-top:12px">
-              <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);margin-bottom:6px">Needs confirmation</div>
+              <div style="font-size:14.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);margin-bottom:6px">Needs confirmation</div>
               <div style="display:flex;flex-wrap:wrap;gap:6px">
                 <sc-for list="{{ det.questions }}" as="q" hint-placeholder-count="2">
-                  <span style="font-size:11.5px;color:var(--fg);padding:5px 10px;border:1px solid var(--warn-border);background:var(--warn-soft);border-radius:20px">{{ q }}</span>
+                  <span style="font-size:16px;color:var(--fg);padding:5px 10px;border:1px solid var(--warn-border);background:var(--warn-soft);border-radius:20px">{{ q }}</span>
                 </sc-for>
               </div>
             </div>
           </sc-if>
           <sc-if value="{{ det.hasRejected }}" hint-placeholder-val="{{ false }}">
-            <div style="margin-top:12px;font-size:11.5px;color:var(--fg-muted)">
+            <div style="margin-top:12px;font-size:16px;color:var(--fg-muted)">
               Look-alikes not merged:
               <sc-for list="{{ det.rejected }}" as="r" hint-placeholder-count="1"><span class="mono" style="color:var(--fg-faint);text-decoration:line-through;margin-left:6px">{{ r.entity_name }}</span></sc-for>
             </div>
@@ -541,27 +541,27 @@
         <sc-if value="{{ det.hasWebsites }}" hint-placeholder-val="{{ false }}">
           <div style="border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:15px 17px">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600">Website versions</div>
+              <div style="font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600">Website versions</div>
               <div style="display:flex;align-items:center;gap:8px">
                 <div style="display:flex;gap:5px">
                   <sc-for list="{{ det.versionTabs }}" as="v" hint-placeholder-count="2">
-                    <button onClick="{{ v.onSelect }}" style="font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:7px;cursor:pointer;border:1px solid {{ v.bd }};background:{{ v.bg }};color:{{ v.fg }}">v{{ v.version }}</button>
+                    <button onClick="{{ v.onSelect }}" style="font-size:16px;font-weight:600;padding:5px 11px;border-radius:7px;cursor:pointer;border:1px solid {{ v.bd }};background:{{ v.bg }};color:{{ v.fg }}">v{{ v.version }}</button>
                   </sc-for>
                 </div>
                 <sc-if value="{{ det.canDiff }}" hint-placeholder-val="{{ false }}">
-                  <button onClick="{{ toggleDiff }}" style="font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:7px;cursor:pointer;border:1px solid {{ det.diffBd }};background:{{ det.diffBg }};color:{{ det.diffFg }}">Diff vs v{{ det.diffPrev }}</button>
+                  <button onClick="{{ toggleDiff }}" style="font-size:16px;font-weight:600;padding:5px 11px;border-radius:7px;cursor:pointer;border:1px solid {{ det.diffBd }};background:{{ det.diffBg }};color:{{ det.diffFg }}">Diff vs v{{ det.diffPrev }}</button>
                 </sc-if>
               </div>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:11.5px;color:var(--fg-muted)">
-              <span style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;border:1px solid var(--border-strong);border-radius:5px;padding:2px 7px;color:var(--fg)">{{ det.selState }}</span>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:16px;color:var(--fg-muted)">
+              <span style="font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;border:1px solid var(--border-strong);border-radius:5px;padding:2px 7px;color:var(--fg)">{{ det.selState }}</span>
               <span class="mono">{{ det.selHash }}</span>
               <a href="{{ det.selUrl }}" target="_blank" rel="noopener" class="mono">{{ det.selUrl }} ↗</a>
             </div>
             <sc-if value="{{ det.showDiff }}" hint-placeholder-val="{{ false }}">
               <div style="border:1px solid var(--border);border-radius:9px;overflow:hidden;margin-bottom:4px">
                 <sc-for list="{{ det.diffRows }}" as="d" hint-placeholder-count="2">
-                  <div style="display:flex;align-items:center;gap:9px;padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px;background:{{ d.bg }}">
+                  <div style="display:flex;align-items:center;gap:9px;padding:8px 12px;border-bottom:1px solid var(--border);font-size:16.5px;background:{{ d.bg }}">
                     <span class="mono" style="width:14px;color:{{ d.markColor }};font-weight:700">{{ d.mark }}</span>
                     <span style="color:var(--fg)">{{ d.text }}</span>
                   </div>
@@ -570,25 +570,25 @@
             </sc-if>
             <sc-if value="{{ det.showPreview }}" hint-placeholder-val="{{ false }}">
               <div style="border:1px solid var(--border-strong);border-radius:10px;overflow:hidden;background:#fff">
-                <div class="mono" style="padding:7px 12px;background:#eef0f3;border-bottom:1px solid #dfe3e8;font-size:10px;color:#7a828d">{{ det.selUrl }}</div>
+                <div class="mono" style="padding:7px 12px;background:#eef0f3;border-bottom:1px solid #dfe3e8;font-size:14.5px;color:#7a828d">{{ det.selUrl }}</div>
                 <div style="font-family:'IBM Plex Sans',sans-serif;color:#1b2129">
                   <sc-for list="{{ det.selSections }}" as="sec" hint-placeholder-count="2">
                     <sc-if value="{{ sec.isHero }}" hint-placeholder-val="{{ false }}">
                       <div style="padding:22px 26px;text-align:center;border-bottom:1px solid #eef0f3;background:repeating-linear-gradient(135deg,#f5f6f8 0 14px,#fff 14px 28px)">
-                        <div style="font-size:22px;font-weight:700">{{ sec.heading }}</div>
-                        <div style="font-size:13px;color:#5a6472;margin-top:5px">{{ sec.subheading }}</div>
+                        <div style="font-size:26.5px;font-weight:700">{{ sec.heading }}</div>
+                        <div style="font-size:17px;color:#5a6472;margin-top:5px">{{ sec.subheading }}</div>
                       </div>
                     </sc-if>
                     <sc-if value="{{ sec.isFacts }}" hint-placeholder-val="{{ false }}">
                       <div style="padding:16px 26px;border-bottom:1px solid #eef0f3">
-                        <div style="font-size:13px;font-weight:700;margin-bottom:7px">{{ sec.heading }}</div>
+                        <div style="font-size:17px;font-weight:700;margin-bottom:7px">{{ sec.heading }}</div>
                         <sc-for list="{{ sec.facts }}" as="f" hint-placeholder-count="1">
-                          <div style="font-size:12.5px;color:#1b2129;padding:2px 0"><span style="color:#9aa1ab;text-transform:uppercase;font-size:9.5px;margin-right:8px">{{ f.label }}</span>{{ f.value }}</div>
+                          <div style="font-size:16px;color:#1b2129;padding:2px 0"><span style="color:#9aa1ab;text-transform:uppercase;font-size:14px;margin-right:8px">{{ f.label }}</span>{{ f.value }}</div>
                         </sc-for>
                       </div>
                     </sc-if>
                     <sc-if value="{{ sec.isCta }}" hint-placeholder-val="{{ false }}">
-                      <div style="padding:18px 26px;text-align:center;background:#f6f7f9"><div style="font-size:14px;font-weight:700">{{ sec.heading }}</div><div style="font-size:12px;color:#5a6472;margin-top:3px">{{ sec.body }}</div></div>
+                      <div style="padding:18px 26px;text-align:center;background:#f6f7f9"><div style="font-size:18px;font-weight:700">{{ sec.heading }}</div><div style="font-size:16.5px;color:#5a6472;margin-top:3px">{{ sec.body }}</div></div>
                     </sc-if>
                   </sc-for>
                 </div>
@@ -598,22 +598,22 @@
         </sc-if>
 
         <div style="border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:15px 17px">
-          <div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:9px">Email thread</div>
+          <div style="font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600;margin-bottom:9px">Email thread</div>
           <sc-if value="{{ det.hasEmail }}" hint-placeholder-val="{{ false }}">
             <div style="border:1px solid var(--border);border-radius:8px;padding:12px 14px">
-              <div style="font-size:12.5px;font-weight:600">{{ det.emailSubject }}</div>
-              <div style="font-size:11.5px;color:var(--fg-muted);margin-top:3px">Draft · not yet sent</div>
+              <div style="font-size:16px;font-weight:600">{{ det.emailSubject }}</div>
+              <div style="font-size:16px;color:var(--fg-muted);margin-top:3px">Draft · not yet sent</div>
             </div>
           </sc-if>
           <sc-if value="{{ det.noEmail }}" hint-placeholder-val="{{ false }}">
-            <div style="font-size:12.5px;color:var(--fg-faint);font-style:italic">No outreach yet — the email thread will appear here once a site is approved and outreach is drafted.</div>
+            <div style="font-size:16px;color:var(--fg-faint);font-style:italic">No outreach yet — the email thread will appear here once a site is approved and outreach is drafted.</div>
           </sc-if>
         </div>
 
         <div style="border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:15px 17px">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-            <div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600">Audit timeline</div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--fg-faint)">
+            <div style="font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);font-weight:600">Audit timeline</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:14.5px;color:var(--fg-faint)">
               <span style="width:11px;height:11px;border:1.4px solid var(--fg-faint);border-radius:2px;position:relative"><span style="position:absolute;inset:2px 2px auto 2px;height:3px;border-top:1.4px solid var(--fg-faint);border-radius:2px 2px 0 0"></span></span>
               append-only · hash-chained
             </div>
@@ -628,13 +628,13 @@
                 <div style="padding-bottom:16px;flex:1;min-width:0">
                   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
                     <span style="{{ e.actorStyle }}">{{ e.actor }}</span>
-                    <span style="font-size:13px;font-weight:600">{{ e.action }}</span>
-                    <span class="mono" style="font-size:10.5px;color:var(--fg-faint)">{{ e.time }}</span>
+                    <span style="font-size:17px;font-weight:600">{{ e.action }}</span>
+                    <span class="mono" style="font-size:14.5px;color:var(--fg-faint)">{{ e.time }}</span>
                   </div>
                   <sc-if value="{{ e.hasReason }}" hint-placeholder-val="{{ false }}">
-                    <div style="font-size:12px;color:var(--fg-muted);margin-top:3px">{{ e.reason }}</div>
+                    <div style="font-size:16.5px;color:var(--fg-muted);margin-top:3px">{{ e.reason }}</div>
                   </sc-if>
-                  <div class="mono" style="font-size:9.5px;color:var(--fg-faint);margin-top:4px;display:flex;align-items:center;gap:6px">
+                  <div class="mono" style="font-size:14px;color:var(--fg-faint);margin-top:4px;display:flex;align-items:center;gap:6px">
                     <span style="opacity:.6">{{ e.prevHash }}</span><span style="opacity:.4">→</span><span style="color:var(--fg-muted)">{{ e.hash }}</span>
                   </div>
                 </div>
@@ -649,36 +649,36 @@
     <sc-if value="{{ isApprovals }}" hint-placeholder-val="{{ false }}">
       <div style="flex-shrink:0;padding:14px 24px;border-bottom:1px solid var(--border);background:var(--panel);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
         <div>
-          <h1 style="margin:0;font-size:18px;font-weight:700;letter-spacing:-.01em">Approvals log</h1>
-          <div style="font-size:12px;color:var(--fg-muted);margin-top:3px">{{ aprCount }} decisions · immutable record</div>
+          <h1 style="margin:0;font-size:21.5px;font-weight:700;letter-spacing:-.01em">Approvals log</h1>
+          <div style="font-size:16.5px;color:var(--fg-muted);margin-top:3px">{{ aprCount }} decisions · immutable record</div>
         </div>
         <div style="display:flex;gap:8px;align-items:center">
-          <select onChange="{{ setAprType }}" style="font-size:12px;padding:6px 10px;border-radius:7px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg)">
+          <select onChange="{{ setAprType }}" style="font-size:16.5px;padding:6px 10px;border-radius:7px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg)">
             <option value="all">All subjects</option><option value="site">Site</option><option value="email">Email</option>
           </select>
-          <select onChange="{{ setAprDecision }}" style="font-size:12px;padding:6px 10px;border-radius:7px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg)">
+          <select onChange="{{ setAprDecision }}" style="font-size:16.5px;padding:6px 10px;border-radius:7px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg)">
             <option value="all">All decisions</option><option value="approve">Approved</option><option value="request_changes">Changes requested</option><option value="reject">Rejected</option><option value="edit">Edited</option>
           </select>
         </div>
       </div>
       <div style="flex:1;overflow:auto;padding:16px 24px">
         <div style="border:1px solid var(--border);border-radius:11px;overflow-x:auto;overflow-y:hidden;background:var(--panel);max-width:1000px">
-          <div style="display:grid;grid-template-columns:118px minmax(0,1fr) 132px 158px;gap:14px;min-width:600px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--panel-2);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-faint);font-weight:600">
+          <div style="display:grid;grid-template-columns:118px minmax(0,1fr) 132px 158px;gap:14px;min-width:600px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--panel-2);font-size:14.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-faint);font-weight:600">
             <span>Decision</span><span>Subject</span><span>When</span><span>Content hash</span>
           </div>
           <sc-for list="{{ aprRows }}" as="a" hint-placeholder-count="4">
             <div style="display:grid;grid-template-columns:118px minmax(0,1fr) 132px 158px;gap:14px;min-width:600px;padding:12px 16px;border-bottom:1px solid var(--border);align-items:center">
               <span style="{{ a.pillStyle }}">{{ a.decisionLabel }}</span>
               <div style="min-width:0" title="{{ a.subject_label }}">
-                <div style="font-size:12.5px;font-weight:500;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.subject_label }}</div>
-                <sc-if value="{{ a.hasReason }}" hint-placeholder-val="{{ false }}"><div style="font-size:11px;color:var(--fg-faint);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.reason }}</div></sc-if>
+                <div style="font-size:16px;font-weight:500;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.subject_label }}</div>
+                <sc-if value="{{ a.hasReason }}" hint-placeholder-val="{{ false }}"><div style="font-size:15px;color:var(--fg-faint);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.reason }}</div></sc-if>
               </div>
-              <span class="mono" style="font-size:11px;color:var(--fg-muted)">{{ a.time }}</span>
-              <span class="mono" style="font-size:10.5px;color:var(--fg-faint);word-break:break-all">{{ a.content_hash }}</span>
+              <span class="mono" style="font-size:15px;color:var(--fg-muted)">{{ a.time }}</span>
+              <span class="mono" style="font-size:14.5px;color:var(--fg-faint);word-break:break-all">{{ a.content_hash }}</span>
             </div>
           </sc-for>
           <sc-if value="{{ aprEmpty }}" hint-placeholder-val="{{ false }}">
-            <div style="padding:26px;text-align:center;font-size:12.5px;color:var(--fg-faint)">No decisions match these filters.</div>
+            <div style="padding:26px;text-align:center;font-size:16px;color:var(--fg-faint)">No decisions match these filters.</div>
           </sc-if>
         </div>
       </div>
@@ -693,27 +693,27 @@
           <div style="display:flex;align-items:center;gap:10px">
             <span style="{{ modal.iconStyle }}">{{ modal.icon }}</span>
             <div>
-              <div style="font-size:15px;font-weight:700">{{ modal.title }}</div>
-              <div style="font-size:12px;color:var(--fg-muted);margin-top:1px">{{ modal.subtitle }}</div>
+              <div style="font-size:18px;font-weight:700">{{ modal.title }}</div>
+              <div style="font-size:16.5px;color:var(--fg-muted);margin-top:1px">{{ modal.subtitle }}</div>
             </div>
           </div>
         </div>
         <div style="padding:16px 20px;display:flex;flex-direction:column;gap:11px">
-          <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px"><span style="color:var(--fg-muted)">Business</span><span style="font-weight:600;text-align:right">{{ modal.business }}</span></div>
-          <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px"><span style="color:var(--fg-muted)">Subject</span><span style="font-weight:600;text-align:right">{{ modal.subject }}</span></div>
-          <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px"><span style="color:var(--fg-muted)">Transition</span><span class="mono" style="font-weight:600;text-align:right">{{ modal.transition }}</span></div>
-          <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px;align-items:center"><span style="color:var(--fg-muted)">Content hash</span><span class="mono" style="font-size:11px;color:var(--fg);background:var(--panel-2);border:1px solid var(--border);border-radius:6px;padding:2px 8px;word-break:break-all;text-align:right">{{ modal.hash }}</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;font-size:16px"><span style="color:var(--fg-muted)">Business</span><span style="font-weight:600;text-align:right">{{ modal.business }}</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;font-size:16px"><span style="color:var(--fg-muted)">Subject</span><span style="font-weight:600;text-align:right">{{ modal.subject }}</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;font-size:16px"><span style="color:var(--fg-muted)">Transition</span><span class="mono" style="font-weight:600;text-align:right">{{ modal.transition }}</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;font-size:16px;align-items:center"><span style="color:var(--fg-muted)">Content hash</span><span class="mono" style="font-size:15px;color:var(--fg);background:var(--panel-2);border:1px solid var(--border);border-radius:6px;padding:2px 8px;word-break:break-all;text-align:right">{{ modal.hash }}</span></div>
           <sc-if value="{{ modal.needsReason }}" hint-placeholder-val="{{ false }}">
             <div style="margin-top:2px">
-              <div style="font-size:11px;color:var(--fg-muted);margin-bottom:5px">{{ modal.reasonLabel }}</div>
-              <textarea onInput="{{ setModalReason }}" placeholder="{{ modal.reasonPlaceholder }}" style="width:100%;min-height:64px;resize:vertical;font-size:12.5px;padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg)"></textarea>
+              <div style="font-size:15px;color:var(--fg-muted);margin-bottom:5px">{{ modal.reasonLabel }}</div>
+              <textarea onInput="{{ setModalReason }}" placeholder="{{ modal.reasonPlaceholder }}" style="width:100%;min-height:64px;resize:vertical;font-size:16px;padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg)"></textarea>
             </div>
           </sc-if>
-          <div style="font-size:11.5px;color:var(--fg-muted);background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:9px 11px;line-height:1.4">{{ modal.note }}</div>
+          <div style="font-size:16px;color:var(--fg-muted);background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:9px 11px;line-height:1.4">{{ modal.note }}</div>
         </div>
         <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:9px">
-          <button onClick="{{ closeModal }}" style="padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg);font-weight:600;font-size:13px;cursor:pointer">Cancel <span class="mono" style="font-size:10px;color:var(--fg-faint)">Esc</span></button>
-          <button onClick="{{ confirmModal }}" ref="{{ modalConfirmRef }}" style="{{ modal.confirmStyle }}">{{ modal.confirmLabel }} <span class="mono" style="font-size:10px;opacity:.75">↵</span></button>
+          <button onClick="{{ closeModal }}" style="padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg);font-weight:600;font-size:17px;cursor:pointer">Cancel <span class="mono" style="font-size:14.5px;color:var(--fg-faint)">Esc</span></button>
+          <button onClick="{{ confirmModal }}" ref="{{ modalConfirmRef }}" style="{{ modal.confirmStyle }}">{{ modal.confirmLabel }} <span class="mono" style="font-size:14.5px;opacity:.75">↵</span></button>
         </div>
       </div>
     </div>
@@ -724,21 +724,21 @@
     <div onClick="{{ cancelEdit }}" style="position:fixed;inset:0;background:rgba(12,15,20,.5);backdrop-filter:blur(2px);display:flex;justify-content:flex-end;z-index:100">
       <div onClick="{{ stop }}" style="width:min(480px,100%);height:100%;background:var(--panel);border-left:1px solid var(--border-strong);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;animation:om-fade .18s ease-out">
         <div style="padding:16px 20px;border-bottom:1px solid var(--border)">
-          <div style="font-size:15px;font-weight:700">Edit {{ editKind }} draft</div>
-          <div style="font-size:12px;color:var(--fg-muted);margin-top:2px">{{ editBusiness }} · saving logs an audit event & re-hashes</div>
+          <div style="font-size:18px;font-weight:700">Edit {{ editKind }} draft</div>
+          <div style="font-size:16.5px;color:var(--fg-muted);margin-top:2px">{{ editBusiness }} · saving logs an audit event & re-hashes</div>
         </div>
         <div style="flex:1;overflow:auto;padding:18px 20px;display:flex;flex-direction:column;gap:14px">
           <sc-for list="{{ editFields }}" as="fld" hint-placeholder-count="2">
             <div>
-              <label style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);font-weight:600;display:block;margin-bottom:5px">{{ fld.label }}</label>
-              <textarea onInput="{{ fld.onInput }}" style="width:100%;font-size:13px;padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg);resize:vertical;min-height:{{ fld.minH }}" value="{{ fld.value }}">{{ fld.value }}</textarea>
+              <label style="font-size:15px;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);font-weight:600;display:block;margin-bottom:5px">{{ fld.label }}</label>
+              <textarea onInput="{{ fld.onInput }}" style="width:100%;font-size:17px;padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg);resize:vertical;min-height:{{ fld.minH }}" value="{{ fld.value }}">{{ fld.value }}</textarea>
             </div>
           </sc-for>
-          <div style="font-size:11.5px;color:var(--fg-muted);background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:9px 11px">Editing keeps this item in the queue — you still approve it afterward. Only verified facts may appear; edits don't bypass Gate {{ editGate }}.</div>
+          <div style="font-size:16px;color:var(--fg-muted);background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:9px 11px">Editing keeps this item in the queue — you still approve it afterward. Only verified facts may appear; edits don't bypass Gate {{ editGate }}.</div>
         </div>
         <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:9px">
-          <button onClick="{{ cancelEdit }}" style="padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg);font-weight:600;font-size:13px;cursor:pointer">Cancel</button>
-          <button onClick="{{ saveEdit }}" style="padding:8px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);font-weight:600;font-size:13px;cursor:pointer">Save draft</button>
+          <button onClick="{{ cancelEdit }}" style="padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg);font-weight:600;font-size:17px;cursor:pointer">Cancel</button>
+          <button onClick="{{ saveEdit }}" style="padding:8px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);font-weight:600;font-size:17px;cursor:pointer">Save draft</button>
         </div>
       </div>
     </div>
@@ -746,7 +746,7 @@
 
   <!-- ===================== TOAST ===================== -->
   <sc-if value="{{ toastOpen }}" hint-placeholder-val="{{ false }}">
-    <div style="position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:120;background:var(--fg);color:var(--bg);padding:11px 18px;border-radius:10px;box-shadow:var(--shadow-lg);font-size:13px;font-weight:500;display:flex;align-items:center;gap:10px;animation:om-pop .18s ease-out">
+    <div style="position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:120;background:var(--fg);color:var(--bg);padding:11px 18px;border-radius:10px;box-shadow:var(--shadow-lg);font-size:17px;font-weight:500;display:flex;align-items:center;gap:10px;animation:om-pop .18s ease-out">
       <span style="width:8px;height:8px;border-radius:50%;background:var(--ok)"></span>{{ toast }}
     </div>
   </sc-if>
@@ -936,7 +936,7 @@ class Component extends DCLogic {
         corrLabel: c.corroborations + (c.corroborations === 1 ? " source" : " sources"),
         sourceCount: (c.sources || []).length,
         sources: (c.sources || []).map((s) => ({ type: s.source_type, url: s.source_url })),
-        badgeStyle: `font-size:9px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:${fg};background:${bg};border:1px solid ${bd};border-radius:5px;padding:1px 6px`,
+        badgeStyle: `font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:${fg};background:${bg};border:1px solid ${bd};border-radius:5px;padding:1px 6px`,
         rowStyle: `padding:11px 13px;border-bottom:1px solid var(--border);${active ? "background:var(--accent-soft);box-shadow:inset 0 0 0 2px var(--accent);" : ""}`,
         onEnter: interactive ? () => this.setState({ highlightField: c.field }) : (() => {}),
         onLeave: interactive ? () => this.setState({ highlightField: null }) : (() => {}),
@@ -995,7 +995,10 @@ class Component extends DCLogic {
     out.boardCount = S.businesses.length;
     out.columns = active.map((st) => {
       const cards = (byStatus[st] || []).map(mkCard);
+      // Empty stages collapse to a narrow strip so the stages that actually hold
+      // work stay on screen instead of being pushed off to the right.
       return { label: this.STATUS_LABEL[st] || st, count: cards.length, cards, empty: cards.length === 0,
+        width: cards.length === 0 ? "104px" : "288px",
         dot: gates[st] ? "var(--accent)" : "var(--fg-faint)" };
     });
     const closedCards = closed.flatMap((st) => (byStatus[st] || []).map(mkCard));
@@ -1027,7 +1030,7 @@ class Component extends DCLogic {
         weaknesses: (item.weaknesses || []).map((w) => ({
           issue: w.issue, sevLabel: w.severity.toUpperCase(), evidence: w.evidence || "no extra detail",
           sevDot: this.sevDot(w.severity),
-          chipStyle: "display:inline-flex;align-items:center;gap:6px;font-size:11.5px;white-space:nowrap;color:var(--fg);background:var(--panel);border:1px solid var(--border-strong);border-radius:7px;padding:5px 9px",
+          chipStyle: "display:inline-flex;align-items:center;gap:6px;font-size:16px;white-space:nowrap;color:var(--fg);background:var(--panel);border:1px solid var(--border-strong);border-radius:7px;padding:5px 9px",
         })),
         claims: this.buildClaims(item.dossier.claims, true),
         hasQuestions: (item.dossier.questions || []).length > 0, questions: item.dossier.questions || [],
@@ -1042,8 +1045,14 @@ class Component extends DCLogic {
         out.cur.previewSections = this.buildSections(item.website.content, true);
       }
       if (item.gate === "email" && item.emailDraft) {
-        out.cur.emailSubject = item.emailDraft.subject; out.cur.emailBody = item.emailDraft.body;
-        out.cur.emailFooter = item.emailDraft.footer; out.cur.emailHash = this.contentHashFor(item);
+        // The stored body already ends with the compliance footer; strip it here
+        // so the footer renders once, in its own block, instead of twice.
+        const fullBody = item.emailDraft.body || "";
+        const foot = item.emailDraft.footer || "";
+        out.cur.emailSubject = item.emailDraft.subject;
+        out.cur.emailBody = (foot && fullBody.endsWith(foot)
+          ? fullBody.slice(0, -foot.length) : fullBody).trimEnd();
+        out.cur.emailFooter = foot.trim(); out.cur.emailHash = this.contentHashFor(item);
       }
     }
 
@@ -1063,11 +1072,11 @@ class Component extends DCLogic {
       }[kind];
       out.modal = {
         title: cfg.title, subtitle: cfg.subtitle, icon: cfg.icon,
-        iconStyle: `width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;background:${cfg.iconBg};color:${cfg.iconFg};border:1px solid ${cfg.iconBd};flex-shrink:0`,
+        iconStyle: `width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;background:${cfg.iconBg};color:${cfg.iconFg};border:1px solid ${cfg.iconBd};flex-shrink:0`,
         business: item.business.name, subject: subj, transition: trans, hash: this.contentHashFor(item),
         needsReason: cfg.needsReason, reasonLabel: cfg.reasonLabel, reasonPlaceholder: cfg.reasonPlaceholder, note: cfg.note,
         confirmLabel: cfg.confirmLabel,
-        confirmStyle: `padding:8px 18px;border-radius:8px;border:1px solid ${cfg.confirmBd};background:${cfg.confirmBg};color:${cfg.confirmFg};font-weight:600;font-size:13px;cursor:pointer`,
+        confirmStyle: `padding:8px 18px;border-radius:8px;border:1px solid ${cfg.confirmBd};background:${cfg.confirmBg};color:${cfg.confirmFg};font-weight:600;font-size:17px;cursor:pointer`,
       };
     }
 
@@ -1090,7 +1099,7 @@ class Component extends DCLogic {
       const websites = d.websites || [];
       const sel = websites.find((w) => w.version === S.detailVersion) || websites[websites.length - 1] || null;
       const prev = sel ? websites.find((w) => w.version === sel.version - 1) : null;
-      const actorStyle = (a) => `font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:1px 7px;border-radius:5px;border:1px solid var(--border-strong);color:${a === "human" ? "var(--fg)" : "var(--fg-muted)"};background:${a === "human" ? "var(--panel-2)" : "transparent"}`;
+      const actorStyle = (a) => `font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:1px 7px;border-radius:5px;border:1px solid var(--border-strong);color:${a === "human" ? "var(--fg)" : "var(--fg-muted)"};background:${a === "human" ? "var(--panel-2)" : "transparent"}`;
       const actorDot = (a) => a === "human" ? "var(--accent)" : a === "worker" ? "var(--border-strong)" : "var(--fg-faint)";
       out.det = {
         name: b.name, statusLabel: this.STATUS_LABEL[b.status] || b.status,
@@ -1134,7 +1143,7 @@ class Component extends DCLogic {
     const decLabel = { approve: "Approved", reject: "Rejected", request_changes: "Changes req.", edit: "Edited" };
     const decPill = (dec) => {
       const strong = dec === "approve";
-      return `font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:6px;text-align:center;${strong ? "background:var(--fg);color:var(--bg);border:1px solid var(--fg);" : "background:var(--panel-2);color:var(--fg-muted);border:1px solid var(--border-strong);"}`;
+      return `font-size:14.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:6px;text-align:center;${strong ? "background:var(--fg);color:var(--bg);border:1px solid var(--fg);" : "background:var(--panel-2);color:var(--fg-muted);border:1px solid var(--border-strong);"}`;
     };
     let rows = S.approvals;
     if (S.aprType !== "all") rows = rows.filter((a) => a.subject_type === S.aprType);
