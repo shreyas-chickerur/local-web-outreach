@@ -196,6 +196,62 @@ def cmd_email_demo(_args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_seed(args: argparse.Namespace) -> int:
+    """Populate the CONFIGURED database (the one `make api` serves) with the
+    bundled Frisco pipeline so the Operator Console has real data to show:
+    a mix of SITE_DRAFTED (Gate 1) and EMAIL_DRAFTED (Gate 2) businesses."""
+    from app.ai.email_composer import TemplateEmailComposer
+    from app.core.approvals import create_approval
+    from app.core.enums import Actor, BusinessStatus, Decision, SubjectType
+    from app.core.state_machine import advance
+    from app.stages.outreach import compose_email
+
+    engine = make_engine(database_url())
+    Base.metadata.create_all(engine)
+    session = make_session_factory(engine)()
+
+    existing = session.query(Business).count()
+    if existing and not args.reset:
+        print(f"DB already has {existing} businesses. Re-run with --reset to wipe and reseed.")
+        session.close()
+        engine.dispose()
+        return 0
+    if args.reset and existing:
+        for table in reversed(Base.metadata.sorted_tables):
+            session.execute(table.delete())
+        session.commit()
+
+    extractor = PassthroughExtractor()
+    composer = TemplateEmailComposer()
+    n_site = n_email = 0
+    for i, entry in enumerate(demo_businesses()):
+        sources = entry.pop("sources")
+        biz = Business(status=BusinessStatus.RESEARCHED, **entry)
+        session.add(biz)
+        session.flush()
+        build_dossier(session, biz, sources, extractor, model_version="demo/manual")
+        site = generate_website(session, biz)  # -> SITE_DRAFTED
+        # Advance every other business through Gate 1 so both gates have items.
+        if i % 2 == 0:
+            approval = create_approval(session, subject_type=SubjectType.SITE, subject_id=biz.id,
+                                       decision=Decision.APPROVE, approver="operator",
+                                       content=site.content_json)
+            advance(session, biz, BusinessStatus.SITE_APPROVED,
+                    actor=Actor.HUMAN.value, approval=approval)
+            compose_email(session, biz, composer)  # -> EMAIL_DRAFTED
+            n_email += 1
+        else:
+            n_site += 1
+        session.commit()
+
+    session.close()
+    engine.dispose()
+    print(f"Seeded {n_site + n_email} businesses into {database_url()}")
+    print(f"  {n_site} awaiting SITE approval (Gate 1), {n_email} awaiting EMAIL approval (Gate 2)")
+    print("Now run `make api` and open http://127.0.0.1:8090")
+    return 0
+
+
 def cmd_discover(args: argparse.Namespace) -> int:
     try:
         source = get_places_source()
@@ -221,6 +277,9 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("site-demo", help="generate grounded site drafts from bundled data (no key)")
     sub.add_parser("email-demo", help="compose outreach emails from bundled data (no key)")
 
+    p_seed = sub.add_parser("seed", help="populate the API database with bundled data (no key)")
+    p_seed.add_argument("--reset", action="store_true", help="wipe existing rows first")
+
     p_disc = sub.add_parser("discover", help="discover+qualify a real location (needs API key)")
     p_disc.add_argument("location", help='e.g. "Frisco, TX"')
     p_disc.add_argument("--category", default=None, help="optional category filter")
@@ -228,6 +287,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.command == "demo":
         return cmd_demo(args)
+    if args.command == "seed":
+        return cmd_seed(args)
     if args.command == "research-demo":
         return cmd_research_demo(args)
     if args.command == "site-demo":

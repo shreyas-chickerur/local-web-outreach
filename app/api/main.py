@@ -9,9 +9,11 @@ from __future__ import annotations
 
 import uuid
 from collections.abc import Iterator
+from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
 from app.api import schemas, service
@@ -109,6 +111,12 @@ def create_app() -> FastAPI:
         session: Session = Depends(get_session),
     ):
         return _run_decision(session, service.decide_email, business_id, payload)
+
+    # Serve the Operator Console (static files) at the root, AFTER the /api routes
+    # so they take precedence. `html=True` serves console/index.html at "/".
+    console_dir = Path(__file__).resolve().parents[2] / "console"
+    if console_dir.is_dir():
+        app.mount("/", StaticFiles(directory=str(console_dir), html=True), name="console")
 
     return app
 

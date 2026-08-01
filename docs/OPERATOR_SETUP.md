@@ -14,7 +14,9 @@ the software to use them lands in a later phase.
 - ☑ `GOOGLE_PLACES_API_KEY` in `.env`
 - ☑ `ANTHROPIC_API_KEY` in `.env`
 - ☑ `SENDER_NAME` + `SENDER_POSTAL_ADDRESS` lines present in `.env`
-- ☐ **Edit `SENDER_POSTAL_ADDRESS` to a real mailing address** (still the placeholder)
+- ☑ Console wired to the backend — `make seed && make api` → http://127.0.0.1:8090
+- ☐ **Edit `SENDER_POSTAL_ADDRESS` to a real mailing address** (still the placeholder;
+  a send-time guard now refuses to send while it's a placeholder)
 - ☐ Real-data dry run + your review (A8)
 - ☐ Everything in Part B (needed before any send)
 
@@ -72,14 +74,23 @@ Your `.env` already has `GOOGLE_PLACES_API_KEY`, `ANTHROPIC_API_KEY`,
 2. Verify: `make email-demo` — confirm your real address + the opt-out line show
    in the footer. (Nothing sends; no key needed for this.)
 
-### A7. Wire the console to the backend
-The Operator Console (built in Claude design) currently runs on mock data.
-1. Run the backend: `make api` (serves on http://localhost:8090).
-2. In the console's `api.js`, point each function at the real endpoints
-   (`/api/pipeline`, `/api/review-queue`, `/api/businesses/{id}`,
-   `/api/approvals`, `/api/businesses/{id}/site-decision`,
-   `/api/businesses/{id}/email-decision`). Field names already match — no
-   renaming. Ask Claude Code to do this wiring when you're ready.
+### A7. Wire the console to the backend — ☑ DONE
+The console lives in `console/` and is served by FastAPI at the root, with its
+data layer (`console/api.js`) calling the real endpoints — same origin, no CORS.
+To run it:
+
+```bash
+make seed    # fill the DB with the bundled pipeline (both gates populated)
+make api     # then open http://127.0.0.1:8090
+```
+
+`make seed --reset` wipes and reseeds. Both approval gates work end-to-end
+(verified in-browser): approving an email advances EMAIL_DRAFTED →
+EMAIL_APPROVED and writes a hashed approval to the log.
+
+**Known gap:** the *Edit* button isn't wired — server-side draft editing needs an
+endpoint that re-generates and re-hashes the draft. Approve / Reject / Request
+changes are fully wired; Edit shows a clear message.
 
 ### A8. Real-data dry run + YOUR review (the real quality gate)
 1. `export GOOGLE_PLACES_API_KEY=...` then `make discover LOCATION="Frisco, TX" CATEGORY=restaurant`

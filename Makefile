@@ -3,7 +3,7 @@ PY := .venv/bin/python
 PIP := .venv/bin/pip
 PYTEST := .venv/bin/pytest
 
-.PHONY: venv install test test-unit test-func test-perf test-pg test-all cov lint typecheck migrate clean demo discover research-demo site-demo email-demo evals api
+.PHONY: venv install test test-unit test-func test-perf test-pg test-all cov lint typecheck migrate clean demo discover research-demo site-demo email-demo evals api seed
 
 venv:
 	python3.11 -m venv .venv
@@ -72,7 +72,12 @@ evals:
 	$(PY) -m evals.site_eval
 	$(PY) -m evals.email_eval
 
-# Operator Console API (Phase 5). Set DATABASE_URL for a real DB; defaults to SQLite.
+# Populate the API's database with the bundled pipeline so the console has data.
+seed:
+	$(PY) -m app.cli seed --reset
+
+# Operator Console API (Phase 5). Serves the console at / and the API at /api.
+# Set DATABASE_URL for a real DB; defaults to SQLite. Run `make seed` first.
 api:
 	$(PY) -m uvicorn app.api.main:app --reload --port 8090
 
