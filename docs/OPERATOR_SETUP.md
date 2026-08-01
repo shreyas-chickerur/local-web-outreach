@@ -4,11 +4,19 @@ This is the human checklist for running the platform. The code handles the
 pipeline; this covers the accounts, keys, domains, legal items, and decisions the
 code can't make for you.
 
-**Build status (2026-07-29):** built + tested through **Phase 6** (research → site
-→ email, all approval-gated). **Not built yet:** Phase 7 (actually sending),
-Phase 8 (reply/complaint monitoring), Phase 10 (payments). Steps for those are
-marked **[LATER]** — set the accounts up now (they have lead time), but the
-software to use them lands in a later phase.
+**Build status (2026-08-01):** built + tested through **Phase 6** (research → site
+→ email, all approval-gated; 177 tests green). **Not built yet:** Phase 7 (actually
+sending), Phase 8 (reply/complaint monitoring), Phase 10 (payments). Steps for
+those are marked **[LATER]** — set the accounts up now (they have lead time), but
+the software to use them lands in a later phase.
+
+**Your progress so far (2026-08-01):**
+- ☑ `GOOGLE_PLACES_API_KEY` in `.env`
+- ☑ `ANTHROPIC_API_KEY` in `.env`
+- ☑ `SENDER_NAME` + `SENDER_POSTAL_ADDRESS` lines present in `.env`
+- ☐ **Edit `SENDER_POSTAL_ADDRESS` to a real mailing address** (still the placeholder)
+- ☐ Real-data dry run + your review (A8)
+- ☐ Everything in Part B (needed before any send)
 
 **Golden rule:** secrets live in a local `.env` (gitignored). Never commit them,
 never paste them into chat. Use a password manager for every account below.
@@ -37,7 +45,7 @@ Google suspends accounts that do it).
    registrar, Google Workspace admin, Anthropic, Stripe). One identity, one place
    to monitor.
 
-### A3. Google Places API key (lead discovery)
+### A3. Google Places API key (lead discovery) — ☑ DONE (key in `.env`)
 1. Log into https://console.cloud.google.com with the hub Gmail.
 2. Create a project (e.g. "local-web-outreach").
 3. Enable the **Places API** (and Maps if prompted).
@@ -46,7 +54,7 @@ Google suspends accounts that do it).
 5. Note: billing must be enabled; Places has a monthly free tier, then per-call
    cost. Set a budget alert.
 
-### A4. Anthropic API key (research + copy)
+### A4. Anthropic API key (research + copy) — ☑ DONE (key in `.env`)
 1. Sign up at https://console.anthropic.com with the hub Gmail.
 2. Create an API key; copy it. Add a small credit + a spend limit.
 
@@ -56,13 +64,13 @@ comfortable publishing:
 - a PO box, a registered-agent address, or a business mailing address.
 Write it down exactly as it should appear.
 
-### A6. Configure the app
-1. `cp .env.example .env`
-2. Fill in: `GOOGLE_PLACES_API_KEY`, `ANTHROPIC_API_KEY`, `SENDER_NAME`,
-   `SENDER_POSTAL_ADDRESS` (your A5 address), and `DATABASE_URL` (SQLite default
-   is fine for dev).
-3. Verify: `make email-demo` — confirm your real address + the opt-out line show
-   in the footer.
+### A6. Configure the app — ☑ mostly done
+Your `.env` already has `GOOGLE_PLACES_API_KEY`, `ANTHROPIC_API_KEY`,
+`SENDER_NAME`, and a placeholder `SENDER_POSTAL_ADDRESS`. `DATABASE_URL` is unset
+(SQLite default — fine for dev). Remaining:
+1. **Edit `SENDER_POSTAL_ADDRESS`** to your real A5 address (still the placeholder).
+2. Verify: `make email-demo` — confirm your real address + the opt-out line show
+   in the footer. (Nothing sends; no key needed for this.)
 
 ### A7. Wire the console to the backend
 The Operator Console (built in Claude design) currently runs on mock data.
