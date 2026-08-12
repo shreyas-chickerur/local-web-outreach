@@ -20,7 +20,9 @@ def test_template_composer_is_grounded_with_one_cta():
     assert "Acme Diner" in draft.body
     assert "Frisco, TX" in draft.body
     assert draft.body.count("https://preview-x.example/") == 1  # exactly one CTA
-    assert "you don't have a website yet" in draft.body  # natural clause for no_site
+    # no working site -> we must NOT claim we looked at one
+    assert "couldn't find a website" in draft.body
+    assert "had a look at your website" not in draft.body
 
 
 def test_template_composer_no_weakness_still_grounded():
@@ -29,15 +31,46 @@ def test_template_composer_no_weakness_still_grounded():
         preview_url="https://p.example/",
     )
     assert "https://p.example/" in draft.body
-    assert "could use a refresh" in draft.body
+    assert "Acme" in draft.body
 
 
-def test_template_composer_picks_highest_severity():
+# Wording that criticises the owner's current site. The offer stands on its own;
+# leading with a fault is a poor first impression and invites a defensive reply.
+_CRITICISM = ("dated", "outdated", "not secure", "isn\'t secure", "insecure", "slow",
+              "loads slowly", "not mobile", "isn\'t mobile", "broken", "isn\'t loading",
+              "needs work", "could use a refresh", "poor", "old")
+
+
+@pytest.mark.parametrize("weaknesses", [
+    [("stale_content", "medium")],
+    [("no_https", "high")],
+    [("slow_load", "low"), ("no_https", "high")],
+    [("not_mobile_responsive", "medium")],
+    [("no_site", "high")],
+    [],
+])
+def test_email_never_criticises_their_current_site(weaknesses):
     draft = TemplateEmailComposer().compose(
         business_name="Acme", location="Frisco, TX",
-        weaknesses=[("slow_load", "low"), ("no_https", "high")], preview_url="https://p/",
+        weaknesses=weaknesses, preview_url="https://p/",
     )
-    assert "isn't secure" in draft.body  # HIGH no_https beats LOW slow_load
+    lowered = draft.body.lower()
+    found = [w for w in _CRITICISM if w in lowered]
+    assert not found, f"email criticises their site: {found}"
+
+
+def test_email_only_claims_to_have_seen_a_site_that_exists():
+    """Saying 'I had a look at your website' to a business with none is false."""
+    with_site = TemplateEmailComposer().compose(
+        business_name="Acme", location="Frisco, TX",
+        weaknesses=[("stale_content", "medium")], preview_url="https://p/")
+    assert "had a look at your website" in with_site.body
+
+    for issue in ("no_site", "site_unreachable"):
+        without = TemplateEmailComposer().compose(
+            business_name="Acme", location="Frisco, TX",
+            weaknesses=[(issue, "high")], preview_url="https://p/")
+        assert "couldn't find a website" in without.body
 
 
 # --- mocked Claude composer (no network / no key) ---
