@@ -53,8 +53,47 @@ class Dossier:
         return [c for c in self.claims if c.status is ClaimStatus.VERIFIED]
 
 
-def _norm_value(value: str) -> str:
-    return re.sub(r"\s+", " ", value.strip().lower())
+# Two sources describing the SAME fact rarely format it identically. Google says
+# "9500 Frisco St, Frisco, TX 75033"; Yelp says the same with ", USA" appended.
+# Comparing raw strings turns that into a CONFLICT, which is worse than useless:
+# it buries a fact both sources actually agree on. Normalization is field-aware,
+# so a genuine disagreement (a different street) still conflicts.
+_STREET_ABBREV = {
+    "street": "st", "road": "rd", "avenue": "ave", "boulevard": "blvd",
+    "drive": "dr", "lane": "ln", "parkway": "pkwy", "court": "ct",
+    "highway": "hwy", "suite": "ste", "north": "n", "south": "s",
+    "east": "e", "west": "w",
+}
+_COUNTRY_SUFFIXES = (", usa", ", united states", ", us")
+
+
+def _norm_generic(value: str) -> str:
+    return re.sub(r"\s+", " ", (value or "").strip().lower())
+
+
+def _norm_phone(value: str) -> str:
+    """Compare phones by digits only; keep the last 10 so a +1 prefix matches."""
+    digits = re.sub(r"\D", "", value or "")
+    return digits[-10:] if len(digits) >= 10 else digits
+
+
+def _norm_address(value: str) -> str:
+    """Fold country suffix, punctuation, and street-word abbreviations."""
+    text = _norm_generic(value)
+    for suffix in _COUNTRY_SUFFIXES:
+        if text.endswith(suffix):
+            text = text[: -len(suffix)]
+    text = re.sub(r"[.,#]", " ", text)
+    return " ".join(_STREET_ABBREV.get(w, w) for w in text.split()).strip()
+
+
+def _norm_value(value: str, field: str = "") -> str:
+    """Normalize a claim value for equality comparison, by field type."""
+    if field == "phone":
+        return _norm_phone(value)
+    if field == "address":
+        return _norm_address(value)
+    return _norm_generic(value)
 
 
 def corroborate(claims: list[RawClaim]) -> list[ResolvedClaim]:
@@ -69,7 +108,7 @@ def corroborate(claims: list[RawClaim]) -> list[ResolvedClaim]:
         # Group by normalized value; count distinct source_urls per value.
         by_value: dict[str, list[RawClaim]] = {}
         for claim in group:
-            by_value.setdefault(_norm_value(claim.value), []).append(claim)
+            by_value.setdefault(_norm_value(claim.value, field_name), []).append(claim)
 
         all_sources = [
             {"source_type": c.source_type.value, "source_url": c.source_url} for c in group

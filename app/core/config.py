@@ -32,6 +32,16 @@ def google_places_api_key() -> str | None:
     return os.environ.get("GOOGLE_PLACES_API_KEY")
 
 
+def yelp_api_key() -> str | None:
+    """The Yelp Fusion API key, if configured.
+
+    Lives here rather than in the adapter so it is read *after* the
+    ``load_dotenv()`` above — an adapter reading ``os.environ`` directly only
+    sees the key when this module happens to be imported first.
+    """
+    return os.environ.get("YELP_API_KEY", "").strip() or None
+
+
 def sender_name() -> str:
     """Display name used in the CAN-SPAM email footer."""
     return os.environ.get("SENDER_NAME", "Local Web Outreach")

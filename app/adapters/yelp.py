@@ -10,18 +10,12 @@ and the pipeline falls back to whatever else it has — it never guesses.
 
 from __future__ import annotations
 
-import os
-
 import httpx
 
 from app.adapters.directory import DirectoryPlace
+from app.core.config import yelp_api_key
 
 SEARCH_URL = "https://api.yelp.com/v3/businesses/search"
-
-
-def yelp_api_key() -> str | None:
-    key = os.environ.get("YELP_API_KEY", "").strip()
-    return key or None
 
 
 class YelpSource:

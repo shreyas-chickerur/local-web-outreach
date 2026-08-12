@@ -59,10 +59,13 @@ class GooglePlacesSource(PlacesSource):
     """Google Places Text Search adapter (used in production with an API key)."""
 
     BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json"
+    DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json"
 
-    def __init__(self, api_key: str, client: httpx.Client | None = None) -> None:
+    def __init__(self, api_key: str, client: httpx.Client | None = None,
+                 fetch_details: bool = True) -> None:
         self._api_key = api_key
         self._client = client or httpx.Client(timeout=15.0)
+        self._fetch_details = fetch_details
 
     def search(self, location: str, category: str | None = None) -> list[BusinessCandidate]:
         query = f"{category} in {location}" if category else f"businesses in {location}"
@@ -71,19 +74,41 @@ class GooglePlacesSource(PlacesSource):
         payload = resp.json()
         out: list[BusinessCandidate] = []
         for r in payload.get("results", []):
+            place_id = r["place_id"]
+            # Text Search does NOT return website or phone — they come only from
+            # Place Details. Without this call every business looks like it has
+            # no website (so the outreach email would say so, wrongly) and has no
+            # phone for a second source to corroborate.
+            details = self._details(place_id) if self._fetch_details else {}
             out.append(
                 BusinessCandidate(
-                    place_id=r["place_id"],
+                    place_id=place_id,
                     name=r.get("name", ""),
                     location=location,
                     category=category,
                     address=r.get("formatted_address"),
-                    website=r.get("website"),
+                    phone=details.get("formatted_phone_number"),
+                    website=details.get("website"),
                     rating=r.get("rating"),
                     review_count=r.get("user_ratings_total"),
                 )
             )
         return out
+
+    def _details(self, place_id: str) -> dict:
+        """Fetch the contact fields Text Search omits. A failure degrades to an
+        empty dict rather than losing the candidate."""
+        try:
+            resp = self._client.get(
+                self.DETAILS_URL,
+                params={"place_id": place_id,
+                        "fields": "formatted_phone_number,website",
+                        "key": self._api_key},
+            )
+            resp.raise_for_status()
+            return resp.json().get("result") or {}
+        except (httpx.HTTPError, ValueError):
+            return {}
 
 
 def get_places_source(client: httpx.Client | None = None) -> PlacesSource:

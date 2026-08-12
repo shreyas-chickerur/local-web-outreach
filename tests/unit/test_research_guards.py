@@ -123,3 +123,62 @@ def test_entity_resolution_matches_on_phone():
     target = TargetEntity(name="Totally Different Name", phone="972-377-0707")
     kept, _ = resolve(target, [_source("The Depot Cafe", phone="(972) 377-0707")])
     assert len(kept) == 1  # phone triangulation ties them despite the name
+
+
+# ---- field-aware value normalization (false conflicts from formatting) ------
+def test_address_formatting_differences_do_not_create_a_conflict():
+    """Real case: Google omits ', USA'; Yelp appends it. Same address."""
+    from app.ai.research_runner import RawClaim
+    from app.core.enums import ClaimStatus, SourceType
+    from app.stages.research import corroborate
+
+    resolved = corroborate([
+        RawClaim(field="address", value="9500 Frisco St, Frisco, TX 75033",
+                 source_url="https://maps.google.com/x", source_type=SourceType.GBP),
+        RawClaim(field="address", value="9500 Frisco St, Frisco, TX 75033, USA",
+                 source_url="https://yelp.com/biz/x", source_type=SourceType.DIRECTORY),
+    ])
+    assert len(resolved) == 1
+    assert resolved[0].status is ClaimStatus.VERIFIED
+    assert resolved[0].corroborations == 2
+    assert resolved[0].value == "9500 Frisco St, Frisco, TX 75033"  # cleaner form kept
+
+
+def test_genuinely_different_addresses_still_conflict():
+    """Executive Mowing: Google says Custer Rd, Yelp says Warren Pkwy."""
+    from app.ai.research_runner import RawClaim
+    from app.core.enums import ClaimStatus, SourceType
+    from app.stages.research import corroborate
+
+    resolved = corroborate([
+        RawClaim(field="address", value="11625 Custer Rd, Frisco, TX 75035",
+                 source_url="https://maps.google.com/x", source_type=SourceType.GBP),
+        RawClaim(field="address", value="6160 Warren Pkwy Suite, 100, Frisco, TX 75034, USA",
+                 source_url="https://yelp.com/biz/x", source_type=SourceType.DIRECTORY),
+    ])
+    assert resolved[0].status is ClaimStatus.CONFLICT
+
+
+@pytest.mark.parametrize("a,b", [
+    ("(972) 377-0707", "+1 972-377-0707"),
+    ("972.377.0707", "9723770707"),
+    ("(972) 377-0707", "972-377-0707"),
+])
+def test_phone_formatting_differences_corroborate(a, b):
+    from app.ai.research_runner import RawClaim
+    from app.core.enums import ClaimStatus, SourceType
+    from app.stages.research import corroborate
+
+    resolved = corroborate([
+        RawClaim(field="phone", value=a, source_url="https://one/", source_type=SourceType.GBP),
+        RawClaim(field="phone", value=b, source_url="https://two/",
+                 source_type=SourceType.DIRECTORY),
+    ])
+    assert resolved[0].status is ClaimStatus.VERIFIED
+
+
+def test_street_abbreviations_fold_together():
+    from app.stages.research import _norm_address
+
+    assert _norm_address("123 Elm Street, Frisco, TX") == _norm_address("123 Elm St., Frisco TX")
+    assert _norm_address("1 North Main Ave") == _norm_address("1 N Main Avenue")

@@ -277,7 +277,8 @@ def cmd_advance(args: argparse.Namespace) -> int:
     email) outreach draft, so they land at the approval gates."""
     from app.adapters.directory import DirectorySource
     from app.adapters.osm import NominatimSource
-    from app.adapters.yelp import YelpSource, yelp_api_key
+    from app.adapters.yelp import YelpSource
+    from app.core.config import yelp_api_key
     from app.core.enums import Actor, BusinessStatus
     from app.core.state_machine import advance
     from app.stages.collect import collect_sources

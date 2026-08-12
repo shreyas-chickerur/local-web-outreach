@@ -37,8 +37,12 @@ def test_parse_handles_a_row_with_no_address():
     assert place.address is None
 
 
-def test_lookup_returns_none_without_an_api_key():
-    """No key -> the source is simply absent; it never guesses."""
+def test_lookup_returns_none_without_an_api_key(monkeypatch):
+    """No key -> the source is simply absent; it never guesses.
+
+    Clears the env var so a real key in the developer's .env can't mask this.
+    """
+    monkeypatch.delenv("YELP_API_KEY", raising=False)
     assert YelpSource(api_key=None).lookup("Ryno Lawn Care", "Frisco, TX") is None
 
 

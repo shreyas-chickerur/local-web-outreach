@@ -49,3 +49,24 @@ def test_factory_rejects_unknown_provider(monkeypatch):
     monkeypatch.setenv("PLACES_PROVIDER", "bing")
     with pytest.raises(RuntimeError, match="Unknown PLACES_PROVIDER"):
         get_places_source()
+
+
+def test_yelp_api_key_reads_the_env(monkeypatch):
+    from app.core import config
+
+    monkeypatch.setenv("YELP_API_KEY", "abc123")  # pragma: allowlist secret
+    assert config.yelp_api_key() == "abc123"  # pragma: allowlist secret
+    monkeypatch.setenv("YELP_API_KEY", "   ")
+    assert config.yelp_api_key() is None  # whitespace-only is not a key
+    monkeypatch.delenv("YELP_API_KEY")
+    assert config.yelp_api_key() is None
+
+
+def test_yelp_adapter_reads_the_key_through_config():
+    """Regression: the adapter used to read os.environ itself, so the key was
+    invisible unless app.core.config (which loads .env) was imported first."""
+    import inspect
+
+    from app.adapters import yelp
+
+    assert "os.environ" not in inspect.getsource(yelp)
