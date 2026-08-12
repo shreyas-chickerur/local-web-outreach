@@ -1,84 +1,62 @@
 """Render a generated site's content model as a real, viewable web page.
 
-Phase 4 produces a *content model* — grounded facts with claim ids. Until now
-nothing turned it into HTML, so the "preview link" pointed at a domain that does
-not exist and neither the operator nor a prospect could actually see the site
-they were being asked to approve or buy.
+Phase 4 produces a *content model* — verified facts with claim ids, plus the
+business's own self-attested content. This turns it into the page a prospect
+actually opens, so it has to look like something worth paying for: editorial
+type, a full-bleed hero, a numbered offerings grid, a clickable gallery, and a
+dark closing band.
 
-The renderer is deliberately plain-Python (no template engine) and escapes every
-value, because everything on this page comes from third-party data. It renders
-ONLY what the content model contains: if a fact was not verified it is not here.
+Everything on the page is third-party data, so every value is escaped. It renders
+ONLY what the model contains: no verified fact, no fact on the page.
 """
 
 from __future__ import annotations
 
+import json
 from html import escape
 
-_PALETTE = {
-    "restaurant": ("#1c1917", "#b45309", "#fffbeb"),
-    "service": ("#0f172a", "#0369a1", "#f0f9ff"),
-    "generic": ("#111827", "#4338ca", "#eef2ff"),
-}
+from app.render.styles import css_for
+from app.render.theme import palette_for, voice_for
 
-_CSS = """
-*{box-sizing:border-box;margin:0;padding:0}
-body{font:16px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;
-     color:%(ink)s;background:#fff;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
-header.nav{display:flex;align-items:center;justify-content:space-between;
-     padding:20px 0;border-bottom:1px solid #e5e7eb}
-header.nav .brand{font-weight:700;font-size:1.05rem;letter-spacing:-.01em}
-header.nav a.cta{background:%(accent)s;color:#fff;text-decoration:none;
-     padding:10px 18px;border-radius:8px;font-weight:600;font-size:.9rem}
-.hero{background:%(tint)s;padding:88px 0 80px;text-align:center}
-.hero h1{font-size:clamp(2.2rem,5vw,3.4rem);line-height:1.1;letter-spacing:-.03em;
-     font-weight:800;margin-bottom:16px}
-.hero p{font-size:clamp(1.05rem,2vw,1.3rem);color:#4b5563;max-width:640px;margin:0 auto}
-.hero .actions{margin-top:32px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn{display:inline-block;text-decoration:none;padding:14px 26px;border-radius:9px;
-     font-weight:600}
-.btn-primary{background:%(accent)s;color:#fff}
-.btn-ghost{border:1px solid #d1d5db;color:%(ink)s}
-section.block{padding:64px 0;border-bottom:1px solid #f3f4f6}
-section.block h2{font-size:1.6rem;letter-spacing:-.02em;margin-bottom:28px;font-weight:700}
-.facts{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.fact{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px}
-.fact .label{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;
-     color:#6b7280;font-weight:700;margin-bottom:6px}
-.fact .value{font-size:1.12rem;font-weight:600}
-.rating{display:flex;align-items:baseline;gap:10px}
-.rating .stars{color:%(accent)s;font-size:1.3rem;letter-spacing:2px}
-.hero.with-photo{position:relative;background:#000;padding:0}
-.hero.with-photo .photo{height:min(62vh,520px);background-size:cover;background-position:center}
-.hero.with-photo .overlay{position:absolute;inset:0;display:flex;flex-direction:column;
-     align-items:center;justify-content:center;text-align:center;padding:0 24px;
-     background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.65))}
-.hero.with-photo h1,.hero.with-photo p{color:#fff}
-.hero.with-photo p{color:#f3f4f6}
-.tagline{margin-top:14px;font-size:1.02rem;color:#6b7280}
-.grid-cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.card{border:1px solid #e5e7eb;border-radius:12px;padding:18px 20px;background:#fff;
-     font-weight:600;display:flex;align-items:center;gap:10px}
-.card .dot{width:8px;height:8px;border-radius:50%%;background:%(accent)s;flex-shrink:0}
-.hours{display:grid;gap:10px;max-width:520px}
-.hours .row{display:flex;justify-content:space-between;padding:12px 16px;
-     border:1px solid #e5e7eb;border-radius:10px;background:#fff}
-.story{font-size:1.08rem;color:#374151;max-width:760px}
-.gallery{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
-.gallery img{width:100%%;height:190px;object-fit:cover;border-radius:12px;display:block;
-     border:1px solid #e5e7eb;background:#f3f4f6}
-.socials{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px}
-.socials a{color:#9ca3af;text-decoration:none;font-size:.86rem;border:1px solid #374151;
-     padding:7px 14px;border-radius:999px}
-.cta-band{background:%(ink)s;color:#fff;padding:64px 0;text-align:center}
-.cta-band h2{font-size:1.9rem;letter-spacing:-.02em;margin-bottom:12px;font-weight:700}
-.cta-band p{color:#d1d5db;margin-bottom:26px}
-.cta-band .btn-primary{background:#fff;color:%(ink)s}
-footer{padding:36px 0;color:#6b7280;font-size:.85rem;text-align:center}
-.draft-ribbon{position:fixed;top:16px;right:-46px;transform:rotate(45deg);
-     background:#b91c1c;color:#fff;padding:7px 60px;font-size:.72rem;font-weight:700;
-     letter-spacing:.09em;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-@media(max-width:640px){.hero{padding:60px 0 56px}section.block{padding:44px 0}}
+# Small inline runtime: sticky-nav state, scroll reveal, and a gallery lightbox
+# with keyboard control. No external requests — the page must stand alone.
+_JS = """
+(function(){
+  var nav=document.querySelector('.nav');
+  if(nav){var onScroll=function(){nav.classList.toggle('solid',window.scrollY>60)};
+    onScroll();addEventListener('scroll',onScroll,{passive:true});}
+
+  var els=[].slice.call(document.querySelectorAll('.reveal'));
+  if('IntersectionObserver' in window && els.length){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){e.target.classList.add('in');
+        io.unobserve(e.target);} });},{rootMargin:'0px 0px -8% 0px',threshold:.08});
+    els.forEach(function(el){io.observe(el)});
+  } else { els.forEach(function(el){el.classList.add('in')}); }
+
+  var box=document.querySelector('.lightbox');
+  if(!box) return;
+  var img=box.querySelector('img'), srcs=JSON.parse(box.dataset.srcs||'[]'), i=0;
+  function show(n){ i=(n+srcs.length)%srcs.length; img.src=srcs[i]; }
+  function open(n){ show(n); box.classList.add('open');
+    document.body.style.overflow='hidden'; box.querySelector('.x').focus(); }
+  function close(){ box.classList.remove('open'); document.body.style.overflow=''; }
+  document.querySelectorAll('.gallery button').forEach(function(b,n){
+    b.addEventListener('click',function(){open(n)});
+  });
+  box.querySelector('.x').addEventListener('click',close);
+  box.querySelector('.prev').addEventListener('click',function(e){
+    e.stopPropagation();show(i-1)});
+  box.querySelector('.next').addEventListener('click',function(e){
+    e.stopPropagation();show(i+1)});
+  box.addEventListener('click',function(e){ if(e.target===box) close(); });
+  addEventListener('keydown',function(e){
+    if(!box.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    if(e.key==='ArrowLeft') show(i-1);
+    if(e.key==='ArrowRight') show(i+1);
+  });
+})();
 """
 
 
@@ -92,116 +70,211 @@ def _stars(value: str) -> str:
     return "★" * full + ("½" if half else "") + "☆" * (5 - full - half)
 
 
-def _fact_html(fact: dict) -> str:
-    label = escape(str(fact.get("label", "")))
-    value = escape(str(fact.get("value", "")))
-    if fact.get("field") == "rating":
-        value = (f'<span class="rating"><span class="stars">{_stars(fact.get("value", ""))}'
-                 f"</span><span>{value} out of 5</span></span>")
-    return (f'<div class="fact"><div class="label">{label}</div>'
-            f'<div class="value">{value}</div></div>')
+def _find(sections: list[dict], stype: str) -> dict:
+    return next((s for s in sections if s.get("type") == stype), {})
+
+
+def _collect_facts(sections: list[dict]) -> dict[str, dict]:
+    """field -> fact, across every fact-bearing section."""
+    out: dict[str, dict] = {}
+    for section in sections:
+        for fact in section.get("facts", []) or []:
+            field = fact.get("field")
+            if field and field not in out:
+                out[field] = fact
+    return out
+
+
+def _section(title: str, eyebrow: str, inner: str, *, band: str = "") -> str:
+    return (
+        f'<section class="{band}"><div class="wrap">'
+        f'<div class="section-head reveal">'
+        f'<div class="eyebrow">{escape(eyebrow)}</div>'
+        f'<h2 class="section-title">{escape(title)}</h2></div>'
+        f"{inner}</div></section>"
+    )
 
 
 def render_site(content: dict, *, draft: bool = True) -> str:
-    """Return a complete HTML document for a generated site's content model."""
+    """Return a complete, self-contained HTML document for a site model."""
     name = escape(str(content.get("business_name", "")))
     industry = str(content.get("industry", "generic"))
-    ink, accent, tint = _PALETTE.get(industry, _PALETTE["generic"])
-    css = _CSS % {"ink": ink, "accent": accent, "tint": tint}
+    palette = palette_for(industry)
+    eyebrow, closing_line, cta_label = voice_for(industry)
+    css = css_for(palette)
 
-    sections = content.get("sections", [])
-    hero: dict = next((s for s in sections if s.get("type") == "hero"), {})
-    cta: dict = next((s for s in sections if s.get("type") == "cta"), {})
-    body: list[str] = []
+    sections = content.get("sections", []) or []
+    hero = _find(sections, "hero")
+    facts = _collect_facts(sections)
+    subheading = escape(str(hero.get("subheading", "") or ""))
+    tagline = content.get("tagline")
 
-    for section in sections:
-        stype = section.get("type")
-        if stype in {"hero", "cta"}:
-            continue
-        heading = escape(str(section.get("heading", "")))
-        inner = ""
-        if section.get("facts"):
-            inner = (f'<div class="facts">'
-                     f'{"".join(_fact_html(f) for f in section["facts"])}</div>')
-        elif stype == "offerings":
-            cards = "".join(
-                f'<div class="card"><span class="dot"></span>{escape(str(i))}</div>'
-                for i in section.get("items", []))
-            inner = f'<div class="grid-cards">{cards}</div>'
-        elif stype == "opening_hours":
-            rows = "".join(f'<div class="row"><span>{escape(str(i))}</span></div>'
-                           for i in section.get("items", []))
-            inner = f'<div class="hours">{rows}</div>'
-        elif stype == "story":
-            inner = f'<p class="story">{escape(str(section.get("body", "")))}</p>'
-        elif stype == "gallery":
-            imgs = "".join(f'<img src="{escape(str(u))}" alt="" loading="lazy">'
-                           for u in section.get("images", []))
-            inner = f'<div class="gallery">{imgs}</div>'
-        if not inner:
-            continue
-        body.append(f'<section class="block"><div class="wrap">'
-                    f"<h2>{heading}</h2>{inner}</div></section>")
-
-    # Their customers came to do something — order, book, get a quote. A new site
-    # that drops those actions is a downgrade however good it looks.
+    # --- hero -------------------------------------------------------------
     actions = content.get("actions") or []
     action_btns = "".join(
-        f'<a class="btn btn-ghost" href="{escape(str(a.get("url", "#")))}">'
+        f'<a class="btn btn-on-photo" href="{escape(str(a.get("url", "#")))}">'
         f'{escape(str(a.get("kind") or a.get("label", "")))}</a>'
-        for a in actions[:3])
-    tagline = content.get("tagline")
-    tagline_html = f'<p class="tagline">{escape(str(tagline))}</p>' if tagline else ""
-    subheading = escape(str(hero.get("subheading", "")))
+        for a in actions[:2]
+    )
     photo = content.get("hero_image")
+    hero_body = (
+        f'<div class="eyebrow">{escape(eyebrow)}</div>'
+        f'<h1 class="display">{name}</h1>'
+        f'<p class="sub">{subheading or escape(str(tagline or ""))}</p>'
+        f'<div class="cta-row">'
+        f'<a class="btn btn-primary btn-lg" href="#contact">{escape(cta_label)}</a>'
+        f"{action_btns}</div>"
+    )
     if photo:
         hero_html = (
-            f'<div class="hero with-photo">'
-            f'<div class="photo" style="background-image:url(\'{escape(str(photo))}\')"></div>'
-            f'<div class="overlay"><h1>{name}</h1><p>{subheading}</p>'
-            f'<div class="actions"><a class="btn btn-primary" href="#contact">Get in touch</a>'
-            f"{action_btns}</div></div></div>")
+            f'<header class="hero">'
+            f'<div class="bg" style="background-image:url(&quot;{escape(str(photo))}&quot;)">'
+            f'</div><div class="scrim"></div>'
+            f'<div class="inner"><div class="wrap">{hero_body}</div></div></header>'
+        )
     else:
         hero_html = (
-            f'<div class="hero"><div class="wrap"><h1>{name}</h1><p>{subheading}</p>'
-            f"{tagline_html}"
-            f'<div class="actions"><a class="btn btn-primary" href="#contact">Get in touch</a>'
-            f'<a class="btn btn-ghost" href="#details">See details</a>'
-            f"{action_btns}</div></div></div>")
+            f'<header class="hero hero--plain"><div class="inner"><div class="wrap">'
+            f"{hero_body}</div></div></header>"
+        )
+
+    # --- body sections ----------------------------------------------------
+    body: list[str] = []
+    bands = ["", "band-tint"]
+    band_i = 0
+
+    def next_band() -> str:
+        nonlocal band_i
+        band = bands[band_i % 2]
+        band_i += 1
+        return band
+
+    offerings = _find(sections, "offerings")
+    if offerings.get("items"):
+        cards = "".join(
+            f'<div class="offer reveal"><span class="num">{n:02d}</span>'
+            f'<span class="name">{escape(str(item))}</span></div>'
+            for n, item in enumerate(offerings["items"], start=1)
+        )
+        body.append(_section(str(offerings.get("heading", "What we offer")),
+                             "What we do", f'<div class="offer-grid">{cards}</div>',
+                             band=next_band()))
+
+    story = _find(sections, "story")
+    rating_fact = facts.get("rating")
+    if story.get("body") or rating_fact:
+        left = (f'<div class="story reveal"><p>{escape(str(story.get("body", "")))}</p></div>'
+                if story.get("body") else "")
+        right = ""
+        if rating_fact:
+            value = escape(str(rating_fact.get("value", "")))
+            right = (
+                f'<div class="stat-card reveal"><div class="big">{value}</div>'
+                f'<div class="stars">{_stars(str(rating_fact.get("value", "")))}</div>'
+                f'<div class="cap">Average customer rating, verified across '
+                f"independent review sites.</div></div>"
+            )
+        body.append(_section(str(story.get("heading", "About us")), "Our story",
+                             f'<div class="story-grid">{left}{right}</div>',
+                             band=next_band()))
+
+    hours = _find(sections, "opening_hours")
+    if hours.get("items"):
+        rows = ""
+        for item in hours["items"]:
+            text = str(item)
+            when, _, times = text.partition(":")
+            rows += (
+                f'<div class="row"><span class="when">{escape(when.strip())}</span>'
+                f'<span class="dots"></span><span>{escape(times.strip())}</span></div>'
+                if times else
+                f'<div class="row"><span class="when">{escape(text)}</span></div>'
+            )
+        body.append(_section(str(hours.get("heading", "Hours")), "When we're open",
+                             f'<div class="hours reveal">{rows}</div>', band=next_band()))
+
+    gallery = _find(sections, "gallery")
+    images = [str(u) for u in (gallery.get("images") or [])]
+    if images:
+        tiles = "".join(
+            f'<button type="button" aria-label="Open image {n}">'
+            f'<img src="{escape(u)}" alt="" loading="lazy"></button>'
+            for n, u in enumerate(images, start=1)
+        )
+        body.append(_section(str(gallery.get("heading", "Gallery")), "A look inside",
+                             f'<div class="gallery reveal">{tiles}</div>', band=next_band()))
+
+    lightbox = ""
+    if images:
+        srcs = escape(json.dumps(images), quote=True)
+        lightbox = (
+            f'<div class="lightbox" data-srcs="{srcs}" role="dialog" aria-modal="true">'
+            f'<button class="x" aria-label="Close">✕</button>'
+            f'<button class="arrow prev" aria-label="Previous">‹</button>'
+            f'<img src="" alt="">'
+            f'<button class="arrow next" aria-label="Next">›</button></div>'
+        )
+
+    # --- closing / contact ------------------------------------------------
+    cards = ""
+    if facts.get("address"):
+        cards += (f'<div class="contact-card"><div class="k">Find us</div>'
+                  f'<div class="v">{escape(str(facts["address"]["value"]))}</div></div>')
+    if facts.get("phone"):
+        phone = str(facts["phone"]["value"])
+        digits = "".join(c for c in phone if c.isdigit() or c == "+")
+        cards += (f'<div class="contact-card"><div class="k">Call</div>'
+                  f'<div class="v"><a href="tel:{escape(digits)}">{escape(phone)}</a>'
+                  f"</div></div>")
+    for action in actions[:2]:
+        cards += (f'<div class="contact-card"><div class="k">'
+                  f'{escape(str(action.get("kind", "Online")))}</div>'
+                  f'<div class="v"><a href="{escape(str(action.get("url", "#")))}">'
+                  f'{escape(str(action.get("label", "Open")))}</a></div></div>')
 
     socials = content.get("socials") or []
     socials_html = ""
     if socials:
-        links = "".join(f'<a href="{escape(str(s.get("url", "#")))}">'
-                        f'{escape(str(s.get("name", "")))}</a>' for s in socials)
+        links = "".join(
+            f'<a href="{escape(str(s.get("url", "#")))}">{escape(str(s.get("name", "")))}</a>'
+            for s in socials
+        )
         socials_html = f'<div class="socials">{links}</div>'
 
-    ribbon = '<div class="draft-ribbon">DRAFT · PRIVATE</div>' if draft else ""
+    closing = (
+        f'<section class="closing" id="contact"><div class="wrap">'
+        f'<div class="section-head reveal" style="margin-inline:auto;text-align:center;'
+        f'align-items:center">'
+        f'<div class="eyebrow" style="color:#fff;opacity:.8">Get in touch</div>'
+        f'<h2 class="section-title">{escape(closing_line)}</h2>'
+        f'<p class="lede">We\'d love to hear from you.</p></div>'
+        f'<div class="contact-grid reveal">{cards}</div></div></section>'
+    )
+
+    draft_badge = '<div class="draft">Draft proposal · private</div>' if draft else ""
+
     return f"""<!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<meta name="description" content="{escape(str(tagline or subheading or name))}">
 <title>{name}</title>
 <style>{css}</style>
 </head><body>
-{ribbon}
-<div class="wrap"><header class="nav">
-  <span class="brand">{name}</span>
-  <a class="cta" href="#contact">Get in touch</a>
-</header></div>
-
+<nav class="nav"><div class="wrap bar">
+  <a class="brand" href="#top">{name}</a>
+  <div class="nav-links"><a href="#contact">Contact</a></div>
+</div></nav>
+<a id="top"></a>
 {hero_html}
-
-<a id="details"></a>
 {"".join(body)}
-
-<div class="cta-band" id="contact"><div class="wrap">
-  <h2>{escape(str(cta.get("heading", "Get in touch")))}</h2>
-  <p>{escape(str(cta.get("body", "")))}</p>
-  <a class="btn btn-primary" href="#contact">Contact us</a>
+{closing}
+<footer><div class="wrap bar">
+  <span>© {name}</span>
   {socials_html}
-</div></div>
-
-<footer><div class="wrap">© {name}. Private proposal — not indexed.</div></footer>
+</div></footer>
+{lightbox}
+{draft_badge}
+<script>{_JS}</script>
 </body></html>"""

@@ -35,7 +35,7 @@ def test_preview_serves_the_generated_site(client, session, make_site_drafted):
     # a private proposal: never indexable, and visibly a draft
     assert res.headers["X-Robots-Tag"] == "noindex, nofollow"
     assert 'content="noindex, nofollow"' in res.text
-    assert "DRAFT" in res.text
+    assert "Draft proposal" in res.text
 
 
 def test_unknown_preview_token_is_404(client):
@@ -89,11 +89,11 @@ def test_rating_renders_as_stars():
         ],
     })
     assert "★★★★" in html
-    assert "4.6 out of 5" in html
+    assert "4.6" in html
 
 
 def test_approved_site_drops_the_draft_ribbon():
     content = {"business_name": "Acme", "industry": "service",
                "sections": [{"type": "hero", "heading": "Acme", "subheading": ""}]}
-    assert "DRAFT" in render_site(content, draft=True)
-    assert "DRAFT" not in render_site(content, draft=False)
+    assert "Draft proposal" in render_site(content, draft=True)
+    assert "Draft proposal" not in render_site(content, draft=False)
