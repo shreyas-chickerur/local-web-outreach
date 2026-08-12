@@ -20,6 +20,7 @@ import secrets
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from app.core import config
 from app.core.approvals import hash_content
 from app.core.enums import Actor, BusinessStatus, ClaimStatus, WebsiteState
 from app.core.errors import SiteIntegrityError
@@ -155,7 +156,7 @@ def generate_website(session: Session, business, *, model_version: str | None = 
         version=next_version,
         content_json=content,
         preview_token=token,
-        preview_url=f"https://preview-{token}.lwo.example/",
+        preview_url=f"{config.preview_base_url()}/preview/{token}",
         state=WebsiteState.DRAFT,
         content_hash=hash_content(content),
     )

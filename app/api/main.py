@@ -13,12 +13,15 @@ from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.api import schemas, service
 from app.core.config import database_url
 from app.core.db import make_engine, make_session_factory
+from app.core.enums import WebsiteState
 from app.core.errors import (
     ApprovalRequiredError,
     ComplianceError,
@@ -26,6 +29,8 @@ from app.core.errors import (
     StaleContentError,
     TransitionError,
 )
+from app.models.website import Website
+from app.render.site_html import render_site
 
 _session_factory: object | None = None
 
@@ -124,6 +129,23 @@ def create_app() -> FastAPI:
         session: Session = Depends(get_session),
     ):
         return _run_decision(session, service.edit_draft, business_id, payload)
+
+    @app.get("/preview/{token}", response_class=HTMLResponse)
+    def site_preview(token: str, session: Session = Depends(get_session)):
+        """Serve a generated site as a real, viewable page.
+
+        This is the link the operator reviews and the prospect eventually opens.
+        It is a private proposal: unguessable token, noindex, and clearly marked
+        DRAFT until the site is approved.
+        """
+        site = session.execute(
+            select(Website).where(Website.preview_token == token)
+        ).scalars().first()
+        if site is None:
+            raise HTTPException(status_code=404, detail="preview not found")
+        html = render_site(site.content_json or {},
+                           draft=site.state is not WebsiteState.APPROVED)
+        return HTMLResponse(html, headers={"X-Robots-Tag": "noindex, nofollow"})
 
     # Serve the Operator Console (static files) at the root, AFTER the /api routes
     # so they take precedence. `html=True` serves console/index.html at "/".

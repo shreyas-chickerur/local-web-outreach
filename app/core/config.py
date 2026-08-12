@@ -42,6 +42,15 @@ def yelp_api_key() -> str | None:
     return os.environ.get("YELP_API_KEY", "").strip() or None
 
 
+def preview_base_url() -> str:
+    """Where generated site previews are served from.
+
+    Locally this is the console itself; in production it becomes the public host
+    that prospects can open. The token in the path is what keeps it private.
+    """
+    return os.environ.get("PREVIEW_BASE_URL", "http://127.0.0.1:8090").rstrip("/")
+
+
 def sender_name() -> str:
     """Display name used in the CAN-SPAM email footer."""
     return os.environ.get("SENDER_NAME", "Local Web Outreach")
