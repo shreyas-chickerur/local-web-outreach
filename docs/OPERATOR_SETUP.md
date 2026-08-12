@@ -5,7 +5,7 @@ pipeline; this covers the accounts, keys, domains, legal items, and decisions th
 code can't make for you.
 
 **Build status (2026-08-01):** built + tested through **Phase 6** (research → site
-→ email, all approval-gated; 177 tests green). **Not built yet:** Phase 7 (actually
+→ email, all approval-gated; 228 tests green). **Not built yet:** Phase 7 (actually
 sending), Phase 8 (reply/complaint monitoring), Phase 10 (payments). Steps for
 those are marked **[LATER]** — set the accounts up now (they have lead time), but
 the software to use them lands in a later phase.
@@ -15,15 +15,19 @@ the software to use them lands in a later phase.
 - ☑ `SENDER_NAME` + `SENDER_POSTAL_ADDRESS` lines present in `.env`
 - ☑ Console fully wired — all four actions (Approve/Reject/Request changes/Edit)
 - ☑ Live source collection + contact-email scraping (`advance`)
+- ☑ Independent directories (OpenStreetMap + Yelp) so facts can reach VERIFIED
+- ☑ Identity-based dedup (the 3× `JC's Landscaping` bug)
 - ☑ Pre-commit hook blocking any `.env` / `.db` commit
-- ☐ **A2 — create the dedicated project Gmail** (do this first; everything hangs off it)
+- ☑ **A2 — hub Gmail: `friscooperator@gmail.com`**
+- ☐ **A4b — get the free Yelp API key** ← do this before the next run
 - ☐ **Edit `SENDER_POSTAL_ADDRESS` to a real mailing address** (still the placeholder;
   a send-time guard refuses to send while it's a placeholder)
 - ☐ **A8 — real-data dry run + your review** ← the next real milestone
 - ☐ Everything in Part B (needed before any send; **B4 warmup takes ~4 weeks — start early**)
 
-**Shortest path from here:** A2 (new Gmail) → A8 (dry run, judge the output) →
-B4/B1–B3 (domains + warmup, in parallel, because of the 4-week clock).
+**Shortest path from here:** A4b (Yelp key, 5 min) → re-run A8 (`discover` +
+`advance`, judge the output) → B1–B4 (domains + warmup, in parallel, because of
+the ~4-week warmup clock).
 
 ---
 
