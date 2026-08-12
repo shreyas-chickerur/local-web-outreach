@@ -48,6 +48,28 @@ section.block h2{font-size:1.6rem;letter-spacing:-.02em;margin-bottom:28px;font-
 .fact .value{font-size:1.12rem;font-weight:600}
 .rating{display:flex;align-items:baseline;gap:10px}
 .rating .stars{color:%(accent)s;font-size:1.3rem;letter-spacing:2px}
+.hero.with-photo{position:relative;background:#000;padding:0}
+.hero.with-photo .photo{height:min(62vh,520px);background-size:cover;background-position:center}
+.hero.with-photo .overlay{position:absolute;inset:0;display:flex;flex-direction:column;
+     align-items:center;justify-content:center;text-align:center;padding:0 24px;
+     background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.65))}
+.hero.with-photo h1,.hero.with-photo p{color:#fff}
+.hero.with-photo p{color:#f3f4f6}
+.tagline{margin-top:14px;font-size:1.02rem;color:#6b7280}
+.grid-cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{border:1px solid #e5e7eb;border-radius:12px;padding:18px 20px;background:#fff;
+     font-weight:600;display:flex;align-items:center;gap:10px}
+.card .dot{width:8px;height:8px;border-radius:50%%;background:%(accent)s;flex-shrink:0}
+.hours{display:grid;gap:10px;max-width:520px}
+.hours .row{display:flex;justify-content:space-between;padding:12px 16px;
+     border:1px solid #e5e7eb;border-radius:10px;background:#fff}
+.story{font-size:1.08rem;color:#374151;max-width:760px}
+.gallery{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.gallery img{width:100%%;height:190px;object-fit:cover;border-radius:12px;display:block;
+     border:1px solid #e5e7eb;background:#f3f4f6}
+.socials{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.socials a{color:#9ca3af;text-decoration:none;font-size:.86rem;border:1px solid #374151;
+     padding:7px 14px;border-radius:999px}
 .cta-band{background:%(ink)s;color:#fff;padding:64px 0;text-align:center}
 .cta-band h2{font-size:1.9rem;letter-spacing:-.02em;margin-bottom:12px;font-weight:700}
 .cta-band p{color:#d1d5db;margin-bottom:26px}
@@ -94,14 +116,65 @@ def render_site(content: dict, *, draft: bool = True) -> str:
 
     for section in sections:
         stype = section.get("type")
-        if stype in {"hero", "cta"} or not section.get("facts"):
+        if stype in {"hero", "cta"}:
             continue
-        facts = "".join(_fact_html(f) for f in section["facts"])
-        body.append(
-            f'<section class="block"><div class="wrap">'
-            f'<h2>{escape(str(section.get("heading", "")))}</h2>'
-            f'<div class="facts">{facts}</div></div></section>'
-        )
+        heading = escape(str(section.get("heading", "")))
+        inner = ""
+        if section.get("facts"):
+            inner = (f'<div class="facts">'
+                     f'{"".join(_fact_html(f) for f in section["facts"])}</div>')
+        elif stype == "offerings":
+            cards = "".join(
+                f'<div class="card"><span class="dot"></span>{escape(str(i))}</div>'
+                for i in section.get("items", []))
+            inner = f'<div class="grid-cards">{cards}</div>'
+        elif stype == "opening_hours":
+            rows = "".join(f'<div class="row"><span>{escape(str(i))}</span></div>'
+                           for i in section.get("items", []))
+            inner = f'<div class="hours">{rows}</div>'
+        elif stype == "story":
+            inner = f'<p class="story">{escape(str(section.get("body", "")))}</p>'
+        elif stype == "gallery":
+            imgs = "".join(f'<img src="{escape(str(u))}" alt="" loading="lazy">'
+                           for u in section.get("images", []))
+            inner = f'<div class="gallery">{imgs}</div>'
+        if not inner:
+            continue
+        body.append(f'<section class="block"><div class="wrap">'
+                    f"<h2>{heading}</h2>{inner}</div></section>")
+
+    # Their customers came to do something — order, book, get a quote. A new site
+    # that drops those actions is a downgrade however good it looks.
+    actions = content.get("actions") or []
+    action_btns = "".join(
+        f'<a class="btn btn-ghost" href="{escape(str(a.get("url", "#")))}">'
+        f'{escape(str(a.get("kind") or a.get("label", "")))}</a>'
+        for a in actions[:3])
+    tagline = content.get("tagline")
+    tagline_html = f'<p class="tagline">{escape(str(tagline))}</p>' if tagline else ""
+    subheading = escape(str(hero.get("subheading", "")))
+    photo = content.get("hero_image")
+    if photo:
+        hero_html = (
+            f'<div class="hero with-photo">'
+            f'<div class="photo" style="background-image:url(\'{escape(str(photo))}\')"></div>'
+            f'<div class="overlay"><h1>{name}</h1><p>{subheading}</p>'
+            f'<div class="actions"><a class="btn btn-primary" href="#contact">Get in touch</a>'
+            f"{action_btns}</div></div></div>")
+    else:
+        hero_html = (
+            f'<div class="hero"><div class="wrap"><h1>{name}</h1><p>{subheading}</p>'
+            f"{tagline_html}"
+            f'<div class="actions"><a class="btn btn-primary" href="#contact">Get in touch</a>'
+            f'<a class="btn btn-ghost" href="#details">See details</a>'
+            f"{action_btns}</div></div></div>")
+
+    socials = content.get("socials") or []
+    socials_html = ""
+    if socials:
+        links = "".join(f'<a href="{escape(str(s.get("url", "#")))}">'
+                        f'{escape(str(s.get("name", "")))}</a>' for s in socials)
+        socials_html = f'<div class="socials">{links}</div>'
 
     ribbon = '<div class="draft-ribbon">DRAFT · PRIVATE</div>' if draft else ""
     return f"""<!doctype html>
@@ -118,14 +191,7 @@ def render_site(content: dict, *, draft: bool = True) -> str:
   <a class="cta" href="#contact">Get in touch</a>
 </header></div>
 
-<div class="hero"><div class="wrap">
-  <h1>{name}</h1>
-  <p>{escape(str(hero.get("subheading", "")))}</p>
-  <div class="actions">
-    <a class="btn btn-primary" href="#contact">Get in touch</a>
-    <a class="btn btn-ghost" href="#details">See details</a>
-  </div>
-</div></div>
+{hero_html}
 
 <a id="details"></a>
 {"".join(body)}
@@ -134,6 +200,7 @@ def render_site(content: dict, *, draft: bool = True) -> str:
   <h2>{escape(str(cta.get("heading", "Get in touch")))}</h2>
   <p>{escape(str(cta.get("body", "")))}</p>
   <a class="btn btn-primary" href="#contact">Contact us</a>
+  {socials_html}
 </div></div>
 
 <footer><div class="wrap">© {name}. Private proposal — not indexed.</div></footer>

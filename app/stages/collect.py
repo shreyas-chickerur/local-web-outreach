@@ -23,6 +23,7 @@ from app.adapters.directory import DirectorySource
 from app.adapters.site_fetch import HttpSiteFetcher
 from app.ai.research_runner import RawClaim, SourceRecord
 from app.core.enums import SourceType
+from app.stages.extract_site import ExtractedSite, extract_from_html, merge
 
 _TAG_RE = re.compile(r"<(script|style)[^>]*>.*?</\1>", re.IGNORECASE | re.DOTALL)
 _ANY_TAG_RE = re.compile(r"<[^>]+>")
@@ -160,6 +161,9 @@ def tidy_address(address: str | None) -> str | None:
 class Collected:
     sources: list[SourceRecord]
     contact_email: str | None
+    # Their own site's content — self-attested, carried into the proposal so it
+    # is a real website rather than a business card.
+    extracted: ExtractedSite | None = None
 
 
 def collect_sources(
@@ -228,20 +232,21 @@ def collect_sources(
 
     # Final source — the business's own website (independent of the directories).
     contact_email = None
+    extracted: ExtractedSite | None = None
     if business.existing_site_url:
         result = (fetcher or HttpSiteFetcher()).fetch(business.existing_site_url)
         if result.ok and result.html:
             text = html_to_text(result.html)
+            base = result.final_url or business.existing_site_url
             contact_email = find_contact_email(result.html)
-            if contact_email is None:
-                # Not on the homepage — try their contact/about pages.
-                for page in contact_page_urls(result.html, result.final_url
-                                              or business.existing_site_url):
-                    sub = (fetcher or HttpSiteFetcher()).fetch(page)
-                    if sub.ok and sub.html:
+            extracted = extract_from_html(result.html, base)
+            # Their contact/about pages carry the email and often the hours.
+            for page in contact_page_urls(result.html, base):
+                sub = (fetcher or HttpSiteFetcher()).fetch(page)
+                if sub.ok and sub.html:
+                    extracted = merge(extracted, extract_from_html(sub.html, page))
+                    if contact_email is None:
                         contact_email = find_contact_email(sub.html)
-                        if contact_email:
-                            break
             site_claims = []
             lowered = text.lower()
             for label, _ in directory_labels:
@@ -268,4 +273,4 @@ def collect_sources(
                 entity_phone=phone, raw_text=text[:20000], claims=site_claims,
             ))
 
-    return Collected(sources=sources, contact_email=contact_email)
+    return Collected(sources=sources, contact_email=contact_email, extracted=extracted)

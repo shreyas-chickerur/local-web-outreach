@@ -383,7 +383,7 @@ def cmd_advance(args: argparse.Namespace) -> int:
         verified = sum(1 for c in dossier.claims if c.status.value == "verified")
         advance(session, biz, BusinessStatus.RESEARCHED, actor=Actor.SYSTEM.value,
                 reason=f"dossier built: {len(dossier.claims)} claims, {verified} verified")
-        generate_website(session, biz)  # RESEARCHED -> SITE_DRAFTED
+        generate_website(session, biz, extracted=collected.extracted)
         n_site += 1
         session.commit()
         email_note = collected.contact_email or "no public email found — site gate only"

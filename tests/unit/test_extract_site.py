@@ -1,0 +1,130 @@
+"""Reading a business's own site: carry their content, leave the junk behind."""
+
+from __future__ import annotations
+
+import pytest
+
+from app.stages.extract_site import _clean_service, extract_from_html, merge
+
+pytestmark = pytest.mark.unit
+
+_HTML = """
+<html><head>
+<title>The Heritage Table | Frisco</title>
+<meta name="description" content="A true neighborhood restaurant on Main Street.">
+<meta property="og:image" content="/img/hero.jpg">
+</head><body>
+<nav><a href="/">Home</a><a href="/about">About</a></nav>
+<h1>The Heritage Table</h1>
+<h2>Chef's Tasting Menu</h2>
+<h2>Blackland Prairie Cuisine</h2>
+<h2>James Beard Awards 2024</h2>
+<p>We are a neighborhood restaurant serving seasonal food from local farms, and we
+have been part of downtown Frisco for more than a decade now, cooking honestly.</p>
+<ul><li>Private dining room</li><li>Seasonal menu</li></ul>
+<p>Sunday - Wednesday: 5pm - 9pm</p>
+<p>Thursday - Saturday: 5pm - 10pm</p>
+<a href="https://www.opentable.com/r/heritage">Book a table</a>
+<a href="/order-online">Order Online</a>
+<a href="https://www.instagram.com/heritage">Instagram</a>
+<a href="https://www.godaddy.com/domainsearch">Book this domain</a>
+<img src="/img/dining.jpg"><img src="/img/bar.png">
+</body></html>
+"""
+
+
+@pytest.fixture
+def extracted():
+    return extract_from_html(_HTML, "https://theheritagetable.com/")
+
+
+def test_extracts_identity_and_description(extracted):
+    assert "Heritage Table" in extracted.title
+    assert "neighborhood restaurant" in extracted.description
+
+
+def test_extracts_the_about_paragraph(extracted):
+    assert "seasonal food from local farms" in extracted.about
+
+
+def test_extracts_services_but_not_navigation_or_awards(extracted):
+    assert "Chef's Tasting Menu" in extracted.services
+    assert "Blackland Prairie Cuisine" in extracted.services
+    assert "Private dining room" in extracted.services
+    # awards are social proof, not an offering
+    assert not any("Beard" in s or "Award" in s for s in extracted.services)
+    # navigation is not an offering
+    assert not any(s.lower() in {"home", "about"} for s in extracted.services)
+
+
+def test_extracts_hours(extracted):
+    assert any("Sunday" in h for h in extracted.hours)
+    assert any("Thursday" in h for h in extracted.hours)
+
+
+def test_keeps_real_customer_actions(extracted):
+    kinds = {a["kind"] for a in extracted.actions}
+    assert "Book / Reserve" in kinds       # OpenTable is a real booking provider
+    assert "Order Online" in kinds         # on their own site
+
+
+def test_drops_registrar_and_builder_links():
+    """A 'book this domain' link at GoDaddy is not a customer action."""
+    extracted = extract_from_html(
+        '<a href="https://www.godaddy.com/domainsearch">Book this domain</a>',
+        "https://acme.com/")
+    assert extracted.actions == []
+
+
+def test_extracts_socials_and_images(extracted):
+    assert {s["name"] for s in extracted.socials} == {"Instagram"}
+    assert extracted.images  # og:image is promoted to the front
+    assert extracted.images[0].endswith("/img/hero.jpg")
+
+
+def test_offsite_images_are_ignored():
+    extracted = extract_from_html(
+        '<img src="https://cdn.other.com/x.jpg"><img src="/mine.jpg">',
+        "https://acme.com/")
+    assert all("other.com" not in i for i in extracted.images)
+
+
+@pytest.mark.parametrize("junk", [
+    "Home", "Privacy Policy", "How It Works", "Disclaimer", "Our Team",
+    "call us at 972-555-0148", "a", "x" * 80,
+])
+def test_service_junk_is_rejected(junk):
+    assert _clean_service(junk) is None
+
+
+def test_merge_folds_a_contact_page_in(extracted):
+    contact = extract_from_html(
+        "<h2>Catering</h2><p>Monday - Friday: 9am - 5pm</p>", "https://x.com/contact")
+    merged = merge(extracted, contact)
+    assert "Catering" in merged.services
+    assert any("Monday" in h for h in merged.hours)
+
+
+def test_empty_html_is_handled():
+    assert extract_from_html("", "https://x.com/").is_empty()
+
+
+@pytest.mark.parametrize("src", [
+    "/img/james-beard-semifinalist-2024.png",   # award badge — social proof
+    "/assets/logo.svg.png",
+    "/i/facebook-icon.png",
+    "/x/5-stars.jpg",
+    "/ui/arrow-right.png",
+])
+def test_badges_logos_and_icons_are_not_site_photos(src):
+    """An award badge as the hero image is both ugly and a social-proof claim."""
+    extracted = extract_from_html(f'<img src="{src}">', "https://acme.com/")
+    assert extracted.images == []
+
+
+def test_award_og_image_is_not_promoted_to_hero():
+    html = ('<head><meta property="og:image" content="/img/james-beard-award.png"></head>'
+            '<img src="/img/dining-room.jpg">')
+    extracted = extract_from_html(html, "https://acme.com/")
+    assert extracted.images
+    assert "dining-room" in extracted.images[0]
