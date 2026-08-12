@@ -67,6 +67,37 @@ def find_phone(text: str) -> str | None:
     return match.group(0).strip() if match else None
 
 
+# Owners publish their address on a contact page far more often than on the
+# homepage, so follow the obvious ones rather than giving up after one fetch.
+_CONTACT_PATHS = ("contact", "contact-us", "about", "about-us", "get-a-quote", "estimate")
+_CONTACT_LINK_RE = re.compile(r'href=["\']([^"\']+)["\']', re.IGNORECASE)
+
+
+def contact_page_urls(html: str, base_url: str, limit: int = 3) -> list[str]:
+    """Absolute URLs of likely contact/about pages linked from ``html``."""
+    from urllib.parse import urljoin, urlparse
+
+    base_host = urlparse(base_url).netloc.lower()
+    found: list[str] = []
+    for href in _CONTACT_LINK_RE.findall(html or ""):
+        if href.startswith(("mailto:", "tel:", "#", "javascript:")):
+            continue
+        absolute = urljoin(base_url, href)
+        parsed = urlparse(absolute)
+        if parsed.netloc.lower() != base_host:  # stay on their own site
+            continue
+        path = parsed.path.strip("/").lower()
+        if not path:
+            continue
+        last = path.split("/")[-1]
+        if any(last == c or last.startswith(c) for c in _CONTACT_PATHS):
+            if absolute not in found:
+                found.append(absolute)
+        if len(found) >= limit:
+            break
+    return found
+
+
 # A directory's category titles describe what the business *is*. For food we want
 # "South Indian Restaurant", not a list of dishes; for trades, "Landscaping".
 _BASE_NOUNS = {
@@ -202,6 +233,15 @@ def collect_sources(
         if result.ok and result.html:
             text = html_to_text(result.html)
             contact_email = find_contact_email(result.html)
+            if contact_email is None:
+                # Not on the homepage — try their contact/about pages.
+                for page in contact_page_urls(result.html, result.final_url
+                                              or business.existing_site_url):
+                    sub = (fetcher or HttpSiteFetcher()).fetch(page)
+                    if sub.ok and sub.html:
+                        contact_email = find_contact_email(sub.html)
+                        if contact_email:
+                            break
             site_claims = []
             lowered = text.lower()
             for label, _ in directory_labels:

@@ -252,6 +252,51 @@ def cmd_seed(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_validate(args: argparse.Namespace) -> int:
+    """Re-check every drafted lead against the live sources, adversarially."""
+    from app.adapters.osm import NominatimSource
+    from app.adapters.yelp import YelpSource
+    from app.core.config import yelp_api_key
+    from app.core.enums import BusinessStatus
+    from app.stages.validate import validate_business
+
+    engine = make_engine(database_url())
+    Base.metadata.create_all(engine)
+    session = make_session_factory(engine)()
+    directories: list = [NominatimSource()]
+    if yelp_api_key():
+        directories.append(YelpSource())
+    fetcher = HttpSiteFetcher()
+
+    targets = (session.query(Business)
+               .filter(Business.status.in_([BusinessStatus.SITE_DRAFTED,
+                                            BusinessStatus.EMAIL_DRAFTED,
+                                            BusinessStatus.SITE_APPROVED]))
+               .limit(args.limit).all())
+    if not targets:
+        print("Nothing drafted to validate. Run `discover` then `advance` first.")
+        session.close()
+        engine.dispose()
+        return 0
+
+    print(f"Re-validating {len(targets)} drafted lead(s) against live sources...\n")
+    sendable = 0
+    for biz in targets:
+        report = validate_business(session, biz, directories=directories, fetcher=fetcher)
+        mark = "OK  " if report.sendable else "FAIL"
+        print(f"[{mark}] {report.name}")
+        for f in report.findings:
+            if f.level != "ok":
+                print(f"         {f.level.upper():4} {f.check}: {f.detail}")
+        sendable += 1 if report.sendable else 0
+    print(f"\n{sendable}/{len(targets)} leads have nothing failing.")
+    print("FAIL = a stored fact or the pitch itself is now wrong; fix before sending.")
+    print("WARN = thin or unconfirmable, but not false.")
+    session.close()
+    engine.dispose()
+    return 0
+
+
 def cmd_reset(_args: argparse.Namespace) -> int:
     """Wipe the configured database WITHOUT seeding demo rows.
 
@@ -385,6 +430,9 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("status", help="counts by status in the configured database")
     sub.add_parser("reset", help="wipe the database WITHOUT seeding demo rows")
 
+    p_val = sub.add_parser("validate", help="re-check drafted leads against live sources")
+    p_val.add_argument("--limit", type=int, default=25, help="how many to validate")
+
     p_adv = sub.add_parser("advance", help="research + draft sites for QUALIFIED leads")
     p_adv.add_argument("--limit", type=int, default=5, help="how many to advance")
     p_adv.add_argument("--no-directories", action="store_true",
@@ -403,6 +451,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_status(args)
     if args.command == "reset":
         return cmd_reset(args)
+    if args.command == "validate":
+        return cmd_validate(args)
     if args.command == "advance":
         return cmd_advance(args)
     if args.command == "research-demo":
