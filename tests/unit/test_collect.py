@@ -92,3 +92,41 @@ def test_qualified_to_researched_is_a_legal_transition():
 
     assert can_transition(S.QUALIFIED, S.RESEARCHED)
     assert can_transition(S.RESEARCHED, S.SITE_DRAFTED)
+
+
+# ------------------------ service / cuisine labelling ------------------------
+@pytest.mark.parametrize("cats,expected", [
+    (("Indian", "Fast Food"), "Indian Fast Food"),
+    (("South Indian", "Restaurants"), "South Indian Restaurant"),
+    (("Jamaican", "Food"), "Jamaican Restaurant"),
+    (("Coffee & Tea",), "Cafe"),
+    (("Restaurants",), "Restaurant"),
+    (("Landscaping", "Lawn Services"), "Landscaping"),
+    ((), None),                 # nothing to say -> say nothing
+    (("", "  "), None),
+])
+def test_service_label(cats, expected):
+    from app.stages.collect import service_label
+    assert service_label(cats) == expected
+
+
+@pytest.mark.parametrize("cats,hint,expected", [
+    (("Greek",), "restaurant", "Greek Restaurant"),      # bare cuisine gets a noun
+    (("South Indian",), "restaurant", "South Indian Restaurant"),
+    (("Steakhouses",), "restaurant", "Steakhouses"),     # already names the venue
+    (("Landscaping",), "lawn", "Landscaping"),           # non-food keeps its label
+])
+def test_service_label_uses_the_category_hint(cats, hint, expected):
+    from app.stages.collect import service_label
+    assert service_label(cats, hint) == expected
+
+
+@pytest.mark.parametrize("raw,expected", [
+    ("7110 Main St, Frisco, TX 75033, USA", "7110 Main St, Frisco, TX 75033"),
+    ("1 A St, Frisco, TX, United States", "1 A St, Frisco, TX"),
+    ("1 A St, Frisco, TX", "1 A St, Frisco, TX"),
+    (None, None),
+])
+def test_tidy_address_drops_the_country(raw, expected):
+    from app.stages.collect import tidy_address
+    assert tidy_address(raw) == expected

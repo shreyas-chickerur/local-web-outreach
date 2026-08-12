@@ -102,6 +102,8 @@ def discover(
             address=candidate.address,
             phone=candidate.phone,
             existing_site_url=candidate.website,
+            rating=candidate.rating,
+            review_count=candidate.review_count,
             geo_country=(candidate.country or "US").upper(),
             status=BusinessStatus.DISCOVERED,
         )

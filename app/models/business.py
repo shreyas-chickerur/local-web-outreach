@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, Integer, String
+from sqlalchemy import Boolean, DateTime, Float, Integer, String
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -34,6 +34,10 @@ class Business(Base):
     # Whether a real, reachable site was verified by probing (never copied from
     # the source's claim — see app/stages/qualify.py).
     has_site: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    # Google's published rating for this place (a second platform's rating
+    # corroborates it — see app/stages/collect.py).
+    rating: Mapped[float | None] = mapped_column(Float, nullable=True)
+    review_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
     opportunity_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
     status: Mapped[BusinessStatus] = mapped_column(
         SAEnum(

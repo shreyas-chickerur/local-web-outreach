@@ -67,6 +67,64 @@ def find_phone(text: str) -> str | None:
     return match.group(0).strip() if match else None
 
 
+# A directory's category titles describe what the business *is*. For food we want
+# "South Indian Restaurant", not a list of dishes; for trades, "Landscaping".
+_BASE_NOUNS = {
+    "restaurants": "Restaurant", "food": "Restaurant", "fast food": "Fast Food",
+    "cafes": "Cafe", "coffee & tea": "Cafe", "bakeries": "Bakery", "bars": "Bar",
+    "food trucks": "Food Truck", "delis": "Deli", "pizza": "Pizza Restaurant",
+}
+# Titles that are a venue type rather than a cuisine/speciality.
+_GENERIC_TITLES = {"restaurants", "food", "fast food", "cafes", "coffee & tea",
+                   "bakeries", "bars", "food trucks", "delis", "breakfast & brunch"}
+
+
+_FOOD_CATEGORIES = {"restaurant", "cafe", "diner", "bakery", "bar", "food"}
+# Titles that already name a venue, so appending "Restaurant" would read wrong
+# ("Steakhouses Restaurant").
+_VENUE_NOUNS = ("restaurant", "cafe", "bar", "bakery", "grill", "house", "pizzeria",
+                "diner", "deli", "pub", "kitchen", "buffet", "bbq", "steakhouse",
+                "creamery", "parlor", "lounge", "bistro", "brasserie", "taqueria")
+
+
+def service_label(categories: tuple[str, ...] | list[str],
+                  category_hint: str | None = None) -> str | None:
+    """Turn directory category titles into one human label.
+
+    ``("Indian", "Fast Food")`` -> ``"Indian Fast Food"``; ``("Greek",)`` for a
+    restaurant -> ``"Greek Restaurant"``; ``("Landscaping", "Lawn Services")`` ->
+    ``"Landscaping"``. Returns None when there is nothing to say — we never
+    invent a description.
+    """
+    titles = [t.strip() for t in (categories or []) if t and t.strip()]
+    if not titles:
+        return None
+    speciality = [t for t in titles if t.lower() not in _GENERIC_TITLES]
+    generic = [t for t in titles if t.lower() in _GENERIC_TITLES]
+    if speciality and generic:
+        return f"{speciality[0]} {_BASE_NOUNS.get(generic[0].lower(), generic[0])}"
+    if speciality:
+        label = speciality[0]
+        # A bare cuisine ("Greek") reads as an adjective; name the venue type.
+        if (category_hint or "").lower() in _FOOD_CATEGORIES and not any(
+            noun in label.lower() for noun in _VENUE_NOUNS
+        ):
+            return f"{label} Restaurant"
+        return label
+    return _BASE_NOUNS.get(generic[0].lower(), generic[0])
+
+
+def tidy_address(address: str | None) -> str | None:
+    """Drop the trailing country on a display address (Google appends ', USA')."""
+    if not address:
+        return address
+    text = address.strip()
+    for suffix in (", USA", ", United States", ", US"):
+        if text.endswith(suffix):
+            text = text[: -len(suffix)]
+    return text.strip().rstrip(",")
+
+
 @dataclass
 class Collected:
     sources: list[SourceRecord]
@@ -88,10 +146,13 @@ def collect_sources(
     )
     gbp_claims = []
     if business.address:
-        gbp_claims.append(RawClaim(field="address", value=business.address,
+        gbp_claims.append(RawClaim(field="address", value=tidy_address(business.address) or "",
                                    source_url=gbp_url, source_type=SourceType.GBP))
     if business.phone:
         gbp_claims.append(RawClaim(field="phone", value=business.phone,
+                                   source_url=gbp_url, source_type=SourceType.GBP))
+    if getattr(business, "rating", None):
+        gbp_claims.append(RawClaim(field="rating", value=str(business.rating),
                                    source_url=gbp_url, source_type=SourceType.GBP))
     sources.append(SourceRecord(
         source_type=SourceType.GBP, source_url=gbp_url, entity_name=business.name,
@@ -101,19 +162,32 @@ def collect_sources(
     # Sources 2..n — third-party directories (OSM, Yelp). Independent of Google,
     # so they can actually corroborate; without them a business with no website
     # has a single source and every fact stays UNVERIFIED forever.
+    directory_labels: list[tuple[str, str]] = []
     for directory in (directories or []):
         place = directory.lookup(business.name, business.location)
         if place is None:
             continue
         dir_claims = []
         if place.address:
-            dir_claims.append(RawClaim(field="address", value=place.address,
+            dir_claims.append(RawClaim(field="address", value=tidy_address(place.address) or "",
                                        source_url=place.source_url,
                                        source_type=SourceType.DIRECTORY))
         if place.phone:
             dir_claims.append(RawClaim(field="phone", value=place.phone,
                                        source_url=place.source_url,
                                        source_type=SourceType.DIRECTORY))
+        if place.rating:
+            # A second platform's rating corroborates Google's. They agree only
+            # loosely, so corroborate() compares ratings to the nearest half star.
+            dir_claims.append(RawClaim(field="rating", value=str(place.rating),
+                                       source_url=place.source_url,
+                                       source_type=SourceType.DIRECTORY))
+        label = service_label(place.categories, getattr(business, 'category', None))
+        if label:
+            dir_claims.append(RawClaim(field="services", value=label,
+                                       source_url=place.source_url,
+                                       source_type=SourceType.DIRECTORY))
+            directory_labels.append((label, place.source_url))
         if dir_claims:
             sources.append(SourceRecord(
                 source_type=SourceType.DIRECTORY, source_url=place.source_url,
@@ -129,6 +203,17 @@ def collect_sources(
             text = html_to_text(result.html)
             contact_email = find_contact_email(result.html)
             site_claims = []
+            lowered = text.lower()
+            for label, _ in directory_labels:
+                # Their own site saying the same thing is genuine, independent
+                # corroboration — not us echoing the directory back at itself.
+                if all(word in lowered for word in label.lower().split()):
+                    site_claims.append(RawClaim(
+                        field="services", value=label,
+                        source_url=result.final_url or business.existing_site_url,
+                        source_type=SourceType.EXISTING_SITE,
+                    ))
+                    break
             phone = find_phone(text)
             if phone:
                 site_claims.append(RawClaim(

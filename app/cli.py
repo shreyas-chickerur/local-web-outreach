@@ -252,6 +252,25 @@ def cmd_seed(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_reset(_args: argparse.Namespace) -> int:
+    """Wipe the configured database WITHOUT seeding demo rows.
+
+    `seed --reset` reloads the bundled demo businesses (The Depot Cafe, JS Lawn
+    Care) whose hand-curated sources include third-party directories — useful for
+    exercising the console, confusing when mixed into live leads. Use this before
+    a real discovery run.
+    """
+    engine = make_engine(database_url())
+    # Drop and recreate rather than DELETE FROM: a dev database created by an
+    # older build is missing newly added columns, and create_all never alters an
+    # existing table. Production schema changes go through Alembic.
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+    engine.dispose()
+    print(f"Wiped {database_url()} (no demo data). Run `discover` next.")
+    return 0
+
+
 def cmd_status(_args: argparse.Namespace) -> int:
     """Counts by status in the configured DB, plus what's waiting on you."""
     from collections import Counter
@@ -364,6 +383,7 @@ def main(argv: list[str] | None = None) -> int:
     p_seed.add_argument("--reset", action="store_true", help="wipe existing rows first")
 
     sub.add_parser("status", help="counts by status in the configured database")
+    sub.add_parser("reset", help="wipe the database WITHOUT seeding demo rows")
 
     p_adv = sub.add_parser("advance", help="research + draft sites for QUALIFIED leads")
     p_adv.add_argument("--limit", type=int, default=5, help="how many to advance")
@@ -381,6 +401,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_seed(args)
     if args.command == "status":
         return cmd_status(args)
+    if args.command == "reset":
+        return cmd_reset(args)
     if args.command == "advance":
         return cmd_advance(args)
     if args.command == "research-demo":

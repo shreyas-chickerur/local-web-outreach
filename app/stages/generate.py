@@ -41,12 +41,13 @@ SECTION_FIELDS: dict[str, list[str]] = {
     "service_area": ["address"],
     "contact": ["address", "phone"],
     "about": ["services"],
+    "standing": ["rating"],
 }
 
 _HEADINGS = {
     "menu": "What we serve", "services": "What we do", "hours": "Hours",
     "location": "Find us", "service_area": "Areas we serve", "contact": "Contact",
-    "about": "About us",
+    "about": "About us", "standing": "Rated by customers",
 }
 
 
@@ -54,23 +55,28 @@ def industry_template(category: str | None) -> tuple[str, list[str]]:
     """Pick an industry template + ordered section list for a category."""
     c = (category or "").lower()
     if c in {"restaurant", "cafe", "diner", "bakery", "bar", "food"}:
-        return "restaurant", ["hero", "menu", "hours", "location", "contact", "cta"]
+        return "restaurant", ["hero", "menu", "standing", "hours", "location", "contact", "cta"]
     if c in {"lawn", "landscaping", "handyman", "plumbing", "cleaning", "pool", "hvac",
              "roofing", "electrician", "service"}:
-        return "service", ["hero", "services", "service_area", "contact", "cta"]
-    return "generic", ["hero", "about", "contact", "cta"]
+        return "service", ["hero", "services", "standing", "service_area", "contact", "cta"]
+    return "generic", ["hero", "about", "standing", "contact", "cta"]
 
 
 def generate_content(business, verified: dict[str, ResearchClaim]) -> dict:  # noqa: ANN001
     """Build the grounded content model from a business's verified claims."""
     template_name, section_types = industry_template(business.category)
     sections: list[dict] = []
+    rendered_fields: set[str] = set()
 
     for stype in section_types:
         if stype == "hero":
+            # Lead with what they actually are ("South Indian Restaurant"), not
+            # just the city — but only when a VERIFIED claim says so.
+            services = verified.get("services")
+            subheading = (f"{services.value} in {business.location}"
+                          if services is not None else business.location)
             sections.append(
-                {"type": "hero", "heading": business.name,
-                 "subheading": f"{business.location}"}
+                {"type": "hero", "heading": business.name, "subheading": subheading}
             )
         elif stype == "cta":
             sections.append(
@@ -81,7 +87,10 @@ def generate_content(business, verified: dict[str, ResearchClaim]) -> dict:  # n
             facts = []
             for field in SECTION_FIELDS.get(stype, []):
                 claim = verified.get(field)
-                if claim is not None:
+                # A field belongs to whichever section renders it first; showing
+                # the address under both "Find us" and "Contact" is just noise.
+                if claim is not None and field not in rendered_fields:
+                    rendered_fields.add(field)
                     facts.append({
                         "label": field.replace("_", " ").title(),
                         "field": field,

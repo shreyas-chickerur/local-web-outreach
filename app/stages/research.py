@@ -77,14 +77,37 @@ def _norm_phone(value: str) -> str:
     return digits[-10:] if len(digits) >= 10 else digits
 
 
+# Street-type words are dropped for comparison: Google writes "1800 Preston On
+# The Lake Blvd", Yelp writes "1800 Preston On The Lake". The house number,
+# street name, city and ZIP still have to match, so this stays specific.
+_STREET_TYPES = {"st", "rd", "ave", "blvd", "dr", "ln", "pkwy", "ct", "hwy",
+                 "cir", "ter", "pl", "way", "trl"}
+
+
 def _norm_address(value: str) -> str:
-    """Fold country suffix, punctuation, and street-word abbreviations."""
+    """Fold country suffix, punctuation, abbreviations, and street-type words."""
     text = _norm_generic(value)
     for suffix in _COUNTRY_SUFFIXES:
         if text.endswith(suffix):
             text = text[: -len(suffix)]
     text = re.sub(r"[.,#]", " ", text)
-    return " ".join(_STREET_ABBREV.get(w, w) for w in text.split()).strip()
+    words = [_STREET_ABBREV.get(w, w) for w in text.split()]
+    return " ".join(w for w in words if w not in _STREET_TYPES).strip()
+
+
+# Fields compared numerically, with how far apart two sources may be and still
+# be saying the same thing. A star rating is a summary of a different crowd on
+# each platform; half a star apart is agreement, a point apart is not.
+_TOLERANT_FIELDS = {"rating": 0.5}
+
+
+def _within_tolerance(claims: list[RawClaim], field: str) -> bool:
+    """True if every source's numeric value sits inside the field's tolerance."""
+    try:
+        values = [float(c.value) for c in claims]
+    except (TypeError, ValueError):
+        return False
+    return bool(values) and (max(values) - min(values)) <= _TOLERANT_FIELDS[field]
 
 
 def _norm_value(value: str, field: str = "") -> str:
@@ -107,8 +130,15 @@ def corroborate(claims: list[RawClaim]) -> list[ResolvedClaim]:
     for field_name, group in by_field.items():
         # Group by normalized value; count distinct source_urls per value.
         by_value: dict[str, list[RawClaim]] = {}
-        for claim in group:
-            by_value.setdefault(_norm_value(claim.value, field_name), []).append(claim)
+        if field_name in _TOLERANT_FIELDS and _within_tolerance(group, field_name):
+            # Numeric fields agree within a tolerance rather than exactly: Google
+            # and Yelp poll different crowds, so 4.7 and 5.0 are the same verdict.
+            # Bucketing would split them at an arbitrary boundary; a tolerance
+            # doesn't.
+            by_value[_norm_value(group[0].value, field_name)] = list(group)
+        else:
+            for claim in group:
+                by_value.setdefault(_norm_value(claim.value, field_name), []).append(claim)
 
         all_sources = [
             {"source_type": c.source_type.value, "source_url": c.source_url} for c in group

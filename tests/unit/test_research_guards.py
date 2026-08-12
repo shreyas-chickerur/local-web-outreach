@@ -182,3 +182,59 @@ def test_street_abbreviations_fold_together():
 
     assert _norm_address("123 Elm Street, Frisco, TX") == _norm_address("123 Elm St., Frisco TX")
     assert _norm_address("1 North Main Ave") == _norm_address("1 N Main Avenue")
+
+
+# ------------------------- rating corroboration ------------------------------
+@pytest.mark.parametrize("g,y,status", [
+    ("4.6", "4.5", "verified"),
+    ("4.9", "5.0", "verified"),
+    ("4.7", "5.0", "verified"),   # real case: Camero's — 0.3 apart is agreement
+    ("4.5", "5.0", "verified"),   # exactly at tolerance
+    ("4.6", "3.9", "conflict"),   # genuinely different standing
+    ("4.0", "2.5", "conflict"),
+])
+def test_ratings_corroborate_within_a_tolerance(g, y, status):
+    """Google and Yelp poll different crowds; they agree in substance, not to
+    the decimal. A tolerance avoids the arbitrary split a bucket boundary makes
+    (4.7 and 5.0 would land in different half-star buckets)."""
+    from app.ai.research_runner import RawClaim
+    from app.core.enums import SourceType
+    from app.stages.research import corroborate
+
+    resolved = corroborate([
+        RawClaim(field="rating", value=g, source_url="https://maps.google/x",
+                 source_type=SourceType.GBP),
+        RawClaim(field="rating", value=y, source_url="https://yelp.com/x",
+                 source_type=SourceType.DIRECTORY),
+    ])
+    assert resolved[0].status.value == status
+
+
+def test_address_matches_when_one_source_omits_the_street_type():
+    """Real case: Google 'Preston On The Lake Blvd' vs Yelp 'Preston On The Lake'."""
+    from app.ai.research_runner import RawClaim
+    from app.core.enums import ClaimStatus, SourceType
+    from app.stages.research import corroborate
+
+    resolved = corroborate([
+        RawClaim(field="address", value="1800 Preston On The Lake Blvd, Little Elm, TX 75068",
+                 source_url="https://maps.google/x", source_type=SourceType.GBP),
+        RawClaim(field="address", value="1800 Preston On The Lake, Little Elm, TX 75068",
+                 source_url="https://yelp.com/x", source_type=SourceType.DIRECTORY),
+    ])
+    assert resolved[0].status is ClaimStatus.VERIFIED
+
+
+def test_different_house_numbers_still_conflict():
+    """Dropping street types must not make distinct addresses look identical."""
+    from app.ai.research_runner import RawClaim
+    from app.core.enums import ClaimStatus, SourceType
+    from app.stages.research import corroborate
+
+    resolved = corroborate([
+        RawClaim(field="address", value="1800 Preston Rd, Frisco, TX 75034",
+                 source_url="https://maps.google/x", source_type=SourceType.GBP),
+        RawClaim(field="address", value="1900 Preston Rd, Frisco, TX 75034",
+                 source_url="https://yelp.com/x", source_type=SourceType.DIRECTORY),
+    ])
+    assert resolved[0].status is ClaimStatus.CONFLICT

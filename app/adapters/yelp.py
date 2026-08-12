@@ -52,10 +52,17 @@ def parse_yelp_business(row: dict) -> DirectoryPlace | None:
     loc = row.get("location") or {}
     display = [line for line in (loc.get("display_address") or []) if line]
     address = ", ".join(display) or None
+    cats = tuple(
+        c.get("title", "") for c in (row.get("categories") or []) if c.get("title")
+    )
+    rating = row.get("rating")
     return DirectoryPlace(
         name=row.get("name") or "",
         address=address,
         phone=row.get("display_phone") or row.get("phone") or None,
         website=None,  # Yelp returns its own page, not the business's site
         source_url=row.get("url") or "https://www.yelp.com/",
+        rating=float(rating) if rating is not None else None,
+        review_count=row.get("review_count"),
+        categories=cats,
     )

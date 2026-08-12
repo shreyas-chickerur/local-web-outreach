@@ -30,6 +30,9 @@ class DirectoryPlace:
     phone: str | None
     website: str | None
     source_url: str
+    rating: float | None = None
+    review_count: int | None = None
+    categories: tuple[str, ...] = ()
 
 
 class DirectorySource(Protocol):

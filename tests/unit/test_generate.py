@@ -153,3 +153,13 @@ def test_generate_from_wrong_state_raises(session):
     session.flush()
     with pytest.raises(TransitionError):
         generate_website(session, biz)
+
+
+def test_a_field_is_rendered_in_only_one_section(make_site_drafted, session):
+    """The address was appearing under both 'Find us' and 'Contact'."""
+    from app.models.website import Website
+
+    biz, _ = make_site_drafted()
+    site = session.query(Website).filter_by(business_id=biz.id).one()
+    fields = [f["field"] for sec in site.content_json["sections"] for f in sec.get("facts", [])]
+    assert len(fields) == len(set(fields)), f"duplicate fields rendered: {fields}"
