@@ -85,7 +85,9 @@ class SiteProber:
         if is_social_or_absent(url):
             return False, [
                 WeaknessFinding(
-                    "no_site", Severity.HIGH, f"no real website (source gave: {url or 'none'})"
+                    "no_site", Severity.HIGH,
+                    "No website at all — only a social page or nothing. "
+                    "Customers searching for them find no site to click."
                 )
             ]
 
@@ -95,7 +97,10 @@ class SiteProber:
                 WeaknessFinding(
                     "site_unreachable",
                     Severity.HIGH,
-                    f"claimed site did not load (status={result.status}, err={result.error})",
+                    "Their website is DOWN — it did not load at all ("
+                    + (f"HTTP {result.status}" if result.status
+                       else "domain does not resolve")
+                    + "). Anyone clicking their link right now sees an error page.",
                 )
             ]
 
@@ -103,7 +108,11 @@ class SiteProber:
         final = result.final_url or url or ""
         if not final.lower().startswith("https://"):
             findings.append(
-                WeaknessFinding("no_https", Severity.HIGH, f"final URL not HTTPS: {final}")
+                WeaknessFinding(
+                    "no_https", Severity.HIGH,
+                    "No HTTPS — Chrome and Safari label the site "
+                    f'"Not secure" in the address bar ({final}).'
+                )
             )
 
         html = result.html or ""
@@ -111,7 +120,9 @@ class SiteProber:
         if 'name="viewport"' not in low and "name='viewport'" not in low:
             findings.append(
                 WeaknessFinding(
-                    "not_mobile_responsive", Severity.MEDIUM, "no <meta name=viewport> tag"
+                    "not_mobile_responsive", Severity.MEDIUM,
+                    "Not built for phones (no mobile viewport tag) — text renders "
+                    "tiny and users must pinch-zoom. Most local searches are mobile."
                 )
             )
 
@@ -121,13 +132,19 @@ class SiteProber:
             if newest <= self._now.year - STALE_YEARS:
                 findings.append(
                     WeaknessFinding(
-                        "stale_content", Severity.MEDIUM, f"copyright year {newest} (stale)"
+                        "stale_content", Severity.MEDIUM,
+                        f"Footer still says {newest} — the site looks abandoned "
+                        "to anyone checking whether they are still in business."
                     )
                 )
 
         if result.elapsed_ms > SLOW_LOAD_MS:
             findings.append(
-                WeaknessFinding("slow_load", Severity.LOW, f"{result.elapsed_ms}ms load time")
+                WeaknessFinding(
+                    "slow_load", Severity.LOW,
+                    f"Slow: took {result.elapsed_ms / 1000:.1f}s to load — visitors "
+                    "commonly abandon a page after about 3s."
+                )
             )
 
         return True, findings

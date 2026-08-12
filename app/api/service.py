@@ -239,8 +239,14 @@ def decide_site(
         # simply rests at SITE_APPROVED; that is not an approval failure.
         try:
             compose_email(session, biz, TemplateEmailComposer())
-        except (NotFoundError, SuppressionError, ComplianceError, TransitionError):
-            pass
+        except (NotFoundError, SuppressionError, ComplianceError, TransitionError) as exc:
+            # Record WHY, so the operator sees a reason instead of a lead that
+            # silently stops dead at SITE_APPROVED with no email to review.
+            record_event(
+                session, actor=Actor.SYSTEM.value, action="outreach:blocked",
+                subject_type=SubjectType.EMAIL.value, subject_id=biz.id,
+                after={"reason": f"no outreach email drafted — {exc}"},
+            )
     elif decision is Decision.REJECT:
         advance(session, biz, BusinessStatus.DISQUALIFIED,
                 actor=Actor.HUMAN.value, reason="operator rejected the site")
