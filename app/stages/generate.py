@@ -36,7 +36,8 @@ FORBIDDEN_SECTIONS = frozenset({"reviews", "testimonials", "awards"})
 # Sections built from the business's own published content. They carry no
 # claim_ids (nothing to corroborate — the business said it about itself) and so
 # must declare provenance instead.
-SELF_ATTESTED_SECTIONS = frozenset({"offerings", "opening_hours", "story", "gallery"})
+SELF_ATTESTED_SECTIONS = frozenset({"offerings", "opening_hours", "story", "gallery",
+                                    "bill_of_fare"})
 
 # Which verified fields each section renders as facts.
 SECTION_FIELDS: dict[str, list[str]] = {
@@ -79,6 +80,11 @@ def _self_attested_sections(extracted) -> list[dict]:  # noqa: ANN001
     if extracted is None:
         return []
     out: list[dict] = []
+    if extracted.menu_items or extracted.menu_media:
+        out.append({"type": "bill_of_fare", "heading": "Menu",
+                    "provenance": "self_attested",
+                    "items": list(extracted.menu_items),
+                    "media": list(extracted.menu_media)})
     if extracted.services:
         out.append({"type": "offerings", "heading": "What we offer",
                     "provenance": "self_attested",
@@ -94,6 +100,37 @@ def _self_attested_sections(extracted) -> list[dict]:  # noqa: ANN001
         out.append({"type": "gallery", "heading": "Gallery",
                     "provenance": "self_attested",
                     "images": list(extracted.images[:6])})
+    return out
+
+
+def _internalised_actions(extracted) -> list[dict]:  # noqa: ANN001
+    """Rewrite actions so the proposal never sends a visitor back to the old site.
+
+    A "Menu" button pointing at their current website makes the new page a
+    brochure for the old one. Where we carry the content ourselves the action
+    becomes an in-page anchor; a link back to their own host is dropped
+    entirely. Only genuine third-party flows (OpenTable, DoorDash) and
+    tel:/mailto: survive as outbound links, because those ARE the real booking
+    path and no new site replaces them.
+    """
+    if extracted is None:
+        return []
+    carries_menu = bool(extracted.menu_items or extracted.menu_media)
+    host = (extracted.site_host or "").lower()
+    out: list[dict] = []
+    for action in extracted.actions:
+        url = str(action.get("url", ""))
+        kind = str(action.get("kind", ""))
+        if kind == "Menu":
+            if carries_menu:
+                out.append({**action, "url": "#menu", "label": "See the menu"})
+            continue                       # no menu content -> no dead button
+        if url.startswith(("tel:", "mailto:")):
+            out.append(action)
+            continue
+        if host and host in url:           # their old site — not a destination
+            continue
+        out.append(action)
     return out
 
 
@@ -154,7 +191,7 @@ def generate_content(business, verified: dict[str, ResearchClaim], extracted=Non
         "hero_image": hero_image,
         # The actions their customers came to perform. Dropping these would make
         # the new site a downgrade however good it looks.
-        "actions": list(extracted.actions) if extracted else [],
+        "actions": _internalised_actions(extracted),
         "socials": list(extracted.socials) if extracted else [],
         "tagline": (extracted.description if extracted else None),
     }

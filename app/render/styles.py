@@ -115,6 +115,20 @@ section{padding:clamp(64px,9vw,120px) 0}
      letter-spacing:.14em;color:var(--accent)}
 .offer .name{font-size:1.22rem;font-weight:700;letter-spacing:-.015em;line-height:1.25}
 
+/* menu */
+.menu-list{display:grid;gap:0;border-top:1px solid var(--line)}
+.menu-row{display:grid;grid-template-columns:1fr auto;gap:8px 18px;padding:20px 4px;
+     border-bottom:1px solid var(--line);align-items:baseline}
+.menu-row .dish{font-size:1.14rem;font-weight:700;letter-spacing:-.012em}
+.menu-row .cost{font-variant-numeric:tabular-nums;font-weight:800;color:var(--accent);
+     font-size:1.08rem}
+.menu-row .desc{grid-column:1/-1;color:var(--muted);font-size:.99rem;max-width:70ch}
+.menu-doc{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+     box-shadow:var(--shadow);background:#fff}
+.menu-doc embed,.menu-doc iframe{width:100%;height:min(78vh,900px);border:0;display:block}
+.menu-doc img{width:100%;height:auto}
+.menu-note{margin-top:18px;color:var(--muted);font-size:.95rem}
+
 /* hours — dot leaders */
 .hours{display:grid;gap:0;max-width:640px;border-top:1px solid var(--line)}
 .hours .row{display:flex;align-items:baseline;gap:14px;padding:18px 4px;

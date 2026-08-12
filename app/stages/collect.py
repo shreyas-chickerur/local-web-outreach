@@ -23,7 +23,12 @@ from app.adapters.directory import DirectorySource
 from app.adapters.site_fetch import HttpSiteFetcher
 from app.ai.research_runner import RawClaim, SourceRecord
 from app.core.enums import SourceType
-from app.stages.extract_site import ExtractedSite, extract_from_html, merge
+from app.stages.extract_site import (
+    ExtractedSite,
+    extract_from_html,
+    menu_page_urls,
+    merge,
+)
 
 _TAG_RE = re.compile(r"<(script|style)[^>]*>.*?</\1>", re.IGNORECASE | re.DOTALL)
 _ANY_TAG_RE = re.compile(r"<[^>]+>")
@@ -240,6 +245,12 @@ def collect_sources(
             base = result.final_url or business.existing_site_url
             contact_email = find_contact_email(result.html)
             extracted = extract_from_html(result.html, base)
+            # Their menu / price-list pages carry the food itself, which the new
+            # site must render rather than linking back to the old one.
+            for page in menu_page_urls(result.html, base):
+                sub = (fetcher or HttpSiteFetcher()).fetch(page)
+                if sub.ok and sub.html:
+                    extracted = merge(extracted, extract_from_html(sub.html, page))
             # Their contact/about pages carry the email and often the hours.
             for page in contact_page_urls(result.html, base):
                 sub = (fetcher or HttpSiteFetcher()).fetch(page)

@@ -42,6 +42,56 @@ _HOURS_RE = re.compile(
     r"(?:\d{1,2}(?::\d{2})?\s*(?:am|pm)\s*[-–—to]+\s*\d{1,2}(?::\d{2})?\s*(?:am|pm)|closed)",
     re.IGNORECASE)
 
+# Menu / price-list parsing. A proposal that links back to the old site for the
+# menu is not a replacement — the new page has to carry the food itself.
+_MENU_PATHS = ("menu", "menus", "food", "drinks", "dinner", "lunch", "brunch",
+               "breakfast", "pricing", "prices", "our-services", "services")
+_PRICE_RE = re.compile(r"\$\s?\d{1,4}(?:\.\d{2})?")
+_BLOCK_RE = re.compile(
+    r"</?(p|div|li|tr|td|th|h[1-6]|section|article|br|ul|ol|dl|dt|dd)[^>]*>",
+    re.IGNORECASE)
+
+
+def html_to_lines(html: str) -> list[str]:
+    """Text lines, keeping block boundaries so menu rows stay separate."""
+    without_code = _TAG_RE.sub(" ", html or "")
+    with_breaks = _BLOCK_RE.sub("\n", without_code)
+    plain = unescape(re.sub(r"<[^>]+>", " ", with_breaks))
+    return [re.sub(r"[ \t]+", " ", ln).strip() for ln in plain.split("\n") if ln.strip()]
+
+
+def extract_menu_items(html: str) -> list[dict]:
+    """Dishes / priced services: {name, price, description}.
+
+    Anchored on the price, because a price is the one unambiguous signal that a
+    line is an item for sale rather than prose or navigation.
+    """
+    items: list[dict] = []
+    seen: set[str] = set()
+    lines = html_to_lines(html)
+    for i, line in enumerate(lines):
+        match = _PRICE_RE.search(line)
+        if not match or len(line) > 220:
+            continue
+        price = match.group(0).replace(" ", "")
+        name = line[: match.start()].strip(" .-–—$\u2022|")
+        description = line[match.end():].strip(" .-–—|")
+        if not name and i:                       # price on its own line
+            name = lines[i - 1].strip(" .-–—|")
+        if not (2 < len(name) <= 70) or name.lower() in _NAV_NOISE:
+            continue
+        if _PRICE_RE.search(name) or name.lower() in seen:
+            continue
+        if not re.search(r"[A-Za-z]{3}", name):
+            continue
+        seen.add(name.lower())
+        items.append({"name": name, "price": price,
+                      "description": description[:160] if len(description) > 3 else ""})
+        if len(items) >= 24:
+            break
+    return items
+
+
 _SOCIAL_HOSTS = {
     "facebook.com": "Facebook", "instagram.com": "Instagram", "twitter.com": "X",
     "x.com": "X", "yelp.com": "Yelp", "linkedin.com": "LinkedIn",
@@ -117,9 +167,15 @@ class ExtractedSite:
     socials: list[dict] = field(default_factory=list)   # {name, url}
     images: list[str] = field(default_factory=list)
     emails: list[str] = field(default_factory=list)
+    site_host: str = ""
+    menu_items: list[dict] = field(default_factory=list)
+    # Restaurants very often publish the menu as a PDF or photo. Embedding it
+    # keeps the visitor on the new page; linking out defeats the replacement.
+    menu_media: list[dict] = field(default_factory=list)   # {url, kind, label}
 
     def is_empty(self) -> bool:
-        return not any((self.about, self.services, self.hours, self.actions, self.images))
+        return not any((self.about, self.services, self.hours, self.actions,
+                        self.images, self.menu_items))
 
 
 def _clean_service(candidate: str) -> str | None:
@@ -152,6 +208,7 @@ def _action_allowed(absolute: str, base_host: str) -> bool:
 def extract_from_html(html: str, base_url: str) -> ExtractedSite:
     """Pull the content and functionality out of one page of their site."""
     out = ExtractedSite()
+    out.site_host = urlparse(base_url).netloc.lower().replace("www.", "")
     if not html:
         return out
     clean = _TAG_RE.sub(" ", html)
@@ -186,6 +243,9 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
             seen.add(name.lower())
             out.services.append(name)
     out.services = out.services[:12]
+
+    out.menu_items = extract_menu_items(clean)
+    out.menu_media = extract_menu_media(clean, base_url)
 
     page_text = _text(clean)
     out.hours = list(dict.fromkeys(m.group(0).strip() for m in _HOURS_RE.finditer(page_text)))[:7]
@@ -234,7 +294,8 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
 
 
 def merge(primary: ExtractedSite, extra: ExtractedSite) -> ExtractedSite:
-    """Fold a secondary page (contact/about) into the homepage's extraction."""
+    """Fold a secondary page (contact/about/menu) into the homepage's extraction."""
+    primary.site_host = primary.site_host or extra.site_host
     primary.about = primary.about or extra.about
     primary.description = primary.description or extra.description
     for svc in extra.services:
@@ -252,4 +313,63 @@ def merge(primary: ExtractedSite, extra: ExtractedSite) -> ExtractedSite:
     for image in extra.images:
         if image not in primary.images and len(primary.images) < 8:
             primary.images.append(image)
+    for media in extra.menu_media:
+        if media["url"] not in {m["url"] for m in primary.menu_media}:
+            primary.menu_media.append(media)
+    known = {i["name"].lower() for i in primary.menu_items}
+    for item in extra.menu_items:
+        if item["name"].lower() not in known and len(primary.menu_items) < 24:
+            known.add(item["name"].lower())
+            primary.menu_items.append(item)
     return primary
+
+
+_MEDIA_RE = re.compile(r"\.(pdf|png|jpe?g|webp)(\?|$)", re.IGNORECASE)
+_MENU_WORD_RE = re.compile(r"menu|drinks?|dinner|lunch|brunch|breakfast|price",
+                           re.IGNORECASE)
+
+
+def extract_menu_media(html: str, base_url: str) -> list[dict]:
+    """Menu PDFs / photos they publish, to embed rather than link away to."""
+    base_host = urlparse(base_url).netloc.lower()
+    out: list[dict] = []
+    for href, label_html in _LINK_RE.findall(html or ""):
+        absolute = urljoin(base_url, href)
+        if urlparse(absolute).netloc.lower() != base_host:
+            continue
+        media = _MEDIA_RE.search(absolute)
+        if not media:
+            continue
+        label = _text(label_html)
+        if not (_MENU_WORD_RE.search(absolute) or _MENU_WORD_RE.search(label)):
+            continue
+        if _JUNK_IMAGE_RE.search(absolute):
+            continue
+        kind = "pdf" if media.group(1).lower() == "pdf" else "image"
+        if absolute not in {m["url"] for m in out}:
+            out.append({"url": absolute, "kind": kind, "label": label[:60] or "Menu"})
+        if len(out) >= 4:
+            break
+    return out
+
+
+def menu_page_urls(html: str, base_url: str, limit: int = 3) -> list[str]:
+    """Links to their menu / price-list pages, so the new site can carry them."""
+    base_host = urlparse(base_url).netloc.lower()
+    found: list[str] = []
+    for href in re.findall(r'href=["\']([^"\']+)["\']', html or "", re.IGNORECASE):
+        if href.startswith(("mailto:", "tel:", "#", "javascript:")):
+            continue
+        absolute = urljoin(base_url, href)
+        parsed = urlparse(absolute)
+        if parsed.netloc.lower() != base_host:
+            continue
+        if _MEDIA_RE.search(absolute):     # a PDF/photo menu is media, not a page
+            continue
+        last = parsed.path.strip("/").lower().split("/")[-1]
+        if any(last == m or last.startswith(m) for m in _MENU_PATHS):
+            if absolute not in found:
+                found.append(absolute)
+        if len(found) >= limit:
+            break
+    return found

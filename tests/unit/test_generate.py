@@ -163,3 +163,47 @@ def test_a_field_is_rendered_in_only_one_section(make_site_drafted, session):
     site = session.query(Website).filter_by(business_id=biz.id).one()
     fields = [f["field"] for sec in site.content_json["sections"] for f in sec.get("facts", [])]
     assert len(fields) == len(set(fields)), f"duplicate fields rendered: {fields}"
+
+
+# ---------------- actions must not send visitors to the old site ------------ #
+def _extracted(**kw):
+    from app.stages.extract_site import ExtractedSite
+    base = {"site_host": "acme.com"}
+    base.update(kw)
+    return ExtractedSite(**base)
+
+
+def test_menu_action_becomes_an_in_page_anchor_when_we_carry_the_menu():
+    from app.stages.generate import _internalised_actions
+
+    out = _internalised_actions(_extracted(
+        actions=[{"kind": "Menu", "label": "Menu", "url": "https://acme.com/menu"}],
+        menu_media=[{"url": "https://acme.com/m.pdf", "kind": "pdf", "label": "Menu"}]))
+    assert out[0]["url"] == "#menu"
+
+
+def test_menu_action_is_dropped_when_there_is_no_menu_content():
+    """Better no button than one that leads nowhere."""
+    from app.stages.generate import _internalised_actions
+
+    assert _internalised_actions(_extracted(
+        actions=[{"kind": "Menu", "label": "Menu", "url": "https://acme.com/menu"}])) == []
+
+
+def test_links_back_to_their_own_site_are_dropped():
+    from app.stages.generate import _internalised_actions
+
+    out = _internalised_actions(_extracted(
+        actions=[{"kind": "Gallery", "label": "Our work", "url": "https://acme.com/gallery"}]))
+    assert out == []
+
+
+def test_real_third_party_booking_flows_survive():
+    """OpenTable IS the booking path; no new site replaces it."""
+    from app.stages.generate import _internalised_actions
+
+    out = _internalised_actions(_extracted(actions=[
+        {"kind": "Book / Reserve", "label": "Book", "url": "https://www.opentable.com/r/x"},
+        {"kind": "Get a Quote", "label": "Call", "url": "tel:+19725550148"},
+    ]))
+    assert {a["url"] for a in out} == {"https://www.opentable.com/r/x", "tel:+19725550148"}

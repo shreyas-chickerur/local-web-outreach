@@ -128,3 +128,44 @@ def test_award_og_image_is_not_promoted_to_hero():
     extracted = extract_from_html(html, "https://acme.com/")
     assert extracted.images
     assert "dining-room" in extracted.images[0]
+
+
+# ------------------------------- menus -------------------------------------- #
+def test_extracts_priced_menu_items():
+    html = """<ul>
+      <li>Short Rib $32 braised eight hours with root vegetables</li>
+      <li>Gulf Snapper $28</li>
+      <li>Chicken Fried Steak $24 cream gravy</li>
+    </ul>"""
+    items = extract_from_html(html, "https://acme.com/").menu_items
+    names = {i["name"] for i in items}
+    assert "Short Rib" in names and "Gulf Snapper" in names
+    short_rib = next(i for i in items if i["name"] == "Short Rib")
+    assert short_rib["price"] == "$32"
+    assert "braised eight hours" in short_rib["description"]
+
+
+def test_menu_item_price_may_sit_on_its_own_line():
+    items = extract_from_html("<div>Wagyu Burger</div><div>$26.00</div>",
+                              "https://acme.com/").menu_items
+    assert items and items[0]["name"] == "Wagyu Burger"
+    assert items[0]["price"] == "$26.00"
+
+
+def test_prose_with_a_price_is_not_a_menu_item():
+    items = extract_from_html(
+        "<p>Home</p><p>$5</p>", "https://acme.com/").menu_items
+    assert all(i["name"].lower() != "home" for i in items)
+
+
+def test_extracts_a_pdf_menu_to_embed():
+    """Restaurants usually publish the menu as a PDF or photo, not HTML."""
+    html = '<a href="/uploads/HT-Dinner-Menu.pdf">HT Dinner Menu</a>'
+    media = extract_from_html(html, "https://acme.com/").menu_media
+    assert media and media[0]["kind"] == "pdf"
+    assert media[0]["url"].endswith("HT-Dinner-Menu.pdf")
+
+
+def test_unrelated_pdfs_are_not_treated_as_menus():
+    html = '<a href="/uploads/privacy-policy.pdf">Privacy Policy</a>'
+    assert extract_from_html(html, "https://acme.com/").menu_media == []

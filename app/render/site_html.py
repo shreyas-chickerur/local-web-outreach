@@ -85,9 +85,11 @@ def _collect_facts(sections: list[dict]) -> dict[str, dict]:
     return out
 
 
-def _section(title: str, eyebrow: str, inner: str, *, band: str = "") -> str:
+def _section(title: str, eyebrow: str, inner: str, *, band: str = "",
+             anchor: str = "") -> str:
+    ident = f' id="{anchor}"' if anchor else ""
     return (
-        f'<section class="{band}"><div class="wrap">'
+        f'<section class="{band}"{ident}><div class="wrap">'
         f'<div class="section-head reveal">'
         f'<div class="eyebrow">{escape(eyebrow)}</div>'
         f'<h2 class="section-title">{escape(title)}</h2></div>'
@@ -148,6 +150,37 @@ def render_site(content: dict, *, draft: bool = True) -> str:
         band = bands[band_i % 2]
         band_i += 1
         return band
+
+    fare = _find(sections, "bill_of_fare")
+    fare_items = fare.get("items") or []
+    fare_media = fare.get("media") or []
+    if fare_items or fare_media:
+        inner = ""
+        if fare_items:
+            rows = "".join(
+                f'<div class="menu-row"><span class="dish">{escape(str(i.get("name", "")))}'
+                f'</span><span class="cost">{escape(str(i.get("price", "")))}</span>'
+                + (f'<span class="desc">{escape(str(i.get("description", "")))}</span>'
+                   if i.get("description") else "")
+                + "</div>"
+                for i in fare_items
+            )
+            inner += f'<div class="menu-list reveal">{rows}</div>'
+        else:
+            # Their menu is a PDF or a photo. Embed it so the visitor never has
+            # to leave for the old site to find out what the food is.
+            doc = fare_media[0]
+            url = escape(str(doc.get("url", "")))
+            if doc.get("kind") == "pdf":
+                inner += (f'<div class="menu-doc reveal"><embed src="{url}#view=FitH" '
+                          f'type="application/pdf"></div>')
+            else:
+                inner += (f'<div class="menu-doc reveal">'
+                          f'<img src="{url}" alt="Menu" loading="lazy"></div>')
+            inner += ('<p class="menu-note">Menu shown as published. A new site would '
+                      'set this in real text, so it is searchable and readable on a phone.</p>')
+        body.append(_section(str(fare.get("heading", "Menu")), "On the menu", inner,
+                             band=next_band(), anchor="menu"))
 
     offerings = _find(sections, "offerings")
     if offerings.get("items"):
