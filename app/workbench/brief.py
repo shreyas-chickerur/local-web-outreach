@@ -254,6 +254,8 @@ def build_brief(
         if brief.published.has_locations_page:
             services = [s for s in services if " " in s.strip()]
         brief.published.services = services
+        brief.published.products = [
+            p for p in brief.published.products if p.strip().lower() not in towns]
 
     known = {f.field for f in brief.confident_facts}
     for wanted, question in (
@@ -315,7 +317,7 @@ def format_brief(brief: Brief) -> str:
 
     pub = brief.published
     has_published = pub is not None and any(
-        (pub.description, pub.services, pub.menu_items, pub.menu_media,
+        (pub.description, pub.services, pub.products, pub.menu_items, pub.menu_media,
          pub.hours, pub.images, pub.socials))
     if pub and has_published:
         lines.append("")
@@ -324,8 +326,11 @@ def format_brief(brief: Brief) -> str:
             lines.append(f"  tagline:  {pub.description[:88]}")
         if pub.services:
             lines.append(f"  services: {', '.join(pub.services[:6])}")
+        if pub.products:
+            lines.append(f"  sells:    {', '.join(pub.products[:6])}")
         if pub.menu_items:
-            lines.append(f"  pricing:  {len(pub.menu_items)} priced items")
+            n = len(pub.menu_items)
+            lines.append(f"  pricing:  {n} priced item{'s' if n != 1 else ''}")
         if pub.menu_media:
             kinds = ", ".join(sorted({m["kind"] for m in pub.menu_media}))
             lines.append(f"  menu/price doc: {len(pub.menu_media)} ({kinds})")

@@ -164,6 +164,9 @@ class ExtractedSite:
     description: str | None = None
     about: str | None = None
     services: list[str] = field(default_factory=list)
+    # Retail goods, kept apart from services: both matter when building a site,
+    # but calling a bottle of sauce a "service" makes the brief wrong.
+    products: list[str] = field(default_factory=list)
     hours: list[str] = field(default_factory=list)
     actions: list[dict] = field(default_factory=list)   # {label, url, kind}
     socials: list[dict] = field(default_factory=list)   # {name, url}
@@ -178,7 +181,7 @@ class ExtractedSite:
     has_locations_page: bool = False
 
     def is_empty(self) -> bool:
-        return not any((self.about, self.services, self.hours, self.actions,
+        return not any((self.about, self.services, self.products, self.hours, self.actions,
                         self.images, self.menu_items))
 
 
@@ -210,7 +213,38 @@ _MARKETING_RE = re.compile(
 _CHROME_RE = re.compile(
     r"(skip to|gift card|locations?\b|donation|franchis|sign ?up|log ?in|newsletter|social|"
     r"subscribe|follow us|main menu|toggle|navigation|search|cart|checkout|"
-    r"privacy|terms|accessibility|site ?map)", re.IGNORECASE)
+    r"privacy|terms|accessibility|site ?map|upcoming events|nationwide|"
+    r"shipping|directions)", re.IGNORECASE)
+
+# Headings that structure a page rather than name something they sell:
+# "What Our Clients Say", "Frequently Asked Questions", "Lawn Care Tips".
+_SECTION_RE = re.compile(
+    r"(clients? say|testimonial|what (our|people)|frequently asked|faq\b|"
+    r"\btips?\b|\bguides?\b|walkthrough|our story|why choose|get a (free )?quote|"
+    r"read more|learn more|latest|blog|gallery|portfolio)", re.IGNORECASE)
+
+# Things they SELL rather than things they DO. For a barbecue joint the bottled
+# sauce is real revenue, but it is not a service and should not be listed as one.
+_PRODUCT_RE = re.compile(
+    r"\b(sauce|seasoning|rub|spice|blend|jerky|bottle|jar|gift ?(set|box)|"
+    r"bundle|sampler|pack)\b", re.IGNORECASE)
+
+# An offering is a noun phrase ("Weed Control"). Filtering junk pattern by
+# pattern was endless, so test the shape instead: a call to action starts with a
+# verb aimed at the reader, and copy addresses them directly.
+_CTA_RE = re.compile(
+    r"^(talk|call|contact|book|schedule|request|order|shop|visit|find|see|"
+    r"learn|discover|save|conserve|explore|start|join|get|ready|need)\b",
+    re.IGNORECASE)
+_ADDRESSES_READER_RE = re.compile(r"\b(we|us|our|you|your|i|my)\b", re.IGNORECASE)
+
+# A heading is not necessarily an offering. "Mckinney, Texas" is where they are.
+_PLACE_RE = re.compile(r"^[A-Za-z .'-]+,\s*(?:[A-Z]{2}|[A-Z][a-z]+)\s*\d{0,5}$")
+
+# A footer row of social links, scraped as a single heading:
+# "Instagram Facebook TikTok Yelp Google Reviews About".
+_SOCIAL_PILE_RE = re.compile(
+    r"(instagram|facebook|tiktok|twitter|yelp|youtube|linkedin)", re.IGNORECASE)
 
 # Things a shop sells that are not services. A t-shirt is not an offering you
 # would build a website section around.
@@ -235,7 +269,19 @@ def _clean_service(candidate: str) -> str | None:
         return None
     if _CHROME_RE.search(text):           # navigation, not an offering
         return None
+    if _SECTION_RE.search(text):          # a page section heading, not an offering
+        return None
+    if text.endswith(","):                # half of a headline split over two lines
+        return None
+    if _CTA_RE.match(text):               # "Talk to a lawn expert" is a button
+        return None
+    if _ADDRESSES_READER_RE.search(text):  # "Areas We Serve" is copy, not a service
+        return None
     if _MERCH_RE.search(text):            # a t-shirt is not a service
+        return None
+    if _PLACE_RE.match(text):             # a branch address, not an offering
+        return None
+    if len(_SOCIAL_PILE_RE.findall(text)) >= 2:   # a footer row of social links
         return None
     return text
 
@@ -281,15 +327,16 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
         name = _clean_service(fragment)
         if name and name.lower() not in seen:
             seen.add(name.lower())
-            out.services.append(name)
+            (out.products if _PRODUCT_RE.search(name) else out.services).append(name)
     for fragment in _LI_RE.findall(clean):
         if len(out.services) >= 12:
             break
         name = _clean_service(fragment)
         if name and name.lower() not in seen and " " in name:
             seen.add(name.lower())
-            out.services.append(name)
+            (out.products if _PRODUCT_RE.search(name) else out.services).append(name)
     out.services = out.services[:12]
+    out.products = out.products[:8]
 
     # Match the href AND the link text: a multi-location brand often uses a
     # "LOCATIONS" dropdown with no /locations URL behind it, which is how a
@@ -357,6 +404,10 @@ def merge(primary: ExtractedSite, extra: ExtractedSite) -> ExtractedSite:
     for svc in extra.services:
         if svc.lower() not in {s.lower() for s in primary.services} and len(primary.services) < 12:
             primary.services.append(svc)
+    for product in extra.products:
+        if (product.lower() not in {p.lower() for p in primary.products}
+                and len(primary.products) < 8):
+            primary.products.append(product)
     for hour in extra.hours:
         if hour not in primary.hours and len(primary.hours) < 7:
             primary.hours.append(hour)
@@ -381,6 +432,10 @@ def merge(primary: ExtractedSite, extra: ExtractedSite) -> ExtractedSite:
 
 
 _MEDIA_RE = re.compile(r"\.(pdf|png|jpe?g|webp)(\?|$)", re.IGNORECASE)
+# Assets are not pages. A stylesheet called "menu-addon.css" was being fetched
+# as if it were the menu, purely because the filename contains "menu".
+_ASSET_RE = re.compile(r"\.(css|js|json|xml|svg|ico|woff2?|ttf|map)(\?|$)",
+                       re.IGNORECASE)
 _MENU_WORD_RE = re.compile(r"menu|drinks?|dinner|lunch|brunch|breakfast|price",
                            re.IGNORECASE)
 
@@ -425,6 +480,8 @@ def contact_page_urls(html: str, base_url: str, limit: int = 3) -> list[str]:
         if href.startswith(("mailto:", "tel:", "#", "javascript:")):
             continue
         absolute = urljoin(base_url, href)
+        if _ASSET_RE.search(absolute):
+            continue
         parsed = urlparse(absolute)
         if parsed.netloc.lower() != base_host:  # stay on their own site
             continue
@@ -543,6 +600,8 @@ def menu_page_urls(html: str, base_url: str, limit: int = 3) -> list[str]:
         if parsed.netloc.lower() != base_host:
             continue
         if _MEDIA_RE.search(absolute):     # a PDF/photo menu is media, not a page
+            continue
+        if _ASSET_RE.search(absolute):     # stylesheets and scripts are not pages
             continue
         last = parsed.path.strip("/").lower().split("/")[-1]
         if any(last == m or last.startswith(m) for m in _MENU_PATHS):

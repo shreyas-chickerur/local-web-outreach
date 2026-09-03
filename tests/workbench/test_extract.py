@@ -4,7 +4,12 @@ from __future__ import annotations
 
 import pytest
 
-from app.workbench.extract import _clean_service, extract_from_html, merge
+from app.workbench.extract import (
+    _clean_service,
+    extract_from_html,
+    menu_page_urls,
+    merge,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -169,3 +174,41 @@ def test_extracts_a_pdf_menu_to_embed():
 def test_unrelated_pdfs_are_not_treated_as_menus():
     html = '<a href="/uploads/privacy-policy.pdf">Privacy Policy</a>'
     assert extract_from_html(html, "https://acme.com/").menu_media == []
+
+
+def test_products_are_not_listed_as_services():
+    """A bottle of sauce is revenue, but it is not a service.
+
+    Hutchins BBQ sells seasoning and sauce alongside catering; listing those as
+    "services" made the brief wrong about what the business does.
+    """
+    html = """<html><body>
+      <h2>Catering</h2><h2>Brisket Seasoning</h2>
+      <h2>Hutchins BBQ Sauce</h2><h2>Original Rib Rub</h2>
+    </body></html>"""
+    site = extract_from_html(html, "https://example.com/")
+    assert site.services == ["Catering"]
+    assert site.products == ["Brisket Seasoning", "Hutchins BBQ Sauce",
+                             "Original Rib Rub"]
+
+
+def test_page_furniture_is_not_an_offering():
+    """Every one of these came off a real homepage and was read as a service."""
+    html = """<html><body>
+      <h2>Weed Control &amp; Fertilization</h2>
+      <h2>What Our Clients Say</h2><h2>Frequently Asked Questions</h2>
+      <h2>Lawn Watering Guide - Tips &amp; Walkthrough</h2>
+      <h2>Conserve Water,</h2><h2>Talk to a lawn expert</h2>
+      <h2>Areas We Serve</h2><h2>Mckinney, Texas</h2>
+      <h2>Instagram Facebook TikTok Yelp</h2><h2>UPCOMING EVENTS</h2>
+    </body></html>"""
+    site = extract_from_html(html, "https://example.com/")
+    assert site.services == ["Weed Control & Fertilization"]
+
+
+def test_stylesheet_is_not_followed_as_a_page():
+    """A theme shipped "menu-addon.css"; the crawler fetched it as the menu."""
+    html = ('<a href="/wp-content/plugins/kadence/mega-menu/menu-addon.css">x</a>'
+            '<a href="/menus/">Menus</a>')
+    assert menu_page_urls(html, "https://example.com/") == [
+        "https://example.com/menus/"]
