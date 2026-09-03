@@ -40,6 +40,12 @@ class DirectoryPlace:
     # chain announces itself here long before its website does - and when the
     # site blocks us, this is the only signal left.
     same_name_nearby: int = 1
+    # OPERATIONAL | CLOSED_TEMPORARILY | CLOSED_PERMANENTLY. Pitching a closed
+    # business wastes a visit, and Google knows before the street does.
+    business_status: str | None = None
+    summary: str | None = None          # Google's one-line editorial description
+    latitude: float | None = None
+    longitude: float | None = None
 
 
 class DirectorySource(Protocol):

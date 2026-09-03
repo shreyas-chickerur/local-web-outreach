@@ -13,10 +13,14 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+from app.adapters.gplaces import PlacesError, search
 from app.cli import available_directories
+from app.core.config import google_places_api_key
 from app.store import db, leads
 from app.web.serialize import brief_to_dict
 from app.workbench.brief import build_brief
+from app.workbench.categories import BY_KEY, CATEGORIES
+from app.workbench.discover import find_all
 
 _UI = Path(__file__).parent / "index.html"
 
@@ -47,6 +51,51 @@ def lookup(query: str, location: str | None, notes: str | None) -> dict:
     with db.session() as conn:
         lead_id = leads.save_brief(conn, payload)
         return leads.brief_with_overrides(conn, lead_id)
+
+
+def locate(query: str) -> dict:
+    """Turn a typed place name into a point, so the list works without
+    granting location access."""
+    key = google_places_api_key()
+    if not key:
+        return {"error": "GOOGLE_PLACES_API_KEY is not set."}
+    try:
+        results = search(key, query, limit=1)
+    except PlacesError as exc:
+        return {"error": str(exc)}
+    if not results:
+        return {"error": f"Could not find {query!r}."}
+    point = (results[0].get("location") or {})
+    if not point:
+        return {"error": f"Could not place {query!r} on a map."}
+    return {"latitude": point["latitude"], "longitude": point["longitude"],
+            "label": (results[0].get("formattedAddress")
+                      or (results[0].get("displayName") or {}).get("text", query))}
+
+
+def prospects(latitude: float, longitude: float, refresh: bool = False,
+              category: str | None = None) -> dict:
+    """Prospects near a point, best first. Never raises.
+
+    One category at a time by default: eight categories cold is ninety-odd site
+    fetches and half a minute, and a page that arrives in pieces beats a page
+    that arrives at once, late. The lookup lock is deliberately not held here —
+    the whole point is that these run at the same time.
+    """
+    key = google_places_api_key()
+    if not key:
+        return {"error": "GOOGLE_PLACES_API_KEY is not set, so there is nothing "
+                         "to search with."}
+    wanted = ([BY_KEY[category]] if category in BY_KEY else None)
+    if category and wanted is None:
+        return {"error": f"unknown category {category!r}"}
+    try:
+        with db.session() as conn:
+            groups = find_all(conn, key, latitude, longitude, refresh=refresh,
+                              categories=wanted or CATEGORIES)
+    except Exception as exc:
+        return {"error": f"Search failed: {type(exc).__name__}: {exc}"}
+    return {"groups": groups}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -110,6 +159,23 @@ class Handler(BaseHTTPRequestHandler):
         route = urlparse(self.path)
         if route.path in ("/", "/index.html"):
             self._send(200, _UI.read_bytes(), "text/html; charset=utf-8")
+            return
+        if route.path == "/api/where":
+            self._json(locate((parse_qs(route.query).get("q") or [""])[0]))
+            return
+        if route.path == "/api/prospects":
+            params = parse_qs(route.query)
+            try:
+                lat = float((params.get("lat") or [""])[0])
+                lng = float((params.get("lng") or [""])[0])
+            except ValueError:
+                self._json({"error": "a latitude and longitude are required"}, 400)
+                return
+            payload = prospects(
+                lat, lng,
+                refresh=(params.get("refresh") or [""])[0] == "1",
+                category=(params.get("category") or [""])[0] or None)
+            self._json(payload, 200 if "error" not in payload else 400)
             return
         if route.path == "/api/leads":
             with db.session() as conn:

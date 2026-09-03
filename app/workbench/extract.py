@@ -25,6 +25,8 @@ from html import unescape
 from urllib.parse import urljoin, urlparse
 
 _TAG_RE = re.compile(r"<(script|style|noscript)[^>]*>.*?</\1>", re.IGNORECASE | re.DOTALL)
+_ANY_TAG_RE = re.compile(r"<[^>]+>")
+_EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 _TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.IGNORECASE | re.DOTALL)
 _META_DESC_RE = re.compile(
     r'<meta[^>]+name=["\']description["\'][^>]+content=["\']([^"\']+)["\']', re.IGNORECASE)
@@ -36,8 +38,7 @@ _IMG_RE = re.compile(r'<img[^>]+src=["\']([^"\']+)["\']', re.IGNORECASE)
 _LINK_RE = re.compile(r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
                       re.IGNORECASE | re.DOTALL)
 _P_RE = re.compile(r"<p[^>]*>(.*?)</p>", re.IGNORECASE | re.DOTALL)
-_ANY_TAG_RE = re.compile(r"<[^>]+>")
-_EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+_ANY_EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 
 _DAYS = r"(?:mon|tue|wed|thu|fri|sat|sun)[a-z]*"
 _HOURS_RE = re.compile(
@@ -184,6 +185,20 @@ class ExtractedSite:
     # it is what lets a directory's claim reach two-source confirmation.
     phone: str | None = None
     address: str | None = None
+    # Two things about a site that decide whether it needs replacing, both free
+    # from HTML we already have: a page with no viewport meta tag was never
+    # made responsive, and a site still on plain http is one browsers now warn
+    # visitors about.
+    mobile_ready: bool = True
+    https: bool = True
+    # The page draws itself with JavaScript, so the HTML we received is a shell.
+    # Not knowing what is on a site is different from the site being empty, and
+    # the difference matters: one is a lead, the other is our blind spot.
+    js_rendered: bool = False
+    # Visible words on the page. "Thin" has to mean the page is thin, not that
+    # our heading filters found nothing they liked — a 336KB roofing site with
+    # no parseable services is a failure of this reader, not a sales lead.
+    text_words: int = 0
 
     def is_empty(self) -> bool:
         return not any((self.about, self.services, self.products, self.hours, self.actions,
@@ -258,6 +273,13 @@ _MERCH_RE = re.compile(
     r"apparel|koozie|tumbler)\b", re.IGNORECASE)
 
 
+# Without this tag a phone renders the desktop layout scaled down, which is
+# what "their site looks broken on my phone" actually means.
+_VIEWPORT_RE = re.compile(r'<meta[^>]+name=["\']viewport', re.IGNORECASE)
+# The mount points the common frameworks leave in an otherwise empty document.
+_SPA_RE = re.compile(
+    r'(id=["\'](root|app|__next|__nuxt)["\']|window\.__NUXT__|__NEXT_DATA__)',
+    re.IGNORECASE)
 _LD_RE = re.compile(
     r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
     re.IGNORECASE | re.DOTALL)
@@ -435,6 +457,11 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
     out.products = out.products[:8]
 
     out.phone, out.address, ld_hours = read_structured_data(html)
+    out.mobile_ready = bool(_VIEWPORT_RE.search(html))
+    # _TAG_RE strips script and style bodies; _ANY_TAG_RE strips the markup.
+    out.text_words = len(_ANY_TAG_RE.sub(" ", _TAG_RE.sub(" ", html)).split())
+    out.js_rendered = out.text_words < 120 and bool(_SPA_RE.search(html))
+    out.https = base_url.lower().startswith("https")
 
     # Match the href AND the link text: a multi-location brand often uses a
     # "LOCATIONS" dropdown with no /locations URL behind it, which is how a
@@ -502,6 +529,7 @@ def merge(primary: ExtractedSite, extra: ExtractedSite) -> ExtractedSite:
     primary.has_locations_page = primary.has_locations_page or extra.has_locations_page
     primary.about = primary.about or extra.about
     primary.phone = primary.phone or extra.phone
+    primary.mobile_ready = primary.mobile_ready or extra.mobile_ready
     primary.address = primary.address or extra.address
     primary.description = primary.description or extra.description
     for svc in extra.services:

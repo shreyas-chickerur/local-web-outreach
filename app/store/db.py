@@ -43,6 +43,15 @@ CREATE TABLE IF NOT EXISTS events (
     note       TEXT
 );
 CREATE INDEX IF NOT EXISTS events_lead ON events(lead_id, id);
+
+-- Discovery results, cached. A page of prospects is one paid request per
+-- category plus one page fetch per business; without this, every reload of the
+-- landing page spends that again for data that changes weekly at most.
+CREATE TABLE IF NOT EXISTS discovery_cache (
+    key        TEXT PRIMARY KEY,
+    payload    TEXT NOT NULL,
+    fetched_at TEXT NOT NULL
+);
 """
 
 

@@ -6,19 +6,26 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+  /* Analogous base (blue -> indigo) with a split-complementary warm accent for
+     the signals that must interrupt you. Every text colour below was measured
+     against the page background: all clear WCAG AA (4.5:1) for body text. */
   :root{
-    /* Warm slate rather than pure grey: long sessions on a cold blue-black
-       screen are tiring, and the accent has to stay readable on it. */
-    --bg:#14161a; --raise:#1a1d23; --card:#1e222a; --line:#2b313b;
-    --line-soft:#232830;
-    --ink:#eceff4; --dim:#a8b2c1; --faint:#6f7b8c;
-    --ok:#5ec98a; --ok-bg:rgba(94,201,138,.10);
-    --warn:#e0b062; --warn-bg:rgba(224,176,98,.10);
-    --bad:#ef7d78; --bad-bg:rgba(239,125,120,.10);
-    --accent:#7aa2f7; --accent-2:#a78bfa;
+    --bg:#f6f8fc; --surface:#ffffff; --raise:#eef2f9; --line:#dfe6f1;
+    --line-soft:#eaeff7;
+    --ink:#141b2b;      /* 16.2:1 */
+    --dim:#4a5b78;      /*  6.5:1 */
+    --faint:#5f6e85;    /*  4.9:1 */
+    --accent:#2563eb;   /*  4.9:1 */
+    --accent-2:#6d3fe0; /*  5.8:1 */
+    --ok:#0f7a52;       /*  5.0:1 */
+    --warn:#8a5a00;     /*  5.6:1 */
+    --bad:#c0362c;      /*  5.2:1 */
+    --ok-bg:#e6f6ee; --warn-bg:#fdf3e0; --bad-bg:#fdecea; --accent-bg:#e8efff;
     --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
-    --r:14px; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.5);
+    --r:14px;
+    --shadow:0 1px 2px rgba(20,27,43,.06),0 8px 20px -14px rgba(20,27,43,.22);
+    --shadow-lift:0 2px 6px rgba(20,27,43,.08),0 16px 32px -18px rgba(20,27,43,.3);
   }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   *{box-sizing:border-box}
@@ -26,14 +33,14 @@
   body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
     font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
   /* A quiet wash of colour so the page is not a flat grey rectangle. */
-  body::before{content:'';position:fixed;inset:0 0 auto;height:340px;z-index:0;
-    background:radial-gradient(900px 300px at 18% -60px,rgba(122,162,247,.16),transparent 70%),
-               radial-gradient(700px 260px at 82% -80px,rgba(167,139,250,.12),transparent 70%);
+  body::before{content:'';position:fixed;inset:0 0 auto;height:320px;z-index:0;
+    background:radial-gradient(900px 300px at 15% -80px,rgba(37,99,235,.10),transparent 70%),
+               radial-gradient(760px 280px at 85% -90px,rgba(109,63,224,.08),transparent 70%);
     pointer-events:none}
 
   header{position:sticky;top:0;z-index:10;padding:22px 34px 18px;
     border-bottom:1px solid var(--line-soft);
-    background:rgba(20,22,26,.82);backdrop-filter:blur(14px) saturate(140%)}
+    background:rgba(246,248,252,.86);backdrop-filter:blur(14px) saturate(140%)}
   .brand{display:flex;align-items:baseline;gap:11px}
   .brand h1{margin:0;font-size:16px;font-weight:650;letter-spacing:-.01em}
   .brand .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);
@@ -42,15 +49,15 @@
   form{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}
   .field{position:relative;flex:1;min-width:230px}
   .field.small{flex:0 0 172px;min-width:140px}
-  input{width:100%;background:var(--raise);border:1px solid var(--line);
+  input{width:100%;background:var(--surface);border:1px solid var(--line);
     color:var(--ink);padding:12px 15px;border-radius:11px;font:inherit;
     transition:border-color .18s,box-shadow .18s,background .18s}
-  input:hover{border-color:#39414e}
-  input:focus{outline:none;background:var(--card);border-color:var(--accent);
-    box-shadow:0 0 0 3.5px rgba(122,162,247,.16)}
+  input:hover{border-color:#c3cfe2}
+  input:focus{outline:none;border-color:var(--accent);
+    box-shadow:0 0 0 3.5px rgba(37,99,235,.16)}
   input::placeholder{color:var(--faint)}
   button.go{background:linear-gradient(135deg,var(--accent),var(--accent-2));
-    border:0;color:#0d1017;padding:12px 26px;border-radius:11px;font:inherit;
+    border:0;color:#fff;padding:12px 26px;border-radius:11px;font:inherit;
     font-weight:650;cursor:pointer;transition:transform .14s,filter .18s,opacity .18s}
   button.go:hover{filter:brightness(1.08)}
   button.go:active{transform:scale(.975)}
@@ -60,16 +67,16 @@
   .pick{background:transparent;border:1px solid var(--line);color:var(--dim);
     font:inherit;font-size:12.5px;padding:4px 11px;border-radius:99px;cursor:pointer;
     transition:all .16s}
-  .pick:hover{border-color:var(--accent);color:var(--ink);background:rgba(122,162,247,.09)}
-  .pick[aria-pressed=true]{border-color:var(--accent);color:var(--ink);
-    background:rgba(122,162,247,.16)}
+  .pick:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+  .pick[aria-pressed=true]{border-color:var(--accent);color:var(--accent);
+    background:var(--accent-bg)}
 
   main{position:relative;z-index:1;padding:30px 34px 90px;max-width:1080px;margin:0 auto}
   .empty{text-align:center;padding:76px 20px;color:var(--faint)}
   .empty svg{opacity:.5;margin-bottom:14px}
   .empty h3{color:var(--dim);font-weight:550;margin:0 0 6px;font-size:16px}
   .empty p{margin:0;font-size:13.5px;max-width:400px;margin-inline:auto}
-  .err{background:var(--bad-bg);border:1px solid rgba(239,125,120,.3);
+  .err{background:var(--bad-bg);border:1px solid #f5c6c1;
     color:var(--bad);padding:16px 18px;border-radius:var(--r)}
 
   /* Loading: the lookup takes seconds, so show what it is doing. */
@@ -103,7 +110,7 @@
   .score span{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
 
   .banner{margin:22px 0 0;padding:15px 17px;border-radius:var(--r);
-    background:var(--warn-bg);border:1px solid rgba(224,176,98,.28)}
+    background:var(--warn-bg);border:1px solid #f0dcb4}
   .banner b{color:var(--warn);display:block;margin-bottom:6px;font-size:13.5px;font-weight:600}
   .banner ul{margin:0;padding-left:19px;color:var(--dim);font-size:13.5px}
 
@@ -113,10 +120,10 @@
   h3.head::after{content:'';flex:1;height:1px;background:var(--line-soft)}
 
   .facts{display:grid;gap:11px}
-  .fact{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  .fact{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
     padding:15px 17px;box-shadow:var(--shadow);position:relative;overflow:hidden;
     transition:border-color .18s,transform .18s}
-  .fact:hover{border-color:#39414e;transform:translateY(-1px)}
+  .fact:hover{border-color:#c3cfe2;box-shadow:var(--shadow-lift);transform:translateY(-1px)}
   .fact::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
   .fact.verified::before{background:var(--ok)}
   .fact.unverified::before{background:var(--warn)}
@@ -141,7 +148,7 @@
   .src{display:inline-flex;align-items:center;gap:6px;background:var(--raise);
     border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:11.5px;
     color:var(--dim);text-decoration:none;font-family:var(--mono);transition:all .15s}
-  .src:hover{border-color:var(--accent);color:var(--ink)}
+  .src:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
   .src i{width:5px;height:5px;border-radius:50%;background:var(--ok);flex:0 0 auto}
   .cands{margin-top:12px;display:grid;gap:7px}
   .cand{display:flex;gap:12px;align-items:baseline;background:var(--raise);
@@ -153,7 +160,7 @@
     align-items:baseline;background:var(--warn-bg);border-radius:8px;padding:7px 11px}
   .dissent b{font-family:var(--mono);font-weight:500;font-size:11.5px}
 
-  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
     padding:5px 18px;box-shadow:var(--shadow)}
   .prow{display:grid;grid-template-columns:104px 1fr;gap:16px;padding:13px 0;
     border-bottom:1px solid var(--line-soft);align-items:start}
@@ -164,23 +171,23 @@
   .chips{display:flex;gap:6px;flex-wrap:wrap}
   .chip{background:var(--raise);border:1px solid var(--line);border-radius:7px;
     padding:4px 10px;font-size:12.5px;color:var(--dim);transition:all .15s}
-  .chip:hover{border-color:var(--accent);color:var(--ink)}
+  .chip:hover{border-color:var(--accent);color:var(--accent)}
 
   .shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px}
   .shots img{width:100%;height:108px;object-fit:cover;border-radius:11px;
     border:1px solid var(--line);cursor:zoom-in;transition:transform .22s,border-color .22s}
   .shots img:hover{transform:scale(1.03);border-color:var(--accent)}
   dialog{border:0;background:transparent;padding:0;max-width:92vw;max-height:92vh}
-  dialog::backdrop{background:rgba(10,11,14,.86);backdrop-filter:blur(3px)}
+  dialog::backdrop{background:rgba(20,27,43,.55);backdrop-filter:blur(3px)}
   dialog img{max-width:92vw;max-height:92vh;border-radius:12px;display:block}
 
   /* Ratings sit apart from facts on purpose: they are not one number two
      sources argue about, so they get no badge and no confidence bar. */
   .rates{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:11px}
-  .rate{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  .rate{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
     padding:14px 16px;box-shadow:var(--shadow);text-decoration:none;display:block;
     transition:border-color .18s,transform .18s}
-  .rate:hover{border-color:var(--accent);transform:translateY(-1px)}
+  .rate:hover{border-color:var(--accent);box-shadow:var(--shadow-lift);transform:translateY(-1px)}
   .rate .who{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;
     color:var(--faint);font-weight:600}
   .rate .n{font-size:27px;font-weight:680;letter-spacing:-.02em;line-height:1.25;
@@ -190,9 +197,9 @@
   .rate .thin{color:var(--faint);font-size:11.5px;margin-top:5px}
 
   .fact.operator_verified::before{background:var(--accent-2)}
-  .operator_verified .badge{background:rgba(167,139,250,.14);color:var(--accent-2)}
+  .operator_verified .badge{background:#f1ecfe;color:var(--accent-2)}
   .byline{margin-top:10px;font-size:12.5px;color:var(--accent-2);
-    background:rgba(167,139,250,.09);border-radius:8px;padding:8px 11px}
+    background:#f1ecfe;border-radius:8px;padding:8px 11px}
   .byline b{font-weight:600}
   .byline em{font-style:normal;color:var(--dim)}
   .was{margin-top:8px;font-size:12.5px;color:var(--faint)}
@@ -202,7 +209,7 @@
   .mini{background:transparent;border:1px solid var(--line);color:var(--dim);
     font:inherit;font-size:12.5px;padding:7px 13px;border-radius:9px;cursor:pointer;
     transition:all .15s}
-  .mini:hover{border-color:var(--accent-2);color:var(--ink);background:rgba(167,139,250,.1)}
+  .mini:hover{border-color:var(--accent-2);color:var(--accent-2);background:#f1ecfe}
   .mini.primary{border-color:var(--accent-2);color:var(--accent-2)}
 
   .trail{display:grid;gap:0}
@@ -216,11 +223,56 @@
   .ev .when{color:var(--faint);font-size:12px;margin-top:2px}
   .ev q{color:var(--dim);font-style:italic}
   .statusbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:14px}
-  .statusbar .mini[aria-pressed=true]{border-color:var(--accent);color:var(--ink);
-    background:rgba(122,162,247,.16)}
+  .statusbar .mini[aria-pressed=true]{border-color:var(--accent);color:var(--accent);
+    background:var(--accent-bg)}
+
+  .where{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:13px;
+    font-size:13.5px;color:var(--dim)}
+  .where b{color:var(--ink);font-weight:600}
+  .group{margin-top:34px}
+  .ghead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+  .ghead h3{margin:0;font-size:17px;font-weight:650;letter-spacing:-.015em}
+  .ghead span{color:var(--faint);font-size:13px}
+  .gcount{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--faint)}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:12px;
+    margin-top:13px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+    padding:15px 16px;box-shadow:var(--shadow);cursor:pointer;text-align:left;
+    font:inherit;color:inherit;display:flex;flex-direction:column;gap:9px;
+    transition:transform .18s cubic-bezier(.2,.7,.3,1),box-shadow .18s,border-color .18s;
+    animation:rise .38s cubic-bezier(.2,.7,.3,1) both}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift);border-color:#c3cfe2}
+  .card:active{transform:translateY(-1px)}
+  .card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .ctop{display:flex;gap:12px;align-items:flex-start}
+  .cname{font-weight:640;font-size:15.5px;line-height:1.3;letter-spacing:-.01em}
+  .cmeta{color:var(--faint);font-size:12.5px;margin-top:3px}
+  /* The score is the first thing you look at, so it is the only ring on the page. */
+  .ring{--p:0;flex:0 0 auto;width:46px;height:46px;border-radius:50%;display:grid;
+    place-items:center;font-weight:700;font-size:14px;position:relative;
+    background:conic-gradient(var(--ring-c) calc(var(--p)*1%),var(--raise) 0)}
+  .ring::after{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--surface)}
+  .ring b{position:relative;z-index:1;color:var(--ring-c)}
+  .why{display:flex;flex-direction:column;gap:4px}
+  .why div{font-size:12.5px;color:var(--dim);display:flex;gap:7px;align-items:baseline}
+  .why i{font-family:var(--mono);font-style:normal;font-size:11px;flex:0 0 30px;
+    text-align:right}
+  .why .up{color:var(--ok)} .why .down{color:var(--bad)} .why .flat{color:var(--faint)}
+  .cfoot{display:flex;gap:8px;align-items:center;margin-top:auto;padding-top:4px;
+    font-size:12px;color:var(--faint);font-family:var(--mono)}
+  .tag{background:var(--bad-bg);color:var(--bad);border-radius:6px;padding:2px 7px;
+    font-family:var(--sans);font-size:11.5px;font-weight:600}
+  .tag.ok{background:var(--ok-bg);color:var(--ok)}
+  .skel{height:118px;border-radius:var(--r);background:linear-gradient(100deg,
+    var(--raise) 30%,#f6f9ff 48%,var(--raise) 62%);background-size:220% 100%;
+    animation:shimmer 1.3s linear infinite}
+  @keyframes shimmer{to{background-position:-120% 0}}
+  .back{background:none;border:0;color:var(--accent);font:inherit;font-size:13.5px;
+    cursor:pointer;padding:0;margin-bottom:14px;display:inline-flex;gap:6px;align-items:center}
+  .back:hover{text-decoration:underline}
 
   .asks{display:grid;gap:9px}
-  .ask{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);
+  .ask{display:flex;gap:12px;background:var(--surface);border:1px solid var(--line);
     border-left:3px solid var(--accent);border-radius:11px;padding:13px 16px;font-size:14.5px}
   .ask .q{color:var(--accent);font-weight:700;flex:0 0 auto}
   .notes{display:grid;gap:7px}
@@ -244,43 +296,142 @@
     <div class="field small"><input id="notes" placeholder="What you know"></div>
     <button class="go" id="go">Research</button>
   </form>
-  <div class="picks" id="picks"><b>TRY</b></div>
+  <div class="where" id="where">
+    <span>Showing prospects near</span> <b id="place">…</b>
+    <button class="pick" onclick="askLocation()">Use my location</button>
+    <button class="pick" onclick="changePlace()">Change</button>
+    <button class="pick" onclick="loadLanding(true)">Refresh</button>
+  </div>
 </header>
 
 <main id="out"></main>
 <dialog id="lightbox"><img id="lightbox-img" alt=""></dialog>
 
 <script>
-const EXAMPLES = [
-  ["Hutchins BBQ", ""], ["craftwaykitchen.com", ""],
-  ["Ryno Lawn Care", "Frisco, TX"], ["The Heritage Table", "Frisco, TX"],
-  ["JS Lawn Care Service", "Frisco, TX"], ["Starbucks", "Frisco, TX"],
-  ["Zzqqx Nonexistent Business", "Frisco, TX"],
-];
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c =>
   ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
+// ---------------------------------------------------------------- landing ---
+// The list of prospects is the product; search is for when you already know
+// who you are looking at.
+let PLACE = null;   // {latitude, longitude, label}
+
+// A brief is a detour from the list, so there is always a way back to it.
+const BACK = `<button class="back" onclick="loadLanding()">← back to prospects</button>`;
+
 const EMPTY = `<div class="empty in">
   <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor"
        stroke-width="1.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.5-4.5"/></svg>
-  <h3>Nothing looked up yet</h3>
-  <p>Give a company name or a website. Every claim comes back with the sources
-     behind it, so you can see what is confirmed and what is only one source's word.</p></div>`;
-$("#out").innerHTML = EMPTY;
+  <h3>Nowhere to look yet</h3>
+  <p>Allow location, or pick a town, and this fills with local businesses ranked
+     by how much they look like they need a website.</p></div>`;
 
-const picks = $("#picks");
-for (const [q, loc] of EXAMPLES) {
-  const b = document.createElement("button");
-  b.type = "button"; b.className = "pick"; b.textContent = q;
-  b.setAttribute("aria-pressed", "false");
-  b.onclick = () => {
-    document.querySelectorAll(".pick").forEach(p => p.setAttribute("aria-pressed", "false"));
-    b.setAttribute("aria-pressed", "true");
-    $("#q").value = q; $("#loc").value = loc; $("#f").requestSubmit();
-  };
-  picks.appendChild(b);
+const CATEGORIES = [
+  ["restaurants", "Restaurants & cafés"], ["hvac", "HVAC & plumbing"],
+  ["home", "Home services"], ["auto", "Auto services"],
+  ["beauty", "Salons & spas"], ["fitness", "Gyms & studios"],
+  ["pro", "Local professionals"], ["shops", "Independent shops"],
+];
+
+function savePlace(place) {
+  PLACE = place;
+  $("#place").textContent = place.label;
+  try { localStorage.setItem("workbench.place", JSON.stringify(place)); } catch {}
 }
+
+function askLocation() {
+  if (!navigator.geolocation) { changePlace(); return; }
+  $("#place").textContent = "asking your browser…";
+  navigator.geolocation.getCurrentPosition(
+    pos => { savePlace({latitude: pos.coords.latitude,
+                        longitude: pos.coords.longitude, label: "your location"});
+             loadLanding(); },
+    () => { $("#place").textContent = "location declined"; changePlace(); },
+    {timeout: 8000});
+}
+
+async function changePlace() {
+  const typed = prompt("Which town? e.g. Frisco, TX");
+  if (!typed) return;
+  $("#place").textContent = "finding " + typed + "…";
+  const found = await (await fetch("/api/where?q=" + encodeURIComponent(typed))).json();
+  if (found.error) { $("#place").textContent = found.error; return; }
+  savePlace(found);
+  loadLanding();
+}
+
+const ringColor = n => n >= 80 ? "var(--ok)" : n >= 60 ? "var(--warn)" : "var(--faint)";
+
+function card(p) {
+  // Show the reasons that moved the score most — the case, not the arithmetic.
+  // Ordered by how much each moved the score, not by the order the rules ran:
+  // "no website" is the reason to walk in, "+6 a phone number" is not.
+  const why = [...(p.reasons || [])]
+    .sort((a, b) => Math.abs(parseInt(b)) - Math.abs(parseInt(a)))
+    .slice(0, 3).map(r => {
+    const points = r.trim().split(/\s+/)[0];
+    const cls = points.startsWith("+") ? "up" : points === "0" ? "flat" : "down";
+    return `<div><i class="${cls}">${esc(points)}</i><span>${
+      esc(r.trim().slice(points.length).trim())}</span></div>`;
+  }).join("");
+  const site = p.website
+    ? `<span class="tag ok">has a site</span>` : `<span class="tag">no website</span>`;
+  return `<button class="card" onclick="openProspect(${esc(JSON.stringify(p.name))
+    .replace(/'/g, "&#39;")}, ${esc(JSON.stringify(p.address || ""))})">
+    <div class="ctop">
+      <div class="ring" style="--p:${p.score};--ring-c:${ringColor(p.score)}"><b>${p.score}</b></div>
+      <div><div class="cname">${esc(p.name)}</div>
+        <div class="cmeta">${p.rating != null ? `${p.rating}★ · ${p.reviews} reviews` : "no rating yet"}</div>
+      </div>
+    </div>
+    <div class="why">${why}</div>
+    <div class="cfoot">${site}</div></button>`;
+}
+
+function openProspect(name, address) {
+  $("#q").value = name;
+  $("#loc").value = (address || "").split(",").slice(1, 3).join(",").trim();
+  $("#f").requestSubmit();
+}
+
+async function loadLanding(refresh = false) {
+  if (!PLACE) return;
+  $("#out").innerHTML = CATEGORIES.map(([key, label]) => `<section class="group" id="g-${key}">
+      <div class="ghead"><h3>${esc(label)}</h3></div>
+      <div class="cards"><div class="skel"></div><div class="skel"></div>
+        <div class="skel"></div><div class="skel"></div></div></section>`).join("");
+  // Each category is its own request so the page fills in as answers arrive
+  // instead of waiting half a minute for the slowest one.
+  CATEGORIES.forEach(async ([key]) => {
+    const q = new URLSearchParams({lat: PLACE.latitude, lng: PLACE.longitude,
+                                   category: key, refresh: refresh ? "1" : "0"});
+    let group;
+    try {
+      const data = await (await fetch("/api/prospects?" + q)).json();
+      group = data.error ? {error: data.error} : (data.groups || [])[0];
+    } catch (err) { group = {error: err.message}; }
+    const node = document.getElementById("g-" + key);
+    if (!node) return;
+    if (group.error) {
+      node.innerHTML = `<div class="ghead"><h3>${esc(node.querySelector("h3").textContent)}</h3></div>
+        <div class="err">${esc(group.error)}</div>`;
+      return;
+    }
+    const list = group.prospects || [];
+    node.innerHTML = `<div class="ghead"><h3>${esc(group.label)}</h3>
+        <span>${esc(group.blurb || "")}</span>
+        <span class="gcount">${list.length}</span></div>
+      <div class="cards">${list.slice(0, 8).map(card).join("")}</div>`;
+  });
+}
+
+(function boot() {
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem("workbench.place") || "null"); } catch {}
+  if (saved && saved.latitude) { savePlace(saved); loadLanding(); }
+  else { $("#place").textContent = "nowhere yet"; $("#out").innerHTML = EMPTY; askLocation(); }
+})();
 
 $("#f").onsubmit = async e => {
   e.preventDefault();
@@ -505,7 +656,7 @@ function render(d) {
       d.assumptions.map(a => `<div class="note"><span class="m">·</span><span>${esc(a)}</span></div>`).join("")
     }</div></section>` : "";
 
-  return `<div class="hero in">
+  return `${BACK}<div class="hero in">
       <div>
         <h2>${esc(d.name)}</h2>
         <div class="meta">

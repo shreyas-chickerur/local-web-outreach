@@ -46,6 +46,23 @@ WHAT THEIR SITE PUBLISHES
 - **Nothing is guessed.** Gaps become questions to ask in person.
 - **Assumptions are stated**, so you can correct them.
 
+## The landing page — prospects near you
+
+The first screen is a list of local businesses grouped by trade, ranked by how
+much they look like they need a website. Location comes from the browser, or
+you can type a town. Search stays in the header for when you already know who
+you are looking at.
+
+**The prospect score** is a heuristic, not a measurement, so every point of it
+is shown with its reason attached — if you disagree with a reason, ignore the
+number. It answers "who should I walk into today?", which is a *different*
+question from confidence (how sure we are the data is right). They pull in
+opposite directions: a business with no website is a prime prospect and has
+almost nothing we can confirm.
+
+Cost: one Google Places request per category (eight per town), cached for 24
+hours, plus one page fetch per business.
+
 ## The UI
 
 ```bash
