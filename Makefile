@@ -1,6 +1,6 @@
 PY := .venv/bin/python
 
-.PHONY: install test lint typecheck check brief
+.PHONY: install test lint typecheck check brief ui
 
 install:
 	python3.11 -m venv .venv
@@ -20,3 +20,7 @@ check: lint typecheck test
 # Research one company: make brief Q="Craftway Kitchen, Frisco, TX"
 brief:
 	$(PY) -m app.cli brief "$(Q)"
+
+# The workbench UI: http://127.0.0.1:8099
+ui:
+	$(PY) -m app.web.server

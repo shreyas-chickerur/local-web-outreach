@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "workbench",
+      "runtimeExecutable": ".venv/bin/python",
+      "runtimeArgs": ["-m", "app.web.server"],
+      "port": 8099
+    }
+  ]
+}

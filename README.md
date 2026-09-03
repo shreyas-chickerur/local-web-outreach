@@ -46,6 +46,17 @@ WHAT THEIR SITE PUBLISHES
 - **Nothing is guessed.** Gaps become questions to ask in person.
 - **Assumptions are stated**, so you can correct them.
 
+## The UI
+
+```bash
+make ui        # http://127.0.0.1:8099
+```
+
+One page: type a company name or a URL and read the brief. It calls the same
+`build_brief()` the CLI does, so the screen cannot drift from the terminal.
+The example chips across the top are the stress cases — a chain, a business
+with no website, one whose sources disagree, and one that does not exist.
+
 ## Keys
 
 Copy `.env.example` to `.env`. OpenStreetMap needs no key but finds little on its
