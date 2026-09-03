@@ -57,6 +57,31 @@ One page: type a company name or a URL and read the brief. It calls the same
 The example chips across the top are the stress cases — a chain, a business
 with no website, one whose sources disagree, and one that does not exist.
 
+## Slice 2 — the lead store (built)
+
+Every lookup is saved to `workbench.db` (SQLite, gitignored). Re-running the
+research refreshes what the sources say and leaves your history alone.
+
+**Confirming a field.** After you talk to a business, type what they actually
+told you into the field's card, with a line on how you know. That value
+replaces the corroborated one, is marked `operator verified`, and carries your
+name, the timestamp, and your note. What the sources said is kept and shown
+underneath as `sources said …` — you outrank a directory, but the directory's
+disagreement is not erased.
+
+**The trail** at the bottom of a lead is append-only: nothing is ever updated
+or deleted, so a correction to a correction is another row and the history
+reads backwards intact.
+
+Attribution comes from `WORKBENCH_OPERATOR`, falling back to `$USER`. This
+labels changes so you can read the trail later — it is **not** authentication,
+and anyone with access to this machine can write under that name.
+
+```bash
+WORKBENCH_DB=/path/to/workbench.db   # optional, defaults to ./workbench.db
+WORKBENCH_OPERATOR="Shreyas"         # optional, defaults to $USER
+```
+
 ## Keys
 
 Copy `.env.example` to `.env`. OpenStreetMap needs no key but finds little on its
@@ -72,6 +97,11 @@ make check     # lint + typecheck + tests
 86 tests, no network, no database.
 
 ## Next
+
+Slices 3-5: generating a site from a brief, chat iteration with versioning, and
+the single screen that ties the lead list to a live preview.
+
+## Notes
 
 Slice 2 is the lead store and tracking; then site generation, chat iteration,
 and one screen that ties them together.

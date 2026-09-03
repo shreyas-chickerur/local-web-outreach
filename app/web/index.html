@@ -95,6 +95,7 @@
   .hero a{color:var(--accent);text-decoration:none;font-family:var(--mono);font-size:13px}
   .hero a:hover{text-decoration:underline}
   .none{color:var(--bad)}
+  .warnish{color:var(--warn)}
   .scorecard{margin-left:auto;display:flex;gap:8px}
   .score{background:var(--raise);border:1px solid var(--line);border-radius:12px;
     padding:9px 14px;text-align:center;min-width:66px}
@@ -188,6 +189,36 @@
   .stars{color:var(--warn);font-size:13px;letter-spacing:2px;margin-top:1px}
   .rate .thin{color:var(--faint);font-size:11.5px;margin-top:5px}
 
+  .fact.operator_verified::before{background:var(--accent-2)}
+  .operator_verified .badge{background:rgba(167,139,250,.14);color:var(--accent-2)}
+  .byline{margin-top:10px;font-size:12.5px;color:var(--accent-2);
+    background:rgba(167,139,250,.09);border-radius:8px;padding:8px 11px}
+  .byline b{font-weight:600}
+  .byline em{font-style:normal;color:var(--dim)}
+  .was{margin-top:8px;font-size:12.5px;color:var(--faint)}
+  .was s{opacity:.8}
+  .confirm{margin-top:11px;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+  .confirm input{flex:1;min-width:150px;padding:8px 11px;font-size:13.5px;border-radius:9px}
+  .mini{background:transparent;border:1px solid var(--line);color:var(--dim);
+    font:inherit;font-size:12.5px;padding:7px 13px;border-radius:9px;cursor:pointer;
+    transition:all .15s}
+  .mini:hover{border-color:var(--accent-2);color:var(--ink);background:rgba(167,139,250,.1)}
+  .mini.primary{border-color:var(--accent-2);color:var(--accent-2)}
+
+  .trail{display:grid;gap:0}
+  .ev{display:grid;grid-template-columns:20px 1fr;gap:13px;padding:0 0 16px}
+  .ev .rail{display:flex;flex-direction:column;align-items:center}
+  .ev .pip{width:9px;height:9px;border-radius:50%;background:var(--accent-2);
+    margin-top:5px;flex:0 0 auto}
+  .ev .line{width:1px;flex:1;background:var(--line);margin-top:4px}
+  .ev:last-child .line{display:none}
+  .ev .what{font-size:14px}
+  .ev .when{color:var(--faint);font-size:12px;margin-top:2px}
+  .ev q{color:var(--dim);font-style:italic}
+  .statusbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  .statusbar .mini[aria-pressed=true]{border-color:var(--accent);color:var(--ink);
+    background:rgba(122,162,247,.16)}
+
   .asks{display:grid;gap:9px}
   .ask{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);
     border-left:3px solid var(--accent);border-radius:11px;padding:13px 16px;font-size:14.5px}
@@ -264,6 +295,7 @@ $("#f").onsubmit = async e => {
   try {
     const p = new URLSearchParams({q, location: $("#loc").value, notes: $("#notes").value});
     const data = await (await fetch("/api/brief?" + p)).json();
+    LEAD = data.lead_id || null;
     $("#out").innerHTML = data.error
       ? `<div class="err in">${esc(data.error)}</div>` : render(data);
     window.scrollTo({top: 0, behavior: "smooth"});
@@ -273,7 +305,67 @@ $("#f").onsubmit = async e => {
   $("#go").disabled = false;
 };
 
-const COLOR = {verified: "var(--ok)", unverified: "var(--warn)", conflict: "var(--bad)"};
+const COLOR = {verified: "var(--ok)", unverified: "var(--warn)",
+               conflict: "var(--bad)", operator_verified: "var(--accent-2)"};
+const VERIFIABLE = ["address", "phone", "hours"];
+let LEAD = null;   // the lead currently on screen
+
+const when = iso => {
+  const d = new Date(iso);
+  return isNaN(d) ? iso : d.toLocaleString(undefined,
+    {month: "short", day: "numeric", hour: "numeric", minute: "2-digit"});
+};
+
+// What you were told outranks any directory, so say plainly whose word it is.
+function byline(f) {
+  if (f.confidence !== "operator_verified") return "";
+  return `<div class="byline"><b>${esc(f.verified_by)}</b> confirmed this ${when(f.verified_at)}`
+    + (f.verified_note ? ` — <em>${esc(f.verified_note)}</em>` : "") + `</div>`
+    + (f.superseded ? `<div class="was">sources said <s>${esc(f.superseded)}</s></div>` : "");
+}
+
+// Confirming is one line: the value you were given, and how you know.
+function confirmRow(f) {
+  if (!LEAD || !VERIFIABLE.includes(f.field)) return "";
+  const start = f.confidence === "conflict" ? "" : esc(f.value ?? "");
+  return `<div class="confirm">
+    <input placeholder="what they actually told you" value="${start}"
+           data-v="${esc(f.field)}" onkeydown="if(event.key==='Enter')confirmField('${esc(f.field)}')">
+    <input placeholder="how do you know?" data-n="${esc(f.field)}"
+           onkeydown="if(event.key==='Enter')confirmField('${esc(f.field)}')">
+    <button class="mini primary" onclick="confirmField('${esc(f.field)}')">Confirm</button>
+  </div>`;
+}
+
+async function post(path, body) {
+  const res = await fetch(path, {method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({lead_id: LEAD, ...body})});
+  const data = await res.json();
+  if (data.error) { alert(data.error); return null; }
+  return data;
+}
+
+async function confirmField(field) {
+  const value = document.querySelector(`[data-v="${field}"]`).value.trim();
+  const note = document.querySelector(`[data-n="${field}"]`).value.trim();
+  if (!value) { alert("Enter what they told you."); return; }
+  const data = await post("/api/verify", {field, value, note});
+  if (data) { $("#out").innerHTML = render(data); window.scrollTo({top: 0, behavior: "smooth"}); }
+}
+
+async function setStatus(status) {
+  const data = await post("/api/status", {status});
+  if (data) $("#out").innerHTML = render(data);
+}
+
+async function addNote() {
+  const box = document.querySelector("#newnote");
+  const text = box.value.trim();
+  if (!text) return;
+  const data = await post("/api/note", {note: text});
+  if (data) $("#out").innerHTML = render(data);
+}
 
 function fact(f) {
   // A conflict has no single value: showing one would pick a winner the
@@ -294,7 +386,7 @@ function fact(f) {
       <span class="pct">${f.score}%</span>
     </div>
     <div class="meter"><i style="--w:${f.score}%;background:${COLOR[f.confidence]}"></i></div>
-    ${body}</div>`;
+    ${byline(f)}${body}${confirmRow(f)}</div>`;
 }
 
 const chips = a => `<div class="chips">${a.map(x => `<span class="chip">${esc(x)}</span>`).join("")}</div>`;
@@ -334,7 +426,9 @@ $("#lightbox").onclick = () => $("#lightbox").close();
 function render(d) {
   const site = d.website_url
     ? `<a href="${esc(d.website_url)}" target="_blank" rel="noopener">${esc(d.website_url)}</a>`
-      + (d.site_reachable === false ? ` <span class="none">— not loading</span>` : "")
+      + ({blocked: ` <span class="warnish">— blocked our reader; the site itself is probably fine</span>`,
+          error: ` <span class="none">— returning an error</span>`,
+          unreachable: ` <span class="none">— not loading</span>`}[d.site_status] || "")
     : `<span class="none">no website found</span>`;
 
   // The counts say at a glance how much of this you can rely on.
@@ -374,6 +468,34 @@ function render(d) {
       </a>`;
     }).join("")}</div></section>` : "";
 
+  const STATUSES = ["new", "to visit", "visited", "interested", "not interested"];
+  const statusbar = d.lead_id ? `<div class="statusbar">${
+    STATUSES.map(t => `<button class="mini" aria-pressed="${d.status === t}"
+      onclick="setStatus('${t}')">${t}</button>`).join("")}</div>` : "";
+
+  // Read top to bottom, the trail explains every value on this page.
+  const trail = (d.events || []).length ? `<section class="in">
+    <h3 class="head">Trail — every change, and who made it</h3>
+    <div class="trail">${d.events.map(e => {
+      const what = e.kind === "status"
+        ? `status → <b>${esc(e.new_value)}</b>`
+        : e.kind === "note" ? `note`
+        : `${esc(e.kind)} <b>${esc(e.field)}</b> as ${esc(e.new_value)}`
+          + (e.old_value && e.old_value !== e.new_value
+             ? ` <em style="color:var(--faint)">(was ${esc(e.old_value)})</em>` : "");
+      return `<div class="ev"><div class="rail"><span class="pip"></span><span class="line"></span></div>
+        <div><div class="what">${what}</div>
+        ${e.note ? `<div class="what"><q>${esc(e.note)}</q></div>` : ""}
+        <div class="when">${esc(e.actor)} · ${when(e.at)}</div></div></div>`;
+    }).join("")}</div>
+    <div class="confirm"><input id="newnote" placeholder="add a note — what you saw or were told"
+      onkeydown="if(event.key==='Enter')addNote()">
+      <button class="mini" onclick="addNote()">Add note</button></div></section>`
+    : (d.lead_id ? `<section class="in"><h3 class="head">Trail</h3>
+        <div class="confirm"><input id="newnote" placeholder="add a note — what you saw or were told"
+          onkeydown="if(event.key==='Enter')addNote()">
+          <button class="mini" onclick="addNote()">Add note</button></div></section>` : "");
+
   const asks = d.open_questions.length ? `<section class="in">
     <h3 class="head">Ask them</h3><div class="asks">${d.open_questions.map(q =>
       `<div class="ask"><span class="q">?</span><span>${esc(q)}</span></div>`).join("")}</div></section>` : "";
@@ -393,7 +515,7 @@ function render(d) {
       </div>
       ${scores ? `<div class="scorecard">${scores}</div>` : ""}
     </div>
-    ${chain}${facts}${ratings}${published(d.published)}${asks}${notes}
+    ${statusbar}${chain}${facts}${ratings}${published(d.published)}${asks}${notes}${trail}
     <footer><span>sources consulted</span>${
       (d.sources_consulted.length ? d.sources_consulted : ["none"])
         .map(s => `<span class="chip">${esc(s)}</span>`).join("")}</footer>`;

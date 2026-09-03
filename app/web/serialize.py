@@ -62,6 +62,7 @@ def brief_to_dict(brief: Brief) -> dict:
             brief.location),
         "website_url": brief.website_url,
         "site_reachable": brief.site_reachable,
+        "site_status": brief.site_status,
         "notes": brief.notes,
         "facts": [fact_to_dict(f) for f in brief.facts],
         "published": (published_to_dict(published)
