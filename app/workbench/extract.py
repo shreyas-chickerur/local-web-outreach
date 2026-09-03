@@ -18,6 +18,7 @@ markup, and every extracted value is escaped at render time.
 
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass, field
 from html import unescape
@@ -179,6 +180,10 @@ class ExtractedSite:
     menu_media: list[dict] = field(default_factory=list)   # {url, kind, label}
     # A dedicated locations page is the clearest sign of more than one branch.
     has_locations_page: bool = False
+    # A business publishing its own phone and address is an independent source:
+    # it is what lets a directory's claim reach two-source confirmation.
+    phone: str | None = None
+    address: str | None = None
 
     def is_empty(self) -> bool:
         return not any((self.about, self.services, self.products, self.hours, self.actions,
@@ -251,6 +256,97 @@ _SOCIAL_PILE_RE = re.compile(
 _MERCH_RE = re.compile(
     r"\b(tee|t-shirt|shirt|hoodie|cap|hat|mug|sticker|merch\w*|gift set|"
     r"apparel|koozie|tumbler)\b", re.IGNORECASE)
+
+
+_LD_RE = re.compile(
+    r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+    re.IGNORECASE | re.DOTALL)
+_TEL_HREF_RE = re.compile(r'href=["\']tel:([^"\']+)["\']', re.IGNORECASE)
+_PHONE_SHAPE_RE = re.compile(r"(\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4})")
+_DAY_RE = re.compile(r"^(mo|tu|we|th|fr|sa|su)", re.IGNORECASE)
+
+
+def _ld_nodes(html: str):
+    """Every schema.org node on the page, however it is nested.
+
+    Sites wrap their business record in @graph, in a list, or in neither, so
+    walk whatever shape comes back rather than assuming one.
+    """
+    for block in _LD_RE.findall(html):
+        try:
+            data = json.loads(unescape(block.strip()))
+        except (ValueError, TypeError):
+            continue
+        stack = [data]
+        while stack:
+            node = stack.pop()
+            if isinstance(node, dict):
+                yield node
+                stack.extend(v for v in node.values() if isinstance(v, (dict, list)))
+            elif isinstance(node, list):
+                stack.extend(node)
+
+
+def _ld_address(node: dict) -> str | None:
+    """A schema.org PostalAddress, flattened the way a directory writes it."""
+    address = node.get("address")
+    if isinstance(address, str):
+        return _text(address) or None
+    if not isinstance(address, dict):
+        return None
+    raw = [address.get(k) for k in
+           ("streetAddress", "addressLocality", "addressRegion", "postalCode")]
+    parts = [_text(str(v)) for v in raw
+             if isinstance(v, (str, int)) and str(v).strip()]
+    if len(parts) < 2:            # a lone city is not an address
+        return None
+    # "123 Main St, Frisco, TX 75033" — region and postcode belong together.
+    head = ", ".join(parts[:-1]) if len(parts) > 2 else parts[0]
+    return f"{head} {parts[-1]}" if len(parts) > 2 else ", ".join(parts)
+
+
+def _ld_hours(node: dict) -> list[str]:
+    """openingHours as a list of strings, whichever of the two shapes is used."""
+    raw = node.get("openingHours") or node.get("openingHoursSpecification")
+    out: list[str] = []
+    for entry in (raw if isinstance(raw, list) else [raw] if raw else []):
+        if isinstance(entry, str) and _DAY_RE.match(entry.strip()):
+            out.append(_text(entry))
+        elif isinstance(entry, dict):
+            days = entry.get("dayOfWeek")
+            days = days if isinstance(days, list) else [days] if days else []
+            names = [str(d).rsplit("/", 1)[-1][:3] for d in days if d]
+            opens, closes = entry.get("opens"), entry.get("closes")
+            if names and opens and closes:
+                out.append(f"{'-'.join(names)} {opens}-{closes}")
+    return out[:7]
+
+
+def read_structured_data(html: str) -> tuple[str | None, str | None, list[str]]:
+    """(phone, address, hours) as the business publishes them about itself.
+
+    Prefers schema.org, which is what a business tells search engines it is,
+    and falls back to a tel: link — the number a visitor would actually tap.
+    """
+    phone = address = None
+    hours: list[str] = []
+    for node in _ld_nodes(html):
+        types = node.get("@type")
+        types = types if isinstance(types, list) else [types]
+        if not any(isinstance(t, str) and (
+                "Business" in t or "Store" in t or "Restaurant" in t
+                or "Organization" in t or "Service" in t) for t in types):
+            continue
+        phone = phone or (_text(str(node.get("telephone"))) if node.get("telephone") else None)
+        address = address or _ld_address(node)
+        hours = hours or _ld_hours(node)
+    if phone is None:
+        found = _TEL_HREF_RE.search(html) or _PHONE_SHAPE_RE.search(html)
+        if found:
+            phone = _text(found.group(1))
+    if phone and not _PHONE_SHAPE_RE.search(phone):
+        phone = None              # an extension or a short code, not a number
+    return phone, address, hours
 
 
 def _clean_service(candidate: str) -> str | None:
@@ -338,6 +434,8 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
     out.services = out.services[:12]
     out.products = out.products[:8]
 
+    out.phone, out.address, ld_hours = read_structured_data(html)
+
     # Match the href AND the link text: a multi-location brand often uses a
     # "LOCATIONS" dropdown with no /locations URL behind it, which is how a
     # three-city restaurant group went unflagged.
@@ -350,7 +448,10 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
     out.menu_media = extract_menu_media(clean, base_url)
 
     page_text = _text(clean)
-    out.hours = _dedupe_hours(m.group(0).strip() for m in _HOURS_RE.finditer(page_text))[:7]
+    # Structured data first: it is what the business tells search engines, and
+    # it survives a footer whose opening times are drawn as an image.
+    out.hours = _dedupe_hours(
+        ld_hours + [m.group(0).strip() for m in _HOURS_RE.finditer(page_text)])[:7]
 
     base_host = urlparse(base_url).netloc.lower().replace("www.", "")
     action_seen: set[str] = set()
@@ -400,6 +501,8 @@ def merge(primary: ExtractedSite, extra: ExtractedSite) -> ExtractedSite:
     primary.site_host = primary.site_host or extra.site_host
     primary.has_locations_page = primary.has_locations_page or extra.has_locations_page
     primary.about = primary.about or extra.about
+    primary.phone = primary.phone or extra.phone
+    primary.address = primary.address or extra.address
     primary.description = primary.description or extra.description
     for svc in extra.services:
         if svc.lower() not in {s.lower() for s in primary.services} and len(primary.services) < 12:

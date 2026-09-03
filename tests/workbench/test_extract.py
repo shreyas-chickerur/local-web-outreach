@@ -212,3 +212,33 @@ def test_stylesheet_is_not_followed_as_a_page():
             '<a href="/menus/">Menus</a>')
     assert menu_page_urls(html, "https://example.com/") == [
         "https://example.com/menus/"]
+
+
+def test_schema_org_gives_the_business_its_own_voice():
+    """Their own site publishing a phone is what lets a lone directory listing
+    reach two-source confirmation instead of staying unverified forever."""
+    html = """<html><body>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@graph":[
+      {"@type":"Restaurant","name":"Test Co","telephone":"(972) 377-2046",
+       "address":{"@type":"PostalAddress","streetAddress":"9225 Preston Rd",
+                  "addressLocality":"Frisco","addressRegion":"TX",
+                  "postalCode":"75033"},
+       "openingHours":["Mo-Su 11:00-21:00"]}]}
+    </script></body></html>"""
+    site = extract_from_html(html, "https://example.com/")
+    assert site.phone == "(972) 377-2046"
+    assert site.address == "9225 Preston Rd, Frisco, TX 75033"
+    assert site.hours
+
+
+def test_a_tel_link_is_the_fallback_phone():
+    site = extract_from_html('<a href="tel:+14694962778">Call</a>',
+                             "https://example.com/")
+    assert site.phone is not None and "469" in site.phone
+
+
+def test_broken_json_ld_does_not_take_the_page_down():
+    """Half the web ships malformed structured data."""
+    html = '<script type="application/ld+json">{not json,,}</script><h2>Catering</h2>'
+    assert extract_from_html(html, "https://example.com/").services == ["Catering"]

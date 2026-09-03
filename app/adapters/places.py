@@ -54,7 +54,7 @@ class GooglePlacesDirectory:
                 d = self._client.get(
                     DETAILS_URL,
                     params={"place_id": place_id,
-                            "fields": "formatted_phone_number,website",
+                            "fields": "formatted_phone_number,website,opening_hours",
                             "key": self._api_key},
                 )
                 d.raise_for_status()
@@ -62,6 +62,7 @@ class GooglePlacesDirectory:
             except (httpx.HTTPError, ValueError):
                 details = {}
 
+        weekday_text = (details.get("opening_hours") or {}).get("weekday_text") or []
         rating = top.get("rating")
         return DirectoryPlace(
             name=top.get("name", ""),
@@ -72,4 +73,5 @@ class GooglePlacesDirectory:
                         if place_id else "https://www.google.com/maps"),
             rating=float(rating) if rating is not None else None,
             review_count=top.get("user_ratings_total"),
+            hours=tuple(str(h) for h in weekday_text[:7]),
         )

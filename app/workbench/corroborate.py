@@ -68,6 +68,10 @@ class Fact:
     # For a CONFLICT, who said what. Two values joined by a pipe are unreadable —
     # the question is always which source to believe.
     candidates: list[dict] = dc_field(default_factory=list)
+    # Sources that disagreed with an otherwise well-supported value. Two
+    # directories agreeing while the business's own site says something else is
+    # a finding worth carrying, not a reason to throw the agreement away.
+    dissent: list[dict] = dc_field(default_factory=list)
 
     @property
     def is_fact(self) -> bool:
@@ -130,7 +134,16 @@ def corroborate(claims: list[RawClaim]) -> list[Fact]:
         all_sources = [{"source_type": c.source_type.value, "source_url": c.source_url}
                        for c in group]
 
-        if len(by_value) > 1:
+        # Rank by how many independent sources back each value. A value backed
+        # by two sources beats a lone dissenter; only a genuine tie is a
+        # conflict, because only then is there no reason to prefer either.
+        ranked = sorted(by_value.values(),
+                        key=lambda claims: len({c.source_url for c in claims}),
+                        reverse=True)
+        top = len({c.source_url for c in ranked[0]})
+        runner_up = len({c.source_url for c in ranked[1]}) if len(ranked) > 1 else 0
+
+        if len(by_value) > 1 and (top < 2 or top == runner_up):
             facts.append(Fact(
                 field=field_name,
                 value=" | ".join(sorted({c.value for c in group})),
@@ -143,15 +156,20 @@ def corroborate(claims: list[RawClaim]) -> list[Fact]:
             ))
             continue
 
-        winning = next(iter(by_value.values()))
+        winning = ranked[0]
+        dissent = [{"value": c.value, "source_type": c.source_type.value,
+                    "source_url": c.source_url}
+                   for claims in ranked[1:] for c in claims]
         distinct = len({c.source_url for c in winning})
         facts.append(Fact(
             field=field_name,
             value=winning[0].value,
             confidence=Confidence.VERIFIED if distinct >= 2 else Confidence.UNVERIFIED,
-            score=min(0.6 + 0.15 * distinct, 0.98) if distinct >= 2 else 0.5,
+            score=(min(0.6 + 0.15 * distinct, 0.98) - (0.1 if dissent else 0.0)
+                   if distinct >= 2 else 0.5),
             corroborations=distinct,
             sources=[{"source_type": c.source_type.value, "source_url": c.source_url}
                      for c in winning],
+            dissent=dissent,
         ))
     return facts

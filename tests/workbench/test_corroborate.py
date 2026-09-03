@@ -6,7 +6,7 @@ from __future__ import annotations
 import pytest
 
 from app.workbench.corroborate import corroborate, normalize
-from app.workbench.types import RawClaim, SourceType
+from app.workbench.types import Confidence, RawClaim, SourceType
 
 pytestmark = pytest.mark.unit
 
@@ -99,3 +99,35 @@ def test_a_state_spelled_out_matches_its_abbreviation():
     ])
     assert facts[0].confidence.value == "verified"
     assert facts[0].corroborations == 3
+
+
+def test_two_agreeing_sources_beat_one_dissenter():
+    """Ryno Lawn Care's own site lists a different number than its listings.
+    That is worth knowing, but it should not erase the fact that Google and
+    Yelp agree — a single dissenter used to drop the field to a 30% conflict."""
+    claims = [
+        RawClaim(field="phone", value="(469) 496-2778",
+                 source_url="https://g", source_type=SourceType.GBP),
+        RawClaim(field="phone", value="(469) 496-2778",
+                 source_url="https://y", source_type=SourceType.YELP),
+        RawClaim(field="phone", value="(214) 728-8894",
+                 source_url="https://their-site",
+                 source_type=SourceType.EXISTING_SITE),
+    ]
+    fact = corroborate(claims)[0]
+    assert fact.confidence is Confidence.VERIFIED
+    assert fact.value == "(469) 496-2778"
+    assert [d["value"] for d in fact.dissent] == ["(214) 728-8894"]
+    # Disagreement is not free: it costs confidence without hiding the answer.
+    assert fact.score < 0.9
+
+
+def test_an_even_split_stays_a_conflict():
+    """With one source each way there is no reason to prefer either."""
+    claims = [
+        RawClaim(field="phone", value="(111) 111-1111",
+                 source_url="https://g", source_type=SourceType.GBP),
+        RawClaim(field="phone", value="(222) 222-2222",
+                 source_url="https://y", source_type=SourceType.YELP),
+    ]
+    assert corroborate(claims)[0].confidence is Confidence.CONFLICT

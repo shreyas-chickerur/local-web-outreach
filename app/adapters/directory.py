@@ -33,6 +33,9 @@ class DirectoryPlace:
     rating: float | None = None
     review_count: int | None = None
     categories: tuple[str, ...] = ()
+    # Opening hours, when the source publishes them. A second source for hours
+    # is what turns "ask them their hours" into a fact you already have.
+    hours: tuple[str, ...] = ()
 
 
 class DirectorySource(Protocol):

@@ -17,7 +17,7 @@ Two paths in:
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from app.adapters.directory import DirectoryPlace, DirectorySource
 from app.adapters.site_fetch import HttpSiteFetcher, SiteFetcher
@@ -29,6 +29,9 @@ from app.workbench.extract import (
     menu_page_urls,
     merge,
 )
+from app.workbench.hours import canonical as canonical_hours
+from app.workbench.hours import describe as describe_hours
+from app.workbench.hours import from_canonical as hours_from_canonical
 from app.workbench.match import same_business
 from app.workbench.resolve import (
     ResolvedInput,
@@ -134,6 +137,10 @@ def _claims_from_place(place: DirectoryPlace, source_type: SourceType) -> list[R
     if place.phone:
         claims.append(RawClaim(field="phone", value=place.phone,
                                source_url=place.source_url, source_type=source_type))
+    schedule = canonical_hours(list(place.hours))
+    if schedule:
+        claims.append(RawClaim(field="hours", value=schedule,
+                               source_url=place.source_url, source_type=source_type))
     if place.rating:
         claims.append(RawClaim(field="rating", value=str(place.rating),
                                source_url=place.source_url, source_type=source_type))
@@ -226,6 +233,22 @@ def build_brief(
             brief.assumptions.append(
                 f"website found via {source_name}: {place.website}")
 
+    # What a business publishes about itself is an independent source. Without
+    # this, a single directory listing could never reach two-source
+    # confirmation, and everything stayed UNVERIFIED no matter how plainly the
+    # number was printed on their own homepage.
+    def _claims_from_site(site: ExtractedSite, url: str) -> list[RawClaim]:
+        out: list[RawClaim] = []
+        for name, value in (("phone", site.phone), ("address", site.address)):
+            if value:
+                out.append(RawClaim(field=name, value=value, source_url=url,
+                                    source_type=SourceType.EXISTING_SITE))
+        schedule = canonical_hours(site.hours)
+        if schedule:
+            out.append(RawClaim(field="hours", value=schedule, source_url=url,
+                                source_type=SourceType.EXISTING_SITE))
+        return out
+
     # A website discovered by a directory still needs reading.
     if brief.website_url and brief.published is None:
         published, reachable = _read_their_site(brief.website_url, fetcher)
@@ -233,6 +256,8 @@ def build_brief(
         brief.published = published
         if reachable:
             brief.sources_consulted.append("their website")
+    if brief.published is not None and brief.website_url:
+        raw_claims.extend(_claims_from_site(brief.published, brief.website_url))
 
     if brief.website_url is None:
         brief.open_questions.append(
@@ -255,6 +280,12 @@ def build_brief(
         raw_claims = [c for c in raw_claims if c not in vague]
 
     brief.facts = corroborate(raw_claims)
+    # "mon:0800-1700 tue:..." exists so two sources can be compared. Nobody
+    # should have to read it, so put the human phrasing back afterwards.
+    brief.facts = [
+        replace(f, value=describe_hours(hours_from_canonical(f.value)))
+        if f.field == "hours" and f.value else f
+        for f in brief.facts]
     brief.chain_signals = chain_signals(brief.facts, brief.website_url, brief.published)
 
     # A town name is not a service. Only the brief knows which towns are in play.
@@ -274,6 +305,8 @@ def build_brief(
             p for p in brief.published.products if p.strip().lower() not in towns]
 
     known = {f.field for f in brief.confident_facts}
+    _NOUN = {"address": "their street address", "phone": "their phone number",
+             "hours": "their opening hours"}
     for wanted, question in (
         ("address", "What is their street address?"),
         ("phone", "What number do customers actually call?"),
@@ -288,7 +321,8 @@ def build_brief(
                        and f.confidence is Confidence.UNVERIFIED), None)
         if single is not None:
             brief.open_questions.append(
-                f"Only {single.sources[0]['source_type']} lists this — confirm "
+                f"{_NOUN[wanted].capitalize()}: only "
+                f"{single.sources[0]['source_type']} lists it — confirm "
                 f"{single.value}?")
         else:
             brief.open_questions.append(question)
@@ -345,6 +379,10 @@ def format_brief(brief: Brief) -> str:
             for src in fact.sources:
                 lines.append(
                     f"{'':30}<- {src.get('source_type')}: {src.get('source_url', '')[:58]}")
+            for other in fact.dissent:
+                lines.append(
+                    f"{'':30}!! {other.get('source_type')} disagrees: "
+                    f"{other.get('value')}")
 
     pub = brief.published
     has_published = pub is not None and any(
