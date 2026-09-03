@@ -15,10 +15,12 @@
   *,*::before,*::after{box-sizing:border-box}
   html,body{margin:0;padding:0;height:100%}
   :root{
-    --bg:#e9ecef;--panel:#ffffff;--panel-2:#f3f5f7;--inset:#eceff2;
-    --border:#dce0e6;--border-strong:#c3cad3;
-    --fg:#1b2129;--fg-muted:#5a6472;--fg-faint:#8b95a3;
-    --accent:oklch(0.55 0.16 264);--accent-fg:#ffffff;--accent-soft:oklch(0.955 0.028 264);--accent-border:oklch(0.86 0.06 264);
+    --bg:#eef1f4;--panel:#ffffff;--panel-2:#f5f7f9;--inset:#eaeef2;
+    --border:#dde3ea;--border-strong:#bfc9d4;
+    --fg:#141a21;--fg-muted:#54606e;--fg-faint:#8794a2;
+    --accent:oklch(0.52 0.15 248);--accent-fg:#ffffff;--accent-soft:oklch(0.965 0.03 248);--accent-border:oklch(0.85 0.07 248);
+    --accent-2:oklch(0.62 0.15 190);
+    --grad:linear-gradient(135deg,oklch(0.52 0.15 248),oklch(0.58 0.14 205));
     --ok:oklch(0.52 0.13 150);--ok-soft:oklch(0.955 0.045 150);--ok-border:oklch(0.83 0.08 150);
     --warn:oklch(0.58 0.11 74);--warn-soft:oklch(0.955 0.05 85);--warn-border:oklch(0.85 0.09 85);
     --bad:oklch(0.53 0.18 27);--bad-soft:oklch(0.955 0.04 27);--bad-border:oklch(0.85 0.09 27);
@@ -29,14 +31,16 @@
     --bg:#0b0e12;--panel:#14181e;--panel-2:#1a1f27;--inset:#0f1318;
     --border:#242b34;--border-strong:#333c48;
     --fg:#e6eaf0;--fg-muted:#98a2b0;--fg-faint:#69727f;
-    --accent:oklch(0.7 0.14 264);--accent-fg:#0b0e12;--accent-soft:oklch(0.3 0.07 264);--accent-border:oklch(0.46 0.09 264);
+    --accent:oklch(0.72 0.13 248);--accent-fg:#0b0e12;--accent-soft:oklch(0.3 0.07 248);--accent-border:oklch(0.46 0.09 248);
+    --accent-2:oklch(0.74 0.12 190);
+    --grad:linear-gradient(135deg,oklch(0.72 0.13 248),oklch(0.74 0.12 195));
     --ok:oklch(0.74 0.14 150);--ok-soft:oklch(0.28 0.06 150);--ok-border:oklch(0.42 0.08 150);
     --warn:oklch(0.8 0.12 82);--warn-soft:oklch(0.3 0.05 82);--warn-border:oklch(0.44 0.07 82);
     --bad:oklch(0.7 0.17 27);--bad-soft:oklch(0.3 0.08 27);--bad-border:oklch(0.46 0.1 27);
     --shadow:0 1px 2px rgba(0,0,0,.45),0 1px 1px rgba(0,0,0,.3);
     --shadow-lg:0 16px 40px rgba(0,0,0,.6),0 4px 10px rgba(0,0,0,.4);
   }
-  body{background:var(--bg);color:var(--fg);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-size:18px;line-height:1.45}
+  body{background:var(--bg);background-image:radial-gradient(circle at 1px 1px,rgba(20,28,38,.045) 1px,transparent 0);background-size:22px 22px;color:var(--fg);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-size:18px;line-height:1.45}
   a{color:var(--accent);text-decoration:none}
   a:hover{color:var(--accent);text-decoration:underline}
   ::-webkit-scrollbar{width:10px;height:10px}
@@ -46,6 +50,14 @@
   summary{list-style:none;cursor:pointer}
   summary::-webkit-details-marker{display:none}
   input,textarea,select{font-family:inherit}
+  @keyframes om-rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @keyframes om-shimmer{0%{background-position:-420px 0}100%{background-position:420px 0}}
+  .lift{transition:transform .16s cubic-bezier(.2,.8,.2,1),box-shadow .16s,border-color .16s}
+  .lift:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:var(--border-strong)}
+  .pressable{transition:transform .1s ease}
+  .pressable:active{transform:scale(.97)}
+  .card-in{animation:om-rise .28s cubic-bezier(.2,.8,.2,1) both}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   @keyframes om-fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   @keyframes om-pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
   .mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
@@ -141,7 +153,7 @@
                 <span class="mono" style="font-size:15px;color:var(--fg-faint);flex-shrink:0;padding-left:6px">{{ col.count }}</span>
               </div>
               <sc-for list="{{ col.cards }}" as="card" hint-placeholder-count="1">
-                <button onClick="{{ card.onOpen }}" style="text-align:left;width:100%;background:var(--panel);border:1px solid {{ card.border }};border-radius:9px;padding:12px;cursor:pointer;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:9px;transition:border-color .12s">
+                <button onClick="{{ card.onOpen }}" class="lift card-in" style="text-align:left;width:100%;background:var(--panel);border:1px solid {{ card.border }};border-radius:11px;padding:13px;cursor:pointer;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:9px">
                   <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
                     <span style="font-size:17.5px;font-weight:600;letter-spacing:-.01em;line-height:1.25">{{ card.name }}</span>
                     <sc-if value="{{ card.hasScore }}" hint-placeholder-val="{{ false }}">
@@ -295,7 +307,7 @@
                           </div>
                         </details>
                         <sc-if value="{{ c.canVerify }}" hint-placeholder-val="{{ true }}">
-                          <button onClick="{{ c.onVerify }}" style="font-size:14.5px;font-weight:600;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-border);border-radius:999px;padding:3px 12px;cursor:pointer">I verified this</button>
+                          <button onClick="{{ c.onVerify }}" class="pressable" style="font-size:14.5px;font-weight:600;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-border);border-radius:999px;padding:3px 12px;cursor:pointer">I verified this</button>
                         </sc-if>
                         <sc-if value="{{ c.vouched }}" hint-placeholder-val="{{ false }}">
                           <span style="font-size:14.5px;color:var(--ok)">✓ verified by {{ c.vouchedBy }}</span>
@@ -695,6 +707,71 @@
         </div>
       </div>
     </sc-if>
+
+    <!-- ===================== HOW THIS WORKS ===================== -->
+    <sc-if value="{{ isHelp }}" hint-placeholder-val="{{ false }}">
+      <div style="flex-shrink:0;padding:14px 24px;border-bottom:1px solid var(--border);background:var(--panel)">
+        <h1 style="margin:0;font-size:21.5px;font-weight:700;letter-spacing:-.01em">How this works</h1>
+        <div style="font-size:16.5px;color:var(--fg-muted);margin-top:3px">Everything you can do here, and what happens when you do it</div>
+      </div>
+      <div style="flex:1;overflow:auto;padding:24px">
+        <div style="max-width:860px;display:flex;flex-direction:column;gap:22px">
+
+          <div style="background:var(--grad);color:#fff;border-radius:14px;padding:22px 24px;box-shadow:var(--shadow-lg)">
+            <div style="font-size:15px;text-transform:uppercase;letter-spacing:.09em;opacity:.85;font-weight:700">The one rule</div>
+            <div style="font-size:21px;font-weight:700;margin-top:8px;line-height:1.35">Nothing reaches a real business until you approve it — twice.</div>
+            <div style="font-size:17px;opacity:.92;margin-top:8px;line-height:1.5">Once for the website, once for the email. Everything else is automated. Your job is judgement, not data entry.</div>
+          </div>
+
+          <div>
+            <h2 style="font-size:18px;font-weight:700;margin:0 0 12px">The five stages</h2>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ helpStages }}" as="h" hint-placeholder-count="5">
+                <div class="lift" style="display:flex;gap:14px;background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:15px 17px">
+                  <div class="mono" style="font-size:15px;font-weight:700;color:var(--accent);flex-shrink:0;width:26px">{{ h.num }}</div>
+                  <div style="min-width:0">
+                    <div style="font-size:17.5px;font-weight:700">{{ h.title }}</div>
+                    <div style="font-size:16.5px;color:var(--fg-muted);margin-top:3px;line-height:1.5">{{ h.body }}</div>
+                    <sc-if value="{{ h.hasYou }}" hint-placeholder-val="{{ false }}">
+                      <div style="font-size:16px;color:var(--accent);margin-top:6px;font-weight:600">You: {{ h.you }}</div>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div>
+            <h2 style="font-size:18px;font-weight:700;margin:0 0 12px">What the words mean</h2>
+            <div style="display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))">
+              <sc-for list="{{ helpTerms }}" as="t" hint-placeholder-count="6">
+                <div style="background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:14px 16px">
+                  <div style="font-size:16.5px;font-weight:700;color:{{ t.color }}">{{ t.term }}</div>
+                  <div style="font-size:16px;color:var(--fg-muted);margin-top:4px;line-height:1.45">{{ t.body }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div>
+            <h2 style="font-size:18px;font-weight:700;margin:0 0 12px">Keyboard</h2>
+            <div style="background:var(--panel);border:1px solid var(--border);border-radius:11px;overflow:hidden">
+              <sc-for list="{{ helpKeys }}" as="k" hint-placeholder-count="6">
+                <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;border-bottom:1px solid var(--border)">
+                  <span class="mono" style="font-size:15px;font-weight:700;background:var(--panel-2);border:1px solid var(--border-strong);border-radius:6px;padding:2px 9px;min-width:38px;text-align:center">{{ k.key }}</span>
+                  <span style="font-size:16.5px;color:var(--fg-muted)">{{ k.does }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:var(--warn-soft);border:1px solid var(--warn-border);border-radius:11px;padding:16px 18px">
+            <div style="font-size:17px;font-weight:700;color:var(--warn)">Nothing sends yet</div>
+            <div style="font-size:16.5px;color:var(--fg-muted);margin-top:5px;line-height:1.5">Sending is not built. Approving an email marks it ready — it does not deliver it. A separate guard also refuses to send while the sender postal address is a placeholder, so an approved email still cannot leave by accident.</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
   </main>
 
   <!-- ===================== CONFIRM / DECISION MODAL ===================== -->
@@ -1036,6 +1113,7 @@ class Component extends DCLogic {
       mkNav("board", "Pipeline", "2px", "board", 0),
       { ...mkNav("review", "Review queue", "50%", "review", S.awaiting), onClick: () => this.go("review") },
       mkNav("approvals", "Approvals log", "2px", "approvals", 0),
+      mkNav("help", "How this works", "2px", "help", 0),
     ];
 
     const out = {
@@ -1044,6 +1122,35 @@ class Component extends DCLogic {
       isReview: S.loaded && S.route.screen === "review",
       isDetail: S.loaded && S.route.screen === "detail",
       isApprovals: S.loaded && S.route.screen === "approvals",
+      isHelp: S.loaded && S.route.screen === "help",
+      helpStages: [
+        { num: "01", title: "Discover", hasYou: false, you: "",
+          body: "You give a town and a category. We pull businesses from Google Places, probe each live website ourselves, and score the ones with real problems — no site, broken site, no HTTPS, not mobile-friendly, or visibly stale. Healthy sites are disqualified on purpose." },
+        { num: "02", title: "Research", hasYou: true, you: "verify anything the machine could not — it is recorded under your name",
+          body: "For each lead we gather facts from independent sources: Google, Yelp, OpenStreetMap, and the business's own site. A fact needs TWO sources that agree before it counts as verified. One source is unverified; sources that disagree are a conflict. We never guess." },
+        { num: "03", title: "Build the website", hasYou: false, you: "",
+          body: "We generate a complete replacement site using only verified facts plus the content they already publish — their menu, hours, services, photos. Anything unverified is left off the page and becomes a question for the owner instead." },
+        { num: "04", title: "Gate 1 — you approve the website", hasYou: true, you: "approve, edit, request changes, or reject",
+          body: "You review the evidence beside the finished page. Approving signs off on that exact version: the approval is bound to a content hash, so if the draft changes afterwards the old approval stops being valid." },
+        { num: "05", title: "Gate 2 — you approve the email", hasYou: true, you: "read it as if you were the owner, then approve or reject",
+          body: "Approving the site drafts the outreach email automatically. It leads with the offer, never criticises their current site, mentions only true specifics, and carries a legally required postal address and one-click opt-out." },
+      ],
+      helpTerms: [
+        { term: "Verified", color: "var(--ok)", body: "Two independent sources agree. Safe to put on the page." },
+        { term: "You verified", color: "var(--ok)", body: "You personally vouched for it. Ships as fact, and the ledger records your name, the time, and how you confirmed it." },
+        { term: "Unverified", color: "var(--warn)", body: "Only one source says so. Left off the site and turned into a question for the owner." },
+        { term: "Conflict", color: "var(--bad)", body: "Sources disagree. Never shipped. Use 'I verified this' to settle it." },
+        { term: "Content hash", color: "var(--fg)", body: "A fingerprint of exactly what you approved. Guarantees an approval can never be silently attached to different text." },
+        { term: "Disqualified", color: "var(--fg-muted)", body: "Not a lead — usually because their existing site is already fine. Nothing is deleted; the record and its evidence stay." },
+      ],
+      helpKeys: [
+        { key: "A", does: "Approve the item you are looking at" },
+        { key: "E", does: "Edit the draft before deciding" },
+        { key: "R", does: "Request changes (keeps it in the queue)" },
+        { key: "X", does: "Reject — disqualifies the business" },
+        { key: "\u2190 \u2192", does: "Move between items in the review queue" },
+        { key: "Esc", does: "Close any dialog without acting" },
+      ],
       nav, navBoard: () => this.go("board"), navReview: () => this.go("review"),
       toggleTheme: () => this.toggleTheme(), themeLabel: S.theme === "dark" ? "Dark" : "Light",
       awaiting: S.awaiting, awaitingLabel: S.awaiting === 1 ? "1 item to review" : S.awaiting + " items to review",
