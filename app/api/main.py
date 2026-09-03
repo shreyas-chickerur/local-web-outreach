@@ -130,6 +130,14 @@ def create_app() -> FastAPI:
     ):
         return _run_decision(session, service.edit_draft, business_id, payload)
 
+    @app.post("/api/claims/{claim_id}/verify", response_model=schemas.Claim)
+    def verify_claim(
+        claim_id: uuid.UUID,
+        payload: schemas.ClaimVerifyIn,
+        session: Session = Depends(get_session),
+    ):
+        return _run_decision(session, service.verify_claim, claim_id, payload)
+
     @app.get("/preview/{token}", response_class=HTMLResponse)
     def site_preview(token: str, session: Session = Depends(get_session)):
         """Serve a generated site as a real, viewable page.

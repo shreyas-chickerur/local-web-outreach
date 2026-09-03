@@ -32,12 +32,18 @@ class Weakness(BaseModel):
 
 
 class Claim(BaseModel):
+    id: uuid.UUID
     field: str
     value: str | None
     status: str
     confidence: float
     corroborations: int
     sources: list[dict[str, Any]]
+    # Set when a human vouched for it — the console shows who and when.
+    verified_by: str | None = None
+    verified_at: datetime | None = None
+    verified_note: str | None = None
+    ships_as_fact: bool = False
 
 
 class WebsiteOut(BaseModel):
@@ -52,7 +58,8 @@ class WebsiteOut(BaseModel):
 class AuditItem(BaseModel):
     ts: str
     actor: str
-    action: str
+    action: str          # raw machine action, shown as subtext
+    title: str           # human-readable headline for this step
     reason: str | None
 
 
@@ -139,6 +146,16 @@ class DraftEditResult(BaseModel):
     business_id: uuid.UUID
     gate: Literal["site", "email"]
     content_hash: str  # the NEW hash — the operator must approve against this
+
+
+class ClaimVerifyIn(BaseModel):
+    """A human vouching for a claim the machine could not corroborate."""
+
+    verifier: str = "operator"
+    # Optional corrected value — an operator checking a CONFLICT usually knows
+    # which of the two candidates is right.
+    value: str | None = None
+    note: str | None = None
 
 
 class DecisionResult(BaseModel):

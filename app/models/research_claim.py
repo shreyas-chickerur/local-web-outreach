@@ -35,7 +35,7 @@ class ResearchClaim(Base):
             ClaimStatus,
             name="claim_status",
             native_enum=False,
-            length=16,
+            length=24,   # fits "operator_verified"
             create_constraint=True,
             values_callable=enum_values,
         ),
@@ -46,9 +46,21 @@ class ResearchClaim(Base):
     # List of {"source_type": ..., "source_url": ...} dicts.
     sources: Mapped[list] = mapped_column(JSON, nullable=False)
     model_version: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    # Set when a human vouches for this claim. Attribution is the whole point:
+    # an operator-verified fact must always name its operator.
+    verified_by: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    verified_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    verified_note: Mapped[str | None] = mapped_column(Text, nullable=True)
     extracted_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=utcnow, nullable=False
     )
+
+    @property
+    def ships_as_fact(self) -> bool:
+        """Machine-corroborated OR vouched for by a named human."""
+        return self.status in (ClaimStatus.VERIFIED, ClaimStatus.OPERATOR_VERIFIED)
 
     def __repr__(self) -> str:  # pragma: no cover - convenience only
         return f"<ResearchClaim {self.field}={self.value!r} status={self.status.value}>"

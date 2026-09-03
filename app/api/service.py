@@ -19,6 +19,8 @@ from app.ai.email_composer import TemplateEmailComposer
 from app.api import schemas
 from app.core.approvals import create_approval, hash_content
 from app.core.audit import latest_transition_reason, record_event
+from app.core.audit_labels import humanize
+from app.core.clock import utcnow
 from app.core.compliance import validate_subject
 from app.core.enums import (
     Actor,
@@ -47,7 +49,12 @@ from app.models.site_weakness import SiteWeakness
 from app.models.website import Website
 from app.stages.outreach import compose_email
 
-_CLAIM_ORDER = {ClaimStatus.VERIFIED: 0, ClaimStatus.CONFLICT: 1, ClaimStatus.UNVERIFIED: 2}
+_CLAIM_ORDER = {
+    ClaimStatus.VERIFIED: 0,
+    ClaimStatus.OPERATOR_VERIFIED: 1,
+    ClaimStatus.CONFLICT: 2,
+    ClaimStatus.UNVERIFIED: 3,
+}
 
 
 def _summary(session: Session, biz: Business) -> schemas.BusinessSummary:
@@ -66,14 +73,22 @@ def _weaknesses(session: Session, business_id: uuid.UUID) -> list[schemas.Weakne
             for w in rows]
 
 
+def _claim_out(c: ResearchClaim) -> schemas.Claim:
+    return schemas.Claim(
+        id=c.id, field=c.field, value=c.value, status=c.status.value,
+        confidence=c.confidence, corroborations=c.corroborations,
+        sources=list(c.sources or []), verified_by=c.verified_by,
+        verified_at=c.verified_at, verified_note=c.verified_note,
+        ships_as_fact=c.ships_as_fact,
+    )
+
+
 def _claims(session: Session, business_id: uuid.UUID) -> list[schemas.Claim]:
     rows = list(session.execute(
         select(ResearchClaim).where(ResearchClaim.business_id == business_id)
     ).scalars().all())
     rows.sort(key=lambda c: (_CLAIM_ORDER.get(c.status, 9), c.field))
-    return [schemas.Claim(field=c.field, value=c.value, status=c.status.value,
-                          confidence=c.confidence, corroborations=c.corroborations,
-                          sources=list(c.sources or [])) for c in rows]
+    return [_claim_out(c) for c in rows]
 
 
 def _latest_draft(session: Session, business_id: uuid.UUID) -> Website | None:
@@ -145,6 +160,7 @@ def get_detail(session: Session, business_id: uuid.UUID) -> schemas.BusinessDeta
         websites=[_website_out(w) for w in _all_websites(session, biz.id)],
         audit=[
             schemas.AuditItem(ts=e.ts, actor=e.actor, action=e.action,
+                              title=humanize(e.action),
                               reason=(e.after or {}).get("reason"))
             for e in session.execute(
                 select(AuditEvent).where(AuditEvent.subject_id == biz.id)
@@ -337,6 +353,46 @@ def edit_draft(
     return schemas.DraftEditResult(
         ok=True, business_id=biz.id, gate="email", content_hash=email.content_hash
     )
+
+
+def verify_claim(
+    session: Session, claim_id: uuid.UUID, payload: schemas.ClaimVerifyIn
+) -> schemas.Claim:
+    """Let a named human vouch for a claim the machine could not corroborate.
+
+    Machine corroboration (two independent sources) is the only route to truth
+    that needs no trust. It is not the only legitimate one: an operator who
+    phones the business knows more than two directories do. So a human may
+    verify a claim — but the ledger records WHO, WHEN, and any correction, and
+    the claim is marked OPERATOR_VERIFIED rather than VERIFIED so the two are
+    never confused.
+    """
+    claim = session.get(ResearchClaim, claim_id)
+    if claim is None:
+        raise NotFoundError(f"claim {claim_id} not found")
+    if claim.status is ClaimStatus.VERIFIED:
+        raise TransitionError("this claim is already corroborated by two sources")
+
+    before = {"status": claim.status.value, "value": claim.value}
+    if payload.value is not None:
+        claim.value = payload.value
+    claim.status = ClaimStatus.OPERATOR_VERIFIED
+    claim.confidence = 1.0          # a human checked it
+    claim.verified_by = payload.verifier
+    claim.verified_at = utcnow()
+    claim.verified_note = payload.note
+    session.flush()
+
+    record_event(
+        session, actor=Actor.HUMAN.value, action="claim:operator_verified",
+        subject_type="research_claim", subject_id=claim.business_id,
+        before=before,
+        after={"field": claim.field, "value": claim.value,
+               "verified_by": payload.verifier,
+               "reason": f"{payload.verifier} verified {claim.field}"
+                         + (f" — {payload.note}" if payload.note else "")},
+    )
+    return _claim_out(claim)
 
 
 def decide_email(

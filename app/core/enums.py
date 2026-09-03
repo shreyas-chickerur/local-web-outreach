@@ -86,6 +86,10 @@ class ClaimStatus(StrEnum):
     VERIFIED = "verified"  # >= 2 independent sources agree
     UNVERIFIED = "unverified"  # single source, or below threshold
     CONFLICT = "conflict"  # sources disagree — never ships; ask the owner
+    # A named human checked this and vouched for it. Ships as fact like VERIFIED,
+    # but the ledger records WHO vouched — machine corroboration is not the only
+    # legitimate route to truth, it is just the only unattended one.
+    OPERATOR_VERIFIED = "operator_verified"
 
 
 class WebsiteState(StrEnum):

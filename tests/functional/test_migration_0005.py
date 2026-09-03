@@ -79,3 +79,43 @@ def test_migrated_schema_accepts_email_and_suppression(tmp_path):
         session.rollback()
         session.close()
         engine.dispose()
+
+
+def test_0007_widens_claim_status_on_a_populated_database(tmp_path):
+    """Migrations run against populated legacy databases, not empty ones."""
+    import sqlite3
+
+    db = tmp_path / "legacy.db"
+    con = sqlite3.connect(db)
+    con.executescript("""
+        CREATE TABLE research_claims (
+          id TEXT PRIMARY KEY, business_id TEXT NOT NULL, field TEXT NOT NULL,
+          value TEXT, status VARCHAR(16) NOT NULL, confidence FLOAT NOT NULL,
+          corroborations INTEGER NOT NULL, sources JSON NOT NULL,
+          model_version VARCHAR(80), extracted_at DATETIME NOT NULL,
+          CONSTRAINT claim_status CHECK (status IN ('verified','unverified','conflict'))
+        );
+        INSERT INTO research_claims VALUES
+          ('c1','b1','phone','(972) 555-0148','verified',0.9,2,'[]',NULL,'2026-01-01');
+    """)
+    con.commit()
+    con.close()
+
+    cfg = _cfg(f"sqlite+pysqlite:///{db}")
+    command.stamp(cfg, "0006_ratings")
+    command.upgrade(cfg, "head")
+
+    con = sqlite3.connect(db)
+    assert con.execute("SELECT COUNT(*) FROM research_claims").fetchone()[0] == 1
+    cols = {r[1] for r in con.execute("PRAGMA table_info(research_claims)")}
+    assert {"verified_by", "verified_at", "verified_note"} <= cols
+    # the widened CHECK admits the new value...
+    cols_sql = ("id,business_id,field,value,status,confidence,corroborations,"
+                "sources,extracted_at")
+    con.execute(f"INSERT INTO research_claims ({cols_sql}) VALUES "
+                "('c2','b1','x','y','operator_verified',1.0,0,'[]','2026-01-01')")
+    # ...but still rejects nonsense
+    with pytest.raises(sqlite3.IntegrityError):
+        con.execute(f"INSERT INTO research_claims ({cols_sql}) VALUES "
+                    "('c3','b1','x','y','bogus',1.0,0,'[]','2026-01-01')")
+    con.close()

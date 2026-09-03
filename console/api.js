@@ -150,6 +150,23 @@ export async function decide({ id, subjectType, decision, contentHash, reason })
 }
 
 /**
+ * Vouch for a claim the machine could not corroborate.
+ *
+ * Machine corroboration (two independent sources) is the only route to truth
+ * that requires no trust — but an operator who phones the business knows more
+ * than two directories do. The server records WHO verified it and when, and
+ * marks the claim `operator_verified` so it is never confused with machine
+ * corroboration.
+ */
+export async function verifyClaim({ claimId, verifier, value, note }) {
+  return http(`/claims/${claimId}/verify`, {
+    method: "POST",
+    body: JSON.stringify({ verifier: verifier || "operator", value: value || null,
+                           note: note || null }),
+  });
+}
+
+/**
  * Apply an operator edit to the draft at the current gate. The server re-hashes
  * the edited content and appends an immutable "edit" audit event; it does NOT
  * change status or record an approval (editing is not a gate decision). The

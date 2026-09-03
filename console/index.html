@@ -134,9 +134,9 @@
           <sc-for list="{{ columns }}" as="col" hint-placeholder-count="6">
             <div style="width:{{ col.width }};flex-shrink:0;display:flex;flex-direction:column;gap:10px">
               <div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px">
-                <div style="display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden">
+                <div style="display:flex;align-items:center;gap:7px;min-width:0">
                   <span style="width:7px;height:7px;border-radius:2px;background:{{ col.dot }};flex-shrink:0"></span>
-                  <span title="{{ col.label }}" style="font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ col.label }}</span>
+                  <span style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--fg-muted);white-space:nowrap">{{ col.label }}</span>
                 </div>
                 <span class="mono" style="font-size:15px;color:var(--fg-faint);flex-shrink:0;padding-left:6px">{{ col.count }}</span>
               </div>
@@ -285,14 +285,25 @@
                           <div style="font-size:14px;color:var(--fg-faint)">{{ c.corrLabel }}</div>
                         </div>
                       </div>
-                      <details style="margin-top:7px;margin-left:14px">
-                        <summary style="font-size:14.5px;color:var(--accent);display:inline-flex;align-items:center;gap:4px">sources ({{ c.sourceCount }})</summary>
-                        <div style="display:flex;flex-direction:column;gap:3px;margin-top:5px;padding-left:2px">
-                          <sc-for list="{{ c.sources }}" as="s" hint-placeholder-count="2">
-                            <a href="{{ s.url }}" target="_blank" rel="noopener" class="mono" style="font-size:14.5px;display:flex;align-items:center;gap:6px;word-break:break-all"><span style="text-transform:uppercase;color:var(--fg-faint);letter-spacing:.04em;flex-shrink:0">{{ s.type }}</span>{{ s.url }}</a>
-                          </sc-for>
-                        </div>
-                      </details>
+                      <div style="display:flex;align-items:center;gap:12px;margin-top:7px;margin-left:14px;flex-wrap:wrap">
+                        <details>
+                          <summary style="font-size:14.5px;color:var(--accent);display:inline-flex;align-items:center;gap:4px">sources ({{ c.sourceCount }})</summary>
+                          <div style="display:flex;flex-direction:column;gap:3px;margin-top:5px;padding-left:2px">
+                            <sc-for list="{{ c.sources }}" as="s" hint-placeholder-count="2">
+                              <a href="{{ s.url }}" target="_blank" rel="noopener" class="mono" style="font-size:14.5px;display:flex;align-items:center;gap:6px;word-break:break-all"><span style="text-transform:uppercase;color:var(--fg-faint);letter-spacing:.04em;flex-shrink:0">{{ s.type }}</span>{{ s.url }}</a>
+                            </sc-for>
+                          </div>
+                        </details>
+                        <sc-if value="{{ c.canVerify }}" hint-placeholder-val="{{ true }}">
+                          <button onClick="{{ c.onVerify }}" style="font-size:14.5px;font-weight:600;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-border);border-radius:999px;padding:3px 12px;cursor:pointer">I verified this</button>
+                        </sc-if>
+                        <sc-if value="{{ c.vouched }}" hint-placeholder-val="{{ false }}">
+                          <span style="font-size:14.5px;color:var(--ok)">✓ verified by {{ c.vouchedBy }}</span>
+                        </sc-if>
+                      </div>
+                      <sc-if value="{{ c.hasVouchNote }}" hint-placeholder-val="{{ false }}">
+                        <div style="font-size:14.5px;color:var(--fg-muted);margin-left:14px;margin-top:3px">“{{ c.vouchedNote }}”</div>
+                      </sc-if>
                     </div>
                   </sc-for>
                 </div>
@@ -628,9 +639,10 @@
                 <div style="padding-bottom:16px;flex:1;min-width:0">
                   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
                     <span style="{{ e.actorStyle }}">{{ e.actor }}</span>
-                    <span style="font-size:17px;font-weight:600">{{ e.action }}</span>
+                    <span style="font-size:17.5px;font-weight:700;letter-spacing:-.01em">{{ e.title }}</span>
                     <span class="mono" style="font-size:14.5px;color:var(--fg-faint)">{{ e.time }}</span>
                   </div>
+                  <div class="mono" style="font-size:13.5px;color:var(--fg-faint);margin-top:2px">{{ e.action }}</div>
                   <sc-if value="{{ e.hasReason }}" hint-placeholder-val="{{ false }}">
                     <div style="font-size:16.5px;color:var(--fg-muted);margin-top:3px">{{ e.reason }}</div>
                   </sc-if>
@@ -744,6 +756,33 @@
     </div>
   </sc-if>
 
+  <!-- ===================== VERIFY CLAIM ===================== -->
+  <sc-if value="{{ verifyOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ cancelVerify }}" style="position:fixed;inset:0;background:rgba(12,15,20,.5);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;z-index:110">
+      <div onClick="{{ stop }}" style="width:min(520px,94vw);background:var(--panel);border:1px solid var(--border-strong);border-radius:14px;box-shadow:var(--shadow-lg);animation:om-fade .18s ease-out">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border)">
+          <div style="font-size:18px;font-weight:700">Verify “{{ verifyField }}” yourself</div>
+          <div style="font-size:16.5px;color:var(--fg-muted);margin-top:2px">Recorded against your name in the audit ledger</div>
+        </div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:14px">
+          <div>
+            <label style="font-size:15px;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);font-weight:600;display:block;margin-bottom:5px">Correct value</label>
+            <textarea onInput="{{ setVerifyValue }}" style="width:100%;font-size:17px;padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg);resize:vertical;min-height:56px" value="{{ verifyValue }}">{{ verifyValue }}</textarea>
+          </div>
+          <div>
+            <label style="font-size:15px;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);font-weight:600;display:block;margin-bottom:5px">How did you confirm it?</label>
+            <input onInput="{{ setVerifyNote }}" placeholder="e.g. called the owner / checked their Facebook page" style="width:100%;font-size:17px;padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg)" value="{{ verifyNote }}">
+          </div>
+          <div style="font-size:16px;color:var(--fg-muted);background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:9px 11px;line-height:1.4">This marks the fact <b>operator-verified</b> — shippable, but recorded separately from machine corroboration, with your name and the time. It can be read back from the audit trail forever.</div>
+        </div>
+        <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:9px">
+          <button onClick="{{ cancelVerify }}" style="padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--fg);font-weight:600;font-size:17px;cursor:pointer">Cancel</button>
+          <button onClick="{{ saveVerify }}" style="padding:8px 18px;border-radius:8px;border:1px solid var(--ok);background:var(--ok);color:#fff;font-weight:600;font-size:17px;cursor:pointer">Verify as me</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
   <!-- ===================== TOAST ===================== -->
   <sc-if value="{{ toastOpen }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:120;background:var(--fg);color:var(--bg);padding:11px 18px;border-radius:10px;box-shadow:var(--shadow-lg);font-size:17px;font-weight:500;display:flex;align-items:center;gap:10px;animation:om-pop .18s ease-out">
@@ -762,7 +801,7 @@ class Component extends DCLogic {
     traceOn: false, highlightField: null,
     closedOpen: false,
     modal: null, modalReason: "",
-    editing: false, editBuf: null,
+    editing: false, editBuf: null, verifying: null, operator: "operator",
     detail: null, detailVersion: null, detailDiff: false,
     aprType: "all", aprDecision: "all",
     toast: null,
@@ -810,8 +849,8 @@ class Component extends DCLogic {
   currentItem() { const q = this.effectiveQueue(); if (!q.length) return null; return q[Math.min(this.state.reviewIndex, q.length - 1)] || null; }
   contentHashFor(item) { if (!item) return ""; return item.gate === "site" ? (item.website ? item.website.content_hash : "") : this.hashStr((item.emailDraft ? item.emailDraft.subject + item.emailDraft.body : "")); }
 
-  statusColor(s) { return s === "verified" ? "var(--ok)" : s === "conflict" ? "var(--bad)" : "var(--warn)"; }
-  statusVars(s) { return s === "verified" ? ["var(--ok)", "var(--ok-soft)", "var(--ok-border)"] : s === "conflict" ? ["var(--bad)", "var(--bad-soft)", "var(--bad-border)"] : ["var(--warn)", "var(--warn-soft)", "var(--warn-border)"]; }
+  statusColor(s) { return (s === "verified" || s === "operator_verified") ? "var(--ok)" : s === "conflict" ? "var(--bad)" : "var(--warn)"; }
+  statusVars(s) { return (s === "verified" || s === "operator_verified") ? ["var(--ok)", "var(--ok-soft)", "var(--ok-border)"] : s === "conflict" ? ["var(--bad)", "var(--bad-soft)", "var(--bad-border)"] : ["var(--warn)", "var(--warn-soft)", "var(--warn-border)"]; }
   sevDot(sev) { const c = sev === "high" ? "var(--fg)" : sev === "medium" ? "var(--fg-muted)" : "var(--fg-faint)"; const filled = sev === "low" ? "transparent" : c; return `width:8px;height:8px;border-radius:2px;border:1.5px solid ${c};background:${filled};flex-shrink:0`; }
 
   // ---- navigation ----
@@ -853,6 +892,34 @@ class Component extends DCLogic {
   moveQueue(delta) { const q = this.effectiveQueue(); if (!q.length) return; const n = Math.min(q.length - 1, Math.max(0, this.state.reviewIndex + delta)); this.setState({ reviewIndex: n, traceOn: false, highlightField: null }); }
   toggleTrace() { this.setState({ traceOn: !this.state.traceOn }); }
 
+  // ---- verify a claim (attributed to the operator) ----
+  openVerify(claim) {
+    this.setState({ verifying: { id: claim.id, field: claim.field,
+      value: claim.value == null ? "" : String(claim.value), note: "" } });
+  }
+  cancelVerify() { this.setState({ verifying: null }); }
+  setVerify(field, v) { this.setState({ verifying: { ...this.state.verifying, [field]: v } }); }
+  async saveVerify() {
+    const v = this.state.verifying; if (!v) return;
+    if (this._verifying) return; this._verifying = true;
+    try {
+      await this.api.verifyClaim({ claimId: v.id, verifier: this.operatorName(),
+                                   value: v.value, note: v.note });
+      await this.refresh();
+      const item = this.currentItem();
+      if (item) { const fresh = await this.api.getReviewQueue();
+        this.setState({ queue: fresh }); }
+      this.setState({ verifying: null, toast: `Verified ${v.field} — recorded as you` });
+      clearTimeout(this._toast);
+      this._toast = setTimeout(() => this.setState({ toast: null }), 2600);
+    } catch (e) {
+      this.setState({ toast: `Could not verify: ${e.message}` });
+      clearTimeout(this._toast);
+      this._toast = setTimeout(() => this.setState({ toast: null }), 4000);
+    } finally { this._verifying = false; }
+  }
+  operatorName() { return this.state.operator || "operator"; }
+
   // ---- edit ----
   openEdit() {
     const item = this.currentItem(); if (!item) return;
@@ -893,6 +960,7 @@ class Component extends DCLogic {
       if (e.key === "Enter" && tag !== "TEXTAREA") { e.preventDefault(); e.stopPropagation(); this.confirmModal(); }
       return;
     }
+    if (this.state.verifying) { if (e.key === "Escape") { e.preventDefault(); this.cancelVerify(); } return; }
     if (this.state.editing) { if (e.key === "Escape") { e.preventDefault(); this.cancelEdit(); } return; }
     if (typing) return;
     if (this.state.route.screen !== "review") return;
@@ -929,8 +997,15 @@ class Component extends DCLogic {
     return (claims || []).map((c) => {
       const [fg, bg, bd] = this.statusVars(c.status);
       const active = interactive && hl === c.field;
+      const vouched = c.status === "operator_verified";
       return {
-        field: c.field, accent: fg, statusLabel: c.status,
+        field: c.field, accent: fg, statusLabel: vouched ? "you verified" : c.status,
+        // Only a claim the machine could NOT corroborate can be vouched for.
+        canVerify: interactive && c.status !== "verified" && c.status !== "operator_verified",
+        vouched, vouchedBy: c.verified_by || "",
+        vouchedNote: c.verified_note || "",
+        hasVouchNote: !!c.verified_note,
+        onVerify: interactive ? () => this.openVerify(c) : (() => {}),
         valueText: c.value == null ? (c.status === "conflict" ? "— sources disagree" : "— not established") : c.value,
         pct: Math.round((c.confidence || 0) * 100) + "%",
         corrLabel: c.corroborations + (c.corroborations === 1 ? " source" : " sources"),
@@ -998,7 +1073,7 @@ class Component extends DCLogic {
       // Empty stages collapse to a narrow strip so the stages that actually hold
       // work stay on screen instead of being pushed off to the right.
       return { label: this.STATUS_LABEL[st] || st, count: cards.length, cards, empty: cards.length === 0,
-        width: cards.length === 0 ? "104px" : "288px",
+        width: cards.length === 0 ? "168px" : "300px",
         dot: gates[st] ? "var(--accent)" : "var(--fg-faint)" };
     });
     const closedCards = closed.flatMap((st) => (byStatus[st] || []).map(mkCard));
@@ -1082,6 +1157,15 @@ class Component extends DCLogic {
 
     // ---- EDIT ----
     out.editing = S.editing; out.cancelEdit = () => this.cancelEdit(); out.saveEdit = () => this.saveEdit();
+    // verify-a-claim modal
+    out.verifyOpen = !!S.verifying;
+    out.verifyField = S.verifying ? S.verifying.field : "";
+    out.verifyValue = S.verifying ? S.verifying.value : "";
+    out.verifyNote = S.verifying ? S.verifying.note : "";
+    out.setVerifyValue = (e) => this.setVerify("value", e.target.value);
+    out.setVerifyNote = (e) => this.setVerify("note", e.target.value);
+    out.cancelVerify = () => this.cancelVerify();
+    out.saveVerify = () => this.saveVerify();
     if (S.editing && item) {
       out.editKind = item.gate === "site" ? "website" : "email"; out.editBusiness = item.business.name;
       out.editGate = item.gate === "site" ? "1" : "2";
@@ -1121,7 +1205,7 @@ class Component extends DCLogic {
         selState: sel ? sel.state.toUpperCase() : "", selHash: sel ? sel.content_hash : "", selUrl: sel ? sel.preview_url : "",
         selSections: sel ? this.buildSections(sel.content, false) : [],
         hasEmail: !!d.emailDraft, noEmail: !d.emailDraft, emailSubject: d.emailDraft ? d.emailDraft.subject : "",
-        audit: (d.audit || []).map((e) => ({ actor: e.actor, action: e.action, time: this.fmtTime(e.ts), hasReason: !!e.reason, reason: e.reason || "", hash: (e.hash || "").slice(0, 8), prevHash: (e.prev_hash || "").slice(0, 8), dot: actorDot(e.actor), actorStyle: actorStyle(e.actor) })),
+        audit: (d.audit || []).map((e) => ({ actor: e.actor, action: e.action, title: e.title || e.action, time: this.fmtTime(e.ts), hasReason: !!e.reason, reason: e.reason || "", hash: (e.hash || "").slice(0, 8), prevHash: (e.prev_hash || "").slice(0, 8), dot: actorDot(e.actor), actorStyle: actorStyle(e.actor) })),
       };
       out.toggleDiff = () => this.setState({ detailDiff: !S.detailDiff });
       out.navReview = () => this.go("review");

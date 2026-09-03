@@ -227,7 +227,11 @@ def generate_website(session: Session, business, *, model_version: str | None = 
     claims = session.execute(
         select(ResearchClaim).where(
             ResearchClaim.business_id == business.id,
-            ResearchClaim.status == ClaimStatus.VERIFIED,
+            # A named human vouching is as shippable as machine corroboration;
+            # the difference is recorded, not used to withhold the fact.
+            ResearchClaim.status.in_(
+                [ClaimStatus.VERIFIED, ClaimStatus.OPERATOR_VERIFIED]
+            ),
         )
     ).scalars().all()
 
