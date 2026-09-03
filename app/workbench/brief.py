@@ -203,9 +203,22 @@ def format_brief(brief: Brief) -> str:
         lines.append("  (nothing corroborated — see open questions)")
     for fact in brief.facts:
         pct = f"{fact.confidence * 100:.0f}%"
-        lines.append(f"  [{fact.status.value:10}] {fact.field:9} {pct:>4}  {fact.value}")
-        for src in fact.sources:
-            lines.append(f"{'':30}<- {src.get('source_type')}: {src.get('source_url', '')[:58]}")
+        if fact.candidates:
+            # A conflict is only useful if you can see who said what.
+            lines.append(f"  [{fact.status.value:10}] {fact.field:9} {pct:>4}  "
+                         f"sources disagree:")
+            for cand in fact.candidates:
+                who = cand.get("source_url", "")
+                label = ("google" if "google" in who else
+                         "yelp" if "yelp" in who else
+                         "openstreetmap" if "openstreetmap" in who else
+                         cand.get("source_type", "source"))
+                lines.append(f"{'':16}{label:>14}: {cand.get('value')}")
+        else:
+            lines.append(f"  [{fact.status.value:10}] {fact.field:9} {pct:>4}  {fact.value}")
+            for src in fact.sources:
+                lines.append(
+                    f"{'':30}<- {src.get('source_type')}: {src.get('source_url', '')[:58]}")
 
     pub = brief.published
     if pub:
@@ -216,9 +229,10 @@ def format_brief(brief: Brief) -> str:
         if pub.services:
             lines.append(f"  services: {', '.join(pub.services[:6])}")
         if pub.menu_items:
-            lines.append(f"  menu:     {len(pub.menu_items)} priced items")
+            lines.append(f"  pricing:  {len(pub.menu_items)} priced items")
         if pub.menu_media:
-            lines.append(f"  menu doc: {len(pub.menu_media)} (PDF/photo)")
+            kinds = ", ".join(sorted({m["kind"] for m in pub.menu_media}))
+            lines.append(f"  menu/price doc: {len(pub.menu_media)} ({kinds})")
         if pub.hours:
             lines.append(f"  hours:    {' | '.join(pub.hours[:3])}")
         if pub.images:

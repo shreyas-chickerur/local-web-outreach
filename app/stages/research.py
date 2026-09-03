@@ -40,6 +40,9 @@ class ResolvedClaim:
     confidence: float
     corroborations: int
     sources: list[dict]
+    # For a CONFLICT, who said what. Without this the reader sees two values
+    # joined by a pipe and has no way to judge which source to believe.
+    candidates: list[dict] = dc_field(default_factory=list)
 
 
 @dataclass
@@ -150,16 +153,21 @@ def corroborate(claims: list[RawClaim]) -> list[ResolvedClaim]:
         ]
 
         if len(by_value) > 1:
-            # Sources disagree on this field.
-            candidates = " | ".join(sorted({c.value for c in group}))
+            # Sources disagree on this field. Keep the pairing of value to source
+            # so a person can judge which one to trust.
             resolved.append(
                 ResolvedClaim(
                     field=field_name,
-                    value=candidates,
+                    value=" | ".join(sorted({c.value for c in group})),
                     status=ClaimStatus.CONFLICT,
                     confidence=0.3,
                     corroborations=len(all_sources),
                     sources=all_sources,
+                    candidates=[
+                        {"value": c.value, "source_type": c.source_type.value,
+                         "source_url": c.source_url}
+                        for c in group
+                    ],
                 )
             )
             continue

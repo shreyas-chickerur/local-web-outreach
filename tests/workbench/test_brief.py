@@ -161,3 +161,48 @@ def test_format_brief_shows_confidence_and_sources():
                                     directories=[a, b], fetcher=_Fetcher(ok=False)))
     assert "verified" in text and "90%" in text
     assert "maps.google" in text and "yelp.com" in text
+
+
+# ------------------- reading the brief, not just producing it ---------------- #
+def test_a_conflict_shows_which_source_said_what():
+    """Two values joined by a pipe are unreadable — you cannot tell whether it
+    is Google or Yelp claiming the 2.4 rating, which is the whole question."""
+    a = _Dir("google", _place(name="Ryno Lawn Care", rating=4.8,
+                              source_url="https://maps.google.com/x"))
+    b = _Dir("yelp", _place(name="Ryno Lawn Care", rating=2.4,
+                            source_url="https://www.yelp.com/biz/x"))
+    brief = build_brief("Ryno Lawn Care, Frisco, TX", directories=[a, b],
+                        fetcher=_Fetcher(ok=False))
+    rating = next(f for f in brief.facts if f.field == "rating")
+    assert rating.status.value == "conflict"
+    by_source = {c["source_url"]: c["value"] for c in rating.candidates}
+    assert by_source["https://maps.google.com/x"] == "4.8"
+    assert by_source["https://www.yelp.com/biz/x"] == "2.4"
+
+    text = format_brief(brief)
+    assert "google: 4.8" in text
+    assert "yelp: 2.4" in text
+
+
+def test_marketing_headlines_are_not_listed_as_services():
+    """'What We Do Best' and 'Enjoy a Weed Free Lawn' are copy, not offerings."""
+    html = """<html><head><title>Ryno Lawn Care</title></head><body>
+      <h2>What We Do Best</h2><h2>Enjoy a Weed Free Lawn</h2>
+      <h2>Ryno Lawn Care?</h2><h2>Sustainable Lawn Care</h2>
+      <h2>Premium Sod Installation</h2></body></html>"""
+    brief = build_brief("rynolawncare.com", fetcher=_Fetcher(html))
+    services = brief.published.services
+    assert "Sustainable Lawn Care" in services
+    assert "Premium Sod Installation" in services
+    assert not any(s in services for s in
+                   ("What We Do Best", "Enjoy a Weed Free Lawn", "Ryno Lawn Care?"))
+
+
+def test_the_same_hours_written_twice_appear_once():
+    html = """<html><head><title>Ryno Lawn Care</title></head><body>
+      <p>Mon-Fri 8am-5pm</p><p>Sat-Sun Closed</p>
+      <p>Mon-Fri 8:00am - 5:00pm</p></body></html>"""
+    brief = build_brief("rynolawncare.com", fetcher=_Fetcher(html))
+    hours = brief.published.hours
+    assert len(hours) == 2
+    assert any("8:00am" in h for h in hours)     # the fuller spelling is kept

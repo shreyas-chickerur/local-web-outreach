@@ -178,6 +178,30 @@ class ExtractedSite:
                         self.images, self.menu_items))
 
 
+def _hours_key(text: str) -> str:
+    """'Mon-Fri 8am-5pm' and 'Mon-Fri 8:00am - 5:00pm' are the same entry."""
+    lowered = re.sub(r"[^a-z0-9]", "", (text or "").lower())
+    return re.sub(r"(\d)00", r"\1", lowered)      # 800am -> 8am
+
+
+def _dedupe_hours(values) -> list[str]:  # noqa: ANN001
+    seen: dict[str, str] = {}
+    for value in values:
+        key = _hours_key(value)
+        # Keep the longest spelling — it is the one with the most information.
+        if key not in seen or len(value) > len(seen[key]):
+            seen[key] = value
+    return list(seen.values())
+
+
+# Headlines sell; they do not name an offering. "What We Do Best" and "Enjoy a
+# Weed Free Lawn" are copy, and listing them as services makes the brief noise.
+_MARKETING_RE = re.compile(
+    r"^(what we|why |how we|enjoy |get |our commitment|welcome|discover |"
+    r"experience |let us|we (are|offer|provide|believe)|the .* difference)"
+    r"|[?!]$", re.IGNORECASE)
+
+
 def _clean_service(candidate: str) -> str | None:
     text = _text(candidate)
     if not (3 <= len(text) <= 60):
@@ -189,6 +213,8 @@ def _clean_service(candidate: str) -> str | None:
     if re.search(r"(https?://|@|\d{3}[-.\s]\d{4})", text):
         return None
     if _SOCIAL_PROOF_RE.search(text):     # awards/press are not offerings
+        return None
+    if _MARKETING_RE.search(text):        # headlines are copy, not offerings
         return None
     return text
 
@@ -248,7 +274,7 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
     out.menu_media = extract_menu_media(clean, base_url)
 
     page_text = _text(clean)
-    out.hours = list(dict.fromkeys(m.group(0).strip() for m in _HOURS_RE.finditer(page_text)))[:7]
+    out.hours = _dedupe_hours(m.group(0).strip() for m in _HOURS_RE.finditer(page_text))[:7]
 
     base_host = urlparse(base_url).netloc.lower().replace("www.", "")
     action_seen: set[str] = set()
