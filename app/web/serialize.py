@@ -14,7 +14,6 @@ from app.workbench.extract import ExtractedSite
 _LABELS = {
     "address": "Address",
     "phone": "Phone",
-    "rating": "Rating",
     "services": "Services",
 }
 
@@ -71,4 +70,5 @@ def brief_to_dict(brief: Brief) -> dict:
         "open_questions": brief.open_questions,
         "sources_consulted": brief.sources_consulted,
         "chain_signals": brief.chain_signals,
+        "ratings": brief.ratings,
     }

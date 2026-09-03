@@ -165,24 +165,25 @@ def test_format_brief_shows_confidence_and_sources():
 
 
 # ------------------- reading the brief, not just producing it ---------------- #
-def test_a_conflict_shows_which_source_said_what():
-    """Two values joined by a pipe are unreadable — you cannot tell whether it
-    is Google or Yelp claiming the 2.4 rating, which is the whole question."""
+def test_ratings_are_listed_per_platform_not_corroborated():
+    """Google's 4.8 and Yelp's 2.4 are not a disagreement to resolve — they
+    measure different review populations, so both are reported, with the review
+    counts that say how much each one is worth."""
     a = _Dir("google", _place(name="Ryno Lawn Care", rating=4.8,
+                              review_count=106,
                               source_url="https://maps.google.com/x"))
-    b = _Dir("yelp", _place(name="Ryno Lawn Care", rating=2.4,
+    b = _Dir("yelp", _place(name="Ryno Lawn Care", rating=2.4, review_count=9,
                             source_url="https://www.yelp.com/biz/x"))
     brief = build_brief("Ryno Lawn Care, Frisco, TX", directories=[a, b],
                         fetcher=_Fetcher(ok=False))
-    rating = next(f for f in brief.facts if f.field == "rating")
-    assert rating.confidence.value == "conflict"
-    by_source = {c["source_url"]: c["value"] for c in rating.candidates}
-    assert by_source["https://maps.google.com/x"] == "4.8"
-    assert by_source["https://www.yelp.com/biz/x"] == "2.4"
+
+    assert not [f for f in brief.facts if f.field == "rating"]
+    assert [(r["source"], r["value"], r["reviews"]) for r in brief.ratings] == [
+        ("google", 4.8, 106), ("yelp", 2.4, 9)]
 
     text = format_brief(brief)
-    assert "google: 4.8" in text
-    assert "yelp: 2.4" in text
+    assert "4.8" in text and "106 reviews" in text
+    assert "2.4" in text and "9 reviews" in text
 
 
 def test_marketing_headlines_are_not_listed_as_services():

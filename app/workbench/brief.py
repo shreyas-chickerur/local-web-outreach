@@ -56,6 +56,10 @@ class Brief:
     sources_consulted: list[str] = field(default_factory=list)
     # Why we think this is a multi-location brand. Empty for a single business.
     chain_signals: list[str] = field(default_factory=list)
+    # One rating per platform. These are not competing claims about a single
+    # number - Google's 4.8 and Yelp's 2.4 measure different review
+    # populations, so both are true and corroborating them is meaningless.
+    ratings: list[dict] = field(default_factory=list)
 
     @property
     def looks_like_a_chain(self) -> bool:
@@ -141,9 +145,6 @@ def _claims_from_place(place: DirectoryPlace, source_type: SourceType) -> list[R
     if schedule:
         claims.append(RawClaim(field="hours", value=schedule,
                                source_url=place.source_url, source_type=source_type))
-    if place.rating:
-        claims.append(RawClaim(field="rating", value=str(place.rating),
-                               source_url=place.source_url, source_type=source_type))
     return claims
 
 
@@ -226,6 +227,10 @@ def build_brief(
                 f"{source_name} matched a listing in a different town: {place.address}")
         brief.sources_consulted.append(source_name)
         raw_claims.extend(_claims_from_place(place, source_type_for(source_name)))
+        if place.rating is not None:
+            brief.ratings.append({"source": source_name, "value": place.rating,
+                                  "reviews": place.review_count,
+                                  "source_url": place.source_url})
         if brief.location is None and place.address:
             brief.location = place.address
         if brief.website_url is None and place.website:
@@ -383,6 +388,14 @@ def format_brief(brief: Brief) -> str:
                 lines.append(
                     f"{'':30}!! {other.get('source_type')} disagrees: "
                     f"{other.get('value')}")
+
+    if brief.ratings:
+        lines.append("")
+        lines.append("RATINGS (per platform — these measure different crowds)")
+        for entry in brief.ratings:
+            count = entry.get("reviews")
+            tail = f"  ({count} reviews)" if count else ""
+            lines.append(f"  {entry['source']:<15}{entry['value']}{tail}")
 
     pub = brief.published
     has_published = pub is not None and any(

@@ -51,11 +51,6 @@ _STATES = {
     "wyoming": "wy",
 }
 
-# Numeric fields agree within a tolerance rather than exactly. A star rating
-# summarises a different crowd on each platform; half a star apart is the same
-# verdict. A tolerance avoids the arbitrary split a bucket boundary creates.
-_TOLERANT_FIELDS = {"rating": 0.5}
-
 
 @dataclass(frozen=True)
 class Fact:
@@ -108,14 +103,6 @@ def normalize(value: str, field_name: str = "") -> str:
     return _norm_generic(value)
 
 
-def _within_tolerance(claims: list[RawClaim], field_name: str) -> bool:
-    try:
-        values = [float(c.value) for c in claims]
-    except (TypeError, ValueError):
-        return False
-    return bool(values) and (max(values) - min(values)) <= _TOLERANT_FIELDS[field_name]
-
-
 def corroborate(claims: list[RawClaim]) -> list[Fact]:
     """Group claims by field and score each by how many sources back it."""
     by_field: dict[str, list[RawClaim]] = {}
@@ -125,11 +112,8 @@ def corroborate(claims: list[RawClaim]) -> list[Fact]:
     facts: list[Fact] = []
     for field_name, group in by_field.items():
         by_value: dict[str, list[RawClaim]] = {}
-        if field_name in _TOLERANT_FIELDS and _within_tolerance(group, field_name):
-            by_value[normalize(group[0].value, field_name)] = list(group)
-        else:
-            for claim in group:
-                by_value.setdefault(normalize(claim.value, field_name), []).append(claim)
+        for claim in group:
+            by_value.setdefault(normalize(claim.value, field_name), []).append(claim)
 
         all_sources = [{"source_type": c.source_type.value, "source_url": c.source_url}
                        for c in group]

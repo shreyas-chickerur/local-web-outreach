@@ -32,13 +32,16 @@ def test_one_source_is_only_unverified():
 
 def test_disagreement_is_a_conflict_that_names_both_sources():
     facts = corroborate([
-        _c("rating", "4.8", "https://maps.google/x", SourceType.GBP),
-        _c("rating", "2.4", "https://yelp.com/x", SourceType.YELP),
+        _c("address", "2770 Main St, Frisco, TX", "https://maps.google/x",
+           SourceType.GBP),
+        _c("address", "1740 N Stemmons Fwy, Lewisville, TX", "https://yelp.com/x",
+           SourceType.YELP),
     ])
     fact = facts[0]
     assert fact.confidence.value == "conflict" and not fact.is_fact
     by_source = {c["source_type"]: c["value"] for c in fact.candidates}
-    assert by_source["google"] == "4.8" and by_source["yelp"] == "2.4"
+    assert by_source["google"].startswith("2770 Main St")
+    assert by_source["yelp"].startswith("1740 N Stemmons")
 
 
 @pytest.mark.parametrize("a,b", [
@@ -59,16 +62,6 @@ def test_genuinely_different_addresses_still_conflict():
         _c("address", "1900 Preston Rd, Frisco, TX", "https://two/"),
     ])
     assert facts[0].confidence.value == "conflict"
-
-
-@pytest.mark.parametrize("a,b,expected", [
-    ("4.6", "4.5", "verified"),
-    ("4.7", "5.0", "verified"),      # 0.3 apart is the same verdict
-    ("4.8", "2.4", "conflict"),      # a real disagreement
-])
-def test_ratings_agree_within_a_tolerance(a, b, expected):
-    facts = corroborate([_c("rating", a, "https://one/"), _c("rating", b, "https://two/")])
-    assert facts[0].confidence.value == expected
 
 
 @pytest.mark.parametrize("a,b", [
