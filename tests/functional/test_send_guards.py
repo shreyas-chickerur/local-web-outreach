@@ -259,3 +259,47 @@ def test_warmup_survives_a_naive_timestamp_from_the_database(session):
     ident.warmup_started_at = datetime.now() - timedelta(days=60)   # naive on purpose
     session.flush()
     assert eligible_identity(session, [ident]) is ident
+
+
+# ------------------------------ redirect ------------------------------------ #
+def test_redirect_delivers_to_the_operator_and_records_the_real_recipient(
+        session, make_email_drafted, tmp_path, monkeypatch):
+    monkeypatch.setenv("SEND_MODE", "self_test")
+    monkeypatch.setenv("SEND_ALLOWLIST", "me@mine.example")
+    biz, email = _approved(session, make_email_drafted,
+                           contact_email="owner@business.example")
+    out = send_one(session, biz, DryRunSender(str(tmp_path)), [_identity(session)],
+                   redirect_to="me@mine.example")
+    assert out.ok and out.recipient == "me@mine.example"
+
+    written = list(tmp_path.glob("*.eml"))[0].read_text()
+    assert "To: me@mine.example" in written
+    assert "[TEST " in written and "owner@business.example" in written
+
+    from app.models.audit import AuditEvent
+    event = session.query(AuditEvent).filter_by(action="send:delivered").one()
+    assert event.after["intended_recipient"] == "owner@business.example"
+    assert event.after["delivered_to"] == "me@mine.example"
+
+
+def test_redirect_is_refused_in_live_mode(session, make_email_drafted, tmp_path,
+                                          monkeypatch):
+    """A redirect is a testing tool. In live mode it could only hide a mistake."""
+    monkeypatch.setenv("SEND_MODE", "live")
+    biz, _ = _approved(session, make_email_drafted)
+    with pytest.raises(SendBlocked, match="not permitted in live mode"):
+        send_one(session, biz, DryRunSender(str(tmp_path)), [_identity(session)],
+                 redirect_to="me@mine.example")
+
+
+def test_redirect_cannot_smuggle_past_suppression(
+        session, make_email_drafted, tmp_path, monkeypatch):
+    """Suppression is checked against the ORIGINAL recipient, not the redirect."""
+    monkeypatch.setenv("SEND_MODE", "self_test")
+    monkeypatch.setenv("SEND_ALLOWLIST", "me@mine.example")
+    biz, email = _approved(session, make_email_drafted)
+    suppress(session, email=email.recipient, reason=SuppressionReason.UNSUBSCRIBE)
+    session.flush()
+    with pytest.raises(SuppressionError):
+        send_one(session, biz, DryRunSender(str(tmp_path)), [_identity(session)],
+                 redirect_to="me@mine.example")

@@ -321,7 +321,10 @@ def cmd_send(args: argparse.Namespace) -> int:
         print(f"{banner}\n")
 
     identities = session.query(SenderIdentity).all()
-    outcomes = send_approved(session, sender, identities, limit=args.limit)
+    if args.to:
+        print(f"REDIRECT — every message goes to {args.to} instead of the business.\n")
+    outcomes = send_approved(session, sender, identities, limit=args.limit,
+                             redirect_to=args.to)
     session.commit()
 
     if not outcomes:
@@ -531,6 +534,8 @@ def main(argv: list[str] | None = None) -> int:
     p_send.add_argument("--limit", type=int, default=10)
     p_send.add_argument("--dry-run", action="store_true",
                         help="force dry run regardless of SEND_MODE")
+    p_send.add_argument("--to", default=None,
+                        help="redirect delivery to this address (testing; not allowed live)")
 
     p_adv = sub.add_parser("advance", help="research + draft sites for QUALIFIED leads")
     p_adv.add_argument("--limit", type=int, default=5, help="how many to advance")

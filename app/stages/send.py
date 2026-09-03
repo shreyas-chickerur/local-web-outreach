@@ -157,8 +157,17 @@ def send_one(
     business: Business,
     sender: Sender,
     identities: list[SenderIdentity],
+    redirect_to: str | None = None,
 ) -> SendOutcome:
-    """Run every guard, then deliver one approved outreach email."""
+    """Run every guard, then deliver one approved outreach email.
+
+    ``redirect_to`` re-addresses the message to the operator instead of the
+    business — the standard way to test a mail path end to end without
+    contacting anyone. It is permitted ONLY outside live mode, the real intended
+    recipient is recorded in the audit event, and the suppression and geo checks
+    still run against the ORIGINAL recipient so a redirect can never be used to
+    smuggle past them.
+    """
     email = session.execute(
         select(Email).where(
             Email.business_id == business.id, Email.status == EmailStatus.APPROVED
@@ -167,7 +176,10 @@ def send_one(
     if email is None:
         raise NotFoundError(f"no approved email for business {business.id}")
 
-    mode = _assert_mode_allows(email.recipient)
+    if redirect_to and config.send_mode() == "live":
+        raise SendBlocked("redirect is not permitted in live mode")
+    delivery_address = redirect_to or email.recipient
+    mode = _assert_mode_allows(delivery_address)
 
     # Check the CONFIGURED address, and then the address actually baked into
     # this email. They differ whenever the email was composed before the real
@@ -197,8 +209,9 @@ def send_one(
     result: SendResult = sender.send(
         sender=identity.address,
         sender_name=identity.display_name or config.sender_name(),
-        recipient=email.recipient,
-        subject=email.subject,
+        recipient=delivery_address,
+        subject=(f"[TEST → {email.recipient}] {email.subject}"
+                 if redirect_to else email.subject),
         body=email.body,
     )
 
@@ -226,11 +239,14 @@ def send_one(
         subject_type=SubjectType.EMAIL.value, subject_id=business.id,
         after={"mode": mode, "inbox": identity.address,
                "message_id": result.message_id,
-               "reason": f"delivered to {email.recipient} via {identity.address}"
-                         + (f" [{mode}]" if mode != "live" else "")},
+               "intended_recipient": email.recipient,
+               "delivered_to": delivery_address,
+               "reason": (f"delivered to {delivery_address} via {identity.address}"
+                          + (f" (redirected from {email.recipient})" if redirect_to else "")
+                          + (f" [{mode}]" if mode != "live" else ""))},
     )
     session.flush()
-    return SendOutcome(business.id, email.recipient, True, result.detail or mode,
+    return SendOutcome(business.id, delivery_address, True, result.detail or mode,
                        result.message_id)
 
 
@@ -263,6 +279,7 @@ def send_approved(
     sender: Sender,
     identities: list[SenderIdentity],
     limit: int = 10,
+    redirect_to: str | None = None,
 ) -> list[SendOutcome]:
     """Send every approved email we are currently permitted to send."""
     businesses = session.execute(
@@ -273,7 +290,8 @@ def send_approved(
     outcomes: list[SendOutcome] = []
     for business in businesses:
         try:
-            outcomes.append(send_one(session, business, sender, identities))
+            outcomes.append(
+                send_one(session, business, sender, identities, redirect_to))
         except (SendBlocked, SuppressionError, TransitionError, NotFoundError) as exc:
             outcomes.append(SendOutcome(business.id, "", False, str(exc)))
     return outcomes
