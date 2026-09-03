@@ -174,6 +174,8 @@ class ExtractedSite:
     # Restaurants very often publish the menu as a PDF or photo. Embedding it
     # keeps the visitor on the new page; linking out defeats the replacement.
     menu_media: list[dict] = field(default_factory=list)   # {url, kind, label}
+    # A dedicated locations page is the clearest sign of more than one branch.
+    has_locations_page: bool = False
 
     def is_empty(self) -> bool:
         return not any((self.about, self.services, self.hours, self.actions,
@@ -200,8 +202,21 @@ def _dedupe_hours(values) -> list[str]:  # noqa: ANN001
 # Weed Free Lawn" are copy, and listing them as services makes the brief noise.
 _MARKETING_RE = re.compile(
     r"^(what we|why |how we|enjoy |get |our commitment|welcome|discover |"
-    r"experience |let us|we (are|offer|provide|believe)|the .* difference)"
-    r"|[?!]$", re.IGNORECASE)
+    r"experience |let us|we[''‘’]?re |we (are|offer|provide|believe)|"
+    r"the .* difference)|[?!]$", re.IGNORECASE)
+
+# Navigation and chrome, matched as SUBSTRINGS. An exact-match list missed
+# every real variant: "Skip to content MENU", "LOCATIONS PLANO", "GIFT CARDS".
+_CHROME_RE = re.compile(
+    r"(skip to|gift card|locations?\b|donation|franchis|sign ?up|log ?in|newsletter|social|"
+    r"subscribe|follow us|main menu|toggle|navigation|search|cart|checkout|"
+    r"privacy|terms|accessibility|site ?map)", re.IGNORECASE)
+
+# Things a shop sells that are not services. A t-shirt is not an offering you
+# would build a website section around.
+_MERCH_RE = re.compile(
+    r"\b(tee|t-shirt|shirt|hoodie|cap|hat|mug|sticker|merch\w*|gift set|"
+    r"apparel|koozie|tumbler)\b", re.IGNORECASE)
 
 
 def _clean_service(candidate: str) -> str | None:
@@ -217,6 +232,10 @@ def _clean_service(candidate: str) -> str | None:
     if _SOCIAL_PROOF_RE.search(text):     # awards/press are not offerings
         return None
     if _MARKETING_RE.search(text):        # headlines are copy, not offerings
+        return None
+    if _CHROME_RE.search(text):           # navigation, not an offering
+        return None
+    if _MERCH_RE.search(text):            # a t-shirt is not a service
         return None
     return text
 
@@ -272,6 +291,14 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
             out.services.append(name)
     out.services = out.services[:12]
 
+    # Match the href AND the link text: a multi-location brand often uses a
+    # "LOCATIONS" dropdown with no /locations URL behind it, which is how a
+    # three-city restaurant group went unflagged.
+    out.has_locations_page = bool(
+        re.search(r'href=["\'][^"\']*/(locations?|our-locations|find-us)\b',
+                  clean, re.IGNORECASE)
+        or re.search(r">\s*(our\s+)?locations\s*<", clean, re.IGNORECASE)
+    )
     out.menu_items = extract_menu_items(clean)
     out.menu_media = extract_menu_media(clean, base_url)
 
@@ -324,6 +351,7 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
 def merge(primary: ExtractedSite, extra: ExtractedSite) -> ExtractedSite:
     """Fold a secondary page (contact/about/menu) into the homepage's extraction."""
     primary.site_host = primary.site_host or extra.site_host
+    primary.has_locations_page = primary.has_locations_page or extra.has_locations_page
     primary.about = primary.about or extra.about
     primary.description = primary.description or extra.description
     for svc in extra.services:

@@ -254,7 +254,7 @@ def test_several_branches_are_called_a_chain_not_a_disagreement():
                         fetcher=_Fetcher(ok=False))
     assert brief.looks_like_a_chain
     assert any("different street addresses" in s for s in brief.chain_signals)
-    assert "LOOKS LIKE A CHAIN" in format_brief(brief)
+    assert "MULTIPLE LOCATIONS" in format_brief(brief)
 
 
 def test_a_store_locator_url_marks_a_chain():
@@ -274,7 +274,7 @@ def test_one_location_is_not_a_chain():
     brief = build_brief("Hutchins BBQ, Frisco, TX", directories=[a, b],
                         fetcher=_Fetcher(ok=False))
     assert not brief.looks_like_a_chain
-    assert "LOOKS LIKE A CHAIN" not in format_brief(brief)
+    assert "MULTIPLE LOCATIONS" not in format_brief(brief)
 
 
 def test_the_same_address_written_two_ways_is_not_a_chain():
@@ -287,3 +287,35 @@ def test_the_same_address_written_two_ways_is_not_a_chain():
     brief = build_brief("Hutchins BBQ, Frisco, TX", directories=[a, b],
                         fetcher=_Fetcher(ok=False))
     assert not brief.looks_like_a_chain
+
+
+def test_a_locations_menu_marks_multiple_branches():
+    """A three-city restaurant group went unflagged because its nav is a
+    LOCATIONS dropdown with no /locations URL behind it."""
+    html = """<html><head><title>CraftWay Kitchen</title></head><body>
+      <nav><a href="/">Home</a><a href="#loc">LOCATIONS</a></nav>
+      <h2>Weekend Brunch</h2></body></html>"""
+    brief = build_brief("craftwaykitchen.com", fetcher=_Fetcher(html))
+    assert brief.looks_like_a_chain
+    assert any("locations page" in s for s in brief.chain_signals)
+
+
+def test_branch_names_are_not_listed_as_services():
+    """On a site with a locations menu, 'Plano' is a branch, not an offering."""
+    html = """<html><head><title>CraftWay Kitchen</title></head><body>
+      <nav><a href="/locations">Locations</a></nav>
+      <h2>Plano</h2><h2>Southlake</h2><h2>Weekend Brunch</h2></body></html>"""
+    brief = build_brief("craftwaykitchen.com", fetcher=_Fetcher(html))
+    services = brief.published.services
+    assert "Weekend Brunch" in services
+    assert "Plano" not in services and "Southlake" not in services
+
+
+@pytest.mark.parametrize("junk", [
+    "Skip to content MENU", "LOCATIONS PLANO", "GIFT CARDS", "We're Social Too",
+    "Donations", "Hutchins Barbeque Texas Shape Tee – Rust", "Merchandise",
+])
+def test_navigation_and_merchandise_are_not_services(junk):
+    """Every one of these appeared in a real brief's services line."""
+    from app.workbench.extract import _clean_service
+    assert _clean_service(junk) is None

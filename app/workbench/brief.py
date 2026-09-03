@@ -87,10 +87,12 @@ def chain_signals(facts: list[Fact], website_url: str | None,
                   published: ExtractedSite | None) -> list[str]:
     """Evidence that this brand has several branches.
 
-    A chain is not a lead — you cannot sell a website to one franchise — and the
-    brief was reporting the ambiguity as a three-way disagreement, which reads
-    like a data problem rather than what it is. The giveaway is that the sources
-    do not disagree about ONE address; they each picked a DIFFERENT branch.
+    Worth knowing before you walk in, in both directions: a national franchise
+    cannot buy a website from you, while a three-location local group often has
+    more budget than a single site. Either way the brief was reporting it as a
+    three-way address disagreement, which reads like a data problem rather than
+    what it is — the sources are not disagreeing about ONE address, they each
+    picked a DIFFERENT branch.
     """
     signals: list[str] = []
 
@@ -109,11 +111,8 @@ def chain_signals(facts: list[Fact], website_url: str | None,
     if website_url and any(h in website_url.lower() for h in _LOCATOR_HINTS):
         signals.append(f"the website is a store locator, not one location: {website_url}")
 
-    if published is not None:
-        locator_links = [a for a in published.actions
-                         if any(h in str(a.get("url", "")).lower() for h in _LOCATOR_HINTS)]
-        if locator_links:
-            signals.append("their site links to a locations page")
+    if published is not None and published.has_locations_page:
+        signals.append("their own site has a locations page")
 
     return signals
 
@@ -242,6 +241,20 @@ def build_brief(
     brief.facts = corroborate(raw_claims)
     brief.chain_signals = chain_signals(brief.facts, brief.website_url, brief.published)
 
+    # A town name is not a service. Only the brief knows which towns are in play.
+    if brief.published is not None:
+        towns = {_town_of(brief.location or "")}
+        towns |= {_town_of(str(c.get("value", "")))
+                  for f in brief.facts if f.field == "address"
+                  for c in (f.candidates or [{"value": f.value}])}
+        towns.discard("")
+        services = [s for s in brief.published.services if s.strip().lower() not in towns]
+        # On a site with a locations menu, a bare one-word entry is a branch
+        # name, not an offering — "Plano" and "Southlake" are not services.
+        if brief.published.has_locations_page:
+            services = [s for s in services if " " in s.strip()]
+        brief.published.services = services
+
     known = {f.field for f in brief.confident_facts}
     for wanted, question in (
         ("address", "What is their street address?"),
@@ -272,7 +285,8 @@ def format_brief(brief: Brief) -> str:
 
     if brief.looks_like_a_chain:
         lines.append("")
-        lines.append("!! LOOKS LIKE A CHAIN — probably not a lead")
+        lines.append("!! MULTIPLE LOCATIONS — a franchise is not a lead, but a "
+                     "local group may be a better one")
         for signal in brief.chain_signals:
             lines.append(f"   {signal}")
 
@@ -300,7 +314,10 @@ def format_brief(brief: Brief) -> str:
                     f"{'':30}<- {src.get('source_type')}: {src.get('source_url', '')[:58]}")
 
     pub = brief.published
-    if pub:
+    has_published = pub is not None and any(
+        (pub.description, pub.services, pub.menu_items, pub.menu_media,
+         pub.hours, pub.images, pub.socials))
+    if pub and has_published:
         lines.append("")
         lines.append("WHAT THEIR SITE PUBLISHES")
         if pub.description:
