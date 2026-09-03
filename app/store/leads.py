@@ -206,8 +206,19 @@ def _QUESTION_WORDS(fields: set[str]) -> list[str]:  # noqa: N802
 
 
 def all_leads(conn: sqlite3.Connection) -> list[dict]:
+    """Every saved lead, most recently touched first.
+
+    Carries the last thing that happened to each one: a list of names and
+    statuses does not tell you what you were doing, and "corrected their hours,
+    Tuesday" is what makes a lead pickup-able a week later.
+    """
     rows = conn.execute(
         "SELECT l.id, l.name, l.location, l.website_url, l.status, l.updated_at,"
-        " (SELECT COUNT(*) FROM events e WHERE e.lead_id = l.id) AS event_count"
+        " (SELECT COUNT(*) FROM events e WHERE e.lead_id = l.id) AS event_count,"
+        " (SELECT e.kind || CASE WHEN e.field IS NOT NULL THEN ' ' || e.field"
+        "         ELSE '' END FROM events e WHERE e.lead_id = l.id"
+        "  ORDER BY e.id DESC LIMIT 1) AS last_action,"
+        " (SELECT e.at FROM events e WHERE e.lead_id = l.id"
+        "  ORDER BY e.id DESC LIMIT 1) AS last_action_at"
         " FROM leads l ORDER BY l.updated_at DESC")
     return [dict(r) for r in rows]

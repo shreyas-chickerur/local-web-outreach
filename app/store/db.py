@@ -44,6 +44,20 @@ CREATE TABLE IF NOT EXISTS events (
 );
 CREATE INDEX IF NOT EXISTS events_lead ON events(lead_id, id);
 
+-- Generated sites, one row per attempt. Versions are never overwritten: the
+-- point of iterating is being able to go back to the one that was better.
+CREATE TABLE IF NOT EXISTS sites (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id    INTEGER NOT NULL REFERENCES leads(id),
+    version    INTEGER NOT NULL,
+    spec       TEXT NOT NULL DEFAULT '',
+    notes      TEXT NOT NULL DEFAULT '{}',
+    html       TEXT NOT NULL,
+    actor      TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    UNIQUE (lead_id, version)
+);
+
 -- Discovery results, cached. A page of prospects is one paid request per
 -- category plus one page fetch per business; without this, every reload of the
 -- landing page spends that again for data that changes weekly at most.

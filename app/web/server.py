@@ -16,7 +16,8 @@ from urllib.parse import parse_qs, urlparse
 from app.adapters.gplaces import PlacesError, search
 from app.cli import available_directories
 from app.core.config import google_places_api_key
-from app.store import db, leads
+from app.site.render import build as build_site
+from app.store import db, leads, sites
 from app.web.serialize import brief_to_dict
 from app.workbench.brief import build_brief
 from app.workbench.categories import BY_KEY, CATEGORIES
@@ -98,6 +99,22 @@ def prospects(latitude: float, longitude: float, refresh: bool = False,
     return {"groups": groups}
 
 
+def generate(lead_id: int, spec_text: str) -> dict:
+    """Build a site for a saved lead and keep it as a new version."""
+    with db.session() as conn:
+        brief = leads.brief_with_overrides(conn, lead_id)
+        html, spec = build_site(brief, spec_text)
+        notes = {"mood": spec.mood, "understood": spec.understood,
+                 "unmet": spec.unmet, "ignored": spec.ignored,
+                 "lead_with": spec.lead_with}
+        version = sites.save(conn, lead_id, html, spec_text, notes)
+        payload = leads.brief_with_overrides(conn, lead_id)
+        payload["site"] = {"version": version, "notes": notes,
+                           "url": f"/site/{lead_id}/{version}"}
+        payload["site_versions"] = sites.versions(conn, lead_id)
+        return payload
+
+
 class Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
 
@@ -142,6 +159,9 @@ class Handler(BaseHTTPRequestHandler):
                 elif route == "/api/status":
                     leads.set_status(conn, lead_id, str(body.get("status", "")),
                                      note=(body.get("note") or None))
+                elif route == "/api/generate":
+                    self._json(generate(lead_id, str(body.get("spec", ""))))
+                    return
                 elif route == "/api/note":
                     text = str(body.get("note", "")).strip()
                     if not text:
@@ -159,6 +179,32 @@ class Handler(BaseHTTPRequestHandler):
         route = urlparse(self.path)
         if route.path in ("/", "/index.html"):
             self._send(200, _UI.read_bytes(), "text/html; charset=utf-8")
+            return
+        # A generated site is served as a real page so it can be opened, shown
+        # on a phone, or sent to the owner — not just previewed in a frame.
+        if route.path.startswith("/site/"):
+            bits = route.path.strip("/").split("/")
+            try:
+                lead_id = int(bits[1])
+                version = int(bits[2]) if len(bits) > 2 else None
+            except (IndexError, ValueError):
+                self._send(404, b"not found", "text/plain; charset=utf-8")
+                return
+            with db.session() as conn:
+                page = sites.html_for(conn, lead_id, version)
+            if page is None:
+                self._send(404, b"no site generated for this lead yet",
+                           "text/plain; charset=utf-8")
+                return
+            self._send(200, page.encode(), "text/html; charset=utf-8")
+            return
+        if route.path == "/api/sites":
+            try:
+                lead_id = int((parse_qs(route.query).get("id") or ["0"])[0])
+            except ValueError:
+                lead_id = 0
+            with db.session() as conn:
+                self._json({"versions": sites.versions(conn, lead_id)})
             return
         if route.path == "/api/where":
             self._json(locate((parse_qs(route.query).get("q") or [""])[0]))

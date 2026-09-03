@@ -119,6 +119,28 @@ The correction is the spelling that works; the fault is kept next to it, because
 the fault is usually the reason to walk in. One click records the correction
 into the lead's trail, attributed like any other change.
 
+## Slice 3 — building them a site
+
+Open a lead and describe what you want in plain words: *"warm and rustic, lead
+with the gallery, book a table"*. Six moods, section ordering, and a call to
+action are read out of the sentence; the panel then tells you which parts
+landed, which could not be honoured (and why), and which words it ignored — a
+half-understood instruction is how you end up rebuilding the same thing three
+times.
+
+**The rule that shapes the generator: no unverified fact ships.** The site gets
+shown to the owner, so one sentence they know to be false ends the meeting.
+Only their own published content, facts two independent sources agreed on, and
+things you confirmed yourself reach the page. A section with no data is absent
+rather than filled with a placeholder. `unsupported()` re-checks every
+generated page against the allowed material and the tests run it, so a future
+section cannot quietly start inventing.
+
+Generation is deterministic — the same brief and words give the same page — so
+any difference between two versions is something you asked for. Every build is
+a new version, kept forever, and logged on the lead's trail. Sites are served
+at `/site/<lead>/<version>` so you can open one on a phone.
+
 ## Keys
 
 Copy `.env.example` to `.env`. OpenStreetMap needs no key but finds little on its
