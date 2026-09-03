@@ -7,6 +7,7 @@ import pytest
 from app.adapters.directory import DirectoryPlace
 from app.adapters.site_fetch import FetchResult
 from app.workbench.brief import build_brief, format_brief
+from app.workbench.types import Confidence
 
 pytestmark = pytest.mark.unit
 
@@ -319,3 +320,46 @@ def test_navigation_and_merchandise_are_not_services(junk):
     """Every one of these appeared in a real brief's services line."""
     from app.workbench.extract import _clean_service
     assert _clean_service(junk) is None
+
+
+def test_town_only_address_does_not_conflict_with_a_street_address():
+    """Yelp knew only "Frisco, TX 75035" for Ryno Lawn Care while Google had the
+    street. Scoring that as a conflict hid a good address and then asked for the
+    address we already had."""
+    google = _Dir("google", DirectoryPlace(
+        name="Ryno Lawn Care", address="2770 Main St #155, Frisco, TX 75033",
+        phone="(469) 496-2778", website=None,
+        source_url="https://maps.google.com/x"))
+    yelp = _Dir("yelp", DirectoryPlace(
+        name="Ryno Lawn Care", address="Frisco, TX 75035", phone=None,
+        website=None, source_url="https://yelp.com/biz/ryno"))
+    brief = build_brief("Ryno Lawn Care", location="Frisco, TX",
+                        directories=[google, yelp], fetcher=_Fetcher(ok=False))
+
+    address = next(f for f in brief.facts if f.field == "address")
+    assert address.confidence is not Confidence.CONFLICT
+    assert address.value.startswith("2770 Main St")
+    assert any("only a town" in a for a in brief.assumptions)
+
+
+def test_header_shows_the_address_found_not_the_town_typed_in():
+    """Looking the same business up by name and by URL printed different
+    headers, because the typed location won over the address we established."""
+    google = _Dir("google", DirectoryPlace(
+        name="Craftway Kitchen", address="5729 Lebanon Rd #100, Frisco, TX 75034",
+        phone="(469) 294-0067", website=None,
+        source_url="https://maps.google.com/x"))
+    brief = build_brief("Craftway Kitchen", location="Frisco, TX",
+                        directories=[google], fetcher=_Fetcher(ok=False))
+    assert "5729 Lebanon Rd #100" in format_brief(brief).splitlines()[1]
+
+
+def test_a_single_source_value_is_offered_for_confirmation():
+    """Printing an address and then asking "what is their street address?"
+    wastes the visit; ask them to confirm the one we have."""
+    yelp = _Dir("yelp", DirectoryPlace(
+        name="JS Lawn Care", address="Plano, TX 75025", phone=None,
+        website=None, source_url="https://yelp.com/biz/js"))
+    brief = build_brief("JS Lawn Care", location="Plano, TX",
+                        directories=[yelp], fetcher=_Fetcher(ok=False))
+    assert any("confirm Plano, TX 75025" in q for q in brief.open_questions)

@@ -36,7 +36,7 @@ from app.workbench.resolve import (
     name_from_title,
     resolve_input,
 )
-from app.workbench.types import RawClaim, SourceType
+from app.workbench.types import Confidence, RawClaim, SourceType
 
 
 @dataclass
@@ -238,6 +238,22 @@ def build_brief(
         brief.open_questions.append(
             "No website found — is that right, or do they have one we missed?")
 
+    # A source that only knows the town ("Frisco, TX 75035") is not disagreeing
+    # with one that has the street ("2770 Main St, Frisco, TX 75033") — it is
+    # simply less specific. Scoring that as a conflict buried a good address and
+    # then asked for the address we already had.
+    street = [c for c in raw_claims
+              if c.field == "address" and _HOUSE_NUMBER_RE.match(c.value.strip())]
+    if street:
+        vague = [c for c in raw_claims
+                 if c.field == "address" and c not in street]
+        for claim in vague:
+            brief.assumptions.append(
+                f"{claim.source_type.value} had only a town for this business, "
+                f"so it neither confirms nor contradicts the street address: "
+                f"{claim.value}")
+        raw_claims = [c for c in raw_claims if c not in vague]
+
     brief.facts = corroborate(raw_claims)
     brief.chain_signals = chain_signals(brief.facts, brief.website_url, brief.published)
 
@@ -263,8 +279,18 @@ def build_brief(
         ("phone", "What number do customers actually call?"),
         ("hours", "What are their opening hours?"),
     ):
-        if wanted not in known and not (
+        if wanted in known or (
                 wanted == "hours" and brief.published and brief.published.hours):
+            continue
+        # If exactly one source gave us a value, asking as though we have
+        # nothing wastes the walk-in. Ask them to confirm what we found.
+        single = next((f for f in brief.facts if f.field == wanted
+                       and f.confidence is Confidence.UNVERIFIED), None)
+        if single is not None:
+            brief.open_questions.append(
+                f"Only {single.sources[0]['source_type']} lists this — confirm "
+                f"{single.value}?")
+        else:
             brief.open_questions.append(question)
 
     return brief
@@ -274,8 +300,13 @@ def format_brief(brief: Brief) -> str:
     """Plain-text brief — the thing you read before walking in."""
     lines: list[str] = []
     lines.append(f"{brief.name}")
-    if brief.location:
-        lines.append(f"  {brief.location}")
+    # Prefer the address we established over the town the operator typed: the
+    # same business looked up by name and by URL should print the same header.
+    best_address = next(
+        (f.value for f in brief.facts
+         if f.field == "address" and f.confidence is not Confidence.CONFLICT), None)
+    if best_address or brief.location:
+        lines.append(f"  {best_address or brief.location}")
     if brief.website_url:
         state = ("reachable" if brief.site_reachable
                  else "NOT LOADING" if brief.site_reachable is False else "")
