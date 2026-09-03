@@ -16,6 +16,9 @@ _EXACT = {
     "approval:recorded": "Decision recorded",
     "edit": "Operator edited the draft",
     "claim:operator_verified": "Operator verified a fact",
+    "send:delivered": "Email sent",
+    "send:failed": "Email failed to send",
+    "send:identity_paused": "Sending paused — deliverability kill switch",
 }
 
 # Status transitions, keyed by the destination state.

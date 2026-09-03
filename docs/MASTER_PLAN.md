@@ -347,7 +347,7 @@ Each phase: **Goal → Build → Interfaces → Tests → DoD.** Guard tests are
   - `evals/C` ≥ bar.
 - **DoD:** every outreach email is compliant, personalized, and approval-gated.
 
-### Phase 7 — Send infrastructure & deliverability kill switch
+### Phase 7 — Send infrastructure & deliverability kill switch  — ✅ BUILT, DRY-RUN LOCKED (2026-09-03)
 - **Goal:** deliver approved emails safely; protect domain reputation automatically.
 - **Build:** `adapters/email_send.py` (Instantly/Smartlead or SMTP); inbox rotation;
   per-inbox daily cap (**10–20/day**); warmup tracking (3–4 weeks before live);

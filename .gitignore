@@ -21,3 +21,6 @@ build/
 dist/
 # Frontend design artifacts (managed in Claude design; not source)
 design/
+
+# Dry-run send output (real .eml files, may contain recipient addresses)
+outbox/

@@ -11,6 +11,7 @@ touches your real database.
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -252,6 +253,92 @@ def cmd_seed(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_identities(args: argparse.Namespace) -> int:
+    """Register or list sending mailboxes."""
+    from app.core.clock import utcnow
+    from app.models.sender_identity import SenderIdentity
+
+    engine = make_engine(database_url())
+    Base.metadata.create_all(engine)
+    session = make_session_factory(engine)()
+    if args.address:
+        existing = session.query(SenderIdentity).filter_by(address=args.address).first()
+        if existing is None:
+            existing = SenderIdentity(address=args.address,
+                                      domain=args.address.split("@")[-1])
+            session.add(existing)
+        existing.display_name = args.display_name or existing.display_name
+        existing.daily_cap = args.cap
+        if args.start_warmup:
+            existing.warmup_started_at = utcnow()
+        session.commit()
+        print(f"registered {existing.address}")
+
+    rows = session.query(SenderIdentity).all()
+    if not rows:
+        print("No sending identities. Add one:\n"
+              "  python -m app.cli identities --address you@yourdomain.com --start-warmup")
+    for i in rows:
+        warm = i.warmup_started_at.strftime("%Y-%m-%d") if i.warmup_started_at else "never"
+        state = f"PAUSED ({i.paused_reason})" if i.paused else "active"
+        print(f"  {i.address:34} {state:22} cap={i.daily_cap:<4} warmup_started={warm} "
+              f"sent={i.sent_count} bounces={i.bounce_count}")
+    session.close()
+    engine.dispose()
+    return 0
+
+
+def cmd_send(args: argparse.Namespace) -> int:
+    """Send approved emails. Dry-run by default — writes .eml files, delivers nothing."""
+    from app.adapters.email_send import DryRunSender, Sender, SmtpSender
+    from app.core import config
+    from app.models.sender_identity import SenderIdentity
+    from app.stages.send import send_approved
+
+    engine = make_engine(database_url())
+    Base.metadata.create_all(engine)
+    session = make_session_factory(engine)()
+
+    mode = "dry_run" if args.dry_run else config.send_mode()
+    if args.dry_run:
+        os.environ["SEND_MODE"] = "dry_run"
+
+    sender: Sender
+    if mode == "dry_run":
+        sender = DryRunSender(config.send_outbox_dir())
+        print(f"DRY RUN — writing .eml files to {config.send_outbox_dir()}, "
+              f"delivering nothing.\n")
+    else:
+        smtp = config.smtp_settings()
+        if not smtp["host"]:
+            print("error: SEND_MODE is not dry_run but SMTP_HOST is not set.",
+                  file=sys.stderr)
+            return 2
+        sender = SmtpSender(host=str(smtp["host"]), port=int(smtp["port"] or 587),
+                            user=smtp["user"], password=smtp["password"])  # type: ignore[arg-type]
+        banner = ("SELF TEST — only addresses on SEND_ALLOWLIST"
+                  if mode == "self_test" else "LIVE — real businesses will receive this")
+        print(f"{banner}\n")
+
+    identities = session.query(SenderIdentity).all()
+    outcomes = send_approved(session, sender, identities, limit=args.limit)
+    session.commit()
+
+    if not outcomes:
+        print("Nothing to send — no business is at EMAIL_APPROVED.")
+    for o in outcomes:
+        mark = "SENT   " if o.ok else "BLOCKED"
+        print(f"  [{mark}] {o.recipient or '(no recipient)':34} {o.reason[:74]}")
+    sent = sum(1 for o in outcomes if o.ok)
+    print(f"\n{sent}/{len(outcomes)} sent.")
+    if mode == "dry_run" and sent:
+        print(f"Open the .eml files in {config.send_outbox_dir()} to see exactly "
+              f"what would have gone out.")
+    session.close()
+    engine.dispose()
+    return 0
+
+
 def cmd_validate(args: argparse.Namespace) -> int:
     """Re-check every drafted lead against the live sources, adversarially."""
     from app.adapters.osm import NominatimSource
@@ -433,6 +520,18 @@ def main(argv: list[str] | None = None) -> int:
     p_val = sub.add_parser("validate", help="re-check drafted leads against live sources")
     p_val.add_argument("--limit", type=int, default=25, help="how many to validate")
 
+    p_ident = sub.add_parser("identities", help="register / list sending mailboxes")
+    p_ident.add_argument("--address", default=None, help="mailbox to register")
+    p_ident.add_argument("--display-name", default=None)
+    p_ident.add_argument("--cap", type=int, default=20, help="daily send cap")
+    p_ident.add_argument("--start-warmup", action="store_true",
+                         help="mark warmup as starting now")
+
+    p_send = sub.add_parser("send", help="send approved emails (dry-run by default)")
+    p_send.add_argument("--limit", type=int, default=10)
+    p_send.add_argument("--dry-run", action="store_true",
+                        help="force dry run regardless of SEND_MODE")
+
     p_adv = sub.add_parser("advance", help="research + draft sites for QUALIFIED leads")
     p_adv.add_argument("--limit", type=int, default=5, help="how many to advance")
     p_adv.add_argument("--no-directories", action="store_true",
@@ -453,6 +552,10 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_reset(args)
     if args.command == "validate":
         return cmd_validate(args)
+    if args.command == "identities":
+        return cmd_identities(args)
+    if args.command == "send":
+        return cmd_send(args)
     if args.command == "advance":
         return cmd_advance(args)
     if args.command == "research-demo":
