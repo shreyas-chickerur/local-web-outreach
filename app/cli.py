@@ -253,6 +253,29 @@ def cmd_seed(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_brief(args: argparse.Namespace) -> int:
+    """v2 slice 1: a company name or URL in, a researched brief out."""
+    from app.adapters.osm import NominatimSource
+    from app.adapters.places import GooglePlacesDirectory
+    from app.adapters.yelp import YelpSource
+    from app.core.config import google_places_api_key, yelp_api_key
+    from app.workbench.brief import build_brief, format_brief
+
+    directories: list = []
+    if google_places_api_key():
+        directories.append(GooglePlacesDirectory())
+    if yelp_api_key():
+        directories.append(YelpSource())
+    directories.append(NominatimSource())
+
+    brief = build_brief(args.input, location=args.location, notes=args.notes,
+                        directories=directories)
+    print()
+    print(format_brief(brief))
+    print()
+    return 0
+
+
 def cmd_identities(args: argparse.Namespace) -> int:
     """Register or list sending mailboxes."""
     from app.core.clock import utcnow
@@ -523,6 +546,11 @@ def main(argv: list[str] | None = None) -> int:
     p_val = sub.add_parser("validate", help="re-check drafted leads against live sources")
     p_val.add_argument("--limit", type=int, default=25, help="how many to validate")
 
+    p_brief = sub.add_parser("brief", help="research one company (name or URL)")
+    p_brief.add_argument("input", help='e.g. "Craftway Kitchen, Frisco, TX" or craftwaykitchen.com')
+    p_brief.add_argument("--location", default=None, help="city, ST (helps the lookup)")
+    p_brief.add_argument("--notes", default=None, help="anything you already know")
+
     p_ident = sub.add_parser("identities", help="register / list sending mailboxes")
     p_ident.add_argument("--address", default=None, help="mailbox to register")
     p_ident.add_argument("--display-name", default=None)
@@ -557,6 +585,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_reset(args)
     if args.command == "validate":
         return cmd_validate(args)
+    if args.command == "brief":
+        return cmd_brief(args)
     if args.command == "identities":
         return cmd_identities(args)
     if args.command == "send":

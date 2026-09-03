@@ -82,6 +82,9 @@ def _norm_phone(value: str) -> str:
 # street name, city and ZIP still have to match, so this stays specific.
 _STREET_TYPES = {"st", "rd", "ave", "blvd", "dr", "ln", "pkwy", "ct", "hwy",
                  "cir", "ter", "pl", "way", "trl"}
+# Unit designators are written every possible way for the same door:
+# "#100", "Suite 100", "Ste 100", "Unit 100". Drop the word, keep the number.
+_UNIT_WORDS = {"ste", "suite", "apt", "unit", "no", "num", "bldg", "building", "fl"}
 
 
 def _norm_address(value: str) -> str:
@@ -92,7 +95,9 @@ def _norm_address(value: str) -> str:
             text = text[: -len(suffix)]
     text = re.sub(r"[.,#]", " ", text)
     words = [_STREET_ABBREV.get(w, w) for w in text.split()]
-    return " ".join(w for w in words if w not in _STREET_TYPES).strip()
+    return " ".join(
+        w for w in words if w not in _STREET_TYPES and w not in _UNIT_WORDS
+    ).strip()
 
 
 # Fields compared numerically, with how far apart two sources may be and still
