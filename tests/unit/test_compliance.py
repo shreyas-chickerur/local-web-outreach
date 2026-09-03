@@ -97,3 +97,18 @@ def test_placeholder_addresses_are_rejected(addr):
 def test_real_addresses_pass(addr):
     assert is_placeholder_address(addr) is False
     assert_real_sender_address(addr)  # does not raise
+
+
+@pytest.mark.parametrize("addr", [
+    "SAMPLE MAILING ADDRESS",      # slipped through once — caught in a live run
+    "Dummy Address",
+    "fake st, frisco tx",
+    "TBD",
+    "N/A",
+    "test address",
+    "123 Main St, Frisco, TX 75034",   # our own docs' stock example
+])
+def test_more_placeholder_shapes_are_rejected(addr):
+    assert is_placeholder_address(addr) is True
+    with pytest.raises(ComplianceError):
+        assert_real_sender_address(addr)

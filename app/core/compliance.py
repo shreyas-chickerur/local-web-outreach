@@ -40,6 +40,14 @@ _PLACEHOLDER_ADDRESS_MARKERS = (
     "your mailing address",
     "placeholder",
     "todo",
+    "sample",
+    "dummy",
+    "fake",
+    "test address",
+    "n/a",
+    "tbd",
+    "xxx",
+    "123 main st",     # the stock example from our own docs
 )
 
 
