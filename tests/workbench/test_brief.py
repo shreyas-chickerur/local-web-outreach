@@ -6,7 +6,12 @@ import pytest
 
 from app.adapters.directory import DirectoryPlace
 from app.adapters.site_fetch import FetchResult
-from app.workbench.brief import build_brief, format_brief, site_state
+from app.workbench.brief import (
+    alternate_urls,
+    build_brief,
+    format_brief,
+    site_state,
+)
 from app.workbench.types import Confidence
 
 pytestmark = pytest.mark.unit
@@ -388,3 +393,44 @@ def test_a_chain_is_flagged_even_when_its_site_blocks_us():
                         directories=[google], fetcher=_Fetcher(ok=False))
     assert brief.looks_like_a_chain
     assert any("4 locations" in s for s in brief.chain_signals)
+
+
+def test_a_broken_certificate_is_not_a_dead_site():
+    """yamadallas.com serves a certificate that is not valid for the www
+    address Google publishes. The site loads perfectly at the other spelling,
+    so calling it "not loading" was wrong twice over — and the certificate is
+    itself the most sellable thing about the lead."""
+    assert alternate_urls("https://www.example.com/") == [
+        "https://example.com/", "http://www.example.com/"]
+    assert alternate_urls("https://example.com/")[0] == "https://www.example.com/"
+
+
+def test_the_working_spelling_is_read_and_the_fault_is_kept():
+    class _CertFetcher:
+        """Fails TLS on www, serves the site on the apex — like the real one."""
+
+        def __init__(self):
+            self.tried: list[str] = []
+
+        def fetch(self, url):
+            self.tried.append(url)
+            if "www." in url and url.startswith("https"):
+                return FetchResult(ok=False, status=None, final_url=None, html="",
+                                   elapsed_ms=1, error="CERTIFICATE_VERIFY_FAILED",
+                                   tls_error=True)
+            return FetchResult(ok=True, status=200, final_url=url,
+                               html="<html><h2>Dinner Service</h2></html>",
+                               elapsed_ms=1)
+
+    fetcher = _CertFetcher()
+    google = _Dir("google", _place(name="Yama Izakaya", address="1 Main St, Plano, TX",
+                                   website="https://www.yama.example/",
+                                   source_url="https://maps.google.com/x"))
+    brief = build_brief("Yama Izakaya", location="Plano, TX", directories=[google],
+                        fetcher=fetcher)
+
+    assert brief.site_status == "insecure"
+    # It did not give up: the site was read at the address that works.
+    assert any("www." not in u for u in fetcher.tried)
+    assert brief.published is not None
+    assert "certificate" in format_brief(brief).lower()

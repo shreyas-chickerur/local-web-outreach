@@ -247,6 +247,13 @@
   .ctop{display:flex;gap:12px;align-items:flex-start}
   .cname{font-weight:640;font-size:15.5px;line-height:1.3;letter-spacing:-.01em}
   .cmeta{color:var(--faint);font-size:12.5px;margin-top:3px}
+  /* The one-line case for walking in. Everything else on the card supports it. */
+  .pitch{font-size:13.5px;line-height:1.45;color:var(--ink);font-weight:550;
+    background:var(--accent-bg);border-radius:10px;padding:9px 11px}
+  .pitch.cold{background:var(--raise);color:var(--dim);font-weight:400}
+  .also{display:flex;flex-direction:column;gap:3px}
+  .also div{font-size:12.5px;color:var(--dim);display:flex;gap:7px;align-items:baseline}
+  .also i{color:var(--accent);font-style:normal;flex:0 0 auto}
   /* The score is the first thing you look at, so it is the only ring on the page. */
   .ring{--p:0;flex:0 0 auto;width:46px;height:46px;border-radius:50%;display:grid;
     place-items:center;font-weight:700;font-size:14px;position:relative;
@@ -377,6 +384,10 @@ function card(p) {
   }).join("");
   const site = p.website
     ? `<span class="tag ok">has a site</span>` : `<span class="tag">no website</span>`;
+  const cold = /Nothing obviously wrong|already works/.test(p.headline || "");
+  const pitch = `<div class="pitch${cold ? " cold" : ""}">${esc(p.headline || "")}</div>`;
+  const also = (p.taglines || []).slice(1, 3).map(t =>
+    `<div><i>›</i><span>${esc(t)}</span></div>`).join("");
   return `<button class="card" onclick="openProspect(${esc(JSON.stringify(p.name))
     .replace(/'/g, "&#39;")}, ${esc(JSON.stringify(p.address || ""))})">
     <div class="ctop">
@@ -385,7 +396,11 @@ function card(p) {
         <div class="cmeta">${p.rating != null ? `${p.rating}★ · ${p.reviews} reviews` : "no rating yet"}</div>
       </div>
     </div>
-    <div class="why">${why}</div>
+    ${pitch}
+    ${also ? `<div class="also">${also}</div>` : ""}
+    <details onclick="event.stopPropagation()"><summary class="cmeta"
+      style="cursor:pointer">how this score was built</summary>
+      <div class="why" style="margin-top:7px">${why}</div></details>
     <div class="cfoot">${site}</div></button>`;
 }
 
@@ -577,7 +592,8 @@ $("#lightbox").onclick = () => $("#lightbox").close();
 function render(d) {
   const site = d.website_url
     ? `<a href="${esc(d.website_url)}" target="_blank" rel="noopener">${esc(d.website_url)}</a>`
-      + ({blocked: ` <span class="warnish">— blocked our reader; the site itself is probably fine</span>`,
+      + ({insecure: ` <span class="none">— certificate error: visitors get a security warning at this address</span>`,
+          blocked: ` <span class="warnish">— blocked our reader; the site itself is probably fine</span>`,
           error: ` <span class="none">— returning an error</span>`,
           unreachable: ` <span class="none">— not loading</span>`}[d.site_status] || "")
     : `<span class="none">no website found</span>`;

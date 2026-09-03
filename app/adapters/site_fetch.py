@@ -24,6 +24,21 @@ class FetchResult:
     html: str
     elapsed_ms: int
     error: str | None = None
+    # The certificate does not match the hostname, or is expired or untrusted.
+    # Worth its own flag: it is not the site being down, it is every visitor
+    # who types that address getting a full-page security warning.
+    tls_error: bool = False
+
+
+_TLS_MARKERS = ("certificate_verify_failed", "ssl:", "sslcertverification",
+                "hostname mismatch", "certificate has expired",
+                "self signed certificate")
+
+
+def _is_tls_failure(exc: Exception) -> bool:
+    """Tell a broken certificate apart from a dead server."""
+    text = str(exc).lower()
+    return any(marker in text for marker in _TLS_MARKERS)
 
 
 class SiteFetcher(Protocol):
@@ -47,7 +62,7 @@ class HttpSiteFetcher:
             elapsed_ms = int((time.perf_counter() - start) * 1000)
             return FetchResult(
                 ok=False, status=None, final_url=None, html="", elapsed_ms=elapsed_ms,
-                error=str(exc),
+                error=str(exc), tls_error=_is_tls_failure(exc),
             )
         elapsed_ms = int((time.perf_counter() - start) * 1000)
         return FetchResult(

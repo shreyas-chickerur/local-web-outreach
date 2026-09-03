@@ -77,3 +77,24 @@ def test_the_score_stays_inside_its_range():
     worst = score(_p(website="https://x.com", is_chain=True, reviews=2))
     best = score(_p(website=None, reviews=800, rating=4.9, phone="x"))
     assert 0 <= worst.score <= 100 and 0 <= best.score <= 100
+
+
+def test_a_broken_certificate_is_the_pitch():
+    """Every customer who follows their Google link sees a security warning
+    before they see the menu. That is the strongest opening there is."""
+    broken = score(_p(website="https://www.x.com", cert_error=True, reviews=600))
+    fine = score(_p(website="https://www.x.com", cert_error=False, reviews=600))
+    assert broken.score > fine.score
+    assert "security warning" in broken.headline
+
+
+def test_the_headline_leads_with_why_to_go_not_why_they_can_pay():
+    p = score(_p(website=None, reviews=800, rating=4.9, phone="x"))
+    assert p.headline.startswith("No website at all")
+    assert any("800 reviews" in t for t in p.taglines)
+
+
+def test_a_prospect_with_nothing_wrong_says_so():
+    p = score(_p(website="https://x.com", mobile_ready=True, https=True,
+                 site_reachable=True, reviews=50, rating=4.5))
+    assert "already works" in p.headline

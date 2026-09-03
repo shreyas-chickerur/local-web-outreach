@@ -15,7 +15,7 @@ from datetime import UTC, datetime, timedelta
 
 from app.adapters.gplaces import PlacesError, places
 from app.adapters.site_fetch import HttpSiteFetcher, SiteFetcher
-from app.workbench.brief import site_state
+from app.workbench.brief import alternate_urls, site_state
 from app.workbench.categories import CATEGORIES, Category
 from app.workbench.extract import extract_from_html
 from app.workbench.prospect import Prospect, rank
@@ -52,6 +52,18 @@ def _inspect(prospect: Prospect, fetcher: SiteFetcher) -> Prospect:
         result = fetcher.fetch(prospect.website)
     except Exception:                       # a bad site must not sink the page
         return prospect
+    if getattr(result, "tls_error", False):
+        # The published address throws a security warning. That is a finding
+        # about them, not a reason for us to give up reading the site.
+        prospect.cert_error = True
+        for candidate in alternate_urls(prospect.website):
+            try:
+                retry = fetcher.fetch(candidate)
+            except Exception:
+                continue
+            if retry.ok and retry.html:
+                result = retry
+                break
     state = site_state(result.status, bool(result.ok and result.html))
     # Being refused is not being broken, and it says nothing about the business.
     prospect.site_reachable = None if state == "blocked" else (state == "ok")
