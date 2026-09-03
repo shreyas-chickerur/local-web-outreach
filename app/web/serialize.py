@@ -29,6 +29,7 @@ def fact_to_dict(fact: Fact) -> dict:
         "corroborations": fact.corroborations,
         "sources": fact.sources,
         "candidates": fact.candidates,
+        "dissent": fact.dissent,
     }
 
 
