@@ -46,6 +46,9 @@ class DirectoryPlace:
     summary: str | None = None          # Google's one-line editorial description
     latitude: float | None = None
     longitude: float | None = None
+    reviews: tuple[dict, ...] = ()
+    photo_refs: tuple[str, ...] = ()
+    price_level: str | None = None
 
 
 class DirectorySource(Protocol):

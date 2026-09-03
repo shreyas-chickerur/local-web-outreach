@@ -8,6 +8,7 @@ than a plain page. Most of what is pinned here is that rule.
 
 from __future__ import annotations
 
+import json
 import re
 
 import pytest
@@ -33,8 +34,10 @@ def _brief(**kw) -> dict:
             "hours": ["Mon-Sat 5pm-9pm"],
             "menu_items": [{"name": "Short Rib", "price": "$32",
                             "description": "braised eight hours"}],
-            "menu_media": [], "photos": ["https://x/1.jpg", "https://x/2.jpg",
-                                         "https://x/3.jpg"],
+            "menu_media": [],
+            # Enough for a hero plus a mosaic: three tiles is the floor for a
+            # gallery that looks built rather than padded.
+            "photos": [f"https://x/{n}.jpg" for n in range(1, 7)],
             "socials": [{"name": "Instagram", "url": "https://instagram.com/x"}],
             "emails": [], "has_locations_page": False,
         },
@@ -148,3 +151,108 @@ def test_every_theme_renders():
         page, spec = build(_brief(), mood)
         assert spec.mood == mood
         assert re.search(r"--accent:#[0-9a-f]{6}", page)
+
+
+def _rich() -> dict:
+    """A brief with everything a real lookup returns."""
+    brief = _brief()
+    brief["lead_id"] = 7
+    brief["latitude"], brief["longitude"] = 33.1506, -96.8225
+    brief["place_photos"] = [f"places/x/photos/{n}" for n in range(10)]
+    brief["testimonials"] = [
+        {"rating": 5, "author": "Gabby Sanchez", "text": "Everything was amazing."},
+        {"rating": 4, "author": "Rowland Short", "text": "Lovely rustic room."},
+        {"rating": 5, "author": "Kim H", "text": "Chef's twists were superb."},
+    ]
+    return brief
+
+
+def test_customer_reviews_are_quoted_with_their_names():
+    """The most credible copy on the page is the part the business did not
+    write — but it only counts if the reader can see who said it."""
+    page, _ = build(_rich())
+    assert 'id="reviews"' in page
+    assert "Gabby Sanchez" in page and "Everything was amazing." in page
+    assert "Google" in page
+
+
+def test_a_single_review_is_not_a_reviews_section():
+    thin = _rich()
+    thin["testimonials"] = thin["testimonials"][:1]
+    page, _ = build(thin)
+    assert 'id="reviews"' not in page
+
+
+def test_google_photography_is_served_through_us_not_with_the_key():
+    """A Places photo URL carries the API key. Putting one in a page we hand to
+    a business owner would publish the key to anyone who views source."""
+    page, _ = build(_rich())
+    assert "/photo/7/0" in page
+    assert "places.googleapis.com" not in page
+    assert "key=" not in page
+
+
+def test_the_page_carries_navigation_for_the_sections_it_has():
+    page, _ = build(_rich())
+    for section in ("services", "gallery", "reviews", "hours", "contact"):
+        assert f'href="#{section}"' in page
+    # and nothing it does not have
+    assert 'href="#menu"' not in page or 'id="menu"' in page
+
+
+def test_structured_data_matches_the_page():
+    page, _ = build(_rich())
+    blob = re.search(r'<script type="application/ld\+json">(.*?)</script>', page, re.S)
+    data = json.loads(blob.group(1))
+    assert data["@type"] == "LocalBusiness"
+    assert data["name"] == "The Heritage Table"
+    assert data["telephone"] == "(469) 664-0100"
+    assert data["geo"]["latitude"] == 33.1506
+
+
+def test_structured_data_omits_what_we_could_not_confirm():
+    """Schema is the same facts in a crawler's shape, not an extra set."""
+    unverified = _rich()
+    unverified["facts"] = [{"field": "phone", "value": "(000) 000-0000",
+                            "confidence": "unverified"}]
+    page, _ = build(unverified)
+    blob = re.search(r'<script type="application/ld\+json">(.*?)</script>', page, re.S)
+    assert "telephone" not in json.loads(blob.group(1))
+
+
+def test_motion_is_cancelled_for_anyone_who_asks():
+    page, _ = build(_rich())
+    assert "prefers-reduced-motion" in page
+    assert "[data-reveal]{opacity:1!important" in page.replace("\n", "")
+
+
+def test_images_reserve_their_space():
+    """Layout shift as photos load is the cheapest tell that a site was thrown
+    together."""
+    page, _ = build(_rich())
+    assert "aspect-ratio" in page
+    assert 'loading="lazy"' in page
+
+
+def test_the_map_needs_no_api_key():
+    page, _ = build(_rich())
+    assert "openstreetmap.org/export/embed.html" in page
+    assert "marker=33.1506" in page
+
+
+def test_a_phone_gets_a_thumb_reachable_action():
+    page, _ = build(_rich())
+    assert 'class="callbar"' in page
+    assert page.count('href="tel:4696640100"') >= 2       # header, hero, call bar
+
+
+def test_reviews_do_not_smuggle_claims_past_the_guard():
+    """A review is the customer's claim, quoted and attributed — allowed. The
+    guard must still catch anything the generator adds around it."""
+    brief = _rich()
+    brief["testimonials"] = [
+        {"rating": 5, "author": "A", "text": "Family-run since 1994 and lovely."},
+        {"rating": 5, "author": "B", "text": "Great food."},
+    ]
+    page, _ = build(brief)
+    assert unsupported(page, material_from_brief(brief)) == []

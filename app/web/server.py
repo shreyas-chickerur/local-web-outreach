@@ -14,6 +14,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from app.adapters.gplaces import PlacesError, search
+from app.adapters.photos import fetch as fetch_photo
 from app.cli import available_directories
 from app.core.config import google_places_api_key
 from app.site.render import build as build_site
@@ -182,6 +183,36 @@ class Handler(BaseHTTPRequestHandler):
             return
         # A generated site is served as a real page so it can be opened, shown
         # on a phone, or sent to the owner — not just previewed in a frame.
+        # Generated pages reference photos through here, so the API key that
+        # fetches them is never written into a page we hand to anyone.
+        if route.path.startswith("/photo/"):
+            bits = route.path.strip("/").split("/")
+            try:
+                lead_id, index = int(bits[1]), int(bits[2])
+            except (IndexError, ValueError):
+                self._send(404, b"not found", "text/plain; charset=utf-8")
+                return
+            with db.session() as conn:
+                try:
+                    brief = leads.load_brief(conn, lead_id)
+                except ValueError:
+                    self._send(404, b"no such lead", "text/plain; charset=utf-8")
+                    return
+            names = brief.get("place_photos") or []
+            if not (0 <= index < len(names)):
+                self._send(404, b"no such photo", "text/plain; charset=utf-8")
+                return
+            image = fetch_photo(google_places_api_key() or "", names[index])
+            if image is None:
+                self._send(404, b"photo unavailable", "text/plain; charset=utf-8")
+                return
+            self.send_response(200)
+            self.send_header("Content-Type", "image/jpeg")
+            self.send_header("Content-Length", str(len(image)))
+            self.send_header("Cache-Control", "public, max-age=604800")
+            self.end_headers()
+            self.wfile.write(image)
+            return
         if route.path.startswith("/site/"):
             bits = route.path.strip("/").split("/")
             try:

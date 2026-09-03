@@ -22,7 +22,8 @@ FIELDS = (
     "places.id,places.displayName,places.formattedAddress,places.rating,"
     "places.userRatingCount,places.websiteUri,places.nationalPhoneNumber,"
     "places.regularOpeningHours,places.businessStatus,places.googleMapsUri,"
-    "places.editorialSummary,places.primaryTypeDisplayName,places.location"
+    "places.editorialSummary,places.primaryTypeDisplayName,places.location,"
+    "places.reviews,places.photos,places.priceLevel"
 )
 
 
@@ -36,6 +37,17 @@ class PlacesError(RuntimeError):
 
 def _to_place(raw: dict, same_name_nearby: int = 1) -> DirectoryPlace:
     hours = ((raw.get("regularOpeningHours") or {}).get("weekdayDescriptions") or [])
+    # Their customers' own words, attributed. The most credible copy on any
+    # small business site is the part the business did not write.
+    reviews = tuple(
+        {"rating": r.get("rating"),
+         "author": (r.get("authorAttribution") or {}).get("displayName", ""),
+         "text": (r.get("text") or {}).get("text", "")}
+        for r in (raw.get("reviews") or [])
+        if (r.get("text") or {}).get("text"))
+    # Photo resource names, not URLs: fetching one needs the API key, so the
+    # page asks our own server for it and the key never leaves this machine.
+    photos = tuple(p["name"] for p in (raw.get("photos") or []) if p.get("name"))
     location = raw.get("location") or {}
     rating = raw.get("rating")
     return DirectoryPlace(
@@ -54,6 +66,9 @@ def _to_place(raw: dict, same_name_nearby: int = 1) -> DirectoryPlace:
         summary=(raw.get("editorialSummary") or {}).get("text"),
         latitude=location.get("latitude"),
         longitude=location.get("longitude"),
+        reviews=reviews,
+        photo_refs=photos[:12],
+        price_level=raw.get("priceLevel"),
     )
 
 

@@ -69,6 +69,13 @@ class Brief:
     # number - Google's 4.8 and Yelp's 2.4 measure different review
     # populations, so both are true and corroborating them is meaningless.
     ratings: list[dict] = field(default_factory=list)
+    # Customer reviews and Google's own photography. Not facts to corroborate —
+    # material for the site we build them, which is short of good imagery and
+    # short of anything credible that the business did not write itself.
+    testimonials: list[dict] = field(default_factory=list)
+    place_photos: list[str] = field(default_factory=list)
+    latitude: float | None = None
+    longitude: float | None = None
 
     @property
     def looks_like_a_chain(self) -> bool:
@@ -259,6 +266,12 @@ def build_brief(
         raw_claims.extend(_claims_from_place(place, source_type_for(source_name)))
         if place.same_name_nearby > 1:
             nearby[source_name] = place.same_name_nearby
+        if place.reviews and not brief.testimonials:
+            brief.testimonials = [dict(r) for r in place.reviews[:5]]
+        if place.photo_refs and not brief.place_photos:
+            brief.place_photos = list(place.photo_refs)
+        if brief.latitude is None and place.latitude is not None:
+            brief.latitude, brief.longitude = place.latitude, place.longitude
         if place.rating is not None:
             brief.ratings.append({"source": source_name, "value": place.rating,
                                   "reviews": place.review_count,

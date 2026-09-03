@@ -28,3 +28,6 @@ outbox/
 # Local database — leads and their audit trail.
 workbench.db
 workbench.db-*
+
+# Cached Google Place photos.
+.cache/

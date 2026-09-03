@@ -1,0 +1,49 @@
+"""Google Place photos, fetched through us so the key stays here.
+
+A photo URL from the Places API carries the API key. Putting that in a page we
+hand to a business owner would publish the key to anyone who views source, so
+the generated site asks this server for `/photo/<lead>/<n>` and the key never
+leaves the machine.
+
+Fetched bytes are cached on disk: photos do not change, and each request is
+billed.
+"""
+
+from __future__ import annotations
+
+import hashlib
+from pathlib import Path
+
+import httpx
+
+CACHE = Path(".cache/photos")
+MAX_WIDTH = 1600
+
+
+def _cache_path(name: str, width: int) -> Path:
+    key = hashlib.sha256(f"{name}@{width}".encode()).hexdigest()[:32]
+    return CACHE / f"{key}.jpg"
+
+
+def fetch(api_key: str, photo_name: str, width: int = MAX_WIDTH,
+          client: httpx.Client | None = None) -> bytes | None:
+    """The image bytes, from disk if we have already paid for them."""
+    if not api_key or not photo_name:
+        return None
+    cached = _cache_path(photo_name, width)
+    if cached.exists():
+        return cached.read_bytes()
+
+    http = client or httpx.Client(timeout=20.0, follow_redirects=True)
+    try:
+        resp = http.get(
+            f"https://places.googleapis.com/v1/{photo_name}/media",
+            params={"maxWidthPx": str(width), "key": api_key})
+        if resp.status_code != 200 or not resp.content:
+            return None
+    except httpx.HTTPError:
+        return None
+
+    CACHE.mkdir(parents=True, exist_ok=True)
+    cached.write_bytes(resp.content)
+    return resp.content
