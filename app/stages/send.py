@@ -181,17 +181,23 @@ def send_one(
     delivery_address = redirect_to or email.recipient
     mode = _assert_mode_allows(delivery_address)
 
-    # Check the CONFIGURED address, and then the address actually baked into
-    # this email. They differ whenever the email was composed before the real
-    # address was set — and it is the composed bytes that reach the recipient.
-    try:
-        assert_real_sender_address(config.sender_postal_address())
-    except ComplianceError as exc:
-        raise SendBlocked(str(exc)) from exc
-    if is_placeholder_address(email.footer or ""):
-        raise SendBlocked(
-            "this email was composed while the postal address was still a "
-            "placeholder — re-draft it before sending")
+    # CAN-SPAM's postal-address requirement protects RECIPIENTS. A self-test
+    # redirected to an allow-listed address of your own cannot reach anyone else,
+    # so the requirement has nothing to bite on and the check is waived — but
+    # ONLY under both conditions together, and never in live mode. Every other
+    # path checks the configured address AND the address baked into this email,
+    # because the two differ whenever the email was composed before a real
+    # address was set, and it is the composed bytes that reach the recipient.
+    self_test_to_self = mode == "self_test" and redirect_to is not None
+    if not self_test_to_self:
+        try:
+            assert_real_sender_address(config.sender_postal_address())
+        except ComplianceError as exc:
+            raise SendBlocked(str(exc)) from exc
+        if is_placeholder_address(email.footer or ""):
+            raise SendBlocked(
+                "this email was composed while the postal address was still a "
+                "placeholder — re-draft it before sending")
 
     if business.status is not BusinessStatus.EMAIL_APPROVED:
         raise TransitionError(

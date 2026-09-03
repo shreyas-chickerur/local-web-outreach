@@ -303,3 +303,38 @@ def test_redirect_cannot_smuggle_past_suppression(
     with pytest.raises(SuppressionError):
         send_one(session, biz, DryRunSender(str(tmp_path)), [_identity(session)],
                  redirect_to="me@mine.example")
+
+
+def test_a_redirected_self_test_may_send_without_a_real_postal_address(
+        session, make_email_drafted, tmp_path, monkeypatch):
+    """CAN-SPAM protects recipients. A redirected self-test can only reach an
+    allow-listed address of your own, so the requirement has nothing to bite on."""
+    monkeypatch.setenv("SEND_MODE", "self_test")
+    monkeypatch.setenv("SEND_ALLOWLIST", "me@mine.example")
+    monkeypatch.setenv("SENDER_POSTAL_ADDRESS", "SAMPLE MAILING ADDRESS")
+    biz, _ = _approved(session, make_email_drafted)
+    out = send_one(session, biz, DryRunSender(str(tmp_path)), [_identity(session)],
+                   redirect_to="me@mine.example")
+    assert out.ok
+
+
+def test_self_test_without_a_redirect_still_requires_a_real_address(
+        session, make_email_drafted, tmp_path, monkeypatch):
+    """Without a redirect, self_test delivers to the BUSINESS's address if it
+    happens to be allow-listed — a real recipient, so the rule applies."""
+    monkeypatch.setenv("SEND_MODE", "self_test")
+    monkeypatch.setenv("SEND_ALLOWLIST", "owner@business.example")
+    monkeypatch.setenv("SENDER_POSTAL_ADDRESS", "SAMPLE MAILING ADDRESS")
+    biz, _ = _approved(session, make_email_drafted,
+                       contact_email="owner@business.example")
+    with pytest.raises(SendBlocked, match="placeholder"):
+        send_one(session, biz, DryRunSender(str(tmp_path)), [_identity(session)])
+
+
+def test_live_mode_never_waives_the_postal_address(
+        session, make_email_drafted, tmp_path, monkeypatch):
+    monkeypatch.setenv("SEND_MODE", "live")
+    monkeypatch.setenv("SENDER_POSTAL_ADDRESS", "SAMPLE MAILING ADDRESS")
+    biz, _ = _approved(session, make_email_drafted)
+    with pytest.raises(SendBlocked, match="placeholder"):
+        send_one(session, biz, DryRunSender(str(tmp_path)), [_identity(session)])
