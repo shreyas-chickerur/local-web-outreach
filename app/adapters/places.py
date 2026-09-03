@@ -15,6 +15,7 @@ import httpx
 
 from app.adapters.directory import DirectoryPlace
 from app.core import config
+from app.workbench.match import same_business
 
 TEXT_SEARCH_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json"
 DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json"
@@ -47,6 +48,8 @@ class GooglePlacesDirectory:
             return None
 
         top = results[0]
+        nearby = sum(1 for r in results
+                     if same_business(top.get("name", ""), r.get("name", "")))
         place_id = top.get("place_id", "")
         details: dict = {}
         if place_id:
@@ -74,4 +77,5 @@ class GooglePlacesDirectory:
             rating=float(rating) if rating is not None else None,
             review_count=top.get("user_ratings_total"),
             hours=tuple(str(h) for h in weekday_text[:7]),
+            same_name_nearby=nearby,
         )

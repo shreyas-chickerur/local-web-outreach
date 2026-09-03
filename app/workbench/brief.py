@@ -38,6 +38,7 @@ from app.workbench.resolve import (
     name_from_domain,
     name_from_title,
     resolve_input,
+    town_of,
 )
 from app.workbench.types import Confidence, RawClaim, SourceType
 
@@ -53,6 +54,11 @@ class Brief:
     assumptions: list[str] = field(default_factory=list)
     open_questions: list[str] = field(default_factory=list)
     site_reachable: bool | None = None
+    # Being refused is not being broken. Home Depot answers our request with a
+    # 403 from its bot protection while the page loads perfectly in a browser;
+    # reporting that as "not loading" tells the reader something false about
+    # the business.
+    site_status: str | None = None      # ok | blocked | error | unreachable
     sources_consulted: list[str] = field(default_factory=list)
     # Why we think this is a multi-location brand. Empty for a single business.
     chain_signals: list[str] = field(default_factory=list)
@@ -70,18 +76,8 @@ class Brief:
         return [f for f in self.facts if f.is_fact]
 
 
-def _town_of(text: str) -> str:
-    """The city out of 'Frisco, TX' or '2770 Main St, Frisco, TX 75033'."""
-    parts = [p.strip().lower() for p in (text or "").split(",") if p.strip()]
-    # The city is the part before the state; with no state, the first part.
-    for i, part in enumerate(parts):
-        if re.fullmatch(r"[a-z]{2}(\s+\d{5}(-\d{4})?)?", part) and i:
-            return parts[i - 1]
-    return parts[0] if parts else ""
-
-
 def _same_town(location: str, address: str) -> bool:
-    town = _town_of(location)
+    town = town_of(location)
     return not town or town in (address or "").lower()
 
 
@@ -91,7 +87,8 @@ _LOCATOR_HINTS = ("store-locator", "storelocator", "/locations", "/stores",
 
 
 def chain_signals(facts: list[Fact], website_url: str | None,
-                  published: ExtractedSite | None) -> list[str]:
+                  published: ExtractedSite | None,
+                  nearby: dict[str, int] | None = None) -> list[str]:
     """Evidence that this brand has several branches.
 
     Worth knowing before you walk in, in both directions: a national franchise
@@ -121,6 +118,14 @@ def chain_signals(facts: list[Fact], website_url: str | None,
     if published is not None and published.has_locations_page:
         signals.append("their own site has a locations page")
 
+    # The directories know how many branches exist whether or not the site lets
+    # us read it. When a chain's bot protection refuses us — Home Depot answers
+    # our reader with a 403 — this is the only signal left.
+    for source, count in sorted((nearby or {}).items()):
+        if count >= 3:
+            signals.append(f"{source} returns {count} locations under this name "
+                           f"in one search")
+
     return signals
 
 
@@ -148,18 +153,31 @@ def _claims_from_place(place: DirectoryPlace, source_type: SourceType) -> list[R
     return claims
 
 
-def _read_their_site(url: str, fetcher: SiteFetcher) -> tuple[ExtractedSite | None, bool]:
+def site_state(status: int | None, ok: bool) -> str:
+    """How to describe a fetch that did not work."""
+    if ok:
+        return "ok"
+    if status in (401, 403, 405, 406, 429):
+        return "blocked"        # refused us, not down
+    if status is None:
+        return "unreachable"    # nothing answered
+    return "error"
+
+
+def _read_their_site(url: str, fetcher: SiteFetcher
+                     ) -> tuple[ExtractedSite | None, bool, str]:
     """Fetch their homepage plus the pages that actually carry content."""
     result = fetcher.fetch(url)
+    state = site_state(result.status, bool(result.ok and result.html))
     if not result.ok or not result.html:
-        return None, False
+        return None, False, state
     base = result.final_url or url
     extracted = extract_from_html(result.html, base)
     for page in menu_page_urls(result.html, base) + contact_page_urls(result.html, base):
         sub = fetcher.fetch(page)
         if sub.ok and sub.html:
             extracted = merge(extracted, extract_from_html(sub.html, page))
-    return extracted, True
+    return extracted, True, "ok"
 
 
 def build_brief(
@@ -186,8 +204,9 @@ def build_brief(
     # name guessed from a domain ("Theheritagetable") matches nothing, while the
     # real name from their page title matches immediately.
     if brief.website_url:
-        published, reachable = _read_their_site(brief.website_url, fetcher)
+        published, reachable, state = _read_their_site(brief.website_url, fetcher)
         brief.site_reachable = reachable
+        brief.site_status = state
         brief.published = published
         if reachable and published:
             brief.sources_consulted.append("their website")
@@ -210,6 +229,7 @@ def build_brief(
         brief.site_reachable = None
 
     # --- directories, now that we know what the business is called ------------
+    nearby: dict[str, int] = {}
     for directory in directories:
         place = directory.lookup(brief.name, brief.location or "")
         if place is None:
@@ -227,6 +247,8 @@ def build_brief(
                 f"{source_name} matched a listing in a different town: {place.address}")
         brief.sources_consulted.append(source_name)
         raw_claims.extend(_claims_from_place(place, source_type_for(source_name)))
+        if place.same_name_nearby > 1:
+            nearby[source_name] = place.same_name_nearby
         if place.rating is not None:
             brief.ratings.append({"source": source_name, "value": place.rating,
                                   "reviews": place.review_count,
@@ -256,8 +278,9 @@ def build_brief(
 
     # A website discovered by a directory still needs reading.
     if brief.website_url and brief.published is None:
-        published, reachable = _read_their_site(brief.website_url, fetcher)
+        published, reachable, state = _read_their_site(brief.website_url, fetcher)
         brief.site_reachable = reachable
+        brief.site_status = state
         brief.published = published
         if reachable:
             brief.sources_consulted.append("their website")
@@ -291,12 +314,13 @@ def build_brief(
         replace(f, value=describe_hours(hours_from_canonical(f.value)))
         if f.field == "hours" and f.value else f
         for f in brief.facts]
-    brief.chain_signals = chain_signals(brief.facts, brief.website_url, brief.published)
+    brief.chain_signals = chain_signals(brief.facts, brief.website_url,
+                                        brief.published, nearby)
 
     # A town name is not a service. Only the brief knows which towns are in play.
     if brief.published is not None:
-        towns = {_town_of(brief.location or "")}
-        towns |= {_town_of(str(c.get("value", "")))
+        towns = {town_of(brief.location or "")}
+        towns |= {town_of(str(c.get("value", "")))
                   for f in brief.facts if f.field == "address"
                   for c in (f.candidates or [{"value": f.value}])}
         towns.discard("")
@@ -347,8 +371,10 @@ def format_brief(brief: Brief) -> str:
     if best_address or brief.location:
         lines.append(f"  {best_address or brief.location}")
     if brief.website_url:
-        state = ("reachable" if brief.site_reachable
-                 else "NOT LOADING" if brief.site_reachable is False else "")
+        state = {"ok": "reachable",
+                 "blocked": "BLOCKED OUR READER — the site itself is probably fine",
+                 "error": "returning an error",
+                 "unreachable": "NOT LOADING"}.get(brief.site_status or "", "")
         lines.append(f"  {brief.website_url}  {('(' + state + ')') if state else ''}")
     else:
         lines.append("  no website found")

@@ -130,3 +130,13 @@ def name_from_title(title: str, *, domain_hint: str = "") -> str | None:
             return best
     # Otherwise prefer the shortest plausible segment: taglines are long.
     return min(candidates, key=len)
+
+
+def town_of(text: str) -> str:
+    """The city out of 'Frisco, TX' or '2770 Main St, Frisco, TX 75033'."""
+    parts = [p.strip().lower() for p in (text or "").split(",") if p.strip()]
+    # The city is the part before the state; with no state, the first part.
+    for i, part in enumerate(parts):
+        if re.fullmatch(r"[a-z]{2}(\s+\d{5}(-\d{4})?)?", part) and i:
+            return parts[i - 1]
+    return parts[0] if parts else ""

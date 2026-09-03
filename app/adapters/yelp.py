@@ -10,10 +10,13 @@ and the pipeline falls back to whatever else it has — it never guesses.
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 import httpx
 
 from app.adapters.directory import DirectoryPlace
 from app.core.config import yelp_api_key
+from app.workbench.match import same_business
 
 SEARCH_URL = "https://api.yelp.com/v3/businesses/search"
 
@@ -42,7 +45,14 @@ class YelpSource:
         except (httpx.HTTPError, ValueError):
             return None
         businesses = (data or {}).get("businesses") or []
-        return parse_yelp_business(businesses[0]) if businesses else None
+        if not businesses:
+            return None
+        place = parse_yelp_business(businesses[0])
+        if place is None:
+            return None
+        nearby = sum(1 for b in businesses
+                     if same_business(place.name, b.get("name", "")))
+        return replace(place, same_name_nearby=nearby)
 
 
 def parse_yelp_business(row: dict) -> DirectoryPlace | None:

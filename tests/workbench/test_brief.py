@@ -6,7 +6,7 @@ import pytest
 
 from app.adapters.directory import DirectoryPlace
 from app.adapters.site_fetch import FetchResult
-from app.workbench.brief import build_brief, format_brief
+from app.workbench.brief import build_brief, format_brief, site_state
 from app.workbench.types import Confidence
 
 pytestmark = pytest.mark.unit
@@ -240,7 +240,7 @@ def test_a_match_in_the_same_town_is_not_flagged():
     ("Frisco", "frisco"),
 ])
 def test_town_is_read_out_of_a_location_or_an_address(text, town):
-    from app.workbench.brief import _town_of
+    from app.workbench.resolve import town_of as _town_of
     assert _town_of(text) == town
 
 
@@ -364,3 +364,27 @@ def test_a_single_source_value_is_offered_for_confirmation():
     brief = build_brief("JS Lawn Care", location="Plano, TX",
                         directories=[yelp], fetcher=_Fetcher(ok=False))
     assert any("confirm Plano, TX 75025" in q for q in brief.open_questions)
+
+
+def test_being_refused_is_not_being_broken():
+    """Home Depot answers our reader with a 403 from its bot protection while
+    the page loads fine in a browser. Reporting that as "not loading" tells the
+    reader something false about the business."""
+    assert site_state(403, ok=False) == "blocked"
+    assert site_state(429, ok=False) == "blocked"
+    assert site_state(500, ok=False) == "error"
+    assert site_state(None, ok=False) == "unreachable"
+    assert site_state(200, ok=True) == "ok"
+
+
+def test_a_chain_is_flagged_even_when_its_site_blocks_us():
+    """Chain detection used to depend on reading their website — exactly what a
+    national chain's bot protection prevents. The directory already knows."""
+    google = _Dir("google", _place(name="The Home Depot",
+                                   address="4600 State Hwy 121, Plano, TX",
+                                   source_url="https://maps.google.com/x",
+                                   same_name_nearby=4))
+    brief = build_brief("Home Depot", location="Plano, TX",
+                        directories=[google], fetcher=_Fetcher(ok=False))
+    assert brief.looks_like_a_chain
+    assert any("4 locations" in s for s in brief.chain_signals)

@@ -36,6 +36,10 @@ class DirectoryPlace:
     # Opening hours, when the source publishes them. A second source for hours
     # is what turns "ask them their hours" into a fact you already have.
     hours: tuple[str, ...] = ()
+    # How many results in the same search carried this business's name. A
+    # chain announces itself here long before its website does - and when the
+    # site blocks us, this is the only signal left.
+    same_name_nearby: int = 1
 
 
 class DirectorySource(Protocol):
