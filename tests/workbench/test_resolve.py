@@ -82,3 +82,10 @@ def test_name_from_title(title, hint, expected):
 def test_title_without_a_domain_hint_prefers_the_shortest_real_segment():
     title = "Best Neighborhood Restaurant In All Of Frisco Texas | Acme Grill"
     assert name_from_title(title) == "Acme Grill"
+
+
+@pytest.mark.parametrize("bad", ["", "   ", "\t\n"])
+def test_blank_input_is_a_clean_error_not_a_crash(bad):
+    """The CLI turns this into a one-line message; it must stay a ValueError."""
+    with pytest.raises(ValueError, match="company name or a website URL"):
+        resolve_input(bad)
