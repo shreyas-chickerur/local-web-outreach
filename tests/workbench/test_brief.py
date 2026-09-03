@@ -111,7 +111,7 @@ def test_two_agreeing_sources_verify_a_fact():
     brief = build_brief("Craftway Kitchen, Frisco, TX", directories=[a, b],
                         fetcher=_Fetcher(ok=False))
     phone = next(f for f in brief.facts if f.field == "phone")
-    assert phone.status.value == "verified"
+    assert phone.confidence.value == "verified"
     assert phone.corroborations == 2
 
 
@@ -121,7 +121,7 @@ def test_disagreeing_sources_conflict_rather_than_picking_one():
     brief = build_brief("Craftway Kitchen, Frisco, TX", directories=[a, b],
                         fetcher=_Fetcher(ok=False))
     phone = next(f for f in brief.facts if f.field == "phone")
-    assert phone.status.value == "conflict"
+    assert phone.confidence.value == "conflict"
     assert "469" in phone.value and "972" in phone.value
 
 
@@ -174,7 +174,7 @@ def test_a_conflict_shows_which_source_said_what():
     brief = build_brief("Ryno Lawn Care, Frisco, TX", directories=[a, b],
                         fetcher=_Fetcher(ok=False))
     rating = next(f for f in brief.facts if f.field == "rating")
-    assert rating.status.value == "conflict"
+    assert rating.confidence.value == "conflict"
     by_source = {c["source_url"]: c["value"] for c in rating.candidates}
     assert by_source["https://maps.google.com/x"] == "4.8"
     assert by_source["https://www.yelp.com/biz/x"] == "2.4"

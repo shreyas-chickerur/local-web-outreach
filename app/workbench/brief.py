@@ -20,26 +20,22 @@ from dataclasses import dataclass, field
 
 from app.adapters.directory import DirectoryPlace, DirectorySource
 from app.adapters.site_fetch import HttpSiteFetcher, SiteFetcher
-from app.ai.research_runner import RawClaim
-from app.core.enums import SourceType
-from app.stages.collect import contact_page_urls
-from app.stages.entity_resolution import _name_similarity
-from app.stages.extract_site import (
+from app.workbench.corroborate import Fact, corroborate
+from app.workbench.extract import (
     ExtractedSite,
+    contact_page_urls,
     extract_from_html,
     menu_page_urls,
     merge,
 )
-from app.stages.research import ResolvedClaim, corroborate
+from app.workbench.match import NAME_MATCH_THRESHOLD, name_similarity
 from app.workbench.resolve import (
     ResolvedInput,
     name_from_domain,
     name_from_title,
     resolve_input,
 )
-
-# Below this, a directory hit is a different company and must not be merged.
-NAME_MATCH_THRESHOLD = 0.6
+from app.workbench.types import RawClaim, SourceType
 
 
 @dataclass
@@ -48,7 +44,7 @@ class Brief:
     location: str | None
     website_url: str | None
     notes: str | None
-    facts: list[ResolvedClaim] = field(default_factory=list)
+    facts: list[Fact] = field(default_factory=list)
     published: ExtractedSite | None = None      # what their own site says
     assumptions: list[str] = field(default_factory=list)
     open_questions: list[str] = field(default_factory=list)
@@ -56,9 +52,17 @@ class Brief:
     sources_consulted: list[str] = field(default_factory=list)
 
     @property
-    def confident_facts(self) -> list[ResolvedClaim]:
-        return [f for f in self.facts if f.status.value in
-                ("verified", "operator_verified")]
+    def confident_facts(self) -> list[Fact]:
+        return [f for f in self.facts if f.is_fact]
+
+
+def source_type_for(directory_name: str) -> SourceType:
+    """Name a source precisely. 'directory' told the reader nothing; 'google'
+    and 'yelp' let them judge which one to believe when the two disagree."""
+    try:
+        return SourceType(directory_name)
+    except ValueError:
+        return SourceType.OTHER
 
 
 def _claims_from_place(place: DirectoryPlace, source_type: SourceType) -> list[RawClaim]:
@@ -142,12 +146,12 @@ def build_brief(
         if place is None:
             continue
         source_name = getattr(directory, "name", "directory")
-        if _name_similarity(brief.name, place.name) < NAME_MATCH_THRESHOLD:
+        if name_similarity(brief.name, place.name) < NAME_MATCH_THRESHOLD:
             brief.assumptions.append(
                 f"ignored a {source_name} result for {place.name!r} — different business")
             continue
         brief.sources_consulted.append(source_name)
-        raw_claims.extend(_claims_from_place(place, SourceType.DIRECTORY))
+        raw_claims.extend(_claims_from_place(place, source_type_for(source_name)))
         if brief.location is None and place.address:
             brief.location = place.address
         if brief.website_url is None and place.website:
@@ -202,10 +206,10 @@ def format_brief(brief: Brief) -> str:
     if not brief.facts:
         lines.append("  (nothing corroborated — see open questions)")
     for fact in brief.facts:
-        pct = f"{fact.confidence * 100:.0f}%"
+        pct = f"{fact.score * 100:.0f}%"
         if fact.candidates:
             # A conflict is only useful if you can see who said what.
-            lines.append(f"  [{fact.status.value:10}] {fact.field:9} {pct:>4}  "
+            lines.append(f"  [{fact.confidence.value:10}] {fact.field:9} {pct:>4}  "
                          f"sources disagree:")
             for cand in fact.candidates:
                 who = cand.get("source_url", "")
@@ -215,7 +219,7 @@ def format_brief(brief: Brief) -> str:
                          cand.get("source_type", "source"))
                 lines.append(f"{'':16}{label:>14}: {cand.get('value')}")
         else:
-            lines.append(f"  [{fact.status.value:10}] {fact.field:9} {pct:>4}  {fact.value}")
+            lines.append(f"  [{fact.confidence.value:10}] {fact.field:9} {pct:>4}  {fact.value}")
             for src in fact.sources:
                 lines.append(
                     f"{'':30}<- {src.get('source_type')}: {src.get('source_url', '')[:58]}")

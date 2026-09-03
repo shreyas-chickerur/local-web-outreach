@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from app.stages.extract_site import _clean_service, extract_from_html, merge
+from app.workbench.extract import _clean_service, extract_from_html, merge
 
 pytestmark = pytest.mark.unit
 
