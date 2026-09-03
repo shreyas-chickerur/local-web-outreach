@@ -51,6 +51,12 @@ class Brief:
     open_questions: list[str] = field(default_factory=list)
     site_reachable: bool | None = None
     sources_consulted: list[str] = field(default_factory=list)
+    # Why we think this is a multi-location brand. Empty for a single business.
+    chain_signals: list[str] = field(default_factory=list)
+
+    @property
+    def looks_like_a_chain(self) -> bool:
+        return bool(self.chain_signals)
 
     @property
     def confident_facts(self) -> list[Fact]:
@@ -70,6 +76,46 @@ def _town_of(text: str) -> str:
 def _same_town(location: str, address: str) -> bool:
     town = _town_of(location)
     return not town or town in (address or "").lower()
+
+
+_HOUSE_NUMBER_RE = re.compile(r"^\s*(\d+)\b")
+_LOCATOR_HINTS = ("store-locator", "storelocator", "/locations", "/stores",
+                  "/find-a", "/our-locations")
+
+
+def chain_signals(facts: list[Fact], website_url: str | None,
+                  published: ExtractedSite | None) -> list[str]:
+    """Evidence that this brand has several branches.
+
+    A chain is not a lead — you cannot sell a website to one franchise — and the
+    brief was reporting the ambiguity as a three-way disagreement, which reads
+    like a data problem rather than what it is. The giveaway is that the sources
+    do not disagree about ONE address; they each picked a DIFFERENT branch.
+    """
+    signals: list[str] = []
+
+    address = next((f for f in facts if f.field == "address"), None)
+    if address is not None and address.candidates:
+        numbers = set()
+        for candidate in address.candidates:
+            match = _HOUSE_NUMBER_RE.match(str(candidate.get("value", "")))
+            if match:
+                numbers.add(match.group(1))
+        if len(numbers) > 1:
+            signals.append(
+                f"sources point at {len(numbers)} different street addresses — "
+                f"each likely a separate branch")
+
+    if website_url and any(h in website_url.lower() for h in _LOCATOR_HINTS):
+        signals.append(f"the website is a store locator, not one location: {website_url}")
+
+    if published is not None:
+        locator_links = [a for a in published.actions
+                         if any(h in str(a.get("url", "")).lower() for h in _LOCATOR_HINTS)]
+        if locator_links:
+            signals.append("their site links to a locations page")
+
+    return signals
 
 
 def source_type_for(directory_name: str) -> SourceType:
@@ -194,6 +240,7 @@ def build_brief(
             "No website found — is that right, or do they have one we missed?")
 
     brief.facts = corroborate(raw_claims)
+    brief.chain_signals = chain_signals(brief.facts, brief.website_url, brief.published)
 
     known = {f.field for f in brief.confident_facts}
     for wanted, question in (
@@ -222,6 +269,12 @@ def format_brief(brief: Brief) -> str:
         lines.append("  no website found")
     if brief.notes:
         lines.append(f"  your notes: {brief.notes}")
+
+    if brief.looks_like_a_chain:
+        lines.append("")
+        lines.append("!! LOOKS LIKE A CHAIN — probably not a lead")
+        for signal in brief.chain_signals:
+            lines.append(f"   {signal}")
 
     lines.append("")
     lines.append("WHAT WE ESTABLISHED")

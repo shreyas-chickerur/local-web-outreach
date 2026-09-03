@@ -240,3 +240,50 @@ def test_a_match_in_the_same_town_is_not_flagged():
 def test_town_is_read_out_of_a_location_or_an_address(text, town):
     from app.workbench.brief import _town_of
     assert _town_of(text) == town
+
+
+# ------------------------------ chains -------------------------------------- #
+def test_several_branches_are_called_a_chain_not_a_disagreement():
+    """Sources naming different street addresses are not disagreeing about one
+    business — they each picked a different branch. Reporting that as a data
+    conflict hides the thing that actually matters: this is not a lead."""
+    a = _Dir("google", _place(name="Starbucks", address="3193 Main St, Frisco, TX 75034"))
+    b = _Dir("yelp", _place(name="Starbucks", address="7135 Preston Rd, Frisco, TX 75034",
+                            source_url="https://yelp.com/x"))
+    brief = build_brief("Starbucks, Frisco, TX", directories=[a, b],
+                        fetcher=_Fetcher(ok=False))
+    assert brief.looks_like_a_chain
+    assert any("different street addresses" in s for s in brief.chain_signals)
+    assert "LOOKS LIKE A CHAIN" in format_brief(brief)
+
+
+def test_a_store_locator_url_marks_a_chain():
+    google = _Dir("google", _place(
+        name="Starbucks", website="https://www.starbucks.com/store-locator/store/12496/"))
+    brief = build_brief("Starbucks, Frisco, TX", directories=[google],
+                        fetcher=_Fetcher(ok=False))
+    assert any("store locator" in s for s in brief.chain_signals)
+
+
+def test_one_location_is_not_a_chain():
+    a = _Dir("google", _place(name="Hutchins BBQ",
+                              address="9225 Preston Rd, Frisco, TX 75033"))
+    b = _Dir("yelp", _place(name="Hutchins BBQ",
+                            address="9225 Preston Rd, Frisco, TX 75033",
+                            source_url="https://yelp.com/x"))
+    brief = build_brief("Hutchins BBQ, Frisco, TX", directories=[a, b],
+                        fetcher=_Fetcher(ok=False))
+    assert not brief.looks_like_a_chain
+    assert "LOOKS LIKE A CHAIN" not in format_brief(brief)
+
+
+def test_the_same_address_written_two_ways_is_not_a_chain():
+    """A formatting difference must never read as two branches."""
+    a = _Dir("google", _place(name="Hutchins BBQ",
+                              address="9225 Preston Rd, Frisco, TX 75033, USA"))
+    b = _Dir("yelp", _place(name="Hutchins BBQ",
+                            address="9225 Preston Road, Frisco, Texas, 75033",
+                            source_url="https://yelp.com/x"))
+    brief = build_brief("Hutchins BBQ, Frisco, TX", directories=[a, b],
+                        fetcher=_Fetcher(ok=False))
+    assert not brief.looks_like_a_chain
