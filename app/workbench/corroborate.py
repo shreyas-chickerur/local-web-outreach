@@ -35,6 +35,21 @@ _STREET_TYPES = {"st", "rd", "ave", "blvd", "dr", "ln", "pkwy", "ct", "hwy",
                  "cir", "ter", "pl", "way", "trl"}
 # "#100", "Suite 100", "Ste 100", "Unit 100" are the same door.
 _UNIT_WORDS = {"ste", "suite", "apt", "unit", "no", "num", "bldg", "building", "fl"}
+# OpenStreetMap spells the state out where Google and Yelp abbreviate it, which
+# made three sources reporting one address look like a three-way disagreement.
+_STATES = {
+    "alabama": "al", "alaska": "ak", "arizona": "az", "arkansas": "ar",
+    "california": "ca", "colorado": "co", "connecticut": "ct", "delaware": "de",
+    "florida": "fl", "georgia": "ga", "hawaii": "hi", "idaho": "id",
+    "illinois": "il", "indiana": "in", "iowa": "ia", "kansas": "ks",
+    "kentucky": "ky", "louisiana": "la", "maine": "me", "maryland": "md",
+    "massachusetts": "ma", "michigan": "mi", "minnesota": "mn",
+    "mississippi": "ms", "missouri": "mo", "montana": "mt", "nebraska": "ne",
+    "nevada": "nv", "ohio": "oh", "oklahoma": "ok", "oregon": "or",
+    "pennsylvania": "pa", "tennessee": "tn", "texas": "tx", "utah": "ut",
+    "vermont": "vt", "virginia": "va", "washington": "wa", "wisconsin": "wi",
+    "wyoming": "wy",
+}
 
 # Numeric fields agree within a tolerance rather than exactly. A star rating
 # summarises a different crowd on each platform; half a star apart is the same
@@ -75,7 +90,7 @@ def _norm_address(value: str) -> str:
         if text.endswith(suffix):
             text = text[: -len(suffix)]
     text = re.sub(r"[.,#]", " ", text)
-    words = [_STREET_ABBREV.get(w, w) for w in text.split()]
+    words = [_STATES.get(w, _STREET_ABBREV.get(w, w)) for w in text.split()]
     return " ".join(
         w for w in words if w not in _STREET_TYPES and w not in _UNIT_WORDS
     ).strip()

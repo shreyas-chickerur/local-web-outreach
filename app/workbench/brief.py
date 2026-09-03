@@ -16,6 +16,7 @@ Two paths in:
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 
 from app.adapters.directory import DirectoryPlace, DirectorySource
@@ -28,7 +29,7 @@ from app.workbench.extract import (
     menu_page_urls,
     merge,
 )
-from app.workbench.match import NAME_MATCH_THRESHOLD, name_similarity
+from app.workbench.match import same_business
 from app.workbench.resolve import (
     ResolvedInput,
     name_from_domain,
@@ -54,6 +55,21 @@ class Brief:
     @property
     def confident_facts(self) -> list[Fact]:
         return [f for f in self.facts if f.is_fact]
+
+
+def _town_of(text: str) -> str:
+    """The city out of 'Frisco, TX' or '2770 Main St, Frisco, TX 75033'."""
+    parts = [p.strip().lower() for p in (text or "").split(",") if p.strip()]
+    # The city is the part before the state; with no state, the first part.
+    for i, part in enumerate(parts):
+        if re.fullmatch(r"[a-z]{2}(\s+\d{5}(-\d{4})?)?", part) and i:
+            return parts[i - 1]
+    return parts[0] if parts else ""
+
+
+def _same_town(location: str, address: str) -> bool:
+    town = _town_of(location)
+    return not town or town in (address or "").lower()
 
 
 def source_type_for(directory_name: str) -> SourceType:
@@ -146,10 +162,16 @@ def build_brief(
         if place is None:
             continue
         source_name = getattr(directory, "name", "directory")
-        if name_similarity(brief.name, place.name) < NAME_MATCH_THRESHOLD:
+        if not same_business(brief.name, place.name):
             brief.assumptions.append(
                 f"ignored a {source_name} result for {place.name!r} — different business")
             continue
+        # Matching on name alone can pick up the same-named business one town
+        # over. That may still be the right company — a lawn service in Plano
+        # covers Frisco — but the reader has to be told, not left to notice.
+        if brief.location and place.address and not _same_town(brief.location, place.address):
+            brief.assumptions.append(
+                f"{source_name} matched a listing in a different town: {place.address}")
         brief.sources_consulted.append(source_name)
         raw_claims.extend(_claims_from_place(place, source_type_for(source_name)))
         if brief.location is None and place.address:

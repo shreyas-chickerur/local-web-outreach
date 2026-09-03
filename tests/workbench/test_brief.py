@@ -206,3 +206,37 @@ def test_the_same_hours_written_twice_appear_once():
     hours = brief.published.hours
     assert len(hours) == 2
     assert any("8:00am" in h for h in hours)     # the fuller spelling is kept
+
+
+def test_a_match_in_another_town_is_flagged_not_hidden():
+    """Matching on name alone picks up the same-named business one town over.
+    It may still be the right company — a Plano lawn service covers Frisco —
+    but the reader has to be told rather than left to notice the address."""
+    elsewhere = _Dir("yelp", _place(name="Craftway Kitchen",
+                                    address="1 Main St, Plano, TX 75025",
+                                    phone="(903) 456-9799"))
+    brief = build_brief("Craftway Kitchen, Frisco, TX", directories=[elsewhere],
+                        fetcher=_Fetcher(ok=False))
+    assert any("different town" in a for a in brief.assumptions)
+    # the data is still used — being in the next town is not disqualifying
+    assert any(f.field == "phone" for f in brief.facts)
+
+
+def test_a_match_in_the_same_town_is_not_flagged():
+    local = _Dir("yelp", _place(name="Craftway Kitchen",
+                                address="5729 Lebanon Rd, Frisco, TX 75034",
+                                phone="(469) 294-0067"))
+    brief = build_brief("Craftway Kitchen, Frisco, TX", directories=[local],
+                        fetcher=_Fetcher(ok=False))
+    assert not any("different town" in a for a in brief.assumptions)
+
+
+@pytest.mark.parametrize("text,town", [
+    ("Frisco, TX", "frisco"),
+    ("2770 Main St, Frisco, TX 75033", "frisco"),
+    ("1 Main St, The Colony, TX 75056", "the colony"),
+    ("Frisco", "frisco"),
+])
+def test_town_is_read_out_of_a_location_or_an_address(text, town):
+    from app.workbench.brief import _town_of
+    assert _town_of(text) == town

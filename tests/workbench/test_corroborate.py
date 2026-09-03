@@ -87,3 +87,15 @@ def test_the_same_source_twice_does_not_corroborate_itself():
     ])
     assert facts[0].confidence.value == "unverified"
     assert facts[0].corroborations == 1
+
+
+def test_a_state_spelled_out_matches_its_abbreviation():
+    """OpenStreetMap writes 'Texas' where Google and Yelp write 'TX', which made
+    three sources reporting one address look like a three-way disagreement."""
+    facts = corroborate([
+        _c("address", "9225 Preston Rd, Frisco, TX 75033, USA", "https://g/"),
+        _c("address", "9225 Preston Rd, Frisco, TX 75033", "https://y/"),
+        _c("address", "9225 Preston Road, Frisco, Texas, 75033", "https://o/"),
+    ])
+    assert facts[0].confidence.value == "verified"
+    assert facts[0].corroborations == 3
