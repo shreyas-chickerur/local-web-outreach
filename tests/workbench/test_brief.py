@@ -6,12 +6,7 @@ import pytest
 
 from app.adapters.directory import DirectoryPlace
 from app.adapters.site_fetch import FetchResult
-from app.workbench.brief import (
-    alternate_urls,
-    build_brief,
-    format_brief,
-    site_state,
-)
+from app.workbench.brief import build_brief, format_brief, site_state
 from app.workbench.types import Confidence
 
 pytestmark = pytest.mark.unit
@@ -393,16 +388,6 @@ def test_a_chain_is_flagged_even_when_its_site_blocks_us():
                         directories=[google], fetcher=_Fetcher(ok=False))
     assert brief.looks_like_a_chain
     assert any("4 locations" in s for s in brief.chain_signals)
-
-
-def test_a_broken_certificate_is_not_a_dead_site():
-    """yamadallas.com serves a certificate that is not valid for the www
-    address Google publishes. The site loads perfectly at the other spelling,
-    so calling it "not loading" was wrong twice over — and the certificate is
-    itself the most sellable thing about the lead."""
-    assert alternate_urls("https://www.example.com/") == [
-        "https://example.com/", "http://www.example.com/"]
-    assert alternate_urls("https://example.com/")[0] == "https://www.example.com/"
 
 
 def test_the_working_spelling_is_read_and_the_fault_is_kept():

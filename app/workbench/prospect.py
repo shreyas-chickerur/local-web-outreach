@@ -58,6 +58,9 @@ class Prospect:
     thin_site: bool = False
     js_rendered: bool = False
     cert_error: bool = False
+    blocked: bool = False
+    url_fault: str | None = None
+    working_url: str | None = None
     score: int = 0
     reasons: list[str] = field(default_factory=list)
     # The same findings said plainly. `reasons` shows the arithmetic; these are
@@ -96,6 +99,20 @@ def score(p: Prospect) -> Prospect:
         add(CERT_ERROR,
             "their https certificate does not match their address",
             "Their own Google link shows a security warning before the site")
+    elif p.url_fault in ("dead", "not-found"):
+        add(SITE_DOWN, f"the address on their listing is {p.url_fault}",
+            "The website on their Google listing does not exist")
+    elif p.url_fault == "parked":
+        add(NO_WEBSITE, "their domain has lapsed and is parked",
+            "Their domain has lapsed — it now shows a for-sale page")
+    elif p.url_fault == "http-link":
+        add(6, "their listing links http though the site serves https",
+            "Their Google listing still links the old http address")
+
+    if p.blocked:
+        reasons.append("  0  their site refused our reader — we could not "
+                       "judge it either way")
+        taglines.append("Their site blocks automated readers — open it yourself")
 
     if not p.website:
         add(NO_WEBSITE, "no website at all",
@@ -110,7 +127,9 @@ def score(p: Prospect) -> Prospect:
         if p.https is False:
             add(NO_HTTPS, "still on http; browsers warn visitors about it",
                 "Still on http — browsers label it \u201cnot secure\u201d")
-        if p.js_rendered:
+        if p.blocked:
+            pass                      # nothing was read, so nothing is claimed
+        elif p.js_rendered:
             # We received a shell, not a page. Claiming the site is empty would
             # be reporting our blind spot as their problem.
             reasons.append("  0  their site renders with JavaScript — we could "
@@ -120,7 +139,7 @@ def score(p: Prospect) -> Prospect:
         elif p.thin_site:
             add(THIN_SITE, "the site publishes almost nothing to work with",
                 "Barely any content — no menu, services or hours to find")
-        if (not p.js_rendered and p.site_reachable is not False
+        if (not p.js_rendered and not p.blocked and p.site_reachable is not False
                 and p.mobile_ready is not False and p.https is not False
                 and not p.thin_site):
             add(SITE_IS_FINE, "their site is already responsive, secure and full",

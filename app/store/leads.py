@@ -18,7 +18,9 @@ from app.store.db import operator
 from app.workbench.match import name_tokens
 from app.workbench.resolve import town_of
 
-VERIFIABLE = ("address", "phone", "hours")
+# "website" is here because a listing's URL is as correctable as its phone
+# number, and the correction is worth the same audit trail.
+VERIFIABLE = ("address", "phone", "hours", "website")
 STATUSES = ("new", "to visit", "visited", "interested", "not interested")
 
 

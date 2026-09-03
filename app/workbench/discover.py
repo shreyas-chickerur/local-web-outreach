@@ -15,10 +15,10 @@ from datetime import UTC, datetime, timedelta
 
 from app.adapters.gplaces import PlacesError, places
 from app.adapters.site_fetch import HttpSiteFetcher, SiteFetcher
-from app.workbench.brief import alternate_urls, site_state
 from app.workbench.categories import CATEGORIES, Category
 from app.workbench.extract import extract_from_html
 from app.workbench.prospect import Prospect, rank
+from app.workbench.weburl import validate
 
 CACHE_HOURS = 24
 CHAIN_AT = 3          # locations under one name before we call it a chain
@@ -48,30 +48,26 @@ def _inspect(prospect: Prospect, fetcher: SiteFetcher) -> Prospect:
     """Read their site for what Google cannot tell us. Never raises."""
     if not prospect.website:
         return prospect
-    try:
-        result = fetcher.fetch(prospect.website)
-    except Exception:                       # a bad site must not sink the page
+    check = validate(prospect.website, fetcher)
+    prospect.url_fault = check.fault
+    prospect.working_url = check.working
+    prospect.cert_error = check.fault == "certificate"
+    prospect.blocked = check.blocked
+    if check.blocked:
+        # The body of a 403 is a bot-protection notice. Measuring it for
+        # viewport tags and word counts scored an error page as the business's
+        # website, which is how a florist with a working site reached 100.
+        prospect.site_reachable = None
         return prospect
-    if getattr(result, "tls_error", False):
-        # The published address throws a security warning. That is a finding
-        # about them, not a reason for us to give up reading the site.
-        prospect.cert_error = True
-        for candidate in alternate_urls(prospect.website):
-            try:
-                retry = fetcher.fetch(candidate)
-            except Exception:
-                continue
-            if retry.ok and retry.html:
-                result = retry
-                break
-    state = site_state(result.status, bool(result.ok and result.html))
-    # Being refused is not being broken, and it says nothing about the business.
-    prospect.site_reachable = None if state == "blocked" else (state == "ok")
-    if not result.html:
+    if check.result is None or not check.result.html:
+        prospect.site_reachable = False
         return prospect
-    site = extract_from_html(result.html, result.final_url or prospect.website)
+
+    prospect.site_reachable = True
+    site = extract_from_html(check.result.html,
+                             check.working or prospect.website)
     prospect.mobile_ready = site.mobile_ready
-    prospect.https = str(result.final_url or "").lower().startswith("https")
+    prospect.https = (check.fault != "no-https")
     prospect.js_rendered = site.js_rendered
     # Measured on the page, not on what our parser managed to pull out of it.
     prospect.thin_site = site.text_words < THIN_WORDS

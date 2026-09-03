@@ -109,6 +109,19 @@
   .score b{display:block;font-size:21px;font-weight:680;line-height:1.2}
   .score span{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
 
+  .listing{margin:20px 0 0;padding:15px 17px;border-radius:var(--r);
+    background:var(--bad-bg);border:1px solid #f5c6c1}
+  .listing.mild{background:var(--warn-bg);border-color:#f0dcb4}
+  .listing.unknown{background:var(--raise);border-color:var(--line)}
+  .listing b{display:block;font-size:13.5px;margin-bottom:7px;color:var(--bad)}
+  .listing.mild b{color:var(--warn)} .listing.unknown b{color:var(--dim)}
+  .listing .urls{display:grid;grid-template-columns:76px 1fr;gap:5px 12px;
+    font-size:12.5px;font-family:var(--mono);align-items:baseline}
+  .listing .urls span{color:var(--faint);font-family:var(--sans)}
+  .listing .urls a{color:var(--accent);text-decoration:none;word-break:break-all}
+  .listing s{color:var(--faint)}
+  .listing .fixit{margin-top:11px}
+
   .banner{margin:22px 0 0;padding:15px 17px;border-radius:var(--r);
     background:var(--warn-bg);border:1px solid #f0dcb4}
   .banner b{color:var(--warn);display:block;margin-bottom:6px;font-size:13.5px;font-weight:600}
@@ -473,7 +486,7 @@ $("#f").onsubmit = async e => {
 
 const COLOR = {verified: "var(--ok)", unverified: "var(--warn)",
                conflict: "var(--bad)", operator_verified: "var(--accent-2)"};
-const VERIFIABLE = ["address", "phone", "hours"];
+const VERIFIABLE = ["address", "phone", "hours", "website"];
 let LEAD = null;   // the lead currently on screen
 
 const when = iso => {
@@ -518,6 +531,13 @@ async function confirmField(field) {
   if (!value) { alert("Enter what they told you."); return; }
   const data = await post("/api/verify", {field, value, note});
   if (data) { $("#out").innerHTML = render(data); window.scrollTo({top: 0, behavior: "smooth"}); }
+}
+
+// One click writes the correction into the trail, attributed like any other.
+async function correctWebsite(url) {
+  const data = await post("/api/verify", {field: "website", value: url,
+    note: "corrected from the address on their Google listing"});
+  if (data) { LEAD = data.lead_id || LEAD; $("#out").innerHTML = render(data); }
 }
 
 async function setStatus(status) {
@@ -607,6 +627,28 @@ function render(d) {
     .map(([label, v, c]) => `<div class="score"><b style="color:${c}">${v}</b><span>${label}</span></div>`)
     .join("");
 
+  // The address a directory publishes is not always the address that works,
+  // and the difference is usually the reason to walk in — so it gets said
+  // plainly, with the correction next to it.
+  const u = d.url_check;
+  const listing = u ? `<div class="listing in ${
+      u.blocked ? "unknown" : ["http-link", "redirected"].includes(u.fault) ? "mild" : ""}">
+    <b>${u.blocked ? "We could not check their site"
+         : "The link on their Google listing is broken"}</b>
+    <div class="urls">
+      <span>published</span><a href="${esc(u.published)}" target="_blank"
+        rel="noopener">${esc(u.published)}</a>
+      ${u.working && u.working !== u.published
+        ? `<span>works</span><a href="${esc(u.working)}" target="_blank"
+             rel="noopener">${esc(u.working)}</a>` : ""}
+    </div>
+    <div style="margin-top:9px;font-size:13px;color:var(--dim)">${esc(u.note)}</div>
+    ${u.working && u.working !== u.published && LEAD ? `<div class="fixit">
+      <button class="mini primary" onclick="correctWebsite(${
+        esc(JSON.stringify(u.working))})">Record ${esc(u.working)} as the right one</button>
+      </div>` : ""}
+  </div>` : "";
+
   const chain = d.chain_signals.length ? `<div class="banner in">
     <b>Multiple locations — a franchise is not a lead, but a local group may be a better one</b>
     <ul>${d.chain_signals.map(s => `<li>${esc(s)}</li>`).join("")}</ul></div>` : "";
@@ -682,7 +724,7 @@ function render(d) {
       </div>
       ${scores ? `<div class="scorecard">${scores}</div>` : ""}
     </div>
-    ${statusbar}${chain}${facts}${ratings}${published(d.published)}${asks}${notes}${trail}
+    ${statusbar}${listing}${chain}${facts}${ratings}${published(d.published)}${asks}${notes}${trail}
     <footer><span>sources consulted</span>${
       (d.sources_consulted.length ? d.sources_consulted : ["none"])
         .map(s => `<span class="chip">${esc(s)}</span>`).join("")}</footer>`;

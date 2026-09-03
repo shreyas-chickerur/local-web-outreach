@@ -99,6 +99,26 @@ WORKBENCH_DB=/path/to/workbench.db   # optional, defaults to ./workbench.db
 WORKBENCH_OPERATOR="Shreyas"         # optional, defaults to $USER
 ```
 
+## Validating the address a directory publishes
+
+The URL on a Google listing is not always the URL that works, and the ways it
+fails are worth telling apart because each is a different sentence at the door:
+
+| fault | what it means |
+|---|---|
+| `certificate` | TLS fails on that exact hostname — every visitor who follows the listing gets a full-page security warning |
+| `not-found` | the domain answers, that page is gone |
+| `parked` | the domain lapsed and shows a registrar's for-sale page |
+| `no-https` | no working https at all |
+| `http-link` | the listing links http; the site itself serves https |
+| `redirected` | it lands on a different domain (often a Facebook page) |
+| `dead` | nothing answers anywhere |
+| *blocked* | their bot filter refused us — **not** a fault, and nothing is concluded |
+
+The correction is the spelling that works; the fault is kept next to it, because
+the fault is usually the reason to walk in. One click records the correction
+into the lead's trail, attributed like any other change.
+
 ## Keys
 
 Copy `.env.example` to `.env`. OpenStreetMap needs no key but finds little on its

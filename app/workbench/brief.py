@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field, replace
-from urllib.parse import urlparse, urlunparse
 
 from app.adapters.directory import DirectoryPlace, DirectorySource
 from app.adapters.site_fetch import HttpSiteFetcher, SiteFetcher
@@ -42,6 +41,7 @@ from app.workbench.resolve import (
     town_of,
 )
 from app.workbench.types import Confidence, RawClaim, SourceType
+from app.workbench.weburl import UrlCheck, validate
 
 
 @dataclass
@@ -60,6 +60,8 @@ class Brief:
     # reporting that as "not loading" tells the reader something false about
     # the business.
     site_status: str | None = None      # ok | blocked | error | unreachable
+    # What the published address actually does, and what to use instead.
+    url_check: UrlCheck | None = None
     sources_consulted: list[str] = field(default_factory=list)
     # Why we think this is a multi-location brand. Empty for a single business.
     chain_signals: list[str] = field(default_factory=list)
@@ -154,22 +156,6 @@ def _claims_from_place(place: DirectoryPlace, source_type: SourceType) -> list[R
     return claims
 
 
-def alternate_urls(url: str) -> list[str]:
-    """Other spellings of the same address, best first.
-
-    A certificate issued for `example.com` but not `www.example.com` breaks the
-    exact URL Google publishes while the site itself is fine. Trying the other
-    spelling is what a visitor's browser effectively does for them.
-    """
-    parsed = urlparse(url if "//" in url else f"https://{url}")
-    host = parsed.netloc
-    others: list[str] = []
-    bare = host[4:] if host.lower().startswith("www.") else f"www.{host}"
-    others.append(urlunparse(parsed._replace(netloc=bare)))
-    others.append(urlunparse(parsed._replace(scheme="http")))
-    return [u for u in others if u != url]
-
-
 def site_state(status: int | None, ok: bool) -> str:
     """How to describe a fetch that did not work."""
     if ok:
@@ -182,30 +168,25 @@ def site_state(status: int | None, ok: bool) -> str:
 
 
 def _read_their_site(url: str, fetcher: SiteFetcher
-                     ) -> tuple[ExtractedSite | None, bool, str]:
+                     ) -> tuple[ExtractedSite | None, bool, str, UrlCheck]:
     """Fetch their homepage plus the pages that actually carry content."""
-    result = fetcher.fetch(url)
-    bad_certificate = bool(getattr(result, "tls_error", False))
-    if bad_certificate:
-        # The address is broken, not necessarily the site. Read it at the
-        # spelling that works — and remember that the published one does not.
-        for candidate in alternate_urls(url):
-            retry = fetcher.fetch(candidate)
-            if retry.ok and retry.html:
-                result, url = retry, candidate
-                break
+    check = validate(url, fetcher)
+    result = check.result
+    if result is None or not result.html:
+        state = ("blocked" if check.blocked
+                 else "insecure" if check.fault == "certificate" else "unreachable")
+        return None, False, state, check
+    url = check.working or url
     state = site_state(result.status, bool(result.ok and result.html))
-    if bad_certificate:
+    if check.fault == "certificate":
         state = "insecure"
-    if not result.ok or not result.html:
-        return None, False, state
     base = result.final_url or url
     extracted = extract_from_html(result.html, base)
     for page in menu_page_urls(result.html, base) + contact_page_urls(result.html, base):
         sub = fetcher.fetch(page)
         if sub.ok and sub.html:
             extracted = merge(extracted, extract_from_html(sub.html, page))
-    return extracted, True, "insecure" if bad_certificate else "ok"
+    return extracted, True, ("insecure" if check.fault == "certificate" else "ok"), check
 
 
 def build_brief(
@@ -232,7 +213,8 @@ def build_brief(
     # name guessed from a domain ("Theheritagetable") matches nothing, while the
     # real name from their page title matches immediately.
     if brief.website_url:
-        published, reachable, state = _read_their_site(brief.website_url, fetcher)
+        published, reachable, state, check = _read_their_site(brief.website_url, fetcher)
+        brief.url_check = check
         brief.site_reachable = reachable
         brief.site_status = state
         brief.published = published
@@ -306,7 +288,8 @@ def build_brief(
 
     # A website discovered by a directory still needs reading.
     if brief.website_url and brief.published is None:
-        published, reachable, state = _read_their_site(brief.website_url, fetcher)
+        published, reachable, state, check = _read_their_site(brief.website_url, fetcher)
+        brief.url_check = check
         brief.site_reachable = reachable
         brief.site_status = state
         brief.published = published
@@ -444,6 +427,15 @@ def format_brief(brief: Brief) -> str:
                 lines.append(
                     f"{'':30}!! {other.get('source_type')} disagrees: "
                     f"{other.get('value')}")
+
+    check = brief.url_check
+    if check is not None and (check.fault or check.blocked):
+        lines.append("")
+        lines.append("THE LINK ON THEIR LISTING")
+        lines.append(f"  published: {check.published}")
+        if check.working and check.working != check.published:
+            lines.append(f"  works:     {check.working}")
+        lines.append(f"  {check.note}")
 
     if brief.ratings:
         lines.append("")
