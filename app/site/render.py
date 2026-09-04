@@ -595,7 +595,7 @@ def _about(m: Material, t: Theme) -> str:
 
     # Split off the first sentence to set as a standfirst. Falls back to the
     # whole text when there is only one sentence, which is common.
-    sentences = re.split(r"(?<=[.!?])\s+", text.strip())
+    sentences = re.split(r"(?<=[.!?])\s+", drop_dangling(text).strip())
     opener = sentences[0] if len(sentences) > 1 else ""
     rest = " ".join(sentences[1:]) if opener else text
 
@@ -699,6 +699,62 @@ def justified(image_url: str, *context: str) -> bool:
     return any(word in haystack or word.rstrip("s") in haystack for word in words)
 
 
+def is_text_graphic(image_url: str, *context: str) -> bool:
+    """Is this a picture of words the page already says?
+
+    A restaurant's events banner is named plan-your-next-event-with-us.png and
+    is a photograph with that sentence set across it. Placed beside the
+    sentence it duplicates the copy, and cropped to a tile it cuts the words in
+    half. The filename reproducing a sentence is the giveaway — an ordinary
+    photograph is called Short-Rib.jpg, not a sentence.
+    """
+    name_words = [w for w in _WORD_RE.findall(image_url.rsplit("/", 1)[-1].lower())
+                  if w not in _IMAGE_STOP]
+    if len(name_words) < 4:
+        return False
+    for sentence in re.split(r"(?<=[.!?])\s+", " ".join(context)):
+        words = set(_WORD_RE.findall(sentence.lower()))
+        if not words:
+            continue
+        shared = sum(1 for w in name_words
+                     if w in words or w.rstrip("s") in words)
+        if shared / len(name_words) >= 0.7:
+            return True
+    return False
+
+
+# Copy that points at something on their old page. Carried across verbatim it
+# tells a visitor to click a link that is not there.
+_DANGLING_RE = re.compile(
+    r"(click (the )?link|click here|see below|see above|link below|"
+    r"scroll down|use the form below|on this page)", re.IGNORECASE)
+
+
+def drop_dangling(text: str) -> str:
+    """Remove sentences that refer to something only their old page had."""
+    sentences = re.split(r"(?<=[.!?])\s+", text.strip())
+    kept = [s for s in sentences if not _DANGLING_RE.search(s)]
+    return " ".join(kept) if kept else text
+
+
+def trim_to_sentence(text: str, limit: int) -> str:
+    """Cut at a sentence, or at worst a word — never mid-word.
+
+    A paragraph ending "or emailing u" reads as broken software, which is the
+    opposite of what a page like this is meant to demonstrate.
+    """
+    text = text.strip()
+    if len(text) <= limit:
+        return text
+    window = text[:limit]
+    for mark in (". ", "! ", "? "):
+        cut = window.rfind(mark)
+        if cut > limit * 0.5:
+            return window[:cut + 1].strip()
+    cut = window.rfind(" ")
+    return (window[:cut] if cut > 0 else window).rstrip(" ,;:-") + "…"
+
+
 def _features(m: Material, t: Theme) -> str:
     """Anything else their page had a section for, kept as alternating rows."""
     keep = [b for b in m.blocks
@@ -709,7 +765,8 @@ def _features(m: Material, t: Theme) -> str:
     rows = []
     for i, block in enumerate(keep[:4]):
         relevant = [src for src in (block.get("images") or ())
-                    if justified(src, block["heading"], block["text"])]
+                    if justified(src, block["heading"], block["text"])
+                    and not is_text_graphic(src, block["heading"], block["text"])]
         fresh = m.take(relevant, 1)
         art = ('<div class="shot">'
                + picture(fresh[0], m.photo_notes.get(fresh[0], ""),
@@ -729,9 +786,10 @@ def _features(m: Material, t: Theme) -> str:
         # apart, the rest as prose. A heading over an undifferentiated block of
         # text is what "no organisation" looks like, and it is most of why a
         # section reads as filler even when the words are theirs.
-        sentences = re.split(r"(?<=[.!?])\s+", block["text"][:460].strip())
+        body = trim_to_sentence(drop_dangling(block["text"]), 460)
+        sentences = re.split(r"(?<=[.!?])\s+", body)
         opener = sentences[0] if len(sentences) > 1 else ""
-        rest = " ".join(sentences[1:]) if opener else block["text"][:460]
+        rest = " ".join(sentences[1:]) if opener else body
         words = (f'<div class="words"><h3>{e(block["heading"])}</h3>'
                  + (f'<p class="standfirst">{e(opener)}</p>' if opener else "")
                  + (f'<p class="prose">{e(rest)}</p>' if rest.strip() else "")

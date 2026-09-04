@@ -37,3 +37,7 @@ workbench.db-*
 
 # Commit message drafts, passed to `git commit -F`. Scaffolding, not history.
 .commits/
+
+# Working notes: feedback themes, debugging lessons, decisions not yet
+# encoded in code or tests. Scaffolding for the work, not part of it.
+.notes/

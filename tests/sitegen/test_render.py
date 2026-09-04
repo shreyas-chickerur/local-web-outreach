@@ -560,3 +560,48 @@ def test_the_gallery_tiles_share_one_shape():
     assert "nth-child(6n+1)" not in page
     assert "repeat(var(--cols,3),minmax(0,1fr))" in page
     assert page.count('aspect-ratio:4/3') >= 1
+
+
+def test_a_picture_of_the_sentence_beside_it_is_not_used():
+    """Their events banner is a photograph with "Plan your next event with us"
+    set across it, named after that sentence. Placed beside the sentence it
+    duplicates the copy, and cropped to a tile it cuts the words in half."""
+    from app.site.render import is_text_graphic
+    text = "Plan you next event with us! Our venue seats up to 75 guests."
+    assert is_text_graphic("/x/plan-your-next-event-with-us-2.png", "Events", text)
+    assert not is_text_graphic("/x/Short-Rib-980x1165.jpg", "Events", text)
+    # A legitimate match is still a match: the picture names the subject, not
+    # a whole sentence of the copy.
+    assert not is_text_graphic("/x/Impractical-Sandwich.jpeg",
+                               "The Impractical Sandwich", "A new sandwich.")
+
+
+def test_copy_is_never_cut_mid_word():
+    """A paragraph ending "or emailing u" reads as broken software, which is
+    the opposite of what the page is meant to demonstrate."""
+    from app.site.render import trim_to_sentence
+    long = ("First sentence here. Second one follows on. " + "word " * 120
+            + "and emailing us")
+    out = trim_to_sentence(long, 460)
+    assert len(out) <= 460
+    assert out.endswith((".", "!", "?", "…"))
+    assert not out.endswith(" u")
+
+
+def test_copy_pointing_at_their_old_page_is_dropped():
+    """"Click link here to inquire" carried across verbatim tells a visitor to
+    click something that is not on the new page."""
+    from app.site.render import drop_dangling
+    text = ("We seat 75 guests. Click link here to inquire about events. "
+            "Call us to book.")
+    out = drop_dangling(text)
+    assert "Click link here" not in out
+    assert "We seat 75 guests." in out and "Call us to book." in out
+
+
+def test_dropping_everything_leaves_the_text_alone():
+    """If every sentence refers to their old page, saying nothing is worse than
+    saying something imperfect."""
+    from app.site.render import drop_dangling
+    text = "Click here to book."
+    assert drop_dangling(text) == text
