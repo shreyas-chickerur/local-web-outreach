@@ -502,11 +502,30 @@ def _menu(m: Material, t: Theme) -> str:
             f'<ul class="dishes">{"".join(rows)}</ul></div></section>')
 
 
+# (tiles, wide columns, narrow columns) — every pairing divides exactly, so the
+# grid is a complete rectangle at each breakpoint rather than a full block with
+# a ragged line under it. The column count follows the tile count: three tiles
+# in a two-column grid strands one, so three tiles keep three columns until the
+# screen is narrow enough for a single file. Twelve is the ceiling; beyond that
+# a gallery stops being a glance and becomes a scroll.
+GALLERY_SHAPES = ((12, 3, 2), (6, 3, 2), (4, 2, 2), (3, 3, 3), (2, 2, 2))
+
+
+def gallery_shape(available: int) -> tuple[int, int, int]:
+    """(tiles, wide columns, narrow columns), or (0, 0, 0) for no gallery."""
+    for tiles, wide, narrow in GALLERY_SHAPES:
+        if available >= tiles:
+            return tiles, wide, narrow
+    return 0, 0, 0
+
+
 def _gallery(m: Material, t: Theme) -> str:
     # Everything the hero did not take. The offer cards take none at all.
-    shots = m.take(m.images, GALLERY_MAX)
-    if len(shots) < 3:
+    candidates = [url for url in m.images if url not in m.spent]
+    wanted, wide, narrow = gallery_shape(len(candidates))
+    if not wanted:
         return ""
+    shots = m.take(m.images, wanted)
     tiles = "".join(
         f'<button aria-label="Open photo {i + 1}" data-reveal data-delay="{i % 4}">'
         + picture(src, m.photo_notes.get(src, ""),
@@ -515,7 +534,8 @@ def _gallery(m: Material, t: Theme) -> str:
     return (f'<section id="gallery"><div class="wrap">'
             f'<p class="eyebrow" data-reveal>Gallery</p>'
             f'<h2 data-reveal>Have a look around</h2>'
-            f'<div class="mosaic">{tiles}</div></div></section>'
+            f'<div class="mosaic" style="--cols:{wide};--cols-narrow:{narrow}">'
+            f'{tiles}</div></div></section>'
             f'<div class="lightbox" role="dialog" aria-label="Photo">'
             f'<button class="close" aria-label="Close">&times;</button>'
             f'<button class="prev" aria-label="Previous">&lsaquo;</button>'

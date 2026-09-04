@@ -396,17 +396,26 @@ html.reveals .editorial-art.in img{{clip-path:inset(0 0 0 0)}}
 .dishes .d{{grid-column:1/-1;color:var(--dim);font-size:15px;margin:0}}
 
 /* --------------------------------------------------------------- gallery -- */
-.mosaic{{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:10px;grid-auto-flow:dense}}
+/* A fixed three-column rhythm with one aspect ratio and one gap, so the whole
+   section is a solid rectangle. It used to be auto-fit columns, a first tile
+   spanning two of them at a different ratio, and dense auto-flow — three
+   sources of raggedness compounding into holes down the right-hand side. */
+.mosaic{{display:grid;gap:clamp(8px,1vw,14px);
+  grid-template-columns:repeat(var(--cols,3),minmax(0,1fr))}}
 .mosaic button{{padding:0;border:0;background:none;cursor:zoom-in;overflow:hidden;
-  border-radius:var(--r);position:relative;aspect-ratio:4/3}}
-.mosaic button:nth-child(6n+1){{grid-column:span 2;aspect-ratio:8/5}}
+  border-radius:var(--r);position:relative;aspect-ratio:4/3;display:block}}
 .mosaic img{{width:100%;height:100%;object-fit:cover;
   transition:transform .7s cubic-bezier(.2,.7,.3,1),
     clip-path 1s cubic-bezier(.2,.7,.3,1)}}
 html.reveals .mosaic img{{clip-path:inset(14% 0 0 0)}}
 html.reveals .mosaic button.in img{{clip-path:inset(0 0 0 0)}}
 .mosaic button:hover img{{transform:scale(1.06)}}
+.mosaic button:focus-visible{{outline:2px solid var(--accent);outline-offset:3px}}
+@media (max-width:860px){{
+  .mosaic{{grid-template-columns:repeat(var(--cols-narrow,2),minmax(0,1fr))}}
+}}
+@media (max-width:520px){{.mosaic{{grid-template-columns:1fr}}}}
+
 .lightbox{{position:fixed;inset:0;z-index:60;background:rgba(8,8,10,.94);
   display:none;place-items:center;padding:26px;backdrop-filter:blur(4px)}}
 .lightbox[open]{{display:grid}}
@@ -603,7 +612,6 @@ html.reveals [data-reveal][data-delay="4"]{{transition-delay:.36s}}
   .bar.open nav{{display:flex;position:absolute;inset:100% 0 auto;flex-direction:column;
     background:var(--surface);color:var(--ink);padding:18px var(--pad);gap:14px;
     box-shadow:var(--shadow)}}
-  .mosaic button:nth-child(6n+1){{grid-column:span 1;aspect-ratio:4/3}}
   .callbar{{display:flex;position:fixed;inset:auto 0 0;z-index:45;gap:10px;
     padding:12px 16px calc(12px + env(safe-area-inset-bottom));
     background:var(--surface);border-top:1px solid var(--line)}}

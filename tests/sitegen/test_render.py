@@ -535,3 +535,28 @@ def test_a_photograph_we_cannot_resize_gets_no_srcset():
                          "photos": [f"https://x/{n}.jpg" for n in range(6)]}
     page, _ = build(lean)
     assert "srcset" not in page
+
+
+@pytest.mark.parametrize("photos,tiles,wide,narrow", [
+    (18, 12, 3, 2), (12, 12, 3, 2), (8, 6, 3, 2), (6, 6, 3, 2),
+    (5, 4, 2, 2), (3, 3, 3, 3), (2, 2, 2, 2), (1, 0, 0, 0),
+])
+def test_the_gallery_is_always_a_complete_rectangle(photos, tiles, wide, narrow):
+    """A full block with a ragged line underneath reads as a mistake. The
+    column count follows the tile count so no row is ever part-empty."""
+    from app.site.render import gallery_shape
+    assert gallery_shape(photos) == (tiles, wide, narrow)
+    if tiles:
+        assert tiles % wide == 0 and tiles % narrow == 0
+
+
+def test_the_gallery_tiles_share_one_shape():
+    """One tile spanning two columns at a different aspect ratio, inside an
+    auto-fit grid with dense flow, was three sources of raggedness compounding."""
+    rich = _rich()
+    rich["place_photos"] = [f"places/x/photos/{n}" for n in range(14)]
+    page, _ = build(rich)
+    assert "grid-auto-flow:dense" not in page
+    assert "nth-child(6n+1)" not in page
+    assert "repeat(var(--cols,3),minmax(0,1fr))" in page
+    assert page.count('aspect-ratio:4/3') >= 1
