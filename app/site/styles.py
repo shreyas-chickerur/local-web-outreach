@@ -143,6 +143,15 @@ body::after{{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
     sheen = t.tint("surface", 0.55)
     body_size = t.scale["body"]
     listing_size = t.step(max(2, t.display_steps - 3))
+    standfirst_size = t.step(2)
+    standfirst_track = t.tracking_for(2)
+    prose_size = t.step(1)
+    partner_size = t.step(2)
+    partner_track = t.tracking_for(2)
+    accolade_size = t.step(max(2, t.display_steps - 1))
+    on_base = t.on(t.bg)
+    on_raise = t.on(t.raise_)
+    on_accent = t.on(t.accent)
     return f'''
 :root{{
   --density-scale:1;
@@ -155,6 +164,10 @@ body::after{{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
   --shadow:0 1px 1px {shade_tight},0 8px 30px {shade_wide};
   --lift:0 2px 4px {shade_tight},0 22px 48px -12px {shade_lift};
   --hairline:{hairline};
+  /* Foregrounds computed against each ground, never paired by hand. */
+  --on-base:{on_base};
+  --on-raise:{on_raise};
+  --on-accent:{on_accent};
   --pad:clamp(20px,5vw,44px);
 }}
 *{{box-sizing:border-box}}
@@ -189,8 +202,16 @@ a{{color:var(--accent)}}
 img{{max-width:100%;display:block}}
 .wrap{{width:min(1180px,100% - var(--pad)*2);margin-inline:auto}}
 .wrap.narrow{{width:min(760px,100% - var(--pad)*2)}}
-section{{padding:clamp(64px,10vw,140px) 0;position:relative}}
-section.band{{background:var(--raise)}}
+/* py-24 at the small end, py-32+ at the large: sections are the main carrier
+   of the editorial whitespace this design depends on. */
+section{{padding:clamp(96px,11vw,168px) 0;position:relative}}
+/* A section's ground is set in ONE place, with the text colour that was
+   computed against it. Two rules both setting a background is how white text
+   ended up on cream paper: `section.band` outranked `.accolade-band` on
+   specificity, so the ground and the foreground came from different places. */
+section[data-ground="raise"]{{background:var(--raise);color:var(--on-raise)}}
+section[data-ground="accent"]{{background:var(--accent);color:var(--on-accent)}}
+section[data-ground="base"]{{background:var(--bg);color:var(--on-base)}}
 .eyebrow{{font-size:12px;letter-spacing:.18em;text-transform:uppercase;
   font-weight:700;color:var(--accent);margin:0 0 14px;font-family:{t.body.stack}}}
 
@@ -268,12 +289,13 @@ section.band{{background:var(--raise)}}
   border:1px solid var(--line);border-radius:var(--r);
   padding:30px 28px;transition:transform .3s cubic-bezier(.2,.7,.3,1),
   box-shadow .3s ease,border-color .3s ease;position:relative;overflow:hidden}}
-.card:hover{{transform:translateY(-5px);box-shadow:var(--lift);
-  border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}}
+/* Not a link, so no lift and no shadow — the same promise .offer used to make.
+   Only the border moves, which reads as attention rather than as a button. */
+.card:hover{{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}}
 .card .num{{font-family:{t.display.stack};font-size:13px;color:var(--accent);
   letter-spacing:.1em;margin-bottom:12px}}
 .card h3{{margin:0}}
-section.band .card{{background:var(--bg)}}
+section[data-ground="raise"] .card{{background:var(--bg)}}
 
 /* ---------------------------------------------------------------- offers -- */
 .head{{max-width:44ch;margin-bottom:clamp(30px,5vw,56px)}}
@@ -288,8 +310,12 @@ section.band .card{{background:var(--bg)}}
    body size. Sections that carry a density still override it inline. */
 
 /* Four or more: the grid is genuinely right, and auto-fit belongs here. */
-.offers{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+/* Equal cards on a fixed three-column rhythm. auto-fit plus a span-2 first
+   card produced a wide tile, two narrow ones, and a single orphan underneath. */
+.offers{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
   gap:clamp(12px,1.6vw,20px)}}
+@media (max-width:860px){{.offers{{grid-template-columns:repeat(2,minmax(0,1fr))}}}}
+@media (max-width:520px){{.offers{{grid-template-columns:1fr}}}}
 /* Exactly three: hold three across so none of them stretches into a slab. */
 [data-density="balanced"] .offers{{
   grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -321,12 +347,17 @@ section.band .card{{background:var(--bg)}}
     clip-path 1s cubic-bezier(.2,.7,.3,1);clip-path:inset(14% 0 0 0)}}
 .editorial-art.in img{{clip-path:inset(0 0 0 0)}}
 .editorial-art:hover img{{transform:scale(1.04)}}
+/* No lift and no shadow on hover: these are not links, and an affordance that
+   promises a destination it does not have is worse than none. Only the rule
+   moves, which reads as attention rather than as a button. */
 .offer{{position:relative;border-radius:var(--r);overflow:hidden;
-  background:var(--surface);border:1px solid var(--line);min-height:180px;
-  display:flex;flex-direction:column;justify-content:flex-end;padding:26px 24px;
-  transition:transform .45s cubic-bezier(.2,.7,.3,1),box-shadow .45s ease,
-    border-color .45s ease}}
-.offer:hover{{transform:translateY(-6px);box-shadow:var(--lift)}}
+  background:var(--surface);border:1px solid var(--line);
+  min-height:clamp(170px,17vw,220px);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:clamp(24px,2.4vw,32px);
+  transition:border-color .4s ease,background .4s ease}}
+.offer:hover{{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));
+  background:var(--raise)}}
 .offer .idx{{font-family:{t.display.stack};font-size:12px;letter-spacing:.16em;
   color:var(--accent);margin-bottom:auto}}
 .offer h3{{margin:14px 0 0;line-height:1.15}}
@@ -334,20 +365,6 @@ section.band .card{{background:var(--bg)}}
   margin-top:18px;transition:width .45s cubic-bezier(.2,.7,.3,1)}}
 .offer:hover .rule{{width:78px}}
 /* Photo-led cards: the picture is the card, the words sit on the glass. */
-.offer.has-art{{min-height:min(340px,42vw);padding:0;border:0;color:#fff;
-  aspect-ratio:4/5}}
-.offer.has-art .art{{position:absolute;inset:0;overflow:hidden}}
-.offer.has-art img{{width:100%;height:100%;object-fit:cover;
-  transition:transform 1.1s cubic-bezier(.2,.7,.3,1),filter .5s ease;
-  clip-path:inset(12% 0 0 0);}}
-.offer.has-art.in img{{clip-path:inset(0 0 0 0)}}
-.offer.has-art:hover img{{transform:scale(1.07)}}
-.offer.has-art .label{{position:relative;z-index:1;margin-top:auto;
-  padding:24px 22px;width:100%;
-  background:linear-gradient(180deg,transparent,rgba(8,8,10,.86) 62%)}}
-.offer.has-art .idx{{color:#fff;opacity:.75}}
-.offer.has-art h3{{color:#fff;text-shadow:0 1px 18px rgba(0,0,0,.4)}}
-.offers .offer.has-art:first-child{{grid-column:span 2;aspect-ratio:16/10}}
 
 /* ----------------------------------------------------------------- stats -- */
 .statband{{padding:clamp(40px,6vw,72px) 0;background:var(--accent);
@@ -407,10 +424,107 @@ section.band .card{{background:var(--bg)}}
 .quotes{{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}}
 .quote{{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
   padding:30px 28px;display:flex;flex-direction:column;gap:14px}}
-section.band .quote{{background:var(--bg)}}
+section[data-ground="raise"] .quote{{background:var(--bg)}}
 .quote p{{margin:0;font-size:16.5px;line-height:1.6}}
 .quote .who{{margin-top:auto;font-size:13.5px;color:var(--dim);font-weight:600}}
 .stars{{color:var(--accent);letter-spacing:3px;font-size:15px}}
+
+/* ----------------------------------------------------- recognition ------- */
+/* The award is the most persuasive line on the page, so it gets scale and
+   space rather than a slab of colour: filling a full-bleed band with the
+   accent would put it far past the tenth of the page it is meant to occupy. */
+.accolade-band{{padding:clamp(96px,12vw,170px) 0}}
+/* The statement and its proof share the measure. Left-aligned copy in a narrow
+   column left the right two-thirds of the band empty, which reads as a gap
+   rather than as space. */
+.accolade-grid{{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+  gap:clamp(30px,5vw,80px);align-items:end}}
+.accolade-grid aside{{padding-bottom:.4em}}
+@media (max-width:820px){{.accolade-grid{{grid-template-columns:1fr;
+  align-items:start;gap:26px}}}}
+.accolade{{max-width:15ch;margin:0 0 .3em;
+  font-size:calc({accolade_size} * var(--density-scale))}}
+.accolade-band .eyebrow{{margin-bottom:22px}}
+.accolade-band .eyebrow::after{{content:"";display:block;width:64px;height:3px;
+  background:var(--accent);margin-top:14px;border-radius:2px}}
+.accolade-note{{font-size:calc({prose_size} * var(--density-scale));
+  max-width:36ch;color:var(--dim);margin:0}}
+.accolade-band .proof{{margin:30px 0 0;font-size:13px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim)}}
+.laurels{{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-top:36px}}
+.laurels img{{height:clamp(84px,9vw,124px);width:auto;object-fit:contain}}
+
+/* -------------------------------------------------------- partners ------- */
+/* The list is the point, not any one name, so it moves. Paused on hover and
+   frozen entirely for anyone who asked for less motion. */
+.marquee{{overflow:hidden;margin-top:26px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}}
+.marquee ul{{display:flex;gap:0;list-style:none;margin:0;padding:0;width:max-content;
+  animation:drift calc(var(--n) * 3.6s) linear infinite}}
+.marquee:hover ul{{animation-play-state:paused}}
+.marquee li{{padding:clamp(18px,2vw,30px) clamp(22px,3vw,48px);
+  border-left:1px solid var(--line);min-width:max-content}}
+.marquee .who{{display:block;font-family:{t.display.stack};
+  font-size:calc({partner_size} * var(--density-scale));line-height:1.15;
+  letter-spacing:{partner_track}}}
+.marquee .note{{display:block;color:var(--dim);font-size:14px;margin-top:8px;
+  max-width:26ch}}
+@keyframes drift{{from{{transform:translateX(0)}}to{{transform:translateX(-50%)}}}}
+
+/* --------------------------------------------------------- features ------ */
+/* Four shapes rather than a left/right zig-zag. Alternating sides is the most
+   recognisable template rhythm there is; varying the measure and the offset
+   reads as edited. */
+.feature{{display:grid;gap:clamp(24px,4vw,64px);align-items:start;
+  padding:clamp(40px,6vw,88px) 0;border-bottom:1px solid var(--line)}}
+.feature:last-child{{border-bottom:0}}
+.feature h3{{margin:0 0 .5em}}
+.feature p{{color:var(--dim);margin:0}}
+.feature .shot{{border-radius:var(--r);overflow:hidden;aspect-ratio:4/3}}
+.feature .shot img{{width:100%;height:100%;object-fit:cover;
+  transition:transform 1s cubic-bezier(.2,.7,.3,1)}}
+.feature .shot:hover img{{transform:scale(1.03)}}
+/* wide: the picture leads, full measure beneath it */
+.feature.wide{{grid-template-columns:1fr}}
+.feature.wide .shot{{aspect-ratio:21/9;order:-1}}
+.feature.wide p{{max-width:62ch}}
+/* offset: text held off the left edge, picture narrow at the right */
+.feature.offset{{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}}
+.feature.offset .words{{padding-left:clamp(0px,4vw,72px)}}
+/* narrow: a column of text, no picture, breathing room either side */
+.feature.narrow{{grid-template-columns:minmax(0,1fr)}}
+.feature.narrow .words{{max-width:52ch;margin-inline:auto;text-align:center}}
+.feature.narrow .shot{{display:none}}
+/* plain: picture left, text right — used once, so it is not a rhythm */
+.feature.plain{{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);
+  align-items:center}}
+.feature.plain .shot{{aspect-ratio:5/4}}
+.feature.plain .shot{{order:-1}}
+@media (max-width:820px){{
+  .feature,.feature.offset,.feature.plain{{grid-template-columns:1fr}}
+  .feature .shot{{order:-1}}
+  .feature.offset .words{{padding-left:0}}
+}}
+
+/* ----------------------------------------------------------------- story -- */
+.story{{max-width:62ch}}
+/* The opening line in the display face, larger and looser: it does the work a
+   pull quote does, without inventing a quote nobody said. */
+.standfirst{{font-family:{t.display.stack};
+  font-size:calc({standfirst_size} * var(--density-scale));
+  line-height:1.28;letter-spacing:{standfirst_track};margin:0 0 .7em;
+  text-wrap:balance}}
+.prose{{font-size:calc({prose_size} * var(--density-scale));line-height:1.72;
+  color:var(--dim);margin:0}}
+.prose.dropcap::first-letter{{float:left;font-family:{t.display.stack};
+  font-size:3.1em;line-height:.82;padding:.06em .09em 0 0;color:var(--accent)}}
+.story p+p{{margin-top:1em}}
+/* A short rule under the heading, so the left column is not just two lines
+   floating in space. */
+.flourish{{display:block;width:52px;height:2px;background:var(--accent);
+  margin-top:20px;border-radius:2px}}
+@media (max-width:900px){{.story{{max-width:none}}}}
 
 /* ----------------------------------------------------------------- hours -- */
 .hourlist{{list-style:none;padding:0;margin:0}}
@@ -467,9 +581,6 @@ footer a:hover{{color:var(--accent)}}
   [data-density="balanced"] .offers{{
     grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}
 }}
-@media (max-width:700px){{
-  .offers .offer.has-art:first-child{{grid-column:span 1;aspect-ratio:4/5}}
-}}
 @media (max-width:860px){{
   .split{{grid-template-columns:1fr}}
   .bar nav{{display:none}}
@@ -490,7 +601,8 @@ footer a:hover{{color:var(--accent)}}
   *,*::before,*::after{{animation:none!important;transition:none!important}}
   [data-reveal]{{opacity:1!important;transform:none!important}}
   .hero .bgimg{{transform:none!important}}
-  .offer.has-art img,.mosaic img,.editorial-art img{{clip-path:none!important}}
+  .mosaic img,.editorial-art img{{clip-path:none!important}}
+  .marquee ul{{animation:none!important;flex-wrap:wrap;width:auto}}
 }}
 '''
 
@@ -605,14 +717,23 @@ if (counters.length) {
       if (!isFinite(target) || reduced) continue;
       const started = performance.now();
       const span = 1100;
+      const settle = () => {
+        entry.target.textContent = target.toLocaleString();
+      };
       const step = (now) => {
         const progress = Math.min((now - started) / span, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
         entry.target.textContent = Math.round(target * eased).toLocaleString();
         if (progress < 1) requestAnimationFrame(step);
-        else entry.target.textContent = target.toLocaleString();
+        else settle();
       };
       requestAnimationFrame(step);
+      // requestAnimationFrame stops in a throttled or backgrounded tab, which
+      // leaves the number frozen part-way — a visitor reading "674 reviews"
+      // when the business has 676. Timers keep running, so this guarantees the
+      // real figure lands whatever the animation does.
+      setTimeout(settle, span + 400);
+      document.addEventListener("visibilitychange", settle, {once: true});
     }
   }, {threshold: 0.4});
   counters.forEach(el => countObserver.observe(el));

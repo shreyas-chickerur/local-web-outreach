@@ -55,6 +55,25 @@ def rgba(hex_colour: str, alpha: float) -> str:
     return f"rgba({red},{green},{blue},{alpha:g})"
 
 
+def _luminance(hex_colour: str) -> float:
+    channels = []
+    for value in rgb(hex_colour):
+        srgb = value / 255
+        channels.append(srgb / 12.92 if srgb <= 0.04045
+                        else ((srgb + 0.055) / 1.055) ** 2.4)
+    return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
+
+
+def contrast(one: str, two: str) -> float:
+    """The WCAG ratio between two colours, 1.0 to 21.0."""
+    light, dark = sorted((_luminance(one), _luminance(two)), reverse=True)
+    return (light + 0.05) / (dark + 0.05)
+
+
+AA_BODY = 4.5
+AA_LARGE = 3.0
+
+
 @dataclass(frozen=True)
 class Face:
     """A typeface, its stack, and the axes it actually exposes."""
@@ -123,6 +142,27 @@ class Theme:
     grain: bool = False
 
     # ------------------------------------------------------------------ #
+    def on(self, ground: str, *, large: bool = False) -> str:
+        """A foreground colour guaranteed to be readable on `ground`.
+
+        Computed rather than declared. The previous approach paired a colour
+        with its background by hand, and one specificity conflict was enough to
+        put white text on cream paper — a defect no amount of care prevents,
+        because the pairing was never checked against the ground that actually
+        won.
+        """
+        need = AA_LARGE if large else AA_BODY
+        for candidate in (self.ink, self.bg, self.surface, "#ffffff", "#000000"):
+            if contrast(candidate, ground) >= need:
+                return candidate
+        # Nothing in the palette clears it, so fall back to whichever extreme
+        # is furthest away — still the best available, and the audit will say so.
+        return "#ffffff" if _luminance(ground) < 0.4 else "#111111"
+
+    def readable_on(self, ground: str) -> tuple[str, float]:
+        colour = self.on(ground)
+        return colour, contrast(colour, ground)
+
     def tint(self, token: str, alpha: float) -> str:
         """One of this theme's own colours, at an alpha."""
         return rgba(getattr(self, token), alpha)

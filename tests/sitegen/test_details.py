@@ -153,3 +153,12 @@ def test_every_size_that_uses_the_density_variable_can_resolve_outside_a_section
     assert users, "nothing uses the variable — the test is watching the wrong thing"
     root = re.search(r":root\{([^}]*)\}", markup).group(1)
     assert "--density-scale" in root      # inherited by every one of them
+
+
+def test_a_counted_number_is_guaranteed_to_land():
+    """requestAnimationFrame stops in a throttled or backgrounded tab, leaving
+    the number frozen part-way — a visitor reading "674 reviews" for a business
+    that has 676. Timers keep running, so the real figure has to be forced."""
+    markup = page("warm")
+    assert "setTimeout(settle" in markup
+    assert 'addEventListener("visibilitychange", settle' in markup

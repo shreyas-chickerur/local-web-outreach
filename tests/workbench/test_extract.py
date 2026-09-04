@@ -9,6 +9,7 @@ from app.workbench.extract import (
     extract_from_html,
     menu_page_urls,
     merge,
+    social_belongs_to,
     story_score,
     strip_leading_heading,
 )
@@ -296,3 +297,72 @@ def test_a_call_to_action_does_not_outscore_a_story():
                         "since, cutting every board by hand in the workshop "
                         "behind the store because that is how we were taught.")
     assert story > cta
+
+
+def test_lazy_loaded_images_are_found():
+    """Most sites defer image loading, so matching only src= saw almost none of
+    their photography — including the dish this restaurant is promoting."""
+    html = '''<img src="/a.jpg"><img data-src="/b.jpg" title="Impractical Sandwich">
+              <img data-lazy-src="/c.jpg"><img srcset="/d.jpg 800w, /e.jpg 1600w">
+              <img src="data:image/gif;base64,R0lGOD">'''
+    found = extract_from_html(html, "https://example.com/").images
+    for name in ("a.jpg", "b.jpg", "c.jpg", "d.jpg"):
+        assert any(name in url for url in found), name
+    assert not any(url.startswith("data:") for url in found)
+
+
+def test_the_pages_own_sections_are_carried_over():
+    """Rebuilding from a fixed list of sections threw away the parts of their
+    site that say the most: their philosophy, their awards, their suppliers."""
+    html = """<html><body>
+      <h2>Philosophy</h2><p>A culture is built on the food it consumes, and we
+         try to cook in a way that respects where every ingredient came from
+         before it reached this kitchen.</p>
+      <h2>James Beard Awards 2024</h2>
+      <h2>Nominated for Best Chef - Texas</h2><p>A fine dining experience.</p>
+      <h2>A Few of Our Partners</h2>
+      <h3>1836 Farms</h3><p>Terrell - black Angus beef</p>
+      <h3>Windy Meadows</h3><p>Campbell - pastured poultry</p>
+      <h3>Comeback Creek</h3><p>Pittsburg - vegetables</p>
+    </body></html>"""
+    blocks = {b["kind"]: b for b in extract_from_html(html, "https://x.com/").blocks}
+    assert "Philosophy" == blocks["story"]["heading"]
+    assert blocks["award"]["kicker"] == "James Beard Awards 2024"
+    assert "Best Chef" in blocks["award"]["heading"]
+    assert blocks["partners"]["heading"] == "A Few of Our Partners"
+    assert [e["name"] for e in blocks["partners"]["entries"]] == [
+        "1836 Farms", "Windy Meadows", "Comeback Creek"]
+
+
+def test_a_nav_heading_is_not_mistaken_for_a_section():
+    html = "<h2>Main menu</h2><p>Home About Contact Privacy Terms Sitemap</p>"
+    assert extract_from_html(html, "https://x.com/").blocks == []
+
+
+def test_a_social_link_must_be_a_profile_not_a_post():
+    """Linking a business's Instagram to one reel from 2022 is worse than not
+    linking it at all."""
+    for path in ("/reel/Ce7AuUJ/", "/p/abc123/", "/explore/tags/food/"):
+        html = f'<a href="https://www.instagram.com{path}">Instagram</a>'
+        assert extract_from_html(html, "https://x.com/").socials == []
+    html = '<a href="https://www.instagram.com/theheritagetable/">Instagram</a>'
+    assert extract_from_html(html, "https://x.com/").socials[0]["name"] == "Instagram"
+
+
+def test_a_host_is_matched_exactly_not_by_suffix():
+    """prairiefarmsteadtx.com ends with "x.com", and was being published on a
+    restaurant's site as its X account."""
+    html = '<a href="https://prairiefarmsteadtx.com/">Prairie Farmstead</a>'
+    assert extract_from_html(html, "https://x.com/").socials == []
+
+
+def test_a_profile_belongs_to_the_business_or_it_is_not_theirs():
+    """A restaurant crediting fourteen farms links fourteen other businesses'
+    accounts, every one a valid profile on the right host."""
+    assert social_belongs_to("https://instagram.com/theheritagetable/",
+                             "The Heritage Table")
+    assert social_belongs_to("https://instagram.com/hutchinsbbq", "Hutchins BBQ")
+    assert not social_belongs_to("https://instagram.com/knobhillfarmtx/",
+                                 "The Heritage Table")
+    assert not social_belongs_to("https://instagram.com/1836farms/",
+                                 "The Heritage Table")

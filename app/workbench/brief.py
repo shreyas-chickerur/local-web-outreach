@@ -28,6 +28,7 @@ from app.workbench.extract import (
     extract_from_html,
     menu_page_urls,
     merge,
+    social_belongs_to,
 )
 from app.workbench.hours import canonical as canonical_hours
 from app.workbench.hours import describe as describe_hours
@@ -164,6 +165,25 @@ def _claims_from_place(place: DirectoryPlace, source_type: SourceType) -> list[R
     return claims
 
 
+def _keep_own_socials(brief: Brief) -> None:
+    """Drop social links that belong to somebody else.
+
+    A restaurant crediting its suppliers links their accounts too, and every
+    one is a valid profile on the right host. Sending a customer to the beef
+    farm's Instagram is worse than showing no social links at all.
+    """
+    if brief.published is None:
+        return
+    kept = [s for s in brief.published.socials
+            if social_belongs_to(s.get("url", ""), brief.name)]
+    dropped = [s["name"] for s in brief.published.socials if s not in kept]
+    brief.published.socials = kept
+    if dropped:
+        brief.assumptions.append(
+            f"ignored {len(dropped)} social link(s) belonging to other "
+            f"businesses their site credits")
+
+
 def site_state(status: int | None, ok: bool) -> str:
     """How to describe a fetch that did not work."""
     if ok:
@@ -226,6 +246,7 @@ def build_brief(
         brief.site_reachable = reachable
         brief.site_status = state
         brief.published = published
+        _keep_own_socials(brief)
         if reachable and published:
             brief.sources_consulted.append("their website")
             if published.title and resolved.input_was_url:
@@ -309,6 +330,7 @@ def build_brief(
         brief.site_reachable = reachable
         brief.site_status = state
         brief.published = published
+        _keep_own_socials(brief)
         if reachable:
             brief.sources_consulted.append("their website")
     if brief.published is not None and brief.website_url:

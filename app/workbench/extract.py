@@ -34,7 +34,28 @@ _OG_IMAGE_RE = re.compile(
     r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']', re.IGNORECASE)
 _HEADING_RE = re.compile(r"<h([1-3])[^>]*>(.*?)</h\1>", re.IGNORECASE | re.DOTALL)
 _LI_RE = re.compile(r"<li[^>]*>(.*?)</li>", re.IGNORECASE | re.DOTALL)
-_IMG_RE = re.compile(r'<img[^>]+src=["\']([^"\']+)["\']', re.IGNORECASE)
+# The whole <img> tag, so lazy-loading attributes and the caption can be read
+# off it. Matching only src= missed every photo on a site that defers loading —
+# which is most of them now, and included the one dish this restaurant is
+# currently promoting.
+_IMG_TAG_RE = re.compile(r"<img\b[^>]*>", re.IGNORECASE)
+_ATTR_RE = re.compile(r'([\w:-]+)\s*=\s*["\']([^"\']*)["\']')
+# In priority order: the real source first, then the common lazy attributes.
+_SRC_ATTRS = ("src", "data-src", "data-lazy-src", "data-original", "data-lazy")
+
+
+def _img_sources(html: str) -> list[tuple[str, str]]:
+    """(url, caption) for every image, however the page defers loading it."""
+    found: list[tuple[str, str]] = []
+    for tag in _IMG_TAG_RE.findall(html):
+        attrs = {k.lower(): v for k, v in _ATTR_RE.findall(tag)}
+        url = next((attrs[a] for a in _SRC_ATTRS
+                    if attrs.get(a) and not attrs[a].startswith("data:")), "")
+        if not url and attrs.get("srcset"):
+            url = attrs["srcset"].split(",")[0].strip().split(" ")[0]
+        if url and not url.startswith("data:"):
+            found.append((url, _text(attrs.get("title") or attrs.get("alt") or "")))
+    return found
 _LINK_RE = re.compile(r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
                       re.IGNORECASE | re.DOTALL)
 _P_RE = re.compile(r"<p[^>]*>(.*?)</p>", re.IGNORECASE | re.DOTALL)
@@ -102,6 +123,60 @@ _SOCIAL_HOSTS = {
     "tiktok.com": "TikTok", "youtube.com": "YouTube",
 }
 
+# The first path segment that means "this is a profile" — anything else on
+# these hosts is a single post, a share widget or a search result. Linking a
+# business's "Instagram" to one reel from 2022 is worse than not linking it.
+_PROFILE_RULES: dict[str, tuple[frozenset[str], frozenset[str]]] = {
+    # host: (segments that are NEVER a profile, segments that always ARE one)
+    "instagram.com": (frozenset({"p", "reel", "reels", "explore", "stories",
+                                 "tv", "s", "accounts"}), frozenset()),
+    "facebook.com": (frozenset({"sharer", "sharer.php", "plugins", "tr",
+                                "dialog", "permalink.php", "photo.php",
+                                "events", "posts", "share"}), frozenset()),
+    "twitter.com": (frozenset({"intent", "share", "home", "search", "hashtag",
+                               "i", "status"}), frozenset()),
+    "x.com": (frozenset({"intent", "share", "home", "search", "hashtag", "i",
+                         "status"}), frozenset()),
+    "tiktok.com": (frozenset({"video", "tag", "music", "discover"}), frozenset()),
+    "youtube.com": (frozenset({"watch", "shorts", "results", "playlist",
+                               "embed"}),
+                    frozenset({"channel", "c", "user"})),
+    "linkedin.com": (frozenset({"feed", "posts", "sharing", "shareArticle"}),
+                     frozenset({"company", "in", "school"})),
+    "yelp.com": (frozenset({"search", "writeareview"}), frozenset({"biz"})),
+}
+
+
+def _social_profile(host: str, path: str) -> str | None:
+    """The platform this URL is a profile on, or None.
+
+    Two mistakes to avoid, both seen in the wild on one restaurant's footer:
+    matching the host by suffix classified `prairiefarmsteadtx.com` as X
+    (it ends with "x.com"), and accepting any path linked a business's
+    Instagram to a single reel.
+    """
+    host = host.lower().removeprefix("www.")
+    for domain, name in _SOCIAL_HOSTS.items():
+        # Exact domain or a real subdomain of it — never a suffix match.
+        if host != domain and not host.endswith("." + domain):
+            continue
+        segments = [part for part in path.split("/") if part]
+        if not segments:
+            return None                      # the platform's front page
+        banned, required = _PROFILE_RULES.get(domain, (frozenset(), frozenset()))
+        first = segments[0].lower()
+        if first in banned:
+            return None
+        if required and first not in required and not first.startswith("@"):
+            return None
+        if domain == "tiktok.com" and not first.startswith("@"):
+            return None
+        # A profile is one segment deep; anything longer is a post inside it.
+        if len(segments) > 2:
+            return None
+        return name
+    return None
+
 # The things a visitor actually came to do. A new site that drops these is a
 # downgrade no matter how it looks.
 _ACTION_PATTERNS = (
@@ -141,7 +216,8 @@ _SOCIAL_PROOF_RE = re.compile(
 _JUNK_IMAGE_RE = re.compile(
     r"(logo|badge|award|seal|icon|favicon|sprite|placeholder|spacer|pixel|"
     r"beard|semifinalist|finalist|winner|rating|stars?|yelp|tripadvisor|"
-    r"facebook|instagram|arrow|chevron|btn|button)", re.IGNORECASE)
+    r"facebook|instagram|arrow|chevron|btn|button|screenshot|screen-shot)",
+    re.IGNORECASE)
 
 _JUNK_ACTION_HOSTS = ("godaddy.com", "wix.com", "squarespace.com", "weebly.com",
                       "namecheap.com", "domain.com", "wordpress.com", "shopify.com")
@@ -201,6 +277,11 @@ class ExtractedSite:
     text_words: int = 0
     # How much the about text reads like a business talking about itself.
     about_score: float = 0.0
+    # Headed blocks lifted whole from their page: {heading, text, images, kind}.
+    # Chasing one missing section at a time (their philosophy, their awards,
+    # their farm partners) was losing to a page that simply has more on it than
+    # our fixed list of sections.
+    blocks: list[dict] = field(default_factory=list)
 
     def is_empty(self) -> bool:
         return not any((self.about, self.services, self.products, self.hours, self.actions,
@@ -427,6 +508,185 @@ def story_score(text: str) -> float:
     return max(0.0, density + length_bonus - selling * 3.0)
 
 
+_HEADED_BLOCK_RE = re.compile(r"<h([234])[^>]*>(.*?)</h\1>(.*?)(?=<h[234]\b|\Z)",
+                              re.IGNORECASE | re.DOTALL)
+
+_BLOCK_KINDS: tuple[tuple[str, str], ...] = (
+    (r"james beard|award|nominat|winner|voted|best of|michelin|recogni", "award"),
+    (r"partner|supplier|purveyor|producers?|farms?|friends of|we work with|"
+     r"sourcing|sourced from", "partners"),
+    (r"philosoph|our story|history|heritage|who we are|about us", "story"),
+    (r"event|private dining|venue|parties|catering", "events"),
+    (r"press|featured in|as seen", "press"),
+)
+
+# A block has to say something. Nav lists and button rows have headings too.
+_BLOCK_MIN_WORDS = 12
+# Opening times, and the label rows that sit beside them.
+_TIME_RE = re.compile(r"\d{1,2}(:\d{2})?\s?(am|pm)\b", re.IGNORECASE)
+
+
+def reads_as_prose(text: str) -> bool:
+    """Is this sentences, or a row of labels that happens to sit under a heading?
+
+    "Sunday – Wednesday: 5pm – 9pm Thursday – Saturday: 5pm – 10pm Reserve A
+    Table Chef's Tasting Menu Reservation Location" cleared a word count and
+    was published as a paragraph about dinner service.
+    """
+    words = text.split()
+    if len(words) < _BLOCK_MIN_WORDS:
+        return False
+    if not re.search(r"[.!?]", text):          # no sentence ends anywhere
+        return False
+    times = len(_TIME_RE.findall(text))
+    if times >= 2:                             # an opening-hours table
+        return False
+    # Nav labels are Title Case runs; prose is mostly lower case.
+    capitalised = sum(1 for w in words if w[:1].isupper())
+    return capitalised / len(words) < 0.42
+
+
+def _block_kind(heading: str) -> str:
+    for pattern, kind in _BLOCK_KINDS:
+        if re.search(pattern, heading, re.IGNORECASE):
+            return kind
+    return "feature"
+
+
+# Headings that are furniture on any site. Deliberately NOT _NAV_NOISE, which
+# was built to reject service names and contains real block headings like
+# "philosophy" and "about us" — using it here threw away the best content on
+# the page.
+_BLOCK_STOP = frozenset({
+    "home", "menu", "menus", "search", "cart", "checkout", "login", "log in",
+    "sign up", "newsletter", "subscribe", "follow us", "navigation",
+    "main menu", "privacy", "terms", "sitemap", "site map",
+})
+
+
+def read_blocks(html: str, base_url: str) -> list[dict]:
+    """The page's own sections, lifted whole.
+
+    Their site is organised into headed blocks — Philosophy, A Few of Our
+    Partners, James Beard Awards — and rebuilding from a fixed list of sections
+    threw all of that away. Three shapes have to be handled, because this is
+    how pages are actually written:
+
+    * a heading with prose under it — the ordinary case;
+    * a heading with nothing under it followed by a second heading, which is a
+      kicker and its line ("James Beard Awards 2024" / "Nominated for Best
+      Chef – Texas");
+    * a container heading followed by a run of short headings, each an entry —
+      which is what a partners or suppliers list looks like in markup.
+    """
+    raw: list[dict] = []
+    for _level, heading_html, body in _HEADED_BLOCK_RE.findall(html):
+        heading = _text(heading_html)
+        if not heading or len(heading) > 70:
+            continue
+        if _CHROME_RE.search(heading) or heading.lower() in _BLOCK_STOP:
+            continue
+        raw.append({
+            "heading": heading,
+            "text": _text(_ANY_TAG_RE.sub(" ", body))[:900],
+            "images": [urljoin(base_url, url) for url, _ in _img_sources(body)
+                       if not _JUNK_IMAGE_RE.search(url)][:8],
+        })
+
+    blocks: list[dict] = []
+    index = 0
+    while index < len(raw):
+        current = dict(raw[index])
+        kind = _block_kind(current["heading"])
+
+        # A container heading followed by short ones: each is an entry. Checked
+        # BEFORE the kicker merge, or "A Few of Our Partners" gets folded into
+        # the first farm and the list loses both its name and its first item.
+        entries: list[dict] = []
+        if kind == "partners":
+            look = index + 1
+            while look < len(raw) and len(raw[look]["text"].split()) < _BLOCK_MIN_WORDS:
+                entries.append({"name": raw[look]["heading"],
+                                "note": raw[look]["text"].strip()[:90]})
+                look += 1
+            if entries:
+                index = look - 1
+
+        # A heading with nothing under it is a kicker for the one that follows.
+        if not entries and not current["text"].strip() and index + 1 < len(raw):
+            following = raw[index + 1]
+            if len(following["text"].split()) < _BLOCK_MIN_WORDS * 2:
+                current["kicker"] = current["heading"]
+                current["heading"] = following["heading"]
+                current["text"] = following["text"]
+                current["images"] = current["images"] or following["images"]
+                kind = _block_kind(f"{current['kicker']} {current['heading']}")
+                index += 1
+
+        current["kind"] = kind
+        current["entries"] = entries
+        index += 1
+
+        # An award is short by nature — "Nominated for Best Chef, Texas" is the
+        # whole thing — so the word minimum would drop the most persuasive
+        # line on the page. It survived on one real site only because that
+        # site happened to put pictures next to it.
+        prose = reads_as_prose(current["text"])
+        if not prose and kind not in ("award", "partners"):
+            # Keep the heading and the pictures, drop the label soup: a block
+            # is allowed to be a heading with an image, but not a heading with
+            # a nav row pretending to be a paragraph.
+            current["text"] = ""
+        enough = (prose or entries
+                  or (kind == "award" and (current.get("kicker") or current["text"])))
+        if enough and not any(b["heading"].lower() == current["heading"].lower()
+                              for b in blocks):
+            blocks.append(current)
+    return blocks[:12]
+
+
+def social_handle(url: str) -> str:
+    """The account name out of a profile URL, letters and digits only."""
+    path = urlparse(url).path.strip("/")
+    segments = [p for p in path.split("/") if p]
+    if not segments:
+        return ""
+    handle = segments[-1] if segments[0] in {"company", "in", "biz", "channel",
+                                             "c", "user", "school"} else segments[0]
+    return re.sub(r"[^a-z0-9]", "", handle.lstrip("@").lower())
+
+
+def social_belongs_to(url: str, business: str) -> bool:
+    """Is this profile the business's own?
+
+    A restaurant that credits fourteen farms links fourteen other businesses'
+    Instagram accounts. Every one of them is a valid profile URL on the right
+    host — and linking a customer to their beef supplier's page instead of
+    theirs is worse than showing no social links at all.
+    """
+    handle = social_handle(url)
+    if not handle:
+        return False
+    name = re.sub(r"[^a-z0-9]", "", (business or "").lower())
+    if not name:
+        return False
+    if handle in name or name in handle:
+        return True
+    # Allow a leading "the" and a trailing state or "tx"-style suffix either way.
+    trimmed = re.sub(r"^the", "", name)
+    handle_trimmed = re.sub(r"^the", "", handle)
+    if trimmed and (handle_trimmed.startswith(trimmed)
+                    or trimmed.startswith(handle_trimmed)):
+        return True
+    # Otherwise require most of the business's words to appear in the handle.
+    words = [w for w in re.findall(r"[a-z]+", (business or "").lower())
+             if len(w) > 2 and w not in {"the", "and"}]
+    if not words:
+        return False
+    hits = sum(1 for w in words if w in handle)
+    return hits >= max(2, len(words) - 1)
+
+
 def _clean_service(candidate: str) -> str | None:
     text = _text(candidate)
     if not (3 <= len(text) <= 60):
@@ -519,6 +779,7 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
     out.services = out.services[:12]
     out.products = out.products[:8]
 
+    out.blocks = read_blocks(clean, base_url)
     out.phone, out.address, ld_hours = read_structured_data(html)
     out.mobile_ready = bool(_VIEWPORT_RE.search(html))
     # _TAG_RE strips script and style bodies; _ANY_TAG_RE strips the markup.
@@ -550,12 +811,13 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
         if not label or href.startswith(("#", "javascript:")):
             continue
         absolute = urljoin(base_url, href)
-        host = urlparse(absolute).netloc.lower().replace("www.", "")
+        link = urlparse(absolute)
+        host = link.netloc.lower().replace("www.", "")
 
-        for social_host, name in _SOCIAL_HOSTS.items():
-            if host.endswith(social_host) and name not in {s["name"] for s in out.socials}:
-                out.socials.append({"name": name, "url": absolute})
-                break
+        platform = _social_profile(host, link.path)
+        if platform:
+            if platform not in {s["name"] for s in out.socials}:
+                out.socials.append({"name": platform, "url": absolute})
         else:
             lowered = label.lower()
             for needles, kind in _ACTION_PATTERNS:
@@ -566,7 +828,7 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
                     out.actions.append({"label": label[:40], "url": absolute, "kind": kind})
                     break
 
-    for src in _IMG_RE.findall(clean):
+    for src, _caption in _img_sources(clean):
         absolute = urljoin(base_url, src)
         if _JUNK_IMAGE_RE.search(absolute):   # logos, icons, award badges
             continue
@@ -596,6 +858,10 @@ def merge(primary: ExtractedSite, extra: ExtractedSite) -> ExtractedSite:
     primary.about = primary.about or extra.about
     primary.phone = primary.phone or extra.phone
     primary.mobile_ready = primary.mobile_ready or extra.mobile_ready
+    known = {b["heading"].lower() for b in primary.blocks}
+    for block in extra.blocks:
+        if block["heading"].lower() not in known and len(primary.blocks) < 14:
+            primary.blocks.append(block)
     primary.address = primary.address or extra.address
     primary.description = primary.description or extra.description
     for svc in extra.services:

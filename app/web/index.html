@@ -316,6 +316,7 @@
   .lead .sub{color:var(--faint);font-size:12.5px;margin-top:3px;font-family:var(--mono)}
   .lead .last{color:var(--dim);font-size:12.5px;margin-top:4px}
   .pipe{display:grid;gap:8px}
+  .pipe > .mini{justify-self:start;margin-bottom:6px}
   .stage{margin-top:22px}
   .stage h3{margin:0 0 9px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
     color:var(--faint);font-weight:700;display:flex;align-items:center;gap:9px}
@@ -352,6 +353,104 @@
   .ver:hover{border-color:var(--accent);color:var(--accent)}
   .ver[aria-pressed=true]{background:var(--accent-bg);border-color:var(--accent);
     color:var(--accent);font-weight:600}
+
+  /* ---------------------------------------------------- the workspace --- */
+  /* Three panes: what happened, what it looks like, what was understood.
+     Built from the same tokens as the rest of the dashboard so it reads as one
+     product rather than a bolted-on screen. */
+  body.workspace-open{overflow:hidden}
+  .workspace{position:fixed;inset:0;z-index:60;background:var(--bg);
+    display:grid;grid-template-columns:minmax(280px,1fr) minmax(0,1.5fr) minmax(270px,.95fr);
+    grid-template-rows:auto 1fr}
+  .ws-top{grid-column:1/-1;display:flex;align-items:center;gap:14px;
+    padding:12px 18px;border-bottom:1px solid var(--line);background:var(--surface)}
+  .ws-top h2{margin:0;font-size:16px;font-weight:650;letter-spacing:-.01em}
+  .ws-top .sub{color:var(--faint);font-size:12.5px;font-family:var(--mono)}
+  .ws-top .close{margin-left:auto}
+  .ws-pane{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+  .ws-pane+.ws-pane{border-left:1px solid var(--line)}
+  .ws-head{padding:12px 16px 9px;font-size:11px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--faint);font-weight:700;
+    border-bottom:1px solid var(--line-soft)}
+  .ws-body{flex:1;overflow-y:auto;padding:14px 16px}
+
+  /* left: the trail, newest first, with the chat pinned under it */
+  .ws-event{display:grid;grid-template-columns:18px 1fr;gap:10px;padding:0 0 13px;
+    cursor:default}
+  .ws-event.pick{cursor:pointer;border-radius:8px;margin:0 -8px 13px;padding:6px 8px 13px}
+  .ws-event.pick:hover{background:var(--raise)}
+  .ws-event.active{background:var(--accent-bg);margin:0 -8px 13px;padding:6px 8px 13px;
+    border-radius:8px}
+  .ws-event .rail{display:flex;flex-direction:column;align-items:center}
+  .ws-event .pip{width:8px;height:8px;border-radius:50%;background:var(--line);
+    margin-top:5px;flex:0 0 auto}
+  .ws-event.site .pip{background:var(--accent)}
+  .ws-event.rejected .pip{background:var(--bad)}
+  .ws-event .line{width:1px;flex:1;background:var(--line);margin-top:4px}
+  .ws-event:last-child .line{display:none}
+  .ws-event .what{font-size:13.5px;line-height:1.45}
+  .ws-event .who{color:var(--faint);font-size:11.5px;margin-top:3px;
+    font-family:var(--mono)}
+  .ws-event q{color:var(--dim);font-style:italic}
+  .chatbox{border-top:1px solid var(--line);padding:12px 14px;background:var(--surface)}
+  .chatbox textarea{width:100%;min-height:60px;resize:vertical;border-radius:9px;
+    border:1px solid var(--line);background:var(--bg);color:var(--ink);
+    font:inherit;font-size:13.5px;padding:10px 12px}
+  .chatbox textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .chatbox .row{display:flex;align-items:center;gap:9px;margin-top:9px}
+  .basis{color:var(--faint);font-size:11.5px;font-family:var(--mono)}
+  .basis b{color:var(--accent)}
+
+  /* centre: the preview, at phone width by default */
+  .ws-stage{flex:1;display:grid;place-items:center;padding:20px;overflow:auto;
+    background:repeating-linear-gradient(45deg,var(--raise) 0 10px,transparent 10px 20px)}
+  .device{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    box-shadow:var(--shadow-lift);overflow:hidden;transition:width .3s ease}
+  .device iframe{display:block;border:0;width:100%;height:100%;background:#fff}
+  .device.phone{width:390px;height:750px;max-height:calc(100vh - 190px)}
+  .device.wide{width:100%;height:calc(100vh - 190px);border-radius:10px}
+  .ws-toolbar{display:flex;gap:8px;align-items:center;padding:10px 16px;
+    border-bottom:1px solid var(--line-soft)}
+  .ws-toolbar .grow{margin-left:auto}
+
+  /* right: what the instruction was understood to mean */
+  .diag{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+  .diag span{font-size:11.5px;border-radius:6px;padding:4px 9px;line-height:1.35}
+  .diag .got{background:var(--ok-bg);color:var(--ok)}
+  .diag .skip{background:var(--raise);color:var(--faint)}
+  .diag .no{background:var(--warn-bg);color:var(--warn)}
+  .diag .stop{background:var(--bad-bg);color:var(--bad);font-weight:600}
+  .diag-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--faint);font-weight:700;margin:0 0 7px}
+  .vchip{background:var(--raise);border:1px solid var(--line);border-radius:6px;
+    padding:4px 10px;font-size:12px;cursor:pointer;font:inherit;color:var(--dim);
+    font-family:var(--mono)}
+  .vchip:hover{border-color:var(--accent);color:var(--accent)}
+  .vchip[aria-pressed=true]{background:var(--accent-bg);border-color:var(--accent);
+    color:var(--accent);font-weight:700}
+  .said{background:var(--raise);border-left:2px solid var(--accent);
+    border-radius:0 8px 8px 0;padding:10px 12px;font-size:13px;color:var(--dim);
+    font-style:italic;margin-bottom:14px}
+  @media (max-width:1100px){
+    .workspace{grid-template-columns:1fr;grid-template-rows:auto auto 1fr auto}
+    .ws-pane+.ws-pane{border-left:0;border-top:1px solid var(--line)}
+  }
+
+  /* Labelling: the one thing a person can do that the machine cannot. */
+  .shots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));
+    gap:8px;margin-top:10px}
+  .shot-card{border:1px solid var(--line);border-radius:8px;overflow:hidden;
+    background:var(--surface)}
+  .shot-card img{width:100%;height:74px;object-fit:cover;display:block}
+  .shot-card select{width:100%;border:0;border-top:1px solid var(--line);
+    background:var(--bg);color:var(--dim);font:inherit;font-size:11px;
+    padding:5px 6px}
+  .shot-card select:focus{outline:2px solid var(--accent);outline-offset:-2px}
+  .shot-card.labelled{border-color:var(--accent)}
+  .shot-card.labelled select{color:var(--accent);font-weight:600}
+  .planout{font-family:var(--mono);font-size:11.5px;line-height:1.75;
+    white-space:pre-wrap;background:var(--raise);border:1px solid var(--line);
+    border-radius:8px;padding:11px 13px;color:var(--dim);margin:0 0 14px}
 
   .asks{display:grid;gap:9px}
   .ask{display:flex;gap:12px;background:var(--surface);border:1px solid var(--line);
@@ -502,7 +601,9 @@ function leadRow(l) {
       <div class="sub">${esc(l.website_url || "no website")}</div>
       <div class="last">${touched}</div></div>
     <div class="saved">${l.event_count} ${l.event_count === 1 ? "note" : "notes"}</div>
-  </button>`;
+  </button>
+  <button class="mini" style="margin-top:-4px"
+    onclick="openWorkspace(${l.id}, ${esc(JSON.stringify(l.name))})">Open workspace →</button>`;
 }
 
 async function openLead(id) {
@@ -686,6 +787,211 @@ async function correctWebsite(url) {
   if (data) { LEAD = data.lead_id || LEAD; $("#out").innerHTML = render(data); }
 }
 
+// -------------------------------------------------------------- workspace ---
+// Three panes: what happened to this lead, what the site looks like now, and
+// what the last instruction was actually understood to mean.
+let WS = null;   // {lead_id, name, versions, events, active, diagnostics}
+
+async function openWorkspace(leadId, name) {
+  const data = await (await fetch("/api/workspace?id=" + leadId)).json();
+  let shots = {photos: [], options: []};
+  try { shots = await (await fetch("/api/photos?id=" + leadId)).json(); } catch {}
+  WS = {lead_id: leadId, name: name || `Lead ${leadId}`,
+        versions: data.versions || [], events: data.events || [],
+        active: (data.versions || [])[0]?.version ?? null,
+        diagnostics: null, device: "phone", outline: "",
+        photos: shots.photos || [], labelOptions: shots.options || []};
+  document.body.classList.add("workspace-open");
+  drawWorkspace();
+}
+
+function closeWorkspace() {
+  WS = null;
+  document.body.classList.remove("workspace-open");
+  const frame = $("#workspace");
+  if (frame) frame.remove();
+  renderLeads();
+}
+
+// The version a new instruction will branch from. Selecting an older version
+// in the trail sets this, which is what makes the history navigable rather
+// than merely readable.
+function activeVersion() { return WS && WS.active; }
+
+function pickVersion(version) {
+  WS.active = version;
+  const row = WS.versions.find(v => v.version === version);
+  WS.diagnostics = row ? {understood: row.notes?.understood || [],
+                          ignored_tokens: row.notes?.ignored || [],
+                          unmet: row.notes?.unmet || [],
+                          contradictions: row.notes?.contradictions || [],
+                          spec: row.spec, version} : null;
+  drawWorkspace();
+}
+
+function eventLine(e) {
+  if (e.kind === "site") {
+    const version = parseInt(String(e.new_value || "").replace("v", ""), 10);
+    const from = e.old_value ? ` from ${esc(e.old_value)}` : "";
+    return {cls: "site pick", version,
+            what: `built <b>${esc(e.new_value)}</b>${from}`};
+  }
+  if (e.kind === "site_rejected") {
+    return {cls: "rejected", version: null,
+            what: `<b>blocked</b> — ${esc(e.new_value)}`};
+  }
+  if (e.kind === "status") return {cls: "", version: null,
+    what: `status → <b>${esc(e.new_value)}</b>`};
+  if (e.kind === "note") return {cls: "", version: null, what: "note"};
+  return {cls: "", version: null,
+          what: `${esc(e.kind)} <b>${esc(e.field || "")}</b> ${esc(e.new_value || "")}`};
+}
+
+function drawWorkspace() {
+  const trail = WS.events.length ? WS.events.map(e => {
+    const line = eventLine(e);
+    const active = line.version && line.version === WS.active;
+    return `<div class="ws-event ${line.cls}${active ? " active" : ""}"
+      ${line.version ? `onclick="pickVersion(${line.version})"` : ""}>
+      <div class="rail"><span class="pip"></span><span class="line"></span></div>
+      <div><div class="what">${line.what}</div>
+        ${e.note ? `<div class="what"><q>${esc(e.note)}</q></div>` : ""}
+        <div class="who">${esc(e.actor)} · ${when(e.at)}</div></div></div>`;
+  }).join("") : `<p class="hint">Nothing built yet. Describe the site below.</p>`;
+
+  const chips = WS.versions.map(v =>
+    `<button class="vchip" aria-pressed="${v.version === WS.active}"
+      onclick="pickVersion(${v.version})"
+      title="${esc(v.spec || "no instructions")}">v${v.version}${
+        v.parent_version ? `←${v.parent_version}` : ""}</button>`).join("");
+
+  // What the site was decided to be, before it was emitted. Reading this is a
+  // different and much cheaper activity than reading a rendered page.
+  const outline = WS.outline
+    ? `<p class="diag-label">The plan</p><pre class="planout">${esc(WS.outline)}</pre>`
+    : "";
+  const labeller = (WS.photos || []).length ? `
+    <p class="diag-label">What each photo shows</p>
+    <p class="hint">Shape is measurable; subject is not. Label a few and the
+       hero picks itself.</p>
+    <div class="shots-grid">${WS.photos.map(p => `
+      <div class="shot-card${p.label ? " labelled" : ""}">
+        <img src="${esc(p.url)}" alt="" loading="lazy">
+        <select onchange="labelPhoto(${esc(JSON.stringify(p.url))}, this.value)">
+          <option value="">unlabelled</option>
+          ${(WS.labelOptions || []).map(o =>
+            `<option value="${esc(o)}"${p.label === o ? " selected" : ""}>${esc(o)}</option>`
+          ).join("")}
+        </select></div>`).join("")}</div>` : "";
+
+  const d = WS.diagnostics;
+  const diag = d ? `
+    ${d.spec ? `<div class="said">“${esc(d.spec)}”</div>` : ""}
+    ${d.blocked ? `<p class="diag-label">Blocked by the content gate</p>
+      <div class="diag">${(d.findings || []).map(f =>
+        `<span class="stop">${esc(f)}</span>`).join("")}</div>
+      <p class="hint">Nothing was saved. The previous version is still live.</p>` : ""}
+    ${(d.understood || []).length ? `<p class="diag-label">Understood</p>
+      <div class="diag">${d.understood.map(x =>
+        `<span class="got">${esc(x)}</span>`).join("")}</div>` : ""}
+    ${(d.ignored_tokens || []).length ? `<p class="diag-label">Ignored — not understood</p>
+      <div class="diag">${d.ignored_tokens.map(x =>
+        `<span class="skip">${esc(x)}</span>`).join("")}</div>` : ""}
+    ${(d.unmet || []).length ? `<p class="diag-label">Could not be done</p>
+      <div class="diag">${d.unmet.map(x =>
+        `<span class="no">${esc(x)}</span>`).join("")}</div>` : ""}
+    ${(d.contradictions || []).length ? `<p class="diag-label">Conflicting</p>
+      <div class="diag">${d.contradictions.map(x =>
+        `<span class="no">${esc(x)}</span>`).join("")}</div>` : ""}
+    ` : `<p class="hint">Send an instruction and what it was understood to mean
+         will appear here.</p>`;
+
+  const src = WS.active ? `/site/${WS.lead_id}/${WS.active}` : "";
+  const html = `<div class="workspace" id="workspace">
+    <div class="ws-top">
+      <h2>${esc(WS.name)}</h2>
+      <span class="sub">${WS.active ? "v" + WS.active : "no version yet"}</span>
+      <button class="mini close" onclick="closeWorkspace()">← back to leads</button>
+    </div>
+
+    <section class="ws-pane">
+      <div class="ws-head">History</div>
+      <div class="ws-body" id="ws-trail">${trail}</div>
+      <form class="chatbox" onsubmit="event.preventDefault();sendInstruction()">
+        <textarea id="ws-input" placeholder="warm and rustic, lead with the gallery, book a table"
+          onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey))sendInstruction()"></textarea>
+        <div class="row">
+          <button class="mini primary" type="submit">Send</button>
+          <span class="basis">${WS.active
+            ? `builds on <b>v${WS.active}</b>` : "first build"} · ⌘↵</span>
+        </div>
+      </form>
+    </section>
+
+    <section class="ws-pane">
+      <div class="ws-toolbar">
+        <button class="vchip" aria-pressed="${WS.device === "phone"}"
+          onclick="setDevice('phone')">Phone</button>
+        <button class="vchip" aria-pressed="${WS.device === "wide"}"
+          onclick="setDevice('wide')">Desktop</button>
+        <span class="grow"></span>
+        ${src ? `<a class="vchip" href="${src}" target="_blank" rel="noopener"
+          >open ↗</a>` : ""}
+      </div>
+      <div class="ws-stage">
+        ${src ? `<div class="device ${WS.device}"><iframe src="${src}"
+            title="Site preview" sandbox="allow-same-origin"></iframe></div>`
+          : `<div class="empty"><h3>No site yet</h3>
+             <p>Describe what you want and it will appear here.</p></div>`}
+      </div>
+    </section>
+
+    <section class="ws-pane">
+      <div class="ws-head">Versions</div>
+      <div class="ws-body">
+        <div class="diag">${chips}</div>
+        ${outline}${diag}${labeller}
+      </div>
+    </section>
+  </div>`;
+
+  const existing = $("#workspace");
+  if (existing) existing.outerHTML = html;
+  else document.body.insertAdjacentHTML("beforeend", html);
+}
+
+function setDevice(kind) { WS.device = kind; drawWorkspace(); }
+
+async function sendInstruction() {
+  const box = $("#ws-input");
+  const sentence = (box.value || "").trim();
+  if (!sentence) return;
+  const button = document.querySelector(".chatbox .mini");
+  if (button) { button.disabled = true; button.textContent = "Building…"; }
+
+  const res = await fetch("/api/iterate", {method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({lead_id: WS.lead_id, sentence,
+                          parent_version: activeVersion()})});
+  const data = await res.json();
+  if (button) { button.disabled = false; button.textContent = "Send"; }
+  if (data.error) { alert(data.error); return; }
+
+  WS.versions = data.versions || WS.versions;
+  WS.events = data.events || WS.events;
+  // A rejected instruction writes no version, so the preview must stay on the
+  // one that is still live rather than jumping to nothing.
+  if (!data.rejected && data.version) WS.active = data.version;
+  WS.outline = data.outline || WS.outline;
+  WS.diagnostics = {understood: data.understood, ignored_tokens: data.ignored_tokens,
+                    unmet: data.unmet, contradictions: data.contradictions,
+                    blocked: data.rejected, findings: data.findings,
+                    spec: sentence, version: data.version};
+  box.value = "";
+  drawWorkspace();
+  if (!data.rejected) box.focus();
+}
+
 // ------------------------------------------------------------ site building ---
 let SITE = null;    // {version, notes, url}
 
@@ -715,6 +1021,8 @@ function buildPanel(d) {
       <div class="row">
         <button class="mini primary" onclick="makeSite()">
           ${versions.length ? "Build another version" : "Build the site"}</button>
+        <button class="mini" onclick="openWorkspace(LEAD, ${
+          esc(JSON.stringify(d.name || ""))})">Open the workspace →</button>
         <span class="hint">Only uses what they already publish — nothing invented.
           ⌘↵ to build.</span>
       </div>

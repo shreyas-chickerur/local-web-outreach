@@ -45,6 +45,7 @@ def published_to_dict(site: ExtractedSite) -> dict:
         "socials": site.socials,
         "emails": site.emails,
         "has_locations_page": site.has_locations_page,
+        "blocks": site.blocks,
     }
 
 

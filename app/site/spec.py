@@ -57,6 +57,14 @@ class SiteSpec:
     lead_with: str | None = None        # a section hoisted to the top
     emphasis: list[str] = field(default_factory=list)
     cta: str | None = None
+    cta_label: str | None = None
+    # Sections the operator has asked to drop. Distinct from "no data": one is
+    # a decision, the other is an absence, and they should not look alike.
+    suppress: list[str] = field(default_factory=list)
+    # Which of the candidate photographs leads. Bumped by "use a different
+    # hero photo", because choosing between two good pictures is judgement and
+    # judgement belongs to the operator.
+    hero_offset: int = 0
     one_page: bool = True
     understood: list[str] = field(default_factory=list)
     ignored: list[str] = field(default_factory=list)

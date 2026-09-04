@@ -47,15 +47,34 @@ CREATE INDEX IF NOT EXISTS events_lead ON events(lead_id, id);
 -- Generated sites, one row per attempt. Versions are never overwritten: the
 -- point of iterating is being able to go back to the one that was better.
 CREATE TABLE IF NOT EXISTS sites (
-    id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    lead_id    INTEGER NOT NULL REFERENCES leads(id),
-    version    INTEGER NOT NULL,
-    spec       TEXT NOT NULL DEFAULT '',
-    notes      TEXT NOT NULL DEFAULT '{}',
-    html       TEXT NOT NULL,
-    actor      TEXT NOT NULL,
-    created_at TEXT NOT NULL,
+    id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id        INTEGER NOT NULL REFERENCES leads(id),
+    version        INTEGER NOT NULL,
+    -- The version this one was iterated from. NULL for a first build. Version
+    -- is a monotonic counter; parent is a pointer — forking from v3 while v7
+    -- exists produces v8 with parent 3, never a second v4.
+    parent_version INTEGER,
+    spec           TEXT NOT NULL DEFAULT '',   -- the sentence, as typed
+    spec_json      TEXT NOT NULL DEFAULT '{}', -- the resolved configuration
+    notes          TEXT NOT NULL DEFAULT '{}',
+    html           TEXT NOT NULL,
+    actor          TEXT NOT NULL,
+    created_at     TEXT NOT NULL,
     UNIQUE (lead_id, version)
+);
+
+-- What a photograph actually shows, said by a person.
+-- Nothing here can look at an image: shape is measurable, subject matter is
+-- not, and a landscape photograph of raw peppers is still the wrong lead for a
+-- dining room. One pass of labelling per lead is cheaper than iterating on a
+-- hero nobody can judge automatically.
+CREATE TABLE IF NOT EXISTS photo_labels (
+    lead_id   INTEGER NOT NULL REFERENCES leads(id),
+    url       TEXT NOT NULL,
+    label     TEXT NOT NULL,
+    actor     TEXT NOT NULL,
+    at        TEXT NOT NULL,
+    PRIMARY KEY (lead_id, url)
 );
 
 -- Discovery results, cached. A page of prospects is one paid request per
@@ -69,6 +88,23 @@ CREATE TABLE IF NOT EXISTS discovery_cache (
 """
 
 
+# Columns added after the first databases were written. SQLite cannot add a
+# column conditionally, so existing files are widened on open. Dropping and
+# recreating would lose the versions someone had already built.
+_LATER_COLUMNS = (
+    ("sites", "parent_version", "INTEGER"),
+    ("sites", "spec_json", "TEXT NOT NULL DEFAULT '{}'"),
+)
+
+
+def _widen(conn: sqlite3.Connection) -> None:
+    for table, column, decl in _LATER_COLUMNS:
+        existing = {row["name"] for row in
+                    conn.execute(f"PRAGMA table_info({table})")}
+        if existing and column not in existing:
+            conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")
+
+
 def connect(path: Path | str | None = None) -> sqlite3.Connection:
     target = Path(path) if path is not None else DEFAULT_PATH
     if target.parent != Path(""):
@@ -79,6 +115,7 @@ def connect(path: Path | str | None = None) -> sqlite3.Connection:
     # Survives an interrupted write, which a local tool will eventually see.
     conn.execute("PRAGMA journal_mode = WAL")
     conn.executescript(_SCHEMA)
+    _widen(conn)
     return conn
 
 

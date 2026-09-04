@@ -17,8 +17,9 @@ from app.adapters.gplaces import PlacesError, search
 from app.adapters.photos import fetch as fetch_photo
 from app.cli import available_directories
 from app.core.config import google_places_api_key
+from app.site.pipeline import iterate as run_iteration
 from app.site.render import build as build_site
-from app.store import db, leads, sites
+from app.store import db, leads, photos, sites
 from app.web.serialize import brief_to_dict
 from app.workbench.brief import build_brief
 from app.workbench.categories import BY_KEY, CATEGORIES
@@ -116,6 +117,44 @@ def generate(lead_id: int, spec_text: str) -> dict:
         return payload
 
 
+def workspace(lead_id: int) -> dict:
+    """Everything the iteration screen needs, in one round trip."""
+    with db.session() as conn:
+        return {
+            "lead_id": lead_id,
+            "versions": sites.versions(conn, lead_id),
+            "events": leads.events(conn, lead_id),
+        }
+
+
+def iteration(lead_id: int, sentence: str, parent: object) -> dict:
+    """Run one chat instruction and return the result plus the refreshed panes.
+
+    A rejection is a result, not an error: the operator has to see which words
+    tripped the content gate, and an exception would tell them only that
+    something went wrong.
+    """
+    if not sentence.strip():
+        return {"error": "Type an instruction first."}
+    parent_version: int | None = None
+    if isinstance(parent, (int, str)) and str(parent).strip():
+        try:
+            parent_version = int(parent)
+        except ValueError:
+            parent_version = None
+    with db.session() as conn:
+        try:
+            result = run_iteration(conn, lead_id, sentence,
+                                   parent_version=parent_version)
+        except ValueError as exc:
+            return {"error": str(exc)}
+        payload = result.as_dict()
+        payload["lead_id"] = lead_id
+        payload["versions"] = sites.versions(conn, lead_id)
+        payload["events"] = leads.events(conn, lead_id)
+        return payload
+
+
 class Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
 
@@ -162,6 +201,17 @@ class Handler(BaseHTTPRequestHandler):
                                      note=(body.get("note") or None))
                 elif route == "/api/generate":
                     self._json(generate(lead_id, str(body.get("spec", ""))))
+                    return
+                elif route == "/api/iterate":
+                    self._json(iteration(
+                        lead_id, str(body.get("sentence", "")),
+                        body.get("parent_version")))
+                    return
+                elif route == "/api/label":
+                    with db.session() as conn:
+                        photos.label(conn, lead_id, str(body.get("url", "")),
+                                     str(body.get("label", "")))
+                        self._json({"labels": photos.labels_for(conn, lead_id)})
                     return
                 elif route == "/api/note":
                     text = str(body.get("note", "")).strip()
@@ -228,6 +278,35 @@ class Handler(BaseHTTPRequestHandler):
                            "text/plain; charset=utf-8")
                 return
             self._send(200, page.encode(), "text/html; charset=utf-8")
+            return
+        # The photographs worth labelling: everything we might place, with
+        # whatever a person has already said about each.
+        if route.path == "/api/photos":
+            try:
+                lead_id = int((parse_qs(route.query).get("id") or ["0"])[0])
+            except ValueError:
+                lead_id = 0
+            with db.session() as conn:
+                try:
+                    brief = leads.brief_with_overrides(conn, lead_id)
+                except ValueError:
+                    self._json({"error": "no such lead"}, 400)
+                    return
+                known = photos.labels_for(conn, lead_id)
+            urls = [f"/photo/{lead_id}/{i}"
+                    for i in range(len(brief.get("place_photos") or []))]
+            urls += list((brief.get("published") or {}).get("photos") or [])
+            self._json({"lead_id": lead_id, "labels": known,
+                        "options": list(photos.LABELS),
+                        "photos": [{"url": u, "label": known.get(u)}
+                                   for u in urls[:24]]})
+            return
+        if route.path == "/api/workspace":
+            try:
+                lead_id = int((parse_qs(route.query).get("id") or ["0"])[0])
+            except ValueError:
+                lead_id = 0
+            self._json(workspace(lead_id))
             return
         if route.path == "/api/sites":
             try:

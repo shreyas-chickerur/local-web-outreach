@@ -287,19 +287,32 @@ def test_a_count_of_zero_never_reaches_the_page():
     assert "services offered" not in page
 
 
-def test_a_dense_offer_section_uses_their_photography():
-    """A grid of bare titles is the tell of a generated page: every word true
-    and the section empty."""
+def test_offer_cards_do_not_carry_unrelated_photographs():
+    """They used to take a photo each, paired by position, so "Online Ordering"
+    got a night shot of the building and the next card got the same building
+    again. A picture that has nothing to do with the words is worse than none."""
     many = _rich()
     many["published"] = {**many["published"],
-                         "services": ["Dinner", "Brunch", "Catering", "Private hire",
-                                      "Wine list"]}
+                         "services": ["Dinner", "Brunch", "Catering"]}
     page, _ = build(many)
-    offers = page[page.index('id="services"'):page.index("</section>",
-                                                          page.index('id="services"'))]
-    assert 'data-density="dense"' in offers
-    assert "has-art" in offers
-    assert "/photo/7/" in offers
+    start = page.index('id="services"')
+    offers = page[start:page.index("</section>", start)]
+    assert "<img" not in offers
+    assert "has-art" not in offers
+    assert "Dinner" in offers
+
+
+def test_the_offer_grid_does_not_leave_one_card_stranded():
+    """Four cards in a three-across grid put one alone under three, which reads
+    as broken rather than sparse."""
+    four = _rich()
+    four["published"] = {**four["published"],
+                         "services": ["A", "B", "C", "D"], "products": []}
+    page, _ = build(four)
+    start = page.index('id="services"')
+    offers = page[start:page.index("</section>", start)]
+    assert offers.count("<article") == 3
+    assert "repeat(3,minmax(0,1fr))" in page
 
 
 def test_the_offer_heading_follows_the_trade():
@@ -356,3 +369,129 @@ def test_density_never_conjures_a_section_out_of_nothing():
     page, _ = build(none)
     assert 'id="services"' not in page
     assert 'data-density="empty"' not in page
+
+
+def test_every_photograph_goes_to_the_gallery():
+    """With the offer cards no longer taking any, the pictures are all used
+    where they are actually about something."""
+    rich = _rich()
+    rich["place_photos"] = [f"places/x/photos/{n}" for n in range(14)]
+    page, _ = build(rich)
+    start = page.index('id="gallery"')
+    shots = re.findall(r'src="([^"]+)"', page[start:page.index("</section>", start)])
+    assert len(shots) >= 8
+    hero = re.search(r'url\(&quot;([^&]+)&quot;\)', page).group(1)
+    assert hero not in shots            # the hero is not shown twice
+
+
+def test_the_gallery_keeps_its_photos_when_there_are_few():
+    """Partitioning naively starved the gallery on a business with six."""
+    lean = _rich()
+    lean["place_photos"] = []
+    lean["published"] = {**lean["published"],
+                         "photos": [f"https://x/{n}.jpg" for n in range(6)]}
+    page, _ = build(lean)
+    assert 'id="gallery"' in page
+
+
+def test_an_award_from_their_own_page_is_stated_large():
+    brief = _rich()
+    brief["published"] = {**brief["published"], "blocks": [
+        {"kind": "award", "heading": "Nominated for Best Chef - Texas",
+         "kicker": "James Beard Awards 2024", "text": "A fine dining experience.",
+         "images": [], "entries": []}]}
+    page, _ = build(brief)
+    assert 'id="recognition"' in page
+    assert "James Beard Awards 2024" in page
+    assert 'class="accolade"' in page
+
+
+def test_suppliers_become_a_moving_strip():
+    brief = _rich()
+    brief["published"] = {**brief["published"], "blocks": [
+        {"kind": "partners", "heading": "A Few of Our Partners", "text": "",
+         "images": [], "entries": [{"name": f"Farm {n}", "note": "beef"}
+                                    for n in range(6)]}]}
+    page, _ = build(brief)
+    assert 'id="partners"' in page
+    section = page[page.index('id="partners"'):]
+    section = section[:section.index("</section>")]
+    # Doubled, so the strip can loop without a visible seam.
+    assert section.count('class="who"') == 12
+    assert "@keyframes drift" in page
+
+
+def test_their_own_story_section_beats_our_guess_at_a_paragraph():
+    """A block titled "Philosophy" is the page telling us which words matter."""
+    brief = _rich()
+    brief["published"] = {**brief["published"],
+                          "about": "Scratch kitchen serving dinner nightly.",
+                          "blocks": [{"kind": "story", "heading": "Philosophy",
+                                      "text": "A culture is built on the food it "
+                                              "consumes and we cook to respect it.",
+                                      "images": [], "entries": []}]}
+    page, _ = build(brief)
+    assert "<h2>Philosophy</h2>" in page
+    assert "A culture is built" in page
+
+
+def test_a_food_photo_is_not_presented_as_an_award_badge():
+    """The award block on a real site contained Short-Rib.jpg and
+    garden-tomatoes.jpg. Rendering those as laurels implies the tomatoes won
+    something."""
+    brief = _rich()
+    brief["published"] = {**brief["published"], "blocks": [
+        {"kind": "award", "heading": "Nominated for Best Chef - Texas",
+         "kicker": "James Beard Awards 2024", "text": "Fine dining.",
+         "images": ["https://x/Short-Rib-980x1165.jpg",
+                    "https://x/garden-tomatoes.jpg"], "entries": []}]}
+    page, _ = build(brief)
+    start = page.index('id="recognition"')
+    band = page[start:page.index("</section>", start)]
+    assert "Short-Rib" not in band and "garden-tomatoes" not in band
+    assert "James Beard Awards 2024" in band          # the words still land
+
+
+def test_a_real_badge_image_is_shown():
+    brief = _rich()
+    brief["published"] = {**brief["published"], "blocks": [
+        {"kind": "award", "heading": "Best of Frisco 2024", "text": "",
+         "images": ["https://x/best-of-frisco-award-badge.png"], "entries": []}]}
+    page, _ = build(brief)
+    assert "best-of-frisco-award-badge.png" in page
+    assert 'class="laurels"' in page
+
+
+def test_cards_do_not_offer_a_hover_that_leads_nowhere():
+    """An affordance promising a destination it does not have is worse than
+    none — the lift and shadow said "click me" on a plain block of text."""
+    page, _ = build(_rich())
+    rule = re.search(r"\n\.offer:hover\{([^}]*)\}", page).group(1)
+    assert "transform" not in rule
+    assert "box-shadow" not in rule
+
+
+def test_the_hero_prefers_a_landscape_photograph(monkeypatch):
+    """A portrait crop as a full-bleed hero crops to a sliver. Shape is
+    measurable; subject matter is not, which is why the operator can override."""
+    from app.site import render as render_module
+    # Relative URLs are prefixed with the local origin before measuring, so
+    # key off the tail rather than a path segment.
+    sizes = {"a": (900, 1400), "b": (1600, 1200), "c": (1000, 1000)}
+    monkeypatch.setattr(render_module, "measure", lambda url: sizes.get(url[-1]))
+    assert render_module.pick_hero(("a", "b", "c")) == "b"
+
+
+def test_the_operator_can_move_past_a_hero_they_dislike(monkeypatch):
+    from app.site import render as render_module
+    monkeypatch.setattr(render_module, "measure", lambda url: (1600, 1200))
+    images = ("one", "two", "three")
+    assert render_module.pick_hero(images, 0) == "one"
+    assert render_module.pick_hero(images, 1) == "two"
+    assert render_module.pick_hero(images, 4) == "two"      # wraps, never fails
+
+
+def test_an_unmeasurable_image_is_not_treated_as_a_bad_one(monkeypatch):
+    from app.site import render as render_module
+    monkeypatch.setattr(render_module, "measure", lambda url: None)
+    assert render_module.pick_hero(("only",)) == "only"

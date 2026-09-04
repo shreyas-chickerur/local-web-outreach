@@ -31,3 +31,6 @@ workbench.db-*
 
 # Cached Google Place photos.
 .cache/
+
+# Cached image dimensions.
+.cache/imagesize/

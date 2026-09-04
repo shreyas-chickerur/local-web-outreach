@@ -14,6 +14,7 @@ import sqlite3
 from datetime import UTC, datetime
 from urllib.parse import urlparse
 
+from app.store import photos
 from app.store.db import operator
 from app.workbench.match import name_tokens
 from app.workbench.resolve import town_of
@@ -163,6 +164,7 @@ def brief_with_overrides(conn: sqlite3.Connection, lead_id: int) -> dict:
     brief["lead_id"] = lead_id
     brief["status"] = row["status"]
     brief["events"] = events(conn, lead_id)
+    brief["photo_labels"] = photos.labels_for(conn, lead_id)
 
     overrides = _overrides(conn, lead_id)
     facts = brief.get("facts", [])
