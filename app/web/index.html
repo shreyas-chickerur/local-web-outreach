@@ -431,23 +431,43 @@
   .said{background:var(--raise);border-left:2px solid var(--accent);
     border-radius:0 8px 8px 0;padding:10px 12px;font-size:13px;color:var(--dim);
     font-style:italic;margin-bottom:14px}
+  /* The preview must never be the pane that loses. Three panes plus a header
+     do not fit in one viewport height once they stack, and the middle one
+     collapsed to a single pixel — a blank screen where the site should be. */
+  .ws-stage{min-height:420px}
   @media (max-width:1100px){
-    .workspace{grid-template-columns:1fr;grid-template-rows:auto auto 1fr auto}
+    /* Stop pretending it is one screen: let the whole thing scroll. */
+    body.workspace-open{overflow:auto}
+    .workspace{position:absolute;inset:0 0 auto;min-height:100vh;
+      grid-template-columns:1fr;grid-template-rows:auto}
+    .ws-pane{min-height:0;overflow:visible}
     .ws-pane+.ws-pane{border-left:0;border-top:1px solid var(--line)}
+    .ws-body{overflow:visible;max-height:none}
+    .ws-stage{min-height:min(760px,88vh)}
+    .device.phone{max-height:none}
+    .ws-top{position:sticky;top:0;z-index:2}
+    .chatbox{position:sticky;bottom:0}
   }
 
   /* Labelling: the one thing a person can do that the machine cannot. */
-  .shots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));
-    gap:8px;margin-top:10px}
-  .shot-card{border:1px solid var(--line);border-radius:8px;overflow:hidden;
-    background:var(--surface)}
-  .shot-card img{width:100%;height:74px;object-fit:cover;display:block}
-  .shot-card select{width:100%;border:0;border-top:1px solid var(--line);
+  .shots-grid{display:grid;gap:9px;margin-top:10px}
+  .shot-card{display:grid;grid-template-columns:76px 1fr;gap:10px;
+    border:1px solid var(--line);border-radius:9px;padding:8px;
+    background:var(--surface);align-items:center}
+  .shot-card img{width:76px;height:60px;object-fit:cover;border-radius:6px;
+    display:block}
+  .shot-card input{width:100%;border:1px solid var(--line);border-radius:6px;
+    background:var(--bg);color:var(--ink);font:inherit;font-size:12.5px;
+    padding:6px 8px}
+  .shot-card input:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .shot-card .tagrow{display:flex;align-items:center;gap:7px;margin-top:5px}
+  .shot-card .tag{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    font-weight:700;color:var(--faint)}
+  .shot-card select{border:1px solid var(--line);border-radius:5px;
     background:var(--bg);color:var(--dim);font:inherit;font-size:11px;
-    padding:5px 6px}
-  .shot-card select:focus{outline:2px solid var(--accent);outline-offset:-2px}
+    padding:2px 5px}
   .shot-card.labelled{border-color:var(--accent)}
-  .shot-card.labelled select{color:var(--accent);font-weight:600}
+  .shot-card.labelled .tag{color:var(--accent)}
   .planout{font-family:var(--mono);font-size:11.5px;line-height:1.75;
     white-space:pre-wrap;background:var(--raise);border:1px solid var(--line);
     border-radius:8px;padding:11px 13px;color:var(--dim);margin:0 0 14px}
@@ -796,10 +816,14 @@ async function openWorkspace(leadId, name) {
   const data = await (await fetch("/api/workspace?id=" + leadId)).json();
   let shots = {photos: [], options: []};
   try { shots = await (await fetch("/api/photos?id=" + leadId)).json(); } catch {}
+  // Every POST helper sends the global LEAD, so opening the workspace has to
+  // set it — otherwise labelling and status changes post without a lead id and
+  // fail silently behind an alert.
+  LEAD = leadId;
   WS = {lead_id: leadId, name: name || `Lead ${leadId}`,
         versions: data.versions || [], events: data.events || [],
         active: (data.versions || [])[0]?.version ?? null,
-        diagnostics: null, device: "phone", outline: "",
+        diagnostics: null, device: "phone", outline: data.outline || "",
         photos: shots.photos || [], labelOptions: shots.options || []};
   document.body.classList.add("workspace-open");
   drawWorkspace();
@@ -872,17 +896,25 @@ function drawWorkspace() {
     : "";
   const labeller = (WS.photos || []).length ? `
     <p class="diag-label">What each photo shows</p>
-    <p class="hint">Shape is measurable; subject is not. Label a few and the
-       hero picks itself.</p>
-    <div class="shots-grid">${WS.photos.map(p => `
+    <p class="hint">Describe it in your own words — that becomes the alt text,
+       and the tag is read out of it. Correct the tag if the reading is wrong.</p>
+    <div class="shots-grid">${WS.photos.map((p, i) => `
       <div class="shot-card${p.label ? " labelled" : ""}">
         <img src="${esc(p.url)}" alt="" loading="lazy">
-        <select onchange="labelPhoto(${esc(JSON.stringify(p.url))}, this.value)">
-          <option value="">unlabelled</option>
-          ${(WS.labelOptions || []).map(o =>
-            `<option value="${esc(o)}"${p.label === o ? " selected" : ""}>${esc(o)}</option>`
-          ).join("")}
-        </select></div>`).join("")}</div>` : "";
+        <div>
+          <input value="${esc(p.description || "")}" data-photo="${i}"
+            placeholder="e.g. brisket plate with slaw"
+            onkeydown="if(event.key==='Enter')describePhoto(${i})"
+            onblur="describePhoto(${i})">
+          <div class="tagrow"><span class="tag">${esc(p.label || "untagged")}</span>
+            <select onchange="describePhoto(${i}, this.value)">
+              <option value="">read from the words</option>
+              ${(WS.labelOptions || []).map(o =>
+                `<option value="${esc(o)}"${p.label === o ? " selected" : ""}>${esc(o)}</option>`
+              ).join("")}
+            </select>
+          </div>
+        </div></div>`).join("")}</div>` : "";
 
   const d = WS.diagnostics;
   const diag = d ? `
@@ -961,6 +993,26 @@ function drawWorkspace() {
 }
 
 function setDevice(kind) { WS.device = kind; drawWorkspace(); }
+
+// A label is a fact about the picture, not about this build, so it is stored
+// against the lead and every later version uses it.
+// The description is the fact; the tag is read out of it and only overridden
+// when the reading is wrong. Both are stored against the lead, so every later
+// build uses them — and the words become alt text, which every generated image
+// had been shipping empty.
+async function describePhoto(index, tagOverride) {
+  const photo = WS.photos[index];
+  if (!photo) return;
+  const field = document.querySelector(`[data-photo="${index}"]`);
+  const description = (field ? field.value : photo.description || "").trim();
+  if (!description && !tagOverride) return;
+  const data = await post("/api/label", {url: photo.url, description,
+                                          label: tagOverride || null});
+  if (!data) return;
+  const said = data.photos[photo.url] || {};
+  WS.photos[index] = {...photo, description, label: said.label || null};
+  drawWorkspace();
+}
 
 async function sendInstruction() {
   const box = $("#ws-input");

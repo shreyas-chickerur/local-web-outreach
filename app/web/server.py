@@ -18,7 +18,9 @@ from app.adapters.photos import fetch as fetch_photo
 from app.cli import available_directories
 from app.core.config import google_places_api_key
 from app.site.pipeline import iterate as run_iteration
+from app.site.pipeline import spec_from_config
 from app.site.render import build as build_site
+from app.site.render import plan_for
 from app.store import db, leads, photos, sites
 from app.web.serialize import brief_to_dict
 from app.workbench.brief import build_brief
@@ -118,12 +120,30 @@ def generate(lead_id: int, spec_text: str) -> dict:
 
 
 def workspace(lead_id: int) -> dict:
-    """Everything the iteration screen needs, in one round trip."""
+    """Everything the iteration screen needs, in one round trip.
+
+    Includes the plan for the version currently on screen: the plan is the
+    cheap thing to review, so it should be there when the screen opens rather
+    than only after the next instruction.
+    """
     with db.session() as conn:
+        history = sites.versions(conn, lead_id)
+        outline = ""
+        plan: dict = {}
+        if history:
+            try:
+                brief = leads.brief_with_overrides(conn, lead_id)
+                spec = spec_from_config(history[0].get("spec_json") or {})
+                resolved = plan_for(brief, spec)
+                outline, plan = resolved.outline(), resolved.as_dict()
+            except Exception:      # a plan we cannot draw must not blank the screen
+                outline, plan = "", {}
         return {
             "lead_id": lead_id,
-            "versions": sites.versions(conn, lead_id),
+            "versions": history,
             "events": leads.events(conn, lead_id),
+            "outline": outline,
+            "plan": plan,
         }
 
 
@@ -210,8 +230,9 @@ class Handler(BaseHTTPRequestHandler):
                 elif route == "/api/label":
                     with db.session() as conn:
                         photos.label(conn, lead_id, str(body.get("url", "")),
-                                     str(body.get("label", "")))
-                        self._json({"labels": photos.labels_for(conn, lead_id)})
+                                     str(body.get("description", "")),
+                                     what=(body.get("label") or None))
+                        self._json({"photos": photos.described(conn, lead_id)})
                     return
                 elif route == "/api/note":
                     text = str(body.get("note", "")).strip()
@@ -229,7 +250,15 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802  (stdlib naming)
         route = urlparse(self.path)
         if route.path in ("/", "/index.html"):
-            self._send(200, _UI.read_bytes(), "text/html; charset=utf-8")
+            # Never cached: the operator reloading after a change has to get the
+            # change, or we spend the next exchange comparing different builds.
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Cache-Control", "no-store, must-revalidate")
+            body = _UI.read_bytes()
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
             return
         # A generated site is served as a real page so it can be opened, shown
         # on a phone, or sent to the owner — not just previewed in a frame.
@@ -292,13 +321,16 @@ class Handler(BaseHTTPRequestHandler):
                 except ValueError:
                     self._json({"error": "no such lead"}, 400)
                     return
-                known = photos.labels_for(conn, lead_id)
+                known = photos.described(conn, lead_id)
             urls = [f"/photo/{lead_id}/{i}"
                     for i in range(len(brief.get("place_photos") or []))]
             urls += list((brief.get("published") or {}).get("photos") or [])
             self._json({"lead_id": lead_id, "labels": known,
                         "options": list(photos.LABELS),
-                        "photos": [{"url": u, "label": known.get(u)}
+                        "photos": [{"url": u,
+                                    "label": (known.get(u) or {}).get("label"),
+                                    "description":
+                                        (known.get(u) or {}).get("description", "")}
                                    for u in urls[:24]]})
             return
         if route.path == "/api/workspace":

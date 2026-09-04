@@ -69,9 +69,12 @@ CREATE TABLE IF NOT EXISTS sites (
 -- dining room. One pass of labelling per lead is cheaper than iterating on a
 -- hero nobody can judge automatically.
 CREATE TABLE IF NOT EXISTS photo_labels (
-    lead_id   INTEGER NOT NULL REFERENCES leads(id),
-    url       TEXT NOT NULL,
-    label     TEXT NOT NULL,
+    lead_id     INTEGER NOT NULL REFERENCES leads(id),
+    url         TEXT NOT NULL,
+    label       TEXT NOT NULL,
+    -- What you actually wrote. Kept verbatim because it becomes the alt text
+    -- on the finished page, which is worth as much as the placement.
+    description TEXT NOT NULL DEFAULT '',
     actor     TEXT NOT NULL,
     at        TEXT NOT NULL,
     PRIMARY KEY (lead_id, url)
@@ -94,6 +97,7 @@ CREATE TABLE IF NOT EXISTS discovery_cache (
 _LATER_COLUMNS = (
     ("sites", "parent_version", "INTEGER"),
     ("sites", "spec_json", "TEXT NOT NULL DEFAULT '{}'"),
+    ("photo_labels", "description", "TEXT NOT NULL DEFAULT ''"),
 )
 
 

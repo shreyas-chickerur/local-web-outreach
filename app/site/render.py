@@ -93,6 +93,9 @@ class Material:
     blocks: tuple[dict, ...] = ()
     # {url: what it shows}, said by a person. Empty until someone labels.
     photo_labels: dict = dc_field(default_factory=dict)
+    # What each photograph shows, in the operator's words. Becomes alt text,
+    # which every generated image had been shipping empty.
+    photo_notes: dict = dc_field(default_factory=dict)
     trade_kind: str = "default"
     # Photographs already placed. Sections spend from one pool, so the same
     # picture cannot turn up in the gallery and again beside a feature row.
@@ -176,6 +179,7 @@ def material_from_brief(brief: dict) -> Material:
         lead_id=brief.get("lead_id"),
         blocks=tuple(published.get("blocks") or ()),
         photo_labels=dict(brief.get("photo_labels") or {}),
+        photo_notes=dict(brief.get("photo_notes") or {}),
         trade_kind=trade_kind(brief.get("trade")),
         latitude=brief.get("latitude"),
         longitude=brief.get("longitude"),
@@ -470,7 +474,8 @@ def _gallery(m: Material, t: Theme) -> str:
         return ""
     tiles = "".join(
         f'<button aria-label="Open photo {i + 1}" data-reveal data-delay="{i % 4}">'
-        f'<img src="{e(src)}" alt="" loading="lazy" decoding="async"></button>'
+        f'<img src="{e(src)}" alt="{e(m.photo_notes.get(src, ""))}"'
+        f' loading="lazy" decoding="async"></button>'
         for i, src in enumerate(shots))
     return (f'<section id="gallery"><div class="wrap">'
             f'<p class="eyebrow" data-reveal>Gallery</p>'
@@ -651,7 +656,8 @@ def _features(m: Material, t: Theme) -> str:
         relevant = [src for src in (block.get("images") or ())
                     if justified(src, block["heading"], block["text"])]
         fresh = m.take(relevant, 1)
-        art = (f'<div class="shot"><img src="{e(fresh[0])}" alt=""'
+        art = (f'<div class="shot"><img src="{e(fresh[0])}"'
+               f' alt="{e(m.photo_notes.get(fresh[0], ""))}"'
                f' loading="lazy" decoding="async"></div>') if fresh else ""
         # Shape follows the count, not the index. A single row in the "wide"
         # shape stacks a 21:9 picture above three lines of text and occupies
