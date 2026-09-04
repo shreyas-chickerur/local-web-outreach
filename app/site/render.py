@@ -26,6 +26,7 @@ import re
 from dataclasses import dataclass
 from urllib.parse import quote_plus
 
+from app.site.density import calculate_density_signal, density_attrs
 from app.site.spec import SiteSpec, parse_spec
 from app.site.styles import css, script
 from app.site.theme import Theme, theme_for
@@ -209,40 +210,78 @@ def _offer_heading(m: Material) -> tuple[str, str]:
     return "What we do", "How we can help"
 
 
-def _services(m: Material, t: Theme) -> str:
-    """Photo-led where there are photos to lead with.
-
-    A grid of bare titles is the tell of a generated page: the words are true
-    and the section is empty. Their own photography carries it instead, and
-    where there is none the type does the work rather than a numbered box.
-    """
-    items = list(m.services) + list(m.products)
-    if not items:
-        return ""
-    eyebrow, heading = _offer_heading(m)
-    # Keep the first image for the hero and the rest for the gallery; the
-    # middle ones dress this section without starving either.
-    art = m.images[1:1 + len(items)] if len(m.images) > 3 else ()
-    cards = []
-    for i, item in enumerate(items[:8]):
-        photo = art[i] if i < len(art) else None
-        if photo:
-            cards.append(
-                f'<article class="offer has-art" data-reveal data-delay="{i % 4}">'
+def _offer_item(item: str, index: int, photo: str | None) -> str:
+    """One offering. Photo-led when there is a photo to lead with."""
+    if photo:
+        return (f'<article class="offer has-art" data-reveal data-delay="{index % 4}">'
                 f'<div class="art"><img src="{e(photo)}" alt="" loading="lazy"'
                 f' decoding="async"></div>'
-                f'<div class="label"><span class="idx">{i + 1:02d}</span>'
+                f'<div class="label"><span class="idx">{index + 1:02d}</span>'
                 f'<h3>{e(item)}</h3></div></article>')
-        else:
-            cards.append(
-                f'<article class="offer" data-reveal data-delay="{i % 4}">'
-                f'<span class="idx">{i + 1:02d}</span><h3>{e(item)}</h3>'
-                f'<span class="rule"></span></article>')
+    return (f'<article class="offer" data-reveal data-delay="{index % 4}">'
+            f'<span class="idx">{index + 1:02d}</span><h3>{e(item)}</h3>'
+            f'<span class="rule"></span></article>')
+
+
+def _offer_row(item: str, index: int) -> str:
+    """One offering in the sparse layout: a rule and a large line of type.
+
+    Deliberately not a card. Two cards in a row built for four leave a gutter
+    of dead space down the middle, which is the thing this layout exists to
+    avoid.
+    """
+    return (f'<li data-reveal data-delay="{index % 4}">'
+            f'<span class="idx">{index + 1:02d}</span>'
+            f'<h3>{e(item)}</h3></li>')
+
+
+def _services(m: Material, t: Theme) -> str:
+    """What they offer, laid out according to how much of it there is.
+
+    Three compositions rather than one grid with different numbers in it:
+
+    * **sparse** (one or two) — an asymmetric split, display type carrying the
+      left, the items set large against rules on the right. The auto-fit grid
+      is not used at all here.
+    * **balanced** (three) — three across, each still substantial.
+    * **dense** (four or more) — the grid, which is genuinely right at volume.
+
+    A section with nothing in it is absent, not empty: `renders` decides that
+    and it is the same rule everywhere.
+    """
+    items = list(m.services) + list(m.products)
+    signal = calculate_density_signal(items)
+    if not signal["renders"]:
+        return ""
+
+    eyebrow, heading = _offer_heading(m)
+    attrs = density_attrs(signal)
     lede = f'<p class="lede">{e(m.tagline)}</p>' if m.tagline else ""
-    return (f'<section id="services"><div class="wrap">'
+
+    if signal["layout"] == "editorial":
+        rows = "".join(_offer_row(item, i) for i, item in enumerate(items))
+        # One photograph, large, rather than one per item: at this count a grid
+        # of pictures reads as padding.
+        art = (f'<div class="editorial-art" data-reveal data-delay="1">'
+               f'<img src="{e(m.images[1])}" alt="" loading="lazy" decoding="async">'
+               f'</div>') if len(m.images) > 2 else ""
+        return (f'<section id="services" {attrs}><div class="wrap">'
+                f'<div class="offers offers-editorial">'
+                f'<div class="display" data-reveal>'
+                f'<p class="eyebrow">{e(eyebrow)}</p><h2>{e(heading)}</h2>{lede}</div>'
+                f'<div class="offers-side"><ol class="listing">{rows}</ol>{art}</div>'
+                f'</div></div></section>')
+
+    # Keep the first image for the hero and the rest for the gallery; the
+    # middle ones dress this section without starving either.
+    art_pool = m.images[1:1 + len(items)] if len(m.images) > 3 else ()
+    cards = "".join(
+        _offer_item(item, i, art_pool[i] if i < len(art_pool) else None)
+        for i, item in enumerate(items[:8]))
+    return (f'<section id="services" {attrs}><div class="wrap">'
             f'<div class="head" data-reveal><p class="eyebrow">{e(eyebrow)}</p>'
             f'<h2>{e(heading)}</h2>{lede}</div>'
-            f'<div class="offers">{"".join(cards)}</div></div></section>')
+            f'<div class="offers">{cards}</div></div></section>')
 
 
 def _stats(m: Material, t: Theme) -> str:

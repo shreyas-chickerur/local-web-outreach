@@ -287,12 +287,17 @@ def test_a_count_of_zero_never_reaches_the_page():
     assert "services offered" not in page
 
 
-def test_the_offer_section_uses_their_photography_when_there_is_some():
+def test_a_dense_offer_section_uses_their_photography():
     """A grid of bare titles is the tell of a generated page: every word true
     and the section empty."""
-    page, _ = build(_rich())
+    many = _rich()
+    many["published"] = {**many["published"],
+                         "services": ["Dinner", "Brunch", "Catering", "Private hire",
+                                      "Wine list"]}
+    page, _ = build(many)
     offers = page[page.index('id="services"'):page.index("</section>",
                                                           page.index('id="services"'))]
+    assert 'data-density="dense"' in offers
     assert "has-art" in offers
     assert "/photo/7/" in offers
 
@@ -306,3 +311,45 @@ def test_the_offer_heading_follows_the_trade():
     trade["trade"] = "Roofing contractor"
     trade["published"] = {**trade["published"], "menu_items": []}
     assert "How we can help" in build(trade)[0]
+
+
+def test_two_offerings_do_not_get_a_grid_built_for_four():
+    """auto-fit collapses its empty tracks, so two items become two half-width
+    slabs with dead space down the middle. The sparse case must not use it."""
+    page, _ = build(_rich())          # the fixture has exactly two services
+    offers = page[page.index('id="services""'.replace('""', '"')):]
+    assert 'data-density="sparse"' in page
+    assert "offers-editorial" in page
+    assert "listing" in page
+    # the card grid is not what laid this out
+    assert '<div class="offers">' not in offers.split("</section>")[0]
+
+
+def test_type_scales_inversely_with_how_much_there_is():
+    sparse, _ = build(_rich())
+    dense_brief = _rich()
+    dense_brief["published"] = {**dense_brief["published"],
+                                "services": ["A", "B", "C", "D", "E"]}
+    dense, _ = build(dense_brief)
+    assert "--density-scale:1.25" in sparse
+    assert "--density-scale:0.85" in dense
+    # and the scale is actually wired into a font-size, not just declared
+    assert "calc(clamp(28px,4.6vw,52px) * var(--density-scale))" in sparse
+
+
+def test_three_offerings_hold_three_across():
+    """Exactly three should not stretch into slabs, nor drop to a sparse split."""
+    three = _rich()
+    three["published"] = {**three["published"], "services": ["A", "B", "C"]}
+    page, _ = build(three)
+    assert 'data-density="balanced"' in page
+    assert "repeat(3,minmax(0,1fr))" in page
+
+
+def test_density_never_conjures_a_section_out_of_nothing():
+    """The data-safety rule outranks the layout rule: no items, no section."""
+    none = _rich()
+    none["published"] = {**none["published"], "services": [], "products": []}
+    page, _ = build(none)
+    assert 'id="services"' not in page
+    assert 'data-density="empty"' not in page

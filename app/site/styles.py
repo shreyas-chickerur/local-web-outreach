@@ -134,8 +134,47 @@ section.band .card{{background:var(--bg)}}
 
 /* ---------------------------------------------------------------- offers -- */
 .head{{max-width:44ch;margin-bottom:clamp(30px,5vw,56px)}}
+/* Type scales inversely with how much of it there is. The clamp keeps doing
+   the responsive work; --density-scale only shifts where it sits, so a section
+   with two services is set larger than one with nine without a second set of
+   breakpoints. Defaulted here so any section without the attribute is unmoved. */
+section{{--density-scale:1}}
+[data-density] h2{{font-size:calc(clamp(28px,4.6vw,52px) * var(--density-scale))}}
+
+/* Four or more: the grid is genuinely right, and auto-fit belongs here. */
 .offers{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:clamp(12px,1.6vw,20px)}}
+/* Exactly three: hold three across so none of them stretches into a slab. */
+[data-density="balanced"] .offers{{
+  grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* One or two: no grid of cards at all. An asymmetric split — display type
+   holding the left, the offerings set large against rules on the right —
+   because two cards in a row built for four leave a gutter of dead space
+   down the middle, which is what a template looks like. */
+.offers-editorial{{display:grid;
+  grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);
+  gap:clamp(34px,6vw,96px);align-items:start}}
+.offers-editorial .display{{position:sticky;top:96px}}
+.offers-editorial .display h2{{max-width:14ch}}
+.offers-editorial .lede{{margin-top:18px}}
+.listing{{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}}
+.listing li{{display:grid;grid-template-columns:auto 1fr;gap:0 18px;
+  align-items:baseline;padding:clamp(22px,2.6vw,34px) 0;
+  border-bottom:1px solid var(--line);transition:padding-left .4s
+  cubic-bezier(.2,.7,.3,1)}}
+.listing li:hover{{padding-left:10px}}
+.listing .idx{{font-family:{t.display};font-size:12px;letter-spacing:.16em;
+  color:var(--accent)}}
+.listing h3{{margin:0;line-height:1.08;
+  font-size:calc(clamp(24px,3.1vw,40px) * var(--density-scale))}}
+.editorial-art{{margin-top:clamp(24px,3vw,40px);border-radius:var(--r);
+  overflow:hidden;aspect-ratio:5/3}}
+.editorial-art img{{width:100%;height:100%;object-fit:cover;
+  transition:transform 1.1s cubic-bezier(.2,.7,.3,1),
+    clip-path 1s cubic-bezier(.2,.7,.3,1);clip-path:inset(14% 0 0 0)}}
+.editorial-art.in img{{clip-path:inset(0 0 0 0)}}
+.editorial-art:hover img{{transform:scale(1.04)}}
 .offer{{position:relative;border-radius:var(--r);overflow:hidden;
   background:var(--surface);border:1px solid var(--line);min-height:180px;
   display:flex;flex-direction:column;justify-content:flex-end;padding:26px 24px;
@@ -144,7 +183,8 @@ section.band .card{{background:var(--bg)}}
 .offer:hover{{transform:translateY(-6px);box-shadow:var(--lift)}}
 .offer .idx{{font-family:{t.display};font-size:12px;letter-spacing:.16em;
   color:var(--accent);margin-bottom:auto}}
-.offer h3{{margin:14px 0 0;font-size:clamp(19px,1.9vw,25px);line-height:1.15}}
+.offer h3{{margin:14px 0 0;line-height:1.15;
+  font-size:calc(clamp(19px,1.9vw,25px) * var(--density-scale))}}
 .offer .rule{{display:block;height:2px;width:34px;background:var(--accent);
   margin-top:18px;transition:width .45s cubic-bezier(.2,.7,.3,1)}}
 .offer:hover .rule{{width:78px}}
@@ -276,6 +316,12 @@ footer a:hover{{color:var(--accent)}}
 .hero .actions{{animation-delay:.3s}}
 @keyframes rise{{from{{opacity:0;transform:translateY(30px)}}to{{opacity:1;transform:none}}}}
 
+@media (max-width:900px){{
+  .offers-editorial{{grid-template-columns:1fr;gap:30px}}
+  .offers-editorial .display{{position:static}}
+  [data-density="balanced"] .offers{{
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}
+}}
 @media (max-width:700px){{
   .offers .offer.has-art:first-child{{grid-column:span 1;aspect-ratio:4/5}}
 }}
@@ -298,7 +344,7 @@ footer a:hover{{color:var(--accent)}}
   *,*::before,*::after{{animation:none!important;transition:none!important}}
   [data-reveal]{{opacity:1!important;transform:none!important}}
   .hero .bgimg{{transform:none!important}}
-  .offer.has-art img,.mosaic img{{clip-path:none!important}}
+  .offer.has-art img,.mosaic img,.editorial-art img{{clip-path:none!important}}
 }}
 '''
 
