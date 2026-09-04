@@ -24,10 +24,98 @@ GRAIN = (
     "%3C/svg%3E\")")
 
 
+def _type_rules(t: Theme) -> str:
+    """The type scale, its optics, and the axes, emitted per level.
+
+    Three things happen here that a single global rule cannot do:
+
+    * sizes come off one modular scale, so h1/h2/h3 keep a fixed relationship
+      to the body size rather than drifting between three unrelated clamps;
+    * tracking is this face's value, easing toward zero as size drops — the
+      figure that flatters a 96px headline is too tight at 22px;
+    * `opsz` and `wght` are driven per level, which is the only reason to be
+      paying for a variable font at all. Where the face is static (Archivo
+      Black) the property is omitted entirely and `font-weight` does the work.
+    """
+    scale = t.scale
+    levels = (("h1", t.display_steps, t.display_weight, 144.0),
+              ("h2", max(2, t.display_steps - 2), t.heading_weight, 72.0),
+              ("h3", 2, t.heading_weight, 36.0))
+    lines = []
+    for selector, steps, weight, optical in levels:
+        rules = [
+            f"font-size:calc({scale[selector]} * var(--density-scale))",
+            f"letter-spacing:{t.tracking_for(steps)}",
+        ]
+        variation = t.display.variation(weight, optical)
+        rules.append(f"font-variation-settings:{variation}" if variation
+                     else f"font-weight:{weight}")
+        lines.append(f"{selector}{{{';'.join(rules)}}}")
+    lines.append(f".lede{{font-size:calc({scale['lede']} * var(--density-scale))}}")
+    body_variation = t.body.variation(400, 18.0)
+    if body_variation:
+        lines.append(f"body{{font-variation-settings:{body_variation}}}")
+    return "\n".join(lines)
+
+
+def _layout_rules(t: Theme) -> str:
+    """Structural intent, keyed off the bias each theme declares.
+
+    This is what stops six moods being one page in six colourways: an airy
+    theme gets its whitespace and loses its borders, a structural one gets
+    hairline rules and a micro-shadow, an editorial one offsets its columns.
+    """
+    return """
+/* airy — space does the separating, so the lines get out of the way */
+[data-theme-layout="airy"] section{padding:clamp(88px,13vw,180px) 0}
+[data-theme-layout="airy"] .card,[data-theme-layout="airy"] .offer,
+[data-theme-layout="airy"] .quote{border-color:transparent;
+  box-shadow:0 1px 2px rgba(0,0,0,.03),0 18px 40px -28px rgba(0,0,0,.22)}
+[data-theme-layout="airy"] .split{gap:clamp(48px,8vw,120px)}
+[data-theme-layout="airy"] .listing li{border-bottom-color:transparent;
+  padding-block:clamp(28px,3.4vw,46px)}
+
+/* structured — hairlines and a shallow shadow; the grid is meant to show */
+[data-theme-layout="structured"] section+section{border-top:1px solid var(--line)}
+[data-theme-layout="structured"] .card,[data-theme-layout="structured"] .offer,
+[data-theme-layout="structured"] .quote{box-shadow:0 1px 0 var(--line),
+  0 10px 24px -20px rgba(0,0,0,.3)}
+[data-theme-layout="structured"] .wrap{position:relative}
+
+/* contained — compact and blocky; edges are the point */
+[data-theme-layout="contained"] section{padding:clamp(52px,7.5vw,104px) 0}
+[data-theme-layout="contained"] .wrap{width:min(1080px,100% - var(--pad)*2)}
+[data-theme-layout="contained"] .card,[data-theme-layout="contained"] .offer,
+[data-theme-layout="contained"] .quote{border-width:2px;box-shadow:none}
+[data-theme-layout="contained"] h1,[data-theme-layout="contained"] h2{
+  text-transform:uppercase}
+
+/* editorial — asymmetry, a wider gutter, and the heading held off the edge */
+[data-theme-layout="editorial"] .wrap{width:min(1240px,100% - var(--pad)*2)}
+[data-theme-layout="editorial"] .split{
+  grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);
+  gap:clamp(40px,7vw,110px)}
+[data-theme-layout="editorial"] .head{margin-left:clamp(0px,4vw,80px)}
+[data-theme-layout="editorial"] .offers-editorial{
+  grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr)}
+[data-theme-layout="editorial"] .card,[data-theme-layout="editorial"] .offer,
+[data-theme-layout="editorial"] .quote{border-radius:var(--r);box-shadow:none;
+  border-color:var(--line)}
+@media (max-width:900px){
+  [data-theme-layout="editorial"] .split{grid-template-columns:1fr}
+  [data-theme-layout="editorial"] .head{margin-left:0}
+}
+"""
+
+
 def css(t: Theme) -> str:
     grain_layer = f'''
 body::after{{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
   background-image:{GRAIN};opacity:.05;mix-blend-mode:multiply}}''' if t.grain else ""
+    type_rules = _type_rules(t)
+    layout_rules = _layout_rules(t)
+    body_size = t.scale["body"]
+    listing_size = t.step(max(2, t.display_steps - 3))
     return f'''
 :root{{
   --bg:{t.bg}; --surface:{t.surface}; --raise:{t.raise_}; --ink:{t.ink};
@@ -44,15 +132,12 @@ body::after{{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
    stray wide element without creating a scroller. */
 html{{scroll-behavior:smooth;-webkit-text-size-adjust:100%;
   overflow-x:hidden;overflow-x:clip}}
-body{{margin:0;background:var(--bg);color:var(--ink);font-family:{t.body};
-  font-size:clamp(16px,1.05vw,18px);line-height:1.65;
+body{{margin:0;background:var(--bg);color:var(--ink);font-family:{t.body.stack};
+  font-size:{body_size};line-height:1.65;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}}
 {grain_layer}
-h1,h2,h3{{font-family:{t.display};font-weight:700;line-height:1.05;
-  letter-spacing:-.025em;margin:0 0 .5em}}
-h1{{font-size:clamp(42px,8.5vw,104px)}}
-h2{{font-size:clamp(28px,4.6vw,52px)}}
-h3{{font-size:clamp(18px,1.6vw,22px);letter-spacing:-.01em}}
+h1,h2,h3{{font-family:{t.display.stack};line-height:1.05;margin:0 0 .5em}}
+{type_rules}
 p{{margin:0 0 1em;max-width:68ch}}
 a{{color:var(--accent)}}
 img{{max-width:100%;display:block}}
@@ -61,7 +146,7 @@ img{{max-width:100%;display:block}}
 section{{padding:clamp(64px,10vw,140px) 0;position:relative}}
 section.band{{background:var(--raise)}}
 .eyebrow{{font-size:12px;letter-spacing:.18em;text-transform:uppercase;
-  font-weight:700;color:var(--accent);margin:0 0 14px;font-family:{t.body}}}
+  font-weight:700;color:var(--accent);margin:0 0 14px;font-family:{t.body.stack}}}
 
 /* ---------------------------------------------------------------- chrome -- */
 .bar{{position:fixed;inset:0 0 auto;z-index:40;display:flex;align-items:center;
@@ -69,7 +154,7 @@ section.band{{background:var(--raise)}}
   box-shadow .35s ease,padding .35s ease;color:#fff}}
 .bar.stuck{{background:var(--surface);color:var(--ink);box-shadow:var(--shadow);
   padding-top:10px;padding-bottom:10px}}
-.bar .mark{{font-family:{t.display};font-weight:700;font-size:19px;
+.bar .mark{{font-family:{t.display.stack};font-weight:700;font-size:19px;
   letter-spacing:-.02em;text-decoration:none;color:inherit}}
 .bar nav{{margin-left:auto;display:flex;gap:26px}}
 .bar nav a{{color:inherit;text-decoration:none;font-size:14.5px;font-weight:600;
@@ -117,7 +202,7 @@ section.band{{background:var(--raise)}}
   60%{{transform:translateY(9px);opacity:0}}}}
 
 /* -------------------------------------------------------------- sections -- */
-.lede{{font-size:clamp(19px,2.2vw,26px);line-height:1.5;color:var(--dim);
+.lede{{line-height:1.5;color:var(--dim);
   max-width:34ch;margin:0}}
 .split{{display:grid;grid-template-columns:minmax(240px,.9fr) 1.4fr;
   gap:clamp(28px,5vw,72px);align-items:start}}
@@ -127,7 +212,7 @@ section.band{{background:var(--raise)}}
   box-shadow .3s ease,border-color .3s ease;position:relative;overflow:hidden}}
 .card:hover{{transform:translateY(-5px);box-shadow:var(--lift);
   border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}}
-.card .num{{font-family:{t.display};font-size:13px;color:var(--accent);
+.card .num{{font-family:{t.display.stack};font-size:13px;color:var(--accent);
   letter-spacing:.1em;margin-bottom:12px}}
 .card h3{{margin:0}}
 section.band .card{{background:var(--bg)}}
@@ -139,7 +224,6 @@ section.band .card{{background:var(--bg)}}
    with two services is set larger than one with nine without a second set of
    breakpoints. Defaulted here so any section without the attribute is unmoved. */
 section{{--density-scale:1}}
-[data-density] h2{{font-size:calc(clamp(28px,4.6vw,52px) * var(--density-scale))}}
 
 /* Four or more: the grid is genuinely right, and auto-fit belongs here. */
 .offers{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -164,10 +248,10 @@ section{{--density-scale:1}}
   border-bottom:1px solid var(--line);transition:padding-left .4s
   cubic-bezier(.2,.7,.3,1)}}
 .listing li:hover{{padding-left:10px}}
-.listing .idx{{font-family:{t.display};font-size:12px;letter-spacing:.16em;
+.listing .idx{{font-family:{t.display.stack};font-size:12px;letter-spacing:.16em;
   color:var(--accent)}}
 .listing h3{{margin:0;line-height:1.08;
-  font-size:calc(clamp(24px,3.1vw,40px) * var(--density-scale))}}
+  font-size:calc({listing_size} * var(--density-scale))}}
 .editorial-art{{margin-top:clamp(24px,3vw,40px);border-radius:var(--r);
   overflow:hidden;aspect-ratio:5/3}}
 .editorial-art img{{width:100%;height:100%;object-fit:cover;
@@ -181,10 +265,9 @@ section{{--density-scale:1}}
   transition:transform .45s cubic-bezier(.2,.7,.3,1),box-shadow .45s ease,
     border-color .45s ease}}
 .offer:hover{{transform:translateY(-6px);box-shadow:var(--lift)}}
-.offer .idx{{font-family:{t.display};font-size:12px;letter-spacing:.16em;
+.offer .idx{{font-family:{t.display.stack};font-size:12px;letter-spacing:.16em;
   color:var(--accent);margin-bottom:auto}}
-.offer h3{{margin:14px 0 0;line-height:1.15;
-  font-size:calc(clamp(19px,1.9vw,25px) * var(--density-scale))}}
+.offer h3{{margin:14px 0 0;line-height:1.15}}
 .offer .rule{{display:block;height:2px;width:34px;background:var(--accent);
   margin-top:18px;transition:width .45s cubic-bezier(.2,.7,.3,1)}}
 .offer:hover .rule{{width:78px}}
@@ -209,7 +292,7 @@ section{{--density-scale:1}}
   color:var(--accent-ink)}}
 .stats{{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
   gap:26px;text-align:center}}
-.stat b{{display:block;font-family:{t.display};font-size:clamp(38px,5.4vw,64px);
+.stat b{{display:block;font-family:{t.display.stack};font-size:clamp(38px,5.4vw,64px);
   line-height:1;font-variant-numeric:tabular-nums}}
 .stat span{{display:block;margin-top:10px;font-size:13.5px;letter-spacing:.1em;
   text-transform:uppercase;opacity:.86;font-weight:600}}
@@ -339,6 +422,7 @@ footer a:hover{{color:var(--accent)}}
   .callbar a{{flex:1;text-align:center;justify-content:center}}
   body{{padding-bottom:74px}}
 }}
+{layout_rules}
 @media (prefers-reduced-motion:reduce){{
   html{{scroll-behavior:auto}}
   *,*::before,*::after{{animation:none!important;transition:none!important}}

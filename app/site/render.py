@@ -556,8 +556,10 @@ def build(brief: dict, spec_text: str = "") -> tuple[str, SiteSpec]:
            if m.images else "")
         + '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
         + '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
-        + f'<link href="{theme.fonts}" rel="stylesheet">\n'
-        + f"<style>{css(theme)}</style>\n{_schema(m)}</head>\n<body>\n"
+        + f'<link href="{theme.fonts_href}" rel="stylesheet">\n'
+        + f"<style>{css(theme)}</style>\n{_schema(m)}</head>\n"
+        + f'<body data-theme="{e(spec.mood)}" '
+        + f'data-theme-layout="{e(theme.layout_bias)}">\n'
         + _nav(m, order, spec) + "\n" + body + "\n"
         + _callbar(m, spec) + "\n" + _footer(m)
         + f"\n<script>{script()}</script>\n</body></html>", spec)

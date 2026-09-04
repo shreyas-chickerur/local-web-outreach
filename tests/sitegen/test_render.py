@@ -333,8 +333,11 @@ def test_type_scales_inversely_with_how_much_there_is():
     dense, _ = build(dense_brief)
     assert "--density-scale:1.25" in sparse
     assert "--density-scale:0.85" in dense
-    # and the scale is actually wired into a font-size, not just declared
-    assert "calc(clamp(28px,4.6vw,52px) * var(--density-scale))" in sparse
+    # Wired into a real font-size, not merely declared. Asserted on the
+    # mechanism rather than a literal clamp, so changing the type scale is not
+    # a test failure — only disconnecting it is.
+    assert re.search(r"h2\{font-size:calc\(clamp\([^)]*\) \* var\(--density-scale\)\)[;}]",
+                     sparse)
 
 
 def test_three_offerings_hold_three_across():
