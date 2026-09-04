@@ -38,9 +38,14 @@ body::after{{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
   --pad:clamp(20px,5vw,44px);
 }}
 *{{box-sizing:border-box}}
-html{{scroll-behavior:smooth;-webkit-text-size-adjust:100%}}
+/* `overflow-x:hidden` on BODY makes the body its own scroll container, and
+   window.scrollTo then cannot scroll the page back up — which is exactly how
+   the back-to-top button came to do nothing. `clip` on the root contains a
+   stray wide element without creating a scroller. */
+html{{scroll-behavior:smooth;-webkit-text-size-adjust:100%;
+  overflow-x:hidden;overflow-x:clip}}
 body{{margin:0;background:var(--bg);color:var(--ink);font-family:{t.body};
-  font-size:clamp(16px,1.05vw,18px);line-height:1.65;overflow-x:hidden;
+  font-size:clamp(16px,1.05vw,18px);line-height:1.65;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}}
 {grain_layer}
 h1,h2,h3{{font-family:{t.display};font-weight:700;line-height:1.05;
@@ -127,6 +132,48 @@ section.band{{background:var(--raise)}}
 .card h3{{margin:0}}
 section.band .card{{background:var(--bg)}}
 
+/* ---------------------------------------------------------------- offers -- */
+.head{{max-width:44ch;margin-bottom:clamp(30px,5vw,56px)}}
+.offers{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:clamp(12px,1.6vw,20px)}}
+.offer{{position:relative;border-radius:var(--r);overflow:hidden;
+  background:var(--surface);border:1px solid var(--line);min-height:180px;
+  display:flex;flex-direction:column;justify-content:flex-end;padding:26px 24px;
+  transition:transform .45s cubic-bezier(.2,.7,.3,1),box-shadow .45s ease,
+    border-color .45s ease}}
+.offer:hover{{transform:translateY(-6px);box-shadow:var(--lift)}}
+.offer .idx{{font-family:{t.display};font-size:12px;letter-spacing:.16em;
+  color:var(--accent);margin-bottom:auto}}
+.offer h3{{margin:14px 0 0;font-size:clamp(19px,1.9vw,25px);line-height:1.15}}
+.offer .rule{{display:block;height:2px;width:34px;background:var(--accent);
+  margin-top:18px;transition:width .45s cubic-bezier(.2,.7,.3,1)}}
+.offer:hover .rule{{width:78px}}
+/* Photo-led cards: the picture is the card, the words sit on the glass. */
+.offer.has-art{{min-height:min(340px,42vw);padding:0;border:0;color:#fff;
+  aspect-ratio:4/5}}
+.offer.has-art .art{{position:absolute;inset:0;overflow:hidden}}
+.offer.has-art img{{width:100%;height:100%;object-fit:cover;
+  transition:transform 1.1s cubic-bezier(.2,.7,.3,1),filter .5s ease;
+  clip-path:inset(12% 0 0 0);}}
+.offer.has-art.in img{{clip-path:inset(0 0 0 0)}}
+.offer.has-art:hover img{{transform:scale(1.07)}}
+.offer.has-art .label{{position:relative;z-index:1;margin-top:auto;
+  padding:24px 22px;width:100%;
+  background:linear-gradient(180deg,transparent,rgba(8,8,10,.86) 62%)}}
+.offer.has-art .idx{{color:#fff;opacity:.75}}
+.offer.has-art h3{{color:#fff;text-shadow:0 1px 18px rgba(0,0,0,.4)}}
+.offers .offer.has-art:first-child{{grid-column:span 2;aspect-ratio:16/10}}
+
+/* ----------------------------------------------------------------- stats -- */
+.statband{{padding:clamp(40px,6vw,72px) 0;background:var(--accent);
+  color:var(--accent-ink)}}
+.stats{{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:26px;text-align:center}}
+.stat b{{display:block;font-family:{t.display};font-size:clamp(38px,5.4vw,64px);
+  line-height:1;font-variant-numeric:tabular-nums}}
+.stat span{{display:block;margin-top:10px;font-size:13.5px;letter-spacing:.1em;
+  text-transform:uppercase;opacity:.86;font-weight:600}}
+
 /* ------------------------------------------------------------------ menu -- */
 .filters{{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:30px}}
 .filters button{{background:transparent;border:1.5px solid var(--line);
@@ -152,7 +199,9 @@ section.band .card{{background:var(--bg)}}
   border-radius:var(--r);position:relative;aspect-ratio:4/3}}
 .mosaic button:nth-child(6n+1){{grid-column:span 2;aspect-ratio:8/5}}
 .mosaic img{{width:100%;height:100%;object-fit:cover;
-  transition:transform .7s cubic-bezier(.2,.7,.3,1),filter .4s ease}}
+  transition:transform .7s cubic-bezier(.2,.7,.3,1),
+    clip-path 1s cubic-bezier(.2,.7,.3,1);clip-path:inset(14% 0 0 0)}}
+.mosaic button.in img{{clip-path:inset(0 0 0 0)}}
 .mosaic button:hover img{{transform:scale(1.06)}}
 .lightbox{{position:fixed;inset:0;z-index:60;background:rgba(8,8,10,.94);
   display:none;place-items:center;padding:26px;backdrop-filter:blur(4px)}}
@@ -227,6 +276,9 @@ footer a:hover{{color:var(--accent)}}
 .hero .actions{{animation-delay:.3s}}
 @keyframes rise{{from{{opacity:0;transform:translateY(30px)}}to{{opacity:1;transform:none}}}}
 
+@media (max-width:700px){{
+  .offers .offer.has-art:first-child{{grid-column:span 1;aspect-ratio:4/5}}
+}}
 @media (max-width:860px){{
   .split{{grid-template-columns:1fr}}
   .bar nav{{display:none}}
@@ -246,6 +298,7 @@ footer a:hover{{color:var(--accent)}}
   *,*::before,*::after{{animation:none!important;transition:none!important}}
   [data-reveal]{{opacity:1!important;transform:none!important}}
   .hero .bgimg{{transform:none!important}}
+  .offer.has-art img,.mosaic img{{clip-path:none!important}}
 }}
 '''
 
@@ -329,6 +382,48 @@ if (box) {
     if (e.key === "ArrowLeft") show(at - 1);
     if (e.key === "ArrowRight") show(at + 1);
   });
+}
+
+/* Back to top. Bound here rather than inline: inside an onclick attribute the
+   element is in scope, so `scrollTo` resolves to the button's own
+   Element.scrollTo and quietly scrolls the button instead of the page. */
+const toTop = document.querySelector(".top");
+if (toTop) toTop.addEventListener("click", () => {
+  const from = window.scrollY;
+  if (reduced) { window.scrollTo({top: 0, behavior: "instant"}); return; }
+  window.scrollTo({top: 0, behavior: "smooth"});
+  // Some engines ignore programmatic smooth scrolling entirely. If nothing has
+  // moved shortly after, jump — a button that does nothing is the worst case.
+  setTimeout(() => {
+    if (window.scrollY < from) return;                 // it is animating, leave it
+    // "instant" overrides the CSS scroll-behavior, which would otherwise smooth
+    // this call too — and smooth is exactly what did not work.
+    window.scrollTo({top: 0, behavior: "instant"});
+  }, 320);
+});
+
+/* Numbers count up the first time they come into view. */
+const counters = document.querySelectorAll("[data-count]");
+if (counters.length) {
+  const countObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      countObserver.unobserve(entry.target);
+      const target = parseFloat(entry.target.dataset.count);
+      if (!isFinite(target) || reduced) continue;
+      const started = performance.now();
+      const span = 1100;
+      const step = (now) => {
+        const progress = Math.min((now - started) / span, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        entry.target.textContent = Math.round(target * eased).toLocaleString();
+        if (progress < 1) requestAnimationFrame(step);
+        else entry.target.textContent = target.toLocaleString();
+      };
+      requestAnimationFrame(step);
+    }
+  }, {threshold: 0.4});
+  counters.forEach(el => countObserver.observe(el));
 }
 
 /* "Open now", worked out in the visitor's own timezone from the printed hours. */

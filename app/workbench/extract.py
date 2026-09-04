@@ -199,6 +199,8 @@ class ExtractedSite:
     # our heading filters found nothing they liked — a 336KB roofing site with
     # no parseable services is a failure of this reader, not a sales lead.
     text_words: int = 0
+    # How much the about text reads like a business talking about itself.
+    about_score: float = 0.0
 
     def is_empty(self) -> bool:
         return not any((self.about, self.services, self.products, self.hours, self.actions,
@@ -371,6 +373,60 @@ def read_structured_data(html: str) -> tuple[str | None, str | None, list[str]]:
     return phone, address, hours
 
 
+# Words a business uses when it talks about itself, and words it uses when it
+# is trying to take a booking. A paragraph headed "Our story" has to be the
+# first kind.
+_STORY_WORDS = re.compile(
+    r"\b(we|our|us|founded|started|began|opened|family|generations?|tradition|"
+    r"passion|passionate|proud|chef|owner|born|roots|recipe|recipes|craft|"
+    r"handmade|scratch|locally|community|neighbou?rhood|history|story|"
+    r"believe|dedicated|committed|inspired|journey|est|since)\b",
+    re.IGNORECASE)
+_TRANSACTIONAL = re.compile(
+    r"(click here|click link|inquire|enquire|rsvp|book now|order now|"
+    r"call us|email us|fill out|form below|terms|privacy|cookie|"
+    r"subscribe|newsletter|gift card|free estimate|get a quote|chat with|"
+    r"schedule (your|a|an)|request (your|a|an)|sign up|learn more|"
+    r"@|\$\d|\d{3}[-.]\d{3}[-.]\d{4})",
+    re.IGNORECASE)
+# Below this a paragraph is not a story, and a heading promising one is worse
+# than no section at all.
+STORY_BAR = 5.0
+
+
+_LEAD_HEADING = re.compile(
+    r"^(?:[A-Z][A-Z&' ]{3,40}?(?=[A-Z][a-z])"      # SHOUTED HEADING then a Sentence
+    r"|[A-Z][\w' ]{2,40}\?\s+)")                   # "Why Choose Us?" then the text
+
+
+def strip_leading_heading(text: str) -> str:
+    """Drop a heading that ran into the paragraph.
+
+    Extracting a block often catches the heading above it, so an about section
+    would open with "UPCOMING EVENTS" or "Why Choose Us" before saying anything.
+    """
+    return _LEAD_HEADING.sub("", text.strip(), count=1).strip()
+
+
+def story_score(text: str) -> float:
+    """How much this reads like a business describing itself.
+
+    Rewards the vocabulary of self-description, penalises the vocabulary of a
+    booking form, and mildly favours longer passages — a real story is rarely
+    one line.
+    """
+    if not text:
+        return 0.0
+    words = len(text.split())
+    story = len(_STORY_WORDS.findall(text))
+    selling = len(_TRANSACTIONAL.findall(text))
+    # The floor stops a fifteen-word call-to-action scoring like an essay:
+    # "Call us — chat with our team" is almost all story words by density.
+    density = story / max(words, 45) * 100
+    length_bonus = min(words / 120, 1.0)
+    return max(0.0, density + length_bonus - selling * 3.0)
+
+
 def _clean_service(candidate: str) -> str | None:
     text = _text(candidate)
     if not (3 <= len(text) <= 60):
@@ -431,11 +487,18 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
     if desc:
         out.description = _text(desc.group(1))[:300] or None
 
-    # The longest paragraph is nearly always the "about" blurb.
+    # Not the longest paragraph: that rule picked a private-events booking
+    # pitch off a restaurant's homepage and a page headed "Our story" ended up
+    # telling nobody anything about them.
     paragraphs = [_text(p) for p in _P_RE.findall(clean)]
-    candidates = [p for p in paragraphs if 80 <= len(p) <= 600]
-    if candidates:
-        out.about = max(candidates, key=len)
+    best, best_score = None, 0.0
+    for raw in (p for p in paragraphs if 80 <= len(p) <= 900):
+        candidate = strip_leading_heading(raw)
+        score = story_score(candidate)
+        if score > best_score:
+            best, best_score = candidate, score
+    out.about = best if best_score >= STORY_BAR else None
+    out.about_score = round(best_score, 2)
 
     # Services: sub-headings and list items read as offerings.
     seen: set[str] = set()
@@ -527,6 +590,9 @@ def merge(primary: ExtractedSite, extra: ExtractedSite) -> ExtractedSite:
     """Fold a secondary page (contact/about/menu) into the homepage's extraction."""
     primary.site_host = primary.site_host or extra.site_host
     primary.has_locations_page = primary.has_locations_page or extra.has_locations_page
+    # An /about page beats the homepage when its text reads more like a story.
+    if extra.about and extra.about_score > primary.about_score:
+        primary.about, primary.about_score = extra.about, extra.about_score
     primary.about = primary.about or extra.about
     primary.phone = primary.phone or extra.phone
     primary.mobile_ready = primary.mobile_ready or extra.mobile_ready

@@ -9,6 +9,8 @@ from app.workbench.extract import (
     extract_from_html,
     menu_page_urls,
     merge,
+    story_score,
+    strip_leading_heading,
 )
 
 pytestmark = pytest.mark.unit
@@ -242,3 +244,55 @@ def test_broken_json_ld_does_not_take_the_page_down():
     """Half the web ships malformed structured data."""
     html = '<script type="application/ld+json">{not json,,}</script><h2>Catering</h2>'
     assert extract_from_html(html, "https://example.com/").services == ["Catering"]
+
+
+def test_the_about_text_is_the_one_that_reads_like_a_story():
+    """Taking the longest paragraph put a private-events booking pitch under a
+    heading that said "Our story" — the section told the reader nothing about
+    the business."""
+    html = """<html><body>
+      <p>Plan your next event with us! Our venue options include a private
+         dining room seating 40-46 guests. Click link here to inquire, or call
+         us at 469-664-0100 or email info@example.com to make a reservation for
+         fewer than fifteen guests in the main room downstairs today.</p>
+      <p>We opened in 2014 with one idea: cook everything from scratch and buy
+         from farms we know. Our chef grew up here and still writes the menu
+         around what the season gives us.</p>
+    </body></html>"""
+    site = extract_from_html(html, "https://example.com/")
+    assert site.about is not None
+    assert site.about.startswith("We opened in 2014")
+
+
+def test_a_page_with_no_story_gets_no_about_text():
+    """A heading promising a story with no story under it is worse than no
+    section at all."""
+    html = """<html><body>
+      <p>Orders placed before 2pm ship the same business day. Standard delivery
+         takes 3-5 business days. Click here to view our full shipping and
+         returns policy for more information about your order.</p>
+    </body></html>"""
+    assert extract_from_html(html, "https://example.com/").about is None
+
+
+def test_a_heading_that_ran_into_the_paragraph_is_removed():
+    """Extraction catches the heading above a block, so the about section
+    opened with "UPCOMING EVENTS" before it said anything."""
+    assert strip_leading_heading(
+        "UPCOMING EVENTS Beyond our restaurants we bring our craft to festivals."
+    ).startswith("Beyond our restaurants")
+    assert strip_leading_heading(
+        "Why Choose Us? Locally owned since 2009 and proud of it."
+    ).startswith("Locally owned")
+    assert strip_leading_heading("We opened in 2014.") == "We opened in 2014."
+
+
+def test_a_call_to_action_does_not_outscore_a_story():
+    """Fifteen words of "call us, chat with our team" is almost all story words
+    by density; it must not win on that."""
+    cta = story_score("Call us 214-728-8894 Free estimate Get a Quote Chat with "
+                      "our team — we will reply right here.")
+    story = story_score("We opened in 2009 and our family has run the shop ever "
+                        "since, cutting every board by hand in the workshop "
+                        "behind the store because that is how we were taught.")
+    assert story > cta

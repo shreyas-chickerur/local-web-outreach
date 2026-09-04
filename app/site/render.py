@@ -32,8 +32,8 @@ from app.site.theme import Theme, theme_for
 from app.workbench.hours import parse_week
 
 # Sections in the order they read, when nothing asks otherwise.
-ORDER = ("hero", "services", "menu", "gallery", "reviews", "about", "hours",
-         "contact")
+ORDER = ("hero", "stats", "services", "menu", "gallery", "reviews", "about",
+         "hours", "contact")
 
 _CTA_LABEL = {"call": "Call us", "book": "Book a table", "order": "Order online",
               "quote": "Get a quote", "visit": "Find us"}
@@ -63,6 +63,7 @@ class Material:
     lead_id: int | None = None
     latitude: float | None = None
     longitude: float | None = None
+    price_level: str | None = None
 
     @property
     def images(self) -> tuple[str, ...]:
@@ -106,6 +107,7 @@ def material_from_brief(brief: dict) -> Material:
         rating=best.get("value") if best else None,
         reviews=best.get("reviews") if best else None,
         trade=brief.get("trade"),
+        price_level=brief.get("price_level"),
         quotes=tuple(brief.get("testimonials") or ()),
         place_photos=tuple(brief.get("place_photos") or ()),
         lead_id=brief.get("lead_id"),
@@ -193,19 +195,84 @@ def _hero(m: Material, spec: SiteSpec, t: Theme) -> str:
             + "</header>")
 
 
+_FOOD_TRADES = ("restaurant", "cafe", "coffee", "bakery", "bar", "pizza",
+                "barbecue", "grill", "diner", "kitchen", "food")
+
+
+def _offer_heading(m: Material) -> tuple[str, str]:
+    """Name the section after what the business actually does."""
+    trade = (m.trade or "").lower()
+    if m.menu_items or any(word in trade for word in _FOOD_TRADES):
+        return "On offer", "What we cook and serve"
+    if m.products and not m.services:
+        return "The shop", "What we make"
+    return "What we do", "How we can help"
+
+
 def _services(m: Material, t: Theme) -> str:
+    """Photo-led where there are photos to lead with.
+
+    A grid of bare titles is the tell of a generated page: the words are true
+    and the section is empty. Their own photography carries it instead, and
+    where there is none the type does the work rather than a numbered box.
+    """
     items = list(m.services) + list(m.products)
     if not items:
         return ""
-    cards = "".join(
-        f'<div class="card" data-reveal data-delay="{i % 4}">'
-        f'<div class="num">{i + 1:02d}</div><h3>{e(item)}</h3></div>'
-        for i, item in enumerate(items[:9]))
+    eyebrow, heading = _offer_heading(m)
+    # Keep the first image for the hero and the rest for the gallery; the
+    # middle ones dress this section without starving either.
+    art = m.images[1:1 + len(items)] if len(m.images) > 3 else ()
+    cards = []
+    for i, item in enumerate(items[:8]):
+        photo = art[i] if i < len(art) else None
+        if photo:
+            cards.append(
+                f'<article class="offer has-art" data-reveal data-delay="{i % 4}">'
+                f'<div class="art"><img src="{e(photo)}" alt="" loading="lazy"'
+                f' decoding="async"></div>'
+                f'<div class="label"><span class="idx">{i + 1:02d}</span>'
+                f'<h3>{e(item)}</h3></div></article>')
+        else:
+            cards.append(
+                f'<article class="offer" data-reveal data-delay="{i % 4}">'
+                f'<span class="idx">{i + 1:02d}</span><h3>{e(item)}</h3>'
+                f'<span class="rule"></span></article>')
     lede = f'<p class="lede">{e(m.tagline)}</p>' if m.tagline else ""
-    return (f'<section id="services"><div class="wrap"><div class="split">'
-            f'<div data-reveal><p class="eyebrow">What we do</p>'
-            f'<h2>Everything we offer</h2>{lede}</div>'
-            f'<div class="cards">{cards}</div></div></div></section>')
+    return (f'<section id="services"><div class="wrap">'
+            f'<div class="head" data-reveal><p class="eyebrow">{e(eyebrow)}</p>'
+            f'<h2>{e(heading)}</h2>{lede}</div>'
+            f'<div class="offers">{"".join(cards)}</div></div></section>')
+
+
+def _stats(m: Material, t: Theme) -> str:
+    """A band of the few numbers we can stand behind.
+
+    Counting things we actually have — reviews, dishes, the rating — rather
+    than the invented "500+ happy customers" that makes a page worthless.
+    """
+    tiles = []
+    if m.rating:
+        tiles.append((f"{m.rating}", "average rating", ""))
+    if m.reviews:
+        tiles.append((f"{m.reviews}", "Google reviews", "count"))
+    # Only count something we actually have: a proud "0 services offered" is
+    # the kind of detail that loses the room.
+    offerings = len(m.services) + len(m.products)
+    if m.menu_items:
+        tiles.append((f"{len(m.menu_items)}", "dishes on the menu", "count"))
+    elif offerings:
+        tiles.append((f"{offerings}", "services offered", "count"))
+    if len(tiles) < 2:
+        return ""
+    cells = "".join(
+        f'<div class="stat" data-reveal data-delay="{i}">'
+        f'<b{(" data-count=" + chr(34) + value + chr(34)) if kind else ""}>'
+        f'{e(value)}</b>'
+        f'<span>{e(label)}</span></div>'
+        for i, (value, label, kind) in enumerate(tiles))
+    return (f'<section id="stats" class="statband"><div class="wrap">'
+            f'<div class="stats">{cells}</div></div></section>')
 
 
 def _menu(m: Material, t: Theme) -> str:
@@ -279,11 +346,20 @@ def _reviews(m: Material, t: Theme) -> str:
             f'<div class="quotes">{"".join(cards)}</div></div></section>')
 
 
+# "Our story" promises a history. Text about how a place cooks is not one, and
+# a heading that over-promises is the first thing an owner notices.
+_HISTORY = re.compile(
+    r"\b(founded|started|opened|began|since \d{4}|generations?|family|"
+    r"grew up|years ago|est\.? ?\d{4}|history|heritage|tradition)\b",
+    re.IGNORECASE)
+
+
 def _about(m: Material, t: Theme) -> str:
     if not m.about:
         return ""
+    heading = "Our story" if _HISTORY.search(m.about) else "What we are about"
     return (f'<section id="about"><div class="wrap"><div class="split">'
-            f'<div data-reveal><p class="eyebrow">About</p><h2>Our story</h2></div>'
+            f'<div data-reveal><p class="eyebrow">About</p><h2>{heading}</h2></div>'
             f'<div data-reveal data-delay="1">'
             f'<p style="font-size:clamp(17px,1.7vw,22px)">{e(m.about)}</p>'
             f'</div></div></div></section>')
@@ -378,11 +454,10 @@ def _footer(m: Material) -> str:
     if m.phone:
         bits.append(f'<a href="tel:{e(_digits(m.phone))}">{e(m.phone)}</a>')
     return (f'<footer><div class="wrap"><div class="row">{"".join(bits)}'
-            f'<button class="top" onclick="scrollTo({{top:0,behavior:'
-            f'&quot;smooth&quot;}})">Back to top</button></div></div></footer>')
+            f'<button class="top">Back to top</button></div></div></footer>')
 
 
-_BUILDERS = {"services": _services, "menu": _menu, "gallery": _gallery,
+_BUILDERS = {"stats": _stats, "services": _services, "menu": _menu, "gallery": _gallery,
              "reviews": _reviews, "about": _about, "hours": _hours,
              "contact": _contact}
 
@@ -392,6 +467,7 @@ _NO_DATA = {
     "gallery": "there are not enough photos to build one",
     "services": "their site does not list what they offer in a readable way",
     "reviews": "no reviews with text came back for them",
+    "stats": "there are not enough numbers we can stand behind",
     "hours": "no source publishes their opening hours",
     "about": "their site has no about text",
     "contact": "we have no address, phone or email to show",

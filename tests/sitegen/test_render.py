@@ -256,3 +256,53 @@ def test_reviews_do_not_smuggle_claims_past_the_guard():
     ]
     page, _ = build(brief)
     assert unsupported(page, material_from_brief(brief)) == []
+
+
+def test_back_to_top_is_not_wired_through_an_inline_handler():
+    """Inside an onclick attribute the element is in scope, so `scrollTo`
+    resolves to the button's own Element.scrollTo and scrolls the button
+    instead of the page. The button looked fine and did nothing."""
+    page, _ = build(_rich())
+    assert 'class="top"' in page
+    assert "onclick" not in page.split('class="top"')[1][:120]
+    assert 'querySelector(".top")' in page
+
+
+def test_the_body_is_not_made_into_a_scroll_container():
+    """overflow-x on BODY makes the body its own scroller, and window.scrollTo
+    can then no longer scroll the page back up."""
+    page, _ = build(_rich())
+    body_rule = re.search(r"\nbody\{(.*?)\}", page, re.S).group(1)
+    assert "overflow-x" not in body_rule
+    assert "overflow-x:clip" in page
+
+
+def test_a_count_of_zero_never_reaches_the_page():
+    """A proud "0 services offered" loses the room."""
+    bare = _rich()
+    bare["published"] = {**bare["published"], "services": [], "products": [],
+                         "menu_items": []}
+    page, _ = build(bare)
+    assert ">0<" not in page
+    assert "services offered" not in page
+
+
+def test_the_offer_section_uses_their_photography_when_there_is_some():
+    """A grid of bare titles is the tell of a generated page: every word true
+    and the section empty."""
+    page, _ = build(_rich())
+    offers = page[page.index('id="services"'):page.index("</section>",
+                                                          page.index('id="services"'))]
+    assert "has-art" in offers
+    assert "/photo/7/" in offers
+
+
+def test_the_offer_heading_follows_the_trade():
+    food = _rich()
+    food["trade"] = "Restaurant"
+    assert "What we cook and serve" in build(food)[0]
+
+    trade = _rich()
+    trade["trade"] = "Roofing contractor"
+    trade["published"] = {**trade["published"], "menu_items": []}
+    assert "How we can help" in build(trade)[0]

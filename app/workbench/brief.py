@@ -74,6 +74,7 @@ class Brief:
     # short of anything credible that the business did not write itself.
     testimonials: list[dict] = field(default_factory=list)
     place_photos: list[str] = field(default_factory=list)
+    trade: str | None = None            # "Restaurant", as the directory files it
     latitude: float | None = None
     longitude: float | None = None
 
@@ -268,6 +269,8 @@ def build_brief(
             nearby[source_name] = place.same_name_nearby
         if place.reviews and not brief.testimonials:
             brief.testimonials = [dict(r) for r in place.reviews[:5]]
+        if place.categories and brief.trade is None:
+            brief.trade = place.categories[0] or None
         if place.photo_refs and not brief.place_photos:
             brief.place_photos = list(place.photo_refs)
         if brief.latitude is None and place.latitude is not None:
