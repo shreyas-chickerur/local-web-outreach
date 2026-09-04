@@ -629,12 +629,22 @@ function leadRow(l) {
 async function openLead(id) {
   $("#out").innerHTML = `<div class="load in"><div class="step">
     <span class="spin"></span>Opening what we already know</div></div>`;
-  const data = await (await fetch("/api/lead?id=" + id)).json();
+  let data;
+  try {
+    data = await (await fetch("/api/lead?id=" + id)).json();
+  } catch (err) {
+    $("#out").innerHTML = `<div class="err in">Could not open that lead: ${
+      esc(err.message)}</div>`;
+    return;
+  }
   if (data.error) { $("#out").innerHTML = `<div class="err in">${esc(data.error)}</div>`; return; }
   LEAD = data.lead_id || id;
   SITE = null;
-  data.site_versions = ((await (await fetch("/api/sites?id=" + id)).json()).versions) || [];
-  $("#out").innerHTML = render(data);
+  try {
+    data.site_versions =
+      ((await (await fetch("/api/sites?id=" + id)).json()).versions) || [];
+  } catch { data.site_versions = []; }
+  paint(data);
 }
 
 const ringColor = n => n >= 80 ? "var(--ok)" : n >= 60 ? "var(--warn)" : "var(--faint)";
@@ -741,14 +751,26 @@ $("#f").onsubmit = async e => {
       try { data.site_versions =
         (await (await fetch("/api/sites?id=" + LEAD)).json()).versions || []; } catch {}
     }
-    $("#out").innerHTML = data.error
-      ? `<div class="err in">${esc(data.error)}</div>` : render(data);
+    if (data.error) $("#out").innerHTML = `<div class="err in">${esc(data.error)}</div>`;
+    else paint(data);
     window.scrollTo({top: 0, behavior: "smooth"});
   } catch (err) {
     $("#out").innerHTML = `<div class="err in">${esc(err.message)}</div>`;
   }
   $("#go").disabled = false;
 };
+
+// Rendering is the one place a thrown exception is invisible: the loading
+// message simply stays forever. Say what broke instead.
+function paint(data) {
+  try {
+    $("#out").innerHTML = render(data);
+  } catch (err) {
+    $("#out").innerHTML = `<div class="err in">The brief could not be drawn: ${
+      esc(err.message)}. The data is fine — this is a bug in the page.</div>`;
+    throw err;
+  }
+}
 
 const COLOR = {verified: "var(--ok)", unverified: "var(--warn)",
                conflict: "var(--bad)", operator_verified: "var(--accent-2)"};
@@ -805,6 +827,33 @@ async function correctWebsite(url) {
   const data = await post("/api/verify", {field: "website", value: url,
     note: "corrected from the address on their Google listing"});
   if (data) { LEAD = data.lead_id || LEAD; $("#out").innerHTML = render(data); }
+}
+
+// The brief's own site panel. Deliberately thin: iterating happens in the
+// workspace, and a second chat box on this screen would be two places to do
+// the same thing with two different sets of state.
+function buildPanel(d) {
+  if (!LEAD) return "";
+  const versions = d.site_versions || [];
+  const latest = versions[0];
+  const preview = latest ? `<div class="frame">
+      <div class="bar">v${latest.version} — built from what they publish
+        <a href="/site/${LEAD}/${latest.version}" target="_blank" rel="noopener"
+          >open full size ↗</a></div>
+      <iframe src="/site/${LEAD}/${latest.version}" title="Generated site preview"
+        sandbox="allow-scripts"></iframe></div>` : "";
+  return `<section class="in"><h3 class="head">Their new site</h3>
+    <div class="build">
+      <div class="row">
+        <button class="mini primary"
+          onclick="openWorkspace(LEAD, ${esc(JSON.stringify(d.name || ""))})">
+          ${versions.length ? "Open the workspace" : "Build the first version"}</button>
+        <span class="hint">${versions.length
+          ? `${versions.length} version${versions.length === 1 ? "" : "s"} so far — `
+          : ""}describe what you want and iterate there.</span>
+      </div>
+      ${preview}
+    </div></section>`;
 }
 
 // -------------------------------------------------------------- workspace ---

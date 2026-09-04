@@ -87,3 +87,31 @@ def test_the_pages_script_parses():
         path = fh.name
     done = subprocess.run([node, "--check", path], capture_output=True, text=True)
     assert done.returncode == 0, done.stderr
+
+
+def test_every_function_the_page_calls_actually_exists():
+    """A bulk edit deleted three functions the renderer calls, and the only
+    symptom was a loading message that never went away — the exception was
+    invisible because rendering is what replaces it."""
+    import re
+
+    page = server._UI.read_text()
+    script = page.split("<script>", 1)[1].rsplit("</script>", 1)[0]
+    defined = set(re.findall(r"(?:async\s+)?function\s+(\w+)", script))
+    defined |= set(re.findall(r"(?:const|let|var)\s+(\w+)\s*=", script))
+    # Everything wired to an onclick/onchange in the markup, plus the calls the
+    # renderer makes into its own helpers.
+    called = set(re.findall(r'on(?:click|change|submit|blur|keydown)="(\w+)\(', page))
+    called |= set(re.findall(r"\$\{(\w+)\(", page))
+    builtin = {"if", "for", "return", "esc", "String", "Math", "JSON", "alert",
+               "parseInt", "parseFloat", "fetch", "event", "scrollTo"}
+    missing = sorted(name for name in called - defined - builtin)
+    assert not missing, f"called but never defined: {missing}"
+
+
+def test_rendering_failures_are_shown_rather_than_swallowed():
+    """The loading message stays forever if render() throws, so the failure has
+    to be caught and said out loud."""
+    page = server._UI.read_text()
+    assert "function paint(data)" in page
+    assert "could not be drawn" in page
