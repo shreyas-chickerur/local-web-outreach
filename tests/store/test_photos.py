@@ -111,3 +111,34 @@ def test_an_unlabelled_lead_keeps_its_original_order():
     """A business nobody has labelled should still get a page."""
     urls = ["a", "b", "c"]
     assert photos.rank_for_hero(urls, {}, "food") == urls
+
+
+def test_a_filename_that_says_what_it_shows_is_offered_as_a_description():
+    """Their own uploads are often named after the subject, so those can be
+    filled in without anyone squinting at a thumbnail."""
+    assert photos.suggest_from_url("https://x/Short-Rib-980x1165.jpg") == "short rib"
+    assert photos.suggest_from_url("https://x/housemade-bread.jpg") == "housemade bread"
+
+
+def test_an_opaque_filename_offers_nothing_rather_than_a_guess():
+    """A proxied Google photo has no name, and inventing one would be worse
+    than leaving the field empty."""
+    assert photos.suggest_from_url("/photo/1/0") == ""
+    assert photos.suggest_from_url("https://x/IMG-0959-scaled.jpg") == ""
+    assert photos.suggest_from_url("https://x/mg_2795.jpeg") == ""
+
+
+def test_suggestions_stay_silent_about_what_they_cannot_read():
+    urls = ["/photo/1/0", "https://x/garden-tomatoes.jpg"]
+    assert photos.suggest_all(urls) == {
+        "https://x/garden-tomatoes.jpg": "garden tomatoes"}
+
+
+def test_an_untagged_photograph_is_still_usable(conn, lead):
+    """"I could not identify this one" is a legitimate answer: it should keep
+    the picture in the gallery, not throw it away."""
+    photos.label(conn, lead, "/photo/1/0", "the dining room")
+    ranked = photos.rank_for_hero(["/photo/1/0", "/photo/1/5"],
+                                  photos.labels_for(conn, lead), "food")
+    assert "/photo/1/5" in ranked            # unlabelled, still a candidate
+    assert ranked[0] == "/photo/1/0"         # but the known one leads

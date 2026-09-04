@@ -8,6 +8,7 @@ once per lead and every later decision — the hero above all — uses those.
 
 from __future__ import annotations
 
+import re
 import sqlite3
 from datetime import UTC, datetime
 
@@ -152,3 +153,33 @@ def rank_for_hero(urls: list[str], labels: dict[str, str],
             return (2, urls.index(url))          # never a lead if we know better
         return (0, preference.index(what) if what in preference else len(preference))
     return sorted(urls, key=rank)
+
+
+# Words that are noise in a filename rather than a description of the picture.
+_FILENAME_NOISE = frozenset({
+    "jpg", "jpeg", "png", "webp", "gif", "scaled", "final", "copy", "edit",
+    "photo", "image", "img", "dsc", "mg", "web", "small", "large", "wide",
+    "crop", "new", "site", "home", "resized", "compressed", "min", "full",
+})
+
+
+def suggest_from_url(url: str) -> str:
+    """A description read out of the filename, or "" when it says nothing.
+
+    Their own uploads are often named after what they show — Short-Rib.jpg,
+    housemade-bread.jpg — so those can be filled in without anyone squinting at
+    a thumbnail. A proxied Google photo has an opaque URL and gets nothing,
+    which is the honest answer rather than a guess.
+    """
+    stem = url.rsplit("/", 1)[-1].rsplit(".", 1)[0]
+    words = [w for w in re.split(r"[-_.\s]+", stem.lower())
+             if w and not w.isdigit() and w not in _FILENAME_NOISE
+             and not re.fullmatch(r"\d+x\d+", w) and len(w) > 2]
+    if not words:
+        return ""
+    return " ".join(words)
+
+
+def suggest_all(urls: list[str]) -> dict[str, str]:
+    """Descriptions we can read off the filenames. Silent about the rest."""
+    return {url: text for url in urls if (text := suggest_from_url(url))}

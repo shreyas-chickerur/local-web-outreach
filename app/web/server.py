@@ -234,6 +234,24 @@ class Handler(BaseHTTPRequestHandler):
                                      what=(body.get("label") or None))
                         self._json({"photos": photos.described(conn, lead_id)})
                     return
+                elif route == "/api/labels":
+                    # All of them at once: labelling twenty photographs should
+                    # not be twenty round trips and twenty redraws.
+                    entries = body.get("photos") or []
+                    saved, failed = 0, []
+                    with db.session() as conn:
+                        for entry in entries:
+                            try:
+                                photos.label(conn, lead_id,
+                                             str(entry.get("url", "")),
+                                             str(entry.get("description", "")),
+                                             what=(entry.get("label") or None))
+                                saved += 1
+                            except ValueError as exc:
+                                failed.append(str(exc))
+                        self._json({"saved": saved, "failed": failed,
+                                    "photos": photos.described(conn, lead_id)})
+                    return
                 elif route == "/api/note":
                     text = str(body.get("note", "")).strip()
                     if not text:
@@ -325,12 +343,15 @@ class Handler(BaseHTTPRequestHandler):
             urls = [f"/photo/{lead_id}/{i}"
                     for i in range(len(brief.get("place_photos") or []))]
             urls += list((brief.get("published") or {}).get("photos") or [])
+            hints = photos.suggest_all(urls[:24])
             self._json({"lead_id": lead_id, "labels": known,
                         "options": list(photos.LABELS),
+                        "suggestions": hints,
                         "photos": [{"url": u,
                                     "label": (known.get(u) or {}).get("label"),
                                     "description":
-                                        (known.get(u) or {}).get("description", "")}
+                                        (known.get(u) or {}).get("description", ""),
+                                    "suggestion": hints.get(u, "")}
                                    for u in urls[:24]]})
             return
         if route.path == "/api/workspace":

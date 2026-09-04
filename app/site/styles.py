@@ -344,8 +344,9 @@ section[data-ground="raise"] .card{{background:var(--bg)}}
   overflow:hidden;aspect-ratio:5/3}}
 .editorial-art img{{width:100%;height:100%;object-fit:cover;
   transition:transform 1.1s cubic-bezier(.2,.7,.3,1),
-    clip-path 1s cubic-bezier(.2,.7,.3,1);clip-path:inset(14% 0 0 0)}}
-.editorial-art.in img{{clip-path:inset(0 0 0 0)}}
+    clip-path 1s cubic-bezier(.2,.7,.3,1)}}
+html.reveals .editorial-art img{{clip-path:inset(14% 0 0 0)}}
+html.reveals .editorial-art.in img{{clip-path:inset(0 0 0 0)}}
 .editorial-art:hover img{{transform:scale(1.04)}}
 /* No lift and no shadow on hover: these are not links, and an affordance that
    promises a destination it does not have is worse than none. Only the rule
@@ -402,8 +403,9 @@ section[data-ground="raise"] .card{{background:var(--bg)}}
 .mosaic button:nth-child(6n+1){{grid-column:span 2;aspect-ratio:8/5}}
 .mosaic img{{width:100%;height:100%;object-fit:cover;
   transition:transform .7s cubic-bezier(.2,.7,.3,1),
-    clip-path 1s cubic-bezier(.2,.7,.3,1);clip-path:inset(14% 0 0 0)}}
-.mosaic button.in img{{clip-path:inset(0 0 0 0)}}
+    clip-path 1s cubic-bezier(.2,.7,.3,1)}}
+html.reveals .mosaic img{{clip-path:inset(14% 0 0 0)}}
+html.reveals .mosaic button.in img{{clip-path:inset(0 0 0 0)}}
 .mosaic button:hover img{{transform:scale(1.06)}}
 .lightbox{{position:fixed;inset:0;z-index:60;background:rgba(8,8,10,.94);
   display:none;place-items:center;padding:26px;backdrop-filter:blur(4px)}}
@@ -562,13 +564,17 @@ footer a:hover{{color:var(--accent)}}
 .top:hover{{border-color:var(--accent);color:var(--accent)}}
 
 /* ---------------------------------------------------------------- motion -- */
-[data-reveal]{{opacity:0;transform:translateY(26px);
+/* Scoped to `html.reveals`, which a script in the head adds. Without
+   JavaScript — a crawler, a locked-down frame, someone with it switched off —
+   the content is simply visible. Hiding it by default and revealing it with a
+   script meant a sandboxed preview showed the hero and nothing else at all. */
+html.reveals [data-reveal]{{opacity:0;transform:translateY(26px);
   transition:opacity .8s cubic-bezier(.2,.7,.3,1),transform .8s cubic-bezier(.2,.7,.3,1)}}
-[data-reveal].in{{opacity:1;transform:none}}
-[data-reveal][data-delay="1"]{{transition-delay:.09s}}
-[data-reveal][data-delay="2"]{{transition-delay:.18s}}
-[data-reveal][data-delay="3"]{{transition-delay:.27s}}
-[data-reveal][data-delay="4"]{{transition-delay:.36s}}
+html.reveals [data-reveal].in{{opacity:1;transform:none}}
+html.reveals [data-reveal][data-delay="1"]{{transition-delay:.09s}}
+html.reveals [data-reveal][data-delay="2"]{{transition-delay:.18s}}
+html.reveals [data-reveal][data-delay="3"]{{transition-delay:.27s}}
+html.reveals [data-reveal][data-delay="4"]{{transition-delay:.36s}}
 .hero h1,.hero .sub,.hero .facts,.hero .actions{{
   animation:rise 1s cubic-bezier(.16,.84,.32,1) both}}
 .hero .sub{{animation-delay:.12s}} .hero .facts{{animation-delay:.2s}}
@@ -599,7 +605,7 @@ footer a:hover{{color:var(--accent)}}
 @media (prefers-reduced-motion:reduce){{
   html{{scroll-behavior:auto}}
   *,*::before,*::after{{animation:none!important;transition:none!important}}
-  [data-reveal]{{opacity:1!important;transform:none!important}}
+  html.reveals [data-reveal]{{opacity:1!important;transform:none!important}}
   .hero .bgimg{{transform:none!important}}
   .mosaic img,.editorial-art img{{clip-path:none!important}}
   .marquee ul{{animation:none!important;flex-wrap:wrap;width:auto}}

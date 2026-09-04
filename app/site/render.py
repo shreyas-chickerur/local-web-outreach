@@ -917,6 +917,10 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
         + f'<meta property="og:title" content="{e(m.name)}">\n'
         + (f'<meta property="og:image" content="{e(m.images[0])}">\n'
            if m.images else "")
+        # Marks the document as script-capable BEFORE first paint, so the
+        # reveal styles only apply where something exists to undo them. Without
+        # this the page is simply visible, which is the right failure.
+        + "<script>document.documentElement.className+=' reveals'</script>\n"
         + '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
         + '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
         + f'<link href="{theme.fonts_href}" rel="stylesheet">\n'

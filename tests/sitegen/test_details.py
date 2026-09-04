@@ -162,3 +162,24 @@ def test_a_counted_number_is_guaranteed_to_land():
     markup = page("warm")
     assert "setTimeout(settle" in markup
     assert 'addEventListener("visibilitychange", settle' in markup
+
+
+def test_the_page_is_readable_without_javascript():
+    """Hiding content by default and revealing it with a script meant a
+    sandboxed preview — and any crawler, and anyone with scripting off — saw
+    the hero and nothing else at all."""
+    markup = page("warm")
+    # The reveal styles are scoped to a class only a script can add.
+    assert "html.reveals [data-reveal]{opacity:0" in markup
+    assert "[data-reveal]{opacity:0" not in markup.replace(
+        "html.reveals [data-reveal]{opacity:0", "")
+    # And that script runs in the head, before anything paints.
+    head = markup[:markup.index("</head>")]
+    assert "className+=' reveals'" in head
+
+
+def test_clip_path_reveals_are_gated_the_same_way():
+    """A picture masked to a sliver is the same failure as invisible text."""
+    markup = page("warm")
+    assert "html.reveals .mosaic img{clip-path:inset(" in markup
+    assert "html.reveals .editorial-art img{clip-path:inset(" in markup
