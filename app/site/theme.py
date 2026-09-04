@@ -236,8 +236,21 @@ _SYSTEM = ("-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,"
 
 # Inter carries an optical-size axis as well as weight; asking for the ranges
 # is what makes them available to font-variation-settings later.
+# One body face for every mood was why six themes read alike however different
+# the headlines were: body text is most of what anyone actually reads, so it
+# carries most of the voice.
 INTER = Face(stack=f"'Inter',{_SYSTEM}", google="Inter:opsz,wght@14..32,100..900",
              wght=(100, 900), opsz=(14, 32))
+KARLA = Face(stack=f"'Karla',{_SYSTEM}", google="Karla:wght@300..800",
+             wght=(300, 800))
+MANROPE = Face(stack=f"'Manrope',{_SYSTEM}", google="Manrope:wght@200..800",
+               wght=(200, 800))
+SPACE_GROTESK = Face(stack=f"'Space Grotesk',{_SYSTEM}",
+                     google="Space+Grotesk:wght@300..700", wght=(300, 700))
+JOST = Face(stack=f"'Jost',{_SYSTEM}", google="Jost:wght@200..700",
+            wght=(200, 700))
+BARLOW = Face(stack=f"'Barlow',{_SYSTEM}",
+              google="Barlow:wght@300;400;500;600;700")
 
 FRAUNCES = Face(stack="'Fraunces',Georgia,'Times New Roman',serif",
                 google="Fraunces:opsz,wght@9..144,400..900",
@@ -261,7 +274,7 @@ THEMES: dict[str, Theme] = {
         bg="#fbf7f1", surface="#ffffff", raise_="#f4ece1", ink="#2a1f16",
         dim="#6f5c49", accent="#b4551f", accent_soft="#fbeade",
         accent_ink="#ffffff", line="#e9dcc9",
-        display=FRAUNCES, body=INTER,
+        display=FRAUNCES, body=KARLA,
         modular_ratio=1.28, display_steps=6, tracking=-0.012,
         display_weight=700, heading_weight=600,
         layout_bias="structured", radius="14px",
@@ -272,7 +285,7 @@ THEMES: dict[str, Theme] = {
         bg="#f7fafb", surface="#ffffff", raise_="#eef4f6", ink="#0f1c24",
         dim="#4a606d", accent="#0d7f83", accent_soft="#e2f2f2",
         accent_ink="#ffffff", line="#dfeaee",
-        display=SORA, body=INTER,
+        display=SORA, body=MANROPE,
         modular_ratio=1.2, display_steps=8, tracking=-0.022,
         display_weight=700, heading_weight=600,
         layout_bias="airy", radius="16px",
@@ -283,7 +296,7 @@ THEMES: dict[str, Theme] = {
         bg="#fffdf6", surface="#ffffff", raise_="#fdf3e0", ink="#171310",
         dim="#544c44", accent="#e04a1e", accent_soft="#ffe9df",
         accent_ink="#ffffff", line="#f0e4d2",
-        display=ARCHIVO_BLACK, body=INTER,
+        display=ARCHIVO_BLACK, body=SPACE_GROTESK,
         modular_ratio=1.333, display_steps=6, tracking=-0.028,
         display_weight=400, heading_weight=400,      # the face has one weight
         layout_bias="contained", radius="6px",
@@ -295,7 +308,7 @@ THEMES: dict[str, Theme] = {
         bg="#f7f5f2", surface="#ffffff", raise_="#efece6", ink="#17181a",
         dim="#585a55", accent="#1d5c46", accent_soft="#e5efea",
         accent_ink="#ffffff", line="#e3ded5",
-        display=PLAYFAIR, body=INTER,
+        display=PLAYFAIR, body=JOST,
         modular_ratio=1.333, display_steps=6, tracking=0.0,
         display_weight=600, heading_weight=500,
         layout_bias="editorial", radius="3px",
@@ -306,7 +319,7 @@ THEMES: dict[str, Theme] = {
         bg="#f2f2ef", surface="#ffffff", raise_="#e8e8e4", ink="#16181a",
         dim="#4f5459", accent="#b8410c", accent_soft="#fbe6dc",
         accent_ink="#ffffff", line="#dcdcd6",
-        display=OSWALD, body=INTER,
+        display=OSWALD, body=BARLOW,
         modular_ratio=1.25, display_steps=7, tracking=-0.02,
         display_weight=600, heading_weight=500,
         layout_bias="structured", radius="0px",
@@ -318,7 +331,7 @@ THEMES: dict[str, Theme] = {
         bg="#0f1115", surface="#171a20", raise_="#1d2129", ink="#f4f1ec",
         dim="#a7a49d", accent="#d9a441", accent_soft="#2a2418",
         accent_ink="#14151a", line="#2a2e37",
-        display=CORMORANT, body=INTER,
+        display=CORMORANT, body=KARLA,
         modular_ratio=1.28, display_steps=7, tracking=0.006,
         display_weight=600, heading_weight=500,
         layout_bias="editorial", radius="8px",

@@ -13,6 +13,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+from app.adapters import photos as photos_api
 from app.adapters.gplaces import PlacesError, search
 from app.adapters.photos import fetch as fetch_photo
 from app.cli import available_directories
@@ -286,6 +287,7 @@ class Handler(BaseHTTPRequestHandler):
             bits = route.path.strip("/").split("/")
             try:
                 lead_id, index = int(bits[1]), int(bits[2])
+                asked = int((parse_qs(route.query).get("w") or ["0"])[0] or 0)
             except (IndexError, ValueError):
                 self._send(404, b"not found", "text/plain; charset=utf-8")
                 return
@@ -299,7 +301,9 @@ class Handler(BaseHTTPRequestHandler):
             if not (0 <= index < len(names)):
                 self._send(404, b"no such photo", "text/plain; charset=utf-8")
                 return
-            image = fetch_photo(google_places_api_key() or "", names[index])
+            width = photos_api.nearest_width(asked) if asked else photos_api.MAX_WIDTH
+            image = fetch_photo(google_places_api_key() or "", names[index],
+                                width=width)
             if image is None:
                 self._send(404, b"photo unavailable", "text/plain; charset=utf-8")
                 return

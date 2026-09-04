@@ -17,7 +17,20 @@ from pathlib import Path
 import httpx
 
 CACHE = Path(".cache/photos")
-MAX_WIDTH = 1600
+# Google will serve the same photograph far larger than we were asking for:
+# 1600px got a 1600x1200 file when 3200x2400 was available for the same call.
+# A hero at 1600 on a retina laptop is visibly soft, and that was the whole of
+# the "low resolution" problem — nothing needed upscaling, we needed to ask.
+MAX_WIDTH = 2400
+WIDTHS = (800, 1600, 2400, 3200)
+
+
+def nearest_width(requested: int) -> int:
+    """Clamp to a small set so the cache does not fill with near-duplicates."""
+    for width in WIDTHS:
+        if requested <= width:
+            return width
+    return WIDTHS[-1]
 
 
 def _cache_path(name: str, width: int) -> Path:

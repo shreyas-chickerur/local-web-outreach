@@ -44,6 +44,16 @@ _ATTR_RE = re.compile(r'([\w:-]+)\s*=\s*["\']([^"\']*)["\']')
 _SRC_ATTRS = ("src", "data-src", "data-lazy-src", "data-original", "data-lazy")
 
 
+# WordPress writes resized copies as name-WIDTHxHEIGHT.ext and keeps the
+# original beside them. The page links the small one; we want the big one.
+_RESIZED_RE = re.compile(r"-\d{2,4}x\d{2,4}(?=\.\w{3,4}(?:\?|$))")
+
+
+def full_size(url: str) -> str:
+    """The original upload behind a resized copy, when the name gives it away."""
+    return _RESIZED_RE.sub("", url)
+
+
 def _img_sources(html: str) -> list[tuple[str, str]]:
     """(url, caption) for every image, however the page defers loading it."""
     found: list[tuple[str, str]] = []
@@ -54,7 +64,8 @@ def _img_sources(html: str) -> list[tuple[str, str]]:
         if not url and attrs.get("srcset"):
             url = attrs["srcset"].split(",")[0].strip().split(" ")[0]
         if url and not url.startswith("data:"):
-            found.append((url, _text(attrs.get("title") or attrs.get("alt") or "")))
+            found.append((full_size(url),
+                          _text(attrs.get("title") or attrs.get("alt") or "")))
     return found
 _LINK_RE = re.compile(r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
                       re.IGNORECASE | re.DOTALL)

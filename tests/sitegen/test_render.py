@@ -495,3 +495,43 @@ def test_an_unmeasurable_image_is_not_treated_as_a_bad_one(monkeypatch):
     from app.site import render as render_module
     monkeypatch.setattr(render_module, "measure", lambda url: None)
     assert render_module.pick_hero(("only",)) == "only"
+
+
+def test_a_feature_row_is_not_a_heading_over_a_wall_of_text():
+    """The opening sentence carries the section and the rest supports it. A
+    heading and one undifferentiated paragraph is the shape of filler."""
+    brief = _rich()
+    brief["published"] = {**brief["published"], "blocks": [
+        {"kind": "feature", "heading": "Events",
+         "text": "Plan your next event with us. Our venue seats up to seventy "
+                 "five guests across two rooms, with the option to clear tables "
+                 "for dancing.",
+         "images": [], "entries": []}]}
+    page, _ = build(brief)
+    start = page.index('id="more"')
+    block = page[start:page.index("</section>", start)]
+    assert 'class="standfirst"' in block
+    assert "Plan your next event with us." in block
+    assert 'class="prose"' in block
+
+
+def test_proxied_photographs_are_offered_at_several_widths():
+    """A hero at 1600 is soft on a retina screen, and a phone should not be
+    sent the 2400 version to display at 390 points."""
+    rich = _rich()
+    rich["place_photos"] = [f"places/x/photos/{n}" for n in range(9)]
+    page, _ = build(rich)
+    assert "?w=800 800w" in page and "2400w" in page
+    assert "image-set(" in page              # the hero is a background image
+    assert "w=3200" in page                  # and has a 2x source
+
+
+def test_a_photograph_we_cannot_resize_gets_no_srcset():
+    """Width descriptors for an image served at whatever size it happens to be
+    would lie to the browser about what it is fetching."""
+    lean = _rich()
+    lean["place_photos"] = []
+    lean["published"] = {**lean["published"],
+                         "photos": [f"https://x/{n}.jpg" for n in range(6)]}
+    page, _ = build(lean)
+    assert "srcset" not in page

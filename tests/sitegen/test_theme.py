@@ -151,3 +151,18 @@ def test_the_biases_differ_structurally_not_only_in_colour():
 
 def test_theme_lookup_falls_back_rather_than_raising():
     assert theme_for("nonsense") is THEMES["fresh"]
+
+
+def test_each_mood_has_its_own_body_face():
+    """One body face for every theme was why six moods read alike however
+    different the headlines were — body text is most of what anyone reads."""
+    bodies = {t.body.stack.split(",")[0] for t in THEMES.values()}
+    assert len(bodies) >= 4, bodies
+
+
+def test_the_body_face_is_requested_not_just_named():
+    """A stack naming a font nobody downloaded falls through to the system
+    default, which is the boring outcome dressed as a decision."""
+    for mood, theme in THEMES.items():
+        family = theme.body.stack.split(",")[0].strip("'")
+        assert family.replace(" ", "+") in theme.fonts_href, mood

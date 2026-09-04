@@ -190,6 +190,28 @@ def e(value) -> str:
     return html.escape(str(value if value is not None else ""), quote=True)
 
 
+def srcset(url: str) -> str:
+    """Widths for a proxied photograph, so a phone is not sent a 1MB hero.
+
+    Only our own proxy can resize; a photograph on their site is served at
+    whatever size it is, and inventing width descriptors for it would lie to
+    the browser about what it is fetching.
+    """
+    if not url.startswith("/photo/"):
+        return ""
+    joiner = "&amp;" if "?" in url else "?"
+    return " ".join(f"{url}{joiner}w={w} {w}w," for w in (800, 1600, 2400)).rstrip(",")
+
+
+def picture(url: str, alt: str, *, sizes: str = "100vw",
+            extra: str = 'loading="lazy" decoding="async"') -> str:
+    """One <img>, at the best resolution the source can give."""
+    responsive = srcset(url)
+    return (f'<img src="{e(url)}" alt="{e(alt)}"'
+            + (f' srcset="{responsive}" sizes="{sizes}"' if responsive else "")
+            + f" {extra}>")
+
+
 def _digits(phone: str | None) -> str:
     return re.sub(r"[^\d+]", "", phone or "")
 
@@ -297,8 +319,20 @@ def _hero(m: Material, spec: SiteSpec, t: Theme) -> str:
         facts.append(f"<span>{e(m.hours[0])}</span>")
     layers = ""
     if photo:
-        layers = (f'<div class="bgimg" style="background-image:url(&quot;{e(photo)}&quot;)">'
-                  f'</div><div class="veil"></div>')
+        # A background cannot take a srcset, so image-set does the same job:
+        # a phone fetches the 1600 and a retina desktop the 3200. The plain
+        # url() stays as the fallback for anything that does not know it.
+        if photo.startswith("/photo/"):
+            joiner = "&amp;" if "?" in photo else "?"
+            source = (f'image-set(url(&quot;{e(photo)}{joiner}w=1600&quot;) 1x,'
+                      f' url(&quot;{e(photo)}{joiner}w=3200&quot;) 2x)')
+            background = (f'background-image:url(&quot;{e(photo)}{joiner}w=2400&quot;);'
+                          f'background-image:-webkit-{source};'
+                          f'background-image:{source}')
+        else:
+            background = f'background-image:url(&quot;{e(photo)}&quot;)'
+        layers = (f'<div class="bgimg" style="{background}"></div>'
+                  f'<div class="veil"></div>')
     return (f'<header class="hero{" has-photo" if photo else ""}" id="top">{layers}'
             f'<div class="wrap"><h1>{e(m.name)}</h1>'
             + (f'<p class="sub">{e(sub)}</p>' if sub else "")
@@ -388,9 +422,10 @@ def _services(m: Material, t: Theme) -> str:
         rows = "".join(_offer_row(item, i) for i, item in enumerate(items))
         # One photograph, large, rather than one per item: at this count a grid
         # of pictures reads as padding.
-        art = (f'<div class="editorial-art" data-reveal data-delay="1">'
-               f'<img src="{e(m.take(m.images, 1)[0])}" alt="" loading="lazy"'
-               f' decoding="async"></div>') if len(m.images) > 2 else ""
+        art = ('<div class="editorial-art" data-reveal data-delay="1">'
+               + picture(m.take(m.images, 1)[0], "",
+                         sizes="(max-width:900px) 100vw, 50vw")
+               + "</div>") if len(m.images) > 2 else ""
         return (f'<section id="services" {attrs}><div class="wrap">'
                 f'<div class="offers offers-editorial">'
                 f'<div class="display" data-reveal>'
@@ -474,8 +509,8 @@ def _gallery(m: Material, t: Theme) -> str:
         return ""
     tiles = "".join(
         f'<button aria-label="Open photo {i + 1}" data-reveal data-delay="{i % 4}">'
-        f'<img src="{e(src)}" alt="{e(m.photo_notes.get(src, ""))}"'
-        f' loading="lazy" decoding="async"></button>'
+        + picture(src, m.photo_notes.get(src, ""),
+                  sizes="(max-width:700px) 100vw, 33vw") + "</button>"
         for i, src in enumerate(shots))
     return (f'<section id="gallery"><div class="wrap">'
             f'<p class="eyebrow" data-reveal>Gallery</p>'
@@ -656,9 +691,10 @@ def _features(m: Material, t: Theme) -> str:
         relevant = [src for src in (block.get("images") or ())
                     if justified(src, block["heading"], block["text"])]
         fresh = m.take(relevant, 1)
-        art = (f'<div class="shot"><img src="{e(fresh[0])}"'
-               f' alt="{e(m.photo_notes.get(fresh[0], ""))}"'
-               f' loading="lazy" decoding="async"></div>') if fresh else ""
+        art = ('<div class="shot">'
+               + picture(fresh[0], m.photo_notes.get(fresh[0], ""),
+                         sizes="(max-width:820px) 100vw, 50vw")
+               + "</div>") if fresh else ""
         # Shape follows the count, not the index. A single row in the "wide"
         # shape stacks a 21:9 picture above three lines of text and occupies
         # 930px to say one thing; side by side it says the same thing in a
@@ -669,10 +705,18 @@ def _features(m: Material, t: Theme) -> str:
             shape = "plain" if art else "narrow"
         else:
             shape = ("wide", "offset", "narrow", "plain")[i % 4]
-        rows.append(
-            f'<article class="feature {shape}" data-reveal>'
-            f'<div class="words"><h3>{e(block["heading"])}</h3>'
-            f'<p>{e(block["text"][:420])}</p></div>{art}</article>')
+        # The same treatment the about section gets: the opening sentence set
+        # apart, the rest as prose. A heading over an undifferentiated block of
+        # text is what "no organisation" looks like, and it is most of why a
+        # section reads as filler even when the words are theirs.
+        sentences = re.split(r"(?<=[.!?])\s+", block["text"][:460].strip())
+        opener = sentences[0] if len(sentences) > 1 else ""
+        rest = " ".join(sentences[1:]) if opener else block["text"][:460]
+        words = (f'<div class="words"><h3>{e(block["heading"])}</h3>'
+                 + (f'<p class="standfirst">{e(opener)}</p>' if opener else "")
+                 + (f'<p class="prose">{e(rest)}</p>' if rest.strip() else "")
+                 + "</div>")
+        rows.append(f'<article class="feature {shape}" data-reveal>{words}{art}</article>')
 
     return (f'<section id="more"><div class="wrap">{"".join(rows)}</div></section>')
 

@@ -481,8 +481,17 @@ section[data-ground="raise"] .quote{{background:var(--bg)}}
 .feature{{display:grid;gap:clamp(24px,4vw,64px);align-items:start;
   padding:clamp(40px,6vw,88px) 0;border-bottom:1px solid var(--line)}}
 .feature:last-child{{border-bottom:0}}
-.feature h3{{margin:0 0 .5em}}
-.feature p{{color:var(--dim);margin:0}}
+.feature h3{{margin:0 0 .45em}}
+.feature p{{margin:0}}
+/* The opening line carries the section; the rest supports it. Without the
+   distinction a feature row is a heading and a paragraph, which is the shape
+   of filler. */
+.feature .standfirst{{font-family:{t.display.stack};
+  font-size:calc({standfirst_size} * var(--density-scale));line-height:1.3;
+  letter-spacing:{standfirst_track};margin:0 0 .55em;color:var(--ink);
+  text-wrap:balance;max-width:24ch}}
+.feature.wide .standfirst,.feature.narrow .standfirst{{max-width:34ch}}
+.feature .prose{{color:var(--dim);max-width:56ch;line-height:1.68}}
 .feature .shot{{border-radius:var(--r);overflow:hidden;aspect-ratio:4/3}}
 .feature .shot img{{width:100%;height:100%;object-fit:cover;
   transition:transform 1s cubic-bezier(.2,.7,.3,1)}}
