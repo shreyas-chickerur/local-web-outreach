@@ -34,3 +34,6 @@ workbench.db-*
 
 # Cached image dimensions.
 .cache/imagesize/
+
+# Commit message drafts, passed to `git commit -F`. Scaffolding, not history.
+.commits/
