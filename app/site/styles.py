@@ -66,7 +66,15 @@ def _layout_rules(t: Theme) -> str:
     hairline rules and a micro-shadow, an editorial one offsets its columns.
     """
     return """
-/* airy — space does the separating, so the lines get out of the way */
+/* A section boundary should be drawn, not merely implied by a gap. Each bias
+   draws it differently; all of them are one physical pixel. */
+section+section::before{content:"";position:absolute;top:0;left:0;right:0;
+  height:1px;pointer-events:none}
+
+/* airy — a hairline that fades out at both ends, so it reads as a whisper */
+[data-theme-layout="airy"] section+section::before{
+  background:linear-gradient(90deg,transparent,var(--line) 22%,
+    var(--line) 78%,transparent)}
 [data-theme-layout="airy"] section{padding:clamp(88px,13vw,180px) 0}
 [data-theme-layout="airy"] .card,[data-theme-layout="airy"] .offer,
 [data-theme-layout="airy"] .quote{border-color:transparent;
@@ -75,12 +83,16 @@ def _layout_rules(t: Theme) -> str:
 [data-theme-layout="airy"] .listing li{border-bottom-color:transparent;
   padding-block:clamp(28px,3.4vw,46px)}
 
-/* structured — hairlines and a shallow shadow; the grid is meant to show */
-[data-theme-layout="structured"] section+section{border-top:1px solid var(--line)}
+/* structured — the rule is meant to show: solid, edge to edge */
+[data-theme-layout="structured"] section+section::before{background:var(--line)}
 [data-theme-layout="structured"] .card,[data-theme-layout="structured"] .offer,
 [data-theme-layout="structured"] .quote{box-shadow:0 1px 0 var(--line),
   0 10px 24px -20px rgba(0,0,0,.3)}
 [data-theme-layout="structured"] .wrap{position:relative}
+
+/* contained — the divider is part of the frame, so it is heavier and inked */
+[data-theme-layout="contained"] section+section::before{height:2px;
+  background:var(--ink);opacity:.9}
 
 /* contained — compact and blocky; edges are the point */
 [data-theme-layout="contained"] section{padding:clamp(52px,7.5vw,104px) 0}
@@ -89,6 +101,12 @@ def _layout_rules(t: Theme) -> str:
 [data-theme-layout="contained"] .quote{border-width:2px;box-shadow:none}
 [data-theme-layout="contained"] h1,[data-theme-layout="contained"] h2{
   text-transform:uppercase}
+
+/* editorial — the rule starts at the content column rather than the bezel,
+   which is what makes a page feel typeset instead of boxed */
+[data-theme-layout="editorial"] section+section::before{
+  left:clamp(16px,7vw,140px);
+  background:linear-gradient(90deg,var(--line) 78%,transparent)}
 
 /* editorial — asymmetry, a wider gutter, and the heading held off the edge */
 [data-theme-layout="editorial"] .wrap{width:min(1240px,100% - var(--pad)*2)}
@@ -114,6 +132,15 @@ body::after{{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
   background-image:{GRAIN};opacity:.05;mix-blend-mode:multiply}}''' if t.grain else ""
     type_rules = _type_rules(t)
     layout_rules = _layout_rules(t)
+    nav_tint = t.tint("surface", 0.72)
+    hairline = t.tint("ink", 0.10)
+    selection = t.tint("accent", 0.24)
+    shade_tight = t.tint("ink", 0.04)
+    shade_wide = t.tint("ink", 0.055)
+    shade_lift = t.tint("ink", 0.16)
+    # A highlight the eye reads as light falling on the top edge. Mixed from
+    # the theme's own ink so it lightens on paper and on the dark mood alike.
+    sheen = t.tint("surface", 0.55)
     body_size = t.scale["body"]
     listing_size = t.step(max(2, t.display_steps - 3))
     return f'''
@@ -121,8 +148,12 @@ body::after{{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
   --bg:{t.bg}; --surface:{t.surface}; --raise:{t.raise_}; --ink:{t.ink};
   --dim:{t.dim}; --accent:{t.accent}; --accent-soft:{t.accent_soft};
   --accent-ink:{t.accent_ink}; --line:{t.line}; --r:{t.radius};
-  --shadow:0 1px 2px rgba(0,0,0,.04),0 12px 32px -18px rgba(0,0,0,.28);
-  --lift:0 2px 6px rgba(0,0,0,.06),0 28px 56px -28px rgba(0,0,0,.36);
+  /* Two layers doing different jobs: a hairline-tight contact shadow to seat
+     the card, and a wide, very faint cast to lift it. A single heavy shadow
+     reads as a border with a blur on it. */
+  --shadow:0 1px 1px {shade_tight},0 8px 30px {shade_wide};
+  --lift:0 2px 4px {shade_tight},0 22px 48px -12px {shade_lift};
+  --hairline:{hairline};
   --pad:clamp(20px,5vw,44px);
 }}
 *{{box-sizing:border-box}}
@@ -136,7 +167,21 @@ body{{margin:0;background:var(--bg);color:var(--ink);font-family:{t.body.stack};
   font-size:{body_size};line-height:1.65;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}}
 {grain_layer}
-h1,h2,h3{{font-family:{t.display.stack};line-height:1.05;margin:0 0 .5em}}
+h1,h2,h3{{font-family:{t.display.stack};line-height:1.05;margin:0 0 .5em;
+  /* Stops a headline dropping one word onto its own line at an awkward width.
+     Unsupported engines ignore it and wrap as before. */
+  text-wrap:balance}}
+.hero .sub,.lede,.eyebrow{{text-wrap:balance}}
+p{{text-wrap:pretty}}
+
+/* Focus you can actually see, in the theme's own accent rather than the
+   browser's blue — and only for keyboard users, so a mouse click stays quiet. */
+:focus-visible{{outline:2px solid var(--accent);outline-offset:3px;
+  border-radius:2px}}
+:focus:not(:focus-visible){{outline:none}}
+.cta:focus-visible,.book:focus-visible{{outline-offset:4px}}
+
+::selection{{background:{selection};color:var(--ink)}}
 {type_rules}
 p{{margin:0 0 1em;max-width:68ch}}
 a{{color:var(--accent)}}
@@ -152,8 +197,19 @@ section.band{{background:var(--raise)}}
 .bar{{position:fixed;inset:0 0 auto;z-index:40;display:flex;align-items:center;
   gap:22px;padding:14px clamp(18px,4vw,40px);transition:background .35s ease,
   box-shadow .35s ease,padding .35s ease;color:#fff}}
-.bar.stuck{{background:var(--surface);color:var(--ink);box-shadow:var(--shadow);
+/* Translucent rather than solid: the page reads through it, which is the
+   single most recognisable cue that a site was designed. The hairline carries
+   the edge so no shadow is needed, and the saturate() stops content going grey
+   as it passes underneath. */
+.bar.stuck{{background:{nav_tint};color:var(--ink);
+  -webkit-backdrop-filter:blur(14px) saturate(180%);
+  backdrop-filter:blur(14px) saturate(180%);
+  border-bottom:1px solid {hairline};
   padding-top:10px;padding-bottom:10px}}
+/* Without blur support the translucency reads as a bug, so fall back opaque. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){{
+  .bar.stuck{{background:var(--surface);box-shadow:var(--shadow)}}
+}}
 .bar .mark{{font-family:{t.display.stack};font-weight:700;font-size:19px;
   letter-spacing:-.02em;text-decoration:none;color:inherit}}
 .bar nav{{margin-left:auto;display:flex;gap:26px}}
@@ -207,7 +263,8 @@ section.band{{background:var(--raise)}}
 .split{{display:grid;grid-template-columns:minmax(240px,.9fr) 1.4fr;
   gap:clamp(28px,5vw,72px);align-items:start}}
 .cards{{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}}
-.card{{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+.card{{background:linear-gradient(180deg,{sheen},transparent 42%),var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);
   padding:30px 28px;transition:transform .3s cubic-bezier(.2,.7,.3,1),
   box-shadow .3s ease,border-color .3s ease;position:relative;overflow:hidden}}
 .card:hover{{transform:translateY(-5px);box-shadow:var(--lift);

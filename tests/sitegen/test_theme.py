@@ -144,9 +144,9 @@ def test_the_biases_differ_structurally_not_only_in_colour():
     airy, structured = _page("fresh"), _page("warm")
     assert 'data-theme-layout="airy"' in airy
     assert 'data-theme-layout="structured"' in structured
-    # an airy theme drops its borders; a structured one draws rules
+    # an airy theme drops its borders; a structured one draws its rules
     assert '[data-theme-layout="airy"] .card' in airy
-    assert 'section+section{border-top' in structured
+    assert '[data-theme-layout="structured"] section+section::before' in structured
 
 
 def test_theme_lookup_falls_back_rather_than_raising():

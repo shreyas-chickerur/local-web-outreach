@@ -38,6 +38,23 @@ SMALL_SCREEN_DAMPING = 0.62
 LayoutBias = Literal["airy", "structured", "contained", "editorial"]
 
 
+def rgb(hex_colour: str) -> tuple[int, int, int]:
+    """A hex colour as its channels, so alpha can be mixed from theme tokens.
+
+    Translucency has to be derived rather than declared: a nav tinted with a
+    hard-coded white works on five themes and looks broken on the dark one.
+    """
+    value = hex_colour.lstrip("#")
+    if len(value) == 3:
+        value = "".join(c * 2 for c in value)
+    return int(value[0:2], 16), int(value[2:4], 16), int(value[4:6], 16)
+
+
+def rgba(hex_colour: str, alpha: float) -> str:
+    red, green, blue = rgb(hex_colour)
+    return f"rgba({red},{green},{blue},{alpha:g})"
+
+
 @dataclass(frozen=True)
 class Face:
     """A typeface, its stack, and the axes it actually exposes."""
@@ -106,6 +123,10 @@ class Theme:
     grain: bool = False
 
     # ------------------------------------------------------------------ #
+    def tint(self, token: str, alpha: float) -> str:
+        """One of this theme's own colours, at an alpha."""
+        return rgba(getattr(self, token), alpha)
+
     @property
     def body_size(self) -> tuple[float, float]:
         return (16.0, 18.0)
