@@ -145,6 +145,7 @@ body::after{{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
     listing_size = t.step(max(2, t.display_steps - 3))
     return f'''
 :root{{
+  --density-scale:1;
   --bg:{t.bg}; --surface:{t.surface}; --raise:{t.raise_}; --ink:{t.ink};
   --dim:{t.dim}; --accent:{t.accent}; --accent-soft:{t.accent_soft};
   --accent-ink:{t.accent_ink}; --line:{t.line}; --r:{t.radius};
@@ -280,7 +281,11 @@ section.band .card{{background:var(--bg)}}
    the responsive work; --density-scale only shifts where it sits, so a section
    with two services is set larger than one with nine without a second set of
    breakpoints. Defaulted here so any section without the attribute is unmoved. */
-section{{--density-scale:1}}
+/* Defined on the ROOT, not on `section`. The hero is a <header>, so scoping
+   the fallback to sections left `var(--density-scale)` undefined inside it —
+   which makes calc(clamp(...) * var(--density-scale)) invalid at
+   computed-value time, and the headline silently collapsed to the inherited
+   body size. Sections that carry a density still override it inline. */
 
 /* Four or more: the grid is genuinely right, and auto-fit belongs here. */
 .offers{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));

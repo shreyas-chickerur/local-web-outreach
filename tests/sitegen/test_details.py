@@ -133,3 +133,23 @@ def test_colour_maths_is_exact():
     assert rgb("#ffffff") == (255, 255, 255)
     assert rgb("#fff") == (255, 255, 255)
     assert rgba("#0d7f83", 0.5) == "rgba(13,127,131,0.5)"
+
+
+def test_the_density_fallback_is_defined_on_the_root():
+    """The hero is a <header>, not a <section>. Scoping --density-scale to
+    sections left it undefined there, which makes
+    calc(clamp(...) * var(--density-scale)) invalid at computed-value time —
+    and the headline silently collapsed to the inherited body size."""
+    markup = page("warm")
+    root = re.search(r":root\{([^}]*)\}", markup).group(1)
+    assert "--density-scale:1" in root
+
+
+def test_every_size_that_uses_the_density_variable_can_resolve_outside_a_section():
+    """Any rule multiplying by --density-scale must have a value to multiply by
+    wherever it applies, or the declaration is dropped entirely."""
+    markup = page("warm")
+    users = re.findall(r"([a-z0-9 .#\[\]=\"-]+)\{[^}]*var\(--density-scale\)", markup)
+    assert users, "nothing uses the variable — the test is watching the wrong thing"
+    root = re.search(r":root\{([^}]*)\}", markup).group(1)
+    assert "--density-scale" in root      # inherited by every one of them
