@@ -978,6 +978,10 @@ function drawWorkspace() {
       <div class="diag">${(d.findings || []).map(f =>
         `<span class="stop">${esc(f)}</span>`).join("")}</div>
       <p class="hint">Nothing was saved. The previous version is still live.</p>` : ""}
+    ${d.unchanged ? `<p class="diag-label">Nothing to change</p>
+      <p class="hint">This asked for the page you already have, so no version
+         was written. If a word below is greyed out, that is the part with no
+         rule behind it yet.</p>` : ""}
     ${(d.understood || []).length ? `<p class="diag-label">Understood</p>
       <div class="diag">${d.understood.map(x =>
         `<span class="got">${esc(x)}</span>`).join("")}</div>` : ""}
@@ -1088,8 +1092,9 @@ async function sendInstruction() {
   WS.diagnostics = {understood: data.understood, ignored_tokens: data.ignored_tokens,
                     unmet: data.unmet, contradictions: data.contradictions,
                     blocked: data.rejected, findings: data.findings,
+                    unchanged: data.unchanged,
                     spec: sentence, version: data.version};
-  box.value = "";
+  if (!data.unchanged) box.value = "";
   drawWorkspace();
   if (!data.rejected) box.focus();
 }

@@ -148,3 +148,45 @@ def test_the_lead_photograph_can_be_cycled_and_reset():
     assert spec["hero_offset"] == 2
     spec = parse("use the first hero photo", spec)
     assert spec["hero_offset"] == 0
+
+
+# --- colour ------------------------------------------------------------- #
+
+@pytest.mark.parametrize("sentence,accent", [
+    ("the page should have more blue", "blue"),
+    ("want more blue on the page", "blue"),
+    ("make it navy", "navy"),
+    ("dark blue please", "navy"),          # one colour, not a mood and a colour
+    ("light blue", "sky"),
+    ("forest green accents", "forest"),
+    ("can we go burgundy", "burgundy"),
+    ("greyscale", "grey"),
+])
+def test_colour_is_understood(sentence, accent):
+    """Colour is the commonest thing anyone says about a page. Without a rule
+    for it, "more blue" landed in ignored_tokens and produced a version
+    identical to its parent."""
+    out = parse_iteration_instruction(sentence, dict(DEFAULT_SPEC))
+    assert out["accent"] == accent
+    assert "blue" not in out["ignored_tokens"]
+    assert any("accented" in note for note in out["understood"])
+
+
+def test_a_colour_word_does_not_eat_the_mood():
+    out = parse_iteration_instruction("warm and rustic with navy accents",
+                                      dict(DEFAULT_SPEC))
+    assert (out["mood"], out["accent"]) == ("warm", "navy")
+
+
+def test_dark_alone_is_still_a_mood():
+    """Colour matches first, but only on adjacency — "dark" on its own must
+    still reach the mood table."""
+    out = parse_iteration_instruction("make it darker", dict(DEFAULT_SPEC))
+    assert out["mood"] == "night"
+    assert out["accent"] is None
+
+
+def test_colour_carries_forward_like_every_other_decision():
+    first = parse_iteration_instruction("more blue", dict(DEFAULT_SPEC))
+    second = parse_iteration_instruction("lead with the gallery", first)
+    assert second["accent"] == "blue"

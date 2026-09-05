@@ -67,6 +67,10 @@ class IterationResult:
     parent_version: int | None = None
     rejected: bool = False
     findings: list[str] = field(default_factory=list)
+    # The instruction parsed to exactly the configuration it started from, so
+    # no version was written. Distinct from `rejected`: nothing was wrong with
+    # it, there was simply nothing in it this could act on.
+    unchanged: bool = False
 
     @property
     def url(self) -> str | None:
@@ -83,6 +87,7 @@ class IterationResult:
             "defects": self.defects, "repairs": self.repairs,
             "plan": self.plan, "outline": self.outline,
             "rejected": self.rejected, "findings": self.findings,
+            "unchanged": self.unchanged,
         }
 
 
@@ -97,6 +102,7 @@ def spec_from_config(config: dict) -> SiteSpec:
         suppress=list(config.get("suppress") or []),
         cta=(cta or {}).get("kind") if isinstance(cta, dict) else cta,
         cta_label=(cta or {}).get("label") if isinstance(cta, dict) else None,
+        accent=config.get("accent"),
         hero_offset=int(config.get("hero_offset") or 0),
         understood=list(config.get("understood") or []),
         ignored=list(config.get("ignored_tokens") or []),
@@ -145,7 +151,7 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
     # The design audit: defects the operator should never have to catch. It
     # runs before the honesty gate because a page that fails on contrast is
     # worth knowing about even when it also fails on content.
-    report = audit(html, theme_for(spec.mood))
+    report = audit(html, theme_for(spec.mood, spec.accent))
     defects = [str(f) for f in report.failures]
     repairs = report.as_dict()["repairs"]
 
@@ -165,6 +171,25 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
     if parent_version is None:
         history = sites.versions(conn, lead_id)
         parent_version = history[0]["version"] if history else None
+
+    # A version should mean something changed. "the page should have more blue"
+    # was a word the parser had no rule for, so it minted a version byte-for-byte
+    # identical to its parent and left the operator staring at an unchanged page
+    # wearing a fresh number.
+    #
+    # The comparison is on the rendered page rather than on the configuration,
+    # because the brief can move underneath an unchanged instruction — confirm
+    # the hours and the same words legitimately produce a different site.
+    if parent_version is not None:
+        previous = sites.html_for(conn, lead_id, parent_version)
+        if previous is not None and previous == html:
+            return IterationResult(
+                lead_id=lead_id, spec=config, understood=config["understood"],
+                unmet=spec.unmet, ignored_tokens=config["ignored_tokens"],
+                contradictions=config["contradictions"],
+                defects=defects, repairs=repairs,
+                plan=resolved.as_dict(), outline=resolved.outline(),
+                parent_version=parent_version, unchanged=True)
 
     notes = {"mood": spec.mood, "understood": config["understood"],
              "unmet": spec.unmet, "ignored": config["ignored_tokens"],

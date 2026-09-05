@@ -32,7 +32,40 @@ DEFAULT_SPEC: dict = {
     "emphasis": [],
     "suppress": [],
     "cta": None,
+    "accent": None,
 }
+
+# (phrase, accent name). Colour is the thing people say first about a page, so
+# not having it here meant the commonest instruction there is landed in
+# `ignored_tokens` and produced a version identical to its parent.
+#
+# Two-word phrases sit here rather than in MOOD_PHRASES because "dark blue" is
+# a colour, not a mood plus a colour — and this table is matched first so the
+# mood pass never gets to split it.
+COLOUR_PHRASES: tuple[tuple[str, str], ...] = (
+    ("navy blue", "navy"), ("dark blue", "navy"), ("midnight blue", "navy"),
+    ("sky blue", "sky"), ("light blue", "sky"), ("pale blue", "sky"),
+    ("royal blue", "blue"), ("navy", "navy"), ("blue", "blue"),
+    ("cobalt", "blue"), ("azure", "sky"),
+    ("forest green", "forest"), ("dark green", "forest"),
+    ("olive green", "olive"), ("sage green", "sage"), ("mint green", "mint"),
+    ("emerald", "forest"), ("forest", "forest"), ("olive", "olive"),
+    ("sage", "sage"), ("mint", "mint"), ("green", "green"),
+    ("teal", "teal"), ("turquoise", "teal"), ("aqua", "teal"),
+    ("burnt orange", "terracotta"), ("terracotta", "terracotta"),
+    ("rust", "terracotta"), ("orange", "orange"), ("amber", "amber"),
+    ("mustard", "mustard"), ("gold", "gold"), ("golden", "gold"),
+    ("yellow", "yellow"),
+    ("burgundy", "burgundy"), ("maroon", "burgundy"), ("wine", "burgundy"),
+    ("crimson", "crimson"), ("scarlet", "crimson"), ("red", "red"),
+    ("dusty rose", "rose"), ("rose", "rose"), ("pink", "pink"),
+    ("blush", "pink"),
+    ("indigo", "indigo"), ("violet", "violet"), ("purple", "purple"),
+    ("lilac", "violet"), ("plum", "plum"), ("aubergine", "plum"),
+    ("brown", "brown"), ("chocolate", "brown"),
+    ("charcoal", "charcoal"), ("grey", "grey"), ("gray", "grey"),
+    ("greyscale", "grey"), ("monochrome", "grey"),
+)
 
 MOODS = ("warm", "fresh", "bold", "refined", "industrial", "night")
 
@@ -196,6 +229,12 @@ def parse_iteration_instruction(sentence: str, current_spec: dict) -> dict:
     contradictions: list[str] = []
     tokens = _tokens(sentence)
     used = [False] * len(tokens)
+
+    # --- accent colour: before mood, so "dark blue" is not read as "dark" ----
+    for _, (_, colour) in _find_phrases(tokens, used, COLOUR_PHRASES):
+        spec["accent"] = colour
+        understood.append(f"accented {colour}")
+        break
 
     # --- mood: first in source order wins, and a conflict is said out loud --
     moods = _find_phrases(tokens, used, MOOD_PHRASES)

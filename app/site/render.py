@@ -944,7 +944,7 @@ def plan_for(brief: dict, spec: SiteSpec) -> SitePlan:
     of "does this business publish hours?" would drift apart within a week.
     """
     m = material_from_brief(brief)
-    theme = theme_for(spec.mood)
+    theme = theme_for(spec.mood, spec.accent)
     hero = pick_hero(m.images, spec.hero_offset, m.photo_labels, m.trade_kind)
     if hero:
         m.spent.add(hero)
@@ -1017,7 +1017,7 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
     everything carried over from earlier instructions.
     """
     m = material_from_brief(brief)
-    theme = theme_for(spec.mood)
+    theme = theme_for(spec.mood, spec.accent)
 
     sections = {key: builder(m, theme) for key, builder in _BUILDERS.items()}
     available = {"hero"} | {k for k, v in sections.items() if v}

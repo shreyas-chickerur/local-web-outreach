@@ -12,7 +12,7 @@ import re
 import pytest
 
 from app.site.render import build
-from app.site.theme import THEMES, Face, theme_for
+from app.site.theme import THEMES, Face, contrast, theme_for
 
 pytestmark = pytest.mark.unit
 
@@ -166,3 +166,45 @@ def test_the_body_face_is_requested_not_just_named():
     for mood, theme in THEMES.items():
         family = theme.body.stack.split(",")[0].strip("'")
         assert family.replace(" ", "+") in theme.fonts_href, mood
+
+
+# --- recolouring -------------------------------------------------------- #
+
+def test_recolouring_moves_only_the_accent():
+    """Under 60-30-10 the accent is the 10%. "More blue" means the buttons and
+    rules turn blue, not that the paper does."""
+    warm = THEMES["warm"]
+    blue = warm.recoloured("blue")
+    assert (blue.bg, blue.ink, blue.surface) == (warm.bg, warm.ink, warm.surface)
+    assert blue.accent != warm.accent
+
+
+def test_recolouring_keeps_the_weight_the_palette_was_designed_with():
+    """Saturation is inherited, so a recoloured page reads as designed rather
+    than as a stock hue dropped into it."""
+    from app.site.theme import _to_hsl
+    warm = THEMES["warm"]
+    _, was, _ = _to_hsl(warm.accent)
+    _, now, _ = _to_hsl(warm.recoloured("blue").accent)
+    assert abs(now - was) < 0.02
+
+
+def test_navy_and_blue_are_different_colours():
+    assert THEMES["warm"].recoloured("navy").accent != \
+        THEMES["warm"].recoloured("blue").accent
+
+
+@pytest.mark.parametrize("mood", sorted(THEMES))
+@pytest.mark.parametrize("accent", ["blue", "navy", "sky", "forest", "yellow",
+                                    "pink", "charcoal", "gold"])
+def test_button_text_stays_readable_on_every_recoloured_accent(mood, accent):
+    """accent_ink is recomputed rather than carried over, for the same reason
+    `on()` exists: a hand-paired ink is only correct for its own accent."""
+    theme = THEMES[mood].recoloured(accent)
+    assert contrast(theme.accent_ink, theme.accent) >= 4.5
+
+
+def test_an_unknown_colour_leaves_the_theme_alone():
+    warm = THEMES["warm"]
+    assert warm.recoloured("chartreuse") is warm
+    assert warm.recoloured(None) is warm

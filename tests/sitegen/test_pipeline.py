@@ -163,8 +163,11 @@ def test_an_older_version_is_untouched_by_a_fork(conn, lead):
 def test_versions_never_collide_under_repeated_writes(conn, lead):
     """The version is allocated inside the INSERT rather than read first and
     written after, which is what stops two writers claiming the same number."""
-    for index in range(12):
-        iterate(conn, lead, f"warm {index}")
+    # Each instruction has to produce a genuinely different page: an iteration
+    # that renders the page it started from writes no version, by design.
+    for colour in ("blue", "navy", "teal", "forest", "olive", "gold",
+                   "mustard", "crimson", "plum", "indigo", "rose", "charcoal"):
+        iterate(conn, lead, f"more {colour}")
     numbers = [row["version"] for row in sites.versions(conn, lead)]
     assert numbers == sorted(set(numbers), reverse=True)
     assert len(numbers) == 12
@@ -219,3 +222,35 @@ def test_branching_from_a_version_that_does_not_exist_is_refused(conn, lead):
     iterate(conn, lead, "warm")
     with pytest.raises(ValueError, match="no such version"):
         iterate(conn, lead, "make it bolder", parent_version=99)
+
+
+def test_an_instruction_that_changes_nothing_writes_no_version(conn, lead):
+    """A version should mean something changed. "More blue" used to mint a
+    version byte-identical to its parent, leaving the operator staring at an
+    unchanged page wearing a fresh number."""
+    first = iterate(conn, lead, "warm and rustic")
+    again = iterate(conn, lead, "warm and rustic")
+    assert again.unchanged is True
+    assert again.version is None
+    assert [row["version"] for row in sites.versions(conn, lead)] == [first.version]
+
+
+def test_more_blue_now_changes_the_page(conn, lead):
+    warm = iterate(conn, lead, "warm and rustic")
+    blue = iterate(conn, lead, "the page should have more blue")
+    assert blue.unchanged is False
+    assert blue.version is not None
+    assert "blue" not in blue.ignored_tokens
+    assert sites.html_for(conn, lead, blue.version) != \
+        sites.html_for(conn, lead, warm.version)
+
+
+def test_the_same_words_rebuild_when_the_brief_moved(conn, lead, monkeypatch):
+    """The guard compares the rendered page, not the configuration: confirming
+    a business's hours legitimately makes the same instruction a new site."""
+    first = iterate(conn, lead, "warm and rustic")
+    monkeypatch.setattr(pipeline, "build_from_spec",
+                        lambda brief, spec: "<html>different</html>")
+    again = iterate(conn, lead, "warm and rustic")
+    assert again.unchanged is False
+    assert again.version != first.version

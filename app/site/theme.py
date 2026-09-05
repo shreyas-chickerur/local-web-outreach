@@ -22,7 +22,7 @@ means declaring its ratio and its face — not writing another block of CSS.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Literal
 
 # The viewport range the fluid type scale interpolates across. Below and above
@@ -68,6 +68,77 @@ def contrast(one: str, two: str) -> float:
     """The WCAG ratio between two colours, 1.0 to 21.0."""
     light, dark = sorted((_luminance(one), _luminance(two)), reverse=True)
     return (light + 0.05) / (dark + 0.05)
+
+
+def _to_hsl(hex_colour: str) -> tuple[float, float, float]:
+    red, green, blue = (channel / 255 for channel in rgb(hex_colour))
+    high, low = max(red, green, blue), min(red, green, blue)
+    light = (high + low) / 2
+    if high == low:
+        return 0.0, 0.0, light                      # grey has no hue
+    spread = high - low
+    sat = spread / (2 - high - low) if light > 0.5 else spread / (high + low)
+    if high == red:
+        hue = ((green - blue) / spread) % 6
+    elif high == green:
+        hue = (blue - red) / spread + 2
+    else:
+        hue = (red - green) / spread + 4
+    return hue * 60, sat, light
+
+
+def _from_hsl(hue: float, sat: float, light: float) -> str:
+    hue = hue % 360
+    chroma = (1 - abs(2 * light - 1)) * sat
+    second = chroma * (1 - abs((hue / 60) % 2 - 1))
+    base = light - chroma / 2
+    sector = int(hue // 60)
+    red, green, blue = (
+        (chroma, second, 0.0), (second, chroma, 0.0), (0.0, chroma, second),
+        (0.0, second, chroma), (second, 0.0, chroma), (chroma, 0.0, second),
+    )[sector % 6]
+    return "#" + "".join(f"{round(max(0.0, min(1.0, c + base)) * 255):02x}"
+                         for c in (red, green, blue))
+
+
+# (hue in degrees, saturation multiplier, lightness delta). The multiplier and
+# delta are what keep "navy" from reading as "blue": the same hue at lower
+# lightness is a different colour to a person, and only the hue is shared.
+#
+# Saturation and lightness otherwise come from the theme's OWN accent, so a
+# recoloured page keeps the weight the palette was designed with instead of
+# dropping a crayon into it.
+ACCENT_TUNING: dict[str, tuple[float, float, float]] = {
+    "red": (2, 1.0, 0.0),
+    "crimson": (348, 1.0, -0.02),
+    "burgundy": (345, 0.85, -0.14),
+    "terracotta": (16, 0.9, 0.0),
+    "orange": (28, 1.0, 0.02),
+    "amber": (40, 1.0, 0.04),
+    "gold": (44, 0.95, 0.02),
+    "mustard": (46, 0.9, -0.02),
+    "yellow": (52, 1.0, 0.06),
+    "olive": (74, 0.7, -0.06),
+    "green": (140, 1.0, 0.0),
+    "forest": (150, 0.9, -0.10),
+    "sage": (120, 0.45, 0.06),
+    "mint": (160, 0.8, 0.10),
+    "teal": (178, 1.0, -0.02),
+    "sky": (202, 1.0, 0.08),
+    "blue": (214, 1.0, 0.0),
+    "navy": (222, 0.95, -0.16),
+    "indigo": (246, 0.95, -0.04),
+    "purple": (280, 1.0, 0.0),
+    "violet": (272, 1.0, 0.02),
+    "plum": (310, 0.85, -0.08),
+    "pink": (334, 1.0, 0.08),
+    "rose": (346, 0.9, 0.04),
+    "brown": (22, 0.55, -0.12),
+    "grey": (0, 0.0, -0.04),
+    "charcoal": (0, 0.0, -0.20),
+}
+
+ACCENT_NAMES = tuple(sorted(ACCENT_TUNING))
 
 
 AA_BODY = 4.5
@@ -158,6 +229,34 @@ class Theme:
         # Nothing in the palette clears it, so fall back to whichever extreme
         # is furthest away — still the best available, and the audit will say so.
         return "#ffffff" if _luminance(ground) < 0.4 else "#111111"
+
+    def recoloured(self, accent: str | None) -> Theme:
+        """This theme with its accent moved to a named hue.
+
+        Only the accent moves. Under 60-30-10 the accent IS the 10%, so
+        "more blue" means the buttons, rules and eyebrows turn blue while the
+        paper and ink stay the ones the theme was designed around — repainting
+        the ground would produce a different, worse page than the one asked for.
+
+        Saturation and lightness are inherited from the theme's existing
+        accent, so a warm page recoloured blue keeps its warm weight rather
+        than acquiring a stock hue.
+        """
+        tuning = ACCENT_TUNING.get((accent or "").lower())
+        if tuning is None:
+            return self
+        hue, sat_scale, light_delta = tuning
+        _, sat, light = _to_hsl(self.accent)
+        shifted = _from_hsl(hue, min(1.0, sat * sat_scale),
+                            max(0.12, min(0.88, light + light_delta)))
+        _, soft_sat, soft_light = _to_hsl(self.accent_soft)
+        soft = _from_hsl(hue, min(1.0, soft_sat * sat_scale), soft_light)
+        # Button text is chosen against the colour that actually won, for the
+        # same reason `on()` exists: a hand-paired accent_ink is only correct
+        # for the accent it was paired with.
+        ink = max((self.ink, "#ffffff", "#111111"),
+                  key=lambda candidate: contrast(candidate, shifted))
+        return replace(self, accent=shifted, accent_soft=soft, accent_ink=ink)
 
     def readable_on(self, ground: str) -> tuple[str, float]:
         colour = self.on(ground)
@@ -339,5 +438,5 @@ THEMES: dict[str, Theme] = {
 }
 
 
-def theme_for(mood: str) -> Theme:
-    return THEMES.get(mood, THEMES["fresh"])
+def theme_for(mood: str, accent: str | None = None) -> Theme:
+    return THEMES.get(mood, THEMES["fresh"]).recoloured(accent)

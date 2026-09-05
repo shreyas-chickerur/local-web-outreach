@@ -12,6 +12,8 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 
+from app.site.iterate import COLOUR_PHRASES
+
 # Section keys the generator knows how to build, in their default order.
 SECTIONS = ("hero", "services", "menu", "gallery", "about", "hours", "contact")
 
@@ -54,6 +56,9 @@ class SiteSpec:
 
     text: str = ""
     mood: str = "fresh"
+    # The 10% in 60-30-10. Named rather than a hex value: the operator asks for
+    # "blue", and what blue means is the theme's own saturation at a blue hue.
+    accent: str | None = None
     lead_with: str | None = None        # a section hoisted to the top
     emphasis: list[str] = field(default_factory=list)
     cta: str | None = None
@@ -83,6 +88,16 @@ def parse_spec(text: str, *, default_cta: str | None = None) -> SiteSpec:
     if not words:
         spec.cta = default_cta
         return spec
+
+    # Colour before mood, for the same reason the iteration parser does it:
+    # "dark blue" names one colour, not a mood and a colour.
+    lowered = f" {text.lower()} "
+    for phrase, colour in sorted(COLOUR_PHRASES,
+                                 key=lambda row: -len(row[0].split())):
+        if f" {phrase} " in lowered:
+            spec.accent = colour
+            spec.understood.append(f"accented {colour}")
+            break
 
     for name, triggers in _MOODS.values():
         if words & set(triggers):
