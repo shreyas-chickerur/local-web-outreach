@@ -24,9 +24,8 @@ from app.adapters.site_fetch import HttpSiteFetcher, SiteFetcher
 from app.workbench.corroborate import Fact, corroborate
 from app.workbench.extract import (
     ExtractedSite,
-    contact_page_urls,
+    content_page_urls,
     extract_from_html,
-    menu_page_urls,
     merge,
     social_belongs_to,
 )
@@ -210,7 +209,7 @@ def _read_their_site(url: str, fetcher: SiteFetcher
         state = "insecure"
     base = result.final_url or url
     extracted = extract_from_html(result.html, base)
-    for page in menu_page_urls(result.html, base) + contact_page_urls(result.html, base):
+    for page in content_page_urls(result.html, base):
         sub = fetcher.fetch(page)
         if sub.ok and sub.html:
             extracted = merge(extracted, extract_from_html(sub.html, page))

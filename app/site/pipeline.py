@@ -24,6 +24,7 @@ from app.adapters import claude
 from app.adapters.claude import ClaudeError
 from app.site.audit import audit
 from app.site.iterate import DEFAULT_SPEC, parse_iteration_instruction
+from app.site.opening import opening_spec
 from app.site.render import (
     build_from_spec,
     material_from_brief,
@@ -88,6 +89,9 @@ class IterationResult:
     # call failed. An operator whose instructions suddenly stop being
     # understood should be told the model is unreachable, not left guessing.
     reader_error: str = ""
+    # Why the opening version looks the way it does, in words the operator can
+    # repeat to the owner.
+    rationale: str = ""
 
     @property
     def url(self) -> str | None:
@@ -107,6 +111,7 @@ class IterationResult:
             "unchanged": self.unchanged, "kind": self.kind,
             "unsupported": self.unsupported, "defect": self.defect,
             "read_by": self.read_by, "reader_error": self.reader_error,
+            "rationale": self.rationale,
         }
 
 
@@ -188,6 +193,66 @@ def read_instruction(sentence: str, base: dict) -> dict:
     config["unsupported"] = []
     config["defect"] = ""
     return config
+
+
+def open_site(conn: sqlite3.Connection, lead_id: int,
+              *, actor: str | None = None) -> IterationResult:
+    """The first version of a new lead's site, designed before anyone types.
+
+    The operator walks in with a site. It must already look made for this
+    business — a version that opens on "no site yet", or on the same default
+    theme every trade gets, is worse than nothing because it says the tool did
+    not look. So the direction is chosen from the evidence, and everything the
+    generator enforces about craft applies to it exactly as to any later
+    version, the content gate included.
+
+    Idempotent: a lead that already has a version keeps it. This runs when the
+    workspace opens, and opening the workspace twice is not a request to
+    rebuild.
+    """
+    history = sites.versions(conn, lead_id)
+    if history:
+        return IterationResult(lead_id=lead_id, spec={},
+                               version=history[0]["version"], unchanged=True)
+
+    brief = leads.brief_with_overrides(conn, lead_id)
+    config = opening_spec(brief)
+    rationale = str(config.pop("rationale", ""))
+    read_by = str(config.pop("read_by", "trade table"))
+    for key in ("kind", "unsupported", "defect"):
+        config.pop(key, None)
+    config["instruction"] = "opening design"
+
+    spec = spec_from_config(config)
+    resolved = plan_for(brief, spec)
+    html = build_from_spec(brief, spec)
+    report = audit(html, theme_for(spec.mood, spec.accent))
+    defects = [str(f) for f in report.failures]
+    repairs = report.as_dict()["repairs"]
+
+    findings = unsupported(html, material_from_brief(brief))
+    if findings:
+        # The gate applies to the opening version too. A first draft that
+        # invents something is not a better first impression than none.
+        sites.reject(conn, lead_id, "opening design", findings, actor=actor)
+        return IterationResult(
+            lead_id=lead_id, spec=config, defects=defects, repairs=repairs,
+            plan=resolved.as_dict(), outline=resolved.outline(),
+            rejected=True, findings=findings, read_by=read_by)
+
+    notes = {"mood": spec.mood, "understood": list(config.get("understood") or []),
+             "unmet": spec.unmet, "ignored": [], "contradictions": [],
+             "defects": defects, "repairs": repairs,
+             "plan": resolved.as_dict(), "lead_with": spec.lead_with,
+             "rationale": rationale}
+    version = sites.save(conn, lead_id, html, "opening design", notes=notes,
+                         actor=actor, spec_json=config, parent_version=None)
+    return IterationResult(
+        lead_id=lead_id, spec=config,
+        understood=list(config.get("understood") or []),
+        defects=defects, repairs=repairs,
+        plan=resolved.as_dict(), outline=resolved.outline(),
+        version=version, read_by=read_by, rationale=rationale)
 
 
 def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,

@@ -941,6 +941,21 @@ def extract_menu_media(html: str, base_url: str) -> list[dict]:
 # Owners publish their address on a contact page far more often than on the
 # homepage, so follow the obvious ones rather than giving up after one fetch.
 _CONTACT_PATHS = ("contact", "contact-us", "about", "about-us", "get-a-quote", "estimate")
+
+# Everything else a small business puts on its own pages. The crawl used to
+# fetch the homepage, the menu and the contact page, so a restaurant's story,
+# its private-dining pitch, its press and its gallery were simply lost — and
+# the generated site then had nothing to say in its About section because
+# nobody had read the page where they said it.
+_STORY_PATHS = (
+    "our-story", "story", "history", "heritage", "philosophy", "mission",
+    "team", "our-team", "chef", "chefs", "staff", "people", "who-we-are",
+    "gallery", "photos", "pictures",
+    "events", "private-events", "private-dining", "parties", "catering",
+    "press", "awards", "accolades", "recognition", "reviews", "testimonials",
+    "specials", "wine", "wine-list", "bar", "drinks",
+    "experience", "dining", "visit", "faq", "sourcing", "partners", "farms",
+)
 _CONTACT_LINK_RE = re.compile(r'href=["\']([^"\']+)["\']', re.IGNORECASE)
 
 
@@ -1060,6 +1075,45 @@ def find_contact_email(html: str) -> str | None:
                 return addr
     return candidates[0]
 
+
+
+def _pages_matching(html: str, base_url: str, paths: tuple[str, ...],
+                    limit: int) -> list[str]:
+    """Same-host links whose last path segment names one of `paths`."""
+    base_host = urlparse(base_url).netloc.lower()
+    found: list[str] = []
+    for href in re.findall(r'href=["\']([^"\']+)["\']', html or "", re.IGNORECASE):
+        if href.startswith(("mailto:", "tel:", "#", "javascript:")):
+            continue
+        absolute = urljoin(base_url, href)
+        parsed = urlparse(absolute)
+        if parsed.netloc.lower() != base_host:
+            continue
+        if _MEDIA_RE.search(absolute) or _ASSET_RE.search(absolute):
+            continue
+        last = parsed.path.strip("/").lower().split("/")[-1]
+        if any(last == p or last.startswith(p) for p in paths):
+            if absolute not in found:
+                found.append(absolute)
+        if len(found) >= limit:
+            break
+    return found
+
+
+def content_page_urls(html: str, base_url: str, limit: int = 10) -> list[str]:
+    """Every page of theirs worth reading, in one list.
+
+    "Carry over what their site says" means reading the pages where they say
+    it. Menu and contact were the only two families visited, which is why a
+    business whose entire personality lives on an Our Story page arrived here
+    with nothing to put in an About section.
+    """
+    seen: list[str] = []
+    for paths in (_MENU_PATHS, _CONTACT_PATHS, _STORY_PATHS):
+        for url in _pages_matching(html, base_url, paths, limit):
+            if url not in seen:
+                seen.append(url)
+    return seen[:limit]
 
 
 def menu_page_urls(html: str, base_url: str, limit: int = 3) -> list[str]:

@@ -19,7 +19,7 @@ from app.adapters.photos import fetch as fetch_photo
 from app.cli import available_directories
 from app.core.config import google_places_api_key
 from app.site.pipeline import iterate as run_iteration
-from app.site.pipeline import spec_from_config
+from app.site.pipeline import open_site, spec_from_config
 from app.site.render import build as build_site
 from app.site.render import plan_for
 from app.store import db, leads, photos, sites
@@ -128,6 +128,15 @@ def workspace(lead_id: int) -> dict:
     than only after the next instruction.
     """
     with db.session() as conn:
+        if not sites.versions(conn, lead_id):
+            # A new lead opens on a site, not on "no site yet". Designed from
+            # the evidence before anyone types — see `pipeline.open_site`.
+            try:
+                open_site(conn, lead_id)
+            except Exception:
+                # A first draft that cannot be built must not stop the operator
+                # reaching the screen; they can still send an instruction.
+                pass
         history = sites.versions(conn, lead_id)
         outline = ""
         plan: dict = {}
@@ -139,12 +148,32 @@ def workspace(lead_id: int) -> dict:
                 outline, plan = resolved.outline(), resolved.as_dict()
             except Exception:      # a plan we cannot draw must not blank the screen
                 outline, plan = "", {}
+        # Why the opening version looks the way it does. Written once, against
+        # v1, and worth keeping on screen: it is the sentence the operator says
+        # out loud when they turn the laptop around.
+        unlocks: list[str] = []
+        try:
+            unlocks = list(
+                leads.brief_with_overrides(conn, lead_id).get("open_questions") or [])
+        except Exception:
+            unlocks = []
+        rationale = ""
+        if history:
+            first = history[-1]
+            rationale = str((first.get("notes") or {}).get("rationale") or "")
         return {
             "lead_id": lead_id,
             "versions": history,
             "events": leads.events(conn, lead_id),
             "outline": outline,
             "plan": plan,
+            "rationale": rationale,
+            # What one visit would unlock. A business with no website arrives
+            # here with little corroborated material, so its opening version is
+            # thin — and the honest response is to say which questions would
+            # thicken it, not to publish a single source as though it were a
+            # fact.
+            "unlocks": unlocks,
         }
 
 

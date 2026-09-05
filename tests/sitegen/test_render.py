@@ -13,7 +13,8 @@ import re
 
 import pytest
 
-from app.site.render import build, material_from_brief, unsupported
+from app.site.render import Material, build, material_from_brief, unsupported
+from app.site.spec import SiteSpec
 
 pytestmark = pytest.mark.unit
 
@@ -605,3 +606,26 @@ def test_dropping_everything_leaves_the_text_alone():
     from app.site.render import drop_dangling
     text = "Click here to book."
     assert drop_dangling(text) == text
+
+
+def test_a_button_never_promises_a_channel_it_links_away_from():
+    """"Order online" on a tel: href is the page telling a customer something
+    untrue, and they find out by tapping it."""
+    from app.site.render import _cta_label
+    m = Material(name="Hutchins", phone="972 377 2046", address="Frisco, TX")
+    # "Order online" promises a channel a tel: link does not have.
+    assert _cta_label(m, SiteSpec(cta="order")) == "Call to order"
+    # "Book a table" does not — you book by ringing — so it stands.
+    assert _cta_label(m, SiteSpec(cta="book")) == "Book a table"
+    assert _cta_label(m, SiteSpec(cta="quote")) == "Get a quote"
+    # An operator's own words are kept unless they name a channel too.
+    assert _cta_label(m, SiteSpec(cta="order",
+                                  cta_label="Order on our app")) == "Call to order"
+    assert _cta_label(m, SiteSpec(cta="book",
+                                  cta_label="Reserve a table")) == "Reserve a table"
+
+
+def test_with_no_phone_the_action_is_the_map_whatever_was_asked_for():
+    from app.site.render import _cta_label
+    m = Material(name="Ichika", address="Plano, TX")
+    assert _cta_label(m, SiteSpec(cta="book")) == "Find us"

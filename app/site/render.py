@@ -236,7 +236,7 @@ def _nav(m: Material, present: list[str], spec: SiteSpec) -> str:
     book = ""
     if m.phone:
         book = (f'<a class="book" href="tel:{e(_digits(m.phone))}">'
-                f'{e(_CTA_LABEL.get(spec.cta or "call", "Call us"))}</a>')
+                f'{e(_cta_label(m, spec))}</a>')
     return (f'<div class="progress"></div>\n<div class="bar">'
             f'<a class="mark" href="#top">{e(m.name)}</a>'
             f'<button class="burger" aria-label="Menu">&#9776;</button>'
@@ -246,7 +246,7 @@ def _nav(m: Material, present: list[str], spec: SiteSpec) -> str:
 def _cta(m: Material, spec: SiteSpec) -> str:
     """Only offer an action we can actually wire up."""
     if m.phone:
-        label = spec.cta_label or _CTA_LABEL.get(spec.cta or "call", "Call us")
+        label = _cta_label(m, spec)
         if spec.cta in (None, "call") and not spec.cta_label:
             label = f"Call {m.phone}"
         return f'<a class="cta" href="tel:{e(_digits(m.phone))}">{e(label)}</a>'
@@ -849,7 +849,7 @@ def _callbar(m: Material, spec: SiteSpec) -> str:
     """On a phone the action should never be more than a thumb away."""
     if not m.phone:
         return ""
-    label = _CTA_LABEL.get(spec.cta or "call", "Call us")
+    label = _cta_label(m, spec)
     directions = ""
     if m.address:
         directions = (f'<a class="cta ghost" href="{_maps(m.address)}"'
@@ -993,12 +993,29 @@ def _section_images(html: str) -> list[str]:
     return re.findall(r'<img[^>]+src="([^"]+)"', html or "")
 
 
+# What the button says when the only way to do the thing is to ring them. The
+# label has to match where the link goes: "Order online" on a tel: href is the
+# page telling a customer something untrue, and they find out by tapping it.
+_CTA_BY_PHONE = {"order": "Call to order", "book": "Call to book",
+                 "quote": "Call for a quote", "visit": "Call us",
+                 "call": "Call us"}
+# Words that promise something a telephone link cannot deliver. "Book a table"
+# is fine over tel: — you book by ringing. "Order online" is not.
+_NAMES_A_CHANNEL = re.compile(r"\bonline\b|\bweb\b|\bapp\b", re.IGNORECASE)
+
+
 def _cta_label(m: Material, spec: SiteSpec) -> str:
     if not m.phone and not m.address:
         return ""
-    if m.phone:
-        return spec.cta_label or _CTA_LABEL.get(spec.cta or "call", "Call us")
-    return "Find us"
+    if not m.phone:
+        # A map is the destination, so the label says so whatever was asked
+        # for: there is no ordering or booking to send anyone to.
+        return "Find us"
+    kind = spec.cta or "call"
+    label = spec.cta_label or _CTA_LABEL.get(kind, "Call us")
+    if _NAMES_A_CHANNEL.search(label):
+        return _CTA_BY_PHONE.get(kind, "Call us")
+    return label
 
 
 def _cta_href(m: Material, spec: SiteSpec) -> str:

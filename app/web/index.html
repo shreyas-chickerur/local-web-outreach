@@ -873,6 +873,7 @@ async function openWorkspace(leadId, name) {
         versions: data.versions || [], events: data.events || [],
         active: (data.versions || [])[0]?.version ?? null,
         diagnostics: null, device: "phone", outline: data.outline || "",
+        rationale: data.rationale || "", unlocks: data.unlocks || [],
         photos: shots.photos || [], labelOptions: shots.options || []};
   document.body.classList.add("workspace-open");
   drawWorkspace();
@@ -940,6 +941,15 @@ function drawWorkspace() {
 
   // What the site was decided to be, before it was emitted. Reading this is a
   // different and much cheaper activity than reading a rendered page.
+  const unlocks = (WS.unlocks || []).length
+    ? `<p class="diag-label">What one visit would unlock</p>
+       <p class="hint">These are single-source or missing. Confirm them on the
+          brief and they can appear on the page.</p>
+       <div class="diag">${WS.unlocks.map(q =>
+         `<span class="skip">${esc(q)}</span>`).join("")}</div>` : "";
+  const why = WS.rationale
+    ? `<p class="diag-label">Why it opens this way</p>
+       <p class="hint">${esc(WS.rationale)}</p>` : "";
   const outline = WS.outline
     ? `<p class="diag-label">The plan</p><pre class="planout">${esc(WS.outline)}</pre>`
     : "";
@@ -1063,7 +1073,7 @@ function drawWorkspace() {
       <div class="ws-head">Versions</div>
       <div class="ws-body">
         <div class="diag">${chips}</div>
-        ${outline}${diag}${labeller}
+        ${why}${unlocks}${outline}${diag}${labeller}
       </div>
     </section>
   </div>`;
