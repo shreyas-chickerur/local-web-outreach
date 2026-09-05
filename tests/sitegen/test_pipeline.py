@@ -6,6 +6,7 @@ import pytest
 
 from app.site import pipeline
 from app.site.pipeline import IterationResult, iterate
+from app.site.understand import apply_answer
 from app.store import db, leads, sites
 
 pytestmark = pytest.mark.unit
@@ -254,3 +255,97 @@ def test_the_same_words_rebuild_when_the_brief_moved(conn, lead, monkeypatch):
     again = iterate(conn, lead, "warm and rustic")
     assert again.unchanged is False
     assert again.version != first.version
+
+
+# --- reading an instruction with a model --------------------------------- #
+
+def model_says(monkeypatch, payload):
+    """Stand in for the whole adapter: these tests are about routing, and the
+    transport has its own tests."""
+    monkeypatch.setattr(pipeline.claude, "available", lambda: True)
+    monkeypatch.setattr(pipeline, "understand",
+                        lambda sentence, base, **kw:
+                        apply_answer(payload, base))
+
+
+def test_without_a_key_the_phrase_parser_still_runs(conn, lead, monkeypatch):
+    """Offline the tool works with a smaller vocabulary. It does not stop."""
+    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    result = iterate(conn, lead, "warm and rustic")
+    assert result.read_by == "phrases"
+    assert result.version is not None
+
+
+def test_a_model_failure_falls_back_rather_than_losing_the_instruction(
+        conn, lead, monkeypatch):
+    monkeypatch.setattr(pipeline.claude, "available", lambda: True)
+
+    def boom(sentence, base, **kw):
+        raise pipeline.ClaudeError("unreachable")
+
+    monkeypatch.setattr(pipeline, "understand", boom)
+    result = iterate(conn, lead, "warm and rustic")
+    assert result.read_by == "phrases"
+    assert result.version is not None
+
+
+def test_a_defect_report_does_not_restyle_the_page(conn, lead, monkeypatch):
+    """The whole point. "The hours look cramped" is a bug report, and the old
+    parser answered it by making the hours bigger."""
+    first = iterate(conn, lead, "warm and rustic")
+    model_says(monkeypatch, {"kind": "defect",
+                             "defect": "the hours are cramped",
+                             "understood": []})
+    result = iterate(conn, lead, "the hours look cramped")
+    assert result.kind == "defect"
+    assert result.version is None
+    assert result.unchanged is True
+    assert result.defect == "the hours are cramped"
+    assert [row["version"] for row in sites.versions(conn, lead)] == [first.version]
+
+
+def test_a_request_to_change_the_facts_is_refused_not_rendered(
+        conn, lead, monkeypatch):
+    """Business facts come from corroborated sources. An instruction is not a
+    source."""
+    iterate(conn, lead, "warm and rustic")
+    model_says(monkeypatch, {"kind": "content",
+                             "understood": ["asked to say they are family owned"],
+                             "unsupported": ["cannot add a claim the sources "
+                                             "do not support"]})
+    result = iterate(conn, lead, "say they are family owned since 1994")
+    assert result.kind == "content"
+    assert result.version is None
+
+
+def test_what_the_renderer_cannot_do_is_recorded_in_their_words(
+        conn, lead, monkeypatch):
+    iterate(conn, lead, "warm and rustic")
+    model_says(monkeypatch, {"kind": "unsupported", "understood": [],
+                             "unsupported": ["cannot change the size of the logo"]})
+    result = iterate(conn, lead, "make the logo bigger")
+    assert result.kind == "unsupported"
+    assert result.unsupported == ["cannot change the size of the logo"]
+    assert result.version is None
+
+
+def test_a_style_answer_from_the_model_builds_a_version(conn, lead, monkeypatch):
+    first = iterate(conn, lead, "warm and rustic")
+    model_says(monkeypatch, {"kind": "style", "accent": "navy",
+                             "understood": ["accented navy"]})
+    result = iterate(conn, lead, "could we try something cooler and more coastal")
+    assert result.read_by == "claude"
+    assert result.version is not None
+    assert result.version != first.version
+    assert sites.html_for(conn, lead, result.version) != \
+        sites.html_for(conn, lead, first.version)
+
+
+def test_the_content_gate_still_runs_on_a_model_read(conn, lead, monkeypatch):
+    """A model in the loop makes the gate more important, not less."""
+    model_says(monkeypatch, {"kind": "style", "mood": "night",
+                             "understood": ["styled night"]})
+    monkeypatch.setattr(pipeline, "unsupported", lambda page, material: ["voted"])
+    result = iterate(conn, lead, "make it darker")
+    assert result.rejected is True
+    assert result.version is None

@@ -29,3 +29,16 @@ def yelp_api_key() -> str | None:
 def preview_base_url() -> str:
     """Where generated site previews will be served from (slice 3)."""
     return os.environ.get("PREVIEW_BASE_URL", "http://127.0.0.1:8090").rstrip("/")
+
+
+def anthropic_api_key() -> str | None:
+    """Claude — reads an instruction and returns decisions, never copy.
+
+    Optional. Without it the deterministic phrase parser handles instructions
+    on its own, understanding less and saying so.
+    """
+    return os.environ.get("ANTHROPIC_API_KEY", "").strip() or None
+
+
+def anthropic_model() -> str:
+    return os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5").strip()

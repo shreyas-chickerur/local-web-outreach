@@ -20,6 +20,8 @@ from __future__ import annotations
 import sqlite3
 from dataclasses import dataclass, field
 
+from app.adapters import claude
+from app.adapters.claude import ClaudeError
 from app.site.audit import audit
 from app.site.iterate import DEFAULT_SPEC, parse_iteration_instruction
 from app.site.render import (
@@ -30,6 +32,7 @@ from app.site.render import (
 )
 from app.site.spec import SiteSpec
 from app.site.theme import theme_for
+from app.site.understand import understand
 from app.store import leads, sites
 
 
@@ -71,6 +74,16 @@ class IterationResult:
     # no version was written. Distinct from `rejected`: nothing was wrong with
     # it, there was simply nothing in it this could act on.
     unchanged: bool = False
+    # What kind of thing the instruction was: an edit, a bug report, a request
+    # to change what the site says, or something the renderer cannot do. Only
+    # "style" writes a version — the misread this replaced was treating all
+    # four as edits.
+    kind: str = "style"
+    # Genuinely asked for, and outside what the generator can express. The
+    # queue of what to build next, in the operator's own words.
+    unsupported: list[str] = field(default_factory=list)
+    defect: str = ""
+    read_by: str = "phrases"
 
     @property
     def url(self) -> str | None:
@@ -87,7 +100,9 @@ class IterationResult:
             "defects": self.defects, "repairs": self.repairs,
             "plan": self.plan, "outline": self.outline,
             "rejected": self.rejected, "findings": self.findings,
-            "unchanged": self.unchanged,
+            "unchanged": self.unchanged, "kind": self.kind,
+            "unsupported": self.unsupported, "defect": self.defect,
+            "read_by": self.read_by,
         }
 
 
@@ -135,14 +150,79 @@ def current_config(conn: sqlite3.Connection, lead_id: int,
     return dict(DEFAULT_SPEC)
 
 
+def read_instruction(sentence: str, base: dict) -> dict:
+    """One instruction, read as well as we can read it.
+
+    Claude first, because a table of phrases understands about a fifth of what
+    an operator actually types. The phrase parser is the fallback rather than
+    the fallback being nothing: no key, a timeout, or a refusal must not lose
+    the instruction, and offline the tool still works with a smaller vocabulary.
+
+    Both readings resolve to the same validated configuration, so nothing
+    downstream — the renderer, the audit, the content gate — can tell which one
+    it got.
+    """
+    if claude.available():
+        try:
+            answer = understand(sentence, base)
+            answer["read_by"] = "claude"
+            return answer
+        except ClaudeError as exc:
+            # Worth carrying rather than swallowing: an operator whose
+            # instructions suddenly stop being understood should be told the
+            # model is unreachable, not left guessing.
+            fallback = parse_iteration_instruction(sentence, base)
+            fallback["read_by"] = "phrases"
+            fallback["kind"] = "style"
+            fallback["unsupported"] = []
+            fallback["defect"] = ""
+            fallback["reader_error"] = str(exc)
+            return fallback
+    config = parse_iteration_instruction(sentence, base)
+    config["read_by"] = "phrases"
+    config["kind"] = "style"
+    config["unsupported"] = []
+    config["defect"] = ""
+    return config
+
+
 def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
             *, parent_version: int | None = None,
             actor: str | None = None) -> IterationResult:
     """Apply one instruction and store the result, unless it fails the gate."""
     brief = leads.brief_with_overrides(conn, lead_id)
     base = current_config(conn, lead_id, parent_version)
-    config = parse_iteration_instruction(sentence, base)
+    config = read_instruction(sentence, base)
+    read_by = str(config.pop("read_by", "phrases"))
+    kind = str(config.pop("kind", "style"))
+    unsupported_asks = list(config.pop("unsupported", []))
+    complaint = str(config.pop("defect", ""))
+    config.pop("reader_error", None)
     config["instruction"] = sentence
+
+    if kind != "style":
+        # A bug report, a request for different facts, or something the
+        # renderer cannot express. None of them is an edit. Answering a
+        # complaint by restyling the page is exactly the misread this replaced.
+        live = parent_version
+        if live is None:
+            history = sites.versions(conn, lead_id)
+            live = history[0]["version"] if history else None
+        found: list[str] = []
+        if kind == "defect" and live is not None:
+            # Say what the audit already knows about the page they are looking
+            # at, rather than asking them to describe it again.
+            page = sites.html_for(conn, lead_id, live)
+            if page:
+                spec_now = spec_from_config(base)
+                report = audit(page, theme_for(spec_now.mood, spec_now.accent))
+                found = [str(f) for f in report.failures]
+        return IterationResult(
+            lead_id=lead_id, spec={**config},
+            understood=list(config.get("understood") or []),
+            defects=found, parent_version=live, unchanged=True,
+            kind=kind, unsupported=unsupported_asks, defect=complaint,
+            read_by=read_by)
 
     spec = spec_from_config(config)
     resolved = plan_for(brief, spec)
@@ -189,7 +269,8 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
                 contradictions=config["contradictions"],
                 defects=defects, repairs=repairs,
                 plan=resolved.as_dict(), outline=resolved.outline(),
-                parent_version=parent_version, unchanged=True)
+                parent_version=parent_version, unchanged=True,
+                unsupported=unsupported_asks, read_by=read_by)
 
     notes = {"mood": spec.mood, "understood": config["understood"],
              "unmet": spec.unmet, "ignored": config["ignored_tokens"],
@@ -206,4 +287,5 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
         contradictions=config["contradictions"],
         defects=defects, repairs=repairs,
         plan=resolved.as_dict(), outline=resolved.outline(),
-        version=version, parent_version=parent_version)
+        version=version, parent_version=parent_version,
+        unsupported=unsupported_asks, read_by=read_by)

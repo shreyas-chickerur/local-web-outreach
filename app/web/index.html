@@ -978,6 +978,22 @@ function drawWorkspace() {
       <div class="diag">${(d.findings || []).map(f =>
         `<span class="stop">${esc(f)}</span>`).join("")}</div>
       <p class="hint">Nothing was saved. The previous version is still live.</p>` : ""}
+    ${d.kind === "defect" ? `<p class="diag-label">Read as a bug report</p>
+      <p class="hint">${d.defect ? esc(d.defect) : "Something looks wrong."}
+         Nothing was restyled — describing a fault is not an instruction to
+         change the design. What the audit says about the page you are looking
+         at is below.</p>` : ""}
+    ${d.kind === "content" ? `<p class="diag-label">That would change what the site says</p>
+      <p class="hint">Facts about the business come from corroborated sources,
+         not from instructions. Correct it on the brief and it will appear
+         here.</p>` : ""}
+    ${(d.unsupported || []).length ? `<p class="diag-label">Asked for, and not possible yet</p>
+      <div class="diag">${d.unsupported.map(x =>
+        `<span class="no">${esc(x)}</span>`).join("")}</div>
+      <p class="hint">This is the build queue, in your words.</p>` : ""}
+    ${(d.defects || []).length ? `<p class="diag-label">What the audit finds</p>
+      <div class="diag">${d.defects.map(x =>
+        `<span class="no">${esc(x)}</span>`).join("")}</div>` : ""}
     ${d.unchanged ? `<p class="diag-label">Nothing to change</p>
       <p class="hint">This asked for the page you already have, so no version
          was written. If a word below is greyed out, that is the part with no
@@ -994,6 +1010,8 @@ function drawWorkspace() {
     ${(d.contradictions || []).length ? `<p class="diag-label">Conflicting</p>
       <div class="diag">${d.contradictions.map(x =>
         `<span class="no">${esc(x)}</span>`).join("")}</div>` : ""}
+    ${d.read_by === "phrases" ? `<p class="hint">Read with the built-in phrase
+       list. Set ANTHROPIC_API_KEY for the fuller reading.</p>` : ""}
     ` : `<p class="hint">Send an instruction and what it was understood to mean
          will appear here.</p>`;
 
@@ -1092,7 +1110,10 @@ async function sendInstruction() {
   WS.diagnostics = {understood: data.understood, ignored_tokens: data.ignored_tokens,
                     unmet: data.unmet, contradictions: data.contradictions,
                     blocked: data.rejected, findings: data.findings,
-                    unchanged: data.unchanged,
+                    defects: data.defects,
+                    unchanged: data.unchanged, kind: data.kind,
+                    unsupported: data.unsupported, defect: data.defect,
+                    read_by: data.read_by,
                     spec: sentence, version: data.version};
   if (!data.unchanged) box.value = "";
   drawWorkspace();
