@@ -1049,6 +1049,51 @@ function drawWorkspace() {
 
 function setDevice(kind) { WS.device = kind; drawWorkspace(); }
 
+// One instruction becomes one version. Deleted by a bulk edit and unnoticed
+// because a missing handler fails silently: the form submits, nothing throws
+// anywhere visible, and the page simply sits there.
+async function sendInstruction() {
+  const box = $("#ws-input");
+  const sentence = (box.value || "").trim();
+  if (!sentence) return;
+  const button = document.querySelector(".chatbox .mini");
+  const say = (text) => { if (button) button.textContent = text; };
+  if (button) button.disabled = true;
+  say("Building…");
+
+  let data;
+  try {
+    const res = await fetch("/api/iterate", {method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({lead_id: WS.lead_id, sentence,
+                            parent_version: activeVersion()})});
+    data = await res.json();
+  } catch (err) {
+    // A build that dies server-side must say so. Silence here is what made
+    // this bug invisible in the first place.
+    alert("The build failed to run: " + err);
+    return;
+  } finally {
+    if (button) button.disabled = false;
+    say("Send");
+  }
+  if (data.error) { alert(data.error); return; }
+
+  WS.versions = data.versions || WS.versions;
+  WS.events = data.events || WS.events;
+  // A rejected instruction writes no version, so the preview must stay on the
+  // one that is still live rather than jumping to nothing.
+  if (!data.rejected && data.version) WS.active = data.version;
+  WS.outline = data.outline || WS.outline;
+  WS.diagnostics = {understood: data.understood, ignored_tokens: data.ignored_tokens,
+                    unmet: data.unmet, contradictions: data.contradictions,
+                    blocked: data.rejected, findings: data.findings,
+                    spec: sentence, version: data.version};
+  box.value = "";
+  drawWorkspace();
+  if (!data.rejected) box.focus();
+}
+
 // A label is a fact about the picture, not about this build, so it is stored
 // against the lead and every later version uses it.
 // The description is the fact; the tag is read out of it and only overridden

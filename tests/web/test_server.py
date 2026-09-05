@@ -101,7 +101,12 @@ def test_every_function_the_page_calls_actually_exists():
     defined |= set(re.findall(r"(?:const|let|var)\s+(\w+)\s*=", script))
     # Everything wired to an onclick/onchange in the markup, plus the calls the
     # renderer makes into its own helpers.
-    called = set(re.findall(r'on(?:click|change|submit|blur|keydown)="(\w+)\(', page))
+    # Every call in a handler, not just the first: the missing one was second
+    # in `onsubmit="event.preventDefault();sendInstruction()"`, so a regex that
+    # read only the leading name saw `event` and passed.
+    called = set()
+    for body in re.findall(r'on(?:click|change|submit|blur|keydown)="([^"]*)"', page):
+        called |= set(re.findall(r"(?<![.\w])(\w+)\s*\(", body))
     called |= set(re.findall(r"\$\{(\w+)\(", page))
     builtin = {"if", "for", "return", "esc", "String", "Math", "JSON", "alert",
                "parseInt", "parseFloat", "fetch", "event", "scrollTo"}
