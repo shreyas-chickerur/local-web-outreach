@@ -119,8 +119,10 @@ def test_understand_calls_the_api_and_validates_the_answer(monkeypatch):
     assert out["accent"] == "blue"
     assert route.called
     body = route.calls[0].request.content.decode()
-    assert '"temperature":0' in body.replace(" ", "")
+    # Forced, so the model cannot answer with prose. No temperature: current
+    # models reject it, and the stored spec is what makes a rebuild identical.
     assert '"tool_choice"' in body
+    assert "temperature" not in body
 
 
 @respx.mock

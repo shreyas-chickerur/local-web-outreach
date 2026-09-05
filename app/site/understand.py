@@ -45,6 +45,24 @@ from app.site.plan import SECTION_RULES
 from app.site.theme import ACCENT_NAMES
 
 SECTIONS = tuple(key for key, _, _ in SECTION_RULES)
+
+# What each section actually contains. Without this the model knows only the
+# names, and answers "cannot add a map" for a page whose contact section has
+# rendered an embedded map all along. An `unsupported` answer is only as honest
+# as the description the model was given.
+SECTION_CONTENTS = {
+    "stats": "rating, number of reviews, number of services — a band of figures",
+    "recognition": "awards and press the business has won",
+    "services": "what they do, as cards",
+    "menu": "dishes and prices",
+    "gallery": "their photographs, as a mosaic with a lightbox",
+    "about": "their story, in their own words",
+    "features": "longer passages taken from their own page",
+    "partners": "suppliers and sourcing",
+    "reviews": "quoted customer reviews, attributed",
+    "hours": "opening times",
+    "contact": "address, phone, directions AND an embedded map",
+}
 CTA_KINDS = tuple(dict.fromkeys(kind for _, kind, _ in CTA_PHRASES))
 # The label belongs to the kind, not to the model. This is the seam that stops
 # model-written words reaching a button.
@@ -81,10 +99,26 @@ complaint, classify it "style", apply the change, and note the complaint.
 Fields carry forward: omit a field to leave it as it is. Set it only when the
 instruction actually asks for that change.
 
+Before answering "unsupported", check the section list: the page already
+contains more than the names suggest, and claiming something is impossible when
+a section already does it is the worst answer you can give.
+
+When they ask for something a section already provides ("add a map", "show
+their hours"), that is "style": emphasise that section. It is on the page
+unless it was dropped, and emphasising it puts it back. If nothing then
+changes, they are told the page already had it — which is the honest answer and
+not one you have to guess at.
+
 Write `understood` as short plain phrases addressed to the operator, e.g.
 "led with the gallery", "accented navy". Write `unsupported` as what the
 generator cannot do, e.g. "cannot change the size of the logo".
 """
+
+
+def _sections_note() -> str:
+    lines = "\n".join(f"  {key}: {what}"
+                      for key, what in SECTION_CONTENTS.items())
+    return f"\n\nThe sections the page can contain:\n{lines}\n"
 
 
 def _tool() -> dict:
@@ -101,15 +135,19 @@ def _tool() -> dict:
                            "description": "The accent colour — the 10% in "
                                           "60-30-10. Not the background."},
                 "lead_with": {"type": "string", "enum": list(SECTIONS),
-                              "description": "Section hoisted to the top."},
+                              "description": "Section hoisted to the top of "
+                                             "the page, under the hero."},
                 "emphasis": {"type": "array", "items":
                              {"type": "string", "enum": list(SECTIONS)}},
                 "suppress": {"type": "array", "items":
                              {"type": "string", "enum": list(SECTIONS)},
                              "description": "Sections to drop entirely."},
                 "cta": {"type": "string", "enum": list(CTA_KINDS),
-                        "description": "The primary action. The button's "
-                                       "wording is fixed and not yours to set."},
+                        "description": "The primary action. Renders as a button "
+                                       "in the sticky header and in the hero, "
+                                       "linked to their phone number or booking "
+                                       "page. The wording is fixed and not "
+                                       "yours to set."},
                 "next_hero_photo": {
                     "type": "boolean",
                     "description": "True if they want a different lead "
@@ -215,6 +253,7 @@ def understand(sentence: str, current: dict, *,
     Raises `ClaudeError` when there is no key or the call fails, so the caller
     can fall back to the phrase parser rather than losing the instruction.
     """
-    answer = claude.structured(SYSTEM, _prompt(sentence, current), _tool(),
+    answer = claude.structured(SYSTEM + _sections_note(),
+                               _prompt(sentence, current), _tool(),
                                client=client)
     return apply_answer(answer, current)

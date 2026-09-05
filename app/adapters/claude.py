@@ -44,6 +44,11 @@ def structured(system: str, prompt: str, tool: dict, *,
     `tool` is a JSON Schema the answer must satisfy. Forcing the tool means the
     model has no way to reply with prose, which is the property the caller
     depends on: it is being asked for decisions, not for writing.
+
+    No `temperature`: current models reject it, and it was never what made this
+    reproducible. A version replays from its stored spec, so rebuilding v41
+    gives the same page whether or not reading the sentence twice would give
+    the same spec.
     """
     key = config.anthropic_api_key()
     if not key:
@@ -59,10 +64,6 @@ def structured(system: str, prompt: str, tool: dict, *,
             json={
                 "model": model or config.anthropic_model(),
                 "max_tokens": max_tokens,
-                # Same sentence, same decisions — as close to reproducible as a
-                # model gets. The version's resolved spec is what actually
-                # guarantees a rebuild is identical.
-                "temperature": 0,
                 "system": system,
                 "tools": [tool],
                 "tool_choice": {"type": "tool", "name": tool["name"]},
