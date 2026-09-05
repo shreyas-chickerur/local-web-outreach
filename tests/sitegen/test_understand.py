@@ -148,3 +148,10 @@ def test_no_key_is_an_error_the_caller_can_fall_back_from(monkeypatch):
     assert claude.available() is False
     with pytest.raises(ClaudeError):
         understand("more blue", dict(DEFAULT_SPEC))
+
+
+def test_the_suite_never_has_a_live_key():
+    """Guards the guard: without this, a key in the developer's environment
+    silently turns every pipeline test into a billable network call that passes
+    only because the fallback catches it."""
+    assert claude.available() is False

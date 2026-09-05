@@ -1010,7 +1010,11 @@ function drawWorkspace() {
     ${(d.contradictions || []).length ? `<p class="diag-label">Conflicting</p>
       <div class="diag">${d.contradictions.map(x =>
         `<span class="no">${esc(x)}</span>`).join("")}</div>` : ""}
-    ${d.read_by === "phrases" ? `<p class="hint">Read with the built-in phrase
+    ${d.reader_error ? `<p class="diag-label">Fell back to the phrase list</p>
+      <div class="diag"><span class="stop">${esc(d.reader_error)}</span></div>
+      <p class="hint">The instruction was still read, with a smaller
+         vocabulary. Fix the above and it goes back to the fuller reading.</p>`
+      : d.read_by === "phrases" ? `<p class="hint">Read with the built-in phrase
        list. Set ANTHROPIC_API_KEY for the fuller reading.</p>` : ""}
     ` : `<p class="hint">Send an instruction and what it was understood to mean
          will appear here.</p>`;
@@ -1113,7 +1117,7 @@ async function sendInstruction() {
                     defects: data.defects,
                     unchanged: data.unchanged, kind: data.kind,
                     unsupported: data.unsupported, defect: data.defect,
-                    read_by: data.read_by,
+                    read_by: data.read_by, reader_error: data.reader_error,
                     spec: sentence, version: data.version};
   if (!data.unchanged) box.value = "";
   drawWorkspace();

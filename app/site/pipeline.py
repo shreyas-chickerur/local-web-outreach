@@ -84,6 +84,10 @@ class IterationResult:
     unsupported: list[str] = field(default_factory=list)
     defect: str = ""
     read_by: str = "phrases"
+    # Why the fuller reading was not used, when a key is configured but the
+    # call failed. An operator whose instructions suddenly stop being
+    # understood should be told the model is unreachable, not left guessing.
+    reader_error: str = ""
 
     @property
     def url(self) -> str | None:
@@ -102,7 +106,7 @@ class IterationResult:
             "rejected": self.rejected, "findings": self.findings,
             "unchanged": self.unchanged, "kind": self.kind,
             "unsupported": self.unsupported, "defect": self.defect,
-            "read_by": self.read_by,
+            "read_by": self.read_by, "reader_error": self.reader_error,
         }
 
 
@@ -197,7 +201,7 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
     kind = str(config.pop("kind", "style"))
     unsupported_asks = list(config.pop("unsupported", []))
     complaint = str(config.pop("defect", ""))
-    config.pop("reader_error", None)
+    reader_error = str(config.pop("reader_error", ""))
     config["instruction"] = sentence
 
     if kind != "style":
@@ -222,7 +226,7 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
             understood=list(config.get("understood") or []),
             defects=found, parent_version=live, unchanged=True,
             kind=kind, unsupported=unsupported_asks, defect=complaint,
-            read_by=read_by)
+            read_by=read_by, reader_error=reader_error)
 
     spec = spec_from_config(config)
     resolved = plan_for(brief, spec)
@@ -270,7 +274,8 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
                 defects=defects, repairs=repairs,
                 plan=resolved.as_dict(), outline=resolved.outline(),
                 parent_version=parent_version, unchanged=True,
-                unsupported=unsupported_asks, read_by=read_by)
+                unsupported=unsupported_asks, read_by=read_by,
+                reader_error=reader_error)
 
     notes = {"mood": spec.mood, "understood": config["understood"],
              "unmet": spec.unmet, "ignored": config["ignored_tokens"],
@@ -288,4 +293,5 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
         defects=defects, repairs=repairs,
         plan=resolved.as_dict(), outline=resolved.outline(),
         version=version, parent_version=parent_version,
-        unsupported=unsupported_asks, read_by=read_by)
+        unsupported=unsupported_asks, read_by=read_by,
+        reader_error=reader_error)
