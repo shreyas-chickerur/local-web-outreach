@@ -280,25 +280,53 @@ def trade_kind(trade: str | None) -> str:
     return "default"
 
 
+# A hero is full-bleed at whatever width the screen is. Below this it is
+# visibly soft on an ordinary laptop, and the first thing anyone sees being
+# blurry costs more than any amount of good judgement about its subject.
+HERO_MIN_WIDTH = 1600
+# The shape a full-bleed hero is cropped to. Nearer this means less of the
+# photograph is thrown away.
+HERO_ASPECT = 1.7
+
+
 def pick_hero(images: tuple[str, ...], offset: int = 0,
               labels: dict | None = None, trade: str = "default") -> str | None:
-    """The lead photograph: landscape if we can tell, and honouring an offset.
+    """The lead photograph: sharp enough, landscape, and the right subject.
 
-    Shape is measurable, so a portrait crop never leads. Subject matter is not —
-    a landscape photograph of raw peppers is still the wrong hero for a fine
-    dining room, and nothing here can see that. `offset` exists because the
-    operator can, and "use the next photo" is a one-word correction.
+    Shape and resolution are measurable, so a portrait crop never leads and
+    neither does the softest picture in the set. Subject matter is not — a
+    landscape photograph of raw peppers is still the wrong hero for a fine
+    dining room, and nothing here can see that, which is why the operator
+    labels them first.
+
+    Ichika's hero was 1226×843 while every other photograph it had was 2400
+    wide: the old rule took the first landscape image and never asked how big
+    it was.
     """
     if not images:
         return None
-    landscape: list[str] = []
+    sized: list[tuple[str, int, int]] = []
     for url in images[:10]:
         size = measure(url if url.startswith("http") else f"{LOCAL}{url}")
-        if size and size[1] and size[0] / size[1] >= 1.15:
-            landscape.append(url)
-    ordered = landscape or list(images)
-    # A person's judgement outranks the machine's: shape only narrows the
-    # field, the label decides which of them leads.
+        if size and size[1]:
+            sized.append((url, size[0], size[1]))
+
+    landscape = [(u, w, h) for u, w, h in sized if w / h >= 1.15]
+    # Tiered, so a business whose photographs are all small still gets a hero:
+    # sharp and landscape, then landscape, then whatever there is.
+    sharp = [(u, w, h) for u, w, h in landscape if w >= HERO_MIN_WIDTH]
+    pool = sharp or landscape
+    if pool:
+        # Widest first, then the shape closest to a hero crop — by area a
+        # nearly-square 2400×2086 outranks a 2400×1351, and the square one is
+        # the worse hero at every screen size because the crop throws most of
+        # it away.
+        ordered = [u for u, _, _ in sorted(
+            pool, key=lambda r: (-r[1], abs(r[1] / r[2] - HERO_ASPECT)))]
+    else:
+        ordered = list(images)
+    # A person's judgement outranks the machine's: shape and size only narrow
+    # the field, the label decides which of them leads.
     if labels:
         ordered = rank_for_hero(ordered, labels, trade)
     return ordered[offset % len(ordered)]
@@ -1046,6 +1074,12 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
             body += "\n" + sections[key]
 
     description = m.tagline or m.about or ""
+    # The share image is the hero, not whatever happened to be first. This is
+    # the picture that shows in a text message when the operator sends the
+    # link, and Ichika's first photograph was the smallest it had. `measure` is
+    # disk-cached, so asking a second time costs nothing.
+    share_image = (pick_hero(m.images, spec.hero_offset, m.photo_labels,
+                             m.trade_kind) or (m.images[0] if m.images else ""))
     page = (
         "<!doctype html>\n"
         '<html lang="en"><head><meta charset="utf-8">\n'
@@ -1054,8 +1088,12 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
         + (f'<meta name="description" content="{e(description[:160])}">\n'
            if description else "")
         + f'<meta property="og:title" content="{e(m.name)}">\n'
-        + (f'<meta property="og:image" content="{e(m.images[0])}">\n'
-           if m.images else "")
+        # The share image is the hero, not whatever happened to be first. This
+        # is the picture that shows in a text message when the operator sends
+        # the link, and Ichika's first photograph was the smallest it had.
+        # `measure` is disk-cached, so asking again costs nothing.
+        + (f'<meta property="og:image" content="{e(share_image)}">\n'
+           if share_image else "")
         # Marks the document as script-capable BEFORE first paint, so the
         # reveal styles only apply where something exists to undo them. Without
         # this the page is simply visible, which is the right failure.

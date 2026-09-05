@@ -34,7 +34,7 @@ from app.site.render import (
 from app.site.spec import SiteSpec
 from app.site.theme import theme_for
 from app.site.understand import understand
-from app.store import leads, sites
+from app.store import leads, photos, sites
 
 
 class ContentSafetyError(RuntimeError):
@@ -216,6 +216,19 @@ def open_site(conn: sqlite3.Connection, lead_id: int,
                                version=history[0]["version"], unchanged=True)
 
     brief = leads.brief_with_overrides(conn, lead_id)
+
+    # Nobody has looked at the photographs yet, so the design would be made
+    # blind: which picture leads, whether there is a room shot worth a wide
+    # band, whether the only usable images are of food — all of it turns on
+    # what they show, and that is the one thing this cannot see. Marking one
+    # "unclear" is a decision and counts; leaving it untouched does not.
+    material = material_from_brief(brief)
+    pending = photos.unreviewed(conn, lead_id, list(material.images))
+    if pending:
+        return IterationResult(
+            lead_id=lead_id, spec={}, kind="needs_labels",
+            unsupported=pending, unchanged=True)
+
     config = opening_spec(brief)
     rationale = str(config.pop("rationale", ""))
     read_by = str(config.pop("read_by", "trade table"))

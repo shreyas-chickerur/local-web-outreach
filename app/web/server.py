@@ -21,7 +21,7 @@ from app.core.config import google_places_api_key
 from app.site.pipeline import iterate as run_iteration
 from app.site.pipeline import open_site, spec_from_config
 from app.site.render import build as build_site
-from app.site.render import plan_for
+from app.site.render import material_from_brief, plan_for
 from app.store import db, leads, photos, sites
 from app.web.serialize import brief_to_dict
 from app.workbench.brief import build_brief
@@ -128,16 +128,18 @@ def workspace(lead_id: int) -> dict:
     than only after the next instruction.
     """
     with db.session() as conn:
-        if not sites.versions(conn, lead_id):
-            # A new lead opens on a site, not on "no site yet". Designed from
-            # the evidence before anyone types — see `pipeline.open_site`.
-            try:
-                open_site(conn, lead_id)
-            except Exception:
-                # A first draft that cannot be built must not stop the operator
-                # reaching the screen; they can still send an instruction.
-                pass
         history = sites.versions(conn, lead_id)
+        # What the first build is waiting for. Placing a photograph well needs
+        # to know what it shows, so the design waits for a person rather than
+        # guessing — see `pipeline.open_site`.
+        pending: list[str] = []
+        if not history:
+            try:
+                material = material_from_brief(
+                    leads.brief_with_overrides(conn, lead_id))
+                pending = photos.unreviewed(conn, lead_id, list(material.images))
+            except Exception:
+                pending = []
         outline = ""
         plan: dict = {}
         if history:
@@ -174,6 +176,8 @@ def workspace(lead_id: int) -> dict:
             # thicken it, not to publish a single source as though it were a
             # fact.
             "unlocks": unlocks,
+            "pending_labels": pending,
+            "can_build": not history and not pending,
         }
 
 
@@ -251,6 +255,16 @@ class Handler(BaseHTTPRequestHandler):
                                      note=(body.get("note") or None))
                 elif route == "/api/generate":
                     self._json(generate(lead_id, str(body.get("spec", ""))))
+                    return
+                elif route == "/api/build":
+                    # The first version, once the photographs have been looked
+                    # at. Explicit rather than automatic: the operator decides
+                    # when the evidence is good enough to design from.
+                    result = open_site(conn, lead_id)
+                    payload = result.as_dict()
+                    payload["versions"] = sites.versions(conn, lead_id)
+                    payload["events"] = leads.events(conn, lead_id)
+                    self._json(payload)
                     return
                 elif route == "/api/iterate":
                     self._json(iteration(

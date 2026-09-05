@@ -874,6 +874,7 @@ async function openWorkspace(leadId, name) {
         active: (data.versions || [])[0]?.version ?? null,
         diagnostics: null, device: "phone", outline: data.outline || "",
         rationale: data.rationale || "", unlocks: data.unlocks || [],
+        pending: data.pending_labels || [], canBuild: !!data.can_build,
         photos: shots.photos || [], labelOptions: shots.options || []};
   document.body.classList.add("workspace-open");
   drawWorkspace();
@@ -957,12 +958,13 @@ function drawWorkspace() {
   const labeller = (WS.photos || []).length ? `
     <p class="diag-label">What each photo shows</p>
     <p class="hint">Describe them in your own words — that becomes the alt text,
-       and the tag is read out of it. Leave any you cannot identify blank:
-       untagged photos still appear in the gallery, they just never lead.</p>
+       and the tag is read out of it. If you cannot identify one, pick
+       “can’t tell”: it still appears in the gallery, it just never leads.
+       The first build waits until every photo has one or the other.</p>
     <div class="row" style="margin:8px 0 4px;gap:8px">
       <button class="mini primary" onclick="saveDescriptions()">Save all</button>
       <button class="mini" onclick="prefillDescriptions()">Fill from filenames</button>
-      <span class="basis">${untagged} of ${WS.photos.length} untagged</span>
+      <span class="basis">${untagged} of ${WS.photos.length} still to look at</span>
     </div>
     <div class="shots-grid">${WS.photos.map((p, i) => `
       <div class="shot-card${p.label ? " labelled" : ""}">
@@ -975,7 +977,8 @@ function drawWorkspace() {
             <select data-tag="${i}">
               <option value="">read from the words</option>
               ${(WS.labelOptions || []).map(o =>
-                `<option value="${esc(o)}"${p.label === o ? " selected" : ""}>${esc(o)}</option>`
+                `<option value="${esc(o)}"${p.label === o ? " selected" : ""}>${
+                  o === "unclear" ? "can’t tell" : esc(o)}</option>`
               ).join("")}
             </select>
           </div>
@@ -1064,8 +1067,17 @@ function drawWorkspace() {
       <div class="ws-stage">
         ${src ? `<div class="device ${WS.device}"><iframe src="${src}"
             title="Site preview" sandbox="allow-scripts"></iframe></div>`
-          : `<div class="empty"><h3>No site yet</h3>
-             <p>Describe what you want and it will appear here.</p></div>`}
+          : `<div class="empty">
+             <h3>${WS.pending.length ? "Say what the photos show" : "Ready to build"}</h3>
+             <p>${WS.pending.length
+               ? `${WS.pending.length} still to go. Where a photograph goes
+                  depends on what it shows, and that is the one thing this
+                  cannot see — so it waits for you rather than guessing.
+                  Mark any you cannot identify as “can't tell”.`
+               : "Every photo has been looked at. Build the opening version."}</p>
+             <button class="mini primary" onclick="buildFirst()"
+               ${WS.canBuild ? "" : "disabled"}>Build the first version</button>
+             </div>`}
       </div>
     </section>
 
@@ -1081,6 +1093,33 @@ function drawWorkspace() {
   const existing = $("#workspace");
   if (existing) existing.outerHTML = html;
   else document.body.insertAdjacentHTML("beforeend", html);
+}
+
+// The opening version, once the photographs have been described. Deliberately
+// a button rather than something that happens on open: the design is made from
+// what the operator said the pictures show, so it waits for them to say it.
+async function buildFirst() {
+  const button = document.querySelector(".empty .mini");
+  if (button) { button.disabled = true; button.textContent = "Designing…"; }
+  let data;
+  try {
+    const res = await fetch("/api/build", {method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({lead_id: WS.lead_id})});
+    data = await res.json();
+  } catch (err) {
+    alert("The build failed to run: " + err);
+    if (button) { button.disabled = false; button.textContent = "Build the first version"; }
+    return;
+  }
+  if (data.error) { alert(data.error); return; }
+  if (data.kind === "needs_labels") {
+    WS.pending = data.unsupported || [];
+    WS.canBuild = false;
+    drawWorkspace();
+    return;
+  }
+  await openWorkspace(WS.lead_id, WS.name);
 }
 
 function setDevice(kind) { WS.device = kind; drawWorkspace(); }
@@ -1149,8 +1188,9 @@ async function saveDescriptions() {
     const tag = document.querySelector(`[data-tag="${index}"]`);
     const description = field ? field.value.trim() : "";
     const override = tag ? tag.value : "";
-    // Nothing said and nothing chosen means "I could not identify this one",
-    // which is a legitimate answer and not something to send.
+    // Nothing said and nothing chosen means "not looked at yet", which the
+    // first build waits on. Saying you cannot identify it is “can’t tell”, and
+    // that is a decision the build accepts.
     if (!description && !override) return;
     entries.push({url: photo.url, description, label: override || null});
   });

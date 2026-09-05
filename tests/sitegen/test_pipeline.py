@@ -7,7 +7,7 @@ import pytest
 from app.site import pipeline
 from app.site.pipeline import IterationResult, iterate
 from app.site.understand import apply_answer
-from app.store import db, leads, sites
+from app.store import db, leads, photos, sites
 
 pytestmark = pytest.mark.unit
 
@@ -353,8 +353,42 @@ def test_the_content_gate_still_runs_on_a_model_read(conn, lead, monkeypatch):
 
 # --- the opening version ------------------------------------------------- #
 
+def review_every_photo(conn, lead):
+    """Stand in for the operator having looked at them.
+
+    Marking one "unclear" is a decision and counts; leaving it untouched is
+    not, which is the whole point of the gate.
+    """
+    from app.site.render import material_from_brief
+    material = material_from_brief(leads.brief_with_overrides(conn, lead))
+    for url in material.images:
+        photos.label(conn, lead, url, "", what="unclear")
+
+
+def test_the_first_build_waits_for_the_photographs_to_be_looked_at(
+        conn, lead, monkeypatch):
+    """Where a photograph goes depends on what it shows, and that is the one
+    thing this cannot see. It waits rather than guessing."""
+    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    result = pipeline.open_site(conn, lead)
+    assert result.kind == "needs_labels"
+    assert result.version is None
+    assert result.unsupported          # the ones still to look at
+    assert sites.versions(conn, lead) == []
+
+
+def test_marking_one_unclear_counts_as_having_looked(conn, lead, monkeypatch):
+    """"I cannot tell what this is" is a decision. A blank field is not, and
+    without somewhere to record the difference the build cannot know whether
+    the operator is finished."""
+    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    review_every_photo(conn, lead)
+    assert pipeline.open_site(conn, lead).version is not None
+
+
 def test_a_new_lead_opens_on_a_site_not_on_nothing(conn, lead, monkeypatch):
     monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    review_every_photo(conn, lead)
     result = pipeline.open_site(conn, lead)
     assert result.version is not None
     assert sites.html_for(conn, lead, result.version)
@@ -363,6 +397,7 @@ def test_a_new_lead_opens_on_a_site_not_on_nothing(conn, lead, monkeypatch):
 def test_opening_twice_does_not_build_twice(conn, lead, monkeypatch):
     """The workspace opens on every click. That is not a request to rebuild."""
     monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    review_every_photo(conn, lead)
     first = pipeline.open_site(conn, lead)
     again = pipeline.open_site(conn, lead)
     assert again.version == first.version
@@ -374,6 +409,7 @@ def test_the_content_gate_applies_to_the_opening_version(conn, lead, monkeypatch
     """A first draft that invents something is not a better first impression
     than none."""
     monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    review_every_photo(conn, lead)
     monkeypatch.setattr(pipeline, "unsupported", lambda page, material: ["voted"])
     result = pipeline.open_site(conn, lead)
     assert result.rejected is True
@@ -383,6 +419,7 @@ def test_the_content_gate_applies_to_the_opening_version(conn, lead, monkeypatch
 
 def test_an_instruction_builds_on_the_opening_version(conn, lead, monkeypatch):
     monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    review_every_photo(conn, lead)
     opened = pipeline.open_site(conn, lead)
     nudged = iterate(conn, lead, "make it darker")
     assert nudged.parent_version == opened.version

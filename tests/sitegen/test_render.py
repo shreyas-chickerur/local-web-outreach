@@ -629,3 +629,34 @@ def test_with_no_phone_the_action_is_the_map_whatever_was_asked_for():
     from app.site.render import _cta_label
     m = Material(name="Ichika", address="Plano, TX")
     assert _cta_label(m, SiteSpec(cta="book")) == "Find us"
+
+
+def test_the_hero_is_not_the_smallest_photograph_in_the_set():
+    """Ichika's hero was 1226x843 while every other photograph it had was 2400
+    wide: the rule took the first landscape image and never asked how big."""
+    import app.site.render as render
+    from app.site.render import HERO_MIN_WIDTH, pick_hero
+
+    sizes = {"/a": (1226, 843), "/b": (2400, 1351), "/c": (2400, 2086)}
+    original = render.measure
+    render.measure = lambda url: sizes.get(url.replace(render.LOCAL, ""))
+    try:
+        # /b, not /a: big enough to lead with, and the shape closest to a hero
+        # crop. /c is larger by area and a worse hero at every screen size.
+        assert pick_hero(tuple(sizes)) == "/b"
+        assert HERO_MIN_WIDTH > 1226
+    finally:
+        render.measure = original
+
+
+def test_a_business_whose_photographs_are_all_small_still_gets_a_hero():
+    import app.site.render as render
+    from app.site.render import pick_hero
+
+    sizes = {"/a": (900, 500), "/b": (800, 600)}
+    original = render.measure
+    render.measure = lambda url: sizes.get(url.replace(render.LOCAL, ""))
+    try:
+        assert pick_hero(tuple(sizes)) in sizes
+    finally:
+        render.measure = original

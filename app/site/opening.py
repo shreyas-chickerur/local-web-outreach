@@ -29,6 +29,7 @@ from __future__ import annotations
 import httpx
 
 from app.adapters import claude
+from app.adapters.imageinfo import measure
 from app.site.iterate import DEFAULT_SPEC, MOODS
 from app.site.render import plan_for
 from app.site.spec import SiteSpec
@@ -163,9 +164,42 @@ def digest(brief: dict) -> str:
         counts: dict[str, int] = {}
         for what in labels.values():
             counts[str(what)] = counts.get(str(what), 0) + 1
-        lines.append("photographs on hand: " + ", ".join(
+        lines.append("photographs, as the operator described them: " + ", ".join(
             f"{n}× {what}" for what, n in sorted(counts.items())))
+    notes = brief.get("photo_notes") or {}
+    for said in list(notes.values())[:12]:
+        if said:
+            lines.append(f"  photo — {str(said)[:120]}")
+    lines.append(_imagery_note(brief))
     return "\n".join(lines)
+
+
+def _imagery_note(brief: dict) -> str:
+    """How much of the photography is good enough to build around.
+
+    A page laid out for big imagery looks broken when every photograph is
+    small, and the decision to go text-forward instead is one the designer
+    should be allowed to make with the facts in front of them.
+    """
+    from app.site.render import HERO_MIN_WIDTH, LOCAL, material_from_brief
+    try:
+        images = list(material_from_brief(brief).images)[:12]
+    except Exception:
+        return "photography: unknown"
+    big = small = 0
+    for url in images:
+        size = measure(url if url.startswith("http") else f"{LOCAL}{url}")
+        if not size:
+            continue
+        if size[0] >= HERO_MIN_WIDTH:
+            big += 1
+        else:
+            small += 1
+    if not (big or small):
+        return "photography: none usable"
+    return (f"photography: {big} large enough to lead with, {small} too small "
+            f"— a layout built around big imagery needs the first number to be "
+            f"more than one or two")
 
 
 def _prompt(brief: dict) -> str:

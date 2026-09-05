@@ -17,7 +17,15 @@ from app.store.db import operator
 # What a picture can be, ordered by how well it leads a page. The list is
 # deliberately short: a longer one is slower to apply and no more useful.
 LABELS = ("dish", "room", "exterior", "people", "drink", "ingredients",
-          "award", "logo", "other")
+          "award", "logo", "other", "unclear")
+
+# "I looked at this one and cannot tell what it is" — a decision, and a
+# different thing from never having looked. Without somewhere to record it,
+# a blank field means both, and the build cannot know whether the operator is
+# finished. It never leads: an unidentifiable photograph is the worst possible
+# first impression.
+UNREVIEWED = ""
+SKIPPED = "unclear"
 
 # What a description means, longest phrase first so "award badge" beats "badge"
 # and "dining room" is never read as two separate things. Same matching
@@ -92,7 +100,7 @@ HERO_PREFERENCE: dict[str, tuple[str, ...]] = {
 # Never the lead image, for different reasons: a wordmark is not a photograph,
 # an award badge belongs in the recognition band at size, and raw produce does
 # not make anyone want dinner.
-NEVER_LEADS = ("logo", "award", "ingredients", "other")
+NEVER_LEADS = ("logo", "award", "ingredients", "other", "unclear")
 
 
 def _now() -> str:
@@ -114,6 +122,10 @@ def label(conn: sqlite3.Connection, lead_id: int, url: str,
         raise ValueError(f"unknown label {tag!r} — one of {', '.join(LABELS)}")
     if not text and not what:
         raise ValueError("describe the photograph, or pick a category")
+    if tag == SKIPPED:
+        # Marked unclear on purpose. Any words written before that stand as a
+        # note, but they must not become alt text claiming to describe it.
+        text = ""
     conn.execute(
         "INSERT INTO photo_labels (lead_id, url, label, description, actor, at)"
         " VALUES (?,?,?,?,?,?)"
@@ -135,6 +147,18 @@ def described(conn: sqlite3.Connection, lead_id: int) -> dict[str, dict]:
         (lead_id,))
     return {row["url"]: {"label": row["label"],
                          "description": row["description"] or ""} for row in rows}
+
+
+def unreviewed(conn: sqlite3.Connection, lead_id: int,
+               urls: list[str]) -> list[str]:
+    """Photographs nobody has made a decision about yet.
+
+    A decision includes "unclear". The first build waits for this list to be
+    empty, because placing a photograph well needs to know what it shows, and
+    guessing is the one thing this system will not do.
+    """
+    seen = set(labels_for(conn, lead_id))
+    return [url for url in urls if url not in seen]
 
 
 def rank_for_hero(urls: list[str], labels: dict[str, str],
