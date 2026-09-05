@@ -190,3 +190,54 @@ def test_colour_carries_forward_like_every_other_decision():
     first = parse_iteration_instruction("more blue", dict(DEFAULT_SPEC))
     second = parse_iteration_instruction("lead with the gallery", first)
     assert second["accent"] == "blue"
+
+
+# --- a complaint is not an instruction ---------------------------------- #
+
+@pytest.mark.parametrize("sentence,section", [
+    ("our story doesn't actually have anything about their story", "about"),
+    ("the hours look cramped", "hours"),
+    ("the have a look around gallery is weirdly spaced", "gallery"),
+    ("why are the awards in the gallery", "gallery"),
+])
+def test_naming_a_section_is_not_asking_for_more_of_it(sentence, section):
+    """Every one of these used to come back as "emphasised the X" — the page
+    grew the section the operator was complaining about. A bare section name
+    now goes to the ignored list, where it can be seen."""
+    out = parse_iteration_instruction(sentence, dict(DEFAULT_SPEC))
+    assert section not in out["emphasis"]
+    assert f"emphasised the {section}" not in out["understood"]
+
+
+@pytest.mark.parametrize("sentence,section", [
+    ("focus on the reviews", "reviews"),
+    ("more photos please", "gallery"),
+    ("highlight what we do", "services"),
+    ("add a map", "contact"),
+    ("the menu matters", "menu"),
+])
+def test_emphasis_still_works_when_it_is_actually_asked_for(sentence, section):
+    out = parse_iteration_instruction(sentence, dict(DEFAULT_SPEC))
+    assert section in out["emphasis"]
+
+
+def test_an_unusable_section_name_is_reported_not_swallowed():
+    out = parse_iteration_instruction("the hours look cramped",
+                                      dict(DEFAULT_SPEC))
+    assert "hours" in out["ignored_tokens"]
+
+
+def test_family_owned_is_a_fact_not_a_mood():
+    """"the headline should mention family owned" used to come back as
+    "styled warm", which is a silent misread of a statement about the
+    business."""
+    out = parse_iteration_instruction("the headline should mention family owned",
+                                      dict(DEFAULT_SPEC))
+    assert out["understood"] == []
+    assert out["mood"] == DEFAULT_SPEC["mood"]
+
+
+def test_family_friendly_is_still_a_mood():
+    out = parse_iteration_instruction("make it family friendly",
+                                      dict(DEFAULT_SPEC))
+    assert out["mood"] == "warm"

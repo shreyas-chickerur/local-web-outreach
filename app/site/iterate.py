@@ -76,7 +76,7 @@ MOOD_PHRASES: tuple[tuple[str, str], ...] = (
     ("rustic", "warm"),
     ("cosy", "warm"), ("cozy", "warm"), ("homely", "warm"),
     ("welcoming", "warm"), ("farmhouse", "warm"), ("comfort", "warm"),
-    ("family", "warm"), ("earthy", "warm"),
+    ("family friendly", "warm"), ("family feel", "warm"), ("earthy", "warm"),
     ("cleaner", "fresh"), ("clean", "fresh"), ("minimal", "fresh"),
     ("simpler", "fresh"), ("modern", "fresh"),
     ("fresh", "fresh"), ("simple", "fresh"), ("airy", "fresh"),
@@ -144,6 +144,16 @@ HOIST_BEFORE = ("lead with", "start with", "open with", "begin with",
 HOIST_AFTER = ("first", "at the top", "up top", "to the top", "on top", "up")
 DROP_BEFORE = ("remove", "drop", "delete", "hide", "lose", "cut", "kill",
                "without", "no", "take out", "get rid of")
+# Emphasis needs a marker of its own. Without one, naming a section used to
+# mean "make it bigger" — so "our story doesn't have anything about their
+# story" promoted the about section, and "the hours look cramped" promoted the
+# hours. A complaint is not an instruction, and this module's own rule is that
+# visibly ignored beats silently misread.
+EMPHASIS_BEFORE = ("focus on", "play up", "lead on", "highlight", "showcase",
+                   "emphasise", "emphasize", "feature", "more", "add",
+                   "include", "expand", "bigger", "push", "want", "need")
+EMPHASIS_AFTER = ("matters", "is important", "should stand out",
+                  "front and centre", "front and center")
 
 # How far from a section name an intent word still counts as attached to it.
 INTENT_WINDOW = 3
@@ -300,14 +310,25 @@ def parse_iteration_instruction(sentence: str, current_spec: dict) -> dict:
 
         hoisted = (_marker_near(tokens, used, index, HOIST_BEFORE, before=True)
                    or _marker_near(tokens, used, index, HOIST_AFTER, before=False))
-        spec["suppress"] = [s for s in spec["suppress"] if s != section]
         if hoisted:
+            spec["suppress"] = [s for s in spec["suppress"] if s != section]
             spec["lead_with"] = section
             understood.append(f"led with the {section}")
-        elif section not in spec["emphasis"]:
-            spec["emphasis"].append(section)
-            understood.append(f"emphasised the {section}")
-        _ = phrase
+            continue
+
+        if (_marker_near(tokens, used, index, EMPHASIS_BEFORE, before=True)
+                or _marker_near(tokens, used, index, EMPHASIS_AFTER, before=False)):
+            spec["suppress"] = [s for s in spec["suppress"] if s != section]
+            if section not in spec["emphasis"]:
+                spec["emphasis"].append(section)
+                understood.append(f"emphasised the {section}")
+            continue
+
+        # Named with no intent attached. Give the words back so they surface as
+        # ignored rather than being spent on a guess: "why are the awards in the
+        # gallery" is a question about a defect, not a request for more gallery.
+        for offset in range(len(phrase.split())):
+            used[index + offset] = False
 
     # --- the residue is what we could not use ------------------------------
     ignored = sorted({
