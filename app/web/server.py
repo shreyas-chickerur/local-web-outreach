@@ -387,10 +387,12 @@ class Handler(BaseHTTPRequestHandler):
                     self._json({"error": "no such lead"}, 400)
                     return
                 known = photos.described(conn, lead_id)
-            urls = [f"/photo/{lead_id}/{i}"
-                    for i in range(len(brief.get("place_photos") or []))]
-            urls += list((brief.get("published") or {}).get("photos") or [])
-            hints = photos.suggest_all(urls[:24])
+            # Exactly what the first build waits on, from the same function
+            # that decides it. Two lists built two ways can disagree, and the
+            # failure is the worst kind: every photo on screen is labelled and
+            # the build still refuses.
+            urls = list(material_from_brief(brief).images)
+            hints = photos.suggest_all(urls)
             self._json({"lead_id": lead_id, "labels": known,
                         "options": list(photos.LABELS),
                         "suggestions": hints,
@@ -399,7 +401,7 @@ class Handler(BaseHTTPRequestHandler):
                                     "description":
                                         (known.get(u) or {}).get("description", ""),
                                     "suggestion": hints.get(u, "")}
-                                   for u in urls[:24]]})
+                                   for u in urls]})
             return
         if route.path == "/api/workspace":
             try:

@@ -120,3 +120,24 @@ def test_rendering_failures_are_shown_rather_than_swallowed():
     page = server._UI.read_text()
     assert "function paint(data)" in page
     assert "could not be drawn" in page
+
+
+def test_the_labeller_and_the_gate_are_fed_by_one_list():
+    """Two lists built two ways can disagree, and the failure is the worst
+    kind: every photo on screen is labelled and the build still refuses."""
+    source = server._UI.read_text()
+    assert "material_from_brief(brief).images" in \
+        (server.__file__ and open(server.__file__).read())
+    # The page starts on the labelling step rather than a workspace that will
+    # refuse — the requirement is visible before it is enforced.
+    assert 'stage: (!(data.versions || []).length' in source
+
+
+def test_labelling_saves_as_you_move_rather_than_at_the_end():
+    """Losing twenty descriptions to a stray refresh would teach the operator
+    never to write anything longer than a word."""
+    source = server._UI.read_text()
+    for mover in ("stepShot", "goToShot"):
+        start = source.index(f"async function {mover}")
+        body = source[start:start + 400]
+        assert "await saveShot(" in body, mover

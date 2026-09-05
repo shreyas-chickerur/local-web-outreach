@@ -450,6 +450,63 @@
   }
 
   /* Labelling: the one thing a person can do that the machine cannot. */
+  /* The labelling step. One photograph at a time, because the operator is
+     looking at a picture and answering a question about it — a grid of
+     thumbnails invites skimming, and a skimmed label is worse than none. */
+  .lab{position:fixed;inset:0;z-index:70;background:var(--bg);
+    display:grid;grid-template-rows:auto auto 1fr auto;overflow:hidden}
+  .lab-top{display:flex;align-items:center;gap:14px;padding:12px 18px;
+    border-bottom:1px solid var(--line);background:var(--surface)}
+  .lab-top h2{margin:0;font-size:16px;font-weight:650;letter-spacing:-.01em}
+  .lab-top .sub{color:var(--faint);font-size:12.5px;font-family:var(--mono)}
+  .lab-top .close{margin-left:auto}
+  .lab-bar{height:3px;background:var(--line-soft)}
+  .lab-bar i{display:block;height:100%;background:var(--accent);
+    transition:width .35s cubic-bezier(.2,.7,.3,1)}
+  .lab-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,380px);
+    min-height:0}
+  .lab-view{position:relative;display:grid;place-items:center;padding:22px;
+    min-height:0;background:repeating-linear-gradient(45deg,
+      var(--raise) 0 10px,transparent 10px 20px)}
+  .lab-view img{max-width:100%;max-height:100%;object-fit:contain;
+    border-radius:10px;box-shadow:var(--shadow-lift);background:var(--surface)}
+  .lab-arrow{position:absolute;top:50%;transform:translateY(-50%);
+    width:42px;height:42px;border-radius:50%;border:1px solid var(--line);
+    background:var(--surface);color:var(--dim);font-size:19px;cursor:pointer;
+    display:grid;place-items:center;transition:border-color .18s,color .18s;
+    z-index:2;box-shadow:var(--shadow-lift)}
+  .lab-arrow:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+  .lab-arrow:disabled{opacity:.35;cursor:default}
+  .lab-arrow.prev{left:14px}
+  .lab-arrow.next{right:14px}
+  .lab-side{border-left:1px solid var(--line);padding:18px;overflow-y:auto;
+    display:flex;flex-direction:column;gap:12px}
+  .lab-side textarea{width:100%;min-height:88px;resize:vertical;
+    border:1px solid var(--line);border-radius:8px;background:var(--surface);
+    color:var(--ink);font:inherit;font-size:13.5px;padding:9px 10px}
+  .lab-side textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .lab-side select{width:100%;border:1px solid var(--line);border-radius:7px;
+    background:var(--surface);color:var(--ink);font:inherit;font-size:13px;
+    padding:7px 8px}
+  .lab-count{font-family:var(--mono);font-size:12px;color:var(--faint)}
+  .lab-strip{display:flex;gap:6px;padding:10px 18px;overflow-x:auto;
+    border-top:1px solid var(--line);background:var(--surface)}
+  .lab-strip button{flex:0 0 auto;width:62px;height:46px;padding:0;
+    border:2px solid transparent;border-radius:6px;overflow:hidden;
+    background:none;cursor:pointer;opacity:.5;transition:opacity .18s}
+  .lab-strip button:hover{opacity:.85}
+  .lab-strip button[aria-current=true]{opacity:1;border-color:var(--accent)}
+  .lab-strip button.done{opacity:1}
+  .lab-strip button.done::after{content:"";position:absolute}
+  .lab-strip img{width:100%;height:100%;object-fit:cover;display:block}
+  .lab-strip .dot{position:relative}
+  .lab-strip .dot::before{content:"";position:absolute;right:3px;top:3px;
+    width:7px;height:7px;border-radius:50%;background:var(--accent);z-index:2}
+  @media (max-width:900px){
+    .lab-main{grid-template-columns:1fr;grid-template-rows:minmax(220px,1fr) auto;
+      overflow-y:auto}
+    .lab-side{border-left:0;border-top:1px solid var(--line)}
+  }
   .shots-grid{display:grid;gap:9px;margin-top:10px}
   .shot-card{display:grid;grid-template-columns:76px 1fr;gap:10px;
     border:1px solid var(--line);border-radius:9px;padding:8px;
@@ -869,13 +926,22 @@ async function openWorkspace(leadId, name) {
   // set it — otherwise labelling and status changes post without a lead id and
   // fail silently behind an alert.
   LEAD = leadId;
+  const photos = shots.photos || [];
   WS = {lead_id: leadId, name: name || `Lead ${leadId}`,
         versions: data.versions || [], events: data.events || [],
         active: (data.versions || [])[0]?.version ?? null,
         diagnostics: null, device: "phone", outline: data.outline || "",
         rationale: data.rationale || "", unlocks: data.unlocks || [],
         pending: data.pending_labels || [], canBuild: !!data.can_build,
-        photos: shots.photos || [], labelOptions: shots.options || []};
+        photos, labelOptions: shots.options || [], shot: 0,
+        // A lead with no site and unlabelled photographs starts on the
+        // labelling step, not on a workspace that will refuse to build. The
+        // requirement should be visible before it is enforced.
+        stage: (!(data.versions || []).length
+                && (data.pending_labels || []).length) ? "label" : "work"};
+  // Start where the work is, not at the beginning of a list already done.
+  const first = photos.findIndex(p => !p.label);
+  WS.shot = first < 0 ? 0 : first;
   document.body.classList.add("workspace-open");
   drawWorkspace();
 }
@@ -883,9 +949,19 @@ async function openWorkspace(leadId, name) {
 function closeWorkspace() {
   WS = null;
   document.body.classList.remove("workspace-open");
-  const frame = $("#workspace");
-  if (frame) frame.remove();
+  for (const id of ["#workspace", "#labeller"]) {
+    const frame = $(id);
+    if (frame) frame.remove();
+  }
   renderLeads();
+}
+
+// Labels are never finished: a photo can be described better later, and the
+// operator often learns what something is on the second visit.
+function relabel() {
+  WS.stage = "label";
+  WS.shot = 0;
+  drawWorkspace();
 }
 
 // The version a new instruction will branch from. Selecting an older version
@@ -923,6 +999,14 @@ function eventLine(e) {
 }
 
 function drawWorkspace() {
+  if (WS.stage === "label") {
+    const shell = $("#workspace");
+    if (shell) shell.remove();
+    drawLabeller();
+    return;
+  }
+  const gone = $("#labeller");
+  if (gone) gone.remove();
   const trail = WS.events.length ? WS.events.map(e => {
     const line = eventLine(e);
     const active = line.version && line.version === WS.active;
@@ -1037,6 +1121,9 @@ function drawWorkspace() {
     <div class="ws-top">
       <h2>${esc(WS.name)}</h2>
       <span class="sub">${WS.active ? "v" + WS.active : "no version yet"}</span>
+      <button class="mini" onclick="relabel()">Photos${
+        (() => { const p = labelProgress();
+                 return p.total ? ` ${p.done}/${p.total}` : ""; })()}</button>
       <button class="mini close" onclick="closeWorkspace()">← back to leads</button>
     </div>
 
@@ -1075,7 +1162,7 @@ function drawWorkspace() {
                   cannot see — so it waits for you rather than guessing.
                   Mark any you cannot identify as “can't tell”.`
                : "Every photo has been looked at. Build the opening version."}</p>
-             <button class="mini primary" onclick="buildFirst()"
+             <button class="mini primary" id="build-first" onclick="buildFirst()"
                ${WS.canBuild ? "" : "disabled"}>Build the first version</button>
              </div>`}
       </div>
@@ -1099,7 +1186,9 @@ function drawWorkspace() {
 // a button rather than something that happens on open: the design is made from
 // what the operator said the pictures show, so it waits for them to say it.
 async function buildFirst() {
-  const button = document.querySelector(".empty .mini");
+  // The button lives in two places — the labelling step and the empty
+  // workspace — so it is found by id rather than by whichever layout is up.
+  const button = $("#build-first");
   if (button) { button.disabled = true; button.textContent = "Designing…"; }
   let data;
   try {
@@ -1109,18 +1198,181 @@ async function buildFirst() {
     data = await res.json();
   } catch (err) {
     alert("The build failed to run: " + err);
-    if (button) { button.disabled = false; button.textContent = "Build the first version"; }
+    if (button) {
+      button.disabled = false;
+      button.textContent = "Build the first version";
+    }
     return;
   }
   if (data.error) { alert(data.error); return; }
   if (data.kind === "needs_labels") {
     WS.pending = data.unsupported || [];
     WS.canBuild = false;
+    WS.stage = "label";
     drawWorkspace();
     return;
   }
-  await openWorkspace(WS.lead_id, WS.name);
+  const {lead_id, name} = WS;
+  await openWorkspace(lead_id, name);
 }
+
+// ---------------------------------------------------------------- labelling
+// A step of its own, before the workspace. The operator is looking at one
+// picture and answering one question about it; a grid invites skimming, and a
+// skimmed label is worse than an honest "can't tell".
+//
+// Every answer saves as they move. Losing twenty descriptions to a stray
+// refresh would teach them never to write anything longer than a word.
+
+function decided(photo) { return !!(photo && photo.label); }
+
+function labelProgress() {
+  const all = WS.photos || [];
+  return {done: all.filter(decided).length, total: all.length};
+}
+
+function drawLabeller() {
+  const shots = WS.photos || [];
+  const at = Math.min(WS.shot || 0, Math.max(0, shots.length - 1));
+  const photo = shots[at] || {};
+  const {done, total} = labelProgress();
+  const pct = total ? Math.round((done / total) * 100) : 0;
+
+  const strip = shots.map((p, i) => `
+    <button class="${decided(p) ? "done dot" : ""}" aria-current="${i === at}"
+      title="${esc(p.description || p.label || "not looked at yet")}"
+      onclick="goToShot(${i})"><img src="${esc(p.url)}" alt="" loading="lazy"></button>`
+  ).join("");
+
+  const html = `<div class="lab" id="labeller">
+    <div class="lab-top">
+      <h2>${esc(WS.name)}</h2>
+      <span class="sub">${done} of ${total} described</span>
+      <button class="mini close" onclick="closeWorkspace()">← back to leads</button>
+    </div>
+    <div class="lab-bar"><i style="width:${pct}%"></i></div>
+
+    <div class="lab-main">
+      <div class="lab-view">
+        <button class="lab-arrow prev" onclick="stepShot(-1)"
+          ${at === 0 ? "disabled" : ""} aria-label="Previous photo">&lsaquo;</button>
+        ${photo.url ? `<img src="${esc(photo.url)}" alt="">` : ""}
+        <button class="lab-arrow next" onclick="stepShot(1)"
+          ${at >= shots.length - 1 ? "disabled" : ""} aria-label="Next photo">&rsaquo;</button>
+      </div>
+
+      <div class="lab-side">
+        <div>
+          <p class="diag-label">What is this a photo of?</p>
+          <p class="hint">Your words become the alt text on the finished page,
+             and the category is read out of them. One line is plenty.</p>
+        </div>
+        <textarea id="lab-note" placeholder="${esc(photo.suggestion
+          || "e.g. the dining room from the doorway")}"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();saveShot(true);}"
+          >${esc(photo.description || "")}</textarea>
+        <div>
+          <p class="diag-label">Category</p>
+          <select id="lab-tag">
+            <option value="">read it from my words</option>
+            ${(WS.labelOptions || []).map(o =>
+              `<option value="${esc(o)}"${photo.label === o ? " selected" : ""}>${
+                o === "unclear" ? "can’t tell" : esc(o)}</option>`).join("")}
+          </select>
+        </div>
+        <div class="row" style="gap:8px;flex-wrap:wrap">
+          <button class="mini primary" onclick="saveShot(true)">
+            ${at >= shots.length - 1 ? "Save" : "Save and next"}</button>
+          <button class="mini" onclick="cannotTell()">Can’t tell</button>
+        </div>
+        <p class="hint lab-count">${at + 1} / ${total} · ← → to move ·
+           ⏎ saves and moves on</p>
+        ${done === total && total
+          ? `<button class="mini primary" id="build-first" onclick="buildFirst()"
+               style="margin-top:auto">Build the first version →</button>`
+          : `<p class="hint" style="margin-top:auto">${total - done} still to go
+               before the first build.</p>`}
+      </div>
+    </div>
+
+    <div class="lab-strip">${strip}</div>
+  </div>`;
+
+  const existing = $("#labeller");
+  if (existing) existing.outerHTML = html;
+  else document.body.insertAdjacentHTML("beforeend", html);
+  const box = $("#lab-note");
+  if (box) box.focus();
+}
+
+// Saving before moving, always. The alternative is an operator who types a
+// description, clicks the arrow, and silently loses it.
+async function saveShot(advance) {
+  const shots = WS.photos || [];
+  const at = Math.min(WS.shot || 0, Math.max(0, shots.length - 1));
+  const photo = shots[at];
+  if (!photo) return;
+  const note = $("#lab-note");
+  const tag = $("#lab-tag");
+  const description = note ? note.value.trim() : "";
+  const override = tag ? tag.value : "";
+
+  if (description || override) {
+    try {
+      const res = await fetch("/api/label", {method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({lead_id: WS.lead_id, url: photo.url,
+                              description, label: override || null})});
+      const data = await res.json();
+      if (data.error) { alert(data.error); return; }
+      const saved = (data.photos || {})[photo.url] || {};
+      photo.label = saved.label || override || photo.label;
+      photo.description = saved.description !== undefined
+        ? saved.description : description;
+    } catch (err) {
+      alert("That did not save: " + err);
+      return;
+    }
+  }
+  if (advance && at < shots.length - 1) WS.shot = at + 1;
+  drawLabeller();
+}
+
+// An explicit decision, and a different thing from leaving it blank: the build
+// waits on the difference.
+async function cannotTell() {
+  const tag = $("#lab-tag");
+  const note = $("#lab-note");
+  if (tag) tag.value = "unclear";
+  if (note) note.value = "";
+  await saveShot(true);
+}
+
+async function stepShot(by) {
+  const shots = WS.photos || [];
+  const next = (WS.shot || 0) + by;
+  if (next < 0 || next >= shots.length) return;
+  await saveShot(false);
+  WS.shot = next;
+  drawLabeller();
+}
+
+async function goToShot(index) {
+  await saveShot(false);
+  WS.shot = index;
+  drawLabeller();
+}
+
+// Arrow keys, but never while they are mid-sentence in the description.
+function labellerKeys(event) {
+  if (!WS || WS.stage !== "label") return;
+  const typing = document.activeElement
+    && ["TEXTAREA", "INPUT", "SELECT"].includes(document.activeElement.tagName);
+  if (typing && event.key !== "Escape") return;
+  if (event.key === "ArrowLeft") stepShot(-1);
+  if (event.key === "ArrowRight") stepShot(1);
+}
+document.addEventListener("keydown", labellerKeys);
 
 function setDevice(kind) { WS.device = kind; drawWorkspace(); }
 
