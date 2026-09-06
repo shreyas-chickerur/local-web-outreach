@@ -1,0 +1,353 @@
+{
+  "assumptions": [
+    "website found via google: http://www.theheritagetable.com/",
+    "ignored 1 social link(s) belonging to other businesses their site credits"
+  ],
+  "chain_signals": [],
+  "facts": [
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "address",
+      "score": 0.8999999999999999,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=9144379154027266819&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/the-heritage-table-frisco?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        }
+      ],
+      "value": "7110 Main St, Frisco, TX 75033, USA"
+    },
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [
+        {
+          "source_type": "their_site",
+          "source_url": "http://www.theheritagetable.com/",
+          "value": "1568175315"
+        }
+      ],
+      "field": "phone",
+      "score": 0.7999999999999999,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=9144379154027266819&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/the-heritage-table-frisco?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        }
+      ],
+      "value": "(469) 664-0100"
+    },
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=9144379154027266819&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "mon:0500-2100 tue:0500-2100 wed:0500-2100 thu:0500-2200 fri:0500-2200 sat:0500-2200 sun:0500-2100"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "http://www.theheritagetable.com/",
+          "value": "mon:1700-2100 tue:1700-2100 wed:1700-2100 thu:1700-2200 fri:1700-2200 sat:1700-2200 sun:1700-2100"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "hours",
+      "score": 0.3,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=9144379154027266819&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "http://www.theheritagetable.com/"
+        }
+      ],
+      "value": "Mon-Wed 5pm-9pm \u00b7 Thu-Sat 5pm-10pm \u00b7 Sun 5pm-9pm"
+    }
+  ],
+  "latitude": 33.150598699999996,
+  "location": "Frisco, TX",
+  "longitude": -96.8224939,
+  "name": "The Heritage Table",
+  "notes": null,
+  "open_questions": [],
+  "place_photos": [
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXRnclYTgjwp6XZ3TIAWz_BhKkpMuM0xWfFFKr52vwxcNStVWK01AKBTNdVrtrO0YPXWgZf3t4tPc9SG893vgLkwLGbi05U1Q4Rbhj1sUX6UYh6k1eDK5K7F1ArLZwA-vQV3dxYTL-1cpM9RZ-K03ZAKuakCAjA8Htd9znjq_YPER6Kzy0dTuwEbn1D63SdlzM98TcdeUJodFLCZB_LgHIL4X2_gVXT6lyysb0HMDAk3iNmhP9xi0Ij06p0MzMAxiHcS0HA5AVny8BIRZ9v1rzJFs1DYz3kq6KdiD3cZ2ZrAQR25OE030d8DEmI_zbcxDNkDadP27KfoNl4vrXTGlX3llI1Ztr4MVIjogcQ8Mh92kOobVWzt7nlw9NYpL1j29R5SsPSw7fGTO2VYKHreS2Tou3OI8uzJegAYjhnE2zLP7wg",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXS1kW4asKCGVyMaLtZk9mceq7Jvu5ZGE0uv8DOwWfRFvJRwRgGJX84bJYEkPC_DMyESmBIFit75vpKDGJJswQSzu9R1DZaGZ1a6GNN4yy3MiSDUjam5D9WvSc67muRo08G5S4Fsb6M14E3QugybIaViAqLIi9IwM0HTV8Q6F9VIzxhP0PAIdpH3_rrHOZ6hT2XKih9oDqs2s6OlAmMktHUYiaalkrrwVzmO6T6P4l8eRgW7lKCevdbzV-S7cuaTD1S8iAMNW5W2cUiY9yUHQehtKa60lvO5jmeKbU7NfZ-Nfk7InBTUITBQd5poGFvO3WTJACIqGDVe89n9ofsb6uPhP5wHpmAARLFvpY9VJqsHyfMhTy6bYmleBedJ-7sJjYSZbkGHxlgzOfeIdZSo_f9h5V2agf2q51AZ6p5XmuRLeHeyf03v_Fu9_7KeWA",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXQ9gezzdxBENmotnGvfiBPORux-1q3XWGyi_53BIZe1hOK89yondT1-H5cRUqg9K6nSqDYfVJEZUZ_Sadn6LMknpB7IEAL4bIHUhFR-nJ07PR4ceL9h38Or_iuSvWiNQNe2zYC1v7Mn55P0fYOKIEBncSDBxZEpXgFVDN_WSpFl78LR8JRYeBmjJIYS9vgW_hru6OUZuoM_RybjjM-1s5zSIMmZSXpTSviyOZOAmny4g2SY60YbL0YQdbXkcfFZ-engALBXS8EXov-gVP_Ab544bJsvYAzrFUaAUrvU1MuYmomRXtNirDntW9GwV71VHyBlAAwFWF5yGsM6xfvRnxlCQVlV89OzTiLtctsK0Qaiu408SExHHMCLrRuEjtN_yK2vraY6sKpAatEk9oMAK_TCM8g3c9I2yFI35nGyoTMe9A",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXRsIAYS344XGIV8eC-u5l8F8KTsVKNepwVv20MxLkxGC8z4-F6Zt0970dPLflFWXElsHcdm_JzgzTsUErTDYvykxNbSrtuz7G-4pw8_MKnrzpXqgox5uRJxd_-Ut5klH1n8NXWGC4yveMQQolZrtg6AeKqASixGQ1OE-Q0rfSp2CpnzK55JYcYGQr2GSiCxB39QJ22A1QunhB29ftI-rXBLL-xX8LZ0txvefdLwRVPiy7gMxdb2zUDx9kd4On6wMoysHD-GZPd68SdNZtcAI-2KzpcI8jknb-agVXkae_VHWy8nyxDatL0_BDpQNMVCVRm2P-3h30Q0UXwm5HhsI6JnYPlOuOjD8RuYE8j5jm2gKlzetJ0-ABlKRe8mty6crWs4yJLLPF1DTmC8w16c9jUrq3_hxNJmrW9kKezTg76qNRpU",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXSSxGPSIlyoQc77dbZnEuzL4OQEqjmzJ0tzmOckQEho7w82b171Rt5az_AZsMZFR-D5yS1ciFMPPSnD3qI5LXcihol02-ZpuuXBIs4gKIYZkJ1sc9vCjIUj94uocTkHTr731Gju7g65fOW8zXna5WCTEmU5kz8_BF11X2f2K7ABmLgcTNo3WM6SV50TV8LCFtDfX9WPYrBA_BfnfQ6upWnuMQUdl6VKB32rUqd6rVqwLegVJ9bxoeZu9aIpW7QTja9PHsUGk54QovIj115yrGnCk2o79ltVKs2gaAbd2qjowppxhaqwUok8aDAxD4jqWvIv-NYisyvveV3N2D7VKt_FVeq4_3PPYJECQyTwEvymHTF2rja0kt7v2wZEGCxifyIBJse-R1t6mc7Ri9hOj3InwV7G-EIzl0mW1JqVyyLi1oUl5sUvR19bXhsWVxHr",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXSa7EpPXCmdOg0smbQH1a35SFP-0GWadwWdhXNaN-5St1E9xikwx6X8LvPn16oyvBPxUIcXPqSaOxTgW7WLiI5p2XCQRejwqK_Tq10dpcKkwout6AA7z0GVqkLM97Usw8XWtif33UrlPlSKsbFto7kdG4vr5WJr8XczAeFWCEi2ljkRf2M-Whq4T5LEs5D6a4LNAPmFYnN9BDDNKPCWywwVf5xk4934AGe9crl_nHO5u83KXhFfrszrOnBdkkwBxj1iRhbZBj38i-ZEVoRtYIO1W_b4k_vByYxjjMuzjHI-On8jRGxvVcpyK6iP12z1KW2QkSl9bU0w42ilIxYon2xFFMv7XJCxAT6WC2KCn-u5AfjBLJtZoZ1IuXNziB0OXZ9yX3FfsMS8C3huvVFUCRteZla3-qIuCOLTqjpdL2O6VZkuoQcz69CoSCshG8qx",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXQH8kodBP5RU_2k6EFCPmGueNKv70GP7bbNvFKO1btEkBzPm6dHudUDBooPaKSmNTCdYPNYiOO2lk2kigpMpQxxmcc9JKIlf7iNq4HFSpJXNTZshRwvWVzhwZ0P6dTAVtyrJtgTJjCReAU8FX1EBJ1zyCU9rtbU-4wTu3r5xkVjVb3oSiBGXYHpSfUBvA81dWzgeLzvk0cuGLmAV2bZbwiXkfWkBvMmlNFdCctz9ABl2ZqIQ4LIP5QunPjm0JvoszH-Z-WYHOMMgxVwcKoKT7HZnjx8caJL0DKmoIvLlm0Vw0EUDK8AhRlb7Jfj8c7AzfnMG9_CqOAKXfnD4SFV-1GzchEVuNCmLq_uNon6tV994gkSOUWYPFY3_F4FEoBMgXq8e7EsnRhggrjIChhLFKPs5MjYRaa4x1elEOTUsQOfHC1su__Guf4rsxAmr5z4",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXT2IIEWlogeISo6D56vFIAI43H2zXbEF7QFI0wBwM0F5PWnDwzMyAgemIT1VC6hxrOSVGVMedOjJNXaOXi2ZTBC8uj-kRTGIsMlYlljUR-Mcj3qftYAZwlvRvJePSQBSMhsotnhz9FcsFUcN8vVZLHNLSCTiPcp3jKnTzMZCnlk2UVKv3HjxzO4mm2Uqeir20FWGER0NFrIIt5WqYDnE7SwKfr4Tq_grLxZmBnr1M2V1_Us1nE-938Ij-ALXiZpABsryz4ckN0LppUP_iRy2YhYP8GuefpZtkI6F5HG9UHFsYC_NX6b6CaKYDmKR2q9XkfPLu6QcZm7FIfb7R3-kQ1Y6puWj1d1kWk4mlJsnuOyYr_zRCxdg3WE2GPjl5PxDz42BMFuJw0hW7WsZPZeJAQXZjok4Yz97ELwDTa2uTdktZfw3QmSYLPLZMJDng",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXS81T1RUhiFtMF1DO6QVqTAJTMZMGXYx9XqFReokqIg4StfTCfp3h6AXmOMUkfQKcapCDCIZuQWAVeJ9Q42As-C7wXQ7UOw2BKwOmE_GQMBkQ9eEh2OmIE81fahZhIcMFSAQupVh8e6XzethYYC_D-mp86Rzq6OisqPyYTjsymPnbmclhf4A3zuKm8frEp3gFgX-6g_uLcDuGP0xOa6qK8TRGQyrcsfHJk3sBrvueKkpifTJYqfgdnDvBeCVi8nDa3kLPGp8yEygTGua_3BsRJKQ2WvrIIXIBkqG7OzVgjIQl7YAyxzEakv6XUx9Q1WhJ08wgOrGxvgPGBOLzrfIny-dZgzmox8ucCavyxA4n5Un7LmTIkEeQrCeDO_9quB6zTGYzcO_IrFM4TnJCFErA_yorocm_Xppxmj8L1A1f8ymVik4JwclRFI0beVzIyh",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXTl1PMolwF4RAzEBWbabkcULGaNChXcOS7Axqgq7_01IEm9gXOyVet0P5qVc5DcLeM3tuTzGd8bhDHXvC9DwfefytiNQpgaTr7ql-G1rcnZ8oNslXoknTK1B95DE-59HbdYIrZRjBUYEfnLxV41hr8c2mv9SuVqrIRrvf2my99yKLEPEv2PKMhTWY9Oo-A9hJg1J3FnPRhPDMNcI5uZ0_quYgcIfhKtYD0DB_IxdMeyKqvIxEoaKFUnl8ih0VQVzmnRb7LD5N6REK2iFsYa54NogAZK23nIwRhe2R4vgpxmUetv62brAZZQ8gZTjzxchd_OJBgWqyPZ-sMwbaqj5Dan-VsOJUxdnJExSw4rPAiQ8z4_kg6WaJp0Euf2xXxNtdRnMBoiUNseEiD0XSoXCOQRVT5nw6t2iR7qO51ccMjNswBH4EgQFWNEIGtKyrI8"
+  ],
+  "published": {
+    "about": "Our intention with HT and our whole animal philosophy, is to take that same approach: find these farms and ranches and do the most we can with them while wasting the very least. We want to define Texas Cuisine not by running parallel with a stereotype, but rather by finding these ingredients and using whatever techniques we have in our repertoire to transform them into something exceptional and memorable. We want to determine our cuisine by the food that we can find within our reach. And we grow our culinary culture with those who grow the ingredients for it.",
+    "about_score": 12.95,
+    "actions": [
+      {
+        "kind": "Menu",
+        "label": "Menus",
+        "url": "https://www.theheritagetable.com/dev/#menus"
+      },
+      {
+        "kind": "Book / Reserve",
+        "label": "Reserve A Table",
+        "url": "https://www.opentable.com/r/the-heritage-table-reservations-frisco?restref=993640&#038;lang=en-US&#038;ot_source=Restaurant%20website"
+      }
+    ],
+    "address": null,
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "Nominated for Best Chef \u2013 Texas",
+        "images": [
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Short-Rib.jpg",
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/IMG-0959-scaled.jpg",
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Peaches.jpg",
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2019/09/mg_2795.jpeg",
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Fig-and-Goat-Cheese.jpg",
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/garden-tomatoes.jpg",
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/housemade-bread.jpg",
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Dinner-Pic.jpg"
+        ],
+        "kicker": "James Beard Awards 2024",
+        "kind": "award",
+        "text": "A Uniquely Comfortable Fine Dining Experience \u00b7 Locally Sourced"
+      },
+      {
+        "entries": [],
+        "heading": "Events",
+        "images": [
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2024/06/plan-your-next-event-with-us-2.png"
+        ],
+        "kind": "events",
+        "text": "Plan you next event with us! Our venue event options include semi-private dining room seating up to 24 guests, private dining room seating 40-46 guests, and full venue use accommodating up to 75 guests with the option to clear tables for appetizers, mingling, or dancing. Click link here to inquire about events for 15 guests or more. For less than 15 guests, you can make a standard reservation by calling our restaurant directly at 469-664-0100 or emailing us at info@theheritagetable.com . Check out our Event Information Sheet and Pricing here And view a short wedding video here , showing the full venue use! BOOK YOUR EVENT HERE Dinner Menu Dietary Accommodation Dinner Menu Drinks Menu Wine Menu"
+      },
+      {
+        "entries": [],
+        "heading": "Philosophy",
+        "images": [
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Rich-Leon.jpg",
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Veg-Delivery.jpg",
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Chelsea-Tomatoes.jpg",
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Steak.jpg"
+        ],
+        "kind": "story",
+        "text": "A culture is built on the food it consumes. Cuisine is a reflection of innovation, necessity, and creativity: it is a form of expression wholly unique to any given culture\u2019s history. Our responsibility is to find the best of what our local farmers, ranchers and artisans have to offer and combine it with the inherent sense of hospitality to our neighborhood to create an exceptional dining experience."
+      },
+      {
+        "entries": [
+          {
+            "name": "1836 Farms",
+            "note": "Terrell \u2013 black Angus beef and dairy"
+          },
+          {
+            "name": "Windy Meadows Family Farm",
+            "note": "Campbell \u2013 pastured poultry"
+          },
+          {
+            "name": "Cheesemaker\u2019s Inc.",
+            "note": "Cleveland \u2013 cheese"
+          },
+          {
+            "name": "Comeback Creek Farms",
+            "note": "Pittsburg \u2013 seasonal fruits and vegetables"
+          },
+          {
+            "name": "Doguet\u2019s Rice Milling Co.",
+            "note": "Beaumont \u2013 rice"
+          },
+          {
+            "name": "Jubilant Fields Farm",
+            "note": "Trenton \u2013 mixed greens and vegetables"
+          },
+          {
+            "name": "Prairie Farmstead",
+            "note": "Sherman \u2013 pastured pork"
+          },
+          {
+            "name": "Stout Creek Farm",
+            "note": "Saltillo \u2013 pastured chicken and vegetables"
+          },
+          {
+            "name": "Veldhuizen Texas Farmstead",
+            "note": "Dublin \u2013 sheep & cow milk cheeses"
+          },
+          {
+            "name": "Demases Farm",
+            "note": "Boyd \u2013 fruits and vegetables"
+          },
+          {
+            "name": "Homestead Gristmill",
+            "note": "Waco- stone-ground grains"
+          },
+          {
+            "name": "Texas Pecan Company",
+            "note": "Dallas \u2013 nuts and dried fruits"
+          },
+          {
+            "name": "Texas Fungus",
+            "note": "Dallas \u2013 cultivated, exotic and foraged mushrooms"
+          },
+          {
+            "name": "Knob Hill Farm",
+            "note": "Howe \u2013 pastured pork and lamb"
+          }
+        ],
+        "heading": "A Few of Our Partners",
+        "images": [],
+        "kind": "partners",
+        "text": ""
+      },
+      {
+        "entries": [],
+        "heading": "Chef Rich Vana",
+        "images": [
+          "https://www.theheritagetable.com/dev/wp-content/uploads/2024/09/Untitled-design-33.png"
+        ],
+        "kind": "feature",
+        "text": "Rich Vana is the Chef and Owner of The Heritage Table, which opened in 2013. With a focus on presenting his guests with innovative, yet accessible fare, he dedicates a strong focus to sourcing from local farms and ranches. Having spent time in many kitchens with chefs across Dallas while working as a culinary writer, Rich gained tremendous insight from those who drive the area\u2019s culinary culture. Rich continued this passion he found, and strives daily to build on the culture in Frisco and North Texas."
+      }
+    ],
+    "description": "The Heritage Table is located on Main Street Frisco and is a true neighborhood restaurant with a scratch kitchen serving dinner nightly.",
+    "emails": [],
+    "has_locations_page": false,
+    "hours": [
+      "Sunday \u2013 Wednesday: 5pm \u2013 9pm",
+      "Thursday \u2013 Saturday: 5pm \u2013 10pm"
+    ],
+    "https": true,
+    "images": [
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2024/06/HTPC-1.png",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Short-Rib.jpg",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/IMG-0959-scaled.jpg",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Peaches.jpg",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2019/09/mg_2795.jpeg",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Fig-and-Goat-Cheese.jpg",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/garden-tomatoes.jpg",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/housemade-bread.jpg"
+    ],
+    "js_rendered": false,
+    "menu_items": [],
+    "menu_media": [
+      {
+        "kind": "image",
+        "label": "Menu",
+        "url": "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Dinner-Pic.jpg"
+      },
+      {
+        "kind": "pdf",
+        "label": "HT Dinner Menu 1-17-23 (1)",
+        "url": "https://www.theheritagetable.com/dev/wp-content/uploads/2024/01/HT-Dinner-Menu-1-17-23-1.pdf"
+      }
+    ],
+    "mobile_ready": true,
+    "phone": "1568175315",
+    "products": [],
+    "services": [
+      "Dinner Service",
+      "Online Ordering",
+      "Chef\u2019s Tasting Menu",
+      "Blackland Prairie Cuisine",
+      "Chef Rich Vana",
+      "Building History"
+    ],
+    "site_host": "theheritagetable.com",
+    "socials": [
+      {
+        "name": "Facebook",
+        "url": "https://www.facebook.com/theheritagetable/"
+      }
+    ],
+    "text_words": 456,
+    "title": "Home | The Heritage Table | Downtown Frisco Restaurants"
+  },
+  "ratings": [
+    {
+      "reviews": 676,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=9144379154027266819&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.6
+    },
+    {
+      "reviews": 404,
+      "source": "yelp",
+      "source_url": "https://www.yelp.com/biz/the-heritage-table-frisco?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+      "value": 4.1
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "yelp",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Francois-Marc Truc",
+      "rating": 4,
+      "text": "Lovely restaurant with a rustic exterior and cottage vibes. We had the country-fried chicken and spaetzle, the whole beast and the braised short rib. All we're delicious and would recommend. The portion sizes are small to medium sized. We ended the night with the chocolate silk pie and the buttermilk lemon pie both which were delicious and not too sweet."
+    },
+    {
+      "author": "Gabby Sanchez",
+      "rating": 5,
+      "text": "Everything was amazing. The staff were so lovely and truly ensured that our meal went smoothly and we felt at home. The chef had touched our table at the beginning of our meal and it was so nice getting to chat with him. I love how many local farms they support it\u2019s incredible! Food was delicious! Love this place, can\u2019t wait to come back!"
+    },
+    {
+      "author": "Rowland Short",
+      "rating": 5,
+      "text": "We shared many plates with family and thought Chef's slight twists to traditional Southern dishes made for a masterfully presented meal. You can taste the farm to table freshness in every bite from local ingredients and perfect seasoning. The historic home and decor was charming and welcoming, as was service and Chef when we met him at our table.\n\nWe recommend everything, but favorites were the fried squash, pork dumplings, beet salad, milk and honey rolls with homemade jam, lamb meatballs, striped bass, beef cheeks (whole beast), fried chicken with spaetzle, silk pie with vanilla ice cream and bread pudding.\n\nDrinks were strong and tasty and we enjoyed the local bourbon recommended to us and local IPAs. We had a great time and the food was rich and filling, yet bright, with perfect hints of acidity and pickling. This is a must try if you are near the north Dallas area. Kudos and cheers, Chef and Heritage Table team!  \ud83d\ude4f\ud83c\udffc\ud83d\udc4d\ud83c\udffc\ud83c\udf7b\ud83e\udd5f\ud83d\udc1f\ud83c\udf56\ud83c\udf57 #eatlocal"
+    },
+    {
+      "author": "Texas YD",
+      "rating": 5,
+      "text": "Traditional rural home atmosphere.\nFood was excellent, recommend the short rib beef.\nChocolate cake, and the bread and butter with jam was excellent.\n\nNice environment for an intimate date setting or special event for friends and family."
+    },
+    {
+      "author": "Kim Huelsing",
+      "rating": 5,
+      "text": "This is such a gem of a restaurant! \ud83e\udd29\ud83d\udc8e The food is absolutely incredible. Farm to table and fresh, they even have an adorable garden out back! Have dined here several times and tried different things - the chef hits it out of the park every time! The service is top notch as well. Such friendly servers and excellent management who you can tell really care. The atmosphere is so special too - it\u2019s such a charming place. You can truly see and feel all the cool history, love, and passion for food. Please do yourself a favor and stop by for a meal!"
+    }
+  ],
+  "trade": "Restaurant",
+  "url_check": {
+    "blocked": false,
+    "fault": "http-link",
+    "note": "the link on their listing is the old http one; the site itself serves https at https://www.theheritagetable.com/dev/",
+    "published": "http://www.theheritagetable.com/",
+    "result": {
+      "elapsed_ms": 117,
+      "error": null,
+      "final_url": "https://www.theheritagetable.com/dev/",
+      "html": "",
+      "ok": true,
+      "status": 200,
+      "tls_error": false
+    },
+    "tried": [
+      "http://www.theheritagetable.com/",
+      "https://www.theheritagetable.com/"
+    ],
+    "working": "https://www.theheritagetable.com/dev/"
+  },
+  "website_url": "http://www.theheritagetable.com/"
+}

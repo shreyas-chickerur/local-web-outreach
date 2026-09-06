@@ -1,0 +1,277 @@
+{
+  "assumptions": [
+    "website found via google: https://www.salonboutique.com/location/frisco-eldorado"
+  ],
+  "chain_signals": [
+    "sources point at 2 different street addresses \u2014 each likely a separate branch",
+    "their own site has a locations page"
+  ],
+  "facts": [
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=248201378407173364&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "11445 Dallas Pkwy Ste 250, Frisco, TX 75033, USA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/salon-boutique-frisco-2?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+          "value": "2693 Preston Rd, Frisco, TX 75034"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "address",
+      "score": 0.3,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=248201378407173364&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/salon-boutique-frisco-2?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        }
+      ],
+      "value": "11445 Dallas Pkwy Ste 250, Frisco, TX 75033, USA | 2693 Preston Rd, Frisco, TX 75034"
+    },
+    {
+      "candidates": [
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/salon-boutique-frisco-2?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+          "value": "(214) 387-4141"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.salonboutique.com/location/frisco-eldorado",
+          "value": "(310) 283-8951"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "phone",
+      "score": 0.3,
+      "sources": [
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/salon-boutique-frisco-2?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.salonboutique.com/location/frisco-eldorado"
+        }
+      ],
+      "value": "(214) 387-4141 | (310) 283-8951"
+    }
+  ],
+  "latitude": 33.172661,
+  "location": "Frisco, TX",
+  "longitude": -96.8408807,
+  "name": "Salon Boutique",
+  "notes": null,
+  "open_questions": [
+    "What is their street address?",
+    "What number do customers actually call?",
+    "What are their opening hours?"
+  ],
+  "place_photos": [
+    "places/ChIJ4REd0U05TIYR9My4sNbJcQM/photos/AVoNoXQBXo80sCU4R-3rhTBL83ezGIVZFKp4U7oB6cXTznhk9seX85eaFAWpeIGNGYdRlisNtJb87Ckyi-tra7Py4zbmJdPM2pDPBJouh0Ux1yazWVuidUtMujuAzBzTJJGc1MLrtKw3KgP1BqMp2HlMq65xSflJGI9Jz1G1Py9q_LXS9eT_uIG47lP8f9ISWSkmZSJ2TkMhR1pvuMC3xllS_ocViA2ZztMoHYfhHMY2Kr5awuiGvyM44n7280DDLL4uqyQXt4dkXaxcBZajjyszQCMcz_8cLBInytDCXbYQGBYLo113U6lMJKw7u9z5f1C9DAPRx5fq10j5-jU9Z0KLXPuF4aatnaX3CDz1rraJxrP9zE9-lCYwLFb43FxSUd2KimiD22rCRbuQVBItVYRXV6kJBYzuwRHctT8UaGkPlia55g1v",
+    "places/ChIJ4REd0U05TIYR9My4sNbJcQM/photos/AVoNoXTBDd3IoEMnLkyqmG-C6FcSXQ_vp0zY4ixC2LXWMvbuzx_TK_QZUvIXABk2ltgIc7uvsbXgc8gg0ZcIgods-NquXOoNDS8p-DLoqb-a92WsA-2NeoSjcnuolvH50xELlFFDSUWtpS5kcS9A6iBFnzgGiwGAmjGdT_cmb3MduV-FoROos3UICQhzdGBWxkcuLqEgC0UN951Mpu888WhGCGjduBlKUzdeLIO7ubuxAYAyfrSdN4Ctb9OCpAwoBX7gipVfrtoIwapLbdn7d-7_1E0bKk1C3iIgvqtvhZ4uOiDCYyNWS3HL0y25SEMxJCQTNvumA7BFjkKg7qVQNaJwvyhSBi7q0Dj-bMEPDBabsO7DP1vDfOHfyJSKewu2X6k4O_0zUhrfhnVAfySPlBP1sCgrfMyKyI1WctK3F-mfHQrnpg",
+    "places/ChIJ4REd0U05TIYR9My4sNbJcQM/photos/AVoNoXQZcLC-1mqajXHotON5IAeFgq0zZ6upMXospwxciUnKSM2qTE6GHvj6506H7SEMpfK99_0ZYANPTgHZGZr7dyGdVsVHoJCf1TH97E28_JBcQUJKE2AvcpHzravM4R8Z5q3Wr6qY95dheMQ8HGSpzdo5bm2Za7oDa71l6MZPtHFd-ZmjbQ3sQkpoXBfXO5kZ2BdPKtzy3iXZBVZ9_ue77PISkImqMo7wnLf3A96DoWRwnSwDsSKRxyjy9gCSxxFmWeLzSUgfR5osLYcc9W9cWAP8L4tVRzQXYlX-7p4A55r4eoRm0IczBGfYrG8mFNJkRDlpOqtkW87iy-IlxIcGuxLFDHAelO36jQAUqS7-3AquLQoqAvgzTdwQKX7qy_O-gAtMZVHaV9ARQ9nKLgWDEMSbjfPsAT5UmbEOThL86vhe7g",
+    "places/ChIJ4REd0U05TIYR9My4sNbJcQM/photos/AVoNoXQzOAk-NsseRVp4ZrGT7xFKAoV3zzy6aeg8pbunH_zRoMPOxJrce1UUbdJs3NYtTVXsjozg0GuRmRpEAS7k2Ux0J0Z7Hkls2NZznYB-hSDz5rBTt1cNFLw8m9PnAO_WhOMDXJgWgAUIe_7S-LkK1y9h3koTcSTOz0jKm4Is-5piXDKmXqn2efYuQ8ZEwvTxG-ZskJA4h00ZBZjcBnWKSISmEzo1w2PRaIe0P9c1gy5sh-dfvLCfSQ3rLdzzOvzIhMpx09kxshd4Fy0AU2OOz4fcNUR3FAzr_wPsVY7nTy-4D6i7USRqsiedgbGHQpNPZ9EJsPKbLnW05lYkaiHq_24W2wKr1dRq7nJ2l_0WfXN9z_JIAHG1NuElD66KlK5hmH7NpYGm0XRH1tk2FH4ienntaZj7ZlBSOyibIO2RkwwU3A",
+    "places/ChIJ4REd0U05TIYR9My4sNbJcQM/photos/AVoNoXSbIY43SHyX68ubXDZiErL-qQIG4TnfkbW9AV_LFOJj482RQifIeQ0rK-gQaFFX4yDjcUcynEEqYwoKkSJsk4m4LUAF_p5ti7dWGE9RdAMBtPnqOOUyGxVjGfN_EYCZlu1QhkCgETI0Nt8L8TRwog-lSe02WIxFuEieI2orfrtGU9r3ybbqB_WHQE5rU9n6ua49nMbwmdUHEZEA3liOKPes0qbywHqPHs1JG6HadxBg76K3DHuaKn9yQGwin78_eQmCt-SI_0cJ1dQt68VEdmghMi26oV4iUIqc0R0qE7NGwjlgJzW5J_GxBzer7PcCgaKUOnM0jAvLZM9NMEgo3Fi_ZKhAhQAtrKIu1YrT9OHPZRjtVZVSXNpIaxnYu5E_BW5DwPLZmBNRybUpPobT0uBSPxBMpZmXc6sBYO0GW_wo2Itc",
+    "places/ChIJ4REd0U05TIYR9My4sNbJcQM/photos/AVoNoXS7IEaOQJP6JZXswyJxhI2dMQFWU6QL8m8xTbrL3t9EgmVBjBNDo7ZWwy6JWrYt2TNvfqgk8M9JHt2wepj-P_ZN0tJlp2xlbOXTy2XeaVBq5fUk-2wdyE2IgWVtth3yWv_xjR8f-aa_m2LNiYb2tUM2NYVfj_oIDeCfgwswEc4giP2pSPF64iHAGrEB2iIZvIAXg3pAyiJnI0I-tO2gE9P1T3Ils_d_nxogCEZQU0vaY1PxUOGFDLgHpW_F4oXOoJObs3W9HSWT6R1YdtoB5Ae03i_5JYD8PqTSQmMnR4bx33nxucinrfjX7-4jJ_sxI-969FD0l53nTcF2Qh4dCJB3-wVRIebn6tUA-YnheOtV3C4gJMKXWrycnJPEvyvDepOYiNlL-USLT6hpjXh6hJ6Dkvcb1EcEB9cRRYpM_kth6g",
+    "places/ChIJ4REd0U05TIYR9My4sNbJcQM/photos/AVoNoXRRVJmTofueLcYyN2vtjkgGE1VIem9Oaezt6uFErNoh3g7ZsvTeq7-N5dD6y0oHb0dU9xTputQriQES9BmR_Es1K-yFFFpvxPy-a0_ZzTQhvJnF-50NDQxBoPJaNgeg2jca8X9z4c5cMHkiWERl0EdNerYivzpra5acJIgPbYIB0nQx7T9tDvBdOq9yZ4I44mqrv7N1mKXDgRpD_lpqKKR5dJ8YoRmj2tx4rDhXOBOExEjWqHb8XqpMN_Pu9Csy5XHNV8aDRbY-8EHlx4VwIClJenubw2RVbVU-6XxR6i7xRyyButCw8vk1Q1gTlm37yN_02YD_vFh6vdsnAca2-wxXbPUUCRfHgboGSOoreMVz6ojrCcDLBhHSwoY3VbXvqCFJw_6M95KWRSkXKd-GraLAwEh2scdYQn60K0XyY_lXaA",
+    "places/ChIJ4REd0U05TIYR9My4sNbJcQM/photos/AVoNoXTLJdWvbxtJSPUBprffVgxsSf36PStu0fRYuSkCVJemoelo2YFM07wHnOoZb6R5u_Ho1nj1l95eQkSGbgQ8yizdhqVPlbo9PFVJ2DruqlvTlRv9zPSX4QyYBP5T1MTuL-Pt9ZcfqX52vpzRJGdYhztDrw0NC9X9jHb9z5Ol5rwZ1yurdba_x87X8DI2SXJ1VIwoavHA-UUMncwisQ2ZHCQVA2KFVJr73fsRlTz7OVAVNpdKIC1jUASUzFwVA7qqvrgPN-kR5SdNybWvMNxVges0YKFgRfatuHwfQHVqxfFmIRer8cXWTPi-kD4j2EUcq3kocEWP0baXG82rrlRGcChruRGhOxsnQ_2bdTKpeGVh0_MZX5bBLOJo5ZHFuTQdeY3GNy6jtbp77IBryKDqIpZAmTkSD564iEpAkklb1OMp0A",
+    "places/ChIJ4REd0U05TIYR9My4sNbJcQM/photos/AVoNoXRtejR2FEp8wpVG62V-JIh03G7XRmSQ_Wk4H5HnlWFQfF5ezwZLQj6C0-_83d3-s3ApZbvnI9uYNFIsscoOofRBaqmd3gvYHMtC5XFkPoAyCV09daxXS9MSn62YlkLFbhQhSmqonWU169Bb1qItaIvSJBhEplo8EZNl9NiOc9ltYl2WI0w0h2nlMwz-A0QU9OIDUnWXbEfKsS52k6ELgISZTrq7y425AZmS1-yLYlrWnOzdVq-y1glD911y9CmbwnTb7aof-yvuaSQDysyuw4pU0HYWVceHEreqjLx0GsQFk3ncjc6KTxSdZtk1uTHaK8LQ58iKT-mKEk2azfr5pMnbfrmwOYkyYHP5-GjTGnEikR8uKH_jOQvENFVjGQBwuyzSkcUUThQTb--FPCbLVsom-v4xgt3ZGuIaSxvv3V_sfAas",
+    "places/ChIJ4REd0U05TIYR9My4sNbJcQM/photos/AVoNoXR5fU_43ZTKd90aFJzO2pTV_44sLPG06FrXk5yg-SZQ71tHrycuRZF49y_0fw2m8k5ussLe8_T8yar1yGpS0OrxRtepdfbMJoTKNxtKFQYV_prR8XsO7JUkrBbtbOdZYdrgeO1Vq4WwXu9kkZJoVvnR3IgtaVUYOfFrwJmk0namIb-NQvAxU0Rz_4OZyWJ2tKGthbgE40pDRYdjcb8GO8G4mVrVWGmPahY2u0QCQ4UL7NrSa0JXcPcz4kyUrVqI0C3ADsThBy3ZBjesukRLHn8MPCCBa8usEiRvqe2VoctPWi3wWUB0E55qviopkIf6UmEcBi19hqgTYUQI9X63LrVe8JcaCN7Jg13vdIvNB2Q3UwuXMDvSDK2MQdwYBscTK22LhAfhD00F1BIW2al9nOtmBXoyxwyn3JSXrKwZwIvBBw"
+  ],
+  "published": {
+    "about": "We know taking the leap to go independent can feel overwhelming \u2014 but it doesn\u2019t have to be. We\u2019re here to support you throughout your entire journey.",
+    "about_score": 6.89,
+    "actions": [],
+    "address": null,
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "About Frisco \u2013 Eldorado",
+        "images": [],
+        "kind": "feature",
+        "text": "Welcome to Salon Boutique in Frisco, Texas \u2013 where luxury and professional excellence converge. Our prestigious address at 11445 Dallas Parkway Suite 250, Frisco, TX 75033, is more than just a location; it\u2019s a destination for beauty professionals who aspire to elevate their careers."
+      },
+      {
+        "entries": [],
+        "heading": "Salon Suite Inquiry",
+        "images": [],
+        "kind": "feature",
+        "text": "Ready to make your next move? Fill out the form to learn about our available suites and pricing \" * \" indicates required fields X/Twitter This field is for validation purposes and should be left unchanged. Full Name * First Your Email * Your Phone Number * What service(s) do you provide? * Location * Select location Glendale Arrowhead Palms North Scottsdale Scottsdale Surprise Arcadia Mesa Tempe Gilbert Henderson North Las Vegas San Antonio The Colony Frisco - Eldorado Frisco - Gaylord Highland Park Rockwell Tyler Houston Chicago Franklin Hendersonville Mentor Murfreesboro Consent * I agree to the following terms: * By submitting this form, you agree to be contacted by Salon Boutique via phone call or text message for follow-up and informational purposes. Message and data rates may apply."
+      },
+      {
+        "entries": [],
+        "heading": "Frequently Asked Questions",
+        "images": [],
+        "kind": "feature",
+        "text": "We know taking the leap to go independent can feel overwhelming \u2014 but it doesn\u2019t have to be. We\u2019re here to support you throughout your entire journey. Be Your Own Boss Run your salon your way. Set your own hours, prices, and schedule \u2014 all in your private suite. Enjoy the freedom to grow your business and live life on your terms. Create Your Brand Build a business that's uniquely yours. Design your suite, create your own atmosphere, and showcase your personal style. From your service menu to your client experience, every detail reflects your vision, helping you stand out, attract loyal clients, and grow a brand people remember. Sell Your Products Increase your income by offering the products you trust and recommend. Stock your favorite professional brands, create retail opportunities, and provide clients with the tools they need to maintain their look between visits. Turn every appointme"
+      },
+      {
+        "entries": [],
+        "heading": "Tenant Benefits",
+        "images": [],
+        "kind": "feature",
+        "text": "Running your own business is easier when the details are already taken care of. Every suite is fully equipped with modern amenities, designed to give you and your clients a professional, stress-free experience."
+      },
+      {
+        "entries": [],
+        "heading": "24/7 Security",
+        "images": [],
+        "kind": "feature",
+        "text": "Secure access gives you peace of mind \u2014 your suite and equipment are protected around the clock."
+      },
+      {
+        "entries": [],
+        "heading": "WiFi Internet",
+        "images": [],
+        "kind": "feature",
+        "text": "Complimentary high-speed Wi-Fi available throughout the building for you and your clients."
+      },
+      {
+        "entries": [],
+        "heading": "Utilities Covered",
+        "images": [],
+        "kind": "feature",
+        "text": "Weekly rental fee includes electricity, water, and Wi-Fi \u2014 no extra charges."
+      },
+      {
+        "entries": [],
+        "heading": "Cleaning Services",
+        "images": [],
+        "kind": "feature",
+        "text": "Professional crews maintain spotless common areas, leaving a lasting impression on your clients."
+      },
+      {
+        "entries": [],
+        "heading": "Frisco \u2013 Eldorado Reviews",
+        "images": [
+          "https://sb.brilliant-sky.com/wp-content/uploads/2025/08/aee0716cf76df2bdc7c348dbc4de43c490e68857.png"
+        ],
+        "kind": "feature",
+        "text": "Vanessa \u201cNessaGoesPlaces\u201d Stone \u2605 \u2605 \u2605 \u2605 \u2605 2 years ago The location is easy to get to and very well kept. Super clean. The first pick with my head down is the color and length before. Go see Sara's Suite 17. #lovemyhair Analise Christine \u2605 \u2605 \u2605 \u2605 \u2605 2 years ago Salon boutique is THE space for your small business. Very professional, great environment, newly renovated and pleasing to the eye. Sam, the property manager is extremely kind and helpful and truly wants the best for his tenants. Highly recommend this spot if you\u2019re looking to rent a home for your small business. Caitlin Casson \u2605 \u2605 \u2605 \u2605 \u2605 3 years ago I absolutely love renting at this location! Sam is the absolute sweetest and makes sure that you feel 100% comfortable in your new salon home. It is so beautiful, so clean, and so welcoming! Salon Boutique offers luxury suite rentals perfect for salon professional, massage therapists, aes"
+      },
+      {
+        "entries": [],
+        "heading": "Book your tour today",
+        "images": [
+          "https://sb.brilliant-sky.com/wp-content/uploads/2025/08/aee0716cf76df2bdc7c348dbc4de43c490e68857.png"
+        ],
+        "kind": "feature",
+        "text": "Salon boutique is a full service luxury spa offering independent cosmetologists, aestheticians, therapists and artisans their own business space. We provide professional and private beauty suites for you to run your own business. \" * \" indicates required fields URL This field is for validation purposes and should be left unchanged. Name * First Phone * Email * Location * Select location Glendale Arrowhead Palms North Scottsdale Scottsdale Surprise Arcadia Mesa Tempe Gilbert Henderson North Las Vegas San Antonio The Colony Frisco - Eldorado Frisco - Gaylord Highland Park Rockwell Tyler Houston Chicago Franklin Hendersonville Mentor Murfreesboro Message Contact Us Today At Salon Boutique, we make it easy for beauty professionals to thrive. Fill out our form and our team will reach out quickly to learn more about your salon suite goals. Our luxurious, fully equipped suites - complete with p"
+      }
+    ],
+    "description": "Discover Salon Boutique Frisco, TX \u2014 luxury salon suites for beauty professionals seeking an upscale space to create, grow, and elevate their careers.",
+    "emails": [],
+    "has_locations_page": true,
+    "hours": [],
+    "https": true,
+    "images": [
+      "https://salonboutique.com/wp-content/uploads/2025/10/1x3P_JBvEA66eHfQQWOwuSxYNInin3ILY.webp",
+      "https://salonboutique.com/wp-content/uploads/2025/10/1U9jSMngcMuKLWoW5hfjYUOqmYqQ_wOr0.webp"
+    ],
+    "js_rendered": false,
+    "menu_items": [],
+    "menu_media": [],
+    "mobile_ready": true,
+    "phone": "(310) 283-8951",
+    "products": [],
+    "services": [
+      "About Frisco \u2013 Eldorado",
+      "Salon Suite Inquiry",
+      "Tenant Benefits",
+      "Frisco \u2013 Eldorado Directory",
+      "Men\u2019s Haircuts by Cynthia and Elsy",
+      "Do\u2019s N Dye by Dana",
+      "Hair by Eyup",
+      "989 Men\u2019s Grooming",
+      "Alejandra Barrera",
+      "Gutierrez Chiropractic Clinic",
+      "Julie\u2019s Studio and Tru-Style Salon",
+      "Microblading Beauty"
+    ],
+    "site_host": "salonboutique.com",
+    "socials": [],
+    "text_words": 1198,
+    "title": null
+  },
+  "ratings": [
+    {
+      "reviews": 56,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=248201378407173364&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.4
+    },
+    {
+      "reviews": 2,
+      "source": "yelp",
+      "source_url": "https://www.yelp.com/biz/salon-boutique-frisco-2?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+      "value": 5.0
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "yelp",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Vanessa \u201cNessaGoesPlaces\u201d Stone",
+      "rating": 5,
+      "text": "The location is easy to get to and very well kept. Super clean. The first pick with my head down is the color and length before. Go see Sara's Suite 17. #lovemyhair"
+    },
+    {
+      "author": "Analise Bergesen",
+      "rating": 5,
+      "text": "Salon boutique is THE space for your small business. Very professional, great environment, newly renovated and pleasing to the eye. Sam, the property manager is extremely kind and helpful and truly wants the best for his tenants. Highly recommend this spot if you\u2019re looking to rent a home for your small business."
+    },
+    {
+      "author": "Caitlin Casson",
+      "rating": 5,
+      "text": "I absolutely love renting at this location!\nSam is the absolute sweetest and makes sure that you feel 100% comfortable in your new salon home.\nIt is so beautiful, so clean, and so welcoming!"
+    },
+    {
+      "author": "Stephen Powelson",
+      "rating": 5,
+      "text": "Just had my hair cut by Cynthia in suite 30. What a great experience. I'm super picky about my hair and was looking for a new place to go. Cynthia made me feel very relaxed and my haircut was awesome. I'll be back for sure. Thanks Cynthia,  I'm a customer for life! =]"
+    },
+    {
+      "author": "Kim Schwartz",
+      "rating": 5,
+      "text": "I go to Penny New at  New Vous Aesthetics! She has ALWAYS done a wonderful job doing all my waxing! She is VERY thorough and extremely professional! Penny makes you feel very comfortable no matter what body part you need to get waxed. Give her a try, you will really like her!"
+    }
+  ],
+  "trade": "Beauty Salon",
+  "url_check": {
+    "blocked": false,
+    "fault": null,
+    "note": "",
+    "published": "https://www.salonboutique.com/location/frisco-eldorado",
+    "result": {
+      "elapsed_ms": 3526,
+      "error": null,
+      "final_url": "https://salonboutique.com/location/frisco-eldorado/",
+      "html": "",
+      "ok": true,
+      "status": 200,
+      "tls_error": false
+    },
+    "tried": [
+      "https://www.salonboutique.com/location/frisco-eldorado"
+    ],
+    "working": "https://salonboutique.com/location/frisco-eldorado/"
+  },
+  "website_url": "https://www.salonboutique.com/location/frisco-eldorado"
+}

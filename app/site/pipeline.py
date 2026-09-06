@@ -210,11 +210,147 @@ def rebuild_opening(conn: sqlite3.Connection, lead_id: int,
     """
     history = sites.versions(conn, lead_id)
     parent = history[0]["version"] if history else None
+    sites.forget_stages(conn, lead_id)
     brief = leads.brief_with_overrides(conn, lead_id)
     config = opening_spec(brief)
     return _build_opening(conn, lead_id, brief, config, actor=actor,
                           parent_version=parent,
                           instruction="rebuilt from the photo descriptions")
+
+
+# The build in the order it happens, each one persisted so a retry re-runs only
+# what failed. A timeout in the last stage used to throw away the vision pass
+# and the design decision that preceded it, and the operator paid for both
+# again — while standing in someone's shop.
+STAGES = ("photographs", "direction", "page")
+
+STAGE_SAYS = {
+    "photographs": "Looking at the photographs",
+    "direction": "Choosing a direction",
+    "page": "Building the page",
+}
+
+
+class BuildFailed(RuntimeError):
+    """A stage did not finish, and which one it was.
+
+    Raised rather than swallowed. `workspace()` used to run the whole build
+    inside a bare `except Exception: pass`, so a failure anywhere produced a
+    blank screen after twenty-five seconds with nothing said about why.
+    """
+
+    def __init__(self, stage: str, reason: str) -> None:
+        super().__init__(f"{stage}: {reason}")
+        self.stage = stage
+        self.reason = reason
+
+
+def build_progress(conn: sqlite3.Connection, lead_id: int) -> dict:
+    """Which stages are already answered, without running anything."""
+    done = [stage for stage in STAGES
+            if sites.recall_stage(conn, lead_id, stage) is not None]
+    return {"stages": list(STAGES), "done": done,
+            "says": dict(STAGE_SAYS),
+            "next": next((s for s in STAGES if s not in done), None)}
+
+
+def run_stage(conn: sqlite3.Connection, lead_id: int, stage: str,
+              *, actor: str | None = None) -> dict:
+    """One stage of the opening build.
+
+    Each is idempotent: a stage whose answer is already stored returns it
+    without asking again. That is what makes a retry cheap, and it is also what
+    makes the census meaningful — a second pass over the same fixtures must pay
+    nothing, or tuning the diversity budget over a few dozen leads is
+    unaffordable.
+    """
+    if stage not in STAGES:
+        raise BuildFailed(stage, "no such stage")
+    stored = sites.recall_stage(conn, lead_id, stage)
+    if stored is not None:
+        return {**stored, "stage": stage, "reused": True}
+
+    brief = leads.brief_with_overrides(conn, lead_id)
+    try:
+        if stage == "photographs":
+            answer = _stage_photographs(conn, lead_id, brief)
+        elif stage == "direction":
+            answer = _stage_direction(brief)
+        else:
+            answer = _stage_page(conn, lead_id, brief, actor=actor)
+    except BuildFailed:
+        raise
+    except Exception as exc:                                   # noqa: BLE001
+        raise BuildFailed(stage, str(exc)) from exc
+
+    if not answer.pop("_transient", False):
+        sites.remember_stage(conn, lead_id, stage, answer)
+    return {**answer, "stage": stage, "reused": False}
+
+
+def _stage_photographs(conn: sqlite3.Connection, lead_id: int,
+                       brief: dict) -> dict:
+    """Look at them before designing around them.
+
+    Which picture leads, whether the only usable images are of food, whether
+    the "hero" is a photograph of a menu — all of it turns on what they show.
+    """
+    material = material_from_brief(brief)
+    unseen = photos.unreviewed(conn, lead_id, list(material.images))
+    looked = unreachable = 0
+    if unseen:
+        answers = vision.look(unseen, material.place_photos)
+        # Only when something actually looked. Without a key `answers` is empty
+        # for every photograph, and filling them all in as "could not fetch"
+        # would silently unblock a build nobody has looked at — which is the
+        # whole thing the keyless path is gating.
+        fill = bool(answers)
+        for url in unseen:
+            seen = answers.get(url)
+            if seen is None and not fill:
+                continue
+            if seen is None:
+                # We could not fetch it to look at — a scraped image that
+                # 404s, hotlink protection, something too large to send. That
+                # is a decision about the photograph too, and recording it is
+                # what stops one dead URL blocking the build forever. It never
+                # leads, and the operator can still describe it.
+                seen = {"subject": "unclear", "quality": 1,
+                        "is_hero_candidate": False,
+                        "why_not": "could not be fetched to look at",
+                        "alt_text": ""}
+                unreachable += 1
+            if photos.record_vision(conn, lead_id, url, seen):
+                looked += 1
+    pending = photos.unreviewed(conn, lead_id, list(material.images))
+    if pending:
+        # Nothing looked, so designing blind around photographs is worse than
+        # asking. The keyless path keeps the labelling step.
+        raise BuildFailed("photographs",
+                          f"{len(pending)} still to be described")
+    return {"looked_at": looked, "unreachable": unreachable,
+            "photographs": len(material.images)}
+
+
+def _stage_direction(brief: dict) -> dict:
+    """What kind of site this business should get."""
+    return {"config": opening_spec(brief)}
+
+
+def _stage_page(conn: sqlite3.Connection, lead_id: int, brief: dict,
+                *, actor: str | None = None) -> dict:
+    """Render, audit, gate and store — from the stored direction."""
+    direction = sites.recall_stage(conn, lead_id, "direction")
+    if direction is None:
+        raise BuildFailed("page", "no direction to build from")
+    result = _build_opening(conn, lead_id, brief, dict(direction["config"]),
+                            actor=actor)
+    return {"version": result.version, "rejected": result.rejected,
+            "findings": result.findings, "defects": result.defects,
+            # A rejection is a result, not an error — but it is not an answer
+            # to remember either. Storing it would let a retry believe the page
+            # stage was finished when no version was ever written.
+            "_transient": result.rejected}
 
 
 def open_site(conn: sqlite3.Connection, lead_id: int,
@@ -224,48 +360,42 @@ def open_site(conn: sqlite3.Connection, lead_id: int,
     The operator walks in with a site. It must already look made for this
     business — a version that opens on "no site yet", or on the same default
     theme every trade gets, is worse than nothing because it says the tool did
-    not look. So the direction is chosen from the evidence, and everything the
-    generator enforces about craft applies to it exactly as to any later
-    version, the content gate included.
+    not look.
 
-    Idempotent: a lead that already has a version keeps it. This runs when the
-    workspace opens, and opening the workspace twice is not a request to
-    rebuild.
+    Every stage in one call, for scripts and tests. The workspace drives the
+    stages one at a time so it can say which one is running; this is the same
+    work in the same order.
+
+    Idempotent: a lead that already has a version keeps it. Opening the
+    workspace twice is not a request to rebuild.
     """
     history = sites.versions(conn, lead_id)
     if history:
         return IterationResult(lead_id=lead_id, spec={},
                                version=history[0]["version"], unchanged=True)
-
-    brief = leads.brief_with_overrides(conn, lead_id)
-
-    # Look at the photographs before designing around them. Which picture
-    # leads, whether the only usable images are of food, whether the "hero" is
-    # a photograph of a menu — all of it turns on what they show.
-    #
-    # This used to wait for a person to type a description of every one, which
-    # is thirty of them per lead and directly contradicts opening on something
-    # worth showing. The vision pass answers it in one call, the screen still
-    # shows every guess for correction, and a correction replaces the guess and
-    # stays attributed.
-    material = material_from_brief(brief)
-    unseen = photos.unreviewed(conn, lead_id, list(material.images))
-    if unseen:
-        for url, seen in vision.look(unseen, material.place_photos).items():
-            photos.record_vision(conn, lead_id, url, seen)
-        brief = leads.brief_with_overrides(conn, lead_id)
-        material = material_from_brief(brief)
-
-    # Without a key nothing looked, and designing blind around photographs is
-    # worse than asking. The keyless path keeps the labelling step.
-    pending = photos.unreviewed(conn, lead_id, list(material.images))
-    if pending:
-        return IterationResult(
-            lead_id=lead_id, spec={}, kind="needs_labels",
-            unsupported=pending, unchanged=True)
-
-    config = opening_spec(brief)
-    return _build_opening(conn, lead_id, brief, config, actor=actor)
+    page: dict = {}
+    try:
+        for stage in STAGES:
+            page = run_stage(conn, lead_id, stage, actor=actor)
+    except BuildFailed as failure:
+        if failure.stage == "photographs":
+            material = material_from_brief(
+                leads.brief_with_overrides(conn, lead_id))
+            return IterationResult(
+                lead_id=lead_id, spec={}, kind="needs_labels", unchanged=True,
+                unsupported=photos.unreviewed(conn, lead_id,
+                                              list(material.images)))
+        raise
+    stored = sites.recall_stage(conn, lead_id, "direction") or {}
+    config = dict(stored.get("config") or {})
+    return IterationResult(
+        lead_id=lead_id, spec=config, version=page.get("version"),
+        rejected=bool(page.get("rejected")),
+        findings=list(page.get("findings") or []),
+        defects=list(page.get("defects") or []),
+        understood=list(config.get("understood") or []),
+        rationale=str(config.get("rationale") or ""),
+        read_by=str(config.get("read_by") or "trade table"))
 
 
 def _build_opening(conn: sqlite3.Connection, lead_id: int, brief: dict,

@@ -1,0 +1,352 @@
+{
+  "assumptions": [
+    "website found via google: https://www.friscodentalcare.com/",
+    "ignored 1 social link(s) belonging to other businesses their site credits",
+    "openstreetmap had only a town for this business, so it neither confirms nor contradicts the street address: Main Street, Frisco, Texas, 75034"
+  ],
+  "chain_signals": [],
+  "facts": [
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=15977660552650615361&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "3245 Main St, Frisco, TX 75034, USA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/frisco-dental-care-frisco?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+          "value": "3245 W Main St, Ste 271, Frisco, TX 75034"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "address",
+      "score": 0.3,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=15977660552650615361&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/frisco-dental-care-frisco?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        }
+      ],
+      "value": "3245 Main St, Frisco, TX 75034, USA | 3245 W Main St, Ste 271, Frisco, TX 75034"
+    },
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 3,
+      "dissent": [],
+      "field": "phone",
+      "score": 0.98,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=15977660552650615361&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/frisco-dental-care-frisco?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.friscodentalcare.com/"
+        }
+      ],
+      "value": "(972) 712-0500"
+    },
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=15977660552650615361&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "mon:0900-1700 tue:0900-1700 wed:0900-1700 thu:0900-1700 fri:0900-1300 sat:closed sun:closed"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.friscodentalcare.com/",
+          "value": "mon:0900-1700 tue:0900-1700 wed:0900-1700 thu:0900-1700 sat:closed sun:closed"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "hours",
+      "score": 0.3,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=15977660552650615361&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.friscodentalcare.com/"
+        }
+      ],
+      "value": "Mon-Thu 9am-5pm \u00b7 Fri 9am-1pm \u00b7 Sat-Sun closed"
+    }
+  ],
+  "latitude": 33.1509152,
+  "location": "Frisco, TX",
+  "longitude": -96.86182079999999,
+  "name": "Frisco Dental Care",
+  "notes": null,
+  "open_questions": [
+    "What is their street address?"
+  ],
+  "place_photos": [
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXQezwzEDpBYIV0MW3WFD942ykqvlX56h2FdTo1pmxfgDXeU0mlhOfoY94tl7YKnocIhos-8EOkYMLdS7MTw5ChNBxifAxKPTjgLcdVZzEFwIR6YE3B7wv0xmNu6wLNKm4d06Uy_-slWG-Q0iCN9vNRdlFdzji7mvuux65ie6RYnF9ZHlonIG831PaAzIb6kUEpSvi--TzYqFxfXAAi90vtH1KZqfDlCDBbcsokN_a-e_mbKpb9_dO1Hq1p-yJOUopKx7tpGNkWs29_MmUtJ5hsNSq2fQHlEZa8S2vfIDbb7LJBV7V8ly5noPQQNO63R0jKXVMEK6xXhw85o8PAArCppe46yOwp4Nxfy4JfhDpUM4HEvDCTZPEONuL3OjvA6ZRETbRjja_gVR9-nhywjbWYrS-F2GOwz2Rww8lEXhDlR3PKR",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXQsAsr3xlfYl6Kf1c_ceILGRoeRo3HHl08AdQgQXOHEh5Jj6Fpjd2yHJW--o2QfNLZ2Q9Dq_36WRikCyHZxbylmG5e93hs8PeEwkEaWD73_U0qNNDGu9l91aUP_RwrPHWpYeUazodchTGXCf9m1hWBOtZDNW1d7xMsbA5IoNEEGcHF2YvAtNdNW4_WFSdcCJBz5I_GmjIqXG5vabxfCVF38bOwXbVx07l0C55o-VxFr_OhGmgpSuY0TWBKsR4Szq-kY1EOJiC8Y5olzIOq86O0s6mUa7VVMDCxZ8zvQKTklnzI-lKLzXg374ZthkiMD6wxbqP-87aezeX_2cfj455TCefe8BVfigV5XDDZ58zfab48Ibh5q_jlDTJcX2WaYkREuyLX8adnvo8X9grCmllVvQwYSdJBeArem4-naujlNBQ",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXTGU2qzzeIm8p0T19fcFWcHQJcYvXoEIkyzbhIpg3c4VMSMvjsYjGFpbWpFaRGN4__nW7tFr6WlXIUcIxgIKv1W4qrD7f6iqeFsDCBwBkpaoxR8I56rRg_OOxGeOdohq2ikalBgUWIuM46b8dOsZezk5WMkbEvrxzL8noLSbN23ASyyiX8rZoSf7GpwBZUnCwWHcVLNqUOSX4xyHlQNVIk7DjxCs7zMatZUgC_DSYsMm1osBFLAyZi_hv8aBxVDPibRSmAdVgygAbijC2zMChjV7W_RKiLkKx5dhK2CDqyBYQiqPaykwNluG7pOyFaKe7aMDya4ymj92DBZIiHEsDdQs1mqmXWCZksLs_NqaIjMKyEwfjnRTgH53UavRvQRKpZ7iQmme46UAx7ADxVoehy_kZ3Km_2dSz5X9jzFPh1nXQ",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXSYdqo0pE05gpZ-afKbv5YfMCu2VU9o90-rsQJKcc8J73iqSSMDXJlQGZL6crhYRDbPNq-Mc4OxUFUs0urwEM7Ocdk5c66b8WDZOFla4qyrerAVWhmcg8bQIAlCKM6roHm5IbiheTfjyUgSAETy2ltUPHLNUykc-YozrVrqH8hBcidH0VOMtbdZNe9WWEujmDWh9LhNloEq8XQTUvyM8MdDMH2W9-tY-nUeCL8QsRJz0ro1FolWcNMgdTdgqItk6WGaHnKTmHFGoHahyDnfwtWNPccqthKWa9jgxNJsu-0lG5kUJBANE8QhhIGK5Zd6yFSWNvwoksDFkq62onhRQa8_d8jLrDBqDQ_6sidYSd3uPVogxNE-2BTg90trVGncdHb2cd--rHMkXwGjvD6ojqN5s_IhNm3PLQd5HfDpM_Sq4w",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXTs3HEs_GiKHmL1jRpfAvSOSyMY6LEX22cf4KaWpjFaeQQk_hmfgvVwyQPDNu7ljivG-XZ4ZHHJJ5MPzad-yOU7i-ZiLLz9nvNgnDGQ2Inmoujkn_r1WQ0AdWiOMMBQkaI_gZxjoxl790g3XS3EQEAZAnVqm5w2qBAGi5OuqvsMqSVSRfM3I6oivrUOBE0nS_xDW9Vr3gMexoE8eJC8N8h7tfZnCN71qfq2CWyMrGDG9G1sFPNlP_k46pAhm5ewtlc_xN0EYG_0MTckVMln-g-SdEMzm8iVhY72doD6ZDYIU-b7o4_W_8REtVYT9TPBlpcIdqKXDjtg6-VJ1tYTEJbXRfl7yRtDgfHTW4uBRGJgNoswxicSZrZZEMzeahbDrkPzUg_P5wuOn1A3KSS1YivNCNFne3Vd-dy5YQ2JGrg9800",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXRFfy-bhw_HCUXTeRw5evx2JnooeEISgnrFNb2s6yKz3ROUUEWgeBWhofzPZZwoa3cmZky2P8sMnA8EIZDr6jlTfpopMB1rYNtJx49WBtbEcV_zXr1mHbDpUEIMRHOvAXodQMBejJ-HzY-Ahv7COgAQB-384IWnrzUhVYCQEJlqdTRG7-DUtNKA61axOANN2GD6WbNkie4w8wITZB1zYFqFrgJ0rPDrLe-WAZTNrbyLSMClitg0vUQxm86nFjhWag7HhWrrDwnPajxVf7NQ-nwlBiagxqw6It2H6DhKm1maRuXAPqrBhZWKzTdgXb4kadWnodlppeLowzdHEDg56lluVNa89ndnJJ11xVO5ZHtHsP6_NWzFMC4S-_gtEprDdpqvsUDj8MaUNsTvua2eyRP19fdX-1_FLxahpMGHLabU_M1n",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXRw3Nb6RbjkYq8e271Zh5ZJaa7qFbsv3iCdxxLO66oSR71QiW_fpuz-YBKxrqLpi59dbvomyGWPWCe1GtD3Vomk43lT4ILa_oxtScKlV7vanvl4AnBUv_gcM1e0SxfjPGQ1VvOLhltomdn-Lz0baEwIKawns10MA4fKz4P3ZU0IUpQHQneE5CrhQWMMnjJ6voRls5XmNOEj7tPjffF_3uS-MWENZeKw1nZYOPZjS_cTVVN-hFyfKqbIwNRgXY6XSWCIm_9GOEHOJNRnkYNIr6HXcXg84Yoa0PYKZlheMHq33oOfBBfcXmTRCuaOoIVIZxYEewpi8dlZpdm8UOmX1o2evRfr0qZbGRbiTc0Ggw6d2eSixPwkLXq9P-jFg8-OAkDDA2FAqeYJZ_x10W2UxK4n718eiCY59M3nMa1QEe5b6A",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXQOtAN033FcFOfoa8yDA0xhsOJOGlwpdrPk0UG88FlasQw_Yr5aXjaACQgkWJxtkbyai9U_X08ZrGtFDMy4PMQeQ32cKWiVRxRJVMRxpEGN8QfCH9AzamHOyYlI0BZ9SoPEVbdta5DuUk6r1CyperpEGbDN7WsKMdHCJ8H2DWKN3_xLzXnMEWSAlCTWfYbUJsuX6GCae95kNi6e0ddw31xXJB4pbeOQoYi47LWxwYp-wgmjfXliKwVchQsNJTy2wo-3Gj2S9OLhRTOtjlu3e3KrdKy7gsyMLUvNNsR2Nkv8OfbRRT1nmU9cBYaygveeN6ZCR4toEfR4Zn5O7DS_NWZdD7we-oGAbKv8joViTBpPAV5XKgAfBT9gxMe1QBm-f_9RlWI7Rfzn3dcnbwcfD3TKH1Y6C49zIcgAraNNIu58J1ds",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXShsEK393N8QZrzBRFaTkMsiKIevI-nENiUYzQf0DvkPmj6OD-l7Btyp4omxL_GnJtswsmDaPCZWEveC9XIjYm-RvGLEUEsOE5MRIGbTCcSqm-i9Uy99f9zUuoQELmW5CPcEJPCFE2CgU0ydUtuGCuoAi_J4Xm8BtDhiy9NH1EQhnhDQtF_1rJjtdfDu-2I8jyO43fTELJXp-kBFvS2jl1wYVEnXNZlJri_leoOlQxWt_GW2o0572Dn52rTTCZulA3Y1khuKsQ-BxFIhdRL7G3__sEZGOTgZIOBtt3OyJi1DBYxyob65npgO8RomBa5y9WxRSEl992QEsgXba7MVpayNthW04cLe4BTgoRLB1Umagf_sa7xACfeaX6HIMBmjmtnvmHTTt2T19rIhUtK99OJtT4GIjvcexFn8HErrCxxTg",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXRw1_6CYjMj4YXw7uHwu47yYJ9_xpL-M8D1B8547Phx--ZDj6R2j6jDxLo-M8c5Y8OeOidnmneFtJFtJuto7LPLIHE40Oeryf8INv-16T-X0iC6utSr4cHYX_MrzwmrYx5cx031iN7bw0BQqvutjOZyg1T4BCxqKkpQJlx9gzd3Xcb1KngFRVE0-XuEUNbKj3gf1j46MP4y6zD7jEOD1D_PviHEfb61Pk8qAXLL_o8WcKNPJICkseU89UIUivwgEJmJAe5HgIPs3Q3Ut0y1YzpIpmOzWllcFuPiSB-kd7RYYpENknP4Ij7olsyU-2d-lXrNf5SvbtTG3c0CZFZ5h6NVlzKcrM1XGn3UL8s2BtW495jgecKkn-LZU7IuxBzihU3qY_dSVEZwUyMUQemF1SXjP3PHbHhYidJaKC5Tr1weDK3b"
+  ],
+  "published": {
+    "about": "We know that going to the dentist can be difficult sometimes, so we do everything we can to make sure you're relaxed and comfortable in our Frisco dental office. Our first priority is to treat you as we want to be treated: with respect, patience, and clarity.",
+    "about_score": 13.16,
+    "actions": [
+      {
+        "kind": "Book / Reserve",
+        "label": "Request an Appointment",
+        "url": "https://www.friscodentalcare.com/request-an-appointment.html"
+      }
+    ],
+    "address": null,
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "Dr. Garry Phillips",
+        "images": [],
+        "kind": "feature",
+        "text": "We know that going to the dentist can be difficult sometimes, so we do everything we can to make sure you\u2019re relaxed and comfortable \u2013 whether you\u2019re coming in for a routine exam, emergency dentistry , or Invisalign . Our first priority is to treat you as we want to be treated: with respect, patience and clarity. Give Us a Call Our Services In Proud Association"
+      },
+      {
+        "entries": [],
+        "heading": "Dental Insurance Accepted",
+        "images": [
+          "https://www.friscodentalcare.com/assets/images/index-financial.png"
+        ],
+        "kind": "feature",
+        "text": "Trying to find a new dentist in Frisco with your new insurance? Call us so we can help! Don\u2019t have insurance? That\u2019s not a problem! We have a great in-office payment plan to get you started! Schedule an Appointment"
+      },
+      {
+        "entries": [],
+        "heading": "Our Dental Services",
+        "images": [
+          "https://www.friscodentalcare.com/assets/images/index-services.jpg",
+          "https://www.friscodentalcare.com/assets/images/index-offer.jpg"
+        ],
+        "kind": "feature",
+        "text": "See All Our Services Family Dentistry Where your family\u2019s health is our priority! From regular cleanings to full mouth rehabilitation, our services will be available to you. Invisalign Invisalign is a comfortable alternative to wire braces. So, you can get the smile you\u2019ve always dreamed of at our nearby office! Dental Crowns A crown provides the functionality of a healthy tooth while the damaged one is given time to heal and repair itself. Cosmetic Dentistry At Frisco Dental Care, we\u2019re dedicated to ensuring that you achieve your smile goals by offering you various cosmetic dentistry solutions. Implants A dental implant is a prosthesis that connects with the bone of the jaw to support a crown, bridge, or denture. Limited Time Special $500 OFF Invisalign Services Call Us to Learn More"
+      },
+      {
+        "entries": [],
+        "heading": "DENTAL INSURANCE PARTNERS",
+        "images": [
+          "https://www.friscodentalcare.com/assets/images/reviews-julie-ann.png",
+          "https://www.friscodentalcare.com/assets/images/reviews-tracie.png",
+          "https://www.friscodentalcare.com/assets/images/reviews-joyelle.png",
+          "https://www.friscodentalcare.com/assets/images/reviews-chad.png",
+          "https://www.friscodentalcare.com/assets/images/reviews-chamaktar.png",
+          "https://www.friscodentalcare.com/assets/images/reviews-vicki.png",
+          "https://www.friscodentalcare.com/assets/images/reviews-cameron.png",
+          "https://www.friscodentalcare.com/assets/images/reviews-glen.png"
+        ],
+        "kind": "partners",
+        "text": "Patient Reviews Julie Ann Cash Wow! What a great experience. I went for my routine cleaning and the hygienist Cheryl was very attentive and educating me along the way of how I can improve my dental hygiene. Dr. Phillips did an assessment and was able to check a troubled spot of some sensitivity. He knew exactly what was wrong and treated me for my pain by filling off an area that was too high from a previous dentist. I immediately felt relief. This practice is clean, kind and happy to see you. Tracy Brown Modern equipment with an old school feel, never feels like I\u2019m being upsold. Love the hospitality. Joyelle Spears I have been a patient of this practice for over 10 years. The entire team, including the dentist, are so friendly and welcoming. Everyone makes certain that you are comfortable and do not feel any pain. I am so grateful to have the care of a team I trust to what is best for "
+      },
+      {
+        "entries": [],
+        "heading": "Our Services",
+        "images": [
+          "https://www.friscodentalcare.com/assets/images/services-1.jpg"
+        ],
+        "kind": "feature",
+        "text": "We provide a wide range of professional dental services in Frisco to meet your needs. We promise to provide every service with a smile, and to the highest level of satisfaction. Become A Patient Invisalign \u2192 Cosmetic Dentistry \u2192 Dental Crowns \u2192 Family Dentistry \u2192 Implants \u2192"
+      },
+      {
+        "entries": [],
+        "heading": "Invisalign",
+        "images": [
+          "https://www.friscodentalcare.com/assets/images/services-2.jpg"
+        ],
+        "kind": "feature",
+        "text": "Want a straight smile that shows your inner confidence without traditional metal braces? Introducing Invisalign, the clear way to get the smile you\u2019ve always wanted. Invisalign works by adjusting the teeth using applied pressure. But unlike braces, you don\u2019t have to give up on popcorn, candy, gum, or any of your favorite foods. Invisalign is also more comfortable when compared to traditional braces. There are no wires that have to be adjusted or other annoyances. Instead, you\u2019ll have to wear thin, transparent aligners that gently adjust crowded and crooked teeth. Invisalign aligners are made out of durable, medical-grade plastic. The aligners are almost undetectable and can be popped in and out easily. This virtually eliminates any interference to your daily life, whether you\u2019re at work or at home. Every few weeks, you\u2019ll receive a new set of aligners that will shift your teeth ever so s"
+      },
+      {
+        "entries": [],
+        "heading": "Cosmetic Dentistry",
+        "images": [
+          "https://www.friscodentalcare.com/assets/images/services-3.jpg"
+        ],
+        "kind": "feature",
+        "text": "Our cosmetic dentistry solutions are world-class, and hundreds of patients trust them and rely on us for their dental needs. With Dr. Philips' unique skills and long experience, we can provide customized and ideal solutions for most aesthetic dental issues. Learn More"
+      },
+      {
+        "entries": [],
+        "heading": "Dental Crowns",
+        "images": [
+          "https://www.friscodentalcare.com/assets/images/services-4.jpg"
+        ],
+        "kind": "feature",
+        "text": "A dental crown is a good treatment for a damaged tooth. Besides helping restore your smile, the crowns also assist in restoring a tooth that would be otherwise be extracted. Dentists recommend crowns because they have multiple benefits. Learn More"
+      },
+      {
+        "entries": [],
+        "heading": "Family Dentistry",
+        "images": [
+          "https://www.friscodentalcare.com/assets/images/services-5.jpg"
+        ],
+        "kind": "feature",
+        "text": "At Frisco Dental Care, we are your one-stop shop for all your family's dental care needs. We attend to patients of all age groups, from infants to seniors. And unlike other facilities that will treat you as just a number, we consider each of our clients as a unique case because we understand that each person's condition is exceptional. Learn More"
+      },
+      {
+        "entries": [],
+        "heading": "Dental Implants",
+        "images": [
+          "https://www.friscodentalcare.com/assets/images/services-6.jpg"
+        ],
+        "kind": "feature",
+        "text": "A dental implant is a prosthesis that connects with the bone of the jaw to support a crown, bridge, or denture. Learn More"
+      },
+      {
+        "entries": [],
+        "heading": "Over 30 Years of Comfortable, Quality Dentistry",
+        "images": [],
+        "kind": "feature",
+        "text": "We know that going to the dentist can be difficult sometimes, so we do everything we can to make sure you're relaxed and comfortable in our Frisco dental office. Our first priority is to treat you as we want to be treated: with respect, patience, and clarity."
+      }
+    ],
+    "description": null,
+    "emails": [],
+    "has_locations_page": false,
+    "hours": [
+      "Mon - Thu 9:00 am - 5:00 pm",
+      "Sat - Sun Closed",
+      "Monday 9:00 am \u2013 5:00 pm",
+      "Tuesday 9:00 am \u2013 5:00 pm",
+      "Wednesday 9:00 am \u2013 5:00 pm",
+      "Thursday 9:00 am - 5:00 pm"
+    ],
+    "https": true,
+    "images": [
+      "https://www.friscodentalcare.com/assets/images/index-banner.jpg",
+      "https://www.friscodentalcare.com/assets/images/index-join.jpg",
+      "https://www.friscodentalcare.com/assets/images/index-financial.png",
+      "https://www.friscodentalcare.com/assets/images/index-services.jpg",
+      "https://www.friscodentalcare.com/assets/images/index-offer.jpg",
+      "https://www.friscodentalcare.com/assets/images/reviews-julie-ann.png",
+      "https://www.friscodentalcare.com/assets/images/reviews-tracie.png",
+      "https://www.friscodentalcare.com/assets/images/reviews-joyelle.png"
+    ],
+    "js_rendered": false,
+    "menu_items": [
+      {
+        "description": "",
+        "name": "Special",
+        "price": "$500"
+      }
+    ],
+    "menu_media": [],
+    "mobile_ready": true,
+    "phone": "+19727120500",
+    "products": [],
+    "services": [
+      "Dr. Garry Phillips",
+      "Dental Insurance Accepted",
+      "DENTAL INSURANCE PARTNERS",
+      "Meet the Dentist",
+      "Meet the Team",
+      "Before & After",
+      "Cosmetic Dentistry Veneers",
+      "Teeth Whitening",
+      "Composite Bonding",
+      "Smile Makeover",
+      "Dental Crowns",
+      "Dental Implants"
+    ],
+    "site_host": "friscodentalcare.com",
+    "socials": [],
+    "text_words": 885,
+    "title": "Dentist Frisco, TX | Dentist Near Me | Local Dentist | Dentist Office Near Me | Cost of Dental Care | Frisco Dental Care"
+  },
+  "ratings": [
+    {
+      "reviews": 83,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=15977660552650615361&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.7
+    },
+    {
+      "reviews": 25,
+      "source": "yelp",
+      "source_url": "https://www.yelp.com/biz/frisco-dental-care-frisco?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+      "value": 4.6
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "yelp",
+    "openstreetmap",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "J M (Texas Foodie)",
+      "rating": 5,
+      "text": "Great dentist office.  Dr Phillips is very gentle and comforting.   I had a crown refitted and a teeth cleaning.   Everyone in the office is friendly and knowledgeable."
+    },
+    {
+      "author": "Mike",
+      "rating": 5,
+      "text": "This office is top notch. Not only are the friendly, they provide great service, reasonable prices and only recommend services required. They also are willing to work with patients that need to reschedule. If you're looking for a great dentist. This is the place to go"
+    },
+    {
+      "author": "Shawn Owen",
+      "rating": 5,
+      "text": "They were right on time, explained the process /costs, performed the work and had me on the road in 20 minutes. My teeth look great, can\u2019t tell where they were repaired!"
+    },
+    {
+      "author": "Laurie Dennis",
+      "rating": 5,
+      "text": "I broke a tooth, googled for a close dentist that had good reviews. That led me to Frisco Dental Care. They got me in the next day. I would absolutely recommend them to anyone needing a dentist! Every single one in there, from the front desk all the way to the Dr. were so kind and so helpful and instantly made me feel comfortable knowing I made the right choice in Dentists. Highly recommend!!"
+    },
+    {
+      "author": "Steve Marinelli",
+      "rating": 5,
+      "text": "I have been a patient of Dr. Phillips for at least 25 years.  He is a good dentist who listens well and takes time to explain. Very happy with him.  And Roxanne has been cleaning my teeth for several years and is always careful and gentle.  I recommend his office."
+    }
+  ],
+  "trade": "Dentist",
+  "url_check": {
+    "blocked": false,
+    "fault": null,
+    "note": "",
+    "published": "https://www.friscodentalcare.com/",
+    "result": {
+      "elapsed_ms": 167,
+      "error": null,
+      "final_url": "https://www.friscodentalcare.com/",
+      "html": "",
+      "ok": true,
+      "status": 200,
+      "tls_error": false
+    },
+    "tried": [
+      "https://www.friscodentalcare.com/"
+    ],
+    "working": "https://www.friscodentalcare.com/"
+  },
+  "website_url": "https://www.friscodentalcare.com/"
+}

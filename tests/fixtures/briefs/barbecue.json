@@ -1,0 +1,409 @@
+{
+  "assumptions": [
+    "website found via google: https://hutchinsbbq.com/"
+  ],
+  "chain_signals": [
+    "their own site has a locations page"
+  ],
+  "facts": [
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 4,
+      "dissent": [],
+      "field": "address",
+      "score": 0.98,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=1884774704280475398&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/hutchins-bbq-frisco-11?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        },
+        {
+          "source_type": "openstreetmap",
+          "source_url": "https://www.openstreetmap.org/way/669408531"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://hutchinsbbq.com/"
+        }
+      ],
+      "value": "9225 Preston Rd, Frisco, TX 75033, USA"
+    },
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 4,
+      "dissent": [],
+      "field": "phone",
+      "score": 0.98,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=1884774704280475398&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/hutchins-bbq-frisco-11?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        },
+        {
+          "source_type": "openstreetmap",
+          "source_url": "https://www.openstreetmap.org/way/669408531"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://hutchinsbbq.com/"
+        }
+      ],
+      "value": "(972) 377-2046"
+    },
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "hours",
+      "score": 0.8999999999999999,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=1884774704280475398&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://hutchinsbbq.com/"
+        }
+      ],
+      "value": "Mon-Sun 11am-9pm"
+    }
+  ],
+  "latitude": 33.1545813,
+  "location": "Frisco, TX",
+  "longitude": -96.80476809999999,
+  "name": "Hutchins BBQ",
+  "notes": null,
+  "open_questions": [],
+  "place_photos": [
+    "places/ChIJdZp5CSU8TIYRBpdHipsQKBo/photos/AVoNoXRQa3oipc9lS6YWh_L1uQSa3DGryrDeIcuzZIAu4tIycDcR9gvzhV5unAtQyZ3ehkSiHuTS7l37F97DudFRKK4Ff8_tYBav0N04hool0CGgkt2qjnLXdnrat41KyxPFnc1TUWMIeLSbCqEvwW3AhoovgwV05-xTFtx-iLPPFtD9Avlc-kW-iDbp9-067HXZ20446in-vKZS-KTz96fgBUNR3o1MwpUzSvI1xyTP0uMHH6wvT4TTGTfFs1d5PUcONlO52YONvw9FVnUXLlUYakrikSz4pqFHLbaQ74vhXCOYp8Jzn2UsBxO_CEOhaGV8VyANQJAaJEZZ1hjxrPGWv7oygfqN6tYmjlGR5_goGwm4vSVNLaWZlGV5sdpFANTGqf5XJDLNhi2cqcz2uyhRrhM7RYFbN45IQ-dMjpxd4OVIDFO-hE2ycsA3dl-pri3K",
+    "places/ChIJdZp5CSU8TIYRBpdHipsQKBo/photos/AVoNoXQIddPMllmyf-Wm9vwWVAs4AJV7RLkEq_fEm3OqkM0ZquSAcgiMz3DIQFeIePhn3dWs20PqDtFASxkZnl3-IH2CDx-Yh5pGYga3Qaf-SakRddsGEFfHGvv2Rm-zpExwBJRbmeSKe6u5z0I7H8SkLGWIzQtrCkhKeuux3vDA09AraXhKak8nivka-meqUmRD79HuWqk6IwdPbE1ACHaQUVhYpkeDQbZE68VZs05tMHhw_XvYp6aUgtXHHmE3Uh1xizaxzB5nt7bVujbIAvRpLPxsyNBpC3q5p95ImnC4zj60u8d2zPzcAhLa_sqc7B32xunxKht1j-pwLZdyq8OezXoxO_Nz4i0hwT-K5bEP9_U6kwWhe3pVpILu1KBTd2SY4TplFS_6UKFigJpNY1zcns75PjS3Zka3gnQp6m2mEW91kTyxAqXB2czgaA2tpr8Q",
+    "places/ChIJdZp5CSU8TIYRBpdHipsQKBo/photos/AVoNoXTQ5XPCTvPPhtdOUaY8oiWfWkqe8-ZdVC_Apozc_s_1biPdGYqtk3Cgs4tGmQ6Hsxu2JCAo3eeXGPdjbh3cmSbkg6KnBbfgtvKOAdpoTDC9hj1kAyj_5jMku-VBxp7Cn_nK1J-alXr2ev2I33jrHCs2qNKnN1xaiKBgJCqLKdduJpZcuFV4LXSufs2ECOWZ9Y4A_rex5yHPEF4wIQp3Im2fkfkmlX_sz7WqUTcIF9eEMstPHyO1WBbQZZhNkTtF59sW4xuwYCbvx4dYCLWCKB8oMwTb9pseyZbWWbk6KchVrtS4PMhiCTxRxJHk5FvzMlwqR50R4HGMUvn7d8xoxSaC51YwHPqTDQ_8-Rp_OgKFoWXlyla2Mh_6oCfaVMR9XyAs4aGEbHhgkC6Qswz7gxwe3TFtbpogSamEThGhu7RM16-pToeI4E5nDZfYxlww",
+    "places/ChIJdZp5CSU8TIYRBpdHipsQKBo/photos/AVoNoXQQSmtt29H-aT3CvSqPXVz1cYvTZjLCxoTzOFFngXvZteVZl9bfHkoTHG4hgx__MMf-WJPZX_aHs7JjsfRzM0xN4t2Be14PJbsajwvQUFwe-qzkGI18qSKuUUo2j95odOxcE3PVPog2vQfEeKXDfMhxjTjvUUhwoIxWeWqT047PFwKtbxky-YLsWP5CfNoi0IfrHqQVmq9gq56jKZjqCYqzgggmd-_9XdQf_k5jokcZP8P_hU11NfsfQ4ImECxvcqHrhL86O2CzFlEQbD7O3Dqrvqf_GHg29WZp-NDRpyaGdLioiqaOhlqWIJDceLmEKClMweja8FzpNhi_cF4Br-DqKZvSYt1kRBCZyB-Jr2ud7Zmk2ZnnlYDwQ7CuICbDlPznEhaJScfWytL-Njtdztgpwcm_it-cN1rs_9qMG82qYrgAGcK3HV-gUpZM4Nan",
+    "places/ChIJdZp5CSU8TIYRBpdHipsQKBo/photos/AVoNoXSbVAuNXJZ2iQq30hcXEcTo23ODSQySNAHfEOTcT5m6XcNF24NOgGTDDdkER_Ytu9n0DWWxKKif430NV81qNGaqcP_owvPSyQp1nz5IWlHYQLvJAQInL9_o-tN15Ho6MNYRIMSirbQhJHMdX7Rz_-rDEU0orh3GaSzP6jSCoPf-8zfvtNRf4QEbgXiz8Kje0eBS_ia3jBNhq0djUOuPFgFeuX6nkW4ttwtkiWo8JCmNEyGyGOLB8X3yvXj8nlXrda6ejt4MbBA74YunZuWTvdfRyABMvoqzt1T5gQUOaS9zqJiUKWH0LoeT4dIC7hE6Gy-Y8cr8ubU8j6A1Q2kr7EPCbbRWpDv9Agsh4vdWQ0tVDpRH08jHSnpOa6DNoYg1lMcKrK938JrzTDo5SnjG7xCPBgToRgpV0S_p4nXxWf-ly-EJynKN2XCcIeqybFFP",
+    "places/ChIJdZp5CSU8TIYRBpdHipsQKBo/photos/AVoNoXS9naD0IxG3Bpsu0WRYWjtonqpimmWIk2vztUSdG0TLexGnn3oVfqoeBBpNlxj9cQcRZwVFcB-r0SojsthL1-z1DCZ7f1cgKyRNQ-JyYfMnVcewhArCaZyxR1DVWWKVF10wgOLWQKhU9F0eK4iBr3QNciDH6STind5kzVs2sb79z65ylOka3vq7nx-vOQfKt0PofMBEU6cmKDh-fmP4K_g_851Ao2p9MW158dyPoOgvN0ym8tc3Un9TBbZA96HJYve1OUaFGR87G9KCB3_g6DwJr8ijC2envyBHe0Kf_kZ9o-RqpXP3rxiv4JocojJs0Po9h0HfoeqnzmTl9dzfDqn0rssn6ObMvyYXyH9lD3uOL2LlDno90l3KvEXGL4jj5olUhAznNZ72NF01qZeDZ2QPRYN_mrpolK5kxyZEw5TGp3ajpehj01bVkxZaw7pP",
+    "places/ChIJdZp5CSU8TIYRBpdHipsQKBo/photos/AVoNoXTHUu8VJIsh6bf9J9KlcLiY-ayPNE2_ExPrB7jPii2KWx4UfYy1Uyv3Ul_rFwxDDArC0MI37RPggiOPtXcQQ4OeFwUbd-ufvDE9GmVSOyQif5rmiaEEZk5QMo5C6JpYW_rySmHdrurC-xWuUU2bonVmM2I-MO8utqgVpmqVs-ZPRbYNI2j52J5mfjtfj3yjiZ7FrzCCO1b7VuTGUV_hVFQWH3WD_XKDnMEmYGfYHMetb0pxaGHghfizdMvZrvgHVyhgfGrchK06VU-P4ZBmGost0-03iFfdoHgHBATgnsbrQF5ZJmJunijWKNZcY7x8nr4QI4kwXYhJ6h5PK7uEon8aA5yTqPqRlrbuK5QyV7sDjojZ_sQNqDEUor49Qq-qm4OjxDHkdz3tNVzxUB373EpnWk_B31btXVaMU4SEXMk_aZrGGjV26K5d18aWw1Kr",
+    "places/ChIJdZp5CSU8TIYRBpdHipsQKBo/photos/AVoNoXSASv_c_RK9pSTsdQ6s5H9xbAu4rtyg68R1dVCOVcnNn6p1pxmodyBCrr_io5Bo0vQO6edMLHopgPWoidVgoNMeQA9B8Do3skIzP0sXqjrzhyM34zTgvldCLRLvFoeAcDbCc0AD2JUFm91eNUjUZAm2RnfoL3LOeXBZX8MngVyx_qYJGtSABwGWSulQgOYUnFH-GYTonIuYutyqgBrElwHyYZ7mWtNl1T2SXnES9KDF3tBxoJT4TFhtdJfS5Gq-KzG2yYab2zkXrPprZBFf0PoSTc884U7t0LUt5V2LWkna-Ee6V7rw6l6E3b_8RviEu0xR4lsJ11KGwTjQvx71Qe0PDaKLlBlFo_CVtjf-eFOZF-JkDQ8IEhqLAnAH8BDFOXojlUbRJ-tLIfFZKE43EYxECvdG00qajWFqf6D1KXwaWpM3IYVXJJWhAIkaFw",
+    "places/ChIJdZp5CSU8TIYRBpdHipsQKBo/photos/AVoNoXRklJKzJw_EXEM08Jlks6gxBt-EnmXGFfhXX3GybW8yDt1CEyq70EbrlfN9-WTE9dx4avZtPqKiA_2OdKtce63ZISOpwkIFPY9opI9Q3t9xu8BfAe55cHv1cw_dWy_RIzj3lty62hDTxBJ0o_X8XmTq62XqYd6bAyGR63D92TU1upGSqBXanKwT-rOPDhJnkKSQkM1KAPQMxe8QMqHhkDKumXTxkGD8STgZqqW9sodXYyT64kdq3YybAX7oGgezfW5LL6FyVpMO-kN5mzvFoMKkw6BSxxDhGlUW-4bc6J5ICqRnPZLx_Fi9HfhEvTu-aUI1_gXbiJ_P6VKVBS_nnwoMzK3qCHMnwLFPHZX1Nf2mIUproVu1zyBpxP3BrMUZHtWt-_KmdqwERIkukHtVv6hWS2mX8AUrWTXK74xsKi7oF02UWucMimfr0T1lP1a2",
+    "places/ChIJdZp5CSU8TIYRBpdHipsQKBo/photos/AVoNoXT5LrtlulntJwSxcfpG7fKlqsagsUMyOm5zCbzJik2iBaNgestZhwJCpKMgoz4PlRWzLLbqk_yJiOKKVzydfMHCh1xjhn6QbKAhrH6c_qe9qmRBXe745l4VXVKGIsRkNvk6qB3iF9RIS5Z4-2Hab5a0BuD-Pq4dzkt3G3qZCKsJgmOOQfU2WYj-UZO2eTTX60m4lh2ZHut90WA9L3pdAVADEpUpfFZQx_ynEb0zIEcl6lNTG1HU89dHEBn9IaNbjeR6BA3tPDnsjact9vMPCGBao2dzUBoUvJV5IdIO20hFeQr4dE0vo848Os8pxDD8SEk-e-5V2v3oLqldFEOqD5yfBtZpUfXY2NOB8msh7LwxMJ7vYFtEYdWNT-LapgQn5fjD8CYouakSuWbrKmKghOPg8p39IrQZZziKCd_YPGi1v-hWLLkrEQYcrzZsTHaU"
+  ],
+  "published": {
+    "about": "We cater across the Dallas\u2013Fort Worth metroplex from our McKinney and Frisco locations, including Plano, Allen, Prosper, The Colony, Little Elm, Celina, Dallas, Fort Worth, and Arlington. Hosting a bit farther out? Ask us \u2014 we\u2019ll do our best to make it work.",
+    "about_score": 11.47,
+    "actions": [
+      {
+        "kind": "Menu",
+        "label": "Menus",
+        "url": "https://hutchinsbbq.com/menus/"
+      },
+      {
+        "kind": "Shop",
+        "label": "Shop All Merchandise",
+        "url": "https://hutchinsbbq.com/shop/"
+      },
+      {
+        "kind": "Get a Quote",
+        "label": "Request a Match-Day Delivery Quote",
+        "url": "https://hutchinsbbq.com/catering-form/"
+      }
+    ],
+    "address": "9225 Preston Rd, Frisco, TX 75033",
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "Summer Catering Focus",
+        "images": [
+          "https://hutchinsbbq.com/wp-content/uploads/2025/11/frisco.jpg"
+        ],
+        "kind": "events",
+        "text": "Summer Hosting? We\u2019ll Handle the BBQ. Pool parties, lake days, backyard birthdays, graduation blowouts. Whatever\u2019s on your summer calendar, Hutchins BBQ is ready to feed your crew without you lifting a finger. Summer\u2019s too short to stress over cooking. That\u2019s where we come in. Our catering team is here to\u2026 READ MORE READ ALL NEWS Built on Faith. Served with Purpose. Hutchins BBQ has been honored multiple times as one of Texas Monthly\u2019s Top 50 BBQ Joints and was voted Best BBQ in DFW for 2025. But our greatest recognition comes from living out the values that built this place \u2014 faith, family, and serving others well. Since 1978, we\u2019ve believed great barbecue is more than a meal \u2014 it\u2019s an opportunity to bless people, share a table, and serve with purpose."
+      },
+      {
+        "entries": [],
+        "heading": "Catering",
+        "images": [
+          "https://hutchinsbbq.com/wp-content/uploads/2025/11/mg_1859.jpg"
+        ],
+        "kind": "events",
+        "text": "Hutchins BBQ catering offers authentic, slow-smoked BBQ and sides for events across the DFW area. Whether it\u2019s a wedding, corporate event, or family gathering, we specialize in delivering the best BBQ experience with Texas\u2019 finest flavors. Trust Hutchins BBQ to cater your next event and satisfy every guest with our delicious BBQ options. Learn More About Catering"
+      },
+      {
+        "entries": [],
+        "heading": "Merchandise",
+        "images": [
+          "https://cdn.shopify.com/s/files/1/0146/3546/6838/files/brisk_d68535d1-7ee5-4a51-beb5-51178778eaf0.png?v=1788363449"
+        ],
+        "kind": "feature",
+        "text": "Rep Hutchins BBQ wherever you go with official gear, gifts, and barbecue-inspired merch made for true Texas BBQ fans. From branded apparel to everyday favorites, our shop makes it easy to carry a piece of Hutchins with you beyond the table. Whether you\u2019re shopping for yourself or picking up something for a fellow BBQ lover, our merchandise is built for those who appreciate faith, family, tradition, and real Texas smoke. \u2039"
+      },
+      {
+        "entries": [],
+        "heading": "DELIVERY",
+        "images": [
+          "https://hutchinsbbq.com/wp-content/uploads/2025/11/mckinney.jpg"
+        ],
+        "kind": "feature",
+        "text": "Get the best BBQ in DFW delivered right to your door with Hutchins BBQ delivery service. From our signature smoked meats to tasty sides, we bring the flavors of Texas BBQ straight to you. Perfect for office lunches, family dinners, or any occasion where you crave quality BBQ without leaving home. Learn More About Delivery"
+      },
+      {
+        "entries": [],
+        "heading": "Get Hutchins Delivered BY UBER EATS",
+        "images": [],
+        "kind": "feature",
+        "text": "Enjoy award-winning Hutchins BBQ delivered right to you. Order all your favorites, from our legendary brisket and ribs to the famous Texas Twinkie. Fast, easy delivery only through UberEats. ORDER MCKINNEY ORDER FRISCO"
+      },
+      {
+        "entries": [],
+        "heading": "Get Hutchins Delivered BY DOORDASH",
+        "images": [],
+        "kind": "feature",
+        "text": "Enjoy award-winning Hutchins BBQ delivered right to you. Order all your favorites, from our legendary brisket and ribs to the famous Texas Twinkie. Fast, easy delivery only through UberEats or DoorDash. Order McKinney Order Frisco"
+      },
+      {
+        "entries": [],
+        "heading": "Is the Hutchins BBQ in McKinney and Frisco the original Hutchins BBQ?",
+        "images": [],
+        "kind": "feature",
+        "text": "Yes. Hutchins BBQ was founded in 1978 by Roy and Delores Hutchins, and our restaurants in McKinney and Frisco are the original Hutchins BBQ locations \u2014 owned and operated by the Hutchins family. We\u2019re the team that invented the Texas Twinkie and has been named to Texas Monthly\u2019s Top 50 BBQ list for over a decade."
+      },
+      {
+        "entries": [],
+        "heading": "Are you the same as Roy Hutchins BBQ in Arlington or Fort Worth?",
+        "images": [],
+        "kind": "feature",
+        "text": "We share the same barbecue family roots, but it\u2019s a separate business with its own ownership and locations. The Hutchins BBQ you\u2019re looking for in McKinney or Frisco is us \u2014 the original Hutchins BBQ. The Roy Hutchins BBQ restaurants operate separately in Arlington, Fort Worth, and Trophy Club. If you\u2019re headed to our McKinney or Frisco pits, you\u2019re in the right place."
+      },
+      {
+        "entries": [],
+        "heading": "What is a Texas Twinkie?",
+        "images": [],
+        "kind": "feature",
+        "text": "The Texas Twinkie is our famous bacon-wrapped, brisket-stuffed jalape\u00f1o \u2014 invented right here at Hutchins BBQ. It\u2019s a guest favorite in the restaurants and a showstopper at catered events ."
+      },
+      {
+        "entries": [],
+        "heading": "Can I order Hutchins BBQ online or have it shipped?",
+        "images": [],
+        "kind": "feature",
+        "text": "Yes. You can order online for pickup and delivery across the Dallas\u2013Fort Worth metroplex, and we ship our hickory-smoked brisket and ribs nationwide through Goldbelly \u2014 so you can enjoy Hutchins BBQ anywhere."
+      },
+      {
+        "entries": [],
+        "heading": "Texas BBQ catering packages for every event",
+        "images": [],
+        "kind": "events",
+        "text": "From intimate backyard gatherings to 300-guest weddings and corporate events, Hutchins BBQ caters across the Dallas\u2013Fort Worth metroplex \u2014 McKinney, Frisco, Plano, Allen, Prosper, Dallas, Fort Worth, and Arlington. Choose the package that fits your event:"
+      },
+      {
+        "entries": [],
+        "heading": "Drop-Off Catering",
+        "images": [],
+        "kind": "events",
+        "text": "Smoked meats, sides, bread, and all the fixings delivered ready to serve. The easy choice for office lunches, parties, and watch parties."
+      },
+      {
+        "entries": [],
+        "heading": "Full-Service Catering",
+        "images": [],
+        "kind": "events",
+        "text": "On-site setup, serving, and cleanup for weddings, galas, and large events. Sit back and enjoy your event while we handle the BBQ."
+      },
+      {
+        "entries": [],
+        "heading": "Office & Corporate Catering",
+        "images": [],
+        "kind": "events",
+        "text": "Boxed BBQ lunches and buffet trays for meetings, client events, and company celebrations. Order ahead with on-time delivery across DFW."
+      }
+    ],
+    "description": "Award-winning Texas BBQ and full-service catering in McKinney & Frisco. Smoked brisket, ribs & more. Dine in, order online, or book catering today.",
+    "emails": [],
+    "has_locations_page": true,
+    "hours": [
+      "Mon-Tue-Wed-Thu-Fri-Sat-Sun 11:00-21:00",
+      "Mon-Sun 11am-9pm"
+    ],
+    "https": true,
+    "images": [
+      "https://hutchinsbbq.com/wp-content/uploads/2025/11/13.png",
+      "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK.png",
+      "https://hutchinsbbq.com/wp-content/uploads/2025/11/doordash.avif",
+      "https://hutchinsbbq.com/wp-content/uploads/2025/11/ubereasts.avif",
+      "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK-1.png",
+      "https://hutchinsbbq.com/wp-content/uploads/2025/11/catering-1.jpg",
+      "https://hutchinsbbq.com/wp-content/uploads/2025/11/frisco.jpg",
+      "https://hutchinsbbq.com/wp-content/uploads/2025/11/mg_1859.jpg",
+      "https://hutchinsbbq.com/wp-content/uploads/2025/11/mg_1806.jpg"
+    ],
+    "js_rendered": false,
+    "menu_items": [
+      {
+        "description": "",
+        "name": "Brisket Seasoning",
+        "price": "$14.99"
+      },
+      {
+        "description": "",
+        "name": "Hutchins BBQ Sauce",
+        "price": "$12.99"
+      },
+      {
+        "description": "",
+        "name": "Hutchins Barbeque Texas Shape Tee \u2013 Rust",
+        "price": "$25.99"
+      },
+      {
+        "description": "",
+        "name": "Hutchins Barbeque Logo Tee \u2013 Black",
+        "price": "$25.99"
+      },
+      {
+        "description": "",
+        "name": "Hutchins Barbeque Patch Trucker Hat \u2013 Camo",
+        "price": "$25.99"
+      },
+      {
+        "description": "",
+        "name": "Hutchins BBQ Original Rib Rub",
+        "price": "$14.99"
+      },
+      {
+        "description": "per person AND Banana pudding can be added for $3.50 per person",
+        "name": "DRINKS can be added for",
+        "price": "$2.00"
+      },
+      {
+        "description": "Minimum Order",
+        "name": "20 Person Minimum OR",
+        "price": "$650"
+      }
+    ],
+    "menu_media": [
+      {
+        "kind": "pdf",
+        "label": "View Menu",
+        "url": "https://hutchinsbbq.com/wp-content/uploads/2026/09/catering-09022206.pdf"
+      },
+      {
+        "kind": "pdf",
+        "label": "View Menu",
+        "url": "https://hutchinsbbq.com/wp-content/uploads/2026/09/delivery-and-setup-09022026.pdf"
+      }
+    ],
+    "mobile_ready": true,
+    "phone": "+1-972-377-2046",
+    "products": [
+      "Brisket Seasoning",
+      "Hutchins BBQ Sauce",
+      "Hutchins BBQ Original Rib Rub"
+    ],
+    "services": [
+      "Summer Catering Focus",
+      "Catering & Delivery",
+      "Mckinney Menu",
+      "Frisco Menu",
+      "Texas BBQ catering packages for every event",
+      "Drop-Off Catering",
+      "Full-Service Catering",
+      "Office & Corporate Catering"
+    ],
+    "site_host": "hutchinsbbq.com",
+    "socials": [
+      {
+        "name": "Instagram",
+        "url": "https://www.instagram.com/hutchins_bbq/"
+      },
+      {
+        "name": "Facebook",
+        "url": "https://www.facebook.com/hutchinsbbq/"
+      },
+      {
+        "name": "TikTok",
+        "url": "https://www.tiktok.com/@hutchinsbbq"
+      }
+    ],
+    "text_words": 661,
+    "title": "Hutchins BBQ | Texas BBQ & Catering \u2014 McKinney & Frisco"
+  },
+  "ratings": [
+    {
+      "reviews": 13869,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=1884774704280475398&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.8
+    },
+    {
+      "reviews": 3488,
+      "source": "yelp",
+      "source_url": "https://www.yelp.com/biz/hutchins-bbq-frisco-11?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+      "value": 4.7
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "yelp",
+    "openstreetmap",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Harshpreet Singh",
+      "rating": 5,
+      "text": "Had an amazing experience at Hutchins Barbeque! The atmosphere was warm and inviting, with a classic Texas BBQ vibe. The staff was friendly, helpful, and made the whole experience enjoyable. The food was outstanding. The brisket was perfectly smoked, tender, and full of flavor. The massive beef rib was incredibly juicy and worth every bite. The jalape\u00f1o sausage, beans, corn, fried okra, and broccoli salad were all delicious and complemented the meats perfectly. Fresh bread and BBQ sauce completed the meal. Everything tasted fresh, and the quality of the barbecue truly stood out. If you\u2019re looking for authentic Texas-style BBQ with generous portions and excellent service, Hutchins Barbeque is definitely a must-visit. I\u2019ll gladly come back again! Highly recommended!"
+    },
+    {
+      "author": "Amanda Phillips",
+      "rating": 5,
+      "text": "We're from Oklahoma and this was some of the best damn barbecue we've ever had. You can tell from the time you walk in it was going to be good by the sure busyness but they get you through quickly with lots of humor. We came for the Texas Twinkies but they were already sold out at 12:00 on a Saturday afternoon which was a disappointment but the rest of the food we had was amazing. My husband had the brisket & pork sandwich. I got a brisket baked potato and they have all of the fixings and they allow you to get your own condiments. Cheese butter sour cream bacon bits and they have all the fixins pickles and onions for sandwiches, extra bread. Also to our surprise they have free dessert peach cobbler and banana pudding. We got mac and cheese which the kids devoured as well as creamy corn and potato casserole. They also have sauces at the table original, spicy and tangy. We both enjoyed the spicy. The only critique I would have is their dining area is not super kid-friendly very few places to put high chairs but the waitresses were super nice and helpful. Service was 100%"
+    },
+    {
+      "author": "Min124 Kim",
+      "rating": 5,
+      "text": "If you\u2019re looking for authentic Texas BBQ around Dallas, Hutchins BBQ is definitely a place you shouldn\u2019t miss.\n\nThe brisket was incredibly tender, juicy, and packed with smoky flavor. The ribs were perfectly cooked, and the famous Texas Twinkie absolutely lived up to the hype. Their sides\u2014especially the mac & cheese and creamed corn\u2014were just as memorable. To top it all off, the complimentary banana pudding and peach cobbler for dine-in guests were a fantastic bonus.\n\nThe restaurant has a lively, casual Texas atmosphere, and although the line can get quite long, it moves efficiently and the staff remain friendly and welcoming.\n\nThe only downside is that it\u2019s on the pricier side, but considering the quality and generous portions, it\u2019s easy to see why it\u2019s consistently ranked among the best BBQ spots in the Dallas\u2013Fort Worth area."
+    },
+    {
+      "author": "Mario Scroggins",
+      "rating": 3,
+      "text": "I wanted to love this place because so many have recommended it to me. It\u2019s good BBQ, but it\u2019s not great for BBQ. The brisket was moist & tender with a great bark, seasoned to perfection outside. However, I was expecting more flavor throughout the meat and did not receive that.\nThe chicken was good but I personally didn\u2019t care for the rub. I\u2019m not holding that against them. It was still good. The Mac & Cheese was simply basic Mac. The ribs were tender but again, they lacked flavor.\nThe Texas Twinkie was amazing. It\u2019s everything\u2026..I would like it if the cream cheese filling was seasoned but all and all it was great.\n\nThis place looks and has the ambience of a classic BBQ joint but for the premiere BBQ features (Brisket & Ribs), I was expecting a bit more flavor.\nAgain, I was just good not great but that\u2019s just my preference. This place has a lot of respect for what they do and I\u2019m sure it\u2019s well deserved."
+    },
+    {
+      "author": "Marco Luzano",
+      "rating": 5,
+      "text": "Hutchins BBQ absolutely delivered! The brisket was the star\u2014tender, juicy, and packed with smoky flavor, with an incredible bark and a perfect smoke ring. The ribs and sausage were excellent too, and the chicken had a great smoky char.\n\nThe sides definitely held their own. The mac & cheese was rich and creamy, the potato salad was on point, and the creamed corn was seriously addictive.\n\nIf you\u2019re looking for authentic Texas BBQ with generous portions and meats that speak for themselves, Hutchins BBQ is a must-try. Come hungry\u2014you\u2019re going to want a little bit of everything!\n\n5/5 \u2b50\ufe0f \u2014 Great BBQ and definitely worth the visit!"
+    }
+  ],
+  "trade": "Barbecue Restaurant",
+  "url_check": {
+    "blocked": false,
+    "fault": null,
+    "note": "",
+    "published": "https://hutchinsbbq.com/",
+    "result": {
+      "elapsed_ms": 904,
+      "error": null,
+      "final_url": "https://hutchinsbbq.com/",
+      "html": "",
+      "ok": true,
+      "status": 200,
+      "tls_error": false
+    },
+    "tried": [
+      "https://hutchinsbbq.com/"
+    ],
+    "working": "https://hutchinsbbq.com/"
+  },
+  "website_url": "https://hutchinsbbq.com/"
+}

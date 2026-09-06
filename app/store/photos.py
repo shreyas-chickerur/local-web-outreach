@@ -99,36 +99,30 @@ def tag_for(description: str) -> str:
 
 # How well each label works as a hero, per kind of business. A roofer's hero is
 # finished work; a restaurant's is a plate or the room.
+# How well each subject leads, per kind of business, best first. One literal:
+# the seven assignments that used to sit below this overwrote every key except
+# `default`, so the reasoning in the comments described values that never took
+# effect and editing the literal did nothing.
 HERO_PREFERENCE: dict[str, tuple[str, ...]] = {
     # The plate first: nobody books a table because of the carpet.
-    "food": ("dish", "room", "drink", "people", "exterior"),
+    "food": ("dish", "room", "drink", "detail", "people", "exterior"),
     # Finished work, then the crew. A roofer sells competence, not premises.
-    "trade": ("exterior", "people", "room"),
+    "trade": ("work", "exterior", "people", "team", "room"),
     # The practitioner, then the room. A waiting room is not a reason to go,
-    # but a face is — and the equipment photograph is actively off-putting.
-    "care": ("people", "room", "exterior"),
+    # but a face is, and the equipment photograph is actively off-putting.
+    "care": ("people", "team", "room", "exterior"),
     # The room sells the treatment here in a way it does not in a clinic.
-    "groom": ("room", "people", "exterior"),
+    "groom": ("room", "work", "people", "exterior"),
     # Bodies moving in the space, then the space.
-    "body": ("people", "room", "exterior"),
+    "body": ("people", "room", "work", "exterior"),
     # Professional services rarely have a photograph worth leading with, which
     # is a fact about the trade rather than about the business — the identity
     # call should be free to reach for type instead.
-    "desk": ("people", "exterior", "room"),
+    "desk": ("people", "team", "exterior", "room"),
     # What is on the shelves, then the shopfront.
-    "retail": ("dish", "room", "exterior", "people"),
+    "retail": ("product", "room", "detail", "exterior", "people"),
     "default": ("room", "exterior", "people", "dish"),
 }
-# The subjects added for the trades that had nowhere to put them: a roofer's
-# finished job, a shop's stock, a practice's team.
-HERO_PREFERENCE["trade"] = ("work", "exterior", "people", "team", "room")
-HERO_PREFERENCE["care"] = ("people", "team", "room", "exterior")
-HERO_PREFERENCE["groom"] = ("room", "work", "people", "exterior")
-HERO_PREFERENCE["body"] = ("people", "room", "work", "exterior")
-HERO_PREFERENCE["desk"] = ("people", "team", "exterior", "room")
-HERO_PREFERENCE["retail"] = ("product", "room", "detail", "exterior", "people")
-HERO_PREFERENCE["food"] = ("dish", "room", "drink", "detail", "people",
-                           "exterior")
 
 # Never the lead image, for different reasons: a wordmark is not a photograph,
 # an award badge belongs in the recognition band at size, raw produce does not
@@ -263,24 +257,6 @@ def unreviewed(conn: sqlite3.Connection, lead_id: int, urls: list[str],
     decided = {row["url"] for row in rows
                if not by_person or row["actor"] != MACHINE_ACTOR}
     return [url for url in urls if url not in decided]
-
-
-def rank_for_hero(urls: list[str], labels: dict[str, str],
-                  trade: str = "default") -> list[str]:
-    """Candidates, best lead first. Unlabelled photographs keep their order.
-
-    Unlabelled is not the same as unsuitable: a business nobody has labelled
-    should still get its original ordering rather than an empty page.
-    """
-    preference = HERO_PREFERENCE.get(trade, HERO_PREFERENCE["default"])
-    def rank(url: str) -> tuple[int, int]:
-        what = labels.get(url)
-        if what is None:
-            return (1, urls.index(url))          # after labelled, in page order
-        if what in NEVER_LEADS:
-            return (2, urls.index(url))          # never a lead if we know better
-        return (0, preference.index(what) if what in preference else len(preference))
-    return sorted(urls, key=rank)
 
 
 # Words that are noise in a filename rather than a description of the picture.

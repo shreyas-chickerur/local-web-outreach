@@ -1,0 +1,220 @@
+{
+  "assumptions": [
+    "google matched a listing in a different town: 2801 N Central Expy, Plano, TX 75075, USA",
+    "website found via google: https://callmilestone.com/plano/plumbing",
+    "yelp matched a listing in a different town: 4651 W John Carpenter Fwy, Ste 170, Irving, TX 75063"
+  ],
+  "chain_signals": [
+    "sources point at 2 different street addresses \u2014 each likely a separate branch",
+    "google returns 5 locations under this name in one search"
+  ],
+  "facts": [
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=15379541617398071893&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "2801 N Central Expy, Plano, TX 75075, USA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/milestone-electric-a-c-and-plumbing-irving?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+          "value": "4651 W John Carpenter Fwy, Ste 170, Irving, TX 75063"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "address",
+      "score": 0.3,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=15379541617398071893&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/milestone-electric-a-c-and-plumbing-irving?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        }
+      ],
+      "value": "2801 N Central Expy, Plano, TX 75075, USA | 4651 W John Carpenter Fwy, Ste 170, Irving, TX 75063"
+    },
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/milestone-electric-a-c-and-plumbing-irving?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+          "value": "(972) 532-0405"
+        }
+      ],
+      "field": "phone",
+      "score": 0.7999999999999999,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=15379541617398071893&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://callmilestone.com/plano/plumbing"
+        }
+      ],
+      "value": "(972) 913-6165"
+    }
+  ],
+  "latitude": 33.035781,
+  "location": "Frisco, TX",
+  "longitude": -96.70628099999999,
+  "name": "Milestone Electric Air Plumbing",
+  "notes": null,
+  "open_questions": [
+    "What is their street address?",
+    "What are their opening hours?"
+  ],
+  "place_photos": [
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXSgGYblSZCyGS6xSNbHKqSBzRPdIFuA--ofyJ3_UaQ2krq5midlGRoVa_VYxLysXAqVUtaP0B41OFr5W3mguoIfkFo3yRENtsvZk2WW5K8Cste4zT0LNPJRlkhzLUMjvlOnHkgUE0NG4HmgE9YGorGkgOSw4doDnXHrg_iWTQFzMIVl9GJPN6coSF_WWSsqxGga35R5i0PFeOpUUTKxGLVxcR1ueuXzWH1tzFs2FfCsxeUdMYnhU33ha3_VtQ-QwnLRMc1xSlN6Oj3DH1hfPzi4cZf0uk_8AFRGHqZKxcSm8MSqVyYfINIkqrY4AL84avtg4G775Ut6jXKpshIHn8qt9FbrFDT0xst2Xyc-KtLINl395A5H-OW1Rn0PHSVrnwDC2Rlxr2gjbXO58casOFXIXmrc9OBNBK1BkMpVq409qihI6v5IVaNY_u_lflQr",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXRFukEZa-xYrh-dbbzb82hqRvcihj4yqr4jLOpxmziVw8x4ATIrhTbNWMe4SUGEye9iPPPrKhZ4BPMRramq8Tj3EjIZwxpvfBma3eU3u_Sm1nyBCSkjQ7oiYtEstsfcxTOt4OXkZe7zXdWwnvLmILFFnuNaSi1Qfya5pGr3WNPJDU8sjb020sx6P0gJJivIgLPvL4n4wWpXyFTB9Ywad5jvszxvUsPZ4Kt1G2_hK8rlJuZcdNMYAXuxe_8r_9FsF-QYI2l9mjTD5vy6ZNqCTuDZS98pu4HYLAyqfbPKY9wedq7ROJpX4YzNWLTf6zazRhbUjj2u5_OVJf2vD3Rjaz1SlFmO6ZN9ACQyC5ei0y4LmkjuF88Int3Dx7pUlrOadNhOfvCw3EaflaW5svqlSp4hShD_6VBjCPLl2WMWH5XT__RtRorFD0Zm0E4ZcJ1Z",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXScUdLVI8Rhu_BYy-wfqe6m-VEOp7OdbJ_9J9W8Xu36HEhp_mzbhKKEYhIo3uJZaAQ7t-whDgXrtKi5jsTRhz19t0zev7ox6-7K_qvF4f5u0ZqN9JySvCUosoGUNA5w-IewT-ANwqVkqoTgnLEZmNqZYseCud_GjGmm4_WFMXw0apy-jri1q3DDyvO45JUGuDMDX-0ZhuLDAOk-esa1w2JP9lvNwssgSi3m9Z9DUeW-yYFJftTgiuCehuZhL0wbNzR9GTj0xVt4VM21bWSB11NZM-IyQ1ccLSBTtnGng9TlsFVlLJFR9GmC-VrnqlFuryKEm-DlrlUeibNElnqOkXoadK1jyI00JPubyaswHTCnEhcqyYYr2sSAkbL4SxTjZeU0zEJAc6n6P3XO0BV5VLCqkWii9qnrKHn15QNn0Sw",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXQst0YI9h2LoezC7iZkzkaJIoQ_0BqYzQJ-2-W3Q6Qzu49TPeERB1D3cm8FrKZWzz5KJJwTjkylcpSZo0uWHpNoOaE1kxz7poy4un2dIU2ckMTBttS5AQGq4Ce0NKpknGLBOjzplr4vdhi2ocFhj2RBCiqdgxy5zl55BJwNKRHTX0r4uhIo_usl0i_sHFORV1HTW9J35mk38Qt39qUl8LrzUZrBQxjVpwmvvAMqGEriD22qfr_8bytE2MKKYPh23NRj2e48GdiM-6DajjrCl7vtT7cRlhazjkK-kKdYakX7OOpDEEGgC4VFTqnYW76WLXA4fbR0mCKZ8Ujo2MS-MsKAt6l4AI-x-yK370DzaGtm_Np7MgmyPZsRrAnL03O8h2mAinRIWbdExeRT41gGSeQljzFjfx4u4_PgrKd8TCLARSSgGNyVWCjjX0oEws86",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXTy4SO8Oa0AuBtA3166hcoAZRiWNCWlRh8TDp0k05rTLU5vwErRTHgufI7DM_ggjID_fe97wq8PIhQoApxuBZTZhaIRgnzCtlQr1OU41XFk5x-IOMcN1tkdQILnWdRqRR419DJCUBmGKN_PVVq2pVCGN7DeretplikpWAdQavtlmcwJ5ej2feFBHfp0HrI8RYWHE0NBy-ub9o4VqEeudtFFOiNcAAJV_IUYwoacCDmmYVz_l8iSiTyY42tBJM6q2re54kgS7Jy3LVO2bXirCgCRO1O0nH-pwcSIUgDRv_D_YiJVJtBNgj6zLciVdKcKNvx0d7o1OglYrvFbEtvfzagRG0jsUalIGccZ0khOt7-sZvvgGLaqr-jjxIOSHPbaWohohejLWcgAqxi0zEGKVvWF8Jl504BjTQivx0RQGg8WZfhebHGk1gy4OWe4M9qg",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXQsS1nWD0RM0STjuP6u5Hn8dTVLCeWYFWQAbEUg6DpgtOyen83LPY0Ca48vzQ9-y3r5uho9uUVJX4lV50LFBOtCvUHeZhp2JvRvXElwxCG7hb6M5bLI-X2TXRdQzWG33YPz8F4gSJ87xMB8EDVo3aqRH9YIAZxH2Tognv2kqPpIdWcwGq_mQxh8UdepooAMLXmeMn1mPRfqqbZIuA4xEpM8TFM9EhMettvEGKrxrDHmjeXT6BY7pdu689qf196qP-deExnZx3T7mUQVd6xbVWbKnJTcdrKAH7vuM0_3Yosa-Poo9STZztEOqwcJkAYYz066D223qgg7WYjF3ukNp9fchbo-Pl8fPdHJgCPv4_P-Do1bFTboxKmMKHMUAcTp3G5SJ_aIGIRDWA_vJcaSWkb-gDG1_4ja7Gj_BPn8IMXNdjXQ2XhwZNVs3m_cIA",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXTVswOTAokYxzlVNRbtfoIrdq0DKiGXBL_upNIcEI6zwX9leAz_X6ta4TkvP-fYyp_lWkEIoxwLT-ZyYfIYOIHixNgHEQ42uorpB5l9TFPDrQaVWrVyfH5G0qat0weuoKV3GQ3JLXwuBl8pFZsDB5KMZiZ8X8gzGFWdkEApN7Fq6FbB5TSC2yHehuO061CbBG14Pr8EAPAz1vBrAeO__Vsq4-G4dzicy2-U1zLaOpUGSAstVc6m17Xqta8o-6Sp_vsMlbh9l4Aov95VeW0mEP3ma27FJbz-BTCsStunEpizhs0DGv0Jk8UZP6UVXGa24_cg-vXI6Cbv8_xIJxBKnQ6ooEZxU4z2FfPCG9-u1YswzjKqceiXtb6qCtUp9dlWj7Rahffeer0j2tN5ab4drrNTXPFy9GoYv6C5KSph1hOSY5_P",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXRUu7bzJqcRCBsZUDW6jibG25a_0nGmmsZvlIF-JM-_PhVVknZ5sdj-80pOly3ltrhQa-9DKeRhkL-BwTsY3L9XmeEYGUxMv9Hh0ZTpsdibMOWputVWG3y1OrwrzrqAM6EOQRrbh47W_RPS0jbx1TUL-rdE_AZOmj8BaMPSB8nC9YWECCoCP5QK_g6Y83bCPGDJGMd3t49s9UQHPhklSgVZJ_F5_wdf8Oy-SeHToUSpMgnQxVLJAw4ZrsKO_Juh1loH_REVOJfFxLs6JccenBhnRXcnUtPs6sONMObGMnxYeJx3-vt_Cexvx4HeA4eqQ1cRei3awwNWQcTdl57rfZU5gQbbkQL2Xbk4HE13MHHuNn-1tJ0-boY2kaPOSLX9FX5_7BLzjz5LXicuJo37oTmL2ucYL4ABwHgTwcu79Fp_l6sKR9xgjNugVulyRABD",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXTuf3MXN23_WqqVbsnK9EffDqSzbDcx4i2w33DIqokQ_fEitRmUgRn6h1s7GTCEezYvYevK88jenZM4moVwfi6r_SMMXHt3cNbG2D4Sk0LPVrxNimcWYJgBnasFtMKBX5IA5KRc7ZukMrKv9SffSLciQU9Jv_KVg4d3LXNSy-aSYE6ZbUJ8_SNkNSWrIwlauuqHp1g1a2YMvPZGw7wRk28mKMsf1An8O6k9yj0Y8JPzyMt-stZqVtwlSzxkvbz12CWGaOP4R-rmTKBQhDMGoFoibBdzjmrnsGvKrg6oMvdMV8gAoI57n-CdkbMLHlj3MpaY1zm3y_lKqeGlWwHdkkr6HSD-1FxuI86ZFKsc6uGqoTL6HfpWN2kJGcrjWxgHhK2oiZ3fEq2wbFO5lfUFO_goLY0jxy_YL3jPhNc6P2RiaUM",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXRQaAc0lJGVbarktBbB0Ef5pmsXNI9hxJy67ZozZcYuXedI7wBPuZ1JbFR2tnuEcmvnIQTQoLApgl_zLqTVC5dVj_oLKThJjcMTYYOV0k-NuuTzsma1XMoBk8oMTdEylOwnfPH02AVf8pLT0upLeziiAAFyNin3Na3BAuHF0zXiTjIfVqFPvZhcjzAc69n2iRARiJVFbgJyj1Vn7BaELLHfZ604HxWQ3-KWEyteg0g-1ge6Bd6F_tgoi5gyhIF3EDpfwUDyT7jzkejJ81S2JpIoRMBSdYTQM_x6c4AF8LWpDbLKbwRge4IPMwGEEgOWooo6MLP11pik4aB1Jc4Dkpg21EYS5f74vQJBEUHWtddSADq954c9TCAzUaJytQSV_YPKVxzwmq3klWYSjSIkiiuyLJ7MrDrWtQ---L7w6uU"
+  ],
+  "published": {
+    "about": "What our customers say about us are very important. We\u2019ve acquired over 20,000 5 star reviews from all Plano residents who have used our plumbing services. From how timely we are to how trustworthy we are, we strive to give a good experience to everyone who uses our services.",
+    "about_score": 16.73,
+    "actions": [
+      {
+        "kind": "Book / Reserve",
+        "label": "Schedule Online Now",
+        "url": "https://callmilestone.com/schedule/"
+      }
+    ],
+    "address": null,
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "Milestone Plumbing is Located in The Heart of Plano!",
+        "images": [],
+        "kind": "feature",
+        "text": "Since November 2022, we\u2019ve proudly served the Plano, TX community, providing reliable plumbing services for over 13 months in the area. Centrally located: Our office ensures that we can offer same-day repairs and respond quickly to your plumbing needs. Fully stocked work trucks: Our plumbers come prepared and are always ready to handle everything from minor leaks to major emergencies. 2-mile radius of many Plano neighborhoods: This means we have faster arrival times and more efficient service, so you can count on us to resolve your plumbing issues quickly and effectively. Whether it\u2019s a routine repair or an urgent situation, we\u2019re here to keep your home running smoothly. Call Now For Service Schedule Online Now Call Now For Service Schedule Online Now Same-Day Plumbing Repairs"
+      },
+      {
+        "entries": [],
+        "heading": "Trusted Plano plumbers delivering fast, reliable service",
+        "images": [
+          "https://b2048518.assetcdn.net/2.0/2048518/wp-content/uploads/sites/7/2024/04/9A0A9697-2-web-res-med-quality.jpg?lossy=2&strip=1&webp=1",
+          "https://b2048518.assetcdn.net/2.0/2048518/wp-content/uploads/sites/7/2024/10/Untitled-1t-2.png?lossy=2&strip=1&webp=1",
+          "https://b2048518.assetcdn.net/2.0/2048518/wp-content/uploads/sites/7/2024/10/Untitled-1s.png?lossy=2&strip=1&webp=1",
+          "https://b2048518.assetcdn.net/2.0/2048518/wp-content/uploads/sites/7/2024/10/BBB_a.png?lossy=2&strip=1&webp=1"
+        ],
+        "kind": "feature",
+        "text": "When you\u2019re dealing with a plumbing issue, waiting isn\u2019t an option. That\u2019s why we have plumbers in Plano ready to provide same-day plumbing repairs you can trust. From leaky faucets to clogged drains or water heater problems, we\u2019re here to \u2018fix it in a flash\u2019. With our reliable and efficient service, you\u2019ll have peace of mind knowing your plumbing is back to normal\u2014today, not tomorrow! Call Now For Service Schedule Online Now Call Now For Service Schedule Online Now Awards That Reflect Our Service! We Fix All Plumbing Issues"
+      },
+      {
+        "entries": [],
+        "heading": "Different Plumbing Services We Offer",
+        "images": [],
+        "kind": "feature",
+        "text": "At Milestone, we provide a wide range of plumbing services to meet your specific needs. Whether you need a water heater installation, help with clogged drain lines, or other plumbing solutions, our team is equipped to handle it all. Our expert plumbers ensure reliable service for any project, big or small. Plumbing Installation Plumbing Maintenance Plumbing Repair Safe and Trusted Plumbing Company Choosing The Right Plumber in Plano, TX Finding the right plumber in Plano can make all the difference when it comes to receiving reliable, stress-free service. It\u2019s important to choose experienced professionals with a proven track record of quality work and exceptional customer care. At Milestone, we take pride in offering: Upfront Pricing : We begin work on your home only after providing you with a clear, upfront price. Same-Day Service : Our fully stocked trucks carry the parts needed to han"
+      }
+    ],
+    "description": "Looking for plumbing services in Plano, TX? Milestone's skilled plumbers are here for you. We can repair any plumbing issues you have. Call our Plumbers today!",
+    "emails": [],
+    "has_locations_page": false,
+    "hours": [],
+    "https": true,
+    "images": [
+      "https://callmilestone.com/plano/wp-content/uploads/sites/7/2022/10/9A0A9697-2-web-res-med-quality.jpg"
+    ],
+    "js_rendered": false,
+    "menu_items": [],
+    "menu_media": [],
+    "mobile_ready": true,
+    "phone": "9729136165",
+    "products": [],
+    "services": [
+      "Trusted Plano plumbers delivering fast, reliable service",
+      "A/C & Heat"
+    ],
+    "site_host": "callmilestone.com",
+    "socials": [],
+    "text_words": 650,
+    "title": "Plumber in Plano, TX - Voted #1 Plumbing Service Near You!"
+  },
+  "ratings": [
+    {
+      "reviews": 6202,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=15379541617398071893&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.9
+    },
+    {
+      "reviews": 14,
+      "source": "yelp",
+      "source_url": "https://www.yelp.com/biz/milestone-electric-a-c-and-plumbing-irving?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+      "value": 4.6
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "yelp",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Jeff Willie",
+      "rating": 5,
+      "text": "Cody Roberts is an ultimate professional, transparent, honest, and totally focused on the homeowner\u2019s needs.\n\n6/29/26\nFrom the moment Arturo Moreno arrived at my home, he was professional, courteous, and knowledgeable. He took the time to answered all of my questions, his attention to detail, technical expertise, and commitment to doing the job right were evident throughout the entire service visit.\n\nExceptional customer service is becoming increasingly rare, and Arturo exceeded my expectations. He represents Milestone with professionalism, integrity, and genuine care for the customer.\n\nI highly recommend both Arturo and Milestone for anyone needing honest, high-quality HVAC service. Thank you for a job well done!\n\n7/30/26\nDayton Gallagher, the ultimate professional. Very high standards that represent the Milestone Brand. The heart of Milestone is people first, family first which is extremely rare for a large company. Service technicians like Dayton Gallagher is the heart of your company."
+    },
+    {
+      "author": "Mandana Shahbazi",
+      "rating": 5,
+      "text": "I had an excellent experience with this technician/Mr.  Brett Conway . He was professional, knowledgeable, respectful, and took the time to explain everything clearly without any pressure. He went above and beyond by cleaning both AC units and making sure I understood what he found and what was worth addressing versus what wasn\u2019t. What stood out most wasn\u2019t just his technical skill, but his character. He communicated with kindness, patience, and genuine professionalism. He has the qualities of someone who will make an outstanding leader in this company. I hope his hard work and dedication are recognized because employees like him are rare. Thank you again for such exceptional service."
+    },
+    {
+      "author": "Farrah Carlton",
+      "rating": 5,
+      "text": "Ryan with Milestone was outstanding! He communicated clearly throughout the entire process, took the time to explain the issue and my options in a way that was easy to understand, and was incredibly respectful of my home. He was professional, knowledgeable, and made a stressful plumbing situation much easier to deal with. I really appreciated his honesty and great customer service. Highly recommend Ryan and the Milestone team!"
+    },
+    {
+      "author": "Rakesh Panchal",
+      "rating": 5,
+      "text": "We had a great experience with Clayton Berry Hill from Milestone! He provided top-notch AC service, explained the issue clearly, and patiently answered all of our follow-up questions. Best of all, he didn't try to oversell us on anything we didn't need. Highly recommend!"
+    },
+    {
+      "author": "James Kerr",
+      "rating": 5,
+      "text": "Milestone is a great brand and their techs are always courteous, affable, and professional.  They explain the work, execute with precision , and are worth the money spent. Shout out to Hiram for the repair of our air conditioning.  He even had a video clip of the work done. Didn't have an iPhone so he couldn't send me a link to it but says it Is in my file. The whole process was great and I'm back in cool air! Thanks!"
+    }
+  ],
+  "trade": "Plumber",
+  "url_check": {
+    "blocked": false,
+    "fault": null,
+    "note": "",
+    "published": "https://callmilestone.com/plano/plumbing",
+    "result": {
+      "elapsed_ms": 136,
+      "error": null,
+      "final_url": "https://callmilestone.com/plano/plumbing/",
+      "html": "",
+      "ok": true,
+      "status": 200,
+      "tls_error": false
+    },
+    "tried": [
+      "https://callmilestone.com/plano/plumbing"
+    ],
+    "working": "https://callmilestone.com/plano/plumbing/"
+  },
+  "website_url": "https://callmilestone.com/plano/plumbing"
+}

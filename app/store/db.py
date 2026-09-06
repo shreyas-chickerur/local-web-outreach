@@ -68,6 +68,19 @@ CREATE TABLE IF NOT EXISTS sites (
 -- not, and a landscape photograph of raw peppers is still the wrong lead for a
 -- dining room. One pass of labelling per lead is cheaper than iterating on a
 -- hero nobody can judge automatically.
+-- What a build has already worked out for this lead, so a retry re-runs only
+-- the stage that failed. Without it a timeout in the last stage throws away
+-- the vision pass and the design decision that preceded it, and the operator
+-- pays for both again — which is exactly the loop that has to be cheap while
+-- the diversity budget is being tuned.
+CREATE TABLE IF NOT EXISTS build_state (
+    lead_id  INTEGER NOT NULL REFERENCES leads(id),
+    stage    TEXT NOT NULL,
+    payload  TEXT NOT NULL DEFAULT '{}',
+    at       TEXT NOT NULL,
+    PRIMARY KEY (lead_id, stage)
+);
+
 CREATE TABLE IF NOT EXISTS photo_labels (
     lead_id     INTEGER NOT NULL REFERENCES leads(id),
     url         TEXT NOT NULL,

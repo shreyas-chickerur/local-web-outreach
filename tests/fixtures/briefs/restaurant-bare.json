@@ -1,0 +1,120 @@
+{
+  "assumptions": [],
+  "chain_signals": [],
+  "facts": [
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [
+        {
+          "source_type": "openstreetmap",
+          "source_url": "https://www.openstreetmap.org/node/13738791955",
+          "value": "8240 Preston Road, Plano, Texas, 75024"
+        }
+      ],
+      "field": "address",
+      "score": 0.7999999999999999,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=1686629629062330158&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/ichika-plano-2?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        }
+      ],
+      "value": "8240 Preston Rd Ste 175, Plano, TX 75024, USA"
+    },
+    {
+      "candidates": [],
+      "confidence": "unverified",
+      "corroborations": 1,
+      "dissent": [],
+      "field": "hours",
+      "score": 0.5,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=1686629629062330158&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        }
+      ],
+      "value": "Mon closed \u00b7 Tue-Sat 6:30am-11pm \u00b7 Sun closed"
+    }
+  ],
+  "latitude": 33.0894604,
+  "location": "Plano, TX",
+  "longitude": -96.8048618,
+  "name": "Ichika",
+  "notes": null,
+  "open_questions": [
+    "No website found \u2014 is that right, or do they have one we missed?",
+    "What number do customers actually call?",
+    "Their opening hours: only google lists it \u2014 confirm Mon closed \u00b7 Tue-Sat 6:30am-11pm \u00b7 Sun closed?"
+  ],
+  "place_photos": [
+    "places/ChIJaa50-2M9TIYRLrfoI7YcaBc/photos/AVoNoXTcJKdN-5Dh7D2wxtCOFW_05DReF1w2B7cKSyZVQF5zDzrv_MtW_GBL6SEPOpBhag1LlgU_lJqqcl3ozSWvrR6003Rw35YBJLEM0hb1J-8_VvyiaO2ft2fJVwBLu0-8vHlz1beBI65hGriNHtY8x1f--w4lvM0rPbibJ01FNRZmn2bK-RDDQ6AJ59-zMa3_jJJsVAJGx1O9k0aPJWM4vWGsHVUkfyq-TFQFO3gXyzb9sqf9K0jMEGZB2aip_Pl_ZVkSLhGxu5US0r7aCPKJhX9u3HVpywZwSK1nFQwF6gKheGdcAHGYDqCpd0I6LmIoPORlfZZDprnFUVXY-Pn9lngs9p6_tEnJmaejqAXiSwIpi914CI3655_6wtF3iP4fcRndyRTYHC0tG3RsUjy9iBbtROyd11VtGO2bTGWbAp6uZ-Ki22FDodzhKssNoUfS",
+    "places/ChIJaa50-2M9TIYRLrfoI7YcaBc/photos/AVoNoXTZSV_WdgDt0yqCsSP_OIiNMdMOXh44SF-8XflGnJStrJdTi4nBIXmetmRDTtIWaigWZXNQfPBzj941vNtgaljBxQAEfgPv7XTf7_5Rh_CY94osWAC3wUlDaYUAk5P3ovYVsd8faOgz0et-MArQWnIfkPeFkkAyKkp0etVae9hbA_adUQ-sp2bd596zQU3Rjg545XmMXniPH3Q3SbX6s8mHyLJ54wS8ZVtLNfUFlHF-WZ3Jg9q8qILS06gR-UZrLvYGijtWWmQUx1L-4X_iOuvu1w2THCmYwuBKj-w1nC5IUwtA1C23iFJtWvgmALgy9SV-WEPReXOeo8BRB1BYIjeS534iDi3YEzPUL9JPH5P_TGTyYwPvr_9sofAFxffADMVEyjyx4X1VvkDzMfRvZiPpOrWd-C6j7ooy51IGlgXJ4fqLIy6e8c-MVQeR5A",
+    "places/ChIJaa50-2M9TIYRLrfoI7YcaBc/photos/AVoNoXSgu1-2m3dEov4dkFNNHf2CfWboHt2ieN-bag1z5jCkqej5hPuiR4s7jiXWXwL0HVMu593cuCAY9fgAdoSrp-dH2xdX7_2ir2tpEvYU7cZLRqOlD2N8aen8_Lm7xL_UlE4gQOXLhuFZYMSldAW63rjxf_G33cIf52jrcnLjQCr_1bnPOxMOm7uHrDu8w5zKJpFG_Qyn6ROYkGCHlHwYYSXwleak8K7-4QwYSl4qWsjXF6NGq_M2WFcgXakSsBkYiurqf6JoajS1XJGuhywJYuW7GtYZKn54fERlGZRtmBk2I8M4C5C12kCpUykcLIF7Vh6gCu3ufSu73oTu_KKxI1YrHw7ZsLTfC0CqVDbJpiJURX7FNfvRdmZJ97D_Kogn2T0bc-fhHzwsYD2zDNQUqKp_EDvRiIf24QX7qtP-lAudsVBqOTXweAuLKM_lDTLI",
+    "places/ChIJaa50-2M9TIYRLrfoI7YcaBc/photos/AVoNoXSrP0HtXvHDGemiggyA_2IeNUVT-KFO66jNAOyUVwhOZMMUr0pXlgxTtWs6YEv3X2OZivp2c250aMOTgrQIYq2OgN1jjUVXymk3ALja4nxGjcKNoT-78c9yVDgnxoaCUgHi_EskKVvRJoVVeOyjNIqRk7dXzRIUbPi00uWcpPBzb9QBF3JSb5uBV93WQ4XzVqtGn2yGEelr2_HsojhXzxn6FIlSw5neXY_LBtaMUE7C_v2389Y8tsHbFk1jnkOn9OCprD9xkb4UwDiesJnpRBGLY0Ixh7ZbnGfneP00SEuuRDuIG7z8PMEYhMGwsOJkS9qPUrfVlFeLipEO5zp_8grmhnqBkmjMkDlql4eLZEC4FVtoz7YFcMMZXlPlP7ZJpnI99TgjeEO60II-pBsKqyf65DIyvMNHNYUyx5eqzkqOtxsUEVlLWD6wLZwAww",
+    "places/ChIJaa50-2M9TIYRLrfoI7YcaBc/photos/AVoNoXQL9tJtBy9JwL2caEV8veuGgvoX0w8Ugm6ZxjZ84qqDXKmIbL-EUW2Zx_0o5Zim4SvqrKWIuo12i5-LrkWRawHd_yV3nRMfmZi-tAXxshbWXbqVWXMhsGpJyVpXT2G8SgIHYBUb8afvNumrsakbrFCB_n2FF-IU1m-4ZqKoqwyQSX5wdBC1QZHyen1MITZm7NVdzqTzPN0IDIR01yZ3Z9JsFdWYZiZCN4QZt79y06kw0RPGkdmUxW9QNWmPruAqoeDBR5VN2gfpTK1PUUfBoxNWDBsx6s_4jCnNL4Kcry_uu7ckKavoTdkFe3C7ddYiQYodz4HGAIjPGpWeXCWD32u2kQtZwCKnP1OWUM1u93wM24dvkPdK4EIOtSr5qHGhCBIr42zuPodBzUvFmVIRv3KoQdskxGGZHGb8iaaOsbQn9XDX-deq4vT7I25Rwwy4",
+    "places/ChIJaa50-2M9TIYRLrfoI7YcaBc/photos/AVoNoXRLuLrbcjGG_jUrQENfuxjv5UMuDWgLvzZEj9exRIF5jML7GpkMMFOe99alELTMd3DZVkhTLLINqc0zZFFqSM533l3LwqLZtCN0_FHxxZk0muvWfzOUwHe0J8OsBSqGk0q7wWOFHauaPWS0nNmoqBlhTTw1xpoBX6stzoXahymKEUMtNMLzfq5fOUJ1cuk_pN-k71KDEi6G6DnVfozPziNJQxgaKbAfBQc6wKnCFtaiGjcPk2lhG5bEeDiRV6Y7j5TFhNAyqWmWdvYwqo8qL1hZpIDt8Gxi2DvonZUM4PBPWnOFcz2hqsE3e7EJRpjZ0BrJBYJB1liARJyAn3HBwT4gYN6f61cKP8x7lw8T8oD6-m2RTNqKPvqw8Z3BDrwIBGR9eFbiV-Xa1J7kMT36nGZqFW1F0MX7tfongCoPYEP8c6e64XNl8jDsOfUXyEGf",
+    "places/ChIJaa50-2M9TIYRLrfoI7YcaBc/photos/AVoNoXSdjkpzRsmIQd2NCIQ7xTHWZjA0j2_yW8rEADxYnCvmKoUtrKaXFn01khuijwxQxBwbKwhRQq859dgAI94lT4j3bTCrFUDpIrI-f_pU1a8NkxT3OuOw5DtnwzFsIQmtQGyg0pACylcvn4pdhtOSyKggcQFaOeJ-aRcmkChRnB-fy7IRptmBDhPCDqL3jOWng8Bh7iNm05Xn1r97NwT9oAK-lCxLQ7lRJyx1wjUM1Ctp53SDAqMk1HCNsYUW-SARM60QRGmhCILJXTgRKTYCwaEJ39VR3QUWlEi1H-nCmnpw1oR6yAZ6NrKLaq9OrzPTFdqcmh6dcKwPWW2Zb0VpZxHEQ-Nmuuh-J1b212xeSKpvA0KNKDKEnzBZf-dmd4gULQz8zbdxydtAKtwWVu-nnx-DHAGAO1WzMsT7CnL6B_1B0KgaK__cdd2q9rFpjQ",
+    "places/ChIJaa50-2M9TIYRLrfoI7YcaBc/photos/AVoNoXTvtSkg4lJfcgIPFjs2vEZmSSHuMzFAw36HxgCY363CGbAuQYoKMzL8USvpx7RooyiyFZRJzKyqabufpplnMTUZaVciOyyGqkTR86NXxegjXqjWQ_AYs9xQLTX3-fKaPnR5mHVU5-H7ScgpoN_Om0v2smuOvhvrJNgseWqt3w69k8wVyGf63BjIXh7sRZd5GfKWYGQiYwW792sVQGCr1aX34vceAeV_4Rqp4rkie1kCfTG9DliPe0M8c3azFQRZO4M1VhwdHgNGMsObrA4gmd_zsQ97t2NP1l44IlH_yAWFX68Whw8NY85-OveT5BM1H_uBDtGdZsxy3Ed2tDSgn54LzVFVbAJz4MqKUaepHRppmDCBboZFAsCGqAJwRbATqOG69lwXAT-EEXz8UOVEu2jouS2bBKdGQ4Jm6G2-4eCMZLtepsrRd1j2-IdwDw",
+    "places/ChIJaa50-2M9TIYRLrfoI7YcaBc/photos/AVoNoXRI6UbbfuXQyu5N6sblR_WGKNO3IKH0vG_ZF476DkpVt4JC-0Vqn05tT9CvcAu-P-hJAmyy0tOzUst6HLru5PNRRZ4r0jai6VsZ03jsgjOJxYKEGMkurGWpYyywipr4bTCKJ79wCVlqVDECvwnO7BiR89PXakQgOmkoC3p-c45e3bHs1j73Sjv_2-vD1gb9tL2OGBIeHwgqRdOwuwe-JUAS9vxbQQ9-y0el6hZGNH8vFWJTC-7lJKihiwWID125KDl44LHVYgBqET2PI9qITFBnJ2sJKEBt4P28J4JwpqfgrWrfm-GWkR7taxdYb0cR02px70J5t9YD02uqj9aA_dehEVoBydM3bj78wTcUVbxVT6n1Hf5WzonP0sQ9842IEHnmxVQINcafPk1EFvX9t7amdOh8mzy6EYniQ66Vz8PcGlOvcNN0CbfgnNVWLJgp",
+    "places/ChIJaa50-2M9TIYRLrfoI7YcaBc/photos/AVoNoXQquYBBPrsy3L3-LZED7LfdJDWNtYpdChAJundRIupb9eH1DGiLlOHj4hJ_DBgU4wNJiqluJLku0s5iSP8vfxXpb1dYaTZo2Z6rIla6XwgPiO7TXhrJ4ZyprLhXzLf8-MiPF27GkXXOv9z8RXHh1r-NusiUuk2BZQfigKOU8mg7Hp8Wz4GcY4Igi3MONneOWUtmwz-Q9Un-i94zulfX7DVPdOT4RTnkMPq9vAj_kFlnWmDM4E0x5GMkPomEp0pF91fT58NL7OuSRXmtpnXwQLX0ilkVnLtDcjRTdZ5rKM37l1wsgk3Srp9_mPGjU3GaMMVdYQeNIt5sBl_9WtHd4f04k5qHg_jpo88_M07vkacMRMgfgkv1QAoJqzV2cHTU9EoXgO16O6GfMc7unDHU-UGrcSCF4yLuUr1my5IPIDLkh4dAUx4_MrgIoSK70A"
+  ],
+  "published": null,
+  "ratings": [
+    {
+      "reviews": 45,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=1686629629062330158&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 5.0
+    },
+    {
+      "reviews": 7,
+      "source": "yelp",
+      "source_url": "https://www.yelp.com/biz/ichika-plano-2?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+      "value": 5.0
+    }
+  ],
+  "site_reachable": null,
+  "site_status": null,
+  "sources_consulted": [
+    "google",
+    "yelp",
+    "openstreetmap"
+  ],
+  "testimonials": [
+    {
+      "author": "Matthew Zhao",
+      "rating": 5,
+      "text": "I really liked Ichika!\n\nI thought the presentation of the food was beautiful, and really demonstrated an element of care and precision. I'm not normally a big fan of sashimi, but the way it was prepared made it delicious and really enjoyable for me. I loved the variety of Japanese cusine as well, how it spanned from a more traditional Kaiseki menu into wagyu and tempura and nigiri, all of which I felt were prepared with great skill and were really tasty! And the mochi dessert at the end - between the texture of the mochi, and the richness of the syrup, and the nuttiness of the roasted flour (Kinako?) - the synergy of the ingredients combined into something outstanding and it might have been the best dessert I've ever had, it was sooo good!\n\nChef Leo is very personable and friendly and unpretentious, and I feel like that personality really comes through in the dishes that are served. It was wonderful to watch the chefs exercise their technique and focus during the cooking process, and the service was great as well - not invasive but thoughtful and attentive and discrete. It was also fun that we got to pick from a choice of glassware to use for sake.\n\nIt's clear to me from the other positive reviews that the quality of food and mastery of technique and flavor is consistent night-after-night. The flavors felt well controlled and intentional - subtle and balanced and nuanced where needed, and then bold and full elsewhere where it fit - and it all worked!\n\nOverall, an amazing dining experience. I can't wait to make a return trip the next time I'm in Texas!"
+    },
+    {
+      "author": "Jennifer Glazar",
+      "rating": 5,
+      "text": "An Exceptional Kaiseki Experience.\n\nOur dinner at Ichika was one of the most memorable meals we\u2019ve had in the U.S. The kaiseki menu was beautifully paced, deeply seasonal, and executed with a level of precision and restraint that is rare to find outside Japan.\nFrom the opening sakizuke to the final sweets, every course felt intentional.\nThe chef\u2019s craftsmanship was mesmerizing to watch. Sitting at the counter added so much to the experience; you can see the care and precision that goes into every slice, garnish, and final touch. Service was warm and attentive without ever feeling intrusive, and the pacing of the meal was relaxed and enjoyable.\nThis is the kind of restaurant that reminds you why kaiseki is considered an art form.\nIchika delivers the kind of thoughtful, ingredient-driven kaiseki experience that lingers in your memory long after the meal ends. The attention to detail, technical skill, and quiet confidence in the cooking are exceptional.\nIn our opinion, this restaurant is operating at a level worthy of serious national recognition. If Michelin were evaluating Plano today, Ichika would absolutely deserve consideration for a star.\nFor anyone seeking an authentic and refined kaiseki dinner in Plano, Texas,\nIchika is a destination worth planning an evening around."
+    },
+    {
+      "author": "Zach Glazar",
+      "rating": 5,
+      "text": "I ate here in early June as part of a party of 8, which was the entire seating for the evening. Service was better than some Michelin starred restaurants I have had the pleasure to dine in and certainly as good as the best of them.\n\nThe food was out of this world from first course to the last. Fresh, exquisitely sourced and prepared and, importantly, fully explained by the owner while being prepared by him and his staff right in front of us. All the courses were as good as my first Kaiseki in Kyoto back in March.\n\nMy only complaint was the chef lamented Okra as a local ingredient, he should not have, the tempura okra was sublime and so perfectly cooked I do not ever have to eat okra again unless it is on another visit to this establishment.\n\nThis was the finest Japanese meal I have eaten in the United States, maybe the finest of any cuisine I have eaten in the United States period. If you enjoy food as art and want to experience a masterful experience then make a reservation here. You will be humbled and grateful by the meal, the staff and the decor. Even the bathroom hand towels were amazing.\n\nI plan to travel back to Texas (from Arizona) with my wife to experience the fall menu. I am not overly wealthy but, even with the travel costs involved, it will be worth it. I am confident of this.\n\nThe respect for the guests and the experience was shown by the ingredients, the artful presentation and perfect preparation of each individual dish.\n\nI cannot recommend this experience enough for the right person.\n\nIf only I could give a 10 stars rating on a 5 star scale could I do the meal justice. The entire experience was a lifetime wish come true."
+    },
+    {
+      "author": "Natalie Tobias",
+      "rating": 5,
+      "text": "Ichika is a rare find as the only true Japanese Kaiseki experience in the Dallas area. The intimacy of the space, allows for a front-row seat to the artistry of the chefs, who prepare every dish directly in front of you. It was fascinating to hear the story behind each course, from the thoughtful sourcing of ingredients to the precise techniques used. The care put into each dish was evident and the result was an incredibly delicious dining experience. Every bite was perfection. I am still dreaming about it days later. Truly high-end and exclusive; a must for anyone seeking an authentic, elevated culinary journey."
+    },
+    {
+      "author": "tae park",
+      "rating": 5,
+      "text": "We got to try the first kaiseki restaurant in DFW. Every dish is made with the finest ingredients and prepared to perfection. Ichika offers an intimate 8 seating kaiseki experience that is perfect for special occasions or even a casual dinner. Thank you chef Leo for brining this unique experience to the neighborhood and providing such a memorable experience"
+    }
+  ],
+  "trade": "Japanese Restaurant",
+  "url_check": null,
+  "website_url": null
+}

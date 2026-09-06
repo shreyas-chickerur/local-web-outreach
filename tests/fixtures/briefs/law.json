@@ -1,0 +1,345 @@
+{
+  "assumptions": [
+    "website found via google: https://snellingsinjurylaw.com/",
+    "ignored a yelp result for 'Weinberg Law Firm' \u2014 different business",
+    "ignored 2 social link(s) belonging to other businesses their site credits"
+  ],
+  "chain_signals": [
+    "their own site has a locations page"
+  ],
+  "facts": [
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=11584513566992087920&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "5750 Genesis Ct #103, Frisco, TX 75034, USA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://snellingsinjurylaw.com/",
+          "value": "5750 Genesis Ct., Suite 205, Frisco, TX 75034"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "address",
+      "score": 0.3,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=11584513566992087920&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://snellingsinjurylaw.com/"
+        }
+      ],
+      "value": "5750 Genesis Ct #103, Frisco, TX 75034, USA | 5750 Genesis Ct., Suite 205, Frisco, TX 75034"
+    },
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "phone",
+      "score": 0.8999999999999999,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=11584513566992087920&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://snellingsinjurylaw.com/"
+        }
+      ],
+      "value": "(214) 387-0387"
+    },
+    {
+      "candidates": [],
+      "confidence": "unverified",
+      "corroborations": 1,
+      "dissent": [],
+      "field": "hours",
+      "score": 0.5,
+      "sources": [
+        {
+          "source_type": "their_site",
+          "source_url": "https://snellingsinjurylaw.com/"
+        }
+      ],
+      "value": "Mon-Fri 8am-6pm"
+    }
+  ],
+  "latitude": 33.1409838,
+  "location": "Frisco, TX",
+  "longitude": -96.8361042,
+  "name": "Snellings Law PLLC",
+  "notes": null,
+  "open_questions": [
+    "What is their street address?"
+  ],
+  "place_photos": [
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXQmc-7zwS57lt4jmiV6OSHXkAwBiqsmwKC85mjBFukmbUx5joqtoJnHaY7DNsqm8sSzRKXB9WinXyjIdtNluKb7LnaZZus0aHlxhywkc1D6QAF3K18MANYam0YKcWBOpW4eZiOrfY9Kxh0dl7SqbzeEnOWjCSYDxpT1_fCGokDPzdfEKeuJiynEUrp2RT1ilw3CsL840O9a6OEa0BgIUDDdP6JcPfHVbv3OrAwziYiwAikIalpqGlhGlQ5_FFM0PT1zP-4ccGGkDEB1HUDJguEcAypt3ChzQ9RcSGEH-D9AKJDZP-qwmfiLjMN42yL_L926f0otbqTBSLw580GInVUUPa9zxTr7_3ghW82rkatiS2xcz9HNtKxPd67oDTkAyl2He4wNdVKZcDr8ipuqZNPuSIOsPVt4-lcFuSVWKlU",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRkGzTlrkkf36JUyNSarpCy4lzBg5bu6LO0V4_-e9Ci2cz7rzN_2Bwgnshu17N5OGycPeJ7rvyX7QBoMC-l2ftHZI2DGE3usr6XLTozjG0Sbqxn9qayUBt--PDPylokEWshefYAhaZQ24h1QbBHZTRSNzofTBYATbd5mVDh-GRh20ad30jZ8u4xaO61y24QCQ0X3PwvTt0b1H1PR7xKUxLGvaMDKdMcWqRBNkPo5cS9XwFR9ewF5xcuaTx6kAgVIK8XDjApiDgUqC8fZ4tACa9hRwVjQr1d6eSoobr6JixLq3IKLty_fFYramPPhPa_BOCyks94W--pnlTe0grNgdi666m5Oes5je5reIMJENXBuLtM4PRBm45gu9oagmSSCxAZpqwcq63U4IanOHSMqR6ETV8CTNbFvWKh1uVSj-A4AQIq",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXQK6T4lB8jtLM9oAnJk4iMtNjhL8MBaXZhNuGjbYLUZdzhPjSJMpgxK-mHNY574pob4npHQIve5QRtLrKb6A6JvqDx2EfHDBJd587jI_d84c76gF5mbMfDFa5bOE4gCkkZ74GsiDK3hj7OeSSKJ0d7ixKhd3IfDSs6p3K-8X5UzHkbk6fhV7si1kI8Sb7EG9IH85TgJnADWiy8T7NtDhZ8tePVVxEbROmvc5xtdoCQAB6Z-FKUTSJWyeFMMaARo8px5BSC5r_DiCKvgXigkFqjfNvpGvlE8PVtrnGpuY86DZ1okU5u5rN2lBi05dTfaJhuYI6CGsWl5cQG1bf0Ip0Nx1vBhg10mRiN2FIO0GLyIo4WklVfYO5dkxcIf_rnUQBIcEWfxMX7TDAdVCoegDWwFSUE7HtAbxY_5hYdpLyoQEA",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRGT6MpdTnQZ6gzbYz0gV53TQzgZMCuunyYuewsKw-DvM_uSVsB0UfWbii-3-8ZB4m9h8NpV1KIWMRy5-BKc0sc-CAMBZu8BfHBAsg00jy4b3f9jQtgtg1Wp4kTM1siSXt_DZLzcGT2ORQSYouRSHWWOR02ga2J_xKj6Q-aGHQrljPPJyRVbcZ0lM15e_ac4QYDR1__-N_sJC0lDNvg0JnmGWAVFpNrJ9_jtHZo_TmnnG37LdUZ81Se4RvAwLDMW7QgI9Ein2K1_f_-mliZBRIbgu3xOp8GBhkuVcup5_Ox8QVoo2nNrOdT9JxGNHgMkVKlfk0fq-94mtEkmEkT307s9B3_VFRTxShmNdOoT0xaivbUdeMyXnUt3kWH-FFDwiBrd_TR9OdN2HXMLDqe9K5ULHQznvSYST9pMNJ8mSGhCXaw",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRHfKuKUDEueLXJKPDyMUyjqPxbVDCcqY7QsUpqTJPGrh3KSDybGounm45haysy6Y6A0P82DnMpibetgk2Imaf5k72sJwPp32ibPrylTfFLAsNYoKbKc1qVkwkkcSzLCI_QY-U5OpLpgtOdC0K2s-n-k8eamF8qxCwrKwkHg6RnXojyyk9ILVZMer8fNXn9-jUK2y9f6GcZNDXMXc0lPVVPQdTHwamjD1TmIBvQxM38IQ7lSKqGFhc6hYGLRHBHkNUvdQUGTD46uF3J7hL5iTk2NIQ8nJLzcvzgOVAmFEmHqCid0X0qTpTyzbLW9RrwTYJ7G-ZnGKqIKTZ42BNHgdDBfDJBHEfNf4gdNio4O5ZSi45vG4Q9pBQIMlF2sCAwULMwcJpxZ4T4EWcR_gjKG0jL1nXP7KB-214VNEvm87WV5JSiC3NJAhardKV71w",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRiI1RNFQgsAj96sC5v6uR5gfMmXdjadsodYImS2Zl7HHPpXP8Wq77Txtv3olTk7Awr60WG_l7diL_qPhJO7Zkoz_j6pxOW_00kIcJDiFCUAfOeIJORpKzH4zF327HCvFShuqm3TvobK8aP8N-6r9Levii2FxFqcCZ3MiYLC6Sto67srLKgm743kgk0S0HSVC4Z93eGwdrdQR-exjGPzw4XUtm7g8TpY7jcTQgjP407tMvFF0-I9wLyCSHJXEjlm3TacdZiz6CO9kn4bMqMXgNK_mnZS7o0-UM86E0NKWKk25Hak-9ZcHdHr1SskC_kz2qQVQyBAgvFlvoQW8firdF_KKmfIw_n700QdNhszGGezgEJj3jWqolYBt2S8iddFTI1uFBPycGp1bb7dbpH--vSx2HsknlpiLsvEq9amc7vtg",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXQQItAwHzOzARvam1azWALLXCrGk3W8Fz2CZpvGj-ZaAR29GzC70NsGEZJnHtsmyTcTw-6fIqeycFJyThD2irI1paz9rVhgxLX16Iy1MW8a46hLuRE3ScyUZQ7OJie6GJYmzWxCI_VpWBKxO6jWoBYHv9wj4qpWi0MjP6R5emsjjKStihY1VqyzNWjrK4cT8nAbx3C33CA8g6oIQIotqDiWXqeHLzbYqAsjn6wqrMQP4Gjrjc6QRxWFP5fx2UNlW4__kBrIlwKPAh23HTn91vozYKYSw0pGX3mYRYt3wYphztPmlJMjCw-9n8aTtlZB4RBHfRKjPI2jCjUeAJ9HwytUMLLVWLA5JQKMKqJbmODVof_VVidAffQejwmF3bqQMWIAarUD1mTW-NP0qCP8lChbe1HkrPwhQ-u1wvNLBmZEDw",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXSOAtSCkjCDT6rcqM9D_zugJzNyl2Tve22x4t5Y4vC_PaX23FEb8MsYIXlB0opFL61lUK0RS9Z2_xWI-ILH6hBzIoMzIYFfcEzujeNSTWj4yV1xdZkWgV_oLhbOZM33T_17jgIkRNwuoTZ8_eUIHdXpaYt--cdu0S8QVTHxxNZtqfDkA_hFvDoO-qcfyo1LHa9PCoBdRH7eCdzyFioyikvkKnTa9WSwf-LoPfcLcFnU50_bU91zJvwsQTe9p89Cnhzs1b0wlG9GQep8iLARiA7scHk-Zo2gtVhLmrYdSY7p76v4kQW22IBezF4ePQZnH1g1bbihKlf4LsUIwKmQ2fUzJL4CPaU-9Jj09Z1L4P215vVPze5HtRIYSsf8sQT7C4N3Q8VfoXYSCzHHoyKN1JoNc5KNNkSL-MwMpoEeUsR5Gngu",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRw9Uj2v2xScf8egocwbr72iR7IKW_DNmYdUMWXz0TUYQ3LV7lZyFqBQhAm5Ew2-UQYK82-HcGae0Asgv4QrjQNa9heO1e5U3QLn1hu-EW3JuS22GKfPKofw4zqurdfe5iFNo4sxuh1eZ0C5bLoKmmH7intIoZRoBN7tdChoQ5dXL8oAHsYa4C1CDn1owQUfgNvYBS8XhZ8GR_TKeUb3Vmmu1plrZj9CgF3qC9KspNt1ylOxMiQbsExrM-zix1Gn-OUY8Df7BsmcnT2JehbgeWvV2ewRaOTT16WzCCD4hl3CNDIEcEPZi7kr0CfTLBz1oXA6bJ6bQLxM6oo7WcHhReifcDoqj4PhrRxnuGqo1B2-NoKiLYYiAvlXVDgFJ5Z2JE1Dzo7FC5Vfg7IgC9uoigb63Cu_NSV-xd7Sx8y7EQ",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXTYowoLVKxrobrZDbTa2NwaZzKxMnI7K1AnSZqxu5F7Hv9SVfCuPx4ZmWeGUmEFs4U2MSPp5XDNn9Shs8ZxJCwKdQiV7jbGIrGsyRG9dC8u6T6WvhBUzPPxQCWmAE1N5WROy0mp7qvP2jk3bwC7Yyno2G5DnBCTBrWVbvei5nVbLq0f5tl8uWYEzun0T8GvZhYS9BluVMxgdUxxLjxwoTXVpCe-JmPcyrV8KZMcYUTDIhM3Xd2XRSUgJMBbH_4h8KPyjKMTJFlE8nW-7hSMiwRsT4gG5i5T6nw9j9V0Z_PePwBIrrO_8zabuEDhRGsyXei35aIWJ2ZV-hj1CT6xywD-jZkeDrc9Pn_uBujV6LaQQvUorzvbZP0TMrz_GCNL5vj5ipFcQrhFj0ODnMoxhbDhItitKGuNDF4M33cfChmGJESn"
+  ],
+  "published": {
+    "about": "At Snellings Law, we maintain a humble confidence in everything we do. We know our strengths and weaknesses and we are confident in our choices. We learn from our mistakes, and always put our clients first.",
+    "about_score": 20.3,
+    "actions": [
+      {
+        "kind": "Get a Quote",
+        "label": "FREE CONSULTATION",
+        "url": "https://snellingsinjurylaw.com/contact/"
+      },
+      {
+        "kind": "Shop",
+        "label": "DWI and Dram Shop Lawyer",
+        "url": "https://snellingsinjurylaw.com/personal-injury/dwi-dramshop-lawyer/"
+      },
+      {
+        "kind": "Careers",
+        "label": "Careers",
+        "url": "https://snellingsinjurylaw.com/careers/"
+      },
+      {
+        "kind": "Book / Reserve",
+        "label": "Cookbook Recipe Submissions",
+        "url": "https://snellingsinjurylaw.com/cookbook-recipe-submissions/"
+      }
+    ],
+    "address": "5750 Genesis Ct., Suite 205, Frisco, TX 75034",
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "We Know The Fear and The Stress",
+        "images": [
+          "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/two-drivers-having-argument-over-who-is-guilty-in-a-crash.jpg",
+          "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/L-Pattern.svg"
+        ],
+        "kind": "feature",
+        "text": "In the moments after an accident caused by someone else\u2019s negligence, we all first look to make certain we and our loved ones do not have any life-threatening injuries. If we can see that is the case, then there is usually an overwhelming sense of relief. However, that relief is often short-lived. It doesn\u2019t take long for at-fault drivers or parties to begin shifting blame, insurance companies to start trying to put words in our mouths or minimize our injuries, and bills to start showing up in the mailbox."
+      },
+      {
+        "entries": [],
+        "heading": "Our Mission is to Help You Recover",
+        "images": [
+          "https://snellingsinjurylaw.com/wp-content/uploads/2026/08/Personal-Injury-Attorneys-Home-v4.webp",
+          "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/justia-10.0.png",
+          "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/BSL_TopVerdict.png",
+          "https://snellingsinjurylaw.com/wp-content/uploads/2025/08/Best-of-NTX-Prosper-Celina.png",
+          "https://snellingsinjurylaw.com/wp-content/uploads/2026/07/living-magazine-best-of-2026-frisco-plano.png",
+          "https://snellingsinjurylaw.com/wp-content/uploads/2026/07/living-magazine-best-of-2026-prosper-celina.png"
+        ],
+        "kind": "feature",
+        "text": "If you or a loved one has been injured in an accident due to someone else\u2019s negligence, you most likely have several questions or concerns. You\u2019ve come to the right place. At Snellings Law, personal injury is all we do, and we\u2019re the car accident lawyer Frisco, TX residents can count on."
+      },
+      {
+        "entries": [],
+        "heading": "More Personal Injury Cases",
+        "images": [
+          "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/L-Pattern.svg",
+          "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/L-Pattern.svg"
+        ],
+        "kind": "feature",
+        "text": "We handle various personal injury related cases from different kinds of accidents to serious injuries that you might have suffered. Check out all the cases we handle. ALL CASES WE HANDLE"
+      },
+      {
+        "entries": [],
+        "heading": "Contact Us For Free Consultation",
+        "images": [],
+        "kind": "feature",
+        "text": "We understand what you\u2019re going through, and we want to help. Our mission is to guide North Texans toward recovery and a fresh start. Even if we can\u2019t take your case, we\u2019ll answer your questions and connect you with someone who can. 214-387-0387 info@snellingsinjurylaw.com"
+      },
+      {
+        "entries": [],
+        "heading": "Recent Results",
+        "images": [],
+        "kind": "feature",
+        "text": "At Snellings Law, we take time to understand your story and how your injuries impact your life. From the start, we gather and preserve evidence to build a strong case, so you can focus on healing while we fight to maximize your claim. We\u2019re proud of the results we\u2019ve achieved for our clients. 100 Thousand Injury Disc Herniation Case Description Rear-end Impact Our contingent fee arrangement with this client yielded attorneys\u2019 fees of $40,000.00 and $1,166.80 in litigation costs. We forwarded these costs and were reimbursed from the proceeds of the jury verdict. 100 Thousand Injury Displaced Recent Back Injury Case Description Rear-end Impact Our contingent fee arrangement with this client yielded attorneys\u2019 fees of $33,521.70 and $96.18 in litigation costs. We forwarded these costs and were reimbursed from the proceeds of the jury verdict. 130 Thousand Injury Cervicalgia Case Description"
+      },
+      {
+        "entries": [],
+        "heading": "North Texas\u2019s Choice for 2026",
+        "images": [
+          "https://snellingsinjurylaw.com/wp-content/uploads/2026/07/North-Texas-Choice.jpg",
+          "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/L-Pattern.svg"
+        ],
+        "kind": "feature",
+        "text": "We\u2019re honored to be named Best Personal Injury Law Firm in Frisco, Plano, Prosper, and Celina yet again. These recognitions are earned from our neighbors and clients, and we don\u2019t take them lightly. Thank you for trusting us with your story."
+      },
+      {
+        "entries": [],
+        "heading": "What Our Clients Say",
+        "images": [],
+        "kind": "feature",
+        "text": "We care deeply for our clients and work hard to fight for them throughout the entire personal injury process. But don\u2019t just take our word for it! Hear what our past clients have to say. READ ALL REVIEWS"
+      },
+      {
+        "entries": [],
+        "heading": "Life-Changing Support After a Car Accident",
+        "images": [],
+        "kind": "feature",
+        "text": "Mr. Scott and his team are amazing people! After a scary car accident, he helped my family and I every step of the way, and he was able to get us so much more than we could have ever imagined. He was very supportive, caring, and very, very helpful and thoughtful. He changed our lives! Emily"
+      },
+      {
+        "entries": [],
+        "heading": "Scott Took Over When the Insurance Company Failed Me",
+        "images": [],
+        "kind": "feature",
+        "text": "Scott and his team helped me with an accident claim I had with Progressive. Progressive fought with me and offered very little in helping me with my claim. So much so I dropped them because of how badly I was treated. I called Scott and they were on the case immediately. Helped me with connecting me with an amazing PT office as well. In the end I was able to collect a check that was tens of thousands more than what Progressive offered. I\u2019m so happy I went with Scott. I highly recommend him. Scott"
+      },
+      {
+        "entries": [],
+        "heading": "Amazing Lawyer that Cares",
+        "images": [],
+        "kind": "feature",
+        "text": "Scott is a great lawyer! He fought hard against the big-name insurance company and got my family far more than I expected. Scott was so involved in my case at times it seemed like he knew more about what happened than I did and it showed when we showed up to trial. I can\u2019t say enough about him and his staff. Truly an amazing lawyer that cares! Richard"
+      },
+      {
+        "entries": [],
+        "heading": "They Truly Care",
+        "images": [],
+        "kind": "feature",
+        "text": "Scott and his whole team are amazing! My family and i were in a horrible accident and we put everything in their hands. The entire team walked us through every step. And showed they truly care. I will always highly recommend this firm! Laura"
+      },
+      {
+        "entries": [],
+        "heading": "Very Helpful and Responsive",
+        "images": [],
+        "kind": "feature",
+        "text": "I cannot recommend Scott highly enough! He was very helpful and responsive to all of my questions. He was able to achieve a great result for me, and I knew what was going on every step of the process. I could tell he cared about me and my problems, and I was not just a file number to him. He and his staff were amazing. Heike"
+      },
+      {
+        "entries": [],
+        "heading": "Frequently Asked Questions",
+        "images": [],
+        "kind": "feature",
+        "text": "Got questions about personal injury? We\u2019ve got you covered! At Snellings Law, we\u2019re always here to answer any questions related to your case. What qualifies as an injury? In personal injury law, an \u201cinjury\u201d means any harm or damage to your body (or even your mind/emotions) caused by someone else\u2019s actions or negligence. It\u2019s not limited to obvious wounds like broken bones or cuts \u2013 it includes a wide range of harm. For example, injuries can be physical (sprains, fractures, head trauma, etc.) as well as financial and emotional. If you had to get medical treatment, missed work, or experienced pain and suffering because of an incident, those all qualify as injuries in the eyes of the law. Essentially, if you were hurt or incurred losses due to another party\u2019s carelessness or wrongful act, it counts as an \u201cinjury\u201d for a personal injury claim. How do I know if I have a personal injury claim? "
+      }
+    ],
+    "description": "Got injured? Snellings Law's personal injury lawyers deliver trusted legal guidance and real results. No fees unless we win. Contact us for free consultation.",
+    "emails": [],
+    "has_locations_page": true,
+    "hours": [
+      "Mon-Tue-Wed-Thu-Fri 08:00-18:00"
+    ],
+    "https": true,
+    "images": [
+      "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/Snellings-Law-PLLC.jpg",
+      "https://snellingsinjurylaw.com/wp-content/uploads/2020/05/Snellings_Horizontal_PLLC.png",
+      "https://snellingsinjurylaw.com/wp-content/uploads/2026/04/Snellings-Solo-Hero-rs.webp",
+      "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/two-drivers-having-argument-over-who-is-guilty-in-a-crash.jpg",
+      "https://snellingsinjurylaw.com/wp-content/uploads/2026/08/Personal-Injury-Attorneys-Home-v4.webp",
+      "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/justia-10.0.png",
+      "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/BSL_TopVerdict.png",
+      "https://snellingsinjurylaw.com/wp-content/uploads/2025/08/Best-of-NTX-Prosper-Celina.png",
+      "https://snellingsinjurylaw.com/wp-content/uploads/2026/07/living-magazine-best-of-2026-frisco-plano.png"
+    ],
+    "js_rendered": false,
+    "menu_items": [],
+    "menu_media": [],
+    "mobile_ready": true,
+    "phone": "+1-214-387-0387",
+    "products": [],
+    "services": [
+      "AUTO ACCIDENT",
+      "18-WHEELER WRECK",
+      "MOTORCYCLE WRECK",
+      "COMMERCIAL VEHICLE ACCIDENT",
+      "WRONGFUL DEATH",
+      "More Personal Injury Cases",
+      "Recent Results",
+      "North Texas\u2019s Choice for 2026",
+      "Life-Changing Support After a Car Accident",
+      "Amazing Lawyer that Cares",
+      "They Truly Care",
+      "Very Helpful and Responsive"
+    ],
+    "site_host": "snellingsinjurylaw.com",
+    "socials": [
+      {
+        "name": "Facebook",
+        "url": "https://www.facebook.com/snellingsinjurylaw"
+      },
+      {
+        "name": "Instagram",
+        "url": "https://www.instagram.com/snellingsinjurylaw/"
+      }
+    ],
+    "text_words": 4803,
+    "title": "Frisco Personal Injury Lawyers | Snellings Law PLLC"
+  },
+  "ratings": [
+    {
+      "reviews": 254,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=11584513566992087920&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.9
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Doug Sharp",
+      "rating": 5,
+      "text": "My son was in a car accident and he received a letter from his insurance company that was unsettling and difficult to understand. I reached out to Scott Snellings to see if he would be willing to help and within minutes, Scott responded and began helping me, even though he was heading into a meeting. Soon after, Scott responded with sage wisdom regarding how to proceed and caring words to comfort our collective anxiety. Scott is an experienced and discerning attorney, but even more importantly, he is a kind and caring man with solid Christian character, who is willing to help others. I highly recommend Scott and Snellings Law."
+    },
+    {
+      "author": "Ryan Gibson",
+      "rating": 5,
+      "text": "We recently wrapped up a case with Snelling Law Firm after being hit by a distracted driver running a red light. Unfortunately, their insurance company didn\u2019t come close to offering a fair settlement or taking care of us on our totaled vehicle, which left us with no real choice but to seek help.\n\nFrom day one, Snelling Law Firm was outstanding. The care team and doctors they connected us with were incredible\u2014professional, attentive, and genuinely focused on getting us back to full health. That alone made a huge difference.\n\nOn the legal side, their team was just as impressive. They handled everything with confidence and clarity, kept us informed throughout the process, and ultimately secured a settlement far beyond anything expected. We didn\u2019t go into this looking for some big payout.  We simply wanted to be treated fairly. Thanks to Snelling Law, we ended up more than whole.\n\nWe are incredibly grateful for Scott Snellings and the entire team. If you ever find yourself in a similar situation, don\u2019t try to handle it alone. Call them. Highly, highly recommend."
+    },
+    {
+      "author": "Katey Miller",
+      "rating": 5,
+      "text": "This is the only office you need to consider if you\u2019re looking for friendly, informed, communicative, and transparent representation on your case. I worked with a couple different attorneys at Snellings, and all were not only excellent at their jobs, but very personable to boot. Royeal is the attorney I worked with through the last few months of my case, and she is exactly the person you want on your side when dealing with something like this. Supportive, incredibly knowledgeable, and clearly cares about her clients\u2014I can\u2019t rave enough. Thank you to Royeal and the whole team at Snellings for making a situation most would groan at into an experience that was as stress free and straightforward as possible."
+    },
+    {
+      "author": "Julie Vilayheuang",
+      "rating": 5,
+      "text": "Firm is very knowledgeable and provides excellent service. Quick and kind responses to my\nInquiries and always makes an effort to help and explain for full understanding. I would recommend them to anyone that needs their services. Ray chow was also very nice to work with."
+    },
+    {
+      "author": "Jennifer S.",
+      "rating": 5,
+      "text": "I reached out to Ray after an injury situation and, even though my case wasn\u2019t ultimately the right fit for his firm, he still took the time to help me understand my options and point me in the right direction.\nHe was generous with his time, thoughtful, and gave me practical advice that helped me feel much more informed and in control of the process. What stood out most was that he was honest, kind, and willing to help even when there was no obligation to do so.\nLegal situations can feel really overwhelming, and I genuinely appreciated his guidance. I\u2019m very grateful for the time he took to help me."
+    }
+  ],
+  "trade": "Attorney",
+  "url_check": {
+    "blocked": false,
+    "fault": null,
+    "note": "",
+    "published": "https://snellingsinjurylaw.com/",
+    "result": {
+      "elapsed_ms": 72,
+      "error": null,
+      "final_url": "https://snellingsinjurylaw.com/",
+      "html": "",
+      "ok": true,
+      "status": 200,
+      "tls_error": false
+    },
+    "tried": [
+      "https://snellingsinjurylaw.com/"
+    ],
+    "working": "https://snellingsinjurylaw.com/"
+  },
+  "website_url": "https://snellingsinjurylaw.com/"
+}

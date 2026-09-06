@@ -1,0 +1,250 @@
+{
+  "assumptions": [
+    "website found via google: https://towsonfirm.com/?utm_source=GBP&utm_medium=GBP&utm_campaign=GBP_Frisco&utm_id=GBP_Frisco",
+    "ignored a yelp result for 'Estes Law Office, P.L.L.C.' \u2014 different business",
+    "ignored 1 social link(s) belonging to other businesses their site credits"
+  ],
+  "chain_signals": [
+    "their own site has a locations page"
+  ],
+  "facts": [
+    {
+      "candidates": [],
+      "confidence": "unverified",
+      "corroborations": 1,
+      "dissent": [],
+      "field": "address",
+      "score": 0.5,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=16669936397878528003&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        }
+      ],
+      "value": "400 Stonebrook Pkwy Ste 203, Frisco, TX 75036, USA"
+    },
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=16669936397878528003&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "(972) 325-7275"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://towsonfirm.com/?utm_source=GBP&utm_medium=GBP&utm_campaign=GBP_Frisco&utm_id=GBP_Frisco",
+          "value": "9723827775"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "phone",
+      "score": 0.3,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=16669936397878528003&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://towsonfirm.com/?utm_source=GBP&utm_medium=GBP&utm_campaign=GBP_Frisco&utm_id=GBP_Frisco"
+        }
+      ],
+      "value": "(972) 325-7275 | 9723827775"
+    }
+  ],
+  "latitude": 33.146828,
+  "location": "Frisco, TX",
+  "longitude": -96.8896022,
+  "name": "Towson Law Firm, PLLC",
+  "notes": null,
+  "open_questions": [
+    "Their street address: only google lists it \u2014 confirm 400 Stonebrook Pkwy Ste 203, Frisco, TX 75036, USA?",
+    "What number do customers actually call?",
+    "What are their opening hours?"
+  ],
+  "place_photos": [
+    "places/ChIJxfJQLbFyOYgRA4jnL9WCV-c/photos/AVoNoXTlOBgrKJt0wY9CMeU6QZqCIucso5_4Hcsij_7oBUUnCzAuqHAdhhCGS7N8VAdFSp2PPTamgGx-8jT6GcaPQloMkvGLetJfuQUeEYkVWAJn2C9vOy7OHKJdaWMIhGl8wYJbCZGp6WaegbHZyPCHVwc5wL6FG44_ZtJkOWp2MGt9iUYbK-way1UMUcwCipXsVkNOfuWgYP2m2Yf4_itI4BgaNVyaVjmNjlZDFwCVg4af3EQY2-i3eM3ubVxliUxdcxTD_udAvOBOhGoQ6rIzIyi136t1UarHSjGaCAHMqXyqP78a-3HIcOmx4VeZvX7VezE9H6CpRB7_RbuwlhLs5HkK9vR7kvhrYkfOziHu1f5aG7RQmXlledMCHo4kWNd5VyRF0vbX89bJY5WW-jDu_oLHy4en-DhLYGOU3N07id-OkHE4MKsK9fA-l7ZMBZzO",
+    "places/ChIJxfJQLbFyOYgRA4jnL9WCV-c/photos/AVoNoXS9y-tGfWuQMOUKJi6rK5xoWZB20sTwqo0dGZBHyBYi8qjAvPHBJk0QVisi9bBTDtPrPauaPzmvCYH2J2E05bY2Iau5si8KOSwGCGB2I8_jpfvIOVBAHBPVjcnS5IRuc3w7aPGrzAxBtlZgeWK785eB1goWcTJH3b-A-qDW3wKorLS1py3SzvVl1WMA3Mw9qVavQDn7OmUkRLg5bnWwrdC3XlXrt4nFsDE68HHvq5ElJ4b7EPct7dE9UfZ8kj2Q6Y-HhFGh2HCt3B4nGZbcBBuj95DLnHMtO1GVIWlZEVAVeCsjOBXVbk0_vdT1yLugW9W8hPOIZrj4QQRmHzy-cPAiGRmqNA6jlXm6HcJ6tLSvNojP60poeESIiQnw3K5mGQS6SP7HY-EmLltedvn07rtnAN4ymy3f4qrRJMPzrlAxxChOVCBcAfjWNw7DW7yW",
+    "places/ChIJxfJQLbFyOYgRA4jnL9WCV-c/photos/AVoNoXSB_bmNUxltQ_rHbbzgKh-l2A2rumvri-fF2WrVE_c80X8aP4rBG0_8f_WdmmsT4MqBrJ79UzwT1d9XMz9-fzunIxGnW8Crljy10jqI4-DOvRVuk28vjyEa6cL5ZRykgeklf3reM-cITlki0GRWub2R6wfQk5aFwAL25tpOMOpYgj9p23x-V4Hl-iKLvCP6dKz0bdsaCWT50UL1pXeqw_q6_lyCMILEvpp-8fISCpfhiLYxkuCMIkFfX-NUz9HQHxUcv4FFh2B87NZEJrw3F0ErmRU21b86Kuz5g9oe3eNRQbwy6TvIZyPkaAwtjEciWnklKnvKJTAN71BNV-plMHjIzwJbW1uWUAxx__pcbMLgr6m63E7wtOaU4lLWj-yhKzvXiLNlmWa8FZkcM26sDDQWZj6dK5q3I2d-d2bQ-3s"
+  ],
+  "published": {
+    "about": "It is imperative to have legal representation to ensure your rights are protected. Our firm believes that we must preserve the integrity of the family dynamic through such difficult divorce or custody matters but understands that peaceful conflict resolution is often appropriate. We believe in our mission to provide quality and caring legal counsel and are committed to fighting for our client\u2019s best interests both inside and outside of the courtroom.",
+    "about_score": 11.86,
+    "actions": [
+      {
+        "kind": "Get a Quote",
+        "label": "Consultation (972) 382-7775",
+        "url": "tel:9723827775"
+      }
+    ],
+    "address": null,
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "Mission Statement",
+        "images": [
+          "https://towsonfirm.com/wp-content/uploads/2026/03/about_image.webp"
+        ],
+        "kind": "feature",
+        "text": "At Towson Law Firm, our team is committed to giving the best possible legal representation for individuals and families. Our law firm is dedicated to providing knowledgeable, professional, and effective counsel for all types of family law and divorce matters. It is imperative to have legal representation to ensure your rights are protected. Our firm believes that we must preserve the integrity of the family dynamic through such difficult divorce or custody matters but understands that peaceful conflict resolution is often appropriate. We believe in our mission to provide quality and caring legal counsel and are committed to fighting for our client\u2019s best interests both inside and outside of the courtroom."
+      },
+      {
+        "entries": [],
+        "heading": "The Colony Family Lawyer",
+        "images": [],
+        "kind": "feature",
+        "text": "Every family has its fair share of disagreements, but some families find themselves in legal disputes over property rights, support payments, and parenting time, to name a few. Some legal disputes between family members can be resolved with independently drafted agreements, whereas others require going to court and pleading your case before a judge. There are countless ways an attorney could assist with a family law dispute. Family law covers a wide range of legal disputes between loved ones and housemates, and a well-versed attorney could help in all of them. If you live in The Colony and need help getting through the divorce process, custody or visitation disputes, adoption issues, or anything in between, a family lawyer could be an invaluable ally."
+      },
+      {
+        "entries": [],
+        "heading": "Ending a Marriage",
+        "images": [
+          "https://towsonfirm.com/wp-content/uploads/2021/12/Uncontested_Divorce.svg",
+          "https://towsonfirm.com/wp-content/uploads/2021/12/Contested_Divorce.svg",
+          "https://towsonfirm.com/wp-content/uploads/2021/12/Child_Custody_Visitation.svg",
+          "https://towsonfirm.com/wp-content/uploads/2021/12/Alimony_Spousal_Support.svg"
+        ],
+        "kind": "feature",
+        "text": "Many people who enlist the help of a family lawyer in The Colony need help dissolving their marriage. Divorce proceedings are common, but the outcome can be unpredictable. Given what is often at stake, it is risky to go through a divorce without legal representation. Many decisions must be made before a divorce can be finalized. Marital assets must be divided, and questions of spousal support must be answered. There are also issues related to the support and custody of minor children to address, if the spouses share kids. An experienced family law attorney could help with these and smaller details, like getting your name changed at the close of the divorce process. Learn More Uncontested Divorce Contested Divorce Child Custody & Visitation Alimony & Spousal Support Learn More"
+      },
+      {
+        "entries": [],
+        "heading": "Family Law Issues Involving Children",
+        "images": [],
+        "kind": "feature",
+        "text": "Child custody and visitation disputes can occur during or after a divorce. Custody issues between former spouses could still be raised again after their divorce has been finalized. When the court hears issues of visitation, child custody, or child support, it is required to decide those issues in a way that serves the child\u2019s best interests, potentially leading to final orders that are not favorable for either parent. A tenacious family lawyer in The Colony could help a parent advocate for their parental rights in and out of court."
+      },
+      {
+        "entries": [],
+        "heading": "Expanding Your Family",
+        "images": [],
+        "kind": "feature",
+        "text": "Family lawyers serving The Colony can also assist with expanding your family through the process of adoption. For many families in The Colony \u2013 as well as the children involved \u2013 adoption is life-changing, but there are numerous legal hurdles that must be cleared first. Adoption is a complex process, and a single mistake could lead to lengthy delays or even lead to rejection of an application to adopt. To avoid these consequences, consider speaking to an attorney early in the process."
+      },
+      {
+        "entries": [],
+        "heading": "Meet Matt Towson",
+        "images": [],
+        "kind": "feature",
+        "text": "Our Law Firm\u2019s approach to your case is based on individual circumstances. Whether it is a simple negotiated settlement, or it requires an aggressive approach, we will protect and defend your best interests. Contact Us Today! (972) 382-7775"
+      },
+      {
+        "entries": [],
+        "heading": "Call a Family Law Attorney in The Colony Right Away",
+        "images": [
+          "https://towsonfirm.com/wp-content/uploads/2026/03/towson-law-gfirm-1.webp",
+          "https://towsonfirm.com/wp-content/uploads/2026/02/TowsonTop10.png",
+          "https://towsonfirm.com/wp-content/uploads/2026/03/towson-law-gfirm-1.webp"
+        ],
+        "kind": "feature",
+        "text": "Whether you are seeking to grow your family or dealing with some sort of dispute, there are numerous ways an attorney might be able to help. The right legal counsel could assist you in resolving your family legal dispute so that you can move past the conflict as soon as possible. Let a family lawyer in The Colony serve as your legal advocate during this important but difficult process. Call right away to schedule a private consultation. Every family has its fair share of disagreements, but some families find themselves in legal disputes over property rights, support payments, and parenting time, to name a few. Some legal disputes between family members can be resolved with independently drafted agreements, whereas others require going to court and pleading your case before a judge. Created with Sketch. Quick Links The Colony Family Lawyer Meet Attorney Matt Towson Your Case Contact Us Ou"
+      },
+      {
+        "entries": [],
+        "heading": "Contact Us Today",
+        "images": [],
+        "kind": "feature",
+        "text": "Contact our Towson Law Firm, PLLC Attorney Matt Towson is well equipped to help you in any family law matter, so don\u2019t hesitate to reach out to our firm as soon as possible."
+      }
+    ],
+    "description": null,
+    "emails": [],
+    "has_locations_page": true,
+    "hours": [],
+    "https": true,
+    "images": [
+      "https://towsonfirm.com/wp-content/uploads/2026/03/towson-law-gfirm-1.webp",
+      "https://towsonfirm.com/wp-content/uploads/2026/02/TowsonTop10.png",
+      "https://towsonfirm.com/wp-content/uploads/2026/04/towson-law-firm-pllc-plaque-scaled.png",
+      "https://towsonfirm.com/wp-content/uploads/2026/03/about_image.webp"
+    ],
+    "js_rendered": false,
+    "menu_items": [],
+    "menu_media": [],
+    "mobile_ready": true,
+    "phone": "9723827775",
+    "products": [],
+    "services": [
+      "Mission Statement",
+      "The Colony Family Lawyer",
+      "Practice Areas",
+      "Family Law Issues Involving Children",
+      "Meet Matt Towson",
+      "2027 Child Custody Analysis Scholarship",
+      "Scholarship Winners",
+      "Areas of Service Adoption",
+      "Child Custody",
+      "The Colony Child Custody Modification Lawyer",
+      "Child Support",
+      "Marital Agreements"
+    ],
+    "site_host": "towsonfirm.com",
+    "socials": [],
+    "text_words": 951,
+    "title": "The Colony Family Lawyer | Texas Family Law Attorney"
+  },
+  "ratings": [
+    {
+      "reviews": 148,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=16669936397878528003&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.9
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "TheBeast",
+      "rating": 5,
+      "text": ". I highly recommend Matt to anyone seeking legal representation. He is honest, reliable, and truly cares about his clients. He worked with me through some very stressful times, always keeping me informed and supported throughout the process. Thanks to his dedication and expertise, I was able to achieve true 50/50 custody. I\u2019m incredibly grateful for his hard work and would not hesitate to recommend him to anyone in need of a great attorney."
+    },
+    {
+      "author": "Logan",
+      "rating": 5,
+      "text": "Matt Matt Matt. Where do I begin? I genuinely cannot say enough good things about Matt Towson. Going through such a stressful time in my life, him and his office were like a breath of fresh air for me. I\u2019d never done any of this custody stuff before and had a lot of stress during this time in my life. He\u2019s very personable, kind, dedicated and so hard working. He listened to all my concerns and nonstop questions (sorry Matt LOL) with nothing but compassion and understanding. He was always an email or phone call away, and when I wanted to meet in person to go over stuff he didn\u2019t hesitate to fit me into his schedule. He got everything done in a timeframe that would stress a normal human out beyond belief, and got me a beyond desirable end result. He is the nicest, most honest, realistic, attentive, down to earth and humble attorney. Matt always asked how I was doing and feeling and was there to lend an ear and help guide me, he just genuinely cares and it shows. Having him during this time was really more than I could\u2019ve ever hoped for, he was a client\u2019s dream attorney. He really has a knack for making you feel like you\u2019re just talking to a friend who\u2019s helping you through this. You have such a bright future, Matt. I couldn\u2019t have done any of this without you. Hiring Matt was one of the best decisions of my life. Thank you will never be enough. If you\u2019re thinking about hiring him, I genuinely cannot recommend him enough to you.  Big Matt Towson fan here!"
+    },
+    {
+      "author": "Reema Alvi",
+      "rating": 5,
+      "text": "Going through a divorce is never easy, but having the right attorney made all the difference. Matt was not only highly skilled and strategic, but also patient and understanding when I needed it most. I felt like I was in good hands from start to finish. He fought for me while also keeping things as smooth and efficient as possible. I\u2019m so thankful for their support and would absolutely recommend Matt!"
+    },
+    {
+      "author": "Nautech",
+      "rating": 5,
+      "text": "During my pending divorce, I made what could have been a huge mistake by waiting until the last minute to seek legal counsel. After I was served divorce papers, I found myself searching online for an attorney, and I truly lucked out when I came across Matt Towson.\n\nThankfully, my wife and I decided to try to work things out, so I didn\u2019t end up going through the entire divorce process. However, having someone with his experience available to answer all my questions and communicate with my spouse\u2019s attorney on my behalf took a huge weight off my shoulders.\n\nI may not have been the easiest client due to my own challenges, but he provided truly exceptional service. He genuinely made time for me and worked with me every step of the way. He\u2019s also very down to earth, which made the entire experience much more comfortable. Throughout the process, he remained patient, professional, and understanding, going above and beyond to ensure everything was handled properly. I\u2019m very grateful for his dedication and would highly recommend him to anyone in need of legal assistance."
+    },
+    {
+      "author": "Abigayle Payne",
+      "rating": 5,
+      "text": "Exceptional representation from start to finish. Matt is strategic, detail-oriented, and absolutely prepared at every stage of the process. He communicated clearly, set realistic expectations, and delivered results.\n\nDivorce can be overwhelming, but I always felt like I had a strong advocate protecting my interests. Matt\u2019s professionalism, confidence, and dedication truly set him apart."
+    }
+  ],
+  "trade": "Attorney",
+  "url_check": {
+    "blocked": false,
+    "fault": null,
+    "note": "",
+    "published": "https://towsonfirm.com/?utm_source=GBP&utm_medium=GBP&utm_campaign=GBP_Frisco&utm_id=GBP_Frisco",
+    "result": {
+      "elapsed_ms": 54,
+      "error": null,
+      "final_url": "https://towsonfirm.com/?utm_source=GBP&utm_medium=GBP&utm_campaign=GBP_Frisco&utm_id=GBP_Frisco",
+      "html": "",
+      "ok": true,
+      "status": 200,
+      "tls_error": false
+    },
+    "tried": [
+      "https://towsonfirm.com/?utm_source=GBP&utm_medium=GBP&utm_campaign=GBP_Frisco&utm_id=GBP_Frisco"
+    ],
+    "working": "https://towsonfirm.com/?utm_source=GBP&utm_medium=GBP&utm_campaign=GBP_Frisco&utm_id=GBP_Frisco"
+  },
+  "website_url": "https://towsonfirm.com/?utm_source=GBP&utm_medium=GBP&utm_campaign=GBP_Frisco&utm_id=GBP_Frisco"
+}

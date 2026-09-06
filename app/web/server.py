@@ -18,8 +18,18 @@ from app.adapters.gplaces import PlacesError, search
 from app.adapters.photos import fetch as fetch_photo
 from app.cli import available_directories
 from app.core.config import DEFAULT_PORT, google_places_api_key
+from app.site.pipeline import (
+    STAGE_SAYS as STAGES_SAY,
+)
+from app.site.pipeline import (
+    STAGES,
+    BuildFailed,
+    build_progress,
+    rebuild_opening,
+    run_stage,
+    spec_from_config,
+)
 from app.site.pipeline import iterate as run_iteration
-from app.site.pipeline import open_site, rebuild_opening, spec_from_config
 from app.site.render import build as build_site
 from app.site.render import material_from_brief, plan_for
 from app.store import db, leads, photos, sites
@@ -151,33 +161,40 @@ def workspace(lead_id: int) -> dict:
         # What the first build is waiting for. Placing a photograph well needs
         # to know what it shows, so the design waits for a person rather than
         # guessing — see `pipeline.open_site`.
+        # Anything that goes wrong here is said out loud. Swallowing it gave a
+        # screen that looked finished and was not: no photographs to describe,
+        # a Build button that would fail, and nothing to explain either.
+        trouble: list[str] = []
         pending: list[str] = []
-        if not history:
-            try:
-                material = material_from_brief(
-                    leads.brief_with_overrides(conn, lead_id))
-                pending = photos.unreviewed(conn, lead_id, list(material.images))
-            except Exception:
-                pending = []
+        unlocks: list[str] = []
+        try:
+            brief = leads.brief_with_overrides(conn, lead_id)
+        except Exception as exc:                               # noqa: BLE001
+            brief = {}
+            trouble.append(f"Could not read the brief: "
+                           f"{type(exc).__name__}: {exc}")
+        if brief:
+            unlocks = list(brief.get("open_questions") or [])
+            if not history:
+                try:
+                    material = material_from_brief(brief)
+                    pending = photos.unreviewed(conn, lead_id,
+                                                list(material.images))
+                except Exception as exc:                       # noqa: BLE001
+                    trouble.append(f"Could not list the photographs: "
+                                   f"{type(exc).__name__}: {exc}")
         outline = ""
         plan: dict = {}
-        if history:
+        if history and brief:
             try:
-                brief = leads.brief_with_overrides(conn, lead_id)
                 spec = spec_from_config(history[0].get("spec_json") or {})
                 resolved = plan_for(brief, spec)
                 outline, plan = resolved.outline(), resolved.as_dict()
-            except Exception:      # a plan we cannot draw must not blank the screen
-                outline, plan = "", {}
-        # Why the opening version looks the way it does. Written once, against
-        # v1, and worth keeping on screen: it is the sentence the operator says
-        # out loud when they turn the laptop around.
-        unlocks: list[str] = []
-        try:
-            unlocks = list(
-                leads.brief_with_overrides(conn, lead_id).get("open_questions") or [])
-        except Exception:
-            unlocks = []
+            except Exception as exc:                           # noqa: BLE001
+                # A plan we cannot draw must not blank the screen — but it must
+                # not pretend the section is simply empty either.
+                trouble.append(f"Could not draw the plan: "
+                               f"{type(exc).__name__}: {exc}")
         rationale = ""
         if history:
             first = history[-1]
@@ -197,6 +214,8 @@ def workspace(lead_id: int) -> dict:
             "unlocks": unlocks,
             "pending_labels": pending,
             "can_build": not history and not pending,
+            "build": build_progress(conn, lead_id),
+            "trouble": trouble,
         }
 
 
@@ -276,13 +295,26 @@ class Handler(BaseHTTPRequestHandler):
                     self._json(generate(lead_id, str(body.get("spec", ""))))
                     return
                 elif route == "/api/build":
-                    # The first version, once the photographs have been looked
-                    # at. Explicit rather than automatic: the operator decides
-                    # when the evidence is good enough to design from.
-                    result = open_site(conn, lead_id)
-                    payload = result.as_dict()
-                    payload["versions"] = sites.versions(conn, lead_id)
-                    payload["events"] = leads.events(conn, lead_id)
+                    # One stage at a time, so the screen can say which one is
+                    # running and a failure can say which one failed. A stage
+                    # already answered returns its answer without asking again,
+                    # so a retry costs only the stage that went wrong.
+                    stage = str(body.get("stage") or "")
+                    progress = build_progress(conn, lead_id)
+                    stage = stage or progress["next"] or STAGES[-1]
+                    try:
+                        answer = run_stage(conn, lead_id, stage)
+                    except BuildFailed as failure:
+                        self._json({"error": f"{STAGES_SAY[failure.stage]} "
+                                             f"did not finish: {failure.reason}",
+                                    "stage": failure.stage,
+                                    "progress": build_progress(conn, lead_id)},
+                                   400)
+                        return
+                    payload = {"stage": stage, "answer": answer,
+                               "progress": build_progress(conn, lead_id),
+                               "versions": sites.versions(conn, lead_id),
+                               "events": leads.events(conn, lead_id)}
                     self._json(payload)
                     return
                 elif route == "/api/rebuild":

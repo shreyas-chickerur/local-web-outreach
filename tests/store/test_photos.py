@@ -81,38 +81,6 @@ def test_an_award_badge_is_told_apart_from_a_company_logo():
     assert photos.tag_for("the company logo in black") == "logo"
 
 
-def test_neither_a_logo_nor_an_award_badge_leads():
-    urls = ["badge", "mark", "plate"]
-    labels = {"badge": "award", "mark": "logo", "plate": "dish"}
-    assert photos.rank_for_hero(urls, labels, "food")[0] == "plate"
-
-
-def test_a_restaurant_leads_with_a_plate_or_the_room():
-    urls = ["peppers", "plate", "dining", "sign"]
-    labels = {"peppers": "ingredients", "plate": "dish", "dining": "room",
-              "sign": "exterior"}
-    assert photos.rank_for_hero(urls, labels, "food")[0] == "plate"
-
-
-def test_a_trade_leads_with_finished_work_not_a_plate():
-    urls = ["plate", "roof"]
-    labels = {"plate": "dish", "roof": "exterior"}
-    assert photos.rank_for_hero(urls, labels, "trade")[0] == "roof"
-
-
-def test_ingredients_and_logos_never_lead():
-    urls = ["logo", "peppers", "unlabelled"]
-    labels = {"logo": "logo", "peppers": "ingredients"}
-    ranked = photos.rank_for_hero(urls, labels, "food")
-    assert ranked[0] == "unlabelled"        # unknown beats known-unsuitable
-
-
-def test_an_unlabelled_lead_keeps_its_original_order():
-    """A business nobody has labelled should still get a page."""
-    urls = ["a", "b", "c"]
-    assert photos.rank_for_hero(urls, {}, "food") == urls
-
-
 def test_a_filename_that_says_what_it_shows_is_offered_as_a_description():
     """Their own uploads are often named after the subject, so those can be
     filled in without anyone squinting at a thumbnail."""
@@ -132,13 +100,3 @@ def test_suggestions_stay_silent_about_what_they_cannot_read():
     urls = ["/photo/1/0", "https://x/garden-tomatoes.jpg"]
     assert photos.suggest_all(urls) == {
         "https://x/garden-tomatoes.jpg": "garden tomatoes"}
-
-
-def test_an_untagged_photograph_is_still_usable(conn, lead):
-    """"I could not identify this one" is a legitimate answer: it should keep
-    the picture in the gallery, not throw it away."""
-    photos.label(conn, lead, "/photo/1/0", "the dining room")
-    ranked = photos.rank_for_hero(["/photo/1/0", "/photo/1/5"],
-                                  photos.labels_for(conn, lead), "food")
-    assert "/photo/1/5" in ranked            # unlabelled, still a candidate
-    assert ranked[0] == "/photo/1/0"         # but the known one leads

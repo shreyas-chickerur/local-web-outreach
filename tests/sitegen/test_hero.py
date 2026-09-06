@@ -242,3 +242,59 @@ def test_an_uncategorised_label_is_outvoted_by_measurement():
     assert pick_hero(("/other", "/dish"),
                      labels={"/other": "other", "/dish": "dish"},
                      trade="food", size_of=same) == "/dish"
+
+
+# --- ported from tests/store/test_photos.py ------------------------------ #
+# These cases were asserting against `rank_for_hero`, which nothing in app/
+# called any more: green against a path production no longer ran. The cases
+# themselves are good, so they now run against the scorer that decides.
+
+def same_size(*urls):
+    return sizes({url: (2400, 1400) for url in urls})
+
+
+def test_neither_a_logo_nor_an_award_badge_leads():
+    urls = ("badge", "mark", "plate")
+    labels = {"badge": "award", "mark": "logo", "plate": "dish"}
+    assert pick_hero(urls, labels=labels, trade="food",
+                     size_of=same_size(*urls)) == "plate"
+
+
+def test_a_restaurant_leads_with_a_plate_or_the_room():
+    urls = ("peppers", "plate", "dining", "sign")
+    labels = {"peppers": "ingredients", "plate": "dish", "dining": "room",
+              "sign": "exterior"}
+    assert pick_hero(urls, labels=labels, trade="food",
+                     size_of=same_size(*urls)) == "plate"
+
+
+def test_a_trade_leads_with_finished_work_not_a_plate():
+    urls = ("plate", "roof")
+    labels = {"plate": "dish", "roof": "work"}
+    assert pick_hero(urls, labels=labels, trade="trade",
+                     size_of=same_size(*urls)) == "roof"
+
+
+def test_an_unknown_subject_beats_a_known_unsuitable_one():
+    urls = ("logo", "peppers", "unlabelled")
+    labels = {"logo": "logo", "peppers": "ingredients"}
+    assert pick_hero(urls, labels=labels, trade="food",
+                     size_of=same_size(*urls)) == "unlabelled"
+
+
+def test_an_unlabelled_pool_keeps_its_original_order():
+    """A business nobody has labelled should still get a page, in the order the
+    photographs arrived — which for Google's is its own ranking."""
+    urls = ("a", "b", "c")
+    scored = hero_scores(urls, size_of=same_size(*urls))
+    assert [s.url for s in scored] == list(urls)
+
+
+def test_an_untagged_photograph_is_still_a_candidate():
+    """"I could not identify this one" keeps the picture in the gallery rather
+    than throwing it away — but the known one leads."""
+    urls = ("/photo/1/0", "/photo/1/5")
+    scored = hero_scores(urls, labels={"/photo/1/0": "room"}, trade="food",
+                         size_of=same_size(*urls))
+    assert {s.url for s in scored} == set(urls)
+    assert scored[0].url == "/photo/1/0"

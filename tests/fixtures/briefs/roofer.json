@@ -1,0 +1,326 @@
+{
+  "assumptions": [
+    "website found via google: http://www.statusroofingllc.com/",
+    "ignored a yelp result for 'Dwell Roofing & Exteriors' \u2014 different business"
+  ],
+  "chain_signals": [],
+  "facts": [
+    {
+      "candidates": [],
+      "confidence": "unverified",
+      "corroborations": 1,
+      "dissent": [],
+      "field": "address",
+      "score": 0.5,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=212013766662637504&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        }
+      ],
+      "value": "1927 Old Witt Rd Ste 100, Frisco, TX 75036, USA"
+    },
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "phone",
+      "score": 0.8999999999999999,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=212013766662637504&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "http://www.statusroofingllc.com/"
+        }
+      ],
+      "value": "(469) 424-4623"
+    },
+    {
+      "candidates": [],
+      "confidence": "unverified",
+      "corroborations": 1,
+      "dissent": [],
+      "field": "hours",
+      "score": 0.5,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=212013766662637504&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        }
+      ],
+      "value": "Mon-Sun 8am-5pm"
+    }
+  ],
+  "latitude": 33.152091999999996,
+  "location": "Frisco, TX",
+  "longitude": -96.89433609999999,
+  "name": "Status Roofing LLC",
+  "notes": null,
+  "open_questions": [
+    "Their street address: only google lists it \u2014 confirm 1927 Old Witt Rd Ste 100, Frisco, TX 75036, USA?",
+    "Their opening hours: only google lists it \u2014 confirm Mon-Sun 8am-5pm?"
+  ],
+  "place_photos": [
+    "places/ChIJ7Y2uGsQ7TIYRwEdrwWU58QI/photos/AVoNoXSsM2-9KtJEAuDwPL5dGeNz91Cc6P54o8CL310r_2LogfQXEqFh_jSMeORhXcDQRaB8Jwm2heUMWFPyjHndy1BzaaC8WD41Num66Da9I6hleNtpQ06gJv34azt914K2BcfJS6aWDxCt4d1yv-ECJw7_meO-c4UrktEXt_bIMl706KMb3ODU8d_RMOVl-rmmNVo-8gpvLVcSwFIfrMHjUmjbNXvUFomp05_5uJ8xLcPze9G480IPyvN3Tb_xbj64GAImOGXQeSyvUqmCCbD-XPS5sf5lg4mlJNMjqD86qHV1m6v0VOmXAl181d5dDgGT5oDpaZKvB1cnauCZu8R4A57NRXTcH1pywj_zejzP4f-jbqrcR2lDc7Tr7vpUE56quScMdKslMbXkFnEx5vqIlJZbmNlUVGLz9m9rl_HJGwBvx2IhYKG9Basp94fpuA",
+    "places/ChIJ7Y2uGsQ7TIYRwEdrwWU58QI/photos/AVoNoXQqilJ9CE0xrpV9H3hliLwWDo1B6PK5A2mDojwaP7svnjIEc0nhphSqi-X1fcFuMWk503QjKzKk0_czHBPQEayApnk_Hy2x5e8dN4LZiw3smWQFOh-rnptqY3RP9DwWVFOONxNFiIZdK6Q9gwNmqL9MiumcT9ZYn8gnUpw1ZcWAdexyAwkGx--LXpBGNPbm2SVswP7AvaQHzagx5jinDMcF4vXFSmQ_UxUOuSmVmMg7B7gf4YFJn0Hfz5t_gLF0sRXtBPA3-ZN-yZN8mFEaeazZJ4jPX9PniseBG-yB97q5o0D1DON4KR2OLst1nsj7KpHDROPcU30-I_nswdZi2S3PTyOjU4X7rXQwkWpvPjaTM1tx-1yRl2BCFtZuDaaRYrNJPXduHn08oQr9d9G7o7Fyqf6TE62p1uoeY5G9Sts75zfTkLR5TrOtnDX9sQu0",
+    "places/ChIJ7Y2uGsQ7TIYRwEdrwWU58QI/photos/AVoNoXR2gcAqGIhZv8K7Nn-m7UT_DlbF29nSwbuuGUrlbTxB-qnuAG61b5bbIv6aKfF7T-PbeI4xhWLc7ad6K2aEtBycnJOlOby9RzRsq_oH443qdsnDq6dEyA882Pds9hkDDGmTsLPRy7beF-Y1jxObC9JOGrElhmiRIOOmL44WcoSURIzXwo0FFa4D6JklhYP583uSotJIcrYIgN9RqozQNTnYONYxZmzEGwLz8-ox_y9YK_zVwQVlJM5uKH0Nl8tn7Du7qpyjiP_BjpuCfB58HvTMusRi4_mH8UeuubVuCfJUTLF-OZ-nBOFJk7LTgM2V9DC7v4DfB4cOayJ2a_lFU-1ohuUaPB-cfdC_FdaX2W-fBr59J9yyKD7iwpgt7jSgO_xVTyFzwkOYQBImjVq7eH8S_s4ixRTRldpzw3ZAeH2wBTVWipqjlNW8KjE2A1sn",
+    "places/ChIJ7Y2uGsQ7TIYRwEdrwWU58QI/photos/AVoNoXTGs3Dxw4pPUr3kcDKdO2iG4xlyUmWdppB-3WpFKQASlgcEZpdtvLy9rKvhgdhDW_9tcz8kPolwaIOMk76WyIH0eNlBj_1PyCNz-IjoZBfvDswjBHGqQtB4sA2JsfGWCPBFgJQ9qRIkpeMetLDOLBY_H_kO0nYQ4PV4Iij41pfEKcMUEFEGhuWHZn2eU1yMPMcAyX6bU9EcfPfh096IaI97_hE6U5Ky5VCsGdMuwDvRmj54No3id1o6J2dvXtx_2rqF61yYY1eQ2T3N4zXZwWGWBf0NPQEv6fsDx7sg1CfBz1m2QwfUqdhLjV5CIFmT2-Uj5CiALHZocqWrjMcIBzVwQSmdZGh63XGxmd-3dVJ8b6Zxk-f1tiBQ9UrzCulZ-qRQEG4E0q-9O0LFaS12FlqHxZdXcO7M0HK5XG_C_8IkZw64__ae26ltDi-C4nh5",
+    "places/ChIJ7Y2uGsQ7TIYRwEdrwWU58QI/photos/AVoNoXQddOP74-ubWEn7WF02n-gkxR8P2ahvZjBU3lY9o_YfXqprNQUZH9c_2TYu_iB_3JCiaOgFlVAdCnITiMzhcl2jOmK1IOd6XxoMxWX0EtfZG5aSqGm3fRyzrJq_WdUV5Oh2vm2IQLjy3qVeooFregQIZDOXXe76KEv6qx6Cm2at3Vl-JFFXybobXqEbKn6mWvhzM3zrAPOyNAVpCMZX3zQAS9S0lgU1B0ILXEq9adAN9SZ3-4VH3aGZ4FJaOlWwjwUDNm5CUzSR_2ZTzA-TaYIr7ZGWmksjnycH6qK_8eKHlDl1tipw_876bdR5uKOJ54lwK6eNPBhbPD5LypWQgIOpQvUAX2vzliKhtP29cxvZM3Y571qqFkPSwNt14aODz1S6tYEF8MDeP18PCoQhmEgLhCyq3I6C8cwmPwMp6VVIVw",
+    "places/ChIJ7Y2uGsQ7TIYRwEdrwWU58QI/photos/AVoNoXSS6n6aMs56clIONWxrv2V_sJSUO_8YSaFk5ZmMkitoZtsNFY_lsjoPWL2qz7Jt79XCrTnEpz1qQjBAGlbiCfOLWGjhI-W_uJmSLgoRzYeJewmloA4D2bxvx8C5Wemi0JwSRg0Ar_YMG79FUqoTuOcMOsAdKMBT4Ix7y8H2PDaWaveR1YnZXFri0oaEZ07jGShRe77t4urK06LvRk2lXCjnw91W4PwHcKCGHgkwdOGKpFfF2-yk9gvNNWwJWwhOSe67PB2XJZDpidLDc1Y34Y45C6mS50mTaSj4S9jaGJfRWLOKPMF5eMOdX0W2uR3AspUxypZZBgsj5Mq5Fniz_N2SynwMqjHDIV6aN0GFWpy6vgOaqukm6nhKYQ9lp1Tta97sQ0uePG1A5HpubW0k8P3yMnJ420HUwlyVoEnNawhMHg",
+    "places/ChIJ7Y2uGsQ7TIYRwEdrwWU58QI/photos/AVoNoXTCyX0fw64RKwLQumR2PYRPOI5TTYMLoXIBeILmgo5IJvl5yk0V6joNEe4Y1p167dewmH2AMG31yjWZwGM-Fli9HoxgzKHsggLy-pTyEKqhUnktZwYCcq5ke_08Ik3AHH0hFEKFpMLFMORSjEBqf860VTqOJf6JOsRgDjozKFJmXGsAIBFRUo-fftuCZqLAPLj8WK1rZXUps59Suki2TFnsVMN_U1WPOFsT5e9L6XQf0uxzupjdBetozzATNi5Kk45BdtrDeimHBB3H3YWW-SMQAdUDZFTNDGo28VOjqZ3pL1FdV4h5xpUR0MLmvmJaF89JfZXT0MnLCcE1ZWwSMBx2eg6IFDD3pN7XRytKF0OIOwmb3-ko86T_xMjLI7NKRc9nge7pLtTdlixF-9kjMVvmSdKq4oThwl-cm1gYwBAl8FWutub8KnuLjaQI-qMf",
+    "places/ChIJ7Y2uGsQ7TIYRwEdrwWU58QI/photos/AVoNoXQD8IdrzqobTPSSfrtXh3WqqfwdICqmbF0YmSbA-1Omy5vXHs__Lrziltj3StdPZTkVTE6IjWALnw1vDhrNpvgoz8uvwS_MFdMYkXtZ0v0uTdN97kCJzMb9S8sMks_1zFn8zRcspbu7Y1PQwQ9BeU5RYKIeSxv6YI9wXQXHtPnD8lJNpTJ_odTbhHRyjJq_2hci1M7j6ISaZxy91qWOTDbSSwnZeWFV0gZrE2JbSZii193ZDJ4hLMl6C-cTyTD-aVqozJFx6DzL0pq1vS_HkMjMT79IltmckABiEfj0tqFVJhHUgHjL9YLxPB09gS4PT8hVdjbCz6RZwpWmOgZoGrfm_R_Rq7eA2zQMEns3ipyPxkPlK2a-3a3ywuqjoPmnVjEQEGJ74oXFlaE1aVBdqVoyKRYG6XXeF1Z6CK1ewjmn7l85",
+    "places/ChIJ7Y2uGsQ7TIYRwEdrwWU58QI/photos/AVoNoXSITIEG_2sBEjp4PR2xcBMsaAQb_xpbdL7yPGwWG_M3aZwyvXtJwwlomM5X_fLG5fFzpaL4iD6szTSRfXpBhkIF6z2IPskWzhO40KYBcMXpdsAbAY9K9U4iiOOnmTvaQMrZn8OJaTqQNdUfxwddfCEIofSaRXSBgjy2yLT1y8eZbKapeFOwIW1lWAcd7b8qPs4RXhja_MB0x5z6GkXQfZCQOZkES6RmQpjZJfSIwqLXxZK6Gvyr2uGztSGfmoaEIuxvyCh2eLDHdT4YIHQ1hXGGIK_dU4zZ5a8xW8x90zBElxpwYxvLQw-QBV_XUgmAqMi3qmSx9HMtdJyPbJOtQHUhew5UKi_qqKcs9LyYLXMmUw0DV7vnkhoHsctjtKLRkZQMRgIBQgiQcT0r7wZyuh0Je5I6OWJzGItTp2OrEpNArQ",
+    "places/ChIJ7Y2uGsQ7TIYRwEdrwWU58QI/photos/AVoNoXTPSM7h2RZ9zMUUrAueYkRWwD2AtJK8ax3M6I0BZEdHx9_v4c7GKDkCCf-czS4JqrH61jH4ihgMHR-f2QsULdbjtkEwRbNm4MmhrgV5cwwStWZDCdHi8ypL2PqUWoBYPffuynxG-y02xTiV4K84y986ULzTc9p4VbEOCn_cSBfZ8eII41gjTDd4wRArVfMw_UNMAbDnMGCTr1GONPaGJHs2S3gx7hDGQgGcfo4uqQGo5kvsPZYF3_qx0fmIG4lRMDh3g3teQFGGjVGx-SpVLqL-wy0tVNyMOP-eVerDoo4pL99-EHYlMQX-zhVr0pHPu4C7wqEvnL5run0JLYuyjNmKxhNGHRJ1gZRx_q9o8O4VMkbHYYawSmMGnovINHH-Tj3qo8ud4WtgD4OWz7e8dOYYiiHkzgm8bTQ4rXPAwlJBRPZINBTWUrpHKgiQzOLQ"
+  ],
+  "published": {
+    "about": "Yes. We operate from our Frisco, TX headquarters and our Oklahoma City office, with crews dispatched statewide across all four states. We're actively expanding market-specific Project Managers \u2014 including a new Austin, TX presence \u2014 to bring local expertise to every market we serve.",
+    "about_score": 11.48,
+    "actions": [
+      {
+        "kind": "Gallery",
+        "label": "Gallery",
+        "url": "https://www.statusroofingllc.com/gallery/"
+      },
+      {
+        "kind": "Get a Quote",
+        "label": "Free Estimate",
+        "url": "https://www.statusroofingllc.com/contact/"
+      }
+    ],
+    "address": null,
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "Every Service Backed by W2 Project Managers",
+        "images": [
+          "https://www.statusroofingllc.com/assets/img/roof-replacement-header.png"
+        ],
+        "kind": "feature",
+        "text": "Trusted manufacturer partners. Company-insured employees. Professional standards on every project across four states."
+      },
+      {
+        "entries": [],
+        "heading": "Roof Replacement",
+        "images": [
+          "https://www.statusroofingllc.com/assets/img/roof-repair-header.png"
+        ],
+        "kind": "feature",
+        "text": "Complete residential and commercial replacements using manufacturer-quality materials. Free inspection, transparent quote, W2-managed installation."
+      },
+      {
+        "entries": [],
+        "heading": "Roof Repair",
+        "images": [
+          "https://www.statusroofingllc.com/assets/img/arial-job.jpg"
+        ],
+        "kind": "feature",
+        "text": "Targeted leak repairs, preventive maintenance, and honest damage assessments. No pressure tactics or fabricated damage claims."
+      },
+      {
+        "entries": [],
+        "heading": "Roof Insurance Claims",
+        "images": [
+          "https://www.statusroofingllc.com/assets/img/commercial-roofing.jpeg"
+        ],
+        "kind": "feature",
+        "text": "Full claims navigation from damage documentation through adjuster coordination and final restoration."
+      },
+      {
+        "entries": [],
+        "heading": "Commercial Roofing",
+        "images": [
+          "https://www.statusroofingllc.com/assets/img/other-services-header.jpeg"
+        ],
+        "kind": "feature",
+        "text": "Pre-qualified for commercial contracts. W2 crews meet insurance and liability requirements that disqualify most roofers."
+      },
+      {
+        "entries": [],
+        "heading": "Other Services",
+        "images": [
+          "https://www.statusroofingllc.com/assets/img/realtor-header.jpeg"
+        ],
+        "kind": "feature",
+        "text": "Gutters, painting, fencing, windows, siding, and exterior remodeling. One contractor for everything outside your home."
+      },
+      {
+        "entries": [],
+        "heading": "Realtor Program",
+        "images": [],
+        "kind": "feature",
+        "text": "A referral partner who protects your closing timelines. Pre-sale inspections, transparent reporting, fast turnaround. Two Hubs. Four States. One Standard."
+      },
+      {
+        "entries": [],
+        "heading": "Trusted by Realtors and Homeowners",
+        "images": [
+          "https://statusroofing-direction.netlify.app/assets/google-color.png",
+          "https://statusroofing-direction.netlify.app/assets/gaf-clean.png",
+          "https://statusroofing-direction.netlify.app/assets/owens-corning-clean.png",
+          "https://statusroofing-direction.netlify.app/assets/Malarkey%20Roofing%20Products_id17PI6HKC_1.svg",
+          "https://statusroofing-direction.netlify.app/assets/F%20Wave.png",
+          "https://statusroofing-direction.netlify.app/assets/Atlas.png",
+          "https://statusroofing-direction.netlify.app/assets/gaf-clean.png",
+          "https://statusroofing-direction.netlify.app/assets/owens-corning-clean.png"
+        ],
+        "kind": "feature",
+        "text": "Consistent five-star reviews across all four states. The proof is in the work. Excellent \u2605\u2605\u2605\u2605\u2605 Based on 200+ reviews Audrey Gossett 1 month ago \u2605\u2605\u2605\u2605\u2605 \"I can't say enough good things about Status Roofing. From start to finish, the entire team was professional and communicated every step. Our roof looks incredible.\" Read more Christian Hurtado 2 months ago \u2605\u2605\u2605\u2605\u2605 \"We met with Sergio Lara for an inspection and we were satisfied with his service. He took the time to walk us through everything and was incredibly professional.\" Read more Kathy D. 2 months ago \u2605\u2605\u2605\u2605\u2605 \"We recently had our roof and gutters replaced by Status Roofing and the entire process was seamless. Their team is responsive, honest, and the workmanship is top-tier.\" Read more Fitzpatrick Real Estate 3 months ago \u2605\u2605\u2605\u2605\u2605 \"I cannot explain enough how great the communication has been between Jeremy and his company Status Roofing and "
+      },
+      {
+        "entries": [],
+        "heading": "Frequently Asked Questions",
+        "images": [],
+        "kind": "feature",
+        "text": "Straight answers about roofing, insurance claims, and the W2 difference. How long does a full roof replacement take? Most residential roof replacements are completed in a single day. Larger homes or complex roof systems may take two days. Our W2 crews are full-time employees \u2014 they show up on schedule and don't disappear mid-job like subcontractors sometimes do. Will you work directly with my insurance adjuster? Yes \u2014 this is one of our specialties. We handle the entire insurance process: damage documentation, adjuster meetings, supplement negotiations, and final sign-off. Most homeowners end up getting significantly more covered than their initial estimate once we're involved. What does \"W2 employees\" actually mean for me as a homeowner? It means every Project Manager running your job is a direct employee of Status Roofing \u2014 background-checked, trained, and covered by our workers' compe"
+      },
+      {
+        "entries": [],
+        "heading": "Status Roofing Delivers Dependable Roofing Services",
+        "images": [
+          "https://www.statusroofingllc.com/assets/img/roof-replacement-header.png",
+          "https://www.statusroofingllc.com/assets/img/roof-repair-header.png",
+          "https://www.statusroofingllc.com/assets/img/commercial-header.jpeg",
+          "https://www.statusroofingllc.com/assets/img/commercial-roofing.jpeg"
+        ],
+        "kind": "feature",
+        "text": "Status Roofing delivers dependable roofing services, ensuring quality installations and repairs across all of Texas, all of Oklahoma, all of Kansas, and all of Missouri. Our skilled team provides the right solutions for your home or business with durable and reliable roofing craftsmanship \u2014 every job managed by a W2 Project Manager from estimate to final invoice. All Services"
+      },
+      {
+        "entries": [],
+        "heading": "We are the roofers you can trust",
+        "images": [],
+        "kind": "feature",
+        "text": "Status Roofing LLC offers a wide range of construction and roofing services for residential and commercial properties. Every Project Manager on every job is a W2 employee of Status Roofing \u2014 directly accountable, fully insured, and on payroll from the first inspection through the final invoice."
+      },
+      {
+        "entries": [],
+        "heading": "Our Core Values",
+        "images": [],
+        "kind": "feature",
+        "text": "\u2713 Transparency \u2014 no hidden costs or surprises \u2713 Reliability \u2014 count on us to fulfill our promises \u2713 Quality \u2014 we only use the best materials Introducing our team \u2014 meet the W2 Project Managers who run every job. Meet Our Team"
+      },
+      {
+        "entries": [],
+        "heading": "Roofs We've Restored Across Four States",
+        "images": [
+          "https://www.statusroofingllc.com/assets/img/gallery-header.jpeg",
+          "https://www.statusroofingllc.com/assets/img/gallery/Gallery-Image-2.webp",
+          "https://www.statusroofingllc.com/assets/img/gallery/Gallery-Image-3.webp",
+          "https://www.statusroofingllc.com/assets/img/gallery/Gallery-Image-4.webp",
+          "https://www.statusroofingllc.com/assets/img/gallery/Gallery-Image-5.webp",
+          "https://www.statusroofingllc.com/assets/img/gallery/Gallery-Image-6.webp",
+          "https://www.statusroofingllc.com/assets/img/gallery/Gallery-Image-7.webp",
+          "https://www.statusroofingllc.com/assets/img/gallery/Gallery-Image-8.webp"
+        ],
+        "kind": "feature",
+        "text": "Residential replacements, storm restorations, commercial systems, and exterior construction. No stock photography \u2014 every image is a Status Roofing project. Your Roof, Next"
+      }
+    ],
+    "description": "W2-insured Project Managers running every roofing job. Serving all of Texas, all of Oklahoma, all of Kansas, and all of Missouri from our Frisco, TX headquarters and Oklahoma City office. 200+ five-star reviews. BBB A+. Same-day estimates.",
+    "emails": [],
+    "has_locations_page": false,
+    "hours": [],
+    "https": true,
+    "images": [
+      "https://www.statusroofingllc.com/assets/four-states-clean.png",
+      "https://www.statusroofingllc.com/assets/img/roof-replacement-header.png",
+      "https://www.statusroofingllc.com/assets/img/roof-repair-header.png",
+      "https://www.statusroofingllc.com/assets/img/arial-job.jpg",
+      "https://www.statusroofingllc.com/assets/img/commercial-roofing.jpeg",
+      "https://www.statusroofingllc.com/assets/img/other-services-header.jpeg",
+      "https://www.statusroofingllc.com/assets/img/realtor-header.jpeg",
+      "https://www.statusroofingllc.com/assets/img/commercial-header.jpeg"
+    ],
+    "js_rendered": false,
+    "menu_items": [],
+    "menu_media": [],
+    "mobile_ready": true,
+    "phone": "4694244623",
+    "products": [],
+    "services": [
+      "Every Service Backed by W2 Project Managers",
+      "Roof Replacement",
+      "Roof Repair",
+      "Roof Insurance Claims",
+      "Commercial Roofing",
+      "Other Services",
+      "Realtor Program",
+      "Trusted by Realtors and Homeowners",
+      "Serving statewide",
+      "4416 N. Western Ave, Ste 204",
+      "License CIB#800007037",
+      "Wichita, Topeka, KC-KS"
+    ],
+    "site_host": "statusroofingllc.com",
+    "socials": [],
+    "text_words": 1316,
+    "title": "Status Roofing \u2014 W2 Project Managers Serving All of Texas, Oklahoma, Kansas & Missouri"
+  },
+  "ratings": [
+    {
+      "reviews": 218,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=212013766662637504&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 5.0
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Cynthia Del Rio",
+      "rating": 5,
+      "text": "I recently had the pleasure of working with Kevin Cardenas at Status Roofing on a transaction where I represented the seller. Kevin was extremely professional throughout the entire process and did an outstanding job managing the roof replacement from start to finish.  He was always available to answer questions, communicate updates, and work collaboratively with all parties involved. His responsiveness, knowledge, and commitment to excellent customer service played a significant role in making this a successful and stress free closing. I highly recommend Status Roofing and Kevin Cardenas for anyone looking for a reliable roofing professional.\n\nCynthia Del Rio, REALTOR\u00ae"
+    },
+    {
+      "author": "adan rodriguez",
+      "rating": 5,
+      "text": "Kevin Cardenas at status roofing is the best ! Made my experience effortless and worked for me. He kept me updated through the whole process and was done the same day! Will recommend to everyone !"
+    },
+    {
+      "author": "Ana Idelsy",
+      "rating": 5,
+      "text": "I highly recommend Status Roofing for anyone needing an honest and professional roof inspection in McKinney, Texas.\n\nDuring the sale of our home, an inspection report raised concerns about possible hail damage and put our transaction at risk. Sergio and Gage responded immediately, and Gage was able to inspect our roof the same day.\n\nHis inspection was thorough, detailed, and incredibly honest. Rather than pushing for a roof replacement, he provided a professional assessment of the roof\u2019s condition, identified the difference between minor foot-traffic wear and actual storm damage, and explained the realities of potential insurance coverage.\n\nMost importantly, Gage confirmed that our roof remains in great condition with plenty of life remaining and no signs of failure. His detailed report helped address the buyer\u2019s concerns and gave us confidence moving forward with the sale.\n\nIf you\u2019re looking for a trusted roofing company for roof inspections, hail damage evaluations, roof repair recommendations, or roofing expertise in McKinney and North Texas, Status Roofing delivers exceptional customer service, integrity, and expert advice. Thank you, Sergio and Gage, for protecting our home and helping us through a stressful situation."
+    },
+    {
+      "author": "Kathy D",
+      "rating": 5,
+      "text": "We recently had our roof and gutters replaced by Status Roofing and the experience exceeded all expectations - even my husband, a former roofer, was impressed. From the very first consultation to the final walkthrough, Jonathan demonstrated professionalism, expertise, and genuine care.\n\nJonathan explained every step of the process clearly, was knowledgeable about the materials, and the quote was transparent with no surprises. The crew worked efficiently and the quality of their workmanship was outstanding.\n\nJonathan and his crew went above and beyond and we are extremely happy with the results. We would confidently recommend Status Roofing to anyone needing a roof or gutter repair/replacement and fence staining."
+    },
+    {
+      "author": "Sandy de Vries",
+      "rating": 5,
+      "text": "Mr. Gage Ball was an absolute delight to work with. He communicated everything from beginning to end. He  has an unbelievably  great personality and I want to get another roof because of him\ud83c\udf1d\u2026.. thank you so very much Gage!!!!"
+    }
+  ],
+  "trade": "Roofing Contractor",
+  "url_check": {
+    "blocked": false,
+    "fault": "http-link",
+    "note": "the link on their listing is the old http one; the site itself serves https at https://www.statusroofingllc.com/",
+    "published": "http://www.statusroofingllc.com/",
+    "result": {
+      "elapsed_ms": 68,
+      "error": null,
+      "final_url": "https://www.statusroofingllc.com/",
+      "html": "",
+      "ok": true,
+      "status": 200,
+      "tls_error": false
+    },
+    "tried": [
+      "http://www.statusroofingllc.com/",
+      "https://www.statusroofingllc.com/"
+    ],
+    "working": "https://www.statusroofingllc.com/"
+  },
+  "website_url": "http://www.statusroofingllc.com/"
+}

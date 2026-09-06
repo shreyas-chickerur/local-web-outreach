@@ -64,6 +64,36 @@ def reject(conn: sqlite3.Connection, lead_id: int, instruction: str,
            note=instruction.strip() or "no instructions given", actor=actor)
 
 
+def remember_stage(conn: sqlite3.Connection, lead_id: int, stage: str,
+                   payload: dict) -> None:
+    """What one build stage worked out, so a retry does not redo it."""
+    conn.execute(
+        "INSERT INTO build_state (lead_id, stage, payload, at) VALUES (?,?,?,?)"
+        " ON CONFLICT(lead_id, stage) DO UPDATE SET payload=excluded.payload,"
+        " at=excluded.at",
+        (lead_id, stage, json.dumps(payload, sort_keys=True), _now()))
+
+
+def recall_stage(conn: sqlite3.Connection, lead_id: int,
+                 stage: str) -> dict | None:
+    row = conn.execute(
+        "SELECT payload FROM build_state WHERE lead_id = ? AND stage = ?",
+        (lead_id, stage)).fetchone()
+    if row is None:
+        return None
+    try:
+        return dict(json.loads(row["payload"]))
+    except (json.JSONDecodeError, TypeError, ValueError):
+        return None
+
+
+def forget_stages(conn: sqlite3.Connection, lead_id: int) -> None:
+    """Start the build over from the beginning. Used when the operator asks
+    for a rebuild, which is a request for a fresh decision rather than a
+    replay of the old one."""
+    conn.execute("DELETE FROM build_state WHERE lead_id = ?", (lead_id,))
+
+
 def versions(conn: sqlite3.Connection, lead_id: int) -> list[dict]:
     rows = conn.execute(
         "SELECT version, parent_version, spec, spec_json, notes, actor,"

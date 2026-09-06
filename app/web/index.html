@@ -933,6 +933,7 @@ async function openWorkspace(leadId, name) {
         diagnostics: null, device: "phone", outline: data.outline || "",
         rationale: data.rationale || "", unlocks: data.unlocks || [],
         pending: data.pending_labels || [], canBuild: !!data.can_build,
+        build: data.build || null, trouble: data.trouble || [],
         photos, labelOptions: shots.options || [], shot: 0,
         // A lead with no site and unlabelled photographs starts on the
         // labelling step, not on a workspace that will refuse to build. The
@@ -1032,6 +1033,10 @@ function drawWorkspace() {
           brief and they can appear on the page.</p>
        <div class="diag">${WS.unlocks.map(q =>
          `<span class="skip">${esc(q)}</span>`).join("")}</div>` : "";
+  const trouble = (WS.trouble || []).length
+    ? `<p class="diag-label">Could not be loaded</p>
+       <div class="diag">${WS.trouble.map(t =>
+         `<span class="stop">${esc(t)}</span>`).join("")}</div>` : "";
   const why = WS.rationale
     ? `<p class="diag-label">Why it opens this way</p>
        <p class="hint">${esc(WS.rationale)}</p>` : "";
@@ -1172,7 +1177,7 @@ function drawWorkspace() {
       <div class="ws-head">Versions</div>
       <div class="ws-body">
         <div class="diag">${chips}</div>
-        ${why}${unlocks}${outline}${diag}${labeller}
+        ${trouble}${why}${unlocks}${outline}${diag}${labeller}
       </div>
     </section>
   </div>`;
@@ -1189,28 +1194,39 @@ async function buildFirst() {
   // The button lives in two places — the labelling step and the empty
   // workspace — so it is found by id rather than by whichever layout is up.
   const button = $("#build-first");
-  if (button) { button.disabled = true; button.textContent = "Designing…"; }
-  let data;
-  try {
-    const res = await fetch("/api/build", {method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({lead_id: WS.lead_id})});
-    data = await res.json();
-  } catch (err) {
-    alert("The build failed to run: " + err);
-    if (button) {
-      button.disabled = false;
-      button.textContent = "Build the first version";
+  const say = (text) => { if (button) button.textContent = text; };
+  if (button) button.disabled = true;
+
+  // One stage at a time — photographs, direction, page — so the wait says what
+  // it is doing and a failure says which part failed. Roughly twenty-five
+  // seconds all told, and a retry costs only the stage that went wrong,
+  // because each one's answer is stored as it finishes.
+  const build = WS.build || {stages: ["photographs", "direction", "page"],
+                             done: [], says: {}};
+  for (const stage of build.stages) {
+    if ((build.done || []).includes(stage)) continue;
+    say((build.says[stage] || stage) + "…");
+    let data;
+    try {
+      const res = await fetch("/api/build", {method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({lead_id: WS.lead_id, stage})});
+      data = await res.json();
+    } catch (err) {
+      alert("The build could not run: " + err);
+      if (button) { button.disabled = false; say("Build the first version"); }
+      return;
     }
-    return;
-  }
-  if (data.error) { alert(data.error); return; }
-  if (data.kind === "needs_labels") {
-    WS.pending = data.unsupported || [];
-    WS.canBuild = false;
-    WS.stage = "label";
-    drawWorkspace();
-    return;
+    if (data.error) {
+      // Named, not swallowed. The stages already finished stay finished, so
+      // pressing the button again resumes rather than starting over.
+      alert(data.error);
+      WS.build = data.progress || WS.build;
+      if (button) { button.disabled = false; say("Try again"); }
+      if (data.stage === "photographs") { WS.stage = "label"; drawWorkspace(); }
+      return;
+    }
+    WS.build = data.progress || WS.build;
   }
   const {lead_id, name} = WS;
   await openWorkspace(lead_id, name);

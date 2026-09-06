@@ -41,3 +41,7 @@ workbench.db-*
 # Working notes: feedback themes, debugging lessons, decisions not yet
 # encoded in code or tests. Scaffolding for the work, not part of it.
 .notes/
+
+# Generated proof: screenshots and the contact sheet. Regenerated on demand by
+# tools/contact_sheet.py, and a PNG per fixture per width is not history.
+artifacts/
