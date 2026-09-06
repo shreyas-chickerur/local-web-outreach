@@ -217,3 +217,28 @@ def test_without_a_key_no_photograph_is_penalised_for_the_absence():
     look = sizes({"/a": (3200, 1800), "/b": (1700, 1000)})
     assert pick_hero(("/a", "/b"), size_of=look, vision={}) == "/a"
     assert pick_hero(("/a", "/b"), size_of=look, vision=None) == "/a"
+
+
+def test_an_uncategorised_label_is_outvoted_by_measurement():
+    """Now that vision writes the subject, `tag_for` only ever sees operator
+    free text — so "other" means "I did not recognise these words", never "bad
+    photograph". It is a penalty of about a tenth, which resolution and vision
+    quality both outrank by an order of magnitude."""
+    from app.site.render import _subject_term
+    assert _subject_term("other", "food") < _subject_term(None, "food")
+    assert _subject_term("other", "food") > _subject_term("logo", "food")
+
+    # Size outvotes it.
+    look = sizes({"/other": (3200, 1800), "/plain": (1700, 1000)})
+    assert pick_hero(("/other", "/plain"), labels={"/other": "other"},
+                     size_of=look) == "/other"
+    # Vision quality outvotes it.
+    same = sizes({"/other": (2400, 1400), "/plain": (2400, 1400),
+                  "/dish": (2400, 1400)})
+    assert pick_hero(("/other", "/plain"), labels={"/other": "other"},
+                     size_of=same, vision={"/other": seen(quality=5),
+                                           "/plain": seen(quality=1)}) == "/other"
+    # A real subject match still wins when nothing else separates them.
+    assert pick_hero(("/other", "/dish"),
+                     labels={"/other": "other", "/dish": "dish"},
+                     trade="food", size_of=same) == "/dish"
