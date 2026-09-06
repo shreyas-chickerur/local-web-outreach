@@ -23,11 +23,15 @@ from __future__ import annotations
 import html
 import json
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, replace
 from dataclasses import field as dc_field
 from urllib.parse import quote_plus
 
-from app.adapters.imageinfo import measure
+from app.adapters import photos as photos_api
+from app.adapters.imageinfo import dimensions_of, measure
+from app.core.claims import CLAIM_RE
+from app.core.config import google_places_api_key, preview_base_url
 from app.site.density import calculate_density_signal, density_attrs
 from app.site.plan import (
     NO_DATA,
@@ -41,7 +45,7 @@ from app.site.plan import (
 from app.site.spec import SiteSpec, parse_spec
 from app.site.styles import css, script
 from app.site.theme import Theme, theme_for
-from app.store.photos import rank_for_hero
+from app.store.photos import HERO_PREFERENCE, NEVER_LEADS, WEAK_LEADS
 from app.workbench.hours import parse_week
 
 # Sections in the order they read, when nothing asks otherwise.
@@ -55,8 +59,6 @@ ORDER = ("hero", "stats", "recognition", "services", "menu", "gallery",
 OFFER_ART_START = 1
 OFFER_ART_MAX = 4
 GALLERY_MIN = 3
-# Proxied photos are served by us, so measuring one needs an absolute URL.
-LOCAL = "http://127.0.0.1:8099"
 GALLERY_MAX = 12
 
 _CTA_LABEL = {"call": "Call us", "book": "Book a table", "order": "Order online",
@@ -93,6 +95,10 @@ class Material:
     blocks: tuple[dict, ...] = ()
     # {url: what it shows}, said by a person. Empty until someone labels.
     photo_labels: dict = dc_field(default_factory=dict)
+    # What looking at the photographs established: quality, the flags that
+    # disqualify a hero, where the subject sits, and one plain sentence of alt
+    # text per picture. Empty without a key, and every reader handles that.
+    photo_vision: dict = dc_field(default_factory=dict)
     # What each photograph shows, in the operator's words. Becomes alt text,
     # which every generated image had been shipping empty.
     photo_notes: dict = dc_field(default_factory=dict)
@@ -100,6 +106,44 @@ class Material:
     # Photographs already placed. Sections spend from one pool, so the same
     # picture cannot turn up in the gallery and again beside a feature row.
     spent: set = dc_field(default_factory=set)
+
+    def alt_for(self, url: str) -> str:
+        """What to call this photograph, in one sentence.
+
+        The operator's own words first — they looked at it and they know the
+        business. Then the vision pass, which looked at it and does not.
+        Empty only when neither exists, and every gallery image used to ship
+        that way.
+        """
+        theirs = (self.photo_notes.get(url) or "").strip()
+        if theirs:
+            return theirs
+        return str((self.photo_vision.get(url) or {}).get("alt_text") or "")
+
+    def size_of(self, url: str) -> tuple[int, int] | None:
+        """How big one of this business's photographs is.
+
+        A proxied `/photo/<lead>/<n>` used to be measured by making an HTTP
+        request back to our own web server on a hardcoded port. From the
+        command line, from a test, from a server on another port, or from
+        inside a request that is itself being served, every one of those came
+        back None — so `pick_hero` saw no sizes at all, fell through to raw
+        order, and the hero became Google photograph zero. That was the whole
+        of the "it picks the wrong picture" complaint.
+
+        The bytes are already on disk, paid for and cached, so read them.
+        """
+        if url.startswith("/photo/"):
+            index = url.rsplit("/", 1)[-1].split("?")[0]
+            if not index.isdigit() or int(index) >= len(self.place_photos):
+                return None
+            data = photos_api.fetch(google_places_api_key() or "",
+                                    self.place_photos[int(index)],
+                                    width=photos_api.MAX_WIDTH)
+            return dimensions_of(data) if data else None
+        # Their own site's images are somebody else's server, so a ranged
+        # request is the right way to ask and the disk cache absorbs it.
+        return measure(url)
 
     def take(self, urls, limit: int) -> list[str]:
         """Unspent photographs, marked as spent."""
@@ -179,6 +223,7 @@ def material_from_brief(brief: dict) -> Material:
         lead_id=brief.get("lead_id"),
         blocks=tuple(published.get("blocks") or ()),
         photo_labels=dict(brief.get("photo_labels") or {}),
+        photo_vision=dict(brief.get("photo_vision") or {}),
         photo_notes=dict(brief.get("photo_notes") or {}),
         trade_kind=trade_kind(brief.get("trade")),
         latitude=brief.get("latitude"),
@@ -263,20 +308,48 @@ def _secondary(m: Material) -> str:
             f' target="_blank" rel="noopener">Get directions</a>')
 
 
-_FOOD_WORDS = ("restaurant", "cafe", "coffee", "bakery", "bar", "pizza",
-               "barbecue", "grill", "diner", "kitchen", "food", "deli")
-_TRADE_WORDS = ("contractor", "roofing", "plumb", "electric", "landscap",
-                "lawn", "hvac", "construction", "repair", "cleaning")
+# Ordered most specific first, because a substring match is greedy and
+# "bar" is inside "barber". Everything used to land in one of three buckets,
+# so a salon, a dentist, a law firm and a gym all preferred a "room" shot —
+# which is right for exactly one of them.
+_TRADE_WORDS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("care", ("dentist", "dental", "orthodont", "chiropract", "clinic",
+              "medical", "doctor", "physician", "veterinar", "optometr",
+              "physical therapy", "podiatr")),
+    ("groom", ("barber", "salon", "hair", "nail", "spa", "beauty", "lash",
+               "brow", "massage", "tattoo", "aesthetic")),
+    ("body", ("gym", "fitness", "yoga", "pilates", "crossfit", "martial",
+              "dance", "climbing", "boxing")),
+    ("desk", ("law", "attorney", "lawyer", "accountant", "accounting", "cpa",
+              "insurance", "financial", "consult", "agency", "notary",
+              "real estate", "realtor", "title", "architect")),
+    ("trade", ("contractor", "roofing", "roofer", "plumb", "electric",
+               "landscap", "lawn", "hvac", "heating", "cooling", "construction",
+               "repair", "cleaning", "pest", "paving", "fencing", "painter",
+               "painting", "flooring", "remodel", "garage door", "locksmith",
+               "septic", "pool service", "auto", "mechanic", "body shop")),
+    ("food", ("restaurant", "cafe", "coffee", "bakery", "pizza", "barbecue",
+              "grill", "diner", "kitchen", "food", "deli", "steakhouse",
+              "sushi", "ramen", "taqueria", "bistro", "brewery", "winery",
+              "bar", "pub", "cantina", "creamery", "juice")),
+    # Last, because "shop" and "store" are inside half the trades above —
+    # "Coffee Shop" is a food business and "Barber Shop" is not a retailer.
+    ("retail", ("boutique", "florist", "jewel", "gallery", "bookshop",
+                "market", "grocer", "pharmacy", "hardware", "shop", "store")),
+)
 
 
 def trade_kind(trade: str | None) -> str:
-    """Which hero preference applies. A roofer leads with finished work; a
-    restaurant leads with a plate or the room."""
+    """Which hero preference applies.
+
+    A roofer leads with finished work, a restaurant with a plate or the room,
+    a dentist with the people rather than the equipment, and a law firm with
+    neither — with the building, or with nothing.
+    """
     name = (trade or "").lower()
-    if any(word in name for word in _FOOD_WORDS):
-        return "food"
-    if any(word in name for word in _TRADE_WORDS):
-        return "trade"
+    for kind, words in _TRADE_WORDS:
+        if any(word in name for word in words):
+            return kind
     return "default"
 
 
@@ -287,53 +360,202 @@ HERO_MIN_WIDTH = 1600
 # The shape a full-bleed hero is cropped to. Nearer this means less of the
 # photograph is thrown away.
 HERO_ASPECT = 1.7
+# Below this a photograph is not a landscape at all and cannot lead.
+HERO_MIN_ASPECT = 1.15
+
+# What each term is worth. Written down rather than buried in the arithmetic
+# because the whole point of a score is that the trade-offs are arguable, and
+# you cannot argue with a lexicographic tuple.
+HERO_WEIGHTS = {"resolution": 1.0, "aspect": 1.0, "subject": 0.9,
+                "quality": 1.1, "usable": 1.0, "headline": 0.4}
+
+# What disqualifies a photograph from leading, whatever else is right about it.
+# All three are things only looking at the picture can establish, which is why
+# they arrive from the vision pass and not from a filename.
+HERO_DISQUALIFIERS = ("has_text_overlay", "is_logo_or_badge",
+                      "is_screenshot_or_document")
+
+
+@dataclass(frozen=True)
+class HeroScore:
+    """One candidate, its total, and what the total is made of."""
+
+    url: str
+    total: float
+    reasons: dict[str, float]
+    size: tuple[int, int] | None = None
+    label: str | None = None
+    position: int = 0
+
+    def line(self) -> str:
+        shape = f"{self.size[0]}x{self.size[1]}" if self.size else "unmeasured"
+        parts = " ".join(f"{k}={v:+.2f}" for k, v in self.reasons.items())
+        return (f"{self.total:+.2f}  {shape:>11}  "
+                f"{(self.label or '-'):>10}  {parts}  {self.url}")
+
+
+def _resolution_term(width: int | None) -> float:
+    """Sharp enough to be full-bleed, on a curve rather than a threshold.
+
+    A tier said "1600 or better" and then ranked purely by width inside it, so
+    a 3000x2900 near-square beat a 2400x1350 that crops perfectly.
+    """
+    if not width:
+        return 0.0
+    if width < HERO_MIN_WIDTH:
+        return 0.15 * (width / HERO_MIN_WIDTH)
+    return 0.6 + 0.4 * min((width - HERO_MIN_WIDTH) / HERO_MIN_WIDTH, 1.0)
+
+
+def _aspect_term(size: tuple[int, int] | None) -> float:
+    if not size or not size[1]:
+        return 0.0
+    ratio = size[0] / size[1]
+    if ratio < HERO_MIN_ASPECT:
+        # A portrait crop in a full-bleed band throws away most of the picture
+        # and usually beheads the subject.
+        return -1.0
+    return 1.0 - min(abs(ratio - HERO_ASPECT) / 0.8, 1.0)
+
+
+def _subject_term(label: str | None, trade: str) -> float:
+    """How well this subject leads for this kind of business.
+
+    A term, not a precedence. It used to be the latter, so a 900px blurry
+    "dish" outranked an unlabelled 3200px perfectly composed room shot purely
+    for having been labelled.
+    """
+    if label is None:
+        # Unlabelled is not unsuitable. Slightly below a good label, well above
+        # one we know to be wrong.
+        return 0.35
+    if label in NEVER_LEADS:
+        return -1.5
+    if label in WEAK_LEADS:
+        # "We could not categorise this", not "this is unsuitable". Slightly
+        # below unlabelled, nowhere near a veto.
+        return 0.25
+    preference = HERO_PREFERENCE.get(trade, HERO_PREFERENCE["default"])
+    if label not in preference:
+        return 0.2
+    return 1.0 - 0.8 * (preference.index(label) / max(len(preference) - 1, 1))
+
+
+def _quality_term(seen: dict | None) -> float:
+    """How good the photograph is, as somebody who looked at it would say.
+
+    One to five, from the vision pass. Absent means nobody looked, which scores
+    as the middle rather than as bad — a lead built without a key must not have
+    every photograph penalised for the key's absence.
+    """
+    if not seen:
+        return 0.5
+    quality = seen.get("quality")
+    if not isinstance(quality, int):
+        return 0.5
+    return (max(1, min(5, quality)) - 1) / 4
+
+
+def _usable_term(seen: dict | None) -> float:
+    """The disqualifiers, and the model's own overall verdict."""
+    if not seen:
+        return 0.0
+    for flag in HERO_DISQUALIFIERS:
+        if seen.get(flag):
+            # A picture of words, a wordmark, or a screenshot. None of them is
+            # a hero however sharp it is, and none of them is detectable
+            # without looking.
+            return -2.0
+    return 0.0 if seen.get("is_hero_candidate") else -0.8
+
+
+def _headline_term(seen: dict | None) -> float:
+    """Whether type will be readable where the page puts it.
+
+    White type over a bright sky is unreadable, and the region under the
+    headline is the only part of the frame that decides it.
+    """
+    if not seen:
+        return 0.0
+    return {"dark": 1.0, "mixed": 0.4, "bright": -0.6}.get(
+        str(seen.get("headline_region_luminance")), 0.0)
+
+
+def hero_scores(images: tuple[str, ...], labels: dict | None = None,
+                trade: str = "default",
+                size_of: Callable[[str], tuple[int, int] | None] | None = None,
+                vision: dict | None = None,
+                ) -> list[HeroScore]:
+    """Every candidate, best first, with its reasons attached.
+
+    Every photograph is considered. The old rule looked at the first ten, and
+    Google's come first in the pool, so a business with ten Place photographs
+    never had a single one of its own site's pictures examined.
+    """
+    look = size_of or measure
+    labels = labels or {}
+    scored: list[HeroScore] = []
+    for position, url in enumerate(images):
+        size = look(url)
+        label = labels.get(url)
+        seen = (vision or {}).get(url)
+        reasons = {
+            "resolution": HERO_WEIGHTS["resolution"] * _resolution_term(
+                size[0] if size else None),
+            "aspect": HERO_WEIGHTS["aspect"] * _aspect_term(size),
+            "subject": HERO_WEIGHTS["subject"] * _subject_term(label, trade),
+            "quality": HERO_WEIGHTS["quality"] * _quality_term(seen),
+            "usable": HERO_WEIGHTS["usable"] * _usable_term(seen),
+            "headline": HERO_WEIGHTS["headline"] * _headline_term(seen),
+        }
+        scored.append(HeroScore(url=url, total=sum(reasons.values()),
+                                reasons=reasons, size=size, label=label,
+                                position=position))
+    # Position breaks ties: it is deterministic, and it is not arbitrary —
+    # Google returns its photographs in its own order of preference, and with
+    # nothing measurable to go on that is the best signal available.
+    return sorted(scored, key=lambda c: (-c.total, c.position))
+
+
+def hero_table(scores: list[HeroScore]) -> str:
+    """The ranking as something a person can read and disagree with."""
+    header = f"{'total':>6}  {'size':>11}  {'label':>10}  reasons"
+    return "\n".join([header] + [s.line() for s in scores])
 
 
 def pick_hero(images: tuple[str, ...], offset: int = 0,
-              labels: dict | None = None, trade: str = "default") -> str | None:
-    """The lead photograph: sharp enough, landscape, and the right subject.
+              labels: dict | None = None, trade: str = "default",
+              size_of: Callable[[str], tuple[int, int] | None] | None = None,
+              vision: dict | None = None) -> str | None:
+    """The lead photograph, as one score rather than a stack of filters.
 
-    Shape and resolution are measurable, so a portrait crop never leads and
-    neither does the softest picture in the set. Subject matter is not — a
-    landscape photograph of raw peppers is still the wrong hero for a fine
-    dining room, and nothing here can see that, which is why the operator
-    labels them first.
+    Resolution, how well the shape survives a hero crop, and how well the
+    subject leads for this trade are all terms in one sum. They used to be
+    tiers, and the tiers hid each other: a labelled photograph re-sorted the
+    whole list afterwards, discarding the size ordering entirely.
 
-    Ichika's hero was 1226×843 while every other photograph it had was 2400
-    wide: the old rule took the first landscape image and never asked how big
-    it was.
+    `offset` exists because the operator can see what none of this can, and
+    "use the next photo" should be a one-word correction.
     """
     if not images:
         return None
-    sized: list[tuple[str, int, int]] = []
-    for url in images[:10]:
-        size = measure(url if url.startswith("http") else f"{LOCAL}{url}")
-        if size and size[1]:
-            sized.append((url, size[0], size[1]))
-
-    landscape = [(u, w, h) for u, w, h in sized if w / h >= 1.15]
-    # Tiered, so a business whose photographs are all small still gets a hero:
-    # sharp and landscape, then landscape, then whatever there is.
-    sharp = [(u, w, h) for u, w, h in landscape if w >= HERO_MIN_WIDTH]
-    pool = sharp or landscape
-    if pool:
-        # Widest first, then the shape closest to a hero crop — by area a
-        # nearly-square 2400×2086 outranks a 2400×1351, and the square one is
-        # the worse hero at every screen size because the crop throws most of
-        # it away.
-        ordered = [u for u, _, _ in sorted(
-            pool, key=lambda r: (-r[1], abs(r[1] / r[2] - HERO_ASPECT)))]
-    else:
-        ordered = list(images)
-    # A person's judgement outranks the machine's: shape and size only narrow
-    # the field, the label decides which of them leads.
-    if labels:
-        ordered = rank_for_hero(ordered, labels, trade)
-    return ordered[offset % len(ordered)]
+    scored = hero_scores(images, labels, trade, size_of, vision)
+    return scored[offset % len(scored)].url
 
 
-def _hero(m: Material, spec: SiteSpec, t: Theme) -> str:
-    photo = pick_hero(m.images, spec.hero_offset, m.photo_labels, m.trade_kind)
+def _hero(m: Material, spec: SiteSpec, t: Theme,
+           photo: str | None = None) -> str:
+    """The opening band. The lead photograph is chosen by the caller.
+
+    It used to choose its own, which put the choice AFTER every section had
+    already been built and had already spent the photographs — so the hero
+    turned up a second time as a gallery tile on every site ever generated.
+    `plan_for` had the order right; this did not, and the two disagreeing is
+    why the workspace showed a four-tile gallery beside a page rendering six.
+    """
+    if photo is None:
+        photo = pick_hero(m.images, spec.hero_offset, m.photo_labels,
+                          m.trade_kind, m.size_of, m.photo_vision)
     if photo:
         m.spent.add(photo)
     sub = m.tagline or m.about or m.trade or ""
@@ -556,7 +778,7 @@ def _gallery(m: Material, t: Theme) -> str:
     shots = m.take(m.images, wanted)
     tiles = "".join(
         f'<button aria-label="Open photo {i + 1}" data-reveal data-delay="{i % 4}">'
-        + picture(src, m.photo_notes.get(src, ""),
+        + picture(src, m.alt_for(src),
                   sizes="(max-width:700px) 100vw, 33vw") + "</button>"
         for i, src in enumerate(shots))
     return (f'<section id="gallery"><div class="wrap">'
@@ -663,7 +885,8 @@ def _recognition(m: Material, t: Theme) -> str:
     badges = [src for src in block.get("images", ()) if _BADGE_RE.search(src)]
     art = ""
     if badges:
-        art = "".join(f'<img src="{e(src)}" alt="" loading="lazy">'
+        art = "".join(f'<img src="{e(src)}" alt="{e(m.alt_for(src))}"'
+                      f' loading="lazy">'
                       for src in badges[:3])
         art = f'<div class="laurels" data-reveal data-delay="2">{art}</div>'
     # Supporting proof, but only what we already established elsewhere.
@@ -797,7 +1020,7 @@ def _features(m: Material, t: Theme) -> str:
                     and not is_text_graphic(src, block["heading"], block["text"])]
         fresh = m.take(relevant, 1)
         art = ('<div class="shot">'
-               + picture(fresh[0], m.photo_notes.get(fresh[0], ""),
+               + picture(fresh[0], m.alt_for(fresh[0]),
                          sizes="(max-width:820px) 100vw, 50vw")
                + "</div>") if fresh else ""
         # Shape follows the count, not the index. A single row in the "wide"
@@ -973,7 +1196,8 @@ def plan_for(brief: dict, spec: SiteSpec) -> SitePlan:
     """
     m = material_from_brief(brief)
     theme = theme_for(spec.mood, spec.accent)
-    hero = pick_hero(m.images, spec.hero_offset, m.photo_labels, m.trade_kind)
+    hero = pick_hero(m.images, spec.hero_offset, m.photo_labels,
+                     m.trade_kind, m.size_of, m.photo_vision)
     if hero:
         m.spent.add(hero)
 
@@ -1054,6 +1278,13 @@ def _cta_href(m: Material, spec: SiteSpec) -> str:
     return ""
 
 
+def absolute(url: str) -> str:
+    """A URL a phone's link preview can actually fetch."""
+    if not url or url.startswith(("http://", "https://", "data:")):
+        return url
+    return f"{preview_base_url()}{url}"
+
+
 def build_from_spec(brief: dict, spec: SiteSpec) -> str:
     """Render from an already-resolved configuration.
 
@@ -1064,22 +1295,28 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
     m = material_from_brief(brief)
     theme = theme_for(spec.mood, spec.accent)
 
+    # Before the sections, not after. They spend photographs from a shared
+    # pool, so a hero chosen afterwards has already been handed out — and
+    # `plan_for` has always done it in this order, which is why the plan and
+    # the page disagreed about how many gallery tiles there were.
+    hero_photo = pick_hero(m.images, spec.hero_offset, m.photo_labels,
+                           m.trade_kind, m.size_of, m.photo_vision)
+    if hero_photo:
+        m.spent.add(hero_photo)
+
     sections = {key: builder(m, theme) for key, builder in _BUILDERS.items()}
     available = {"hero"} | {k for k, v in sections.items() if v}
     order = _order(spec, available)
 
-    body = _hero(m, spec, theme)
+    body = _hero(m, spec, theme, hero_photo)
     for key in order:
         if key != "hero":
             body += "\n" + sections[key]
 
     description = m.tagline or m.about or ""
-    # The share image is the hero, not whatever happened to be first. This is
-    # the picture that shows in a text message when the operator sends the
-    # link, and Ichika's first photograph was the smallest it had. `measure` is
-    # disk-cached, so asking a second time costs nothing.
-    share_image = (pick_hero(m.images, spec.hero_offset, m.photo_labels,
-                             m.trade_kind) or (m.images[0] if m.images else ""))
+    # The share image is the hero — the same object, not a second call that
+    # could answer differently if a measurement flaps mid-render.
+    share_image = hero_photo or (m.images[0] if m.images else "")
     page = (
         "<!doctype html>\n"
         '<html lang="en"><head><meta charset="utf-8">\n'
@@ -1092,7 +1329,10 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
         # is the picture that shows in a text message when the operator sends
         # the link, and Ichika's first photograph was the smallest it had.
         # `measure` is disk-cached, so asking again costs nothing.
-        + (f'<meta property="og:image" content="{e(share_image)}">\n'
+        # Absolute: a relative og:image is the picture silently failing to
+        # load in the message the operator sends, which is the one place it
+        # matters most and the one place nobody checks.
+        + (f'<meta property="og:image" content="{e(absolute(share_image))}">\n'
            if share_image else "")
         # Marks the document as script-capable BEFORE first paint, so the
         # reveal styles only apply where something exists to undo them. Without
@@ -1114,11 +1354,9 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
 # The guard. Run by the tests against every generated page.
 # --------------------------------------------------------------------------- #
 
-_CLAIM_RE = re.compile(
-    r"\b(since \d{4}|est\.? ?\d{4}|\d+\+? years|award[- ]winning|voted|"
-    r"best in|number one|#1|family[- ]owned|family[- ]run|trusted by|"
-    r"\d+ (?:happy )?(?:customers|clients)|five[- ]star|5[- ]star)\b",
-    re.IGNORECASE)
+# Shared with the vision pass, which gates the alt text it writes against the
+# same expression. See `app.core.claims`.
+_CLAIM_RE = CLAIM_RE
 
 
 def unsupported(page: str, material: Material) -> list[str]:

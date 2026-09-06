@@ -153,7 +153,9 @@ own; `GOOGLE_PLACES_API_KEY` is what finds their website, and a free
 make check     # lint + typecheck + tests
 ```
 
-86 tests, no network, no database.
+581 tests, no network, no database — the suite refuses both by
+default (`tests/conftest.py`), so a real API key or a slow DNS lookup on the
+developer's machine cannot change what the tests mean.
 
 ## Next
 

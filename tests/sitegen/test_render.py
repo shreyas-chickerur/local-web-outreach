@@ -639,7 +639,7 @@ def test_the_hero_is_not_the_smallest_photograph_in_the_set():
 
     sizes = {"/a": (1226, 843), "/b": (2400, 1351), "/c": (2400, 2086)}
     original = render.measure
-    render.measure = lambda url: sizes.get(url.replace(render.LOCAL, ""))
+    render.measure = lambda url: sizes.get(url)
     try:
         # /b, not /a: big enough to lead with, and the shape closest to a hero
         # crop. /c is larger by area and a worse hero at every screen size.
@@ -655,7 +655,7 @@ def test_a_business_whose_photographs_are_all_small_still_gets_a_hero():
 
     sizes = {"/a": (900, 500), "/b": (800, 600)}
     original = render.measure
-    render.measure = lambda url: sizes.get(url.replace(render.LOCAL, ""))
+    render.measure = lambda url: sizes.get(url)
     try:
         assert pick_hero(tuple(sizes)) in sizes
     finally:

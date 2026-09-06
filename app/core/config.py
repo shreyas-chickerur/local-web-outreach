@@ -26,9 +26,20 @@ def yelp_api_key() -> str | None:
     return os.environ.get("YELP_API_KEY", "").strip() or None
 
 
+# One place, because two drifted. The default said 8090 while the server has
+# always served 8099, so every absolute URL built from it — the og:image in a
+# link preview, most visibly — pointed at a dead port.
+DEFAULT_PORT = 8099
+
+
 def preview_base_url() -> str:
-    """Where generated site previews will be served from (slice 3)."""
-    return os.environ.get("PREVIEW_BASE_URL", "http://127.0.0.1:8090").rstrip("/")
+    """Where generated site previews are served from.
+
+    Used for anything that must be fetchable from somewhere other than this
+    process: a phone rendering the link preview when the operator texts it.
+    """
+    return os.environ.get(
+        "PREVIEW_BASE_URL", f"http://127.0.0.1:{DEFAULT_PORT}").rstrip("/")
 
 
 def anthropic_api_key() -> str | None:

@@ -1266,6 +1266,13 @@ function drawLabeller() {
           <p class="diag-label">What is this a photo of?</p>
           <p class="hint">Your words become the alt text on the finished page,
              and the category is read out of them. One line is plenty.</p>
+          ${photo.by_machine ? `<p class="hint" style="margin-top:6px">
+             Described by Claude${photo.quality
+               ? ` · quality ${photo.quality}/5` : ""}. Correct it and yours
+             replaces it.</p>` : ""}
+          ${photo.why_not ? `<div class="diag" style="margin-top:6px">
+             <span class="skip">not a hero — ${esc(photo.why_not)}</span>
+             </div>` : ""}
         </div>
         <textarea id="lab-note" placeholder="${esc(photo.suggestion
           || "e.g. the dining room from the doorway")}"
@@ -1287,7 +1294,10 @@ function drawLabeller() {
         </div>
         <p class="hint lab-count">${at + 1} / ${total} · ← → to move ·
            ⏎ saves and moves on</p>
-        ${done === total && total
+        ${WS.versions.length
+          ? `<button class="mini primary" id="rebuild" onclick="rebuildOpening()"
+               style="margin-top:auto">Rebuild from these descriptions →</button>`
+          : done === total && total
           ? `<button class="mini primary" id="build-first" onclick="buildFirst()"
                style="margin-top:auto">Build the first version →</button>`
           : `<p class="hint" style="margin-top:auto">${total - done} still to go
@@ -1373,6 +1383,33 @@ function labellerKeys(event) {
   if (event.key === "ArrowRight") stepShot(1);
 }
 document.addEventListener("keydown", labellerKeys);
+
+// The opening design again, from the corrected descriptions. A new version
+// rather than an edit, so the trail still says what happened — and without it
+// a correction made after the first build reaches nothing, because open_site
+// is idempotent by design.
+async function rebuildOpening() {
+  await saveShot(false);
+  const button = $("#rebuild");
+  if (button) { button.disabled = true; button.textContent = "Rebuilding…"; }
+  let data;
+  try {
+    const res = await fetch("/api/rebuild", {method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({lead_id: WS.lead_id})});
+    data = await res.json();
+  } catch (err) {
+    alert("The rebuild failed to run: " + err);
+    if (button) {
+      button.disabled = false;
+      button.textContent = "Rebuild from these descriptions →";
+    }
+    return;
+  }
+  if (data.error) { alert(data.error); return; }
+  const {lead_id, name} = WS;
+  await openWorkspace(lead_id, name);
+}
 
 function setDevice(kind) { WS.device = kind; drawWorkspace(); }
 

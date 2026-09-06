@@ -20,7 +20,7 @@ from __future__ import annotations
 import sqlite3
 from dataclasses import dataclass, field
 
-from app.adapters import claude
+from app.adapters import claude, vision
 from app.adapters.claude import ClaudeError
 from app.site.audit import audit
 from app.site.iterate import DEFAULT_SPEC, parse_iteration_instruction
@@ -195,6 +195,28 @@ def read_instruction(sentence: str, base: dict) -> dict:
     return config
 
 
+def rebuild_opening(conn: sqlite3.Connection, lead_id: int,
+                    *, actor: str | None = None) -> IterationResult:
+    """The opening design again, now that the photographs are better described.
+
+    `open_site` is idempotent on purpose — opening the workspace twice is not a
+    request to rebuild — and that left a hole the moment vision started
+    unblocking the first build. The order used to be label, then build; it is
+    now build, then correct, and a correction with no way to reach the page is
+    a correction that does nothing.
+
+    A new version rather than an edit of the old one, so the trail still says
+    what happened and the previous page stays reachable.
+    """
+    history = sites.versions(conn, lead_id)
+    parent = history[0]["version"] if history else None
+    brief = leads.brief_with_overrides(conn, lead_id)
+    config = opening_spec(brief)
+    return _build_opening(conn, lead_id, brief, config, actor=actor,
+                          parent_version=parent,
+                          instruction="rebuilt from the photo descriptions")
+
+
 def open_site(conn: sqlite3.Connection, lead_id: int,
               *, actor: str | None = None) -> IterationResult:
     """The first version of a new lead's site, designed before anyone types.
@@ -217,12 +239,25 @@ def open_site(conn: sqlite3.Connection, lead_id: int,
 
     brief = leads.brief_with_overrides(conn, lead_id)
 
-    # Nobody has looked at the photographs yet, so the design would be made
-    # blind: which picture leads, whether there is a room shot worth a wide
-    # band, whether the only usable images are of food — all of it turns on
-    # what they show, and that is the one thing this cannot see. Marking one
-    # "unclear" is a decision and counts; leaving it untouched does not.
+    # Look at the photographs before designing around them. Which picture
+    # leads, whether the only usable images are of food, whether the "hero" is
+    # a photograph of a menu — all of it turns on what they show.
+    #
+    # This used to wait for a person to type a description of every one, which
+    # is thirty of them per lead and directly contradicts opening on something
+    # worth showing. The vision pass answers it in one call, the screen still
+    # shows every guess for correction, and a correction replaces the guess and
+    # stays attributed.
     material = material_from_brief(brief)
+    unseen = photos.unreviewed(conn, lead_id, list(material.images))
+    if unseen:
+        for url, seen in vision.look(unseen, material.place_photos).items():
+            photos.record_vision(conn, lead_id, url, seen)
+        brief = leads.brief_with_overrides(conn, lead_id)
+        material = material_from_brief(brief)
+
+    # Without a key nothing looked, and designing blind around photographs is
+    # worse than asking. The keyless path keeps the labelling step.
     pending = photos.unreviewed(conn, lead_id, list(material.images))
     if pending:
         return IterationResult(
@@ -230,11 +265,24 @@ def open_site(conn: sqlite3.Connection, lead_id: int,
             unsupported=pending, unchanged=True)
 
     config = opening_spec(brief)
+    return _build_opening(conn, lead_id, brief, config, actor=actor)
+
+
+def _build_opening(conn: sqlite3.Connection, lead_id: int, brief: dict,
+                   config: dict, *, actor: str | None = None,
+                   parent_version: int | None = None,
+                   instruction: str = "opening design") -> IterationResult:
+    """Render, audit, gate and store one opening design.
+
+    Shared by the first build and by a rebuild after the photographs have been
+    described better, because two copies of the gate would drift and only one
+    of them would be the one that matters.
+    """
     rationale = str(config.pop("rationale", ""))
     read_by = str(config.pop("read_by", "trade table"))
     for key in ("kind", "unsupported", "defect"):
         config.pop(key, None)
-    config["instruction"] = "opening design"
+    config["instruction"] = instruction
 
     spec = spec_from_config(config)
     resolved = plan_for(brief, spec)
@@ -247,7 +295,7 @@ def open_site(conn: sqlite3.Connection, lead_id: int,
     if findings:
         # The gate applies to the opening version too. A first draft that
         # invents something is not a better first impression than none.
-        sites.reject(conn, lead_id, "opening design", findings, actor=actor)
+        sites.reject(conn, lead_id, instruction, findings, actor=actor)
         return IterationResult(
             lead_id=lead_id, spec=config, defects=defects, repairs=repairs,
             plan=resolved.as_dict(), outline=resolved.outline(),
@@ -258,14 +306,16 @@ def open_site(conn: sqlite3.Connection, lead_id: int,
              "defects": defects, "repairs": repairs,
              "plan": resolved.as_dict(), "lead_with": spec.lead_with,
              "rationale": rationale}
-    version = sites.save(conn, lead_id, html, "opening design", notes=notes,
-                         actor=actor, spec_json=config, parent_version=None)
+    version = sites.save(conn, lead_id, html, instruction, notes=notes,
+                         actor=actor, spec_json=config,
+                         parent_version=parent_version)
     return IterationResult(
         lead_id=lead_id, spec=config,
         understood=list(config.get("understood") or []),
         defects=defects, repairs=repairs,
         plan=resolved.as_dict(), outline=resolved.outline(),
-        version=version, read_by=read_by, rationale=rationale)
+        version=version, parent_version=parent_version,
+        read_by=read_by, rationale=rationale)
 
 
 def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,

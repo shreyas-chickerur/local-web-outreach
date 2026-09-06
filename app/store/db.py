@@ -98,6 +98,10 @@ _LATER_COLUMNS = (
     ("sites", "parent_version", "INTEGER"),
     ("sites", "spec_json", "TEXT NOT NULL DEFAULT '{}'"),
     ("photo_labels", "description", "TEXT NOT NULL DEFAULT ''"),
+    # What the vision pass saw: quality, the flags that disqualify a hero, the
+    # colours sampled from the picture, where the subject sits. Per-photograph
+    # and per-lead, so it lives here rather than in a version's spec.
+    ("photo_labels", "vision_json", "TEXT NOT NULL DEFAULT '{}'"),
 )
 
 

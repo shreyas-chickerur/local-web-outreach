@@ -15,6 +15,26 @@ from app.core import config
 
 
 @pytest.fixture(autouse=True)
+def no_image_measuring(monkeypatch):
+    """No test reaches out to size an image either.
+
+    `pick_hero` measures every candidate now rather than the first ten, and the
+    fixtures use URLs like https://x/1.jpg — so without this the suite spends
+    thirty seconds waiting for DNS to fail. A test that cares about size stubs
+    `render.measure` or passes its own `size_of`.
+    """
+    from app.adapters import imageinfo
+    from app.site import render
+
+    monkeypatch.setattr(imageinfo, "measure", lambda url, client=None: None)
+    monkeypatch.setattr(render, "measure", lambda url: None)
+    # `Material.size_of` reads proxied photographs from the bytes on disk, and
+    # fetches them from Google when they are not there yet. With a real key in
+    # the environment that is a billable call from a unit test.
+    monkeypatch.setattr(render, "google_places_api_key", lambda: "")
+
+
+@pytest.fixture(autouse=True)
 def no_api_calls(monkeypatch):
     """No test uses a real key unless it deliberately arranges one.
 

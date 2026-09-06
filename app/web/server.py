@@ -17,9 +17,9 @@ from app.adapters import photos as photos_api
 from app.adapters.gplaces import PlacesError, search
 from app.adapters.photos import fetch as fetch_photo
 from app.cli import available_directories
-from app.core.config import google_places_api_key
+from app.core.config import DEFAULT_PORT, google_places_api_key
 from app.site.pipeline import iterate as run_iteration
-from app.site.pipeline import open_site, spec_from_config
+from app.site.pipeline import open_site, rebuild_opening, spec_from_config
 from app.site.render import build as build_site
 from app.site.render import material_from_brief, plan_for
 from app.store import db, leads, photos, sites
@@ -118,6 +118,25 @@ def generate(lead_id: int, spec_text: str) -> dict:
                            "url": f"/site/{lead_id}/{version}"}
         payload["site_versions"] = sites.versions(conn, lead_id)
         return payload
+
+
+def _worst_first(urls: list[str], known: dict) -> list[str]:
+    """Least confident first, so attention goes where it is worth spending.
+
+    A machine guess at quality 2 with a reason it could not be the hero is
+    worth ten seconds of the operator's time. A confident one is worth none,
+    and putting them in upload order spends the same attention on both.
+    """
+    def rank(url: str) -> tuple[int, int, int]:
+        said = known.get(url) or {}
+        if not said:
+            return (0, 0, urls.index(url))          # nothing looked at all
+        quality = said.get("quality")
+        quality = quality if isinstance(quality, int) else 3
+        # A person's own description is settled; leave it at the end.
+        settled = 0 if said.get("by_machine") else 1
+        return (1 + settled, quality, urls.index(url))
+    return sorted(urls, key=rank)
 
 
 def workspace(lead_id: int) -> dict:
@@ -266,6 +285,16 @@ class Handler(BaseHTTPRequestHandler):
                     payload["events"] = leads.events(conn, lead_id)
                     self._json(payload)
                     return
+                elif route == "/api/rebuild":
+                    # A correction to a photo description has to be able to
+                    # reach the page. `open_site` is idempotent, so once v1
+                    # exists it would otherwise do nothing at all.
+                    result = rebuild_opening(conn, lead_id)
+                    payload = result.as_dict()
+                    payload["versions"] = sites.versions(conn, lead_id)
+                    payload["events"] = leads.events(conn, lead_id)
+                    self._json(payload)
+                    return
                 elif route == "/api/iterate":
                     self._json(iteration(
                         lead_id, str(body.get("sentence", "")),
@@ -400,8 +429,12 @@ class Handler(BaseHTTPRequestHandler):
                                     "label": (known.get(u) or {}).get("label"),
                                     "description":
                                         (known.get(u) or {}).get("description", ""),
+                                    "by_machine":
+                                        (known.get(u) or {}).get("by_machine", False),
+                                    "quality": (known.get(u) or {}).get("quality"),
+                                    "why_not": (known.get(u) or {}).get("why_not", ""),
                                     "suggestion": hints.get(u, "")}
-                                   for u in urls]})
+                                   for u in _worst_first(urls, known)]})
             return
         if route.path == "/api/workspace":
             try:
@@ -465,7 +498,7 @@ class Handler(BaseHTTPRequestHandler):
         return
 
 
-def serve(port: int = 8099) -> None:
+def serve(port: int = DEFAULT_PORT) -> None:
     server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
     print(f"workbench UI on http://127.0.0.1:{port}")
     server.serve_forever()

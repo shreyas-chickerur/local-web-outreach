@@ -29,7 +29,6 @@ from __future__ import annotations
 import httpx
 
 from app.adapters import claude
-from app.adapters.imageinfo import measure
 from app.site.iterate import DEFAULT_SPEC, MOODS
 from app.site.render import plan_for
 from app.site.spec import SiteSpec
@@ -181,14 +180,17 @@ def _imagery_note(brief: dict) -> str:
     small, and the decision to go text-forward instead is one the designer
     should be allowed to make with the facts in front of them.
     """
-    from app.site.render import HERO_MIN_WIDTH, LOCAL, material_from_brief
+    from app.site.render import HERO_MIN_WIDTH, material_from_brief
     try:
-        images = list(material_from_brief(brief).images)[:12]
+        material = material_from_brief(brief)
     except Exception:
         return "photography: unknown"
     big = small = 0
-    for url in images:
-        size = measure(url if url.startswith("http") else f"{LOCAL}{url}")
+    # Measured from the bytes we already hold, not by asking our own web server
+    # over HTTP — which answered None everywhere except inside a live request
+    # on one particular port.
+    for url in list(material.images)[:12]:
+        size = material.size_of(url)
         if not size:
             continue
         if size[0] >= HERO_MIN_WIDTH:

@@ -423,3 +423,69 @@ def test_an_instruction_builds_on_the_opening_version(conn, lead, monkeypatch):
     opened = pipeline.open_site(conn, lead)
     nudged = iterate(conn, lead, "make it darker")
     assert nudged.parent_version == opened.version
+
+
+def test_a_brand_new_lead_needs_no_human_labelling(conn, lead, monkeypatch):
+    """Waiting for a person to describe thirty photographs per lead directly
+    contradicts opening on something worth showing."""
+    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    from app.site.render import material_from_brief
+    material = material_from_brief(leads.brief_with_overrides(conn, lead))
+    monkeypatch.setattr(pipeline.vision, "look", lambda urls, names: {
+        url: {"subject": "dish", "quality": 4, "is_hero_candidate": True,
+              "alt_text": "A plate of food"} for url in urls})
+    result = pipeline.open_site(conn, lead)
+    assert result.kind == "style"
+    assert result.version is not None
+    assert photos.unreviewed(conn, lead, list(material.images)) == []
+
+
+def test_the_operator_still_outranks_the_machine(conn, lead):
+    """A machine label unblocks the build. It does not overwrite a person, and
+    a person's correction is not overwritten by a later look."""
+    photos.label(conn, lead, "/photo/1/0", "the corner booth at night")
+    assert photos.record_vision(conn, lead, "/photo/1/0",
+                                {"subject": "dish", "alt_text": "food"}) is False
+    described = photos.described(conn, lead)["/photo/1/0"]
+    assert described["description"] == "the corner booth at night"
+    assert described["by_machine"] is False
+
+
+def test_a_machine_label_is_replaceable_and_says_who_wrote_it(conn, lead):
+    photos.record_vision(conn, lead, "/photo/1/0",
+                         {"subject": "dish", "alt_text": "A plate of food"})
+    described = photos.described(conn, lead)["/photo/1/0"]
+    assert described["by_machine"] is True
+    assert described["description"] == "A plate of food"
+    photos.label(conn, lead, "/photo/1/0", "actually the bar")
+    after = photos.described(conn, lead)["/photo/1/0"]
+    assert after["by_machine"] is False and after["description"] == "actually the bar"
+
+
+def test_without_a_key_the_labelling_step_still_guards_the_build(
+        conn, lead, monkeypatch):
+    """Nothing looked, so designing blind around photographs is worse than
+    asking. The keyless path keeps the step."""
+    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.vision, "look", lambda urls, names: {})
+    assert pipeline.open_site(conn, lead).kind == "needs_labels"
+
+
+def test_a_correction_after_the_first_build_can_reach_the_page(
+        conn, lead, monkeypatch):
+    """`open_site` is idempotent, so once v1 exists a corrected description
+    would otherwise change nothing at all."""
+    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.vision, "look", lambda urls, names: {
+        url: {"subject": "other", "quality": 2, "alt_text": "something"}
+        for url in urls})
+    first = pipeline.open_site(conn, lead)
+    assert first.version is not None
+    # Opening again is not a rebuild.
+    assert pipeline.open_site(conn, lead).version == first.version
+
+    photos.label(conn, lead, "/photo/1/0", "the dining room at night")
+    again = pipeline.rebuild_opening(conn, lead)
+    assert again.version is not None
+    assert again.version != first.version
+    assert again.parent_version == first.version

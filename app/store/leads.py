@@ -165,6 +165,7 @@ def brief_with_overrides(conn: sqlite3.Connection, lead_id: int) -> dict:
     brief["status"] = row["status"]
     brief["events"] = events(conn, lead_id)
     brief["photo_labels"] = photos.labels_for(conn, lead_id)
+    brief["photo_vision"] = photos.vision_for(conn, lead_id)
     # The words you wrote, kept for alt text on the finished page.
     brief["photo_notes"] = {url: said["description"]
                             for url, said in photos.described(conn, lead_id).items()
