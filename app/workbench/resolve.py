@@ -17,6 +17,27 @@ from urllib.parse import urlparse
 
 _URL_RE = re.compile(r"^(https?://|www\.)", re.IGNORECASE)
 _DOMAINISH_RE = re.compile(r"^[a-z0-9-]+(\.[a-z0-9-]+)+(/.*)?$", re.IGNORECASE)
+
+# A dot between two words is not enough to make something a web address.
+# "S.Handyman" was read as https://S.Handyman, the name became "S", and the
+# generated page was a single letter on an empty ground.
+#
+# The asymmetry decides the default: read a URL as a name and the directory
+# lookup finds the website anyway, so nothing is lost. Read a name as a URL and
+# the name is gone, and everything downstream is built for a business called
+# "S". So anything ambiguous is a name.
+_REAL_TLDS = frozenset("""
+com net org edu gov mil int co io us uk ca au de fr es it nl se no fi dk pl
+br mx jp cn in ru za nz ie ch at be pt gr cz ro hu biz info name pro mobi
+xyz online site website store shop app dev tech digital media agency studio
+design works group team company solutions services expert care clinic dental
+law legal plumbing contractors construction roofing kitchen bar cafe pizza
+restaurant menu salon spa fitness realty homes house estate live life today
+world tv me cc ly sh gg
+example test invalid localhost local
+""".split())
+# The last row is RFC 2606's reserved names plus the ones used on internal
+# networks: they are real top-level domains, they just never resolve publicly.
 # "Craftway Kitchen, Frisco, TX" and "Craftway Kitchen in Frisco, TX".
 # The separator must be explicit — a bare space cannot introduce the city, or
 # "Ryno Lawn Care in Frisco, TX" loses "Lawn Care" to the city group. A city is
@@ -44,10 +65,23 @@ class ResolvedInput:
 
 
 def looks_like_url(text: str) -> bool:
+    """Is this a web address, or a company name with a full stop in it?
+
+    An explicit scheme or a `www.` settles it. Otherwise the last label has to
+    be a real top-level domain — see `_REAL_TLDS` for why the doubtful cases
+    resolve to "name".
+    """
     candidate = (text or "").strip()
     if not candidate or " " in candidate:
         return False
-    return bool(_URL_RE.match(candidate) or _DOMAINISH_RE.match(candidate))
+    if _URL_RE.match(candidate):
+        return True
+    if candidate.lower().startswith("www."):
+        return True
+    if not _DOMAINISH_RE.match(candidate):
+        return False
+    host = candidate.split("/", 1)[0]
+    return host.rsplit(".", 1)[-1].lower() in _REAL_TLDS
 
 
 def normalize_url(text: str) -> str:

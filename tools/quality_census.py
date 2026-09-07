@@ -44,6 +44,54 @@ from app.store import db, leads, sites
 
 FIXTURES = Path("tests/fixtures/briefs")
 
+# The measurement taken before Slice B, so progress is against a number rather
+# than against a memory. Recorded here rather than in a note because the report
+# should say whether it is better or worse every time it runs.
+#
+# 2026-09-07, eleven fixtures, eight axes:
+#
+#   same-trade mean   56% distance  =  44% IDENTICAL
+#   worst pair        38% distance  —  contractor-bare vs roofer, and
+#                                      barbecue vs restaurant-rich
+#
+# An earlier baseline of 40% was taken against a nine-fixture corpus that was
+# the wrong shape — no fixture carried the business's own photographs, so it
+# was measuring a path the product does not have. Re-pinned rather than
+# compared: a number that moved because the corpus changed is not progress, and
+# leaving the old one in place would have reported 16% better on the day the
+# fixtures were repaired.
+#
+# THE NUMBER IS NOT THE WHOLE STORY, and the contact sheet is why. The two
+# attorneys now score 50% apart on this vector and are still, side by side,
+# obviously the same page: same skeleton, same typeface pairing, same geometry,
+# different photograph. So the vector currently OVERSTATES how different two
+# sites are — the axes that would separate them (page architecture, type
+# system, colour structure, section edges, the signature device) are exactly
+# the ones Slice B adds and this file does not yet name.
+#
+# Which is the argument for the gate staying off. Gating on an instrument that
+# reports 50% for two pages a stranger would call identical would reject builds
+# for the wrong reasons and pass the ones that matter.
+BASELINE_SAME_TRADE = 0.56
+BASELINE_WORST = ("contractor-bare", "roofer", 0.38)
+
+# The gate is NOT on. With eight axes and four structural, "differ on four
+# including one structural" fails almost everything the generator can currently
+# produce — it would reject every build rather than improve any. The census
+# reports the number; the gate turns on partway through Slice B, once the
+# vector is wide enough for a site to satisfy it.
+GATE_ENABLED = False
+# One database on disk, shared by every tool that runs the fixtures.
+#
+# An in-memory database per tool meant the contact sheet paid for a full vision
+# pass and then the census paid for another one, which makes the "a second pass
+# costs nothing" guarantee true within a run and false between them — and the
+# loop these tools exist to make cheap is the loop across them.
+#
+# Gitignored: it is a cache, and deleting it costs one rebuild.
+FIXTURE_DB = Path("artifacts/fixtures.db")
+
+
 
 class Counter:
     """How many times the model was asked, for the assertions below."""
@@ -140,7 +188,7 @@ def main() -> int:
     counter = Counter()
     counter.install()
     rows: list[dict] = []
-    with db.session(":memory:") as conn:
+    with db.session(FIXTURE_DB) as conn:
         ids = load(conn)
         for slug, lead_id in ids.items():
             if args.rebuild:
@@ -230,10 +278,22 @@ def _report(rows, first_pass, again) -> None:
     same = [p for p in pairs if kinds[p[1]] == kinds[p[2]]]
     if same:
         within = sum(p[0] for p in same) / len(same)
-        print(f"  SAME TRADE         mean {within:.0%} "
-              f"across {len(same)} pairs  <-- the number that matters")
+        moved = within - BASELINE_SAME_TRADE
+        verdict = ("no better than the baseline" if abs(moved) < 0.01
+                   else f"{abs(moved):.0%} {'better' if moved > 0 else 'WORSE'} "
+                        f"than the baseline")
+        print(f"  SAME TRADE         mean {within:.0%} distance "
+              f"= {1 - within:.0%} identical, across {len(same)} pairs")
+        print(f"                     baseline {BASELINE_SAME_TRADE:.0%} "
+              f"({1 - BASELINE_SAME_TRADE:.0%} identical) — {verdict}")
+        print("                     <-- the number Slice B has to move")
         for score, one, two in sorted(same)[:3]:
-            print(f"    {score:>5.0%}  {one} vs {two}")
+            flag = ("  <-- the case B has to fix"
+                    if {one, two} == set(BASELINE_WORST[:2]) else "")
+            print(f"    {score:>5.0%}  {one} vs {two}{flag}")
+        if not GATE_ENABLED:
+            print("    (the diversity gate is off until the vector is wide "
+                  "enough to satisfy it)")
     print("\n  closest pairs — these are the ones that look like one tool:")
     for score, one, two in pairs[:5]:
         shared = set(fp.AXES) - prints[

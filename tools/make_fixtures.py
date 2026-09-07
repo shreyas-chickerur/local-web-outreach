@@ -15,12 +15,12 @@ changing rather than a directory listing changing underneath it.
 
 from __future__ import annotations
 
-import dataclasses
 import json
 import sys
 from pathlib import Path
 
 from app.cli import available_directories
+from app.web.serialize import brief_to_dict
 from app.workbench.brief import build_brief
 
 OUT = Path("tests/fixtures/briefs")
@@ -38,6 +38,14 @@ WANTED: tuple[tuple[str, str, str], ...] = (
     # The hardest case in the corpus and the one the operator actually walks
     # into: a real business with a directory listing and nothing else.
     ("bare-trade", "Towson Law Firm, PLLC", "Frisco, TX"),
+    # A contractor with no website at all: the highest-scoring prospect the
+    # landing page produces, and the shape the operator actually walks into.
+    # Nothing but a directory listing and ten photographs to build from.
+    ("contractor-bare", "VIP PLUMBING EXPERTS LLC", "Plano, TX"),
+    # Almost nothing, and what there is is poor: one photograph, no reviews.
+    # If nothing in the corpus scores badly on vision, the type-led hero ships
+    # untested — and that is the path tying Slice A to Slice B.
+    ("threadbare", "S.Handyman", "Frisco, TX"),
 )
 
 
@@ -72,7 +80,13 @@ def main() -> int:
         except Exception as exc:                       # noqa: BLE001
             print(f"  {slug:18} FAILED: {exc}", file=sys.stderr)
             continue
-        payload = json.loads(json.dumps(dataclasses.asdict(brief), default=str))
+        # `brief_to_dict`, not `dataclasses.asdict`: the server stores a lead
+        # through this function, and it is not a straight dump — it maps the
+        # extractor's `images` onto `photos`, which is the field the renderer
+        # reads. Dumping the dataclass produced fixtures in a shape the product
+        # never stores, so every fixture had zero of the business's own
+        # photographs and the whole corpus measured a path that does not exist.
+        payload = json.loads(json.dumps(brief_to_dict(brief), default=str))
         # The lead id is assigned by whichever database loads it, so a fixture
         # must not carry one — proxied photo URLs are built from it and would
         # otherwise point at somebody else's pictures.

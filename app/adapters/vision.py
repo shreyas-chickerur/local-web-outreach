@@ -26,7 +26,7 @@ from __future__ import annotations
 import httpx
 
 from app.adapters import claude, photos
-from app.adapters.imageinfo import dimensions_of
+from app.adapters.imageinfo import dimensions_of, media_type_of
 from app.core import config
 from app.core.claims import reads_as_claim
 from app.store.photos import LABELS
@@ -211,23 +211,55 @@ def look(urls: list[str], place_photos: tuple[str, ...] = (),
             data = thumbnail(url, place_photos)
             if not data:
                 continue
-            blocks.append(claude.image_block(data))
+            kind = media_type_of(data)
+            if kind is None:
+                # An AVIF, or something that is not an image at all. Sending it
+                # under a guessed type fails the whole batch rather than that
+                # one picture.
+                continue
+            blocks.append(claude.image_block(data, kind))
             sent.append(url)
         if not blocks:
             continue
-        listing = "\n".join(f"  image {i}: {u}" for i, u in enumerate(sent))
-        try:
-            answer = claude.structured(
-                SYSTEM,
-                f"{len(sent)} images, in this order:\n{listing}\n\n"
-                f"Describe each one.",
-                _tool(len(sent)), client=client, blocks=blocks,
-                max_tokens=4096, timeout=TIMEOUT)
-        except claude.ClaudeError:
-            continue
-        for entry in answer.get("images") or []:
-            index = entry.get("index")
-            if not isinstance(index, int) or not 0 <= index < len(sent):
-                continue
-            seen[sent[index]] = _clean(entry, sent[index])
+        seen.update(_ask(sent, blocks, client))
     return seen
+
+
+def _ask(sent: list[str], blocks: list[dict],
+         client: httpx.Client | None) -> dict[str, dict]:
+    """One batch, halved and retried if it fails.
+
+    The API rejects the whole request when any single block is unusable, so an
+    oversized or malformed image used to take every photograph beside it down
+    with it — eighteen came back undescribed because of four. Splitting
+    isolates the bad one and costs an extra call only when something is wrong.
+    """
+    if not sent:
+        return {}
+    listing = "\n".join(f"  image {i}: {u}" for i, u in enumerate(sent))
+    try:
+        answer = claude.structured(
+            SYSTEM,
+            f"{len(sent)} images, in this order:\n{listing}\n\n"
+            f"Describe each one.",
+            _tool(len(sent)), client=client, blocks=blocks,
+            max_tokens=4096, timeout=TIMEOUT)
+    except claude.ClaudeError:
+        if len(sent) == 1:
+            return {}
+        half = len(sent) // 2
+        return {**_ask(sent[:half], blocks[:half], client),
+                **_ask(sent[half:], blocks[half:], client)}
+
+    out: dict[str, dict] = {}
+    for entry in answer.get("images") or []:
+        # A schema is not a guarantee. The model returned bare strings in this
+        # array for two of eleven fixtures, and an unguarded `.get` on one of
+        # them took the whole lead down at the first stage.
+        if not isinstance(entry, dict):
+            continue
+        index = entry.get("index")
+        if not isinstance(index, int) or not 0 <= index < len(sent):
+            continue
+        out[sent[index]] = _clean(entry, sent[index])
+    return out

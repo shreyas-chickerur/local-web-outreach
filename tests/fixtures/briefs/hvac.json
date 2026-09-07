@@ -26,7 +26,8 @@
       "corroborations": 2,
       "dissent": [],
       "field": "address",
-      "score": 0.3,
+      "label": "Address",
+      "score": 30,
       "sources": [
         {
           "source_type": "google",
@@ -51,7 +52,8 @@
         }
       ],
       "field": "phone",
-      "score": 0.7999999999999999,
+      "label": "Phone",
+      "score": 80,
       "sources": [
         {
           "source_type": "google",
@@ -75,28 +77,19 @@
     "What are their opening hours?"
   ],
   "place_photos": [
-    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXSgGYblSZCyGS6xSNbHKqSBzRPdIFuA--ofyJ3_UaQ2krq5midlGRoVa_VYxLysXAqVUtaP0B41OFr5W3mguoIfkFo3yRENtsvZk2WW5K8Cste4zT0LNPJRlkhzLUMjvlOnHkgUE0NG4HmgE9YGorGkgOSw4doDnXHrg_iWTQFzMIVl9GJPN6coSF_WWSsqxGga35R5i0PFeOpUUTKxGLVxcR1ueuXzWH1tzFs2FfCsxeUdMYnhU33ha3_VtQ-QwnLRMc1xSlN6Oj3DH1hfPzi4cZf0uk_8AFRGHqZKxcSm8MSqVyYfINIkqrY4AL84avtg4G775Ut6jXKpshIHn8qt9FbrFDT0xst2Xyc-KtLINl395A5H-OW1Rn0PHSVrnwDC2Rlxr2gjbXO58casOFXIXmrc9OBNBK1BkMpVq409qihI6v5IVaNY_u_lflQr",
-    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXRFukEZa-xYrh-dbbzb82hqRvcihj4yqr4jLOpxmziVw8x4ATIrhTbNWMe4SUGEye9iPPPrKhZ4BPMRramq8Tj3EjIZwxpvfBma3eU3u_Sm1nyBCSkjQ7oiYtEstsfcxTOt4OXkZe7zXdWwnvLmILFFnuNaSi1Qfya5pGr3WNPJDU8sjb020sx6P0gJJivIgLPvL4n4wWpXyFTB9Ywad5jvszxvUsPZ4Kt1G2_hK8rlJuZcdNMYAXuxe_8r_9FsF-QYI2l9mjTD5vy6ZNqCTuDZS98pu4HYLAyqfbPKY9wedq7ROJpX4YzNWLTf6zazRhbUjj2u5_OVJf2vD3Rjaz1SlFmO6ZN9ACQyC5ei0y4LmkjuF88Int3Dx7pUlrOadNhOfvCw3EaflaW5svqlSp4hShD_6VBjCPLl2WMWH5XT__RtRorFD0Zm0E4ZcJ1Z",
-    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXScUdLVI8Rhu_BYy-wfqe6m-VEOp7OdbJ_9J9W8Xu36HEhp_mzbhKKEYhIo3uJZaAQ7t-whDgXrtKi5jsTRhz19t0zev7ox6-7K_qvF4f5u0ZqN9JySvCUosoGUNA5w-IewT-ANwqVkqoTgnLEZmNqZYseCud_GjGmm4_WFMXw0apy-jri1q3DDyvO45JUGuDMDX-0ZhuLDAOk-esa1w2JP9lvNwssgSi3m9Z9DUeW-yYFJftTgiuCehuZhL0wbNzR9GTj0xVt4VM21bWSB11NZM-IyQ1ccLSBTtnGng9TlsFVlLJFR9GmC-VrnqlFuryKEm-DlrlUeibNElnqOkXoadK1jyI00JPubyaswHTCnEhcqyYYr2sSAkbL4SxTjZeU0zEJAc6n6P3XO0BV5VLCqkWii9qnrKHn15QNn0Sw",
-    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXQst0YI9h2LoezC7iZkzkaJIoQ_0BqYzQJ-2-W3Q6Qzu49TPeERB1D3cm8FrKZWzz5KJJwTjkylcpSZo0uWHpNoOaE1kxz7poy4un2dIU2ckMTBttS5AQGq4Ce0NKpknGLBOjzplr4vdhi2ocFhj2RBCiqdgxy5zl55BJwNKRHTX0r4uhIo_usl0i_sHFORV1HTW9J35mk38Qt39qUl8LrzUZrBQxjVpwmvvAMqGEriD22qfr_8bytE2MKKYPh23NRj2e48GdiM-6DajjrCl7vtT7cRlhazjkK-kKdYakX7OOpDEEGgC4VFTqnYW76WLXA4fbR0mCKZ8Ujo2MS-MsKAt6l4AI-x-yK370DzaGtm_Np7MgmyPZsRrAnL03O8h2mAinRIWbdExeRT41gGSeQljzFjfx4u4_PgrKd8TCLARSSgGNyVWCjjX0oEws86",
-    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXTy4SO8Oa0AuBtA3166hcoAZRiWNCWlRh8TDp0k05rTLU5vwErRTHgufI7DM_ggjID_fe97wq8PIhQoApxuBZTZhaIRgnzCtlQr1OU41XFk5x-IOMcN1tkdQILnWdRqRR419DJCUBmGKN_PVVq2pVCGN7DeretplikpWAdQavtlmcwJ5ej2feFBHfp0HrI8RYWHE0NBy-ub9o4VqEeudtFFOiNcAAJV_IUYwoacCDmmYVz_l8iSiTyY42tBJM6q2re54kgS7Jy3LVO2bXirCgCRO1O0nH-pwcSIUgDRv_D_YiJVJtBNgj6zLciVdKcKNvx0d7o1OglYrvFbEtvfzagRG0jsUalIGccZ0khOt7-sZvvgGLaqr-jjxIOSHPbaWohohejLWcgAqxi0zEGKVvWF8Jl504BjTQivx0RQGg8WZfhebHGk1gy4OWe4M9qg",
-    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXQsS1nWD0RM0STjuP6u5Hn8dTVLCeWYFWQAbEUg6DpgtOyen83LPY0Ca48vzQ9-y3r5uho9uUVJX4lV50LFBOtCvUHeZhp2JvRvXElwxCG7hb6M5bLI-X2TXRdQzWG33YPz8F4gSJ87xMB8EDVo3aqRH9YIAZxH2Tognv2kqPpIdWcwGq_mQxh8UdepooAMLXmeMn1mPRfqqbZIuA4xEpM8TFM9EhMettvEGKrxrDHmjeXT6BY7pdu689qf196qP-deExnZx3T7mUQVd6xbVWbKnJTcdrKAH7vuM0_3Yosa-Poo9STZztEOqwcJkAYYz066D223qgg7WYjF3ukNp9fchbo-Pl8fPdHJgCPv4_P-Do1bFTboxKmMKHMUAcTp3G5SJ_aIGIRDWA_vJcaSWkb-gDG1_4ja7Gj_BPn8IMXNdjXQ2XhwZNVs3m_cIA",
-    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXTVswOTAokYxzlVNRbtfoIrdq0DKiGXBL_upNIcEI6zwX9leAz_X6ta4TkvP-fYyp_lWkEIoxwLT-ZyYfIYOIHixNgHEQ42uorpB5l9TFPDrQaVWrVyfH5G0qat0weuoKV3GQ3JLXwuBl8pFZsDB5KMZiZ8X8gzGFWdkEApN7Fq6FbB5TSC2yHehuO061CbBG14Pr8EAPAz1vBrAeO__Vsq4-G4dzicy2-U1zLaOpUGSAstVc6m17Xqta8o-6Sp_vsMlbh9l4Aov95VeW0mEP3ma27FJbz-BTCsStunEpizhs0DGv0Jk8UZP6UVXGa24_cg-vXI6Cbv8_xIJxBKnQ6ooEZxU4z2FfPCG9-u1YswzjKqceiXtb6qCtUp9dlWj7Rahffeer0j2tN5ab4drrNTXPFy9GoYv6C5KSph1hOSY5_P",
-    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXRUu7bzJqcRCBsZUDW6jibG25a_0nGmmsZvlIF-JM-_PhVVknZ5sdj-80pOly3ltrhQa-9DKeRhkL-BwTsY3L9XmeEYGUxMv9Hh0ZTpsdibMOWputVWG3y1OrwrzrqAM6EOQRrbh47W_RPS0jbx1TUL-rdE_AZOmj8BaMPSB8nC9YWECCoCP5QK_g6Y83bCPGDJGMd3t49s9UQHPhklSgVZJ_F5_wdf8Oy-SeHToUSpMgnQxVLJAw4ZrsKO_Juh1loH_REVOJfFxLs6JccenBhnRXcnUtPs6sONMObGMnxYeJx3-vt_Cexvx4HeA4eqQ1cRei3awwNWQcTdl57rfZU5gQbbkQL2Xbk4HE13MHHuNn-1tJ0-boY2kaPOSLX9FX5_7BLzjz5LXicuJo37oTmL2ucYL4ABwHgTwcu79Fp_l6sKR9xgjNugVulyRABD",
-    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXTuf3MXN23_WqqVbsnK9EffDqSzbDcx4i2w33DIqokQ_fEitRmUgRn6h1s7GTCEezYvYevK88jenZM4moVwfi6r_SMMXHt3cNbG2D4Sk0LPVrxNimcWYJgBnasFtMKBX5IA5KRc7ZukMrKv9SffSLciQU9Jv_KVg4d3LXNSy-aSYE6ZbUJ8_SNkNSWrIwlauuqHp1g1a2YMvPZGw7wRk28mKMsf1An8O6k9yj0Y8JPzyMt-stZqVtwlSzxkvbz12CWGaOP4R-rmTKBQhDMGoFoibBdzjmrnsGvKrg6oMvdMV8gAoI57n-CdkbMLHlj3MpaY1zm3y_lKqeGlWwHdkkr6HSD-1FxuI86ZFKsc6uGqoTL6HfpWN2kJGcrjWxgHhK2oiZ3fEq2wbFO5lfUFO_goLY0jxy_YL3jPhNc6P2RiaUM",
-    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXRQaAc0lJGVbarktBbB0Ef5pmsXNI9hxJy67ZozZcYuXedI7wBPuZ1JbFR2tnuEcmvnIQTQoLApgl_zLqTVC5dVj_oLKThJjcMTYYOV0k-NuuTzsma1XMoBk8oMTdEylOwnfPH02AVf8pLT0upLeziiAAFyNin3Na3BAuHF0zXiTjIfVqFPvZhcjzAc69n2iRARiJVFbgJyj1Vn7BaELLHfZ604HxWQ3-KWEyteg0g-1ge6Bd6F_tgoi5gyhIF3EDpfwUDyT7jzkejJ81S2JpIoRMBSdYTQM_x6c4AF8LWpDbLKbwRge4IPMwGEEgOWooo6MLP11pik4aB1Jc4Dkpg21EYS5f74vQJBEUHWtddSADq954c9TCAzUaJytQSV_YPKVxzwmq3klWYSjSIkiiuyLJ7MrDrWtQ---L7w6uU"
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXQmJDKzR3XZQOvs7CYXqkDZO-6rH1ZvqGo1NB66jHCP32eWia2Ej5zFBv1DlhpJwHMpiODQ3_VaNk9vaKnnIErKEU4PvG0dY8kUHOlqiPd48pkgCGBezTJBIKp3SSgl8fv65YMyaFWA4BOs1bvyQUtae2VJnZo0GxBhMFmG8o5AUrhxpqRWpRygGn7zmBPbPni0T89RkLn_mhgaSbcz6UhXM2I6NEuI5KrQhk_cMsdcrKl3Vn7FZ2rQXbyIts30T9Qxqjfukn1W8w-3_FjpWCcVSzW_HEflAydvSeSS97ryTpi8yn3GgQ7W3ONynBzeJXZ6B5tDx_sWblsYD_w1aLxnMI0xKv5DzGc1mnNlGl3SwZ1iM__6fsLhBa833iGu8M804Zxooaw3KlJTZw6ns6TqNAV8TqIEnptbLMhC21Tll9aTo6FKZAo0U8EyuAHP",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXQxUa7mVrEjKQ5hOphLHPWPwsCHZHednJVKAuHbFE2lmVV3IAV7Y7SepwBu1sRzgivFi9yVMetQC1E-OMCss8Eh0_VIeKFlzt4oDAmKgaOZTNLK5UExMO3wHO-PH8wlQcL5ud5AT1DJ6UXjU5BLZ2QwMS2nPDEQUFw3j08IB9pNcL7OWir6RfeEG_6EuqgNRmvad0kyaoDOS85LtpleJwy5zn5HYk0FIqbr1qN4rltPxgjueEuTWnWDsRSjj3_lspisst5beqbJv50MIo8P6W6PJEkGpi4TWQZSqYKb5YIVvfW5RSSJSOsbyR_StBQu4w3wjiQtMvkzEmz5wiYhpG9maSzNzkxsx-VVX022njIhq6GMa67cseU2898DD4o8XudVOnn66weJrW-cg0vTlAG5yXp5H0ChCULvGzRSOz9YWwB4PQ9Ei9IHrD4y6gV3",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXTwSJR2y1Lubum8Y4ecdCZA3X2W7JgyJ1LPM3hjcwvUSbjnwbyttbV3cWpFIxGhYv3cudv5O2g_m8dZwNbO9XsyWOJhPEj1QyA6B4ytIXGtRprc_DbNLSU-vzbigxVYEH-uYMXGxAvlu9PVrehApvMzcGyeAq233kJvBb2JTczVOzMfNaXc0b5tAIOuWBChAjtygZTbE_7MTuv2Gq-nn9vCv3hYxVr3WbJqpesOB-GdsY2dPyUgyWz6OEX3uucKovBsnsbn2AGus7Bj1SbMR6rFqcHi2p1G8zChugXScU15qVt6XWMyCB4eWTBXcvGHqf1zAQEEzsytvZnCzbYjOi9yP5Osp9Ipqdz6qHBZrrm_KnOExIGDWybOJs8fb-hh-8Rsk46i86DI0BXCgjYGR1nmV27Np7Ko6GsyxAG17JE",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXQNLb_nu16erKt_ebc5pnshvXgeUDBVKR6N-k9Beo7VCcyWxYYrROtBOGNXX0Z_aAu02oAqiOAAUd9BEgl-Exi-45hSueAuQ7JeDgjpn70pEQ0mPawiZcYHwZYMj7oU3BZJ61PsWEk4wuh66FaVstehvv7Ky-27Uavvi3k63g4bPE_ZNWQQRS2x_PsG1lD6IkTCQnQv88Fa5Qz2nppx-TH_dIa_XFbz0qEuXWEtEDMt9SAlhwDvyjybla91cKM6K5z5j7cCExlgByAyreRJDdPfYWtqpZL-Jj6RTPREIYOeSqmjh7e4ytNDd0RBgItq9x5Q53OfIto1bj47sJiJ5OmjtlTNu2dLz2fmdzF5d62D990aQcP6Xj5AHMfd9gXQF_w9oO5XvWMlIT4BYxDji77NFLlrgmCuB9VNM4ZBHUIh0Yfg77MopVY91rKNlL53",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXSaNcKh9VILelgcvHJCEANbCRpx-Vy_E62z_p16SgEk1ZzaT557UZufzj6racPLAwZqIvDDRtdM7MTYKD585AguHh3GNBC5B0wOCNc4LRjc4w0b_bbN3TNnpzMfyKOyp0w-F9CP9LzMQRP4mQWELR4F8FGN2dL4mSj8BWFOJ5Ub9ZyGAm3aLWRFibXIfpw92I8g0xJ2AuDm7vQuu830ER4IQOrEx6_96cYNR4gLfHRBqcSs-uAEORo8Kxjw4mkC4ioiaRYlm0mvXG1qXhH4AUWfpQLAOix5mdbgMt6RYEBU4tBXDUg2bJ40uv6PqdbxUbU4nMqfpizDnbRwR-elLf_o8OCFawGxQaxmDmdAZKWv7Njq2L9Em_Zv0TC5DB1QiKIHNf3UH1sFg-6FVT9y_iBAhNcgGBPAzwceEWzzhnaDSju5qJGfAcOswcNMeSyJ",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXRFRmlG14H6upYjkXX_IL49gIoWYE9dZgYNPjJaoR6R-UlIW7UVUhOvKraVysLBJkV6Co5vMAPBH8h8icTbM60HyaFnZ_z90IlO9EghQctety4H-QR5H-lsOUMEsayR35wDPIrOz7lkJKyLKJRkd0xv4OjZxhqrM5ETvFl8-WA84f1ZB3XGBDFCPdn5fbavGligBiM8bMYFEJ5ERzYYRspU1gnm90fqwdf6rDykpZX9aK7kLWEuNXx0GvCq-yC2ui90kkFNv57u3slIEy4tRkRRn3Mt8vulZOwRx0VbegWcjJmMl3cODLnbAlS0SoyMOnp8sdV-ahZg-I8TLd2Fhe-bk4EPBFVqg77K9MiHYYjwZ2LNh0-wQfc8GfMfxkQVp1KJvnqB724tANdWon56eriurDtD6kLCIpcLucmTXKFrjqfxxpHnFTSTSu3r2Q",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXTA856wwIRaPCB2nofGP989WpO3zkjlw2_v8LnXQbwwcw76bOHwd2Lc1NznwR8dTxFKr2wC1smB3bleq4l3d04FCLCWal19jPK2w8ssIkMlsWvLGc6JViaDe8dzD-L1p9pvA-LW6nR30a4gRsdf31z5qYRyHfVyjSk1p9z5mIehTSKgefeA-LemgKOmYyHdN2AM_YVlR2O85fy2U9x0G0ETUdfoJPKgAmbwws_lYSkMqh8sFzPspp7nhNq_UKeB9x9zx-3EKWNKRQRVnZvJ15Qd-nAyS6amMPKMaJBjXF6pAvcBL19yS-5Dq4UM3KbGBao-DSyHmGVkwJ5awwVE7a9eCxhCpDSBE7oc55G6Nd0-U8eA3ftMTPaZa5FJ17bXjivm_iQmNqhjZVQFfSXJ_F9QnyQbA2n1cQoOmvOOao7AIKDy",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXT_esdfU7Bghw0rXDVvkZhepI3dTAzdB9Xp3syczCg_VkG9XYOhMch3xy9gp5S70ms_LFY8N_6ZD-HgJhG_IPhxMhmAsh_VxaI10N-gHFPdU43vGABw_RqSuHP8y_bzX7NtNuV4PwKE89G1Pu1bAmwx_bhr2jTel2I0gk-_KQNxnoi6IjI_744-c_RL2AgqVWH6tWeeArNqs5niSCYWkTAtW0xfP5RIibsnc_snC9viuMBJfcG7XOjay4ia_QzUNmRYfCe7GKctwSesLxnIn-Mg62mOPi0dOTQCX6ckxiaN8c27V-udMxevS-8fb2K-18cB9t9XkYxE_LSAIop-HaZkdf3OEmDf9V_WeAaJqIXk4jw7I8D0LAxq53qn_K2tWfZNnPPGJATyg3thqmWF-OLu2mhOk_XyzNlhXTUc7i1-SOxfFg7xalV_EShxWtuk",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXSMJjXoQpGopxdPZrsr14Z6UZzVg6RWaSdq-wSPLz94A_tcU7Hdhff5LxaxWWWxWoUZq_sjerI3IpIz5ezyfD1nWoKKWOBvhe_JLrG5f2VxKZpYEZpUxl8qNVDxwPXVB3PS2MMDCbT_sCx3MZE-CSVZXxltVEBN-TnRFVlMNAb5rD4RgyUxgg-fX-go9hsthLAwX3DiuwJUt7yC6LXFHNc1RwnKTHHm87c4pK25EAF50rH8TMntXal6VPKwIJN6QxNWLbw3LK3N634uUSXOX4_F5OAJKg9vLoPCXiyD1s1Gk5fEOvHhiW1TkCUjR97y6wSB23MaH3XLdODzSe0hJULaNAXRpjZrlCWMi_raqiZidvfUkoz3jGquN9rk6-KUXfh4Ak63E772BbXn65bIC6rtP9LxHp1ptXc2HH2py-ZC76s",
+    "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXTAm8rtkLSGgxBKnjjnvVDOmzKjSLObXin55x-5B4LbStzw42rLUYx1lmazVFrJxOQ-S1RSN63SSGNRWBHwkjUWieC_QQDrYbjQu-PecTcbRDMR8DA4gvX5vVVR9kR1y4zMNKdvEOpPqYriMY3EdOC-Zc3Yrvstp9mMYYkfhU_VCV8ZK3nEkJi1fw27u8VfIa96Ox_Ig91oWrBRmHC_Tr7G_6Y3tI7y6N1w6CVB_ZgL_Jq0Hv8-sPv7f_jkZjSgx0QekA05yl7pDDt8HvBliKIjvUrB1nUpR0Mn7c2ID2T1ykcjbKF8aXOo6zgQ0DzzuHHC0xnfeC0MxECculGiCFxhvdsZYB5WON-n8frCvCRUW1IZVAjHd7izYRztQKEW1pWAAlx1bchzdzpjpQvTwHXw04d3nvnMeScqlonxy20"
   ],
   "published": {
     "about": "What our customers say about us are very important. We\u2019ve acquired over 20,000 5 star reviews from all Plano residents who have used our plumbing services. From how timely we are to how trustworthy we are, we strive to give a good experience to everyone who uses our services.",
-    "about_score": 16.73,
-    "actions": [
-      {
-        "kind": "Book / Reserve",
-        "label": "Schedule Online Now",
-        "url": "https://callmilestone.com/schedule/"
-      }
-    ],
-    "address": null,
     "blocks": [
       {
         "entries": [],
@@ -125,32 +118,25 @@
         "text": "At Milestone, we provide a wide range of plumbing services to meet your specific needs. Whether you need a water heater installation, help with clogged drain lines, or other plumbing solutions, our team is equipped to handle it all. Our expert plumbers ensure reliable service for any project, big or small. Plumbing Installation Plumbing Maintenance Plumbing Repair Safe and Trusted Plumbing Company Choosing The Right Plumber in Plano, TX Finding the right plumber in Plano can make all the difference when it comes to receiving reliable, stress-free service. It\u2019s important to choose experienced professionals with a proven track record of quality work and exceptional customer care. At Milestone, we take pride in offering: Upfront Pricing : We begin work on your home only after providing you with a clear, upfront price. Same-Day Service : Our fully stocked trucks carry the parts needed to han"
       }
     ],
-    "description": "Looking for plumbing services in Plano, TX? Milestone's skilled plumbers are here for you. We can repair any plumbing issues you have. Call our Plumbers today!",
     "emails": [],
     "has_locations_page": false,
     "hours": [],
-    "https": true,
-    "images": [
-      "https://callmilestone.com/plano/wp-content/uploads/sites/7/2022/10/9A0A9697-2-web-res-med-quality.jpg"
-    ],
-    "js_rendered": false,
     "menu_items": [],
     "menu_media": [],
-    "mobile_ready": true,
-    "phone": "9729136165",
+    "photos": [
+      "https://callmilestone.com/plano/wp-content/uploads/sites/7/2022/10/9A0A9697-2-web-res-med-quality.jpg"
+    ],
     "products": [],
     "services": [
       "Trusted Plano plumbers delivering fast, reliable service",
       "A/C & Heat"
     ],
-    "site_host": "callmilestone.com",
     "socials": [],
-    "text_words": 650,
-    "title": "Plumber in Plano, TX - Voted #1 Plumbing Service Near You!"
+    "tagline": "Looking for plumbing services in Plano, TX? Milestone's skilled plumbers are here for you. We can repair any plumbing issues you have. Call our Plumbers today!"
   },
   "ratings": [
     {
-      "reviews": 6202,
+      "reviews": 6203,
       "source": "google",
       "source_url": "https://maps.google.com/?cid=15379541617398071893&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
       "value": 4.9
@@ -197,24 +183,6 @@
     }
   ],
   "trade": "Plumber",
-  "url_check": {
-    "blocked": false,
-    "fault": null,
-    "note": "",
-    "published": "https://callmilestone.com/plano/plumbing",
-    "result": {
-      "elapsed_ms": 136,
-      "error": null,
-      "final_url": "https://callmilestone.com/plano/plumbing/",
-      "html": "",
-      "ok": true,
-      "status": 200,
-      "tls_error": false
-    },
-    "tried": [
-      "https://callmilestone.com/plano/plumbing"
-    ],
-    "working": "https://callmilestone.com/plano/plumbing/"
-  },
+  "url_check": null,
   "website_url": "https://callmilestone.com/plano/plumbing"
 }

@@ -23,7 +23,8 @@
       "corroborations": 2,
       "dissent": [],
       "field": "address",
-      "score": 0.3,
+      "label": "Address",
+      "score": 30,
       "sources": [
         {
           "source_type": "google",
@@ -42,7 +43,8 @@
       "corroborations": 3,
       "dissent": [],
       "field": "phone",
-      "score": 0.98,
+      "label": "Phone",
+      "score": 98,
       "sources": [
         {
           "source_type": "google",
@@ -76,7 +78,8 @@
       "corroborations": 2,
       "dissent": [],
       "field": "hours",
-      "score": 0.3,
+      "label": "Hours",
+      "score": 30,
       "sources": [
         {
           "source_type": "google",
@@ -99,28 +102,19 @@
     "What is their street address?"
   ],
   "place_photos": [
-    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXQezwzEDpBYIV0MW3WFD942ykqvlX56h2FdTo1pmxfgDXeU0mlhOfoY94tl7YKnocIhos-8EOkYMLdS7MTw5ChNBxifAxKPTjgLcdVZzEFwIR6YE3B7wv0xmNu6wLNKm4d06Uy_-slWG-Q0iCN9vNRdlFdzji7mvuux65ie6RYnF9ZHlonIG831PaAzIb6kUEpSvi--TzYqFxfXAAi90vtH1KZqfDlCDBbcsokN_a-e_mbKpb9_dO1Hq1p-yJOUopKx7tpGNkWs29_MmUtJ5hsNSq2fQHlEZa8S2vfIDbb7LJBV7V8ly5noPQQNO63R0jKXVMEK6xXhw85o8PAArCppe46yOwp4Nxfy4JfhDpUM4HEvDCTZPEONuL3OjvA6ZRETbRjja_gVR9-nhywjbWYrS-F2GOwz2Rww8lEXhDlR3PKR",
-    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXQsAsr3xlfYl6Kf1c_ceILGRoeRo3HHl08AdQgQXOHEh5Jj6Fpjd2yHJW--o2QfNLZ2Q9Dq_36WRikCyHZxbylmG5e93hs8PeEwkEaWD73_U0qNNDGu9l91aUP_RwrPHWpYeUazodchTGXCf9m1hWBOtZDNW1d7xMsbA5IoNEEGcHF2YvAtNdNW4_WFSdcCJBz5I_GmjIqXG5vabxfCVF38bOwXbVx07l0C55o-VxFr_OhGmgpSuY0TWBKsR4Szq-kY1EOJiC8Y5olzIOq86O0s6mUa7VVMDCxZ8zvQKTklnzI-lKLzXg374ZthkiMD6wxbqP-87aezeX_2cfj455TCefe8BVfigV5XDDZ58zfab48Ibh5q_jlDTJcX2WaYkREuyLX8adnvo8X9grCmllVvQwYSdJBeArem4-naujlNBQ",
-    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXTGU2qzzeIm8p0T19fcFWcHQJcYvXoEIkyzbhIpg3c4VMSMvjsYjGFpbWpFaRGN4__nW7tFr6WlXIUcIxgIKv1W4qrD7f6iqeFsDCBwBkpaoxR8I56rRg_OOxGeOdohq2ikalBgUWIuM46b8dOsZezk5WMkbEvrxzL8noLSbN23ASyyiX8rZoSf7GpwBZUnCwWHcVLNqUOSX4xyHlQNVIk7DjxCs7zMatZUgC_DSYsMm1osBFLAyZi_hv8aBxVDPibRSmAdVgygAbijC2zMChjV7W_RKiLkKx5dhK2CDqyBYQiqPaykwNluG7pOyFaKe7aMDya4ymj92DBZIiHEsDdQs1mqmXWCZksLs_NqaIjMKyEwfjnRTgH53UavRvQRKpZ7iQmme46UAx7ADxVoehy_kZ3Km_2dSz5X9jzFPh1nXQ",
-    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXSYdqo0pE05gpZ-afKbv5YfMCu2VU9o90-rsQJKcc8J73iqSSMDXJlQGZL6crhYRDbPNq-Mc4OxUFUs0urwEM7Ocdk5c66b8WDZOFla4qyrerAVWhmcg8bQIAlCKM6roHm5IbiheTfjyUgSAETy2ltUPHLNUykc-YozrVrqH8hBcidH0VOMtbdZNe9WWEujmDWh9LhNloEq8XQTUvyM8MdDMH2W9-tY-nUeCL8QsRJz0ro1FolWcNMgdTdgqItk6WGaHnKTmHFGoHahyDnfwtWNPccqthKWa9jgxNJsu-0lG5kUJBANE8QhhIGK5Zd6yFSWNvwoksDFkq62onhRQa8_d8jLrDBqDQ_6sidYSd3uPVogxNE-2BTg90trVGncdHb2cd--rHMkXwGjvD6ojqN5s_IhNm3PLQd5HfDpM_Sq4w",
-    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXTs3HEs_GiKHmL1jRpfAvSOSyMY6LEX22cf4KaWpjFaeQQk_hmfgvVwyQPDNu7ljivG-XZ4ZHHJJ5MPzad-yOU7i-ZiLLz9nvNgnDGQ2Inmoujkn_r1WQ0AdWiOMMBQkaI_gZxjoxl790g3XS3EQEAZAnVqm5w2qBAGi5OuqvsMqSVSRfM3I6oivrUOBE0nS_xDW9Vr3gMexoE8eJC8N8h7tfZnCN71qfq2CWyMrGDG9G1sFPNlP_k46pAhm5ewtlc_xN0EYG_0MTckVMln-g-SdEMzm8iVhY72doD6ZDYIU-b7o4_W_8REtVYT9TPBlpcIdqKXDjtg6-VJ1tYTEJbXRfl7yRtDgfHTW4uBRGJgNoswxicSZrZZEMzeahbDrkPzUg_P5wuOn1A3KSS1YivNCNFne3Vd-dy5YQ2JGrg9800",
-    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXRFfy-bhw_HCUXTeRw5evx2JnooeEISgnrFNb2s6yKz3ROUUEWgeBWhofzPZZwoa3cmZky2P8sMnA8EIZDr6jlTfpopMB1rYNtJx49WBtbEcV_zXr1mHbDpUEIMRHOvAXodQMBejJ-HzY-Ahv7COgAQB-384IWnrzUhVYCQEJlqdTRG7-DUtNKA61axOANN2GD6WbNkie4w8wITZB1zYFqFrgJ0rPDrLe-WAZTNrbyLSMClitg0vUQxm86nFjhWag7HhWrrDwnPajxVf7NQ-nwlBiagxqw6It2H6DhKm1maRuXAPqrBhZWKzTdgXb4kadWnodlppeLowzdHEDg56lluVNa89ndnJJ11xVO5ZHtHsP6_NWzFMC4S-_gtEprDdpqvsUDj8MaUNsTvua2eyRP19fdX-1_FLxahpMGHLabU_M1n",
-    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXRw3Nb6RbjkYq8e271Zh5ZJaa7qFbsv3iCdxxLO66oSR71QiW_fpuz-YBKxrqLpi59dbvomyGWPWCe1GtD3Vomk43lT4ILa_oxtScKlV7vanvl4AnBUv_gcM1e0SxfjPGQ1VvOLhltomdn-Lz0baEwIKawns10MA4fKz4P3ZU0IUpQHQneE5CrhQWMMnjJ6voRls5XmNOEj7tPjffF_3uS-MWENZeKw1nZYOPZjS_cTVVN-hFyfKqbIwNRgXY6XSWCIm_9GOEHOJNRnkYNIr6HXcXg84Yoa0PYKZlheMHq33oOfBBfcXmTRCuaOoIVIZxYEewpi8dlZpdm8UOmX1o2evRfr0qZbGRbiTc0Ggw6d2eSixPwkLXq9P-jFg8-OAkDDA2FAqeYJZ_x10W2UxK4n718eiCY59M3nMa1QEe5b6A",
-    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXQOtAN033FcFOfoa8yDA0xhsOJOGlwpdrPk0UG88FlasQw_Yr5aXjaACQgkWJxtkbyai9U_X08ZrGtFDMy4PMQeQ32cKWiVRxRJVMRxpEGN8QfCH9AzamHOyYlI0BZ9SoPEVbdta5DuUk6r1CyperpEGbDN7WsKMdHCJ8H2DWKN3_xLzXnMEWSAlCTWfYbUJsuX6GCae95kNi6e0ddw31xXJB4pbeOQoYi47LWxwYp-wgmjfXliKwVchQsNJTy2wo-3Gj2S9OLhRTOtjlu3e3KrdKy7gsyMLUvNNsR2Nkv8OfbRRT1nmU9cBYaygveeN6ZCR4toEfR4Zn5O7DS_NWZdD7we-oGAbKv8joViTBpPAV5XKgAfBT9gxMe1QBm-f_9RlWI7Rfzn3dcnbwcfD3TKH1Y6C49zIcgAraNNIu58J1ds",
-    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXShsEK393N8QZrzBRFaTkMsiKIevI-nENiUYzQf0DvkPmj6OD-l7Btyp4omxL_GnJtswsmDaPCZWEveC9XIjYm-RvGLEUEsOE5MRIGbTCcSqm-i9Uy99f9zUuoQELmW5CPcEJPCFE2CgU0ydUtuGCuoAi_J4Xm8BtDhiy9NH1EQhnhDQtF_1rJjtdfDu-2I8jyO43fTELJXp-kBFvS2jl1wYVEnXNZlJri_leoOlQxWt_GW2o0572Dn52rTTCZulA3Y1khuKsQ-BxFIhdRL7G3__sEZGOTgZIOBtt3OyJi1DBYxyob65npgO8RomBa5y9WxRSEl992QEsgXba7MVpayNthW04cLe4BTgoRLB1Umagf_sa7xACfeaX6HIMBmjmtnvmHTTt2T19rIhUtK99OJtT4GIjvcexFn8HErrCxxTg",
-    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXRw1_6CYjMj4YXw7uHwu47yYJ9_xpL-M8D1B8547Phx--ZDj6R2j6jDxLo-M8c5Y8OeOidnmneFtJFtJuto7LPLIHE40Oeryf8INv-16T-X0iC6utSr4cHYX_MrzwmrYx5cx031iN7bw0BQqvutjOZyg1T4BCxqKkpQJlx9gzd3Xcb1KngFRVE0-XuEUNbKj3gf1j46MP4y6zD7jEOD1D_PviHEfb61Pk8qAXLL_o8WcKNPJICkseU89UIUivwgEJmJAe5HgIPs3Q3Ut0y1YzpIpmOzWllcFuPiSB-kd7RYYpENknP4Ij7olsyU-2d-lXrNf5SvbtTG3c0CZFZ5h6NVlzKcrM1XGn3UL8s2BtW495jgecKkn-LZU7IuxBzihU3qY_dSVEZwUyMUQemF1SXjP3PHbHhYidJaKC5Tr1weDK3b"
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXSNblEIlukgGdt95QUuIMJ873zeFd8WekEl86XmP5HssRm2KOvN_39xHdgq2kg3afAXwAluITzmpCjXTYeJFeuBnq6rUxvGKNfH1N-ZV9zrH6osZxJzKJEEgmsKrNJjS3RzfHlEPEkbOSEqZA7L0liS61TTyRwKw3_vPzkWCBUGqXNxhS7377i095O9XXd2_y1_Q4asxphS5Nhs-p5f5CMn8brrwi3AM6gujlZ0E3Fr6jTPyuZ5rPks9_rrlpw8zJSSSn3D0fPUPjNqmaVMFf_Up2wQmL8_B_YbjbabFfqHnYaU1lD9VK2gMyc_lxb-tvYt0Lky0oKi9JJWZgE20gumey5zVFDGty2RTQnUE8ceWPzxRF3WSOGF5K5NWLi6BTbJDr3WZ3lfCJ6_aVz8YWFn-bf-KPwI5fquo0s-plWtmNwq",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXQ1iEPm53rq3-9pAEOmg_7cA42_yzWNbnnNd5CEm84GjGIFxkfK5LTXbP5x6b-2bodakoTElA_L869dn4v3ytq-j2x3x-baO4Gz7Hfwy8bGlv22Z-zMCqoOYDgnFaBLGFjRJgWtrp7C4ea7HJt5U-SZII9HZuVS_Jt1oC4KjFuotk69SseKZo3scYwlgxQjel2_gWfkIieKpd3wiEVIz4AK5Ds2hrViwjDcWW5YkWpxdmf4EsJz2HJDCE_8xXPb3Wfj7HxxvYeONMosXaG6ltXlTssWWJKm0AIb1EEx2ivebZbMCXFlKToYUWXBB-zhODDqAPfYEH2c_aEKM9JIIrxzkUPSDLZCE7j5M694dQ5kBKJc-ko02t0irybQ_Kb42uZCCpHvPD_xBoE99VNQC_1NEYw0C2Kv3pyqIaw5dmAOYA",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXT6Hn0GWqzHKqpT_2IhtR1yLlbn3458ysAGJajrsj_lu2vmt4S1imtfpoUotVY3MRT97uG13Sfkg1gwXnn_z15BHkX7Z6meJfyAMEWNrrsybQAja2hOzyug4Kkd-mWfAV0N-i1zn3etFfIFGHrofEmd5CM72KwmmxIuoAG-IWVeXKmlHpDuCfLipASgNA5RKiXxzN9DwdEUuOBm-CWNoKQGrjTdBlPbvhU_s0cV5g3dQXo7QYBeCZ3iwkSeOywVE_eVyXxk2MGbuIcztc0XMfR7mOTLOspQHlmTaok6XtW4fqU2XdTUNL0LxeaN4qERW3SXN0tCuiz3dTJe17xni7R0FR47V67IiiTkyf5o3EgtlYtxvRrogY7DCHtslP2i_H_OMBLyqTRSWEF3Jf-GBweWo8gS2sBzNb1cN7xDlhhBYw",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXTvqzwesaNjiTKLT597SzCBADgx4pVHo1q2hAWI5LOOXzvQI7tsY6Yn5yKXJAnr8JPNGfZpZyuhYl9vN63DW7OobCLOGvxBRZrR10XFzxXGP8X-7kpmMeI45pwUlPxFp8pQ93uk2nrNH8uZUbGe7bhY2Tgb_M89MwGsJKlzULS_xp26CBzdwYOsq2cFsyn7I0YAkScIJ-52Z1LERNClDhxGm6UkWamYij0vLi73HN6n2d87ylpHaa2eGFw_v-Jm-yrRtOiv5XIZxlwwIcxiRbXdo5pl3Ta_CQFonGJORuBVhU7AALYK9k1c5sxzJk8gK5RvKzTslC_Gq7v7fBRYXIyLdRZsDt_c0nA9MfmqizCKU_QGM8XLcbkQEMe0qgIFXA9gtR0dxAu6bReOpzW7ynvTnW3LoeGgfKsMsIuOfXut1w",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXQDi3JHS1s9k3-clYXRmG6FqyZKUdDAbz6C5NJ5eoZmSi9z6QlTMlm0T1cVT89PlCojlhsbW0dAlHbFFcPCZPDJ8t2flfPlQKoepcKKmIcDbqAI2LruzTG5bjJCr_0qq85Qjf8sV-YFa4uTLeKRuw9pbTGC3bcOIEJIYphQ04tHL5Q_ul9I4TNPS2G-BDR-aPbmip4o28ZpqA1nFUXL-8y_kZFnxzV1BiXOxlpn6X78YzL5PcEw0x_wCdYQo0BQj5NGPCyhVeiHxvawO0Lh9sTvCMfXnRgxXy58w0psJbZKQtfEC3zMrIsnOEpxa2aGhTfKljBCcr3a-HmuDc-Vki8H6BQSpoQdUgAfDw4acV0cd9GT-n6vYW1qmXkUdP7hthILQN8mOqIFIvnkNLrwq2x7wUQq8Jug6LTzPQOirBAiVo8",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXT7Zg1bZpw9q5EBvdpenR2xPh8jDtsRQd3qbmTXi-XeX7rk3D_a7IKMozRJ33MzUtgluDZuUftpDWp4XEnzcllqfzLKjsVwcJTBSNQhBgpPEYBw-eNpyKZX5O3mU4BbRl0oB_-mL7HGLHXqguOboI9gfpKWsV8GP--DDTB1tXxP3kLIouWJ6XqJW2eKy6pWZ2H6NTDVEkuBR_MF38ZbAy3NXWCFz1CJ6FsTpb9tw60xXBxuzX1sa4yjkghkTNGJpFSdNU06MSKCAiIDvL8hGqfvPtZhZ_fvSGYHVEOumhHDyAzoWj4-N_tsb9WGMSpPIUTKIZ03lQ33C29SkAcgsJU5X94guUDCK9dUR92bYGPZkNYj_eyfC7ieC97tJwt2Tir0pj0GrgGNJdyKHaMLVjy5K8WpRoFI08eONRqzOQXVqgEg",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXQ_TfkHHYs6YqUl0hSRGsxDqfpbATzRP5zPN4X1s5NNDoDwbWTDRtI-cPS1d626lxeQ_xG1eb71815s8sShXJSmQxlDj7omPUQfQVPTVgLhgEvq9HuhAi10I2eztc1-nk3ve3FobhDH8P0sHM4BRH_hgytB02wr4ODW50JQ4Ct635UA-y-tQr7Hh6lvvJ3AsxjWhYaxI-PBpGKpmih5HonnBw3owqFjRMJbbkyRXmjyvLUddz6Mv4CwPOmB7RzTxy-mPIHIa5VudW_sgOPYi40nIqMY7DWHp4axhEFlB59ATEyXaUfggC0NSAU1XxvbwU6PjNPqitfckDcrk37okRmIItsdNO8fxH72gGJc4IlEM72qdqx7vFcSePkQSQ_7V1YcnPIKzNl-A21OfyMgv8jb_Zp9gbo-x1webq48qE3w6w",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXQagfrlf3tgK11MS6f2fQtqYrq59-g9mopH1F5A7T4t9NJXksVilF586Y12N_0NQZtOgTcS3d4thqfzagolvaekqnZtc1dlqm-paKL1CG3fABnXHKevhhgJch3-1ZZkEwKHZVGfwfJCZRn2w4Z9LCCtxcWenkavMpzAI6-LV_GrHAP7GCI1cGetHUVxRsaecgHy9l6AiV4Q6Xzv7c8BQi6vsyk894h9f2IPKUSRGRGsTr9JckypDFDl4dxZwg0Zr7fRI5WLxmWD-WxJPNpD2z6VuF6a7QZfgjOeE4cJuw2rzpdfip8Wiga-FncEufdHPAiOiWgSi8gDTZtzN4qH4Se_L68N3QEiaC16fxfNjCqreDVQX9eEjMmneLMR2yXtQWC7VePLlu37oiB-6vuOVI-oL6ukLNsunndrRSJzBkFSYv9w",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXThWxzmHRrDnY2GgMBmXd7f55uPp1oUXtAR7a5ZfW9thzikxma5aOamrOHGvy6Wx1iTaa6r0FcsXo5FOOitf01tadKImugcqJrwOZiXygSMzVFQTe59cMNzje-S5l5ffH7Zs2Lt6ivnmDE-ETqvNzQKpv9MbY4sAtx0SqV-RIZui26b5NdDelpY6R-dAdW7ofGiy2E6M-_Y7l5hvxPzN3PXAEi32fSw3ZuJQ63eS4wkfh3GtRBcmhmtM2oeP0OOrG3n6O1hCD6gbOum4rAgkHIm3EJqsCTtQOOdQhtnGFgUvgZnvRQeSyua24fEIAYI5zvMxDlY9I2cQsy1JG8I0sDXqqAigO7HiaVANZIysphwhbLQR9VGd3oScrRhJJYKLiXYTSog-PcEMNVauVChaIO_I3FplzYTWB4CAlDQS9NnJA",
+    "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXQuQF3rJ4TDHjLwZSRYnLSBkbanwEyh0xG0PqyQUP6ziLAVfGOz7FQ_-wvJlCGvdDCOE9AGGfc6DOMrR--BAZ_necgZzyO0_w-xnVZLIwvuoG-5aUQ_b3xg4xI-wm7KnGHRuykU-Oegi55o_54_n91d2hpNf4CDNqefjqG6OnzrzMeOUWJ4aHbLoeIAHHsbaRNCsvytg_CDoyfeLlA-no8f0vk68RKuvNiyfZf94Fuwy5c-fN8BYZAApCzvrAiRyiTJVF0cDqSfKBlD-Jg9fHJ8DWPI9O81KThzXdYuJZT7j-GIuWpwkijStriddl6J0QgJKQz-zGnPDgjlqCsSzfa4o9EUZZfwSC9hZEMrP6nMVKq-2x-XQg5HBerN38UQU3SSJrL9WRS6BuWDWlFaWXeddHDdCx77-Uic6SBqNgKPg0YN"
   ],
   "published": {
     "about": "We know that going to the dentist can be difficult sometimes, so we do everything we can to make sure you're relaxed and comfortable in our Frisco dental office. Our first priority is to treat you as we want to be treated: with respect, patience, and clarity.",
-    "about_score": 13.16,
-    "actions": [
-      {
-        "kind": "Book / Reserve",
-        "label": "Request an Appointment",
-        "url": "https://www.friscodentalcare.com/request-an-appointment.html"
-      }
-    ],
-    "address": null,
     "blocks": [
       {
         "entries": [],
@@ -226,7 +220,6 @@
         "text": "We know that going to the dentist can be difficult sometimes, so we do everything we can to make sure you're relaxed and comfortable in our Frisco dental office. Our first priority is to treat you as we want to be treated: with respect, patience, and clarity."
       }
     ],
-    "description": null,
     "emails": [],
     "has_locations_page": false,
     "hours": [
@@ -237,8 +230,15 @@
       "Wednesday 9:00 am \u2013 5:00 pm",
       "Thursday 9:00 am - 5:00 pm"
     ],
-    "https": true,
-    "images": [
+    "menu_items": [
+      {
+        "description": "",
+        "name": "Special",
+        "price": "$500"
+      }
+    ],
+    "menu_media": [],
+    "photos": [
       "https://www.friscodentalcare.com/assets/images/index-banner.jpg",
       "https://www.friscodentalcare.com/assets/images/index-join.jpg",
       "https://www.friscodentalcare.com/assets/images/index-financial.png",
@@ -248,17 +248,6 @@
       "https://www.friscodentalcare.com/assets/images/reviews-tracie.png",
       "https://www.friscodentalcare.com/assets/images/reviews-joyelle.png"
     ],
-    "js_rendered": false,
-    "menu_items": [
-      {
-        "description": "",
-        "name": "Special",
-        "price": "$500"
-      }
-    ],
-    "menu_media": [],
-    "mobile_ready": true,
-    "phone": "+19727120500",
     "products": [],
     "services": [
       "Dr. Garry Phillips",
@@ -268,16 +257,10 @@
       "Meet the Team",
       "Before & After",
       "Cosmetic Dentistry Veneers",
-      "Teeth Whitening",
-      "Composite Bonding",
-      "Smile Makeover",
-      "Dental Crowns",
-      "Dental Implants"
+      "Teeth Whitening"
     ],
-    "site_host": "friscodentalcare.com",
     "socials": [],
-    "text_words": 885,
-    "title": "Dentist Frisco, TX | Dentist Near Me | Local Dentist | Dentist Office Near Me | Cost of Dental Care | Frisco Dental Care"
+    "tagline": null
   },
   "ratings": [
     {
@@ -329,24 +312,6 @@
     }
   ],
   "trade": "Dentist",
-  "url_check": {
-    "blocked": false,
-    "fault": null,
-    "note": "",
-    "published": "https://www.friscodentalcare.com/",
-    "result": {
-      "elapsed_ms": 167,
-      "error": null,
-      "final_url": "https://www.friscodentalcare.com/",
-      "html": "",
-      "ok": true,
-      "status": 200,
-      "tls_error": false
-    },
-    "tried": [
-      "https://www.friscodentalcare.com/"
-    ],
-    "working": "https://www.friscodentalcare.com/"
-  },
+  "url_check": null,
   "website_url": "https://www.friscodentalcare.com/"
 }

@@ -11,7 +11,8 @@
       "corroborations": 2,
       "dissent": [],
       "field": "address",
-      "score": 0.8999999999999999,
+      "label": "Address",
+      "score": 90,
       "sources": [
         {
           "source_type": "google",
@@ -36,7 +37,8 @@
         }
       ],
       "field": "phone",
-      "score": 0.7999999999999999,
+      "label": "Phone",
+      "score": 80,
       "sources": [
         {
           "source_type": "google",
@@ -66,7 +68,8 @@
       "corroborations": 2,
       "dissent": [],
       "field": "hours",
-      "score": 0.3,
+      "label": "Hours",
+      "score": 30,
       "sources": [
         {
           "source_type": "google",
@@ -81,39 +84,25 @@
     }
   ],
   "latitude": 33.150598699999996,
-  "location": "Frisco, TX",
+  "location": "7110 Main St, Frisco, TX 75033, USA",
   "longitude": -96.8224939,
   "name": "The Heritage Table",
   "notes": null,
   "open_questions": [],
   "place_photos": [
-    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXRnclYTgjwp6XZ3TIAWz_BhKkpMuM0xWfFFKr52vwxcNStVWK01AKBTNdVrtrO0YPXWgZf3t4tPc9SG893vgLkwLGbi05U1Q4Rbhj1sUX6UYh6k1eDK5K7F1ArLZwA-vQV3dxYTL-1cpM9RZ-K03ZAKuakCAjA8Htd9znjq_YPER6Kzy0dTuwEbn1D63SdlzM98TcdeUJodFLCZB_LgHIL4X2_gVXT6lyysb0HMDAk3iNmhP9xi0Ij06p0MzMAxiHcS0HA5AVny8BIRZ9v1rzJFs1DYz3kq6KdiD3cZ2ZrAQR25OE030d8DEmI_zbcxDNkDadP27KfoNl4vrXTGlX3llI1Ztr4MVIjogcQ8Mh92kOobVWzt7nlw9NYpL1j29R5SsPSw7fGTO2VYKHreS2Tou3OI8uzJegAYjhnE2zLP7wg",
-    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXS1kW4asKCGVyMaLtZk9mceq7Jvu5ZGE0uv8DOwWfRFvJRwRgGJX84bJYEkPC_DMyESmBIFit75vpKDGJJswQSzu9R1DZaGZ1a6GNN4yy3MiSDUjam5D9WvSc67muRo08G5S4Fsb6M14E3QugybIaViAqLIi9IwM0HTV8Q6F9VIzxhP0PAIdpH3_rrHOZ6hT2XKih9oDqs2s6OlAmMktHUYiaalkrrwVzmO6T6P4l8eRgW7lKCevdbzV-S7cuaTD1S8iAMNW5W2cUiY9yUHQehtKa60lvO5jmeKbU7NfZ-Nfk7InBTUITBQd5poGFvO3WTJACIqGDVe89n9ofsb6uPhP5wHpmAARLFvpY9VJqsHyfMhTy6bYmleBedJ-7sJjYSZbkGHxlgzOfeIdZSo_f9h5V2agf2q51AZ6p5XmuRLeHeyf03v_Fu9_7KeWA",
-    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXQ9gezzdxBENmotnGvfiBPORux-1q3XWGyi_53BIZe1hOK89yondT1-H5cRUqg9K6nSqDYfVJEZUZ_Sadn6LMknpB7IEAL4bIHUhFR-nJ07PR4ceL9h38Or_iuSvWiNQNe2zYC1v7Mn55P0fYOKIEBncSDBxZEpXgFVDN_WSpFl78LR8JRYeBmjJIYS9vgW_hru6OUZuoM_RybjjM-1s5zSIMmZSXpTSviyOZOAmny4g2SY60YbL0YQdbXkcfFZ-engALBXS8EXov-gVP_Ab544bJsvYAzrFUaAUrvU1MuYmomRXtNirDntW9GwV71VHyBlAAwFWF5yGsM6xfvRnxlCQVlV89OzTiLtctsK0Qaiu408SExHHMCLrRuEjtN_yK2vraY6sKpAatEk9oMAK_TCM8g3c9I2yFI35nGyoTMe9A",
-    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXRsIAYS344XGIV8eC-u5l8F8KTsVKNepwVv20MxLkxGC8z4-F6Zt0970dPLflFWXElsHcdm_JzgzTsUErTDYvykxNbSrtuz7G-4pw8_MKnrzpXqgox5uRJxd_-Ut5klH1n8NXWGC4yveMQQolZrtg6AeKqASixGQ1OE-Q0rfSp2CpnzK55JYcYGQr2GSiCxB39QJ22A1QunhB29ftI-rXBLL-xX8LZ0txvefdLwRVPiy7gMxdb2zUDx9kd4On6wMoysHD-GZPd68SdNZtcAI-2KzpcI8jknb-agVXkae_VHWy8nyxDatL0_BDpQNMVCVRm2P-3h30Q0UXwm5HhsI6JnYPlOuOjD8RuYE8j5jm2gKlzetJ0-ABlKRe8mty6crWs4yJLLPF1DTmC8w16c9jUrq3_hxNJmrW9kKezTg76qNRpU",
-    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXSSxGPSIlyoQc77dbZnEuzL4OQEqjmzJ0tzmOckQEho7w82b171Rt5az_AZsMZFR-D5yS1ciFMPPSnD3qI5LXcihol02-ZpuuXBIs4gKIYZkJ1sc9vCjIUj94uocTkHTr731Gju7g65fOW8zXna5WCTEmU5kz8_BF11X2f2K7ABmLgcTNo3WM6SV50TV8LCFtDfX9WPYrBA_BfnfQ6upWnuMQUdl6VKB32rUqd6rVqwLegVJ9bxoeZu9aIpW7QTja9PHsUGk54QovIj115yrGnCk2o79ltVKs2gaAbd2qjowppxhaqwUok8aDAxD4jqWvIv-NYisyvveV3N2D7VKt_FVeq4_3PPYJECQyTwEvymHTF2rja0kt7v2wZEGCxifyIBJse-R1t6mc7Ri9hOj3InwV7G-EIzl0mW1JqVyyLi1oUl5sUvR19bXhsWVxHr",
-    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXSa7EpPXCmdOg0smbQH1a35SFP-0GWadwWdhXNaN-5St1E9xikwx6X8LvPn16oyvBPxUIcXPqSaOxTgW7WLiI5p2XCQRejwqK_Tq10dpcKkwout6AA7z0GVqkLM97Usw8XWtif33UrlPlSKsbFto7kdG4vr5WJr8XczAeFWCEi2ljkRf2M-Whq4T5LEs5D6a4LNAPmFYnN9BDDNKPCWywwVf5xk4934AGe9crl_nHO5u83KXhFfrszrOnBdkkwBxj1iRhbZBj38i-ZEVoRtYIO1W_b4k_vByYxjjMuzjHI-On8jRGxvVcpyK6iP12z1KW2QkSl9bU0w42ilIxYon2xFFMv7XJCxAT6WC2KCn-u5AfjBLJtZoZ1IuXNziB0OXZ9yX3FfsMS8C3huvVFUCRteZla3-qIuCOLTqjpdL2O6VZkuoQcz69CoSCshG8qx",
-    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXQH8kodBP5RU_2k6EFCPmGueNKv70GP7bbNvFKO1btEkBzPm6dHudUDBooPaKSmNTCdYPNYiOO2lk2kigpMpQxxmcc9JKIlf7iNq4HFSpJXNTZshRwvWVzhwZ0P6dTAVtyrJtgTJjCReAU8FX1EBJ1zyCU9rtbU-4wTu3r5xkVjVb3oSiBGXYHpSfUBvA81dWzgeLzvk0cuGLmAV2bZbwiXkfWkBvMmlNFdCctz9ABl2ZqIQ4LIP5QunPjm0JvoszH-Z-WYHOMMgxVwcKoKT7HZnjx8caJL0DKmoIvLlm0Vw0EUDK8AhRlb7Jfj8c7AzfnMG9_CqOAKXfnD4SFV-1GzchEVuNCmLq_uNon6tV994gkSOUWYPFY3_F4FEoBMgXq8e7EsnRhggrjIChhLFKPs5MjYRaa4x1elEOTUsQOfHC1su__Guf4rsxAmr5z4",
-    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXT2IIEWlogeISo6D56vFIAI43H2zXbEF7QFI0wBwM0F5PWnDwzMyAgemIT1VC6hxrOSVGVMedOjJNXaOXi2ZTBC8uj-kRTGIsMlYlljUR-Mcj3qftYAZwlvRvJePSQBSMhsotnhz9FcsFUcN8vVZLHNLSCTiPcp3jKnTzMZCnlk2UVKv3HjxzO4mm2Uqeir20FWGER0NFrIIt5WqYDnE7SwKfr4Tq_grLxZmBnr1M2V1_Us1nE-938Ij-ALXiZpABsryz4ckN0LppUP_iRy2YhYP8GuefpZtkI6F5HG9UHFsYC_NX6b6CaKYDmKR2q9XkfPLu6QcZm7FIfb7R3-kQ1Y6puWj1d1kWk4mlJsnuOyYr_zRCxdg3WE2GPjl5PxDz42BMFuJw0hW7WsZPZeJAQXZjok4Yz97ELwDTa2uTdktZfw3QmSYLPLZMJDng",
-    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXS81T1RUhiFtMF1DO6QVqTAJTMZMGXYx9XqFReokqIg4StfTCfp3h6AXmOMUkfQKcapCDCIZuQWAVeJ9Q42As-C7wXQ7UOw2BKwOmE_GQMBkQ9eEh2OmIE81fahZhIcMFSAQupVh8e6XzethYYC_D-mp86Rzq6OisqPyYTjsymPnbmclhf4A3zuKm8frEp3gFgX-6g_uLcDuGP0xOa6qK8TRGQyrcsfHJk3sBrvueKkpifTJYqfgdnDvBeCVi8nDa3kLPGp8yEygTGua_3BsRJKQ2WvrIIXIBkqG7OzVgjIQl7YAyxzEakv6XUx9Q1WhJ08wgOrGxvgPGBOLzrfIny-dZgzmox8ucCavyxA4n5Un7LmTIkEeQrCeDO_9quB6zTGYzcO_IrFM4TnJCFErA_yorocm_Xppxmj8L1A1f8ymVik4JwclRFI0beVzIyh",
-    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXTl1PMolwF4RAzEBWbabkcULGaNChXcOS7Axqgq7_01IEm9gXOyVet0P5qVc5DcLeM3tuTzGd8bhDHXvC9DwfefytiNQpgaTr7ql-G1rcnZ8oNslXoknTK1B95DE-59HbdYIrZRjBUYEfnLxV41hr8c2mv9SuVqrIRrvf2my99yKLEPEv2PKMhTWY9Oo-A9hJg1J3FnPRhPDMNcI5uZ0_quYgcIfhKtYD0DB_IxdMeyKqvIxEoaKFUnl8ih0VQVzmnRb7LD5N6REK2iFsYa54NogAZK23nIwRhe2R4vgpxmUetv62brAZZQ8gZTjzxchd_OJBgWqyPZ-sMwbaqj5Dan-VsOJUxdnJExSw4rPAiQ8z4_kg6WaJp0Euf2xXxNtdRnMBoiUNseEiD0XSoXCOQRVT5nw6t2iR7qO51ccMjNswBH4EgQFWNEIGtKyrI8"
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXRWy5DQTYMzXX775TFQEWhpDrT2tOEw_iAambzNjET23o50wPtnvuAjU8AVMUwrAphMQPETipubqcvsczeeKPAy2KTNZSRuEN83eGXo6xl50GQev1qR64IWJvEGVz0_G7m8mvGa4lKZTZLiTV-l7lmVeIBLK3OUOi6Q2vhgYlHc_Rwrtoq5iK-6xB5ORgPKclOA2iUFdQhARXQrwhPIFA4T_XnxILAxENjy7ZeoZlMuTf2t7etFsiOc8MO4wstQX97fII3FyA9yH7KwIxIb_SIF8-7mSlr1EclpLhfwp9LzKEvs4B2vGtKchMJ8X2rIkgo8KcglZ1MhN7D6Be0dzq3C_R7HLhPRaWUBvvFxB7uROLJGfWiEjWWEgAHGCyGCBT8warD89eGuPlNi2oRM8Ieb0EUMaBDcUff6x3l18qWlu6k",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXTz6B2v766w_Orj44pNCVHj7ekrRwAJDINWnjb0pthvtBNoy2gN8ZIJhbcI3np4WcZcXdYWOEgb80Zps-vjGeYlOnpCVwSgi7ZOQZugob4dDv7VN_SOoRMfNWmhzCT8INZ09j4jNV6MHk8HTO7yNo07WcNMHxuIB90vOlgRtBEUg56CEL51AbyjAVXZR938r8tPcZxtLScdp_shBZYVmo5se12rRNcZLthq-EhhH56Sa39pFkFY1su7bX5ciOeyDr0RxAPSX8T8sEC2ZQOUsNQMcImaRynRahDwYZ_e2ZGnHOBk-3cCpI8XVEBRWcygxx4hwqKBEYgH4vTk_s_s5CH2WyDsB5wR148JBYcc98TBJUPeQZl0pvtldMWUsrLMErhCHFVM55x04CudJGFOlQ36Gog98Bdf3V2j-oLiuF6XA61IAPO6Agqcna8NzA",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXQxNJn5inCOAymioq6xNrT7uVKXrpjCSLAgv7X0G_Q5LT-obGmHDmxxc5wqXi8ouUC0E44M5DfBjVrDBPVThmaKMWdYUyJPubUF8F0FOJA_LcYE_YM5msP-2ixjvdKfWSEdz6iVIfvGB8-hgJBHf1Q4KYu4u_tfCpJGXWjszAwstLH3h1mLuHS7TYloPxQBgJ9sr0WWuQc559Ey6w2oCNA9jb3CzHKwTDf10imnj7Q264fogXLN3XqNddFomtIHXwLniiI2vdaRVZzDmdq4eLQUXp_ICzzbd8PwX7FBlXsZfnx8fUFErq6OZUNk56KV6y2r6Tw2U1LTxQY3XageWzqULRvf12xTSQHHZzRWflA8dTLsdWnxLRv-1nPvtn9-pZK-yidO_Hb4aQQ3EaHq6l6CvOn9ZKakvueT5sfdYLc3ng",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXQ_Jfe9J0JN8-St7kdpn5WZ0qSzcmrt37_yig-NtNVFEykghK872ThoTxJCf3tijsVkT3zTrJcHnMjTJZmZVRwBlclYu3cwX2nUpCPvRc6YX9RYMXhni0qg5t6xaxo_noTN_sl5FWJ9RLc-2ESSZhjyqnGT9JDwVo18pKYaA_HpilmxPZATGVmRhoahKitWXomxs1Fiy8WWk24lnjH7_lURuxAeNRq9mXnudPcHn_uvAQ92_V_5hAMFAW5PI_TMCGhY_Lntz-j00lQzqL65knIsyymRTI-OzVmf4QKqmWIkKa8hv0D9_BhLoqn3lYEei17sL2NsqEn0EeSJ3BXeEbCLezlFNPReBQ9g_nU7qtDvg0EE-9H-3a2g_wtGKl5vfBSCecmS9aZyn3VlqK3HCjmXcAzvMyewCOBs2xxI42KOf59g",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXTeTL4zJn_-sjjF14a7Zt6U6ml91ThykhmsR2Kx9dJfx91KjUifAMPRJslJGuuGa9cJwcmCpl4nF_uVGo8pvQuSvL_fSNXORUbip_ssdJ4wVTPrW4Co02f9ZB7L1f0hr_V6Uwd3gZwfTPAC2aGBd4_elx9CeHrew04h0XabH6tFCuGvf7Ww1cjrve5GmK00AtO2p9_faGVwWF5P5O6LtXLvLwlJwvScKGm7HFGB3RgfSpwggYmu4aJ0s2V9FOOoFwwE5cbWGHurIGc2a3aSdyXDOrXG6xyVkFuI6yulPoSA-ljoT2JTm073fD7S0y5hh-GSI87d40e-hVigeJJX_7IbPUaZrmUsbE2rvUWY3DJ4br59dFXndbTzYVdiYuB4Q8-X-LT08eaX356Usjz5zmqU2JFW1NyFv_Qz_Tw2KvuaNxozO4BbaMJvzOptTJJv",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXRM4Brgr6dYAkOgjTWm14ImkA9an54qEZF3A0bsIoGEshCkq0RCh6U0qRvHzRws6bzyFSsLjx0cOGAutmlT5poPZrpV5h2g9QbuH3Gda0eALOcpxy3TKpHSv9vOA14g9xH8YB1lv491XJmFsvPO3HLrvRqDL4vZXFLtpmWot5037VMua8jBpGln95TypWWsfmGPAJFYfhpyDfHDwNPdvNu2aTSAXYFDSV-w7W_iIgWOYv5KDplBUHz38msnjFIMtxoW8vPjJIhgVfw-WARTVRoRlvdE0sDolYTPUVIU4YPnjbYBMA4Cg-t8KPmIqmUwzb90IG-6uhjYE9W89iGAZwZHzgmNB7Ujwu2TinfjNf36RHSUacmbV1fejQQSduiJbbdSMzV3dI_snybbbGzyLVPRNZvHfJWGD0wdS0Wv21qka5VkYZoszFVJ-Lr2Zto3",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXTcc5te8fF1YzAzzooU0MXREoP0Mhw4vTJn5PmIAeALdExKVGniAJQ_NhoY1yw6IEYO0qEK8T2JeEgzeXZXx7SQFV9Pc8npzTQ_Yz4MARZBHtFLCuzM3B6vq0uulaOzIaLOdNRf_R4QwknQFRZDmZ6eTyQl6f8vcP5MgQsL_ouOwfMKkhkwxx1o4BCG9AgcACUNfkE8vsoLnHcnO_MbVb29_o9CT3hpaN-53kpkDP51G2-KsPSsW-FuoGPlrGncpyJTlX3fPXe-qf48vMETcwNbAUfr57umZTvfdou8CBrlIu6pceXk2uFew26tHBeC19yPskBuq0mDyeORWl3NotkIveIs81iSOuR2VaFnvyQundoEHiPCDcFiA4MU2xNtkIqXA-Rh3lmG5V4O19uj5EFzjp58KbPaXJj6l6So9ylF4p0hQRAeFO61qexTrUIg",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXRh921dOwlqA1ZpHKJn8a79AJlGqaEL6zllJ-pWm3e97dU5UykFmxFvLsz2nSyUpB00NXqQKsFbWctxO7GwX1j36SlUsCUmH59PBZ3nzwg8zzt6bJqwLUmhA8SRyTpz5-jplDo8LOHg8ODgW9yoOr6O5L45BATreNG1SUcOEqqwJKy3nQC11Ku4E2bqIlDynXufaQXDsWPnwzbFPY3YipyvVKoRHCo7gX-heVM2H_uhNo8XFhwNwRErYaQwGUc3OcZe2LTR5apwYrYlT4swopXM26ya58UJ1RoRSwYuaE_2_7xIZSaa6GHr9o-hpbq1NSxC2CSmah75nkL_IbEKz3tzpJ9-G3uKbefAv3NQr0bey2PE4OonaZb-ynIvEkL_0OaSEoGVEm5dNBVK4yINzRb9ZmordUr__5OG_Mzjh8l3xNrXPXOe02ASETcWtQ",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXSrqtyWe2KovE-zUg8V_LZ9GFEtDsYVai_-VHP8Lbwcn9AtCvJ1HzYXxmpzwijMndhzr10FAZFyWBPTZgSzXkbuzg7NkTy9ZEcoIL_VzLXcDx4l5EWfMbA_pmiix8dO_nusHAUGxL_W9NtAwHx4YKd4z3P_GRnoxtit0FZsuTHfzNRXPJmGD92U1dw813eHDj_DQCZIpIwFSXKcAE-okJSKz5bcW_nw8XUwAieQstZA17fG2qxSvP6eixzQonRgrr_uqnx5EVdmHCafoJpzHXBiUW2IwObZP88-zKB1KtfbqOHScVtuwGX-N68SjJThim_pMgnfc7zsLZX3JZfXSvk5oeExb46TEO9ns91-ASptoprnzy-AfZ25Ep8TR2_yH_eJAc6RPRrQSSpCjGhfS2uCNjlNJu-oYCwvoh09UUqiuyvsTr8p463_S9rNLF9X",
+    "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXSILp-KCaj8zIfvaSXrAcA2vpJfrsZDr2psBRgzpZz_GJegBInaXe_Oi73G4H5z50fPOsSfMs6N6Oxp0y-wGb0foBZa1A0GEfJ1xxGruiGtqvbCWljaP9L-2KjV2usNh5_pglPiVK8Tf_IM0KL7DLq1WsGphwEzwDzidxIKYMtP1jzyswpyIj7GeAlU5nUo7js6rd5dlPwenPq_kRJaVrb4LvZaWR4UjlqWc8UQQjPIJwP4O3FGGFesoT_kuMpz3RVwBn-grmataaYpDzhYH458jROb-iTecsymZgRhqshSfQJ8A8BJ_mQdVj-gyDTTzxjBQYRt1LvTi7no0A8EaCbt05o0uNp5Q5Z0gVfCs1iG7hMK3YHDfGa3LGB0U5vMvK7QlC-Ew7msv3aTZzfIKNplVYpOlyiBptrUv2mDu2Dq-eMo8QeALs5Mdpa8kVOv"
   ],
   "published": {
     "about": "Our intention with HT and our whole animal philosophy, is to take that same approach: find these farms and ranches and do the most we can with them while wasting the very least. We want to define Texas Cuisine not by running parallel with a stereotype, but rather by finding these ingredients and using whatever techniques we have in our repertoire to transform them into something exceptional and memorable. We want to determine our cuisine by the food that we can find within our reach. And we grow our culinary culture with those who grow the ingredients for it.",
-    "about_score": 12.95,
-    "actions": [
-      {
-        "kind": "Menu",
-        "label": "Menus",
-        "url": "https://www.theheritagetable.com/dev/#menus"
-      },
-      {
-        "kind": "Book / Reserve",
-        "label": "Reserve A Table",
-        "url": "https://www.opentable.com/r/the-heritage-table-reservations-frisco?restref=993640&#038;lang=en-US&#038;ot_source=Restaurant%20website"
-      }
-    ],
-    "address": null,
     "blocks": [
       {
         "entries": [],
@@ -227,25 +216,12 @@
         "text": "Rich Vana is the Chef and Owner of The Heritage Table, which opened in 2013. With a focus on presenting his guests with innovative, yet accessible fare, he dedicates a strong focus to sourcing from local farms and ranches. Having spent time in many kitchens with chefs across Dallas while working as a culinary writer, Rich gained tremendous insight from those who drive the area\u2019s culinary culture. Rich continued this passion he found, and strives daily to build on the culture in Frisco and North Texas."
       }
     ],
-    "description": "The Heritage Table is located on Main Street Frisco and is a true neighborhood restaurant with a scratch kitchen serving dinner nightly.",
     "emails": [],
     "has_locations_page": false,
     "hours": [
       "Sunday \u2013 Wednesday: 5pm \u2013 9pm",
       "Thursday \u2013 Saturday: 5pm \u2013 10pm"
     ],
-    "https": true,
-    "images": [
-      "https://www.theheritagetable.com/dev/wp-content/uploads/2024/06/HTPC-1.png",
-      "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Short-Rib.jpg",
-      "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/IMG-0959-scaled.jpg",
-      "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Peaches.jpg",
-      "https://www.theheritagetable.com/dev/wp-content/uploads/2019/09/mg_2795.jpeg",
-      "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Fig-and-Goat-Cheese.jpg",
-      "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/garden-tomatoes.jpg",
-      "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/housemade-bread.jpg"
-    ],
-    "js_rendered": false,
     "menu_items": [],
     "menu_media": [
       {
@@ -259,8 +235,16 @@
         "url": "https://www.theheritagetable.com/dev/wp-content/uploads/2024/01/HT-Dinner-Menu-1-17-23-1.pdf"
       }
     ],
-    "mobile_ready": true,
-    "phone": "1568175315",
+    "photos": [
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2024/06/HTPC-1.png",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Short-Rib.jpg",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/IMG-0959-scaled.jpg",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Peaches.jpg",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2019/09/mg_2795.jpeg",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Fig-and-Goat-Cheese.jpg",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/garden-tomatoes.jpg",
+      "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/housemade-bread.jpg"
+    ],
     "products": [],
     "services": [
       "Dinner Service",
@@ -270,15 +254,13 @@
       "Chef Rich Vana",
       "Building History"
     ],
-    "site_host": "theheritagetable.com",
     "socials": [
       {
         "name": "Facebook",
         "url": "https://www.facebook.com/theheritagetable/"
       }
     ],
-    "text_words": 456,
-    "title": "Home | The Heritage Table | Downtown Frisco Restaurants"
+    "tagline": "The Heritage Table is located on Main Street Frisco and is a true neighborhood restaurant with a scratch kitchen serving dinner nightly."
   },
   "ratings": [
     {
@@ -334,19 +316,6 @@
     "fault": "http-link",
     "note": "the link on their listing is the old http one; the site itself serves https at https://www.theheritagetable.com/dev/",
     "published": "http://www.theheritagetable.com/",
-    "result": {
-      "elapsed_ms": 117,
-      "error": null,
-      "final_url": "https://www.theheritagetable.com/dev/",
-      "html": "",
-      "ok": true,
-      "status": 200,
-      "tls_error": false
-    },
-    "tried": [
-      "http://www.theheritagetable.com/",
-      "https://www.theheritagetable.com/"
-    ],
     "working": "https://www.theheritagetable.com/dev/"
   },
   "website_url": "http://www.theheritagetable.com/"

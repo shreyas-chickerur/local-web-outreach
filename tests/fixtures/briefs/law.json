@@ -25,7 +25,8 @@
       "corroborations": 2,
       "dissent": [],
       "field": "address",
-      "score": 0.3,
+      "label": "Address",
+      "score": 30,
       "sources": [
         {
           "source_type": "google",
@@ -44,7 +45,8 @@
       "corroborations": 2,
       "dissent": [],
       "field": "phone",
-      "score": 0.8999999999999999,
+      "label": "Phone",
+      "score": 90,
       "sources": [
         {
           "source_type": "google",
@@ -63,7 +65,8 @@
       "corroborations": 1,
       "dissent": [],
       "field": "hours",
-      "score": 0.5,
+      "label": "Hours",
+      "score": 50,
       "sources": [
         {
           "source_type": "their_site",
@@ -82,43 +85,19 @@
     "What is their street address?"
   ],
   "place_photos": [
-    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXQmc-7zwS57lt4jmiV6OSHXkAwBiqsmwKC85mjBFukmbUx5joqtoJnHaY7DNsqm8sSzRKXB9WinXyjIdtNluKb7LnaZZus0aHlxhywkc1D6QAF3K18MANYam0YKcWBOpW4eZiOrfY9Kxh0dl7SqbzeEnOWjCSYDxpT1_fCGokDPzdfEKeuJiynEUrp2RT1ilw3CsL840O9a6OEa0BgIUDDdP6JcPfHVbv3OrAwziYiwAikIalpqGlhGlQ5_FFM0PT1zP-4ccGGkDEB1HUDJguEcAypt3ChzQ9RcSGEH-D9AKJDZP-qwmfiLjMN42yL_L926f0otbqTBSLw580GInVUUPa9zxTr7_3ghW82rkatiS2xcz9HNtKxPd67oDTkAyl2He4wNdVKZcDr8ipuqZNPuSIOsPVt4-lcFuSVWKlU",
-    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRkGzTlrkkf36JUyNSarpCy4lzBg5bu6LO0V4_-e9Ci2cz7rzN_2Bwgnshu17N5OGycPeJ7rvyX7QBoMC-l2ftHZI2DGE3usr6XLTozjG0Sbqxn9qayUBt--PDPylokEWshefYAhaZQ24h1QbBHZTRSNzofTBYATbd5mVDh-GRh20ad30jZ8u4xaO61y24QCQ0X3PwvTt0b1H1PR7xKUxLGvaMDKdMcWqRBNkPo5cS9XwFR9ewF5xcuaTx6kAgVIK8XDjApiDgUqC8fZ4tACa9hRwVjQr1d6eSoobr6JixLq3IKLty_fFYramPPhPa_BOCyks94W--pnlTe0grNgdi666m5Oes5je5reIMJENXBuLtM4PRBm45gu9oagmSSCxAZpqwcq63U4IanOHSMqR6ETV8CTNbFvWKh1uVSj-A4AQIq",
-    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXQK6T4lB8jtLM9oAnJk4iMtNjhL8MBaXZhNuGjbYLUZdzhPjSJMpgxK-mHNY574pob4npHQIve5QRtLrKb6A6JvqDx2EfHDBJd587jI_d84c76gF5mbMfDFa5bOE4gCkkZ74GsiDK3hj7OeSSKJ0d7ixKhd3IfDSs6p3K-8X5UzHkbk6fhV7si1kI8Sb7EG9IH85TgJnADWiy8T7NtDhZ8tePVVxEbROmvc5xtdoCQAB6Z-FKUTSJWyeFMMaARo8px5BSC5r_DiCKvgXigkFqjfNvpGvlE8PVtrnGpuY86DZ1okU5u5rN2lBi05dTfaJhuYI6CGsWl5cQG1bf0Ip0Nx1vBhg10mRiN2FIO0GLyIo4WklVfYO5dkxcIf_rnUQBIcEWfxMX7TDAdVCoegDWwFSUE7HtAbxY_5hYdpLyoQEA",
-    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRGT6MpdTnQZ6gzbYz0gV53TQzgZMCuunyYuewsKw-DvM_uSVsB0UfWbii-3-8ZB4m9h8NpV1KIWMRy5-BKc0sc-CAMBZu8BfHBAsg00jy4b3f9jQtgtg1Wp4kTM1siSXt_DZLzcGT2ORQSYouRSHWWOR02ga2J_xKj6Q-aGHQrljPPJyRVbcZ0lM15e_ac4QYDR1__-N_sJC0lDNvg0JnmGWAVFpNrJ9_jtHZo_TmnnG37LdUZ81Se4RvAwLDMW7QgI9Ein2K1_f_-mliZBRIbgu3xOp8GBhkuVcup5_Ox8QVoo2nNrOdT9JxGNHgMkVKlfk0fq-94mtEkmEkT307s9B3_VFRTxShmNdOoT0xaivbUdeMyXnUt3kWH-FFDwiBrd_TR9OdN2HXMLDqe9K5ULHQznvSYST9pMNJ8mSGhCXaw",
-    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRHfKuKUDEueLXJKPDyMUyjqPxbVDCcqY7QsUpqTJPGrh3KSDybGounm45haysy6Y6A0P82DnMpibetgk2Imaf5k72sJwPp32ibPrylTfFLAsNYoKbKc1qVkwkkcSzLCI_QY-U5OpLpgtOdC0K2s-n-k8eamF8qxCwrKwkHg6RnXojyyk9ILVZMer8fNXn9-jUK2y9f6GcZNDXMXc0lPVVPQdTHwamjD1TmIBvQxM38IQ7lSKqGFhc6hYGLRHBHkNUvdQUGTD46uF3J7hL5iTk2NIQ8nJLzcvzgOVAmFEmHqCid0X0qTpTyzbLW9RrwTYJ7G-ZnGKqIKTZ42BNHgdDBfDJBHEfNf4gdNio4O5ZSi45vG4Q9pBQIMlF2sCAwULMwcJpxZ4T4EWcR_gjKG0jL1nXP7KB-214VNEvm87WV5JSiC3NJAhardKV71w",
-    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRiI1RNFQgsAj96sC5v6uR5gfMmXdjadsodYImS2Zl7HHPpXP8Wq77Txtv3olTk7Awr60WG_l7diL_qPhJO7Zkoz_j6pxOW_00kIcJDiFCUAfOeIJORpKzH4zF327HCvFShuqm3TvobK8aP8N-6r9Levii2FxFqcCZ3MiYLC6Sto67srLKgm743kgk0S0HSVC4Z93eGwdrdQR-exjGPzw4XUtm7g8TpY7jcTQgjP407tMvFF0-I9wLyCSHJXEjlm3TacdZiz6CO9kn4bMqMXgNK_mnZS7o0-UM86E0NKWKk25Hak-9ZcHdHr1SskC_kz2qQVQyBAgvFlvoQW8firdF_KKmfIw_n700QdNhszGGezgEJj3jWqolYBt2S8iddFTI1uFBPycGp1bb7dbpH--vSx2HsknlpiLsvEq9amc7vtg",
-    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXQQItAwHzOzARvam1azWALLXCrGk3W8Fz2CZpvGj-ZaAR29GzC70NsGEZJnHtsmyTcTw-6fIqeycFJyThD2irI1paz9rVhgxLX16Iy1MW8a46hLuRE3ScyUZQ7OJie6GJYmzWxCI_VpWBKxO6jWoBYHv9wj4qpWi0MjP6R5emsjjKStihY1VqyzNWjrK4cT8nAbx3C33CA8g6oIQIotqDiWXqeHLzbYqAsjn6wqrMQP4Gjrjc6QRxWFP5fx2UNlW4__kBrIlwKPAh23HTn91vozYKYSw0pGX3mYRYt3wYphztPmlJMjCw-9n8aTtlZB4RBHfRKjPI2jCjUeAJ9HwytUMLLVWLA5JQKMKqJbmODVof_VVidAffQejwmF3bqQMWIAarUD1mTW-NP0qCP8lChbe1HkrPwhQ-u1wvNLBmZEDw",
-    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXSOAtSCkjCDT6rcqM9D_zugJzNyl2Tve22x4t5Y4vC_PaX23FEb8MsYIXlB0opFL61lUK0RS9Z2_xWI-ILH6hBzIoMzIYFfcEzujeNSTWj4yV1xdZkWgV_oLhbOZM33T_17jgIkRNwuoTZ8_eUIHdXpaYt--cdu0S8QVTHxxNZtqfDkA_hFvDoO-qcfyo1LHa9PCoBdRH7eCdzyFioyikvkKnTa9WSwf-LoPfcLcFnU50_bU91zJvwsQTe9p89Cnhzs1b0wlG9GQep8iLARiA7scHk-Zo2gtVhLmrYdSY7p76v4kQW22IBezF4ePQZnH1g1bbihKlf4LsUIwKmQ2fUzJL4CPaU-9Jj09Z1L4P215vVPze5HtRIYSsf8sQT7C4N3Q8VfoXYSCzHHoyKN1JoNc5KNNkSL-MwMpoEeUsR5Gngu",
-    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRw9Uj2v2xScf8egocwbr72iR7IKW_DNmYdUMWXz0TUYQ3LV7lZyFqBQhAm5Ew2-UQYK82-HcGae0Asgv4QrjQNa9heO1e5U3QLn1hu-EW3JuS22GKfPKofw4zqurdfe5iFNo4sxuh1eZ0C5bLoKmmH7intIoZRoBN7tdChoQ5dXL8oAHsYa4C1CDn1owQUfgNvYBS8XhZ8GR_TKeUb3Vmmu1plrZj9CgF3qC9KspNt1ylOxMiQbsExrM-zix1Gn-OUY8Df7BsmcnT2JehbgeWvV2ewRaOTT16WzCCD4hl3CNDIEcEPZi7kr0CfTLBz1oXA6bJ6bQLxM6oo7WcHhReifcDoqj4PhrRxnuGqo1B2-NoKiLYYiAvlXVDgFJ5Z2JE1Dzo7FC5Vfg7IgC9uoigb63Cu_NSV-xd7Sx8y7EQ",
-    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXTYowoLVKxrobrZDbTa2NwaZzKxMnI7K1AnSZqxu5F7Hv9SVfCuPx4ZmWeGUmEFs4U2MSPp5XDNn9Shs8ZxJCwKdQiV7jbGIrGsyRG9dC8u6T6WvhBUzPPxQCWmAE1N5WROy0mp7qvP2jk3bwC7Yyno2G5DnBCTBrWVbvei5nVbLq0f5tl8uWYEzun0T8GvZhYS9BluVMxgdUxxLjxwoTXVpCe-JmPcyrV8KZMcYUTDIhM3Xd2XRSUgJMBbH_4h8KPyjKMTJFlE8nW-7hSMiwRsT4gG5i5T6nw9j9V0Z_PePwBIrrO_8zabuEDhRGsyXei35aIWJ2ZV-hj1CT6xywD-jZkeDrc9Pn_uBujV6LaQQvUorzvbZP0TMrz_GCNL5vj5ipFcQrhFj0ODnMoxhbDhItitKGuNDF4M33cfChmGJESn"
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXQR2O9VncPDghypdG7HSevvZbpEOyqtzIWMsIwZ0XxBNjcLcpshUcJVPoVJriErOgke757RfcZ8GiieMdj0d4Hi3E4t9uFm_jviwbIAmfoj6ZouflkOclUoRY2BK676U2Ct0EKkuEAPmGFdnCG6x3QYcouJZNe9Qx3aCme31i6Cg944F8ccRtYwEPNihUjyvLY7dhypeE1cNs-pCwt3AWY6OflzNotJbiz46Ur6wHjEUURYzFQs-xTzWxDVpCthYgHD-D8ueaXeh4WafKazTwijECngofY2K2OhINVyQLkc1JOhs8-R3JFST79BblGR3VCgFZxt-x_EdKnFY0SemqmHos3aZxDyzCfV24XDMEV9VOKeDtWcS-h_p7JTxIm-GXXkqR9egfsNOIcR357PQfdPb7s1Wi4NxwzqOyVdTNM",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXSHImLeKwZcChgxwatxXMeqPGUIbkE5qdXlWNeLOlvuWe4FsPOhiaZomKvl9GyJQJBcsQWSF5YeLbPqsnYoE81ZFOj9dG4Aeghq_RASlDj72DqIaR4N7BNUkh5VBB7p9X2U46FoqPa5htFiMdCtg4TjkdDq3JG2x2Lro4lrQkv0ZBLJqJ3zlU-gFDero4mQLt62wXJnVBuFyxxbKJcxZplmOgEuhqsm1Sww1-ezne8f2qr-XcYF8B2xcyx0GHJsmCnMDHv3nGtzvgN1G4SlORfhnGwPwFsNzMINTDRYyIFDuOmQesGJ74Ug2uNFWT8NKN4FmCsPHoVyOJ1Ye0htbFEnRy4go7mrXsZivO9VxLpawcJoS67FwXyHv2XRgXANSMs61Gj6YzXs0yNrAHgb5c09LaOc5osfU50Rk4JeuO7_72Dk",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRnvpviTCDGK4wEhqRM9WUbn5rVl5QPdg6WtUSZ1_XStdNm6p1ruLF1ODS5YO4LSP1Xvb3D1cU74rO6DRxPf6-UiVGBsqjQ2-TREnzHFEfIaHXZPnpgBJO2ERJpFA3SeV6RfPG4nISlg6RSDJEb8Wyo18I25wRU_nhrb7RWy_sSF472umQx5im5abZA4b--Ug_ZyK22h86RqANHB4KZRghRF7ap28TwEKM3m7rsKjBIuEufRM7yMsEkk2jO41ql_0ez3pm2lHi6qNDTUIiBUO2ceKdkSIA_WT1hk86Nc77Vo2cV5xanBKUb7OZekZQ3yZ_rYeXzH6PLMBgyAJU9inutqxZYUcEkBqlPh9ogboX3SRRZYhDmQiJ6r--pB7TGoDB3gX9pkTu0d-sjYrbAycnj8RLSzVUrYlny13yKoRTBKA",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXTlQBryHD95bTAzO4D7IDDhg1kYxtE0rbUO_GQdC80vbj9TWfSWbHM0X2Uyoq-X18gfHxMmxC7o196AzTaw6DZ47p57KPA8eieMCyF4HPGWk-VceHPs7GDDNjxQ7W34CtqMw5XjbqWdpPZc36dmuwjE7zGzreSrMp0oUiEo_z363TKcwHAWRDLcpSb8JvG9MFPOaKqw2fRovUJoavc3dn0UJw3elUfJQZW43dThGQPEQ9JdwSxaJqAAgsdBzffD0GyExTpUnBTBqY7zKM4xMTJsEubdMuTuBLUeIEuCQqKVGYy1_pXzI_boVBH7yrmxLa33gTmFnjhQQpTo_jAact5Ttl0H9Erw8RCMqc_BaH4q2P2-VLySgDXo78oxq4rReEcP3thSg6e4bHf8EDgfO7LYR6ceH8Lg9gluZf4_ESw1Savj",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXT5GPwjgju2zHr_KljQitjsuPePliBmfvtGFYXWDvhhNZbrhj3MyXXAl7ak0pnfxY5bgQ3Za2jFguRh9jQ7ywlyUbFTdT93Ri2EELc53wTQ56z5cJ-t7WhHzxcsYQes_kB4cmnqvR2-meORpFXa9Q9IM4niHv538-hUcMljL-vCCGI-xuSOpalPFKpMJbmM_NGsi9sjHK2ovxZ3uXsFVi6Ici85lH1Kzw7TNAEuHoq_gl7scxuxn5-SRES7g3x8FEU5GQKOZCrHQKkQjZNFURKYe531z1qELGoHhoUxk8-_mzzrBFdVMedLC8CPIRqSelXVa42Loz6umFEpNonGuEgvE2dM8vI87LbzXsku7KDkmlXiJw7I-8BDP3JYqK68oA0GYbnQpena8kdBmxVF2XurcdZW1LyXf099WaEuQYsuDuPbaZEEN8PA0jMigw",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXQdAinjGMmen-fCClc9FT1tmMOr6hM01evUHOalvoqKcDVcyw8GPnuNzaRAIC19_AnmLOeZcCHEFFDE8HIkaAdLK_k3BT2nrkI8Gzcd-u7Wbu2-ITWqnRfA_YKicFs9YjITDCLsLREp1gGNN_Up2yQ8bJzYaJ3r7HFt7rf9z3X7wl3O3KwBQZB43KgtDWG7kx7lkkb0mzCFp03hgTgaVQ8Pw8hg5RmpNPkr4xQXPaA4wSua2HCTdwEq_pUQUYKA-UVEGzEzfK9nhHAts2t7QFtJUwiUykuHiqXv6CALAXPGC4zThSdr1u6L2vFvVqK-LQ51fO6f9Mu7y2eJNqyfQpw8X-LkHAnAmwGpfrRjBc6SCmgFhsrMmscXHQnzzQv34y1p_hR62nxIZV_a2ypGohkZ31WJSifFqvPkxvDlzjqhsA",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRG8tV3dhm4zwAbBhMyFYf037igXq0cwJ1kICGiJtG-nSk9mZlWRZS0_00lPt788JmfjLBSMA6RjKzV-zmyPS5LvVWzbtTX9SAp1p41Xp3CuYbxIWw5WRJwbPANTXq0ZTNRsCz_YEUhVh-sOi4rXEjvwPmUfb9OS8DnXDh9Aiv8jQ0qAo8d3VulmhRKn12I15yeYfgThYt2HKwC1vInOt9n8pjFuAzyXdwuTie5pKAv4KI9m6XW5VS5c_9ei96KA-vRROnFvn5CHyz4TV9Jdxx8bl7COEGy6gU2UcUr1-5mzQDWizzPcWJHsvbkgvBFAQ9CP_fsp4WtLsrIBnJXbQ89JMR0sjXNBPodxbJM8f30GQun8CHukjampa3OYMvmUcAog9YkNsqEB3Im2K1a8BsiJ1sh9tLnj2SjG_tkWsIqGg",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXSq1xQYlS5lMhU6P8pDhdyC6-nopLSIuotiOdXBNCuFGHcqP1mcJeb4dIw-mQ1nAS1v5kpkpsmSlMJSF_adDHYH5G9KFoZYApOaNATjmHiNh8FgOt4H8Q8tjJaEq6-mz6p0HVIF2w-rNYFxb_O7040r2Skzfn4xHhlr-JexcMnclnj9Ahdm_ROkGHqfu6lFq24wpyPwUExOkAYjm5zn91XP4Y58L_utGu-6cajvI5YDlzlrnweE0x0dfkQ5vySYu3ZAwOJyqZvd6XTxZiaHU_Mlq1gie58kCc6fN5WMzwv6JTWXSlti5jYdyieWrLMpDUxDyW1zag3Xu6Ynx3d5wW1VAXHtPbuWHo6uIbQ0wLkMTdRhND-seqVY8fpLC-ASa2rNHEr6Yi_xMj9dSNRgwDlLCvPlLz-4nZqILMSxT8DKGgXI",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXTU2EkU7jMaEWJJqZujK5HXobp5b5wGvooNQW09vDxhz7Fg4hhZD8PayxKsFwpTdXMEVofTma4WnM3gXCgB-8WEs8rQbCshdyq6WyUt42N0WnO5byLGY5I_VQqwUKpEX99IB9kVxWSfTpBx1rtexfDWehZ-xv_eivpKWRJTvBHODl8FW8qQCKAavQAA33HwuLe3d7FlS3Z9RUptu8YgdJ0bEHjtHE3gViOJkum9affOqSYGHWq-x8bfCybnzz7KIlvogEvVg_StvmNHAczYIsnV4LblGsVQpA5cOZ_JveIKeZFlKQx-EKw563bzRN9K53Lx1ncyWk-CjxQq96ikovScWrDwGcs-HOsRGvxa7tI4aBJtdKo85nFENsZVeW7AEpKuPx_rIECwYElAUAowDay22cED5Pu7E61lVsaNuMg",
+    "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXRmES8vFSd3PwO-fYnaa317n8V62guAH7l_xJkThgfcl5AkPeSAZ1ZzMfumNmxZ3cWhej387lcqJTSkngvTt80WXD5uENGLD-bZcrv9GBwqjWXdYYwQtvTmSznt1Xm0WmjmQM_md8UOlZaPVU05PEUIAS9XiQKFUNBCbWhCFcnKQ1mm__gtlXCpTQm9ackQhYZJ-4WwA4SMR9xxwV_H6pjeOUTTJgaZStrx8bt34mRuHpPQRlpnHTaAYfZ1piTFEiMDHY7ZVWBfn3rKfneCR-0HGRnzxwIkSBKr-yH74nE4sv0n6oWBLza8RxC3fOQpdjqvQgemJz8BjGoswdXA3bbaYwC836XppIQ7p9aFKVIIf5d7jtFvGQ--iQRAiGNkOb2uHJ-0LaDQuU5DjwnOra3qKci1o45H305e9rahxVxy7xHb"
   ],
   "published": {
     "about": "At Snellings Law, we maintain a humble confidence in everything we do. We know our strengths and weaknesses and we are confident in our choices. We learn from our mistakes, and always put our clients first.",
-    "about_score": 20.3,
-    "actions": [
-      {
-        "kind": "Get a Quote",
-        "label": "FREE CONSULTATION",
-        "url": "https://snellingsinjurylaw.com/contact/"
-      },
-      {
-        "kind": "Shop",
-        "label": "DWI and Dram Shop Lawyer",
-        "url": "https://snellingsinjurylaw.com/personal-injury/dwi-dramshop-lawyer/"
-      },
-      {
-        "kind": "Careers",
-        "label": "Careers",
-        "url": "https://snellingsinjurylaw.com/careers/"
-      },
-      {
-        "kind": "Book / Reserve",
-        "label": "Cookbook Recipe Submissions",
-        "url": "https://snellingsinjurylaw.com/cookbook-recipe-submissions/"
-      }
-    ],
-    "address": "5750 Genesis Ct., Suite 205, Frisco, TX 75034",
     "blocks": [
       {
         "entries": [],
@@ -228,14 +207,14 @@
         "text": "Got questions about personal injury? We\u2019ve got you covered! At Snellings Law, we\u2019re always here to answer any questions related to your case. What qualifies as an injury? In personal injury law, an \u201cinjury\u201d means any harm or damage to your body (or even your mind/emotions) caused by someone else\u2019s actions or negligence. It\u2019s not limited to obvious wounds like broken bones or cuts \u2013 it includes a wide range of harm. For example, injuries can be physical (sprains, fractures, head trauma, etc.) as well as financial and emotional. If you had to get medical treatment, missed work, or experienced pain and suffering because of an incident, those all qualify as injuries in the eyes of the law. Essentially, if you were hurt or incurred losses due to another party\u2019s carelessness or wrongful act, it counts as an \u201cinjury\u201d for a personal injury claim. How do I know if I have a personal injury claim? "
       }
     ],
-    "description": "Got injured? Snellings Law's personal injury lawyers deliver trusted legal guidance and real results. No fees unless we win. Contact us for free consultation.",
     "emails": [],
     "has_locations_page": true,
     "hours": [
       "Mon-Tue-Wed-Thu-Fri 08:00-18:00"
     ],
-    "https": true,
-    "images": [
+    "menu_items": [],
+    "menu_media": [],
+    "photos": [
       "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/Snellings-Law-PLLC.jpg",
       "https://snellingsinjurylaw.com/wp-content/uploads/2020/05/Snellings_Horizontal_PLLC.png",
       "https://snellingsinjurylaw.com/wp-content/uploads/2026/04/Snellings-Solo-Hero-rs.webp",
@@ -243,14 +222,8 @@
       "https://snellingsinjurylaw.com/wp-content/uploads/2026/08/Personal-Injury-Attorneys-Home-v4.webp",
       "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/justia-10.0.png",
       "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/BSL_TopVerdict.png",
-      "https://snellingsinjurylaw.com/wp-content/uploads/2025/08/Best-of-NTX-Prosper-Celina.png",
-      "https://snellingsinjurylaw.com/wp-content/uploads/2026/07/living-magazine-best-of-2026-frisco-plano.png"
+      "https://snellingsinjurylaw.com/wp-content/uploads/2025/08/Best-of-NTX-Prosper-Celina.png"
     ],
-    "js_rendered": false,
-    "menu_items": [],
-    "menu_media": [],
-    "mobile_ready": true,
-    "phone": "+1-214-387-0387",
     "products": [],
     "services": [
       "AUTO ACCIDENT",
@@ -260,13 +233,8 @@
       "WRONGFUL DEATH",
       "More Personal Injury Cases",
       "Recent Results",
-      "North Texas\u2019s Choice for 2026",
-      "Life-Changing Support After a Car Accident",
-      "Amazing Lawyer that Cares",
-      "They Truly Care",
-      "Very Helpful and Responsive"
+      "North Texas\u2019s Choice for 2026"
     ],
-    "site_host": "snellingsinjurylaw.com",
     "socials": [
       {
         "name": "Facebook",
@@ -277,8 +245,7 @@
         "url": "https://www.instagram.com/snellingsinjurylaw/"
       }
     ],
-    "text_words": 4803,
-    "title": "Frisco Personal Injury Lawyers | Snellings Law PLLC"
+    "tagline": "Got injured? Snellings Law's personal injury lawyers deliver trusted legal guidance and real results. No fees unless we win. Contact us for free consultation."
   },
   "ratings": [
     {
@@ -322,24 +289,6 @@
     }
   ],
   "trade": "Attorney",
-  "url_check": {
-    "blocked": false,
-    "fault": null,
-    "note": "",
-    "published": "https://snellingsinjurylaw.com/",
-    "result": {
-      "elapsed_ms": 72,
-      "error": null,
-      "final_url": "https://snellingsinjurylaw.com/",
-      "html": "",
-      "ok": true,
-      "status": 200,
-      "tls_error": false
-    },
-    "tried": [
-      "https://snellingsinjurylaw.com/"
-    ],
-    "working": "https://snellingsinjurylaw.com/"
-  },
+  "url_check": null,
   "website_url": "https://snellingsinjurylaw.com/"
 }

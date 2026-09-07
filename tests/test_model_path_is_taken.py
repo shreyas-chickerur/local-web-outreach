@@ -66,7 +66,8 @@ def test_the_opening_design_is_asked_for_when_a_key_exists(keyed):
 
 @respx.mock
 def test_the_photographs_are_looked_at_when_a_key_exists(keyed, monkeypatch):
-    monkeypatch.setattr(vision, "thumbnail", lambda url, names: b"jpegbytes")
+    monkeypatch.setattr(vision, "thumbnail",
+                        lambda url, names: b"\xff\xd8\xff\xe0" + b"\x00" * 32)
     route = respx.post(claude.MESSAGES_URL).mock(return_value=replies(
         "describe", {"images": [{"index": 0, "subject": "dish",
                                  "is_hero_candidate": True, "quality": 4,

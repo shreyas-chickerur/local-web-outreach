@@ -19,19 +19,34 @@ a machine without Chrome, that is the moment to add it.
 
 from __future__ import annotations
 
+import base64
 import html
 import json
+import re
 import shutil
 import subprocess
 import sys
 from pathlib import Path
 
+from app.adapters import photos as photos_api
+from app.adapters.imageinfo import media_type_of
+from app.core.config import google_places_api_key
 from app.site import fingerprint as fp
 from app.site.pipeline import STAGES, run_stage, spec_from_config
 from app.site.render import build_from_spec, material_from_brief, plan_for
 from app.store import db, leads, sites
 
 FIXTURES = Path("tests/fixtures/briefs")
+# One database on disk, shared by every tool that runs the fixtures.
+#
+# An in-memory database per tool meant the contact sheet paid for a full vision
+# pass and then the census paid for another one, which makes the "a second pass
+# costs nothing" guarantee true within a run and false between them — and the
+# loop these tools exist to make cheap is the loop across them.
+#
+# Gitignored: it is a cache, and deleting it costs one rebuild.
+FIXTURE_DB = Path("artifacts/fixtures.db")
+
 OUT = Path("artifacts/contact-sheet")
 CHROME = ("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
           "/Applications/Chromium.app/Contents/MacOS/Chromium",
@@ -63,7 +78,7 @@ def main() -> int:
 
     OUT.mkdir(parents=True, exist_ok=True)
     cards: list[dict] = []
-    with db.session(":memory:") as conn:
+    with db.session(FIXTURE_DB) as conn:
         for path in sorted(FIXTURES.glob("*.json")):
             slug = path.stem
             lead_id = leads.save_brief(conn, json.loads(path.read_text()))
@@ -81,7 +96,7 @@ def main() -> int:
             page = build_from_spec(brief, spec)
 
             site_file = OUT / f"{slug}.html"
-            site_file.write_text(page)
+            site_file.write_text(_inline_photographs(page, brief))
             shots = {}
             for label, width, height in WIDTHS:
                 shot = OUT / f"{slug}-{label}.png"
@@ -97,9 +112,73 @@ def main() -> int:
                 "axes": fp.of(plan, spec, material_from_brief(brief)).as_row(),
             })
 
+    cards = _closest_first(cards)
     (OUT / "index.html").write_text(_sheet(cards))
     print(f"\n  {OUT / 'index.html'}")
     return 0
+
+
+def _inline_photographs(page: str, brief: dict) -> str:
+    """Embed the proxied photographs so the page stands alone.
+
+    A generated page asks our own server for `/photo/<lead>/<n>`, and a
+    screenshot taken from a file:// URL has no server to ask — so every
+    photograph 404s and the capture is eleven grey rectangles. I nearly read a
+    conclusion off exactly that: two law firms that looked identical because
+    neither had loaded its hero.
+
+    The bytes are already on disk, so they go in as data URIs. Slow and large,
+    and it makes the sheet honest, which is the only thing it is for.
+    """
+    names = list(brief.get("place_photos") or [])
+    key = google_places_api_key() or ""
+    if not names or not key:
+        return page
+
+    cache: dict[str, str] = {}
+
+    def replace(match: re.Match) -> str:
+        index = int(match.group(1))
+        if index >= len(names):
+            return match.group(0)
+        if index not in cache:
+            data = photos_api.fetch(key, names[index],
+                                    width=photos_api.MAX_WIDTH)
+            kind = media_type_of(data) if data else None
+            cache[index] = (
+                f"data:{kind};base64,{base64.b64encode(data).decode()}"
+                if data and kind else "")
+        return cache[index] or match.group(0)
+
+    lead_id = brief.get("lead_id")
+    return re.sub(rf"/photo/{lead_id}/(\d+)(?:\?[^\s\"'&)]*)?", replace, page)
+
+
+def _closest_first(cards: list[dict]) -> list[dict]:
+    """The pair the fingerprint says is most alike, first and adjacent.
+
+    The whole point of looking at this is to check the instrument. If two sites
+    the vector calls identical also LOOK identical, the vector is measuring the
+    right things and a gate can be built on it. If they look meaningfully
+    different, the axis set is incomplete and the gate would be tuned against
+    an instrument that does not work. That check is only possible with the two
+    of them side by side.
+    """
+    prints = {card["slug"]: fp.Fingerprint(dict(card["axes"]))
+              for card in cards}
+    pairs = sorted(
+        (len(prints[a["slug"]].differs_from(prints[b["slug"]])),
+         a["slug"], b["slug"])
+        for i, a in enumerate(cards) for b in cards[i + 1:])
+    if not pairs:
+        return cards
+    _, one, two = pairs[0]
+    lead = [c for c in cards if c["slug"] in (one, two)]
+    rest = [c for c in cards if c["slug"] not in (one, two)]
+    for card in lead:
+        card["flag"] = (f"closest pair — {len(prints[one].differs_from(prints[two]))}"
+                        f"/{len(fp.AXES)} axes apart")
+    return lead + rest
 
 
 def _sheet(cards: list[dict]) -> str:
@@ -112,6 +191,7 @@ def _sheet(cards: list[dict]) -> str:
         <img class="phone" src="{e(card['shots'].get('mobile', ''))}" alt="">
         <figcaption>
           <b>{e(card['name'])}</b> <span>{e(card['trade'])}</span>
+          {f'<p class="flag">{e(card["flag"])}</p>' if card.get('flag') else ''}
           <dl>{''.join(f"<dt>{e(axis)}</dt><dd>{e(value)}</dd>"
                        for axis, value in card['axes'])}</dl>
         </figcaption>
@@ -136,6 +216,7 @@ def _sheet(cards: list[dict]) -> str:
  dl{{display:grid;grid-template-columns:auto 1fr;gap:1px 10px;margin:9px 0 0;
    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px}}
  dt{{color:#6f6f6f}} dd{{margin:0;color:#c9c9c9;overflow-wrap:anywhere}}
+ .flag{{margin:6px 0 0;color:#e08a5a;font-size:11px;font-weight:600}}
 </style>
 <h1>{len(cards)} fixtures</h1>
 <p class="note">The question is not whether any one of these is good. It is

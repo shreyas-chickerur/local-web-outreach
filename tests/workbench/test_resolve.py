@@ -89,3 +89,35 @@ def test_blank_input_is_a_clean_error_not_a_crash(bad):
     """The CLI turns this into a one-line message; it must stay a ValueError."""
     with pytest.raises(ValueError, match="company name or a website URL"):
         resolve_input(bad)
+
+
+# --- a full stop in a name is not a web address -------------------------- #
+
+@pytest.mark.parametrize("text", [
+    "S.Handyman", "Mr.Rooter", "A.B.C Plumbing", "J.C. Penney",
+])
+def test_a_company_name_containing_a_full_stop_stays_a_name(text):
+    """"S.Handyman" was read as https://S.Handyman, so the business was called
+    "S" and its generated page was a single letter on an empty ground.
+
+    The asymmetry sets the default: read a URL as a name and the directory
+    lookup finds the website anyway; read a name as a URL and the name is gone,
+    with everything downstream built for the wrong business.
+    """
+    assert looks_like_url(text) is False
+    assert resolve_input(text, location="Frisco, TX").name == text
+
+
+@pytest.mark.parametrize("text", [
+    "craftwaykitchen.com", "www.foo.example", "https://x.internal",
+    "theheritagetable.com/menu", "shop.co.uk",
+])
+def test_something_that_really_is_an_address_is_still_read_as_one(text):
+    assert looks_like_url(text) is True
+
+
+def test_an_explicit_scheme_or_www_settles_it_whatever_the_suffix():
+    """A made-up suffix behind a scheme is still a deliberate address."""
+    assert looks_like_url("https://intranet.corp") is True
+    assert looks_like_url("www.intranet.corp") is True
+    assert looks_like_url("intranet.corp") is False

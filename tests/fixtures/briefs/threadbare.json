@@ -1,0 +1,65 @@
+{
+  "assumptions": [
+    "ignored a yelp result for 'Moe\u2019s Handyman Services' \u2014 different business"
+  ],
+  "chain_signals": [],
+  "facts": [
+    {
+      "candidates": [],
+      "confidence": "unverified",
+      "corroborations": 1,
+      "dissent": [],
+      "field": "address",
+      "label": "Address",
+      "score": 50,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=8048282810157190957&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        }
+      ],
+      "value": "8655 Brookhollow Blvd, Frisco, TX 75034, USA"
+    },
+    {
+      "candidates": [],
+      "confidence": "unverified",
+      "corroborations": 1,
+      "dissent": [],
+      "field": "phone",
+      "label": "Phone",
+      "score": 50,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=8048282810157190957&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        }
+      ],
+      "value": "(945) 289-8844"
+    }
+  ],
+  "latitude": 33.132570799999996,
+  "location": "8655 Brookhollow Blvd, Frisco, TX 75034, USA",
+  "longitude": -96.8086617,
+  "name": "S.Handyman",
+  "notes": null,
+  "open_questions": [
+    "No website found \u2014 is that right, or do they have one we missed?",
+    "Their street address: only google lists it \u2014 confirm 8655 Brookhollow Blvd, Frisco, TX 75034, USA?",
+    "Their phone number: only google lists it \u2014 confirm (945) 289-8844?",
+    "What are their opening hours?"
+  ],
+  "place_photos": [
+    "places/ChIJJQS6p1I9TIYRLU9N_5I-sW8/photos/AVoNoXTJhfWDw_CaSzztQQvyE5EVrsR91cEWG7W261QHDOepJ5vqZ8HBOQMVsdLtHVSHAkUGwMakrdnDO4EMomTUPwXGA9ciLpYleyPCggijnlFldGSZqt6H7tnC0RU-KSboXarUxExtI2_nm5DvGC9BXgd67DIW6k5qwdHjpb68iQhevIzEDN-WRl7R4XfmshCDc3Karh_zePhvkkaI8Z_N6QaivEcz993vCNfPbu1Tq25DFhndL0VbnxT2B5hylyQiZUOyaKyev8xyJKgQNll9C9YB4VSnQJBXUlTNYXCkat7LChuEqystFOoMQg9lySUzE-vJ7vThheRht7JPzQ7tU4YCl2E39HrzsBlrnhnfFZI2RThEqo1ONOQDfox0_1mvlp2XZZe3Th1DSw67aAMppCOUBiwnSoZX_frHezFSY8PEILtC3LhiWKbUMuSlDQ"
+  ],
+  "published": null,
+  "ratings": [],
+  "site_reachable": null,
+  "site_status": null,
+  "sources_consulted": [
+    "google"
+  ],
+  "testimonials": [],
+  "trade": "General Contractor",
+  "url_check": null,
+  "website_url": null
+}

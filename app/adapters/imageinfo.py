@@ -88,6 +88,33 @@ def _jpeg(data: bytes) -> tuple[int, int] | None:
     return None
 
 
+# What the vision API will accept. AVIF is not on the list, and a business that
+# serves AVIF is not unusual any more.
+MEDIA_TYPES: tuple[tuple[str, str], ...] = (
+    ("image/jpeg", "jpeg"), ("image/png", "png"),
+    ("image/gif", "gif"), ("image/webp", "webp"),
+)
+
+
+def media_type_of(data: bytes) -> str | None:
+    """What this actually is, from its bytes rather than its file extension.
+
+    Sent as the wrong type, an image is rejected — and one rejected block fails
+    the whole batch, so eighteen photographs came back undescribed because four
+    of them were PNGs labelled as JPEG. A URL ending in .jpg is a claim by
+    whoever named the file.
+    """
+    if data[:3] == b"\xff\xd8\xff":
+        return "image/jpeg"
+    if data[:8] == b"\x89PNG\r\n\x1a\n":
+        return "image/png"
+    if data[:6] in (b"GIF87a", b"GIF89a"):
+        return "image/gif"
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        return "image/webp"
+    return None
+
+
 def dimensions_of(data: bytes) -> tuple[int, int] | None:
     for reader in (_png, _jpeg, _gif, _webp):
         size = reader(data)
