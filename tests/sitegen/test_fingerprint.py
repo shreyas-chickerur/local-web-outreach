@@ -95,3 +95,36 @@ def test_every_axis_appears_in_the_printable_row():
     two sites feel alike, this says which axis collided."""
     row = fp.of(plan(), SiteSpec(), Material()).as_row()
     assert [axis for axis, _ in row] == list(fp.AXES)
+
+
+def test_the_ruler_has_a_version_that_moves_when_the_ruler_does():
+    """A distance is comparable only to another taken the same way. That has
+    gone wrong twice — a corpus that changed under a pinned baseline, and a
+    distance that became weighted while the baseline stayed flat — so the
+    version is derived from the axes and their weights rather than remembered.
+    """
+    before = fp.metric_version()
+    assert len(before) == 8
+    assert fp.metric_version() == before          # stable within a ruler
+
+    original = dict(fp.WEIGHTS)
+    try:
+        fp.WEIGHTS["accent"] = original["accent"] + 1.0
+        assert fp.metric_version() != before, "reweighting must move the ruler"
+    finally:
+        fp.WEIGHTS.clear()
+        fp.WEIGHTS.update(original)
+    assert fp.metric_version() == before
+
+
+def test_visibility_not_the_structural_set_decides_the_weight():
+    """The pair a person called identical differs on three structural axes —
+    all of them below the fold, all of them downstream of what the business
+    publishes. Weighting the structural set higher would have pushed that pair
+    further apart and made the miss worse."""
+    below_fold = ("section_order", "compositions")
+    first_screen = ("mood", "layout_bias", "hero_subject")
+    assert all(a in fp.STRUCTURAL for a in below_fold)
+    for quiet in below_fold:
+        for loud in first_screen:
+            assert fp.WEIGHTS[quiet] < fp.WEIGHTS[loud], (quiet, loud)

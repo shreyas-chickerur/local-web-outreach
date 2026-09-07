@@ -24,34 +24,48 @@ from pathlib import Path
 
 PAIRS = Path("tests/fixtures/pairs.json")
 
-# Below this, the vector is calling two sites the same. Chosen so that the
-# pairs a person called "same" and the pairs they called "different" separate
-# as cleanly as the current vector allows; it moves as the vector widens, and
-# moving it is a decision to record rather than a knob to tune quietly.
-SAME_BELOW = 0.50
-
 
 @dataclass(frozen=True)
 class Agreement:
-    """How often the vector and a person reach the same verdict."""
+    """How well the vector's ordering matches a person's verdicts.
 
-    agreed: int
-    judged: int
+    Scored by RANK, not against a threshold. Every pair a person called
+    "different studios" should sit further apart than every pair they called
+    "same site" — so with four same and six different there are twenty-four
+    cross-comparisons and the score is how many come out in the right order.
+
+    A threshold would be a free parameter chosen on the same ten pairs it is
+    scored against, which is the invalid baseline in another costume: a number
+    that looks measured and is partly chosen. This has no parameter, it uses
+    the magnitude rather than which side of a line something falls, it is
+    comparable across versions as axes are added, and it cannot be improved by
+    moving a cut.
+
+    If the gate later needs a pass-or-fail, derive the cut from these labels
+    then — and record that it was fitted, and on how many pairs.
+    """
+
+    ordered: int
+    comparisons: int
     unsure: int
-    misses: list[tuple[str, str, str, float]]   # a, b, verdict, distance
+    unmeasured: int
+    # The pairs that came out backwards: (same-pair, different-pair, distances)
+    inversions: list[tuple[str, str, float, float]]
 
     @property
     def rate(self) -> float:
-        return self.agreed / self.judged if self.judged else 0.0
+        return self.ordered / self.comparisons if self.comparisons else 0.0
 
     def report(self) -> str:
-        lines = [f"  AGREEMENT  {self.agreed}/{self.judged} "
-                 f"({self.rate:.0%}) of hand-judged pairs, "
+        lines = [f"  AGREEMENT  {self.ordered}/{self.comparisons} "
+                 f"({self.rate:.0%}) of cross-comparisons ordered correctly, "
                  f"{self.unsure} unsure and not scored"]
-        for a, b, verdict, distance in self.misses:
-            said = "same" if distance < SAME_BELOW else "different"
-            lines.append(f"    {a} vs {b}: a person says {verdict}, "
-                         f"the vector says {said} ({distance:.0%})")
+        if self.unmeasured:
+            lines.append(f"             {self.unmeasured} pair(s) had no "
+                         f"measurement and were skipped")
+        for same, other, near, far in self.inversions[:6]:
+            lines.append(f"    {same} ({near:.0%}) should be closer than "
+                         f"{other} ({far:.0%}) and is not")
         return "\n".join(lines)
 
 
@@ -64,26 +78,38 @@ def load(path: Path | None = None) -> list[dict]:
 
 def score(distances: dict[tuple[str, str], float],
           pairs: list[dict] | None = None) -> Agreement:
-    """Compare the vector's verdicts against the hand-judged ones."""
+    """Rank the vector's distances against the hand-judged verdicts."""
     judged = pairs if pairs is not None else load()
-    agreed = unsure = 0
-    total = 0
-    misses: list[tuple[str, str, str, float]] = []
+
+    def measured(pair: dict) -> float | None:
+        a, b = str(pair.get("a")), str(pair.get("b"))
+        found = distances.get((a, b))
+        return found if found is not None else distances.get((b, a))
+
+    same: list[tuple[str, float]] = []
+    apart: list[tuple[str, float]] = []
+    unsure = unmeasured = 0
     for pair in judged:
-        a, b, verdict = pair.get("a"), pair.get("b"), pair.get("verdict")
+        verdict = pair.get("verdict")
         if verdict == "unsure":
             unsure += 1
             continue
-        key = (str(a), str(b))
-        distance = distances.get(key)
+        distance = measured(pair)
         if distance is None:
-            distance = distances.get((str(b), str(a)))
-        if distance is None:
+            unmeasured += 1
             continue
-        total += 1
-        says_same = distance < SAME_BELOW
-        if says_same == (verdict == "same"):
-            agreed += 1
-        else:
-            misses.append((str(a), str(b), str(verdict), distance))
-    return Agreement(agreed=agreed, judged=total, unsure=unsure, misses=misses)
+        label = f"{pair.get('a')}/{pair.get('b')}"
+        (same if verdict == "same" else apart).append((label, distance))
+
+    ordered = 0
+    inversions: list[tuple[str, str, float, float]] = []
+    for near_name, near in same:
+        for far_name, far in apart:
+            if near < far:
+                ordered += 1
+            else:
+                inversions.append((near_name, far_name, near, far))
+    inversions.sort(key=lambda row: row[2] - row[3], reverse=True)
+    return Agreement(ordered=ordered, comparisons=len(same) * len(apart),
+                     unsure=unsure, unmeasured=unmeasured,
+                     inversions=inversions)

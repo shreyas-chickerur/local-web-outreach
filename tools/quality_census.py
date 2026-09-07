@@ -49,10 +49,10 @@ FIXTURES = Path("tests/fixtures/briefs")
 # than against a memory. Recorded here rather than in a note because the report
 # should say whether it is better or worse every time it runs.
 #
-# 2026-09-07, eleven fixtures, eight axes:
+# 2026-09-07, eleven fixtures, eight axes, weighted distance (ruler b921b635):
 #
-#   same-trade mean   56% distance  =  44% IDENTICAL
-#   worst pair        38% distance  —  contractor-bare vs roofer, and
+#   same-trade mean   44% distance  =  56% IDENTICAL
+#   worst pair        21% distance  —  contractor-bare vs roofer, and
 #                                      barbecue vs restaurant-rich
 #
 # An earlier baseline of 40% was taken against a nine-fixture corpus that was
@@ -73,8 +73,13 @@ FIXTURES = Path("tests/fixtures/briefs")
 # Which is the argument for the gate staying off. Gating on an instrument that
 # reports 50% for two pages a stranger would call identical would reject builds
 # for the wrong reasons and pass the ones that matter.
-BASELINE_SAME_TRADE = 0.56
-BASELINE_WORST = ("contractor-bare", "roofer", 0.38)
+BASELINE_SAME_TRADE = 0.44
+BASELINE_WORST = ("contractor-bare", "roofer", 0.21)
+# Which ruler the numbers above were taken with. A distance is comparable only
+# to another taken the same way, and comparing across a change of ruler has
+# already produced two false readings — a corpus that changed under a pinned
+# baseline, and a distance that became weighted while the baseline stayed flat.
+BASELINE_METRIC = "b921b635"
 
 # The gate is NOT on. With eight axes and four structural, "differ on four
 # including one structural" fails almost everything the generator can currently
@@ -286,9 +291,16 @@ def _report(rows, first_pass, again) -> None:
     if same:
         within = sum(p[0] for p in same) / len(same)
         moved = within - BASELINE_SAME_TRADE
-        verdict = ("no better than the baseline" if abs(moved) < 0.01
-                   else f"{abs(moved):.0%} {'better' if moved > 0 else 'WORSE'} "
-                        f"than the baseline")
+        if fp.metric_version() != BASELINE_METRIC:
+            verdict = (f"NOT COMPARABLE — the baseline was measured with "
+                       f"ruler {BASELINE_METRIC} and this is "
+                       f"{fp.metric_version()}. Re-pin it rather than reading "
+                       f"the difference.")
+        else:
+            verdict = ("no better than the baseline" if abs(moved) < 0.01
+                       else f"{abs(moved):.0%} "
+                            f"{'better' if moved > 0 else 'WORSE'} "
+                            f"than the baseline")
         print(f"  SAME TRADE         mean {within:.0%} distance "
               f"= {1 - within:.0%} identical, across {len(same)} pairs")
         print(f"                     baseline {BASELINE_SAME_TRADE:.0%} "
