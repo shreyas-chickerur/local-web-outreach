@@ -18,6 +18,7 @@ just add noise.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -51,6 +52,9 @@ class Agreement:
     unmeasured: int
     # The pairs that came out backwards: (same-pair, different-pair, distances)
     inversions: list[tuple[str, str, float, float]]
+    # Which judgements this was scored against. A score is only comparable to
+    # another taken against the same labels.
+    labels: str = ""
 
     @property
     def rate(self) -> float:
@@ -59,7 +63,8 @@ class Agreement:
     def report(self) -> str:
         lines = [f"  AGREEMENT  {self.ordered}/{self.comparisons} "
                  f"({self.rate:.0%}) of cross-comparisons ordered correctly, "
-                 f"{self.unsure} unsure and not scored"]
+                 f"{self.unsure} unsure and not scored"
+                 f"  [labels {self.labels}]"]
         if self.unmeasured:
             lines.append(f"             {self.unmeasured} pair(s) had no "
                          f"measurement and were skipped")
@@ -74,6 +79,22 @@ def load(path: Path | None = None) -> list[dict]:
     if not source.exists():
         return []
     return list(json.loads(source.read_text()).get("pairs") or [])
+
+
+def labels_version(path: Path | None = None) -> str:
+    """Which set of judgements a score was taken against.
+
+    The distance got a ruler and the census refuses to compare across a change
+    of it. The hand-judged pairs are equally part of that ruler: the labels
+    were re-judged blind, so 34/36 is not comparable to the earlier 8/10, and
+    in six weeks nobody will remember that. Derived from the verdicts, so it
+    moves whenever a judgement does.
+    """
+    material = "|".join(
+        f"{p.get('a')}~{p.get('b')}={p.get('verdict')}"
+        for p in sorted(load(path),
+                        key=lambda row: (str(row.get("a")), str(row.get("b")))))
+    return hashlib.sha256(material.encode()).hexdigest()[:8]
 
 
 def score(distances: dict[tuple[str, str], float],
@@ -112,4 +133,5 @@ def score(distances: dict[tuple[str, str], float],
     inversions.sort(key=lambda row: row[2] - row[3], reverse=True)
     return Agreement(ordered=ordered, comparisons=len(same) * len(apart),
                      unsure=unsure, unmeasured=unmeasured,
-                     inversions=inversions)
+                     inversions=inversions,
+                     labels=labels_version() if pairs is None else "ad hoc")

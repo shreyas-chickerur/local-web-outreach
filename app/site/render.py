@@ -61,8 +61,35 @@ OFFER_ART_MAX = 4
 GALLERY_MIN = 3
 GALLERY_MAX = 12
 
-_CTA_LABEL = {"call": "Call us", "book": "Book a table", "order": "Order online",
+# What the action says, per trade. "Book a table" is restaurant wording and it
+# was reaching every business that resolved to `book` — a dentist's page went
+# out with a button offering a table, which is the kind of thing an owner spots
+# in one second and does not forget.
+#
+# A flat table per kind for now; it belongs with the trade profiles in Slice C
+# and moves there when they exist. Shipping wrong in the meantime was not an
+# option.
+_CTA_LABEL = {"call": "Call us", "book": "Book now", "order": "Order online",
               "quote": "Get a quote", "visit": "Find us"}
+
+_CTA_BY_TRADE: dict[str, dict[str, str]] = {
+    "food": {"book": "Book a table", "order": "Order online",
+             "visit": "Find us"},
+    "care": {"book": "Book an appointment", "call": "Call the practice"},
+    "groom": {"book": "Book an appointment", "visit": "Find us"},
+    "body": {"book": "Book a class", "visit": "Find us"},
+    "desk": {"book": "Book a consultation", "call": "Call us",
+             "quote": "Request a consultation"},
+    "trade": {"book": "Book a visit", "quote": "Get a free estimate",
+              "call": "Call us"},
+    "retail": {"visit": "Find the shop", "order": "Shop online"},
+}
+
+
+def cta_words(kind: str, trade: str = "default") -> str:
+    """The button's wording, for this kind of action at this kind of business."""
+    per_trade = _CTA_BY_TRADE.get(trade, {})
+    return per_trade.get(kind) or _CTA_LABEL.get(kind, "Call us")
 
 
 @dataclass
@@ -102,10 +129,18 @@ class Material:
     # What each photograph shows, in the operator's words. Becomes alt text,
     # which every generated image had been shipping empty.
     photo_notes: dict = dc_field(default_factory=dict)
-    trade_kind: str = "default"
+    # Which hero preference and which wording apply. Derived from `trade` when
+    # it is not given, because two fields that can disagree eventually do — a
+    # Material built with trade="Barbecue Restaurant" and no trade_kind was
+    # offering a table to nobody in particular.
+    trade_kind: str = ""
     # Photographs already placed. Sections spend from one pool, so the same
     # picture cannot turn up in the gallery and again beside a feature row.
     spent: set = dc_field(default_factory=set)
+
+    def __post_init__(self) -> None:
+        if not self.trade_kind:
+            self.trade_kind = trade_kind(self.trade)
 
     def alt_for(self, url: str) -> str:
         """What to call this photograph, in one sentence.
@@ -481,6 +516,45 @@ def _headline_term(seen: dict | None) -> float:
         str(seen.get("headline_region_luminance")), 0.0)
 
 
+# The three terms that only exist because somebody looked at the picture.
+_SEEN_TERMS = ("quality", "usable", "headline")
+
+
+def unlooked_at() -> float:
+    """What those three are worth when nobody has looked.
+
+    The reference for the floor, derived from the scoring function rather than
+    picked — a hand-chosen number would be a knob to turn until the answer
+    looked right, which is the mistake the agreement metric exists to avoid.
+
+    Only the seen terms, deliberately. Comparing whole scores would drop a
+    business whose photographs are merely portrait or small, and shape has
+    never been a reason to publish no hero at all — it is a reason to crop.
+    The floor is for pictures somebody looked at and condemned.
+    """
+    return (HERO_WEIGHTS["quality"] * _quality_term(None)
+            + HERO_WEIGHTS["usable"] * _usable_term(None)
+            + HERO_WEIGHTS["headline"] * _headline_term(None))
+
+
+def looked_at_and_rejected(score: HeroScore) -> bool:
+    """Did somebody look at this picture and say it cannot lead?
+
+    Read off the sign of the `usable` term, which is the one that only goes
+    negative when vision condemned the photograph — a disqualifier, or an
+    outright "not a hero candidate". No threshold, because there is nothing to
+    choose: zero is where that term changes meaning.
+
+    Deliberately NOT the seen terms summed against `unlooked_at`. That reading
+    took the hero away from a merely mediocre photograph — quality two of five
+    in a mixed-luminance frame — and mediocre is a reason to crop, not a reason
+    to publish no photograph at all. Shape is not a reason either. The floor is
+    for condemnation, and `unlooked_at` stays as the reference that shows why
+    zero is the right place to read.
+    """
+    return score.reasons.get("usable", 0.0) < 0
+
+
 def hero_scores(images: tuple[str, ...], labels: dict | None = None,
                 trade: str = "default",
                 size_of: Callable[[str], tuple[int, int] | None] | None = None,
@@ -526,7 +600,8 @@ def hero_table(scores: list[HeroScore]) -> str:
 def pick_hero(images: tuple[str, ...], offset: int = 0,
               labels: dict | None = None, trade: str = "default",
               size_of: Callable[[str], tuple[int, int] | None] | None = None,
-              vision: dict | None = None) -> str | None:
+              vision: dict | None = None,
+              floor: bool = True) -> str | None:
     """The lead photograph, as one score rather than a stack of filters.
 
     Resolution, how well the shape survives a hero crop, and how well the
@@ -540,7 +615,18 @@ def pick_hero(images: tuple[str, ...], offset: int = 0,
     if not images:
         return None
     scored = hero_scores(images, labels, trade, size_of, vision)
-    return scored[offset % len(scored)].url
+    chosen = scored[offset % len(scored)]
+
+    # No hero at all, when the best picture there is is one somebody looked at
+    # and condemned. S.Handyman's only photograph is a flyer with text burned
+    # across it — vision scored it -1.65 — and it led the page anyway, because
+    # the best of one candidate is still the best.
+    #
+    # `offset` overrides it: the operator has seen the photographs and can
+    # insist, which is the standing rule about whose judgement outranks whose.
+    if floor and offset == 0 and looked_at_and_rejected(chosen):
+        return None
+    return chosen.url
 
 
 def _hero(m: Material, spec: SiteSpec, t: Theme,
@@ -1264,7 +1350,7 @@ def _cta_label(m: Material, spec: SiteSpec) -> str:
         # for: there is no ordering or booking to send anyone to.
         return "Find us"
     kind = spec.cta or "call"
-    label = spec.cta_label or _CTA_LABEL.get(kind, "Call us")
+    label = spec.cta_label or cta_words(kind, m.trade_kind)
     if _NAMES_A_CHANNEL.search(label):
         return _CTA_BY_PHONE.get(kind, "Call us")
     return label

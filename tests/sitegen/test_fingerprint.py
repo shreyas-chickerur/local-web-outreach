@@ -107,24 +107,51 @@ def test_the_ruler_has_a_version_that_moves_when_the_ruler_does():
     assert len(before) == 8
     assert fp.metric_version() == before          # stable within a ruler
 
-    original = dict(fp.WEIGHTS)
-    try:
-        fp.WEIGHTS["accent"] = original["accent"] + 1.0
-        assert fp.metric_version() != before, "reweighting must move the ruler"
-    finally:
-        fp.WEIGHTS.clear()
-        fp.WEIGHTS.update(original)
+    for table in (fp.VISIBILITY, fp.DECIDEDNESS):
+        original = dict(table)
+        try:
+            table["accent"] = original["accent"] + 1.0
+            assert fp.metric_version() != before, \
+                "reweighting either principle must move the ruler"
+        finally:
+            table.clear()
+            table.update(original)
     assert fp.metric_version() == before
 
 
-def test_visibility_not_the_structural_set_decides_the_weight():
+def test_the_structural_set_does_not_decide_the_weight():
     """The pair a person called identical differs on three structural axes —
     all of them below the fold, all of them downstream of what the business
     publishes. Weighting the structural set higher would have pushed that pair
     further apart and made the miss worse."""
-    below_fold = ("section_order", "compositions")
-    first_screen = ("mood", "layout_bias", "hero_subject")
-    assert all(a in fp.STRUCTURAL for a in below_fold)
-    for quiet in below_fold:
-        for loud in first_screen:
-            assert fp.WEIGHTS[quiet] < fp.WEIGHTS[loud], (quiet, loud)
+    material_driven = ("section_order", "compositions")
+    assert all(axis in fp.STRUCTURAL for axis in material_driven)
+    for quiet in material_driven:
+        assert fp.weight_of(quiet) < fp.weight_of("mood"), quiet
+        assert fp.weight_of(quiet) < fp.weight_of("hero_subject"), quiet
+
+
+def test_decidedness_wins_when_the_two_principles_disagree():
+    """Slice B breaks the correlation: photographic treatment is highly
+    visible AND material-driven. The vector measures design decisions, and a
+    consequence of the brief is not one."""
+    fp.VISIBILITY["photo_treatment"] = 2.0
+    fp.DECIDEDNESS["photo_treatment"] = 0.5
+    try:
+        assert fp.weight_of("photo_treatment") == 0.5
+        # And the reverse: a decision nobody can see does not differentiate.
+        fp.VISIBILITY["hidden_choice"] = 0.5
+        fp.DECIDEDNESS["hidden_choice"] = 2.0
+        assert fp.weight_of("hidden_choice") == 0.5
+    finally:
+        for key in ("photo_treatment", "hidden_choice"):
+            fp.VISIBILITY.pop(key, None)
+            fp.DECIDEDNESS.pop(key, None)
+
+
+def test_every_axis_is_scored_on_both_principles():
+    """An axis missing from either table falls back to 1.0 silently, which is a
+    decision nobody made."""
+    for axis in fp.AXES:
+        assert axis in fp.VISIBILITY, axis
+        assert axis in fp.DECIDEDNESS, axis

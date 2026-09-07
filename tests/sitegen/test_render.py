@@ -615,8 +615,12 @@ def test_a_button_never_promises_a_channel_it_links_away_from():
     m = Material(name="Hutchins", phone="972 377 2046", address="Frisco, TX")
     # "Order online" promises a channel a tel: link does not have.
     assert _cta_label(m, SiteSpec(cta="order")) == "Call to order"
-    # "Book a table" does not — you book by ringing — so it stands.
-    assert _cta_label(m, SiteSpec(cta="book")) == "Book a table"
+    # "Book now" does not — you book by ringing — so it stands. The wording is
+    # per trade now, and this Material has none, so it gets the neutral form.
+    assert _cta_label(m, SiteSpec(cta="book")) == "Book now"
+    food = Material(name="Hutchins", phone="972 377 2046",
+                    address="Frisco, TX", trade="Barbecue Restaurant")
+    assert _cta_label(food, SiteSpec(cta="book")) == "Book a table"
     assert _cta_label(m, SiteSpec(cta="quote")) == "Get a quote"
     # An operator's own words are kept unless they name a channel too.
     assert _cta_label(m, SiteSpec(cta="order",

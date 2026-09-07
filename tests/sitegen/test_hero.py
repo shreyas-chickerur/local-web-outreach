@@ -298,3 +298,83 @@ def test_an_untagged_photograph_is_still_a_candidate():
                          size_of=same_size(*urls))
     assert {s.url for s in scored} == set(urls)
     assert scored[0].url == "/photo/1/0"
+
+
+# --- the floor ----------------------------------------------------------- #
+
+def test_a_photograph_somebody_looked_at_and_condemned_leads_nothing():
+    """S.Handyman's only picture is a flyer with text burned across it, scored
+    -1.65, and it led the page anyway — the best of one candidate is still the
+    best. A page with no hero is better than a page led by that."""
+    from app.site.render import unlooked_at
+    look = sizes({"/flyer": (2400, 1350)})
+    condemned = seen(quality=3, is_hero_candidate=False, has_text_overlay=True)
+    assert pick_hero(("/flyer",), size_of=look,
+                     vision={"/flyer": condemned}) is None
+    assert unlooked_at() > 0, "the reference is derived, not picked"
+
+
+def test_the_floor_is_derived_from_the_scoring_function():
+    """A hand-chosen number would be a knob to turn until the answer looked
+    right — the mistake the agreement metric exists to avoid."""
+    import app.site.render as render
+    original = dict(render.HERO_WEIGHTS)
+    before = render.unlooked_at()
+    try:
+        render.HERO_WEIGHTS["quality"] = original["quality"] * 2
+        assert render.unlooked_at() != before
+    finally:
+        render.HERO_WEIGHTS.clear()
+        render.HERO_WEIGHTS.update(original)
+
+
+def test_shape_alone_never_costs_a_business_its_hero():
+    """The floor is for pictures somebody looked at and condemned. A portrait
+    or a small photograph is a reason to crop, not a reason to publish none."""
+    look = sizes({"/portrait": (2000, 3000), "/small": (900, 600)})
+    assert pick_hero(("/portrait",), size_of=look) == "/portrait"
+    assert pick_hero(("/small",), size_of=look) == "/small"
+
+
+def test_the_operator_can_insist_on_a_photograph_the_floor_rejected():
+    """Whose judgement outranks whose. They have seen the picture."""
+    look = sizes({"/flyer": (2400, 1350)})
+    condemned = seen(quality=3, is_hero_candidate=False, is_logo_or_badge=True)
+    assert pick_hero(("/flyer",), 1, size_of=look,
+                     vision={"/flyer": condemned}) == "/flyer"
+
+
+def test_a_good_photograph_is_untouched_by_the_floor():
+    look = sizes({"/a": (2400, 1350)})
+    assert pick_hero(("/a",), size_of=look,
+                     vision={"/a": seen(quality=5,
+                                        headline_region_luminance="dark")}) == "/a"
+
+
+# --- the action's wording ------------------------------------------------ #
+
+def test_a_dentist_is_not_offered_a_table():
+    """It was. "Book a table" is restaurant wording and it reached every trade
+    that resolved to `book` — the kind of thing an owner spots in one second."""
+    from app.site.render import cta_words
+    assert cta_words("book", "food") == "Book a table"
+    assert "table" not in cta_words("book", "care").lower()
+    assert "table" not in cta_words("book", "trade").lower()
+    assert "table" not in cta_words("book", "desk").lower()
+
+
+def test_an_unknown_trade_falls_back_to_wording_that_fits_anyone():
+    from app.site.render import cta_words
+    assert cta_words("book", "default") == "Book now"
+    assert cta_words("nonsense", "default") == "Call us"
+
+
+def test_every_trade_bucket_has_wording_that_reads_for_that_trade():
+    from app.site.render import _CTA_BY_TRADE, cta_words
+    from app.store.photos import HERO_PREFERENCE
+    for trade in HERO_PREFERENCE:
+        if trade == "default":
+            continue
+        assert trade in _CTA_BY_TRADE, f"{trade} has no wording of its own"
+        for kind in ("book", "call", "quote", "order", "visit"):
+            assert cta_words(kind, trade), (trade, kind)
