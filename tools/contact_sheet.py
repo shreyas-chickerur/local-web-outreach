@@ -52,7 +52,13 @@ CHROME = ("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
           "/Applications/Chromium.app/Contents/MacOS/Chromium",
           shutil.which("google-chrome") or "",
           shutil.which("chromium") or "")
-WIDTHS = (("desktop", 1440, 1100), ("mobile", 390, 844))
+# The second row is the one that decides. Above the fold is the only second
+# that matters — it is what the owner sees when the laptop is turned around —
+# and page architecture is mostly a below-the-fold property. If two sites are
+# still indistinguishable in the first viewport after an axis is added, that
+# axis was not doing the work.
+WIDTHS = (("desktop", 1440, 1100), ("mobile", 390, 844),
+          ("fold", 1440, 820))
 
 
 def chrome() -> str | None:
@@ -114,7 +120,9 @@ def main() -> int:
 
     cards = _closest_first(cards)
     (OUT / "index.html").write_text(_sheet(cards))
+    (OUT / "fold.html").write_text(_sheet(cards, fold=True))
     print(f"\n  {OUT / 'index.html'}")
+    print(f"  {OUT / 'fold.html'}   <- the first viewport, the one that decides")
     return 0
 
 
@@ -181,14 +189,16 @@ def _closest_first(cards: list[dict]) -> list[dict]:
     return lead + rest
 
 
-def _sheet(cards: list[dict]) -> str:
+def _sheet(cards: list[dict], *, fold: bool = False) -> str:
     e = html.escape
+    shot = "fold" if fold else "desktop"
     tiles = "\n".join(f'''
       <figure>
         <a href="{e(card['page'])}" target="_blank">
-          <img src="{e(card['shots'].get('desktop', ''))}" alt="">
+          <img src="{e(card['shots'].get(shot, ''))}" alt="">
         </a>
-        <img class="phone" src="{e(card['shots'].get('mobile', ''))}" alt="">
+        {"" if fold else
+          f'<img class="phone" src="{e(card["shots"].get("mobile", ""))}" alt="">'}
         <figcaption>
           <b>{e(card['name'])}</b> <span>{e(card['trade'])}</span>
           {f'<p class="flag">{e(card["flag"])}</p>' if card.get('flag') else ''}
@@ -218,10 +228,15 @@ def _sheet(cards: list[dict]) -> str:
  dt{{color:#6f6f6f}} dd{{margin:0;color:#c9c9c9;overflow-wrap:anywhere}}
  .flag{{margin:6px 0 0;color:#e08a5a;font-size:11px;font-weight:600}}
 </style>
-<h1>{len(cards)} fixtures</h1>
-<p class="note">The question is not whether any one of these is good. It is
-whether a stranger would guess they came from the same tool. The vector under
-each screenshot says which axis collided when two of them feel alike.</p>
+<h1>{len(cards)} fixtures{" — first viewport only" if fold else ""}</h1>
+<p class="note">{"Above the fold is the only second that matters: it is what the "
+ "owner sees when the laptop is turned around. If two of these are still "
+ "indistinguishable here after an axis is added, that axis was not doing the "
+ "work."
+ if fold else
+ "The question is not whether any one of these is good. It is whether a "
+ "stranger would guess they came from the same tool. The vector under each "
+ "screenshot says which axis collided when two of them feel alike."}</p>
 <div class="grid">{tiles}</div>
 """
 

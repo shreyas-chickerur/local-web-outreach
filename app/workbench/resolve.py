@@ -30,14 +30,21 @@ _REAL_TLDS = frozenset("""
 com net org edu gov mil int co io us uk ca au de fr es it nl se no fi dk pl
 br mx jp cn in ru za nz ie ch at be pt gr cz ro hu biz info name pro mobi
 xyz online site website store shop app dev tech digital media agency studio
-design works group team company solutions services expert care clinic dental
-law legal plumbing contractors construction roofing kitchen bar cafe pizza
-restaurant menu salon spa fitness realty homes house estate live life today
-world tv me cc ly sh gg
+design works group team company solutions services expert
+live life today world tv me cc ly sh gg
 example test invalid localhost local
 """.split())
 # The last row is RFC 2606's reserved names plus the ones used on internal
-# networks: they are real top-level domains, they just never resolve publicly.
+# networks: real top-level domains that never resolve publicly.
+#
+# Deliberately absent: .roofing, .plumbing, .law, .legal, .dental, .salon,
+# .spa, .restaurant, .kitchen, .cafe, .pizza, .menu, .contractors,
+# .construction, .fitness, .realty, .homes, .house, .estate, .bar. They all
+# exist, and including them broke the asymmetry precisely along the businesses
+# this tool sells to: "Smith.Roofing" became https://smith.roofing and the name
+# was gone. A local contractor writes their address as smithroofing.com, not
+# smith.roofing. Anyone who really does own one can type the scheme or the
+# www., which still settles it.
 # "Craftway Kitchen, Frisco, TX" and "Craftway Kitchen in Frisco, TX".
 # The separator must be explicit — a bare space cannot introduce the city, or
 # "Ryno Lawn Care in Frisco, TX" loses "Lawn Care" to the city group. A city is

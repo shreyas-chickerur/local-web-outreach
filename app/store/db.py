@@ -68,6 +68,31 @@ CREATE TABLE IF NOT EXISTS sites (
 -- not, and a landscape photograph of raw peppers is still the wrong lead for a
 -- dining room. One pass of labelling per lead is cheaper than iterating on a
 -- hero nobody can judge automatically.
+-- The chat thread, ordered, each turn tied to the version it produced.
+--
+-- THE BOUNDARY THIS TABLE EXISTS TO DRAW: an assistant turn is written by a
+-- model, and model prose is allowed HERE and nowhere near a generated page.
+-- The no-prose rule exists because model text could otherwise reach a site
+-- shown to a business owner, who knows whether it is true. A message to the
+-- operator is not that: they can see the page it describes, and they asked.
+--
+-- Structurally separate on purpose — its own table, its own code path, and
+-- nothing in `app/site/render.py` reads it. The same discipline as the actor
+-- column on photo_labels: the rule is enforced by where the data can go, not
+-- by remembering.
+CREATE TABLE IF NOT EXISTS messages (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id    INTEGER NOT NULL REFERENCES leads(id),
+    role       TEXT NOT NULL CHECK (role IN ('user', 'assistant')),
+    text       TEXT NOT NULL,
+    -- The version this turn produced, when it produced one. A rejected
+    -- instruction and a question back both leave this null.
+    version    INTEGER,
+    at         TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS messages_by_lead ON messages (lead_id, id);
+
 -- What a build has already worked out for this lead, so a retry re-runs only
 -- the stage that failed. Without it a timeout in the last stage throws away
 -- the vision pass and the design decision that preceded it, and the operator

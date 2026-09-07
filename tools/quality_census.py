@@ -30,6 +30,7 @@ import sys
 from pathlib import Path
 
 from app.adapters import claude, vision
+from app.site import agreement
 from app.site import fingerprint as fp
 from app.site.opening import opening_spec
 from app.site.pipeline import STAGES, run_stage, spec_from_config
@@ -259,6 +260,12 @@ def _report(rows, first_pass, again) -> None:
         print(f"    {row['slug']:16} {values}")
 
     prints = [r["fingerprint"] for r in rows]
+    slugs = [r["slug"] for r in rows]
+    distances = {(slugs[i], slugs[j]): fp.distance(a, b)
+                 for i, a in enumerate(prints)
+                 for j, b in enumerate(prints) if i < j}
+    print()
+    print(agreement.score(distances).report())
     pairs = [(fp.distance(a, b), rows[i]["slug"], rows[j]["slug"])
              for i, a in enumerate(prints)
              for j, b in enumerate(prints) if i < j]

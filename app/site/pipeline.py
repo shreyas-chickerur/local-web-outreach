@@ -34,7 +34,7 @@ from app.site.render import (
 from app.site.spec import SiteSpec
 from app.site.theme import theme_for
 from app.site.understand import understand
-from app.store import leads, photos, sites
+from app.store import leads, messages, photos, sites
 
 
 class ContentSafetyError(RuntimeError):
@@ -439,6 +439,14 @@ def _build_opening(conn: sqlite3.Connection, lead_id: int, brief: dict,
     version = sites.save(conn, lead_id, html, instruction, notes=notes,
                          actor=actor, spec_json=config,
                          parent_version=parent_version)
+
+    # The workspace opens on what was decided and why, not on an empty box —
+    # a designer handing over work rather than a tool waiting for input. This
+    # is model prose, and it is allowed here because it reaches the operator
+    # and never the page: `messages` is a different table on a different code
+    # path, and `render` cannot see it.
+    if rationale and not messages.opened(conn, lead_id):
+        messages.add(conn, lead_id, "assistant", rationale, version=version)
     return IterationResult(
         lead_id=lead_id, spec=config,
         understood=list(config.get("understood") or []),

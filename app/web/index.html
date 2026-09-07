@@ -375,6 +375,14 @@
   .ws-body{flex:1;overflow-y:auto;padding:14px 16px}
 
   /* left: the trail, newest first, with the chat pinned under it */
+  .thread{display:grid;gap:10px;margin:0 0 18px}
+  .turn{border-radius:10px;padding:9px 11px;font-size:13px;line-height:1.55}
+  .turn .who{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+    font-weight:700;color:var(--faint);margin-bottom:4px}
+  .turn.assistant{background:var(--raise);border:1px solid var(--line)}
+  .turn.user{background:var(--accent-bg);border:1px solid var(--accent);
+    color:var(--ink)}
+  .turn.user .who{color:var(--accent)}
   .ws-event{display:grid;grid-template-columns:18px 1fr;gap:10px;padding:0 0 13px;
     cursor:default}
   .ws-event.pick{cursor:pointer;border-radius:8px;margin:0 -8px 13px;padding:6px 8px 13px}
@@ -934,6 +942,7 @@ async function openWorkspace(leadId, name) {
         rationale: data.rationale || "", unlocks: data.unlocks || [],
         pending: data.pending_labels || [], canBuild: !!data.can_build,
         build: data.build || null, trouble: data.trouble || [],
+        thread: data.thread || [],
         photos, labelOptions: shots.options || [], shot: 0,
         // A lead with no site and unlabelled photographs starts on the
         // labelling step, not on a workspace that will refuse to build. The
@@ -999,6 +1008,20 @@ function eventLine(e) {
           what: `${esc(e.kind)} <b>${esc(e.field || "")}</b> ${esc(e.new_value || "")}`};
 }
 
+// The conversation. It opens on what the design decided and why — a designer
+// handing over work, not a tool waiting for input. Assistant text is written
+// by a model and reaches the operator only; it has no path to a generated
+// page. See `app/store/messages.py`.
+function drawThread() {
+  if (!(WS.thread || []).length) return "";
+  return `<div class="thread">${WS.thread.map(turn => `
+    <div class="turn ${turn.role}">
+      <div class="who">${turn.role === "user" ? "You" : "Claude"}${
+        turn.version ? ` · v${turn.version}` : ""}</div>
+      <div class="what">${esc(turn.text)}</div>
+    </div>`).join("")}</div>`;
+}
+
 function drawWorkspace() {
   if (WS.stage === "label") {
     const shell = $("#workspace");
@@ -1008,6 +1031,7 @@ function drawWorkspace() {
   }
   const gone = $("#labeller");
   if (gone) gone.remove();
+  const said = drawThread();
   const trail = WS.events.length ? WS.events.map(e => {
     const line = eventLine(e);
     const active = line.version && line.version === WS.active;
@@ -1134,7 +1158,7 @@ function drawWorkspace() {
 
     <section class="ws-pane">
       <div class="ws-head">History</div>
-      <div class="ws-body" id="ws-trail">${trail}</div>
+      <div class="ws-body" id="ws-trail">${said}${trail}</div>
       <form class="chatbox" onsubmit="event.preventDefault();sendInstruction()">
         <textarea id="ws-input" placeholder="warm and rustic, lead with the gallery, book a table"
           onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey))sendInstruction()"></textarea>

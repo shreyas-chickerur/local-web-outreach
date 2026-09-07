@@ -32,7 +32,7 @@ from app.site.pipeline import (
 from app.site.pipeline import iterate as run_iteration
 from app.site.render import build as build_site
 from app.site.render import material_from_brief, plan_for
-from app.store import db, leads, photos, sites
+from app.store import db, leads, messages, photos, sites
 from app.web.serialize import brief_to_dict
 from app.workbench.brief import build_brief
 from app.workbench.categories import BY_KEY, CATEGORIES
@@ -216,6 +216,9 @@ def workspace(lead_id: int) -> dict:
             "can_build": not history and not pending,
             "build": build_progress(conn, lead_id),
             "trouble": trouble,
+            # The conversation, oldest first. It opens on what was decided and
+            # why rather than on an empty box.
+            "thread": messages.thread(conn, lead_id),
         }
 
 
@@ -328,6 +331,9 @@ class Handler(BaseHTTPRequestHandler):
                     self._json(payload)
                     return
                 elif route == "/api/iterate":
+                    said = str(body.get("sentence", "")).strip()
+                    if said:
+                        messages.add(conn, lead_id, "user", said)
                     self._json(iteration(
                         lead_id, str(body.get("sentence", "")),
                         body.get("parent_version")))

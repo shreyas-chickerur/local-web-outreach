@@ -95,6 +95,12 @@ def test_blank_input_is_a_clean_error_not_a_crash(bad):
 
 @pytest.mark.parametrize("text", [
     "S.Handyman", "Mr.Rooter", "A.B.C Plumbing", "J.C. Penney",
+    # The trades this tool sells to. Every one of these suffixes is a real
+    # top-level domain, and treating them as addresses broke the asymmetry
+    # precisely along the customer base: a local contractor writes
+    # smithroofing.com, not smith.roofing.
+    "Smith.Roofing", "Anderson.Law", "Bloom.Salon", "S.Plumbing",
+    "Rossi.Pizza", "Vega.Dental", "Kim.Kitchen", "Ortiz.Construction",
 ])
 def test_a_company_name_containing_a_full_stop_stays_a_name(text):
     """"S.Handyman" was read as https://S.Handyman, so the business was called
@@ -117,7 +123,10 @@ def test_something_that_really_is_an_address_is_still_read_as_one(text):
 
 
 def test_an_explicit_scheme_or_www_settles_it_whatever_the_suffix():
-    """A made-up suffix behind a scheme is still a deliberate address."""
+    """A suffix we do not list is still a deliberate address behind a scheme —
+    which is how anyone who genuinely owns smith.roofing types it."""
     assert looks_like_url("https://intranet.corp") is True
     assert looks_like_url("www.intranet.corp") is True
     assert looks_like_url("intranet.corp") is False
+    assert looks_like_url("https://smith.roofing") is True
+    assert looks_like_url("www.bloom.salon") is True
