@@ -128,8 +128,22 @@ collision fails the build and re-runs the identity decision with the colliding
 axes named; cap the retries and fall back to a deterministic perturbation so a
 build can never hang.
 
-Do not enable the gate until the vector is wide enough to satisfy it. With eight
-axes it would reject nearly everything. Turn it on partway through Slice B.
+**Enabled**, in `app/site/identity.py`, once the premise for deferring it was
+re-checked and had expired. "With eight axes it would reject nearly everything"
+was true at seven axes and false at eight: measured against the corpus after the
+first-screen contract landed, one same-trade pair in ten collided, not nine.
+Nobody had re-checked it against the axis that had actually shipped.
+
+Three stages in order of preference: ask again naming what is taken; perturb
+deterministically when the retries are spent; record an unresolved collision
+rather than shipping one silently. Without a key it goes straight to
+perturbation — asking would fall through to the trade table, which is not a
+different answer but a worse one.
+
+A replayed direction is never re-gated. The gate ran when it was first decided,
+and re-running it on a rebuild is re-asking by another name: it costs a call a
+keyless reviewer cannot make, and it makes the answer depend on the order the
+corpus is loaded in.
 
 ### 2.6 The keyless path must vary too
 

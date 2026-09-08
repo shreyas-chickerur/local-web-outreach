@@ -4,7 +4,7 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "orange",
+    "accent": "navy",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -18,11 +18,11 @@
     "kind": "style",
     "lead_with": null,
     "mood": "industrial",
-    "rationale": "A general contractor earns trust through competence, not scenery, and with only one small photo there isn't enough imagery to build a page around anyway; bold type on the name plus a direct call-to-action reads as capable and no-nonsense, like the trade itself.",
+    "rationale": "With only one small photo that can't carry a hero, and this being a trade where visitors want proof of competence before anything else, the name and craft should lead in bold type rather than lean on a thin photo library.",
     "read_by": "claude",
     "suppress": [],
     "understood": [
-      "A general contractor earns trust through competence, not scenery, and with only one small photo there isn't enough imagery to build a page around anyway; bold type on the name plus a direct call-to-ac"
+      "With only one small photo that can't carry a hero, and this being a trade where visitors want proof of competence before anything else, the name and craft should lead in bold type rather than lean on "
     ],
     "unsupported": []
   },

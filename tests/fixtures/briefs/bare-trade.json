@@ -16,8 +16,8 @@
     },
     "defect": "",
     "emphasis": [
-      "reviews",
-      "stats"
+      "stats",
+      "about"
     ],
     "first_screen": "facts",
     "hero_offset": 0,
@@ -25,13 +25,13 @@
     "kind": "style",
     "lead_with": "reviews",
     "mood": "refined",
-    "rationale": "A family law client is anxious and vetting trust before anything else, so the 4.9-star rating and specific, heartfelt reviews should be the first thing they see, not a photo carousel \u2014 especially since only two images are even large enough to lead with. Navy and a refined mood read as steady, serious competence, which is what someone facing a divorce or custody fight needs to feel about their attorney.",
+    "rationale": "A family law client is anxious and vetting for trust, not browsing photographs of an office building, so the page should open with the 4.9-star, 148-review proof and the attorney's own words rather than a mosaic \u2014 only two photos are even large enough to lead with. Navy and a refined mood read as steady, serious counsel; the call to action should be to call, because someone facing a custody or divorce matter needs to talk to a person now.",
     "read_by": "claude",
     "suppress": [
       "gallery"
     ],
     "understood": [
-      "A family law client is anxious and vetting trust before anything else, so the 4.9-star rating and specific, heartfelt reviews should be the first thing they see, not a photo carousel \u2014 especially sinc"
+      "A family law client is anxious and vetting for trust, not browsing photographs of an office building, so the page should open with the 4.9-star, 148-review proof and the attorney's own words rather th"
     ],
     "unsupported": []
   },

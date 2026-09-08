@@ -93,10 +93,15 @@ def freeze_vision(payload: dict) -> int:
         # The design direction too, for the same reason. Without it a clean
         # checkout with no key measures a different system, and the pinned
         # baseline means nothing to anyone who was not here when it was taken.
-        try:
-            run_stage(conn, stored, "direction")
-        except BuildFailed:
-            pass
+        # Every stage, including `page`. The diversity gate compares against the
+        # sites this workbench has generated, and that history is written when
+        # a page is BUILT — so stopping at `direction` meant the gate never had
+        # anything to compare against and never fired while freezing.
+        for stage in ("direction", "page"):
+            try:
+                run_stage(conn, stored, stage)
+            except BuildFailed:
+                break
         direction = sites.recall_stage(conn, stored, "direction") or {}
         payload["design_direction"] = dict(direction.get("config") or {})
         # And the measurements, the last input that lived outside the corpus:

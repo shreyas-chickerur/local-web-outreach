@@ -3,65 +3,65 @@
 
   barbecue         Barbecue Restaurant       8/8  sections  blocks   5/14    56.8kB  contrast  5.2
                    hero /photo/1/9 (+3.68)
-                   This is a beloved, high-volume BBQ joint with 10 strong photographs of food, fire, and crowds — the smoky bris
+                   This is a beloved, high-volume Texas BBQ joint with 10+ strong photos of food, smoke, and the busy room itself
   bare-trade       Attorney                  5/5  sections  blocks    5/8    50.8kB  contrast 16.1
                    hero /photo/2/1 (+2.63)
-                   A family law client is anxious and vetting trust before anything else, so the 4.9-star rating and specific, he
-  contractor-bare  Plumber                   3/3  sections  blocks    0/0    47.7kB  contrast 12.5
+                   A family law client is anxious and vetting for trust, not browsing photographs of an office building, so the p
+  contractor-bare  Plumber                   2/2  sections  blocks    0/0    45.2kB  contrast  6.1
                    hero /photo/3/6 (+2.61)
-                   This is a plumber, not a restaurant — a visitor's first question is "are these people competent and reliable,"
-  dentist          Dentist                   8/8  sections  blocks   9/11    55.3kB  contrast  5.7
+                   A plumber is hired on proof of competence, not atmosphere, and with only one photo big enough to lead with, th
+  dentist          Dentist                   8/8  sections  blocks   9/11    55.4kB  contrast  5.7
                    hero /photo/4/6 (+3.31)
-                   People choosing a dentist want reassurance of competence and comfort before anything else, and with strong rat
-  hvac             Plumber                   7/7  sections  blocks    3/3    52.1kB  contrast  6.1
+                   People choose a dentist on trust and comfort before anything else, so the first thing a visitor should see is 
+  hvac             Plumber                   7/7  sections  blocks    3/3    52.0kB  contrast  6.2
                    hero /photo/5/0 (+2.60)
-                   This is a trade business whose real selling point is trust at scale — 6,203 Google reviews at 4.9 stars — so a
+                   This is a trade business where trust and responsiveness are the whole pitch — 6,203 Google reviews at 4.9 star
   law              Attorney                  7/7  sections  blocks   6/13    51.7kB  contrast 16.1
                    hero /photo/6/2 (+3.31)
-                   Someone injured and searching for a lawyer wants proof of trust and results before anything else — a 4.9 ratin
+                   Someone hurt in an accident is checking whether this attorney wins and is trusted before anything else — a 4.9
   restaurant-bare  Japanese Restaurant       4/4  sections  blocks    0/0    49.4kB  contrast 12.4
                    hero /photo/7/5 (+3.74)
-                   Ichika's own photography — plated kaiseki, the counter, the chefs at work — is strong and plentiful enough to 
-  restaurant-rich  Restaurant                9/9  sections  blocks    4/5    59.4kB  contrast  5.2
+                   Ichika is a kaiseki restaurant where the plating itself is the argument for why someone should book — nine str
+  restaurant-rich  Restaurant               10/10 sections  blocks    5/5    59.8kB  contrast  5.2
                    hero /photo/8/9 (+3.19)
-                   This is a warm, farm-to-table neighborhood restaurant in a house-like building with genuinely strong photograp
-  roofer           Roofing Contractor        6/6  sections  blocks  10/13    51.1kB  contrast 12.5
+                   This is a farm-to-table neighborhood restaurant with a genuine story (whole-animal philosophy, named chef, hou
+  roofer           Roofing Contractor        6/6  sections  blocks  10/13    51.2kB  contrast 12.5
                    hero /photo/9/2 (+3.04)
-                   A roofing contractor sells trust and competence before atmosphere — visitors want to see the 5.0 rating, 218 r
-  salon            Beauty Salon              5/5  sections  blocks   4/10    51.5kB  contrast 14.4
+                   A roofing contractor sells competence before atmosphere: a visitor scared about their roof wants to see the 5.
+  salon            Beauty Salon              5/5  sections  blocks   4/10    51.5kB  contrast  7.1
                    hero /photo/10/0 (+2.23)
-                   This is actually a salon-suite rental business, not a walk-in salon — its real customers are beauty profession
-  threadbare       General Contractor        0/0  sections  blocks    0/0    41.5kB  contrast  5.0
+                   This isn't really a walk-in salon for the public — it's a suite-rental business selling beauty professionals o
+  threadbare       General Contractor        0/0  sections  blocks    0/0    41.5kB  contrast 12.5
                    hero None (-1.41)
-                   A general contractor earns trust through competence, not scenery, and with only one small photo there isn't en
+                   With only one small photo that can't carry a hero, and this being a trade where visitors want proof of compete
 
   fingerprints
     barbecue         mood=warm accent=terracotta leads_with=gallery action=order
     bare-trade       mood=refined accent=navy leads_with=reviews action=call
-    contractor-bare  mood=industrial accent=navy leads_with=stats action=call
-    dentist          mood=warm accent=teal leads_with=stats action=book
-    hvac             mood=industrial accent=blue leads_with=stats action=call
+    contractor-bare  mood=industrial accent=blue leads_with=stats action=call
+    dentist          mood=warm accent=teal leads_with=reviews action=book
+    hvac             mood=industrial accent=amber leads_with=reviews action=call
     law              mood=refined accent=navy leads_with=stats action=call
     restaurant-bare  mood=refined accent=crimson leads_with=gallery action=book
-    restaurant-rich  mood=warm accent=terracotta leads_with=gallery action=book
+    restaurant-rich  mood=warm accent=olive leads_with=about action=book
     roofer           mood=industrial accent=navy leads_with=stats action=quote
-    salon            mood=refined accent=plum leads_with=about action=visit
-    threadbare       mood=industrial accent=orange leads_with=- action=call
+    salon            mood=refined accent=gold leads_with=gallery action=call
+    threadbare       mood=industrial accent=navy leads_with=- action=call
 
-  AGREEMENT  36/36 (100%) of cross-comparisons ordered correctly, 2 unsure and not scored  [labels 747e4ef5]
+  AGREEMENT  40/40 (100%) of cross-comparisons ordered correctly, 2 unsure and not scored  [labels 449b9ddb]
 
-  PAIRWISE DISTANCE  mean 80% across 55 pairs
-  SAME TRADE         mean 52% distance = 48% identical, across 10 pairs
-                     baseline 52% (48% identical) — no better than the baseline
+  PAIRWISE DISTANCE  mean 82% across 55 pairs
+  SAME TRADE         mean 62% distance = 38% identical, across 10 pairs
+                     baseline 62% (38% identical) — FRESHLY RE-PINNED — this run IS the baseline, so there is nothing to compare yet. The next run is the first that can say better or worse.
                      <-- the number Slice B has to move
-      20%  barbecue vs restaurant-rich  <-- the case B has to fix
-      35%  bare-trade vs law
-      35%  contractor-bare vs hvac
+      35%  bare-trade vs law  <-- the case B has to fix
+      50%  barbecue vs restaurant-bare
+      55%  contractor-bare vs roofer
     (the diversity gate is off until the vector is wide enough to satisfy it)
 
   closest pairs — these are the ones that look like one tool:
-      20%  barbecue         vs restaurant-rich  same on: accent, first_screen, hero_subject, leads_with, mood
       35%  bare-trade       vs law              same on: accent, action, first_screen, mood
-      35%  contractor-bare  vs hvac             same on: action, first_screen, leads_with, mood
-      40%  hvac             vs law              same on: action, first_screen, hero_subject, leads_with
-      40%  restaurant-bare  vs restaurant-rich  same on: action, first_screen, hero_subject, leads_with
+      45%  restaurant-bare  vs salon            same on: first_screen, leads_with, mood
+      50%  barbecue         vs restaurant-bare  same on: first_screen, hero_subject, leads_with
+      50%  dentist          vs hvac             same on: first_screen, hero_subject, leads_with
+      55%  bare-trade       vs salon            same on: action, hero_subject, mood

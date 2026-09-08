@@ -5,7 +5,7 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "terracotta",
+    "accent": "olive",
     "contradictions": [],
     "cta": {
       "kind": "book",
@@ -13,22 +13,20 @@
     },
     "defect": "",
     "emphasis": [
-      "about",
+      "gallery",
       "reviews"
     ],
-    "first_screen": "photo",
+    "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "gallery",
+    "lead_with": "about",
     "mood": "warm",
-    "rationale": "This is a warm, farm-to-table neighborhood restaurant in a house-like building with genuinely strong photography (8 large-worthy shots of food, ingredients, and the glowing exterior at night), so the site should open on that atmosphere and let the food and room sell themselves before anything else. A visitor walking past wants to feel the cottage-dinner-party warmth and see what's on the plate, then read the farm-sourcing story and reviews, before booking a table.",
+    "rationale": "This is a farm-to-table neighborhood restaurant with a genuine story (whole-animal philosophy, named chef, house-turned-restaurant setting) and strong ratings, so the opening should pair that voice with the room rather than open on gallery alone as the prior site did \u2014 a split screen lets the Heritage Table building and name share the first moment while the about section immediately backs it up with substance. Olive replaces terracotta to read as farm/kitchen rather than repeating the same warm-",
     "read_by": "claude",
-    "suppress": [
-      "recognition"
-    ],
+    "suppress": [],
     "understood": [
-      "This is a warm, farm-to-table neighborhood restaurant in a house-like building with genuinely strong photography (8 large-worthy shots of food, ingredients, and the glowing exterior at night), so the "
+      "This is a farm-to-table neighborhood restaurant with a genuine story (whole-animal philosophy, named chef, house-turned-restaurant setting) and strong ratings, so the opening should pair that voice wi"
     ],
     "unsupported": []
   },

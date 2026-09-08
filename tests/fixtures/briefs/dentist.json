@@ -14,22 +14,22 @@
     },
     "defect": "",
     "emphasis": [
-      "reviews",
+      "stats",
       "services"
     ],
     "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "reviews",
     "mood": "warm",
-    "rationale": "People choosing a dentist want reassurance of competence and comfort before anything else, and with strong ratings (4.7/4.6) and warm patient reviews already in hand, leading with those facts builds trust faster than photos of a waiting room. A warm, teal-accented feel signals calm and cleanliness rather than the cold-clinical or corporate look many dental sites default to; 'Menu' has no real content here (only 'Special') so it's suppressed to avoid an embarrassing empty section.",
+    "rationale": "People choose a dentist on trust and comfort before anything else, so the first thing a visitor should see is the strong rating and warm patient reviews, not a stock photo of a chair. The practice's own imagery is friendly but only has a handful of strong shots, so a proof-led opening with stats and reviews up top does more for them than a photo-behind-name look every clinic uses; the 'menu' section has no real material (just 'Special') so it's suppressed.",
     "read_by": "claude",
     "suppress": [
       "menu"
     ],
     "understood": [
-      "People choosing a dentist want reassurance of competence and comfort before anything else, and with strong ratings (4.7/4.6) and warm patient reviews already in hand, leading with those facts builds t"
+      "People choose a dentist on trust and comfort before anything else, so the first thing a visitor should see is the strong rating and warm patient reviews, not a stock photo of a chair. The practice's o"
     ],
     "unsupported": []
   },

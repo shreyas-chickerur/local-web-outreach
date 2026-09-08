@@ -25,13 +25,13 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "refined",
-    "rationale": "Someone injured and searching for a lawyer wants proof of trust and results before anything else \u2014 a 4.9 rating from 254 reviews says \"competent and chosen by others\" faster than any office photo could, and the photography itself is mostly headshots and promo graphics, not the kind of imagery that carries a page. Lead with stats and reviews, use a navy accent for legal seriousness, and push toward a call for the free consultation, which is the one action that matters to someone in this position.",
+    "rationale": "Someone hurt in an accident is checking whether this attorney wins and is trusted before anything else \u2014 a 4.9-star rating over 254 reviews says that in seconds, where a photo of an office or a headshot cannot. The gallery is mostly promo graphics and portraits rather than real casework or courtroom moments, so it should support the story further down, not open it.",
     "read_by": "claude",
     "suppress": [
       "gallery"
     ],
     "understood": [
-      "Someone injured and searching for a lawyer wants proof of trust and results before anything else \u2014 a 4.9 rating from 254 reviews says \"competent and chosen by others\" faster than any office photo coul"
+      "Someone hurt in an accident is checking whether this attorney wins and is trusted before anything else \u2014 a 4.9-star rating over 254 reviews says that in seconds, where a photo of an office or a headsh"
     ],
     "unsupported": []
   },

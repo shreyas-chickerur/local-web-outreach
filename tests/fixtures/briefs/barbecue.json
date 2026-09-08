@@ -23,13 +23,13 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "This is a beloved, high-volume BBQ joint with 10 strong photographs of food, fire, and crowds \u2014 the smoky brisket trays and packed dining room tell people what they're walking into before a word does. Lead with that imagery and the huge review numbers (4.8 from nearly 14k people) to back up the immediate craving, then push toward ordering since catering and delivery are clearly a major part of how they do business.",
+    "rationale": "This is a beloved, high-volume Texas BBQ joint with 10+ strong photos of food, smoke, and the busy room itself \u2014 the pictures and the massive review counts (4.8 from nearly 14,000 people) are the strongest proof of quality, so the site should open on that atmosphere and let people move quickly to ordering or catering rather than reading paragraphs of copy.",
     "read_by": "claude",
     "suppress": [
       "features"
     ],
     "understood": [
-      "This is a beloved, high-volume BBQ joint with 10 strong photographs of food, fire, and crowds \u2014 the smoky brisket trays and packed dining room tell people what they're walking into before a word does."
+      "This is a beloved, high-volume Texas BBQ joint with 10+ strong photos of food, smoke, and the busy room itself \u2014 the pictures and the massive review counts (4.8 from nearly 14,000 people) are the stro"
     ],
     "unsupported": []
   },

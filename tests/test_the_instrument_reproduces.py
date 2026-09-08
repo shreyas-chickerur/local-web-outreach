@@ -32,7 +32,7 @@ FIXTURES = Path("tests/fixtures/briefs")
 # instrument changed is not a result.
 RULER = "575db030"
 LABELS = "449b9ddb"
-SAME_TRADE_MEAN = 0.52
+SAME_TRADE_MEAN = 0.62
 AGREEMENT = (40, 40)
 
 

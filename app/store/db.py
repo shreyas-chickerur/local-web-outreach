@@ -68,6 +68,24 @@ CREATE TABLE IF NOT EXISTS sites (
 -- not, and a landscape photograph of raw peppers is still the wrong lead for a
 -- dining room. One pass of labelling per lead is cheaper than iterating on a
 -- hero nobody can judge automatically.
+-- The last N sites this workbench generated, as decision vectors. The
+-- diversity budget compares a new site against these: a generator's
+-- characteristic failure is that its output is recognisable as its output, and
+-- that is only detectable across sites rather than within one.
+--
+-- Stored rather than recomputed because the point is what was ACTUALLY shipped
+-- before, including from leads whose briefs have since moved.
+CREATE TABLE IF NOT EXISTS fingerprints (
+    id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id INTEGER NOT NULL REFERENCES leads(id),
+    version INTEGER,
+    ruler   TEXT NOT NULL,
+    values_json TEXT NOT NULL,
+    at      TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS fingerprints_recent ON fingerprints (id DESC);
+
 -- The chat thread, ordered, each turn tied to the version it produced.
 --
 -- THE BOUNDARY THIS TABLE EXISTS TO DRAW: an assistant turn is written by a

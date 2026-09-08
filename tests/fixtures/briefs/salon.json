@@ -7,30 +7,30 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "plum",
+    "accent": "gold",
     "contradictions": [],
     "cta": {
-      "kind": "visit",
+      "kind": "call",
       "label": ""
     },
     "defect": "",
     "emphasis": [
-      "gallery",
-      "reviews"
+      "reviews",
+      "services"
     ],
     "first_screen": "photo",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "about",
+    "lead_with": "gallery",
     "mood": "refined",
-    "rationale": "This is actually a salon-suite rental business, not a walk-in salon \u2014 its real customers are beauty professionals deciding whether to lease a chair here, so the page needs to sell the upscale space and the support/community story before anything else, with the strong interior and storefront photography proving the \"luxury\" claim. Reviews from current tenants (not hair clients) are the closest thing to proof of that pitch, so they and the gallery deserve early weight, while the thin, mixed-signal",
+    "rationale": "This isn't really a walk-in salon for the public \u2014 it's a suite-rental business selling beauty professionals on an upscale space to build their own careers, so the room itself (the chandeliered hallway, clean stations, the storefront) needs to sell that luxury feel first, backed by warm testimonials from current tenants. A gold accent and refined mood match the \"luxury salon suites\" positioning, and with 7 strong photographs a photo-led opening earns its keep, while the thin review count (56/2) ",
     "read_by": "claude",
     "suppress": [
       "stats"
     ],
     "understood": [
-      "This is actually a salon-suite rental business, not a walk-in salon \u2014 its real customers are beauty professionals deciding whether to lease a chair here, so the page needs to sell the upscale space an"
+      "This isn't really a walk-in salon for the public \u2014 it's a suite-rental business selling beauty professionals on an upscale space to build their own careers, so the room itself (the chandeliered hallwa"
     ],
     "unsupported": []
   },

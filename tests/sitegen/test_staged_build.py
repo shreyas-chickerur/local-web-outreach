@@ -60,19 +60,26 @@ def test_each_stage_runs_in_order_and_is_recorded(conn, looked):
 
 
 def test_a_stage_already_answered_is_not_asked_again(conn, looked):
+    # Patched at the source. `identity.decide` imports `opening_spec` from
+    # `app.site.opening` directly, so patching the pipeline's alias counts
+    # nothing the diversity gate does.
+    from app.site import opening
+
     asked = {"n": 0}
-    monkey = pipeline.opening_spec
+    monkey = opening.opening_spec
 
     def counted(brief, **kw):
         asked["n"] += 1
         return monkey(brief, **kw)
 
+    opening.opening_spec = counted
     pipeline.opening_spec = counted
     try:
         run_stage(conn, looked, "photographs")
         first = run_stage(conn, looked, "direction")
         second = run_stage(conn, looked, "direction")
     finally:
+        opening.opening_spec = monkey
         pipeline.opening_spec = monkey
     assert asked["n"] == 1
     assert first["reused"] is False and second["reused"] is True
@@ -190,7 +197,9 @@ def test_a_second_build_over_the_same_lead_asks_nothing(conn, looked,
     unit speed. If either answer is re-asked, tuning the diversity budget over
     a few dozen leads is unaffordable and the loop is unusable."""
     asked = {"vision": 0, "direction": 0}
-    real_look, real_open = pipeline.vision.look, pipeline.opening_spec
+    from app.site.opening import opening_spec as real_open_source
+
+    real_look, real_open = pipeline.vision.look, real_open_source
 
     def counted_look(urls, names):
         asked["vision"] += 1
@@ -202,7 +211,10 @@ def test_a_second_build_over_the_same_lead_asks_nothing(conn, looked,
         asked["direction"] += 1
         return real_open(brief, **kw)
 
+    from app.site import opening
+
     monkeypatch.setattr(pipeline.vision, "look", counted_look)
+    monkeypatch.setattr(opening, "opening_spec", counted_open)
     monkeypatch.setattr(pipeline, "opening_spec", counted_open)
     for stage in STAGES:
         run_stage(conn, looked, stage)

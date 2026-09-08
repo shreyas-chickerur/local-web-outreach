@@ -34,7 +34,7 @@ from app.site.render import (
 from app.site.spec import SiteSpec
 from app.site.theme import theme_for
 from app.site.understand import understand
-from app.store import leads, messages, photos, sites
+from app.store import fingerprints, leads, messages, photos, sites
 
 
 class ContentSafetyError(RuntimeError):
@@ -276,7 +276,7 @@ def run_stage(conn: sqlite3.Connection, lead_id: int, stage: str,
         if stage == "photographs":
             answer = _stage_photographs(conn, lead_id, brief)
         elif stage == "direction":
-            answer = _stage_direction(brief)
+            answer = _stage_direction(conn, lead_id, brief)
         else:
             answer = _stage_page(conn, lead_id, brief, actor=actor)
     except BuildFailed:
@@ -333,9 +333,20 @@ def _stage_photographs(conn: sqlite3.Connection, lead_id: int,
             "photographs": len(material.images)}
 
 
-def _stage_direction(brief: dict) -> dict:
-    """What kind of site this business should get."""
-    return {"config": opening_spec(brief)}
+def _stage_direction(conn: sqlite3.Connection, lead_id: int,
+                     brief: dict) -> dict:
+    """What kind of site this business should get, and not one it already made.
+
+    The diversity budget runs here rather than after rendering: a collision is
+    a request for a different DECISION, and re-deciding is cheap where
+    re-rendering and re-auditing is not.
+    """
+    from app.site.identity import decide
+
+    made = decide(conn, lead_id, brief)
+    return {"config": made.config, "attempts": made.attempts,
+            "perturbed": made.perturbed, "unresolved": made.unresolved,
+            "collided_with": made.collided_with}
 
 
 def _stage_page(conn: sqlite3.Connection, lead_id: int, brief: dict,
@@ -440,6 +451,14 @@ def _build_opening(conn: sqlite3.Connection, lead_id: int, brief: dict,
     version = sites.save(conn, lead_id, html, instruction, notes=notes,
                          actor=actor, spec_json=config,
                          parent_version=parent_version)
+
+    # What this site actually decided, for the next one to differ from. Written
+    # after the gate rather than before it, so the history is what shipped.
+    from app.site import fingerprint as fp
+
+    fingerprints.remember(conn, lead_id, version, fp.metric_version(),
+                          dict(fp.of(resolved, spec,
+                                     material_from_brief(brief)).values))
 
     # The workspace opens on what was decided and why, not on an empty box —
     # a designer handing over work rather than a tool waiting for input. This

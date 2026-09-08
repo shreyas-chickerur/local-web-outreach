@@ -52,9 +52,15 @@ FIXTURES = Path("tests/fixtures/briefs")
 # 2026-09-07, eleven fixtures, EIGHT axes — the first-screen contract added as
 # axis one — weighted by visibility x decidedness (ruler 575db030):
 #
-#   same-trade mean   52% distance  =  48% IDENTICAL
-#   worst pair        20% distance  —  barbecue vs restaurant-rich
-#   agreement         36 of 36
+#   same-trade mean   62% distance  =  38% IDENTICAL
+#   worst pair        35% distance  —  bare-trade vs law
+#   agreement         40 of 40
+#
+# The diversity budget landing moved this from 52% to 62% with the agreement
+# held at 40/40 — the first change that improved the mean without costing
+# accuracy. `barbecue` and `restaurant-rich`, the pair the first-screen axis
+# was predicted to separate and did not, are no longer in the closest ten:
+# `restaurant-rich` was pushed off `photo`/`terracotta` onto `split`/`olive`.
 #
 # The mean did not move and the agreement did, which is the point: an axis
 # earns no credit for raising the mean. `dentist` and `law` — the standing
@@ -83,8 +89,8 @@ FIXTURES = Path("tests/fixtures/briefs")
 # Which is the argument for the gate staying off. Gating on an instrument that
 # reports 50% for two pages a stranger would call identical would reject builds
 # for the wrong reasons and pass the ones that matter.
-BASELINE_SAME_TRADE = 0.52
-BASELINE_WORST = ("barbecue", "restaurant-rich", 0.20)
+BASELINE_SAME_TRADE = 0.62
+BASELINE_WORST = ("bare-trade", "law", 0.35)
 # Which ruler the numbers above were taken with. A distance is comparable only
 # to another taken the same way, and comparing across a change of ruler has
 # already produced two false readings — a corpus that changed under a pinned
@@ -136,6 +142,7 @@ class Counter:
 
         vision.look = counted_look                              # type: ignore[assignment]
 
+        import app.site.opening as opening
         import app.site.pipeline as pipeline
 
         def counted_open(brief, **kw):
@@ -147,6 +154,10 @@ class Counter:
                 self.direction += 1
             return answer
 
+        # At the source. `identity.decide` imports `opening_spec` from
+        # `app.site.opening` directly, so patching the pipeline's alias missed
+        # every call the diversity gate made and the census reported zero.
+        opening.opening_spec = counted_open                     # type: ignore[assignment]
         pipeline.opening_spec = counted_open                    # type: ignore[assignment]
         pipeline.vision.look = counted_look                     # type: ignore[assignment]
 

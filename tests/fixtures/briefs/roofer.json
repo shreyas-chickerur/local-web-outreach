@@ -22,13 +22,13 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "A roofing contractor sells trust and competence before atmosphere \u2014 visitors want to see the 5.0 rating, 218 reviews, and multi-state W2-insured operation before anything else, so the stats/proof band belongs first, not a photo. The palette should read as sturdy and professional (navy over anything soft), services and reviews get emphasis since that's what closes the job, and the gallery stays present but secondary since only 7 of 12 photos are strong enough to carry a lead position.",
+    "rationale": "A roofing contractor sells competence before atmosphere: a visitor scared about their roof wants to see the 5.0 rating over 218 reviews, the BBB A+, and the four-state W2-insured operation before anything else, so we open on that proof band rather than a photo. The gallery has only 7 usable shots (mostly aerials and crews) so it's real but secondary \u2014 supporting evidence under the services and reviews that actually build trust.",
     "read_by": "claude",
     "suppress": [
       "gallery"
     ],
     "understood": [
-      "A roofing contractor sells trust and competence before atmosphere \u2014 visitors want to see the 5.0 rating, 218 reviews, and multi-state W2-insured operation before anything else, so the stats/proof band"
+      "A roofing contractor sells competence before atmosphere: a visitor scared about their roof wants to see the 5.0 rating over 218 reviews, the BBB A+, and the four-state W2-insured operation before anyt"
     ],
     "unsupported": []
   },
