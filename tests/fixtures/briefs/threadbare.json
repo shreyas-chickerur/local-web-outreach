@@ -12,18 +12,17 @@
     },
     "defect": "",
     "emphasis": [],
+    "first_screen": "type",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "services",
+    "lead_with": null,
     "mood": "industrial",
-    "rationale": "A general handyman needs to show what jobs he covers and how to reach him fast \u2014 that's what earns trust, not a single small photo, so we suppress the gallery and open on services with a call CTA. Orange on an industrial, workmanlike backdrop reads as tools-and-trade rather than trying to look fancy.",
-    "read_by": "frozen",
-    "suppress": [
-      "gallery"
-    ],
+    "rationale": "A general contractor earns trust through competence, not scenery, and with only one small photo there isn't enough imagery to build a page around anyway; bold type on the name plus a direct call-to-action reads as capable and no-nonsense, like the trade itself.",
+    "read_by": "claude",
+    "suppress": [],
     "understood": [
-      "A general handyman needs to show what jobs he covers and how to reach him fast \u2014 that's what earns trust, not a single small photo, so we suppress the gallery and open on services with a call CTA. Ora"
+      "A general contractor earns trust through competence, not scenery, and with only one small photo there isn't enough imagery to build a page around anyway; bold type on the name plus a direct call-to-ac"
     ],
     "unsupported": []
   },
@@ -76,8 +75,7 @@
     "/photo/11/0": "people"
   },
   "photo_notes": {
-    "/photo/11/0": "A smiling man in a navy polo shirt holding a power drill and rolled papers, wearing a tool belt, standing in a kitchen, with promotional text and badge graphics overlaid reading 'Best Handyman', 'Top ",
-    "/photo/12/0": "A smiling man in a navy polo shirt holding a power drill and rolled papers, wearing a tool belt, standing in a kitchen with badge graphics and text reading Best Handyman overlaid on the image."
+    "/photo/11/0": "A smiling man in a navy polo shirt holding a power drill and rolled papers, wearing a tool belt, standing in a kitchen, with promotional text and badge graphics overlaid reading 'Best Handyman', 'Top "
   },
   "photo_sizes": {
     "/photo/11/0": [

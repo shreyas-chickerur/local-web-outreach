@@ -127,6 +127,7 @@ def spec_from_config(config: dict) -> SiteSpec:
         cta=(cta or {}).get("kind") if isinstance(cta, dict) else cta,
         cta_label=(cta or {}).get("label") if isinstance(cta, dict) else None,
         accent=config.get("accent"),
+        first_screen=str(config.get("first_screen") or "photo"),
         hero_offset=int(config.get("hero_offset") or 0),
         understood=list(config.get("understood") or []),
         ignored=list(config.get("ignored_tokens") or []),

@@ -16,18 +16,19 @@
       "about",
       "reviews"
     ],
+    "first_screen": "photo",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "This is a farm-to-table neighborhood restaurant in a converted house, and it has 8 strong photos of the dish, room, and building that should sell the atmosphere before anything else; the chef's sourcing philosophy and glowing reviews back that up, while the thin partner list would look bare if featured. A \"book\" call-to-action fits a scratch-kitchen dinner spot people plan a visit around.",
-    "read_by": "frozen",
+    "rationale": "This is a warm, farm-to-table neighborhood restaurant in a house-like building with genuinely strong photography (8 large-worthy shots of food, ingredients, and the glowing exterior at night), so the site should open on that atmosphere and let the food and room sell themselves before anything else. A visitor walking past wants to feel the cottage-dinner-party warmth and see what's on the plate, then read the farm-sourcing story and reviews, before booking a table.",
+    "read_by": "claude",
     "suppress": [
-      "partners"
+      "recognition"
     ],
     "understood": [
-      "This is a farm-to-table neighborhood restaurant in a converted house, and it has 8 strong photos of the dish, room, and building that should sell the atmosphere before anything else; the chef's sourci"
+      "This is a warm, farm-to-table neighborhood restaurant in a house-like building with genuinely strong photography (8 large-worthy shots of food, ingredients, and the glowing exterior at night), so the "
     ],
     "unsupported": []
   },

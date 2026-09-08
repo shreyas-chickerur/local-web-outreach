@@ -19,18 +19,19 @@
       "reviews",
       "services"
     ],
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "refined",
-    "rationale": "A personal injury attorney needs to establish trust and results fast \u2014 the 4.9-star rating with 254 reviews and clear case-type expertise reassure an anxious, injured visitor before anything else, and a direct call-to-action fits someone who needs help now. The mood should read as competent and serious rather than playful, and the photo mix (mostly small headshots and promo graphics, not a real gallery-worthy set) is better folded into services/about than showcased as a lead gallery.",
-    "read_by": "frozen",
+    "rationale": "Someone injured and searching for a lawyer wants proof of trust and results before anything else \u2014 a 4.9 rating from 254 reviews says \"competent and chosen by others\" faster than any office photo could, and the photography itself is mostly headshots and promo graphics, not the kind of imagery that carries a page. Lead with stats and reviews, use a navy accent for legal seriousness, and push toward a call for the free consultation, which is the one action that matters to someone in this position.",
+    "read_by": "claude",
     "suppress": [
       "gallery"
     ],
     "understood": [
-      "A personal injury attorney needs to establish trust and results fast \u2014 the 4.9-star rating with 254 reviews and clear case-type expertise reassure an anxious, injured visitor before anything else, and"
+      "Someone injured and searching for a lawyer wants proof of trust and results before anything else \u2014 a 4.9 rating from 254 reviews says \"competent and chosen by others\" faster than any office photo coul"
     ],
     "unsupported": []
   },

@@ -36,6 +36,7 @@ from dataclasses import dataclass
 # makes page architecture independently settable, which is what it was always
 # standing in for.
 AXES: tuple[str, ...] = (
+    "first_screen",
     "mood",
     "accent",
     "leads_with",
@@ -49,7 +50,7 @@ AXES: tuple[str, ...] = (
 # differ only on colour are the same site painted twice, so the budget requires
 # at least one of these.
 STRUCTURAL: frozenset[str] = frozenset(
-    {"leads_with", "section_order", "compositions"})
+    {"first_screen", "leads_with", "section_order", "compositions"})
 
 # What each axis is worth in the distance, from two separate principles that
 # happen to agree today and will not once Slice B lands.
@@ -72,6 +73,10 @@ STRUCTURAL: frozenset[str] = frozenset(
 # WHEN THEY DISAGREE, DECIDEDNESS WINS, which is what `min` encodes. The vector
 # measures design decisions, and a consequence of the brief is not one.
 VISIBILITY: dict[str, float] = {
+    # It IS the first screen. Nothing else on this list is seen sooner or
+    # counts for more — two pages that open the same way are the same site to
+    # the owner being shown them.
+    "first_screen": 3.0,
     "mood": 2.0,             # the whole feel, and the first thing on screen
     "accent": 1.0,           # immediate, but only paint
     "hero_subject": 1.5,     # the largest thing above the fold
@@ -82,6 +87,9 @@ VISIBILITY: dict[str, float] = {
 }
 
 DECIDEDNESS: dict[str, float] = {
+    # Chosen outright, though the material narrows what is offerable: a
+    # business with no usable photograph cannot be given a photographic one.
+    "first_screen": 2.5,
     "mood": 2.0,             # chosen outright
     "accent": 2.0,           # chosen outright
     "hero_subject": 1.5,     # chosen, from what they happen to have
@@ -157,6 +165,7 @@ def of(plan, spec, material=None) -> Fingerprint:
         hero_subject = str(
             material.photo_labels.get(plan.hero_photo) or "unlabelled")
     return Fingerprint({
+        "first_screen": str(spec.first_screen or "photo"),
         "mood": str(spec.mood),
         "accent": str(spec.accent or "theme default"),
         "leads_with": str(spec.lead_with or (sections[0] if sections else "-")),

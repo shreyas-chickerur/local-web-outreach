@@ -10,19 +10,19 @@
     },
     "defect": "",
     "emphasis": [
-      "reviews",
-      "stats"
+      "reviews"
     ],
+    "first_screen": "photo",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "gallery",
     "mood": "refined",
-    "rationale": "Ichika's own photos of precise, seasonal kaiseki dishes are the strongest proof of quality it has, and with nine strong images the site should open on the food and room rather than tell people about it. A perfect 5.0 rating across dozens of reviews and quotes comparing service to Michelin-starred restaurants back that up immediately after, with a refined, quietly formal mood and a deep crimson accent echoing the lacquered dishware, driving straight to a reservation.",
-    "read_by": "frozen",
+    "rationale": "Ichika's own photography \u2014 plated kaiseki, the counter, the chefs at work \u2014 is strong and plentiful enough to sell the experience before a word is read, and the 5.0 reviews naming a kaiseki menu and Michelin-level service confirm this is a considered, quiet, high-craft room rather than a casual diner. Leading with a full-bleed photo behind the name and then the gallery mirrors how a walk-in decides to book, with reviews raised early to reinforce trust and booking as the natural next step.",
+    "read_by": "claude",
     "suppress": [],
     "understood": [
-      "Ichika's own photos of precise, seasonal kaiseki dishes are the strongest proof of quality it has, and with nine strong images the site should open on the food and room rather than tell people about i"
+      "Ichika's own photography \u2014 plated kaiseki, the counter, the chefs at work \u2014 is strong and plentiful enough to sell the experience before a word is read, and the 5.0 reviews naming a kaiseki menu and M"
     ],
     "unsupported": []
   },

@@ -9,7 +9,7 @@
     "google returns 5 locations under this name in one search"
   ],
   "design_direction": {
-    "accent": "amber",
+    "accent": "blue",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -20,18 +20,17 @@
       "reviews",
       "services"
     ],
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "This is a home-services plumber/electrician whose whole pitch is trust and speed proven by volume \u2014 6,203 Google reviews at 4.9 stars is the strongest asset they have, so numbers should hit first, followed by named-technician reviews and the service list; the industrial mood and amber accent match vans, panels, and pipework rather than a soft residential feel, and a single 'Call' CTA fits an urgent, same-day trade.",
-    "read_by": "frozen",
-    "suppress": [
-      "features"
-    ],
+    "rationale": "This is a trade business whose real selling point is trust at scale \u2014 6,203 Google reviews at 4.9 stars \u2014 so a visitor needs those numbers before anything else, not a mood photo. Leading with facts and following quickly with reviews and the service list matches how someone decides whether to call a plumber, and industrial/blue reads as competent and technical rather than decorative.",
+    "read_by": "claude",
+    "suppress": [],
     "understood": [
-      "This is a home-services plumber/electrician whose whole pitch is trust and speed proven by volume \u2014 6,203 Google reviews at 4.9 stars is the strongest asset they have, so numbers should hit first, fol"
+      "This is a trade business whose real selling point is trust at scale \u2014 6,203 Google reviews at 4.9 stars \u2014 so a visitor needs those numbers before anything else, not a mood photo. Leading with facts an"
     ],
     "unsupported": []
   },

@@ -49,12 +49,21 @@ FIXTURES = Path("tests/fixtures/briefs")
 # than against a memory. Recorded here rather than in a note because the report
 # should say whether it is better or worse every time it runs.
 #
-# 2026-09-07, eleven fixtures, SEVEN axes (layout_bias removed as a duplicate
-# of mood), weighted by visibility and decidedness (ruler 563eaa0b):
+# 2026-09-07, eleven fixtures, EIGHT axes — the first-screen contract added as
+# axis one — weighted by visibility x decidedness (ruler 575db030):
 #
 #   same-trade mean   52% distance  =  48% IDENTICAL
-#   worst pair        27% distance  —  contractor-bare vs roofer, and
-#                                      barbecue vs restaurant-rich
+#   worst pair        20% distance  —  barbecue vs restaurant-rich
+#   agreement         36 of 36
+#
+# The mean did not move and the agreement did, which is the point: an axis
+# earns no credit for raising the mean. `dentist` and `law` — the standing
+# inversion, two pages a person calls identical — resolved, because one chose
+# `proof` and the other `facts`. That was the pre-registered claim in
+# .reviews/slice-b-predictions.md and it is the reason the axis went first.
+#
+# The dip I predicted did not happen. Recorded because predictions are only
+# worth writing down if being wrong is reportable.
 #
 # An earlier baseline of 40% was taken against a nine-fixture corpus that was
 # the wrong shape — no fixture carried the business's own photographs, so it
@@ -75,12 +84,12 @@ FIXTURES = Path("tests/fixtures/briefs")
 # reports 50% for two pages a stranger would call identical would reject builds
 # for the wrong reasons and pass the ones that matter.
 BASELINE_SAME_TRADE = 0.52
-BASELINE_WORST = ("contractor-bare", "roofer", 0.27)
+BASELINE_WORST = ("barbecue", "restaurant-rich", 0.20)
 # Which ruler the numbers above were taken with. A distance is comparable only
 # to another taken the same way, and comparing across a change of ruler has
 # already produced two false readings — a corpus that changed under a pinned
 # baseline, and a distance that became weighted while the baseline stayed flat.
-BASELINE_METRIC = "563eaa0b"
+BASELINE_METRIC = "575db030"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
 BASELINE_LABELS = "747e4ef5"

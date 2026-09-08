@@ -16,21 +16,22 @@
     },
     "defect": "",
     "emphasis": [
-      "stats",
-      "about"
+      "reviews",
+      "stats"
     ],
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "reviews",
     "mood": "refined",
-    "rationale": "This is a family-law attorney where trust and a track record matter far more than atmosphere, and with only one photo strong enough to feature, the gallery would look thin \u2014 so lead with the 4.9-star reviews and client testimonials to show proven care and results, backing that up with the mission/about copy, in a refined navy palette that reads as serious and trustworthy rather than flashy.",
-    "read_by": "frozen",
+    "rationale": "A family law client is anxious and vetting trust before anything else, so the 4.9-star rating and specific, heartfelt reviews should be the first thing they see, not a photo carousel \u2014 especially since only two images are even large enough to lead with. Navy and a refined mood read as steady, serious competence, which is what someone facing a divorce or custody fight needs to feel about their attorney.",
+    "read_by": "claude",
     "suppress": [
       "gallery"
     ],
     "understood": [
-      "This is a family-law attorney where trust and a track record matter far more than atmosphere, and with only one photo strong enough to feature, the gallery would look thin \u2014 so lead with the 4.9-star "
+      "A family law client is anxious and vetting trust before anything else, so the 4.9-star rating and specific, heartfelt reviews should be the first thing they see, not a photo carousel \u2014 especially sinc"
     ],
     "unsupported": []
   },

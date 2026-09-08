@@ -223,6 +223,8 @@ section[data-ground="base"]{{background:var(--bg);color:var(--on-base)}}
    single most recognisable cue that a site was designed. The hairline carries
    the edge so no shadow is needed, and the saturate() stops content going grey
    as it passes underneath. */
+body:has(.hero.first-type) .bar,
+body:has(.hero.first-split) .bar{{color:var(--ink)}}
 .bar.stuck{{background:{nav_tint};color:var(--ink);
   -webkit-backdrop-filter:blur(14px) saturate(180%);
   backdrop-filter:blur(14px) saturate(180%);
@@ -263,6 +265,74 @@ section[data-ground="base"]{{background:var(--bg);color:var(--on-base)}}
 .hero .facts{{display:flex;gap:26px;flex-wrap:wrap;margin-bottom:32px;
   font-size:14.5px;font-weight:600;opacity:.92}}
 .hero .facts span{{display:inline-flex;align-items:center;gap:8px}}
+
+/* The first-screen contract. Five positions, and each one has to change what
+   the first 820 pixels look like or it is not an axis — see
+   app/site/firstscreen.py and the standing test that proves it. */
+
+/* TYPE — no photograph. The name at display size on the theme's own ground,
+   set high rather than sunk to the bottom, because there is no picture to sit
+   over and a page that opens on type should look composed rather than empty. */
+.hero.first-type{{min-height:min(72vh,720px);align-items:center;
+  background:var(--bg);color:var(--ink)}}
+.hero.first-type h1{{max-width:22ch;font-size:clamp(48px,9vw,140px);
+  line-height:.92}}
+.hero.first-type .sub{{max-width:46ch;opacity:.72}}
+.hero.first-type .wrap{{padding-top:64px;padding-bottom:64px}}
+
+/* SPLIT — type and photograph at exactly half each, hard-edged. No scrim,
+   because nothing is set over the picture.
+
+   The type is clipped to its own half rather than merely started there: at
+   display size a name runs straight under the photograph otherwise, and it
+   reads as a layout error rather than a choice. */
+.hero.first-split{{min-height:min(88vh,860px);align-items:center;
+  background:var(--bg);color:var(--ink)}}
+.hero.first-split .bgimg{{inset:0 0 0 50%;z-index:0}}
+.hero.first-split .wrap{{width:50%;max-width:50%;box-sizing:border-box;
+  padding-right:clamp(28px,4vw,64px);padding-top:0;padding-bottom:0;
+  overflow-wrap:anywhere}}
+.hero.first-split h1{{max-width:100%;font-size:clamp(30px,4.6vw,62px)}}
+.hero.first-split .sub{{max-width:100%;font-size:clamp(15px,1.5vw,19px)}}
+.hero.first-split .scrollcue{{display:none}}
+@media (max-width:820px){{
+  .hero.first-split .bgimg{{inset:auto 0 0;height:44%}}
+  .hero.first-split .wrap{{width:100%;max-width:100%;padding-bottom:48%}}
+}}
+
+/* FACTS — the numbers first, at a size that reads as the point of the screen
+   rather than as a caption under a headline. */
+.hero.first-facts{{align-items:center}}
+.hero.first-facts h1{{font-size:clamp(30px,4.4vw,58px);margin-bottom:.5em}}
+.hero.first-facts .facts{{display:grid;gap:clamp(18px,3vw,52px);
+  grid-template-columns:repeat(auto-fit,minmax(150px,max-content));
+  font-size:clamp(19px,2.4vw,30px);font-weight:700;opacity:1;
+  letter-spacing:-.01em;margin-bottom:38px}}
+.hero.first-facts .facts span{{display:block}}
+
+/* PROOF — what a visitor checks before ringing a contractor, at the size of
+   the thing they came for. Photography is a narrow band across the top rather
+   than a backdrop: a roofing customer is not buying the photograph, and a
+   position whose only difference from `photo` is a bulleted list is not a
+   position. The claims sit on the theme's own ground so they read as claims
+   and not as a caption. */
+.hero.first-proof{{min-height:min(76vh,760px);align-items:end;
+  background:var(--bg);color:var(--ink);
+  grid-template-rows:clamp(120px,22vh,220px) 1fr}}
+.hero.first-proof .bgimg{{position:relative;inset:auto;grid-row:1;z-index:0;
+  height:100%;filter:saturate(.85)}}
+.hero.first-proof .veil{{display:none}}
+.hero.first-proof .wrap{{grid-row:2;padding-top:clamp(30px,5vh,60px)}}
+.hero.first-proof h1{{font-size:clamp(30px,4.4vw,58px);max-width:16ch}}
+.hero.first-proof .sub{{max-width:52ch;font-size:clamp(15px,1.6vw,19px);
+  margin-bottom:26px}}
+.hero.first-proof .proof{{list-style:none;margin:0 0 32px;padding:0;
+  display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  border-top:1px solid var(--line);max-width:74ch}}
+.hero.first-proof .proof li{{padding:14px 20px 14px 0;
+  border-bottom:1px solid var(--line);font-size:clamp(15px,1.7vw,19px);
+  font-weight:650;letter-spacing:-.01em}}
+.hero.first-proof .scrollcue{{display:none}}
 .actions{{display:flex;gap:12px;flex-wrap:wrap}}
 .cta{{display:inline-flex;align-items:center;gap:9px;background:var(--accent);
   color:var(--accent-ink);text-decoration:none;font-weight:700;

@@ -14,18 +14,21 @@
     "defect": "",
     "emphasis": [
       "services",
-      "gallery"
+      "reviews"
     ],
+    "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "A multi-state roofing contractor needs to prove scale and trustworthiness fast \u2014 the 5.0 rating over 218 reviews, BBB A+, and four-state coverage are the strongest credibility signals a first-time visitor (often mid-insurance-claim or comparing contractors) needs before anything else. The industrial mood with a navy accent reads as sturdy and professional rather than decorative, matching a trade business, and leading with stats before services and the strong roof-work gallery lets the proof carr",
-    "read_by": "frozen",
-    "suppress": [],
+    "rationale": "A roofing contractor sells trust and competence before atmosphere \u2014 visitors want to see the 5.0 rating, 218 reviews, and multi-state W2-insured operation before anything else, so the stats/proof band belongs first, not a photo. The palette should read as sturdy and professional (navy over anything soft), services and reviews get emphasis since that's what closes the job, and the gallery stays present but secondary since only 7 of 12 photos are strong enough to carry a lead position.",
+    "read_by": "claude",
+    "suppress": [
+      "gallery"
+    ],
     "understood": [
-      "A multi-state roofing contractor needs to prove scale and trustworthiness fast \u2014 the 5.0 rating over 218 reviews, BBB A+, and four-state coverage are the strongest credibility signals a first-time vis"
+      "A roofing contractor sells trust and competence before atmosphere \u2014 visitors want to see the 5.0 rating, 218 reviews, and multi-state W2-insured operation before anything else, so the stats/proof band"
     ],
     "unsupported": []
   },

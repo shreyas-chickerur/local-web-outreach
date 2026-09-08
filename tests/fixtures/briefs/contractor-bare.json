@@ -13,20 +13,19 @@
     },
     "defect": "",
     "emphasis": [
-      "gallery"
+      "reviews"
     ],
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "This is a hands-on trade business, so a rating built on 57 reviews is the fastest trust signal a passer-by needs, backed up by real on-the-job photos of the work; the reviews text itself is mixed (including a complaint about reliability and cost), so quoting it directly would undercut trust rather than build it, while the plain star rating still shows credibility without repeating the negative details.",
-    "read_by": "frozen",
-    "suppress": [
-      "reviews"
-    ],
+    "rationale": "This is a plumber, not a restaurant \u2014 a visitor's first question is \"are these people competent and reliable,\" not \"what does the room look like,\" and with mixed reviews (one complaint about no-show and overcharging) the rating/review count needs to be shown plainly rather than buried behind a gallery. Only one photo is large enough to anchor a photo-led design, so the safer, more honest choice is to lead with the trust signals (stats) and back them with the work photos and reviews rather than a",
+    "read_by": "claude",
+    "suppress": [],
     "understood": [
-      "This is a hands-on trade business, so a rating built on 57 reviews is the fastest trust signal a passer-by needs, backed up by real on-the-job photos of the work; the reviews text itself is mixed (inc"
+      "This is a plumber, not a restaurant \u2014 a visitor's first question is \"are these people competent and reliable,\" not \"what does the room look like,\" and with mixed reviews (one complaint about no-show a"
     ],
     "unsupported": []
   },

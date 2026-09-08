@@ -7,26 +7,30 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "gold",
+    "accent": "plum",
     "contradictions": [],
     "cta": {
-      "kind": "quote",
-      "label": "Get a quote"
+      "kind": "visit",
+      "label": "Find us"
     },
     "defect": "",
     "emphasis": [
+      "gallery",
       "reviews"
     ],
+    "first_screen": "photo",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "gallery",
+    "lead_with": "about",
     "mood": "refined",
-    "rationale": "This is actually a salon-suite rental business, not a walk-in salon \u2014 the real customer is a beauty professional deciding whether to lease a chair, so the polished storefront and room photos should sell the space first, backed up by tenant testimonials about how clean, professional and well-managed it is, with a quote/inquiry form as the natural next step.",
-    "read_by": "frozen",
-    "suppress": [],
+    "rationale": "This is actually a salon-suite rental business, not a walk-in salon \u2014 its real customers are beauty professionals deciding whether to lease a chair here, so the page needs to sell the upscale space and the support/community story before anything else, with the strong interior and storefront photography proving the \"luxury\" claim. Reviews from current tenants (not hair clients) are the closest thing to proof of that pitch, so they and the gallery deserve early weight, while the thin, mixed-signal",
+    "read_by": "claude",
+    "suppress": [
+      "stats"
+    ],
     "understood": [
-      "This is actually a salon-suite rental business, not a walk-in salon \u2014 the real customer is a beauty professional deciding whether to lease a chair, so the polished storefront and room photos should se"
+      "This is actually a salon-suite rental business, not a walk-in salon \u2014 its real customers are beauty professionals deciding whether to lease a chair here, so the page needs to sell the upscale space an"
     ],
     "unsupported": []
   },

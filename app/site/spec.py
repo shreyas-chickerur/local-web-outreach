@@ -70,6 +70,10 @@ class SiteSpec:
     # hero photo", because choosing between two good pictures is judgement and
     # judgement belongs to the operator.
     hero_offset: int = 0
+    # What occupies the first 820 pixels and in what relationship — the axis
+    # that decides whether two pages are the same site to the owner being
+    # shown them. See `app/site/firstscreen.py`.
+    first_screen: str = "photo"
     one_page: bool = True
     understood: list[str] = field(default_factory=list)
     ignored: list[str] = field(default_factory=list)

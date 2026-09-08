@@ -17,16 +17,19 @@
       "stats",
       "menu"
     ],
+    "first_screen": "photo",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "This is a beloved, high-volume Texas BBQ joint with strong ratings and abundant, appetizing photography (10 lead-worthy shots of smoked meats, the pit, and the crowded room) \u2014 that imagery sells the place faster than any words, so it should open the site. The 4.8/4.7 ratings back up the visual appeal immediately, and the menu gives visitors the practical next step, while an 'order' call-to-action matches how people actually use the site (dine-in, order online, or book catering).",
-    "read_by": "frozen",
-    "suppress": [],
+    "rationale": "This is a beloved, high-volume BBQ joint with 10 strong photographs of food, fire, and crowds \u2014 the smoky brisket trays and packed dining room tell people what they're walking into before a word does. Lead with that imagery and the huge review numbers (4.8 from nearly 14k people) to back up the immediate craving, then push toward ordering since catering and delivery are clearly a major part of how they do business.",
+    "read_by": "claude",
+    "suppress": [
+      "features"
+    ],
     "understood": [
-      "This is a beloved, high-volume Texas BBQ joint with strong ratings and abundant, appetizing photography (10 lead-worthy shots of smoked meats, the pit, and the crowded room) \u2014 that imagery sells the p"
+      "This is a beloved, high-volume BBQ joint with 10 strong photographs of food, fire, and crowds \u2014 the smoky brisket trays and packed dining room tell people what they're walking into before a word does."
     ],
     "unsupported": []
   },

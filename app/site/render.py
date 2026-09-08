@@ -711,8 +711,15 @@ def _hero(m: Material, spec: SiteSpec, t: Theme,
         facts.append(f"<span>{e(m.address.split(',')[0])}</span>")
     if m.hours:
         facts.append(f"<span>{e(m.hours[0])}</span>")
+    # Which of the five contracts this page opens on. A position that needs a
+    # photograph falls back rather than rendering an empty frame: the floor can
+    # take the hero away after the position was chosen.
+    position = spec.first_screen or "photo"
+    if position in ("photo", "split") and not photo:
+        position = "facts" if facts else "type"
+
     layers = ""
-    if photo:
+    if photo and position in ("photo", "split", "facts", "proof"):
         # A background cannot take a srcset, so image-set does the same job:
         # a phone fetches the 1600 and a retina desktop the 3200. The plain
         # url() stays as the fallback for anything that does not know it.
@@ -727,13 +734,50 @@ def _hero(m: Material, spec: SiteSpec, t: Theme,
             background = f'background-image:url(&quot;{e(photo)}&quot;)'
         layers = (f'<div class="bgimg" style="{background}"></div>'
                   f'<div class="veil"></div>')
-    return (f'<header class="hero{" has-photo" if photo else ""}" id="top">{layers}'
-            f'<div class="wrap"><h1>{e(m.name)}</h1>'
+    if position == "type":
+        # No photograph at all. The name at display size on the theme's own
+        # ground, which is what a page with nothing worth leading with should
+        # look like rather than a grey rectangle.
+        layers = ""
+    elif position == "split":
+        # Type and photograph each taking exactly half, hard-edged. The scrim
+        # goes: nothing is set over the picture, so nothing needs veiling.
+        layers = layers.replace('<div class="veil"></div>', "")
+
+    proof = ""
+    if position == "proof":
+        points = _proof_points(m)
+        proof = ("".join(f'<li>{e(point)}</li>' for point in points))
+        proof = f'<ul class="proof">{proof}</ul>' if proof else ""
+
+    body = (f'<div class="wrap"><h1>{e(m.name)}</h1>'
             + (f'<p class="sub">{e(sub)}</p>' if sub else "")
-            + (f'<div class="facts">{"".join(facts)}</div>' if facts else "")
-            + f'<div class="actions">{_cta(m, spec)}{_secondary(m)}</div></div>'
-            + ('<div class="scrollcue"></div>' if photo else "")
+            + (proof if position == "proof" else
+               f'<div class="facts">{"".join(facts)}</div>' if facts else "")
+            + f'<div class="actions">{_cta(m, spec)}{_secondary(m)}</div></div>')
+
+    classes = f"hero first-{position}" + (" has-photo" if layers else "")
+    return (f'<header class="{classes}" id="top">{layers}{body}'
+            + ('<div class="scrollcue"></div>' if layers else "")
             + "</header>")
+
+
+def _proof_points(m: Material) -> list[str]:
+    """The things a visitor checks before ringing a contractor.
+
+    Corroborated material only — read off `Material`, so nothing here can
+    introduce a claim. Slice C's trade profiles hunt for licence numbers and
+    service areas properly; this is what the directory established.
+    """
+    points: list[str] = []
+    if m.rating and m.reviews:
+        points.append(f"{m.rating} stars from {m.reviews} reviews")
+    if m.address:
+        parts = [part.strip() for part in m.address.split(",")]
+        points.append(parts[-2] if len(parts) >= 2 else parts[0])
+    if m.hours:
+        points.append(m.hours[0])
+    return points
 
 
 _FOOD_TRADES = ("restaurant", "cafe", "coffee", "bakery", "bar", "pizza",

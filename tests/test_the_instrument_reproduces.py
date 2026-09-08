@@ -30,10 +30,10 @@ FIXTURES = Path("tests/fixtures/briefs")
 # The pinned reading, and the rulers it was taken with. These move only in a
 # commit that says they moved and why — a number that changes because the
 # instrument changed is not a result.
-RULER = "563eaa0b"
+RULER = "575db030"
 LABELS = "747e4ef5"
 SAME_TRADE_MEAN = 0.52
-AGREEMENT = (35, 36)
+AGREEMENT = (36, 36)
 
 
 def fingerprints() -> dict[str, fp.Fingerprint]:
@@ -135,14 +135,17 @@ def test_agreement_against_the_blind_labels_is_the_pinned_score():
     assert score.labels == LABELS
 
 
-def test_the_standing_inversion_is_the_one_slice_b_must_resolve():
-    """Pre-registered in .reviews/slice-b-predictions.md. If Slice B lands and
-    this pair is still inverted, the new axes did not do what they were added
-    to do, whatever the mean did."""
+def test_the_standing_inversion_is_resolved_and_stays_resolved():
+    """Pre-registered in .reviews/slice-b-predictions.md as the binding claim:
+    after the first-screen contract lands, `dentist`/`law` resolves.
+
+    It did — one chose `proof`, the other `facts`, which is the difference a
+    person saw and the vector could not. Kept as a test so a later axis cannot
+    quietly undo it while raising the mean."""
     prints = fingerprints()
     slugs = sorted(prints)
     distances = {(a, b): fp.distance(prints[a], prints[b])
                  for i, a in enumerate(slugs) for b in slugs[i + 1:]}
-    inverted = {frozenset((one.split("/")[0], one.split("/")[1]))
-                for one, _, _, _ in agreement.score(distances).inversions}
-    assert inverted == {frozenset(("dentist", "law"))}, inverted
+    assert agreement.score(distances).inversions == [], (
+        "an inversion came back — re-judge the pair blind before accepting it "
+        "as noise, per .reviews/slice-b-predictions.md")

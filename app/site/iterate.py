@@ -33,6 +33,7 @@ DEFAULT_SPEC: dict = {
     "suppress": [],
     "cta": None,
     "accent": None,
+    "first_screen": "photo",
 }
 
 # (phrase, accent name). Colour is the thing people say first about a page, so
