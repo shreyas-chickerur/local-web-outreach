@@ -18,11 +18,11 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "refined",
-    "rationale": "Ichika is a kaiseki restaurant where the plating itself is the argument for why someone should book \u2014 nine strong dish photographs can carry the first screen the way no line of text could. Perfect 5.0 ratings and reviews comparing service to Michelin-starred restaurants are the second thing a visitor needs, so they follow right behind the imagery to confirm the impression the photos give.",
+    "rationale": "Ichika is a kaiseki counter where the plating and the room are the argument for going \u2014 nine strong dish and counter photographs can carry the opening screen, and the 5.0-star, detailed reviews reinforce that quality once they've seen the food. A refined mood with a lacquer-red accent matches the precision described in the photos and reviews, and booking is the natural next step for a small, reservation-style seating.",
     "read_by": "claude",
     "suppress": [],
     "understood": [
-      "Ichika is a kaiseki restaurant where the plating itself is the argument for why someone should book \u2014 nine strong dish photographs can carry the first screen the way no line of text could. Perfect 5.0"
+      "Ichika is a kaiseki counter where the plating and the room are the argument for going \u2014 nine strong dish and counter photographs can carry the opening screen, and the 5.0-star, detailed reviews reinfo"
     ],
     "unsupported": []
   },

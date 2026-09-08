@@ -24,7 +24,6 @@ from app.adapters import claude, vision
 from app.adapters.claude import ClaudeError
 from app.site.audit import audit
 from app.site.iterate import DEFAULT_SPEC, parse_iteration_instruction
-from app.site.opening import opening_spec
 from app.site.render import (
     build_from_spec,
     material_from_brief,
@@ -213,7 +212,13 @@ def rebuild_opening(conn: sqlite3.Connection, lead_id: int,
     parent = history[0]["version"] if history else None
     sites.forget_stages(conn, lead_id)
     brief = leads.brief_with_overrides(conn, lead_id)
-    config = opening_spec(brief)
+    # Through the gate, not around it. This called `opening_spec` directly and
+    # handed the answer straight to `_build_opening`, which records it in the
+    # shared fingerprint history — so a rebuild shipped an ungated decision and
+    # then counted as precedent for everyone after it. It is also the path most
+    # likely to need the gate: it fires right after vision unblocks a build,
+    # which is when the first direction was decided on the thinnest material.
+    config = _stage_direction(conn, lead_id, brief)["config"]
     return _build_opening(conn, lead_id, brief, config, actor=actor,
                           parent_version=parent,
                           instruction="rebuilt from the photo descriptions")

@@ -49,56 +49,62 @@ FIXTURES = Path("tests/fixtures/briefs")
 # than against a memory. Recorded here rather than in a note because the report
 # should say whether it is better or worse every time it runs.
 #
-# 2026-09-07, eleven fixtures, EIGHT axes — the first-screen contract added as
-# axis one — weighted by visibility x decidedness (ruler 575db030):
+# 2026-09-08, eleven fixtures, EIGHT axes, weighted by visibility x
+# decidedness (distance ruler 575db030, gate rule 624e27dc):
 #
-#   same-trade mean   62% distance  =  38% IDENTICAL
-#   worst pair        35% distance  —  bare-trade vs law
-#   agreement         40 of 40
+#   same-trade mean   70% distance  =  30% IDENTICAL
+#   worst pair        45% distance  —  contractor-bare vs roofer
+#   agreement         19 of 33
 #
-# The diversity budget landing moved this from 52% to 62% with the agreement
-# held at 40/40 — the first change that improved the mean without costing
-# accuracy. `barbecue` and `restaurant-rich`, the pair the first-screen axis
-# was predicted to separate and did not, are no longer in the closest ten:
-# `restaurant-rich` was pushed off `photo`/`terracotta` onto `split`/`olive`.
+# THE AGREEMENT NUMBER FELL FROM "40/40" AND NOTHING REGRESSED. That score was
+# taken against verdicts read off a contact sheet with two faults: it had been
+# captured before the fixtures beside it were re-frozen, so five of the eleven
+# pictures were of pages that no longer existed, and the committed row was shot
+# in a 720-pixel window rather than shrunk from the 1440 one — below the
+# breakpoint where the split hero stacks and the columns collapse. So every
+# verdict this project has taken was a judgement of a narrow rendering, some of
+# them of a corpus that had moved. Both faults now have standing tests, the
+# labels were re-judged blind against what ships, and 19/33 is what the vector
+# scores against the right pictures.
 #
-# The mean did not move and the agreement did, which is the point: an axis
-# earns no credit for raising the mean. `dentist` and `law` — the standing
-# inversion, two pages a person calls identical — resolved, because one chose
-# `proof` and the other `facts`. That was the pre-registered claim in
-# .reviews/slice-b-predictions.md and it is the reason the axis went first.
+# The same-trade mean rose 62% -> 70% because the gate's rule was corrected to
+# the one the brief specifies — four axes, one structural, AND ONE WEIGHTED
+# HIGHLY — and the corpus was re-decided under it. `bare-trade`/`law` at 35%,
+# the pair the last baseline called the case to fix, separated.
 #
-# The dip I predicted did not happen. Recorded because predictions are only
-# worth writing down if being wrong is reportable.
+# What the agreement says, and it is the finding of this pass: the three pairs
+# a person calls one studio all share a SKELETON and a TYPEFACE and differ in
+# COLOUR — `dentist`/`law`, `hvac`/`roofer`, `threadbare`/`hvac`. The vector has
+# no axis for the typeface and reaches colour through `mood` at weight 2.0, so
+# it ranks them further apart than pairs a person calls different. That is the
+# case for type treatment as axis two, measured rather than assumed, and this
+# is the number it has to move. The mean is not the target; this is.
+#
+# `dentist`/`law` is the pre-registered claim in
+# .reviews/slice-b-predictions.md, and it binds on first-screen contract AND
+# type treatment — only the first has landed, so the claim is still open. It
+# resolved on that axis alone and then came back when the corpus was
+# re-decided: both now open on `proof`. Recorded, because an interim resolution
+# reported as the claim being met is how a prediction stops being binding.
 #
 # An earlier baseline of 40% was taken against a nine-fixture corpus that was
 # the wrong shape — no fixture carried the business's own photographs, so it
 # was measuring a path the product does not have. Re-pinned rather than
-# compared: a number that moved because the corpus changed is not progress, and
-# leaving the old one in place would have reported 16% better on the day the
-# fixtures were repaired.
-#
-# THE NUMBER IS NOT THE WHOLE STORY, and the contact sheet is why. The two
-# attorneys now score 50% apart on this vector and are still, side by side,
-# obviously the same page: same skeleton, same typeface pairing, same geometry,
-# different photograph. So the vector currently OVERSTATES how different two
-# sites are — the axes that would separate them (page architecture, type
-# system, colour structure, section edges, the signature device) are exactly
-# the ones Slice B adds and this file does not yet name.
-#
-# Which is the argument for the gate staying off. Gating on an instrument that
-# reports 50% for two pages a stranger would call identical would reject builds
-# for the wrong reasons and pass the ones that matter.
-BASELINE_SAME_TRADE = 0.62
-BASELINE_WORST = ("bare-trade", "law", 0.35)
+# compared: a number that moved because the corpus changed is not progress.
+BASELINE_SAME_TRADE = 0.70
+BASELINE_WORST = ("contractor-bare", "roofer", 0.45)
 # Which ruler the numbers above were taken with. A distance is comparable only
 # to another taken the same way, and comparing across a change of ruler has
 # already produced two false readings — a corpus that changed under a pinned
 # baseline, and a distance that became weighted while the baseline stayed flat.
 BASELINE_METRIC = "575db030"
+# And which gate rule the corpus was decided under. Every frozen
+# direction is an answer this rule accepted, so a baseline taken under
+# one rule is not comparable to a corpus decided under another.
+BASELINE_RULE = "624e27dc"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
-BASELINE_LABELS = "449b9ddb"
+BASELINE_LABELS = "4f147671"
 # True on the commit that re-pins, false on every commit after. Without
 # it the first run under a new ruler always prints "no better than the
 # baseline" — because the baseline IS that run's own measurement copied
@@ -106,12 +112,6 @@ BASELINE_LABELS = "449b9ddb"
 # unchanged result.
 BASELINE_IS_FRESH = True
 
-# The gate is NOT on. With eight axes and four structural, "differ on four
-# including one structural" fails almost everything the generator can currently
-# produce — it would reject every build rather than improve any. The census
-# reports the number; the gate turns on partway through Slice B, once the
-# vector is wide enough for a site to satisfy it.
-GATE_ENABLED = False
 # One database on disk, shared by every tool that runs the fixtures.
 #
 # An in-memory database per tool meant the contact sheet paid for a full vision
@@ -154,11 +154,11 @@ class Counter:
                 self.direction += 1
             return answer
 
-        # At the source. `identity.decide` imports `opening_spec` from
-        # `app.site.opening` directly, so patching the pipeline's alias missed
-        # every call the diversity gate made and the census reported zero.
+        # At the source, and only at the source. `identity.decide` imports
+        # `opening_spec` from `app.site.opening` directly, so patching the
+        # pipeline's alias missed every call the diversity gate made and the
+        # census reported zero. The alias is gone; one binding, one patch.
         opening.opening_spec = counted_open                     # type: ignore[assignment]
-        pipeline.opening_spec = counted_open                    # type: ignore[assignment]
         pipeline.vision.look = counted_look                     # type: ignore[assignment]
 
 
@@ -353,9 +353,18 @@ def _report(rows, first_pass, again) -> None:
             flag = ("  <-- the case B has to fix"
                     if {one, two} == set(BASELINE_WORST[:2]) else "")
             print(f"    {score:>5.0%}  {one} vs {two}{flag}")
-        if not GATE_ENABLED:
-            print("    (the diversity gate is off until the vector is wide "
-                  "enough to satisfy it)")
+        # What the gate would say about the corpus it produced, recomputed
+        # here rather than asserted. A constant claiming the gate was off
+        # outlived the commit that turned it on, and the census went on
+        # printing it under the pair the gate had just moved.
+        collided = [(one, two) for _, one, two in same
+                    if fp.collisions(prints[[r["slug"] for r in rows].index(one)],
+                                     [prints[[r["slug"] for r in rows].index(two)]],
+                                     )]
+        print(f"    (the diversity gate is ON — "
+              f"{len(collided)} of {len(same)} same-trade pairs would collide"
+              + (": " + ", ".join(f"{a}/{b}" for a, b in collided)
+                 if collided else "") + ")")
     print("\n  closest pairs — these are the ones that look like one tool:")
     for score, one, two in pairs[:5]:
         shared = set(fp.AXES) - prints[

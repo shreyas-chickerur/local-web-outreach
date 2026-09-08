@@ -23,13 +23,13 @@
     "kind": "style",
     "lead_with": "reviews",
     "mood": "warm",
-    "rationale": "People choose a dentist on trust and comfort before anything else, so the first thing a visitor should see is the strong rating and warm patient reviews, not a stock photo of a chair. The practice's own imagery is friendly but only has a handful of strong shots, so a proof-led opening with stats and reviews up top does more for them than a photo-behind-name look every clinic uses; the 'menu' section has no real material (just 'Special') so it's suppressed.",
+    "rationale": "This is a dental practice, not a restaurant \u2014 a visitor needs reassurance of competence and trustworthiness (ratings, patient reviews, friendly staff) before anything else, not a \"menu\" of services dressed up as food. A warm, calm mood with a clinical teal accent fits a comfortable, patient-first office, and leading with the trust signals (stats, reviews) rather than a photo wall suits the modest handful of usable images. \"Book\" is the single action every visitor to a dentist's site wants to tak",
     "read_by": "claude",
     "suppress": [
       "menu"
     ],
     "understood": [
-      "People choose a dentist on trust and comfort before anything else, so the first thing a visitor should see is the strong rating and warm patient reviews, not a stock photo of a chair. The practice's o"
+      "This is a dental practice, not a restaurant \u2014 a visitor needs reassurance of competence and trustworthiness (ratings, patient reviews, friendly staff) before anything else, not a \"menu\" of services dr"
     ],
     "unsupported": []
   },

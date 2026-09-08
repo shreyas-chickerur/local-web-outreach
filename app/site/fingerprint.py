@@ -100,6 +100,38 @@ DECIDEDNESS: dict[str, float] = {
 }
 
 
+# How many axes a new site must move on. The brief's number, and it lives here
+# beside the rule it is half of rather than in the caller — the gate's shape is
+# one thing, and this project's standing bug is one thing with two definitions.
+# Tuned against the corpus once there is one worth tuning against: a few dozen
+# real leads, not eleven fixtures.
+REQUIRED_AXES = 4
+
+# What "weighted highly" means, for the gate's rule rather than the distance.
+#
+# `BRIEF` §2.5 asks for "difference on at least four axes including at least
+# one weighted highly", and the gate checked STRUCTURAL instead. They are not
+# the same set: three of the four structural axes weigh 1.0 or less, so the
+# rule could be satisfied entirely below the fold while `first_screen` and
+# `mood` — the two heaviest things in the vector — stayed identical. That is
+# what let two attorneys through sharing their opening, their feel, their
+# colour and their button.
+#
+# 2.0 is not picked. Five readings of "weighted highly" were scored against
+# the blind verdicts, and this is the only one that reaches 12 of 13:
+#
+#     one axis at or above 2.0                12/13
+#     four axes that are not colour or subject 11/13
+#     two axes chosen outright                10/13
+#     one axis above the mean weight (1.25)     9/13   — hero_subject dilutes it
+#     structural only (what shipped)            9/13
+#
+# Recorded as measured, on thirteen verdicts, against four alternatives. If the
+# corpus grows and a different reading wins, this moves and `rule_version`
+# says so.
+HIGH_WEIGHT = 2.0
+
+
 def weight_of(axis: str) -> float:
     """What one axis contributes to the distance.
 
@@ -118,6 +150,32 @@ def weight_of(axis: str) -> float:
     default. `min` is a decision for the shape of the vector today, not a law.
     """
     return min(VISIBILITY.get(axis, 1.0), DECIDEDNESS.get(axis, 1.0))
+
+
+def highly_weighted() -> frozenset[str]:
+    """The axes a difference has to touch to count as one somebody notices.
+
+    Derived from the weights rather than listed, so it cannot drift out of step
+    with them the way `layout_bias` drifted out of step with `mood`.
+    """
+    return frozenset(axis for axis in AXES if weight_of(axis) >= HIGH_WEIGHT)
+
+
+def rule_version() -> str:
+    """What the GATE was set to, as against what the distance was measured with.
+
+    Separate from `metric_version` on purpose: the distance is unchanged by a
+    rule change, but the corpus is not. Every fixture's frozen direction is an
+    answer this rule accepted, so a baseline taken under one rule is not
+    comparable to a corpus frozen under another — and without this the census
+    would go on printing the old baseline against a corpus the gate had rebuilt
+    underneath it, which is the invalid baseline again in a third costume.
+    """
+    import hashlib
+
+    material = (f"axes={REQUIRED_AXES}|structural={sorted(STRUCTURAL)}"
+                f"|high={sorted(highly_weighted())}")
+    return hashlib.sha256(material.encode()).hexdigest()[:8]
 
 
 def metric_version() -> str:
@@ -202,7 +260,7 @@ def distance(one: Fingerprint, two: Fingerprint) -> float:
 
 
 def collisions(candidate: Fingerprint, previous: list[Fingerprint],
-               *, axes: int = 4) -> list[tuple[int, set[str]]]:
+               *, axes: int = REQUIRED_AXES) -> list[tuple[int, set[str]]]:
     """Which of the previous sites this one is too close to.
 
     Returns (index, the axes it *did* differ on) for each collision, so the
@@ -210,8 +268,14 @@ def collisions(candidate: Fingerprint, previous: list[Fingerprint],
     different".
     """
     found: list[tuple[int, set[str]]] = []
+    high = highly_weighted()
     for index, other in enumerate(previous):
         moved = candidate.differs_from(other)
-        if len(moved) < axes or not (moved & STRUCTURAL):
+        # Three requirements, not two. Enough axes, at least one of them
+        # structural so colour alone cannot pass, and at least one weighted
+        # highly so a difference nobody sees cannot pass either. The third was
+        # in the brief from the start and had never been written down here.
+        if (len(moved) < axes or not (moved & STRUCTURAL)
+                or not (moved & high)):
             found.append((index, moved))
     return found

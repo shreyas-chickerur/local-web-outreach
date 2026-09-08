@@ -8,7 +8,7 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "navy",
+    "accent": "burgundy",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -19,19 +19,19 @@
       "reviews",
       "services"
     ],
-    "first_screen": "facts",
+    "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "refined",
-    "rationale": "Someone hurt in an accident is checking whether this attorney wins and is trusted before anything else \u2014 a 4.9-star rating over 254 reviews says that in seconds, where a photo of an office or a headshot cannot. The gallery is mostly promo graphics and portraits rather than real casework or courtroom moments, so it should support the story further down, not open it.",
+    "rationale": "A personal injury attorney sells trust and competence before anything else, so the first screen should present the credibility markers \u2014 rating, review count, case results \u2014 rather than a portrait or office photo; the promotional graphics and mixed-quality photography (only 5 of 12 usable at size) aren't strong enough to carry a photo-led opening anyway. Burgundy instead of navy keeps the same serious, refined register but avoids duplicating the recent site's exact palette, and it reads as a war",
     "read_by": "claude",
     "suppress": [
       "gallery"
     ],
     "understood": [
-      "Someone hurt in an accident is checking whether this attorney wins and is trusted before anything else \u2014 a 4.9-star rating over 254 reviews says that in seconds, where a photo of an office or a headsh"
+      "A personal injury attorney sells trust and competence before anything else, so the first screen should present the credibility markers \u2014 rating, review count, case results \u2014 rather than a portrait or "
     ],
     "unsupported": []
   },

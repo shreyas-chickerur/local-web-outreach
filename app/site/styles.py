@@ -225,6 +225,14 @@ section[data-ground="base"]{{background:var(--bg);color:var(--on-base)}}
    as it passes underneath. */
 body:has(.hero.first-type) .bar,
 body:has(.hero.first-split) .bar{{color:var(--ink)}}
+/* The split's chrome gets its own ground. Left translucent it ran dark ink
+   across the photograph — legible left of the midpoint and not right of it,
+   which is a contrast failure the audit cannot see because there is no
+   declared pair to read. Confining the bar to the type half fixed the
+   legibility and wrapped the navigation onto three lines; a header band above
+   a hard-edged split is the composition this position was already making. */
+body:has(.hero.first-split) .bar:not(.stuck){{background:var(--bg);
+  border-bottom:1px solid {hairline}}}
 .bar.stuck{{background:{nav_tint};color:var(--ink);
   -webkit-backdrop-filter:blur(14px) saturate(180%);
   backdrop-filter:blur(14px) saturate(180%);
@@ -285,19 +293,29 @@ body:has(.hero.first-split) .bar{{color:var(--ink)}}
 
    The type is clipped to its own half rather than merely started there: at
    display size a name runs straight under the photograph otherwise, and it
-   reads as a layout error rather than a choice. */
+   reads as a layout error rather than a choice.
+
+   Clipped by PADDING, not by width. `width:50%` was half the answer: `.wrap`
+   is centred with `margin-inline:auto`, so a half-width wrap sits astride the
+   viewport's midpoint and put its own right half under the picture — the
+   heading, the paragraph and four nav links ran across the photograph on the
+   one fixture that opens this way, and the comment above said it did not.
+   Padding uses the centring instead of fighting it: a centred wrap's right
+   half IS the region past the midpoint, so `50%` of the wrap is exactly the
+   distance to claw back, and the text still starts on the same left edge as
+   every other band on the page. */
 .hero.first-split{{min-height:min(88vh,860px);align-items:center;
   background:var(--bg);color:var(--ink)}}
 .hero.first-split .bgimg{{inset:0 0 0 50%;z-index:0}}
-.hero.first-split .wrap{{width:50%;max-width:50%;box-sizing:border-box;
-  padding-right:clamp(28px,4vw,64px);padding-top:0;padding-bottom:0;
-  overflow-wrap:anywhere}}
+.hero.first-split .wrap{{box-sizing:border-box;
+  padding-right:calc(50% + clamp(28px,4vw,64px));
+  padding-top:0;padding-bottom:0;overflow-wrap:anywhere}}
 .hero.first-split h1{{max-width:100%;font-size:clamp(30px,4.6vw,62px)}}
 .hero.first-split .sub{{max-width:100%;font-size:clamp(15px,1.5vw,19px)}}
 .hero.first-split .scrollcue{{display:none}}
 @media (max-width:820px){{
   .hero.first-split .bgimg{{inset:auto 0 0;height:44%}}
-  .hero.first-split .wrap{{width:100%;max-width:100%;padding-bottom:48%}}
+  .hero.first-split .wrap{{padding-right:0;padding-bottom:48%}}
 }}
 
 /* FACTS — the numbers first, at a size that reads as the point of the screen

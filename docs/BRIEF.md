@@ -25,6 +25,17 @@ rank-based agreement metric; ruler *and* label versioning, with the census
 refusing to compare across either; the `messages` table and its prose boundary,
 enforced by an AST test; the build in stages, each answer persisted.
 
+**Done — Slice B, axis one.** The first-screen contract: five positions, what
+each business can support, and a standing test that every axis changes the page
+and no axis is a function of another.
+
+**Done — Slice B, the diversity budget.** The gate in `app/site/identity.py` —
+ask again naming what is taken, perturb deterministically, record an
+unresolvable collision. Its rule now matches §2.5: four axes, one structural,
+**and one weighted highly**. It ran on `_stage_direction` only; `rebuild_opening`
+went around it and recorded the ungated answer as precedent, which an AST test
+now forbids for every caller.
+
 **Bugs closed along the way.** The duplicate hero; plan-versus-page
 disagreement; the preview port mismatch; a business name read as a website, and
 the trade-word top-level domains that broke that same fix; the media type
@@ -32,19 +43,46 @@ hardcoded to JPEG, which lost every PNG and WebP a business publishes; a
 photograph vision could not fetch blocking a build forever; a rejected page
 remembered as a finished stage; `layout_bias`, a phantom axis that was a pure
 function of `mood`; `compositions` encoding `section_order` inside itself;
-labels frozen under one lead id silently matching nothing under another.
+labels frozen under one lead id silently matching nothing under another; the
+split hero's type column centred rather than pinned, so it ran under the
+photograph on the one page that opened that way; a `GATE_ENABLED = False` that
+gated one line of a report and went on printing "the gate is off" after it was
+turned on.
+
+**The measurement apparatus was measuring the wrong pictures.** Two faults,
+both found by looking rather than by a test, both now tested. The committed
+contact sheet was captured before the fixtures beside it were re-frozen, so
+five of eleven pages in it no longer existed. And its committed row was shot in
+a 720-pixel window rather than shrunk from the 1440-pixel one — below the
+breakpoint where the split hero stacks and the columns collapse — so **every
+blind verdict this project has ever taken was read off a narrow rendering.**
+The labels were re-judged against what ships. The agreement figure fell from
+"40 of 40" to 19 of 33 with no code regression: the old number was scored
+against the wrong pictures.
 
 **The instrument's current reading.**
 
-    agreement   35 of 36 cross-pairs, ruler 563eaa0b, labels 747e4ef5
-    census      same-trade mean 52% distance = 48% identical
-                worst pair contractor-bare / roofer at 27%
-                standing inversion dentist / law
-    tests       710
+    agreement   19 of 33 cross-pairs, ruler 575db030, rule 624e27dc,
+                labels 4f147671
+    census      same-trade mean 70% distance = 30% identical
+                closest pair contractor-bare / roofer at 45%, judged DIFFERENT
+                inversions dentist / law, hvac / roofer, threadbare / hvac
+    tests       751
 
-**Not started.** Slices B, C, D, E, G, H, and the rest of F. The tool now
-measures its own sameness well and has not yet done anything about it. That is
-the whole of the remaining work.
+**The pre-registered claim is still open.** `dentist`/`law` resolving binds on
+first-screen contract *and* type treatment; it resolved on the first alone and
+came back when the corpus was re-decided under the corrected rule. An interim
+resolution reported as the claim being met is how a prediction stops binding.
+
+**What the inversions say, and it is the plan.** All three pairs a person calls
+one studio share a SKELETON and a TYPEFACE and differ in COLOUR. The vector has
+no axis for the typeface and reaches colour through `mood` at weight 2.0, so it
+ranks them further apart than pairs a person calls different. Type treatment is
+axis two on evidence rather than on the ordering, and the agreement figure — not
+the mean — is what it has to move.
+
+**Not started.** The rest of Slice B, and Slices C, D, E, G, H and the rest of
+F.
 
 ## 2. The governing requirement
 
@@ -123,10 +161,25 @@ the target.
 ### 2.5 The diversity budget
 
 Compare each new site's fingerprint against the last ten generated. Require
-difference on at least four axes including at least one weighted highly. A
-collision fails the build and re-runs the identity decision with the colliding
-axes named; cap the retries and fall back to a deterministic perturbation so a
-build can never hang.
+difference on at least four axes, at least one of them structural, **and at
+least one weighted highly**. A collision fails the build and re-runs the
+identity decision with the colliding axes named; cap the retries and fall back
+to a deterministic perturbation so a build can never hang.
+
+The third requirement shipped missing. `collisions()` checked STRUCTURAL and
+nothing else, and those are not the same set: three of the four structural axes
+weigh 1.0 or less, so the rule could be satisfied entirely below the fold while
+`first_screen` and `mood` — the two heaviest things in the vector — stayed
+identical. Two attorneys passed it sharing their opening, their feel, their
+colour and their button. "Weighted highly" means at or above 2.0, which is the
+only one of five readings that agrees with the blind verdicts 12 times in 13;
+above the mean weight scores 9, and so does what shipped.
+
+The gate's rule is versioned (`fingerprint.rule_version`) alongside the
+distance. Every frozen direction in the corpus is an answer that rule accepted,
+so changing it re-decides the corpus (`make_fixtures.py --redecide`), which
+re-renders the pages, which invalidates the blind labels. **The ground truth is
+downstream of the gate** and has to be re-taken whenever it moves.
 
 **Enabled**, in `app/site/identity.py`, once the premise for deferring it was
 re-checked and had expired. "With eight axes it would reject nearly everything"

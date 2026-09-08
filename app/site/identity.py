@@ -42,10 +42,6 @@ from app.site.pipeline import spec_from_config
 from app.site.render import material_from_brief, plan_for
 from app.store import fingerprints as store
 
-# How many axes a new site must move on, and at least one of them structural.
-# The brief's numbers. They are tuned against the corpus once there is one
-# large enough to tune against — a few dozen real leads, not eleven fixtures.
-REQUIRED_AXES = 4
 # Asking twice is enough to tell "the model had a better answer and did not
 # reach for it" from "this business genuinely has one shape". Beyond that the
 # retries cost money to produce the same answer.
@@ -138,8 +134,7 @@ def decide(conn: sqlite3.Connection, lead_id: int, brief: dict) -> Decision:
 
     prints = [fp.Fingerprint(values) for values in previous]
     for attempt in range(1, MAX_RETRIES + 2):
-        hit = fp.collisions(print_of(brief, config), prints,
-                            axes=REQUIRED_AXES)
+        hit = fp.collisions(print_of(brief, config), prints)
         if not hit:
             return Decision(config=config, attempts=attempt)
         if attempt > MAX_RETRIES or not claude.available():
@@ -154,13 +149,12 @@ def decide(conn: sqlite3.Connection, lead_id: int, brief: dict) -> Decision:
                          for axis in fp.AXES if axis not in moved})
         config = opening.opening_spec(brief, avoid=_avoidance(shared, prints, hit))
 
-    hit = fp.collisions(print_of(brief, config), prints, axes=REQUIRED_AXES)
+    hit = fp.collisions(print_of(brief, config), prints)
     if not hit:
         return Decision(config=config, attempts=MAX_RETRIES + 1)
 
     moved, axis = perturb(brief, config, previous)
-    remaining = fp.collisions(print_of(brief, moved), prints,
-                              axes=REQUIRED_AXES)
+    remaining = fp.collisions(print_of(brief, moved), prints)
     return Decision(config=moved, collided_with=[dict(p.values) for _, p in
                                                  zip(hit, prints, strict=False)],
                     attempts=MAX_RETRIES + 1, perturbed=axis,

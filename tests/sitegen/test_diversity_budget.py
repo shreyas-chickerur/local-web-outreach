@@ -145,5 +145,71 @@ def test_the_corpus_no_longer_has_a_pair_the_gate_would_reject():
         (a, b) for i, a in enumerate(slugs) for b in slugs[i + 1:]
         if trades[a] == trades[b]
         and fp.collisions(prints[a], [prints[b]],
-                          axes=identity.REQUIRED_AXES)]
+                          axes=fp.REQUIRED_AXES)]
     assert not colliding, f"the gate let these through: {colliding}"
+
+
+def test_every_path_that_records_history_went_through_the_gate():
+    """Structural, not by example.
+
+    `rebuild_opening` called `opening_spec` directly and handed the answer to
+    `_build_opening`, which records the fingerprint unconditionally — so a
+    rebuild shipped an ungated decision and then stood as precedent for every
+    site after it. Nothing failed; the history simply had a row in it that had
+    never been checked against anything.
+
+    A test of that one function would have said nothing about the next caller.
+    This says it of all of them: if you build an opening, you decided it
+    through the gate.
+    """
+    import ast
+
+    source = Path("app/site/pipeline.py").read_text()
+    tree = ast.parse(source)
+    offenders = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.FunctionDef):
+            continue
+        called = {c.func.id for c in ast.walk(node)
+                  if isinstance(c, ast.Call) and isinstance(c.func, ast.Name)}
+        # Reading the stored direction back is not a way around the gate — it
+        # is the gate's own answer, persisted. The literal matters: recalling
+        # some other stage would not be.
+        replays = any(
+            isinstance(c, ast.Call)
+            and getattr(c.func, "attr", "") == "recall_stage"
+            and any(isinstance(a, ast.Constant) and a.value == "direction"
+                    for a in c.args)
+            for c in ast.walk(node))
+        if ("_build_opening" in called and not replays
+                and not called & {"_stage_direction", "decide"}):
+            offenders.append(node.name)
+    assert not offenders, (
+        f"{offenders} build an opening from a direction the diversity gate "
+        f"never saw, and `_build_opening` records it as precedent anyway")
+
+
+def test_a_rebuild_after_better_labels_is_gated(conn, other, monkeypatch):
+    """The path the gate was most likely to be missing from.
+
+    A rebuild fires right after vision unblocks a build — which is exactly when
+    the first direction was decided on the thinnest material, and so the most
+    likely to have landed on whatever everyone else got.
+    """
+    from app.site import pipeline
+
+    brief = {k: v for k, v in brief_of("barbecue").items()
+             if k != "design_direction"}
+    lead = leads.save_brief(conn, brief)
+    pipeline.open_site(conn, lead)
+
+    seen: list[str] = []
+    real = identity.decide
+
+    def watched(connection, lead_id, brief_in):
+        seen.append("gated")
+        return real(connection, lead_id, brief_in)
+
+    monkeypatch.setattr(identity, "decide", watched)
+    pipeline.rebuild_opening(conn, lead)
+    assert seen == ["gated"]

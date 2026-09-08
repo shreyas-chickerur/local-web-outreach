@@ -73,14 +73,12 @@ def test_a_stage_already_answered_is_not_asked_again(conn, looked):
         return monkey(brief, **kw)
 
     opening.opening_spec = counted
-    pipeline.opening_spec = counted
     try:
         run_stage(conn, looked, "photographs")
         first = run_stage(conn, looked, "direction")
         second = run_stage(conn, looked, "direction")
     finally:
         opening.opening_spec = monkey
-        pipeline.opening_spec = monkey
     assert asked["n"] == 1
     assert first["reused"] is False and second["reused"] is True
     assert first["config"] == second["config"]
@@ -215,7 +213,6 @@ def test_a_second_build_over_the_same_lead_asks_nothing(conn, looked,
 
     monkeypatch.setattr(pipeline.vision, "look", counted_look)
     monkeypatch.setattr(opening, "opening_spec", counted_open)
-    monkeypatch.setattr(pipeline, "opening_spec", counted_open)
     for stage in STAGES:
         run_stage(conn, looked, stage)
     assert asked == {"vision": 1, "direction": 1}

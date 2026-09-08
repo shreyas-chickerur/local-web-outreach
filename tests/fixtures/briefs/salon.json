@@ -7,7 +7,7 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "gold",
+    "accent": "rose",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -16,21 +16,21 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "services"
+      "gallery"
     ],
-    "first_screen": "photo",
+    "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "gallery",
-    "mood": "refined",
-    "rationale": "This isn't really a walk-in salon for the public \u2014 it's a suite-rental business selling beauty professionals on an upscale space to build their own careers, so the room itself (the chandeliered hallway, clean stations, the storefront) needs to sell that luxury feel first, backed by warm testimonials from current tenants. A gold accent and refined mood match the \"luxury salon suites\" positioning, and with 7 strong photographs a photo-led opening earns its keep, while the thin review count (56/2) ",
+    "lead_with": "about",
+    "mood": "warm",
+    "rationale": "This is actually a suite-rental business for independent beauty professionals, not a walk-in salon \u2014 the real audience is a stylist deciding whether to rent a chair, so the page needs to say that plainly (type half of split) while still showing the well-kept rooms and hallway (photo half), rather than opening on pure atmosphere as a day-spa would. A warm, welcoming mood with a soft rose accent matches the actual language used \u2014 'welcoming,' 'comfortable,' 'support you' \u2014 better than a cooler ref",
     "read_by": "claude",
     "suppress": [
       "stats"
     ],
     "understood": [
-      "This isn't really a walk-in salon for the public \u2014 it's a suite-rental business selling beauty professionals on an upscale space to build their own careers, so the room itself (the chandeliered hallwa"
+      "This is actually a suite-rental business for independent beauty professionals, not a walk-in salon \u2014 the real audience is a stylist deciding whether to rent a chair, so the page needs to say that plai"
     ],
     "unsupported": []
   },

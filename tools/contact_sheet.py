@@ -62,24 +62,35 @@ CHROME = ("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
 # and page architecture is mostly a below-the-fold property. If two sites are
 # still indistinguishable in the first viewport after an axis is added, that
 # axis was not doing the work.
-WIDTHS = (("desktop", 1440, 1100), ("mobile", 390, 844),
-          ("fold", 1440, 820),
-          # Half scale, small enough to commit. The full-size sheets run to
-          # 400MB because every photograph is inlined as a data URI, so what
-          # goes in the repository beside the census is this row — still
-          # legible for the only question the sheet asks.
-          ("thumb", 720, 410))
+#
+# (label, viewport width, viewport height, device scale). The scale shrinks the
+# IMAGE without narrowing the PAGE, which is the distinction the committed row
+# got wrong: `thumb` was captured in a 720-pixel window, so every thumbnail was
+# a 720-pixel rendering rather than a half-size picture of the 1440 one. Below
+# the 820 breakpoint the split hero stacks, the header changes and the columns
+# collapse — so every blind verdict this project has taken was read off a
+# layout the owner does not see when the laptop is turned around, while the
+# caption said "half scale". Same viewport as `fold`, half the pixels.
+WIDTHS = (("desktop", 1440, 1100, 1.0), ("mobile", 390, 844, 1.0),
+          ("fold", 1440, 820, 1.0),
+          # Small enough to commit. The full-size sheets run to 400MB because
+          # every photograph is inlined as a data URI, so what goes in the
+          # repository beside the census is this row — still legible for the
+          # only question the sheet asks.
+          ("thumb", 1440, 820, 0.5))
 
 
 def chrome() -> str | None:
     return next((path for path in CHROME if path and Path(path).exists()), None)
 
 
-def shoot(binary: str, page: Path, out: Path, width: int, height: int) -> bool:
+def shoot(binary: str, page: Path, out: Path, width: int, height: int,
+          scale: float = 1.0) -> bool:
     out.parent.mkdir(parents=True, exist_ok=True)
     result = subprocess.run(
         [binary, "--headless=new", "--disable-gpu", "--hide-scrollbars",
          f"--window-size={width},{height}",
+         f"--force-device-scale-factor={scale}",
          f"--screenshot={out}", page.resolve().as_uri()],
         capture_output=True, timeout=60)
     return out.exists() and result.returncode == 0
@@ -114,9 +125,9 @@ def main() -> int:
             site_file = OUT / f"{slug}.html"
             site_file.write_text(_inline_photographs(page, brief))
             shots = {}
-            for label, width, height in WIDTHS:
+            for label, width, height, scale in WIDTHS:
                 shot = OUT / f"{slug}-{label}.png"
-                if shoot(binary, site_file, shot, width, height):
+                if shoot(binary, site_file, shot, width, height, scale):
                     shots[label] = shot.name
             print(f"  {slug:16} {len(shots)} shot(s)")
             cards.append({

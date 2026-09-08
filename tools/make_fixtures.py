@@ -135,8 +135,33 @@ def main() -> int:
     parser.add_argument("--vision-only", action="store_true",
                         help="keep the researched brief, refold its vision "
                              "labels into it")
+    parser.add_argument("--redecide", action="store_true",
+                        help="keep the researched brief, throw away its frozen "
+                             "design direction and decide it again under the "
+                             "current gate")
     args = parser.parse_args()
     refresh = args.refresh
+
+    if args.redecide:
+        # A frozen direction replays and is never re-gated, which is right for
+        # a build and wrong for a rule change: the corpus would go on
+        # demonstrating a gate that no longer exists. So the answers are thrown
+        # away and taken again, in slug order, against an empty history — the
+        # order is part of the result and has to be reproducible.
+        db_path = Path("artifacts/fixtures.db")
+        db_path.unlink(missing_ok=True)
+        for target in sorted(OUT.glob("*.json")):
+            payload = json.loads(target.read_text())
+            payload.pop("design_direction", None)
+            seen = freeze_vision(payload)
+            target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+            spec = payload.get("design_direction") or {}
+            print(f"  {target.stem:18} vision={seen:2} "
+                  f"first={spec.get('first_screen', '-'):6} "
+                  f"mood={str(spec.get('mood', '-')):10} "
+                  f"accent={str(spec.get('accent', '-')):10} "
+                  f"read_by={spec.get('read_by', '-')}")
+        return 0
 
     if args.vision_only:
         for target in sorted(OUT.glob("*.json")):

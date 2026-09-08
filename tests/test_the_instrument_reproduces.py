@@ -31,9 +31,22 @@ FIXTURES = Path("tests/fixtures/briefs")
 # commit that says they moved and why — a number that changes because the
 # instrument changed is not a result.
 RULER = "575db030"
-LABELS = "449b9ddb"
-SAME_TRADE_MEAN = 0.62
-AGREEMENT = (40, 40)
+RULE = "624e27dc"
+LABELS = "4f147671"
+SAME_TRADE_MEAN = 0.70
+# 19 of 33, and the drop from "40/40" is a correction rather than a regression.
+# That score was taken against verdicts read off a contact sheet captured in a
+# 720-pixel window — below the breakpoint where the split hero stacks and the
+# columns collapse — of a corpus that had already moved underneath it. Two
+# standing tests now hold the sheet to the corpus and the thumbnails to the
+# desktop fold, the labels were re-judged blind against what actually ships,
+# and this is what the vector scores when the pictures are the right ones.
+#
+# What it says: the pages a person calls one studio share a skeleton and a
+# typeface and differ in colour, and the vector has no axis for the typeface
+# and weights colour through `mood` at 2.0. That is the case for type
+# treatment as axis two, and this number is what it has to move.
+AGREEMENT = (19, 33)
 
 
 def fingerprints() -> dict[str, fp.Fingerprint]:
@@ -70,6 +83,11 @@ def test_both_rulers_recompute_to_the_pinned_values():
     """If either moved, every number below is incomparable to its baseline and
     the census says so rather than reporting a difference."""
     assert fp.metric_version() == RULER
+    assert fp.rule_version() == RULE, (
+        "the gate's rule moved. Every fixture's frozen direction is an answer "
+        "that rule accepted, so re-decide the corpus (tools/make_fixtures.py "
+        "--redecide) and re-pin, rather than reporting the old baseline "
+        "against a corpus the gate rebuilt underneath it")
     assert agreement.labels_version() == LABELS
 
 
@@ -85,6 +103,7 @@ def test_the_pinned_baseline_matches_what_the_census_asserts():
     sys.modules["census"] = census
     spec.loader.exec_module(census)
     assert census.BASELINE_METRIC == RULER
+    assert census.BASELINE_RULE == RULE
     assert census.BASELINE_LABELS == LABELS
     assert census.BASELINE_SAME_TRADE == pytest.approx(SAME_TRADE_MEAN, abs=0.01)
 
@@ -135,17 +154,73 @@ def test_agreement_against_the_blind_labels_is_the_pinned_score():
     assert score.labels == LABELS
 
 
-def test_the_standing_inversion_is_resolved_and_stays_resolved():
-    """Pre-registered in .reviews/slice-b-predictions.md as the binding claim:
-    after the first-screen contract lands, `dentist`/`law` resolves.
+def test_the_inversions_are_the_ones_that_were_looked_at():
+    """The pre-registered claim in `.reviews/slice-b-predictions.md` binds on
+    first-screen contract AND type treatment, and only one of those has landed,
+    so it is still open. What is worth recording is that `dentist`/`law`
+    resolved on the first axis alone and then came back: re-deciding the corpus
+    under the corrected gate rule put both of them on `proof`, and judged blind
+    they are one page in two colours again. An interim resolution is not the
+    claim being paid off.
 
-    It did — one chose `proof`, the other `facts`, which is the difference a
-    person saw and the vector could not. Kept as a test so a later axis cannot
-    quietly undo it while raising the mean."""
+    So this pins the inversions rather than asserting there are none. Every one
+    of them is a pair a person called the same site and the vector ranked
+    further apart than a pair they called different — which is the case for the
+    next axis, not something to assert away. If the set changes, say why in the
+    commit that changes it.
+    """
     prints = fingerprints()
     slugs = sorted(prints)
     distances = {(a, b): fp.distance(prints[a], prints[b])
                  for i, a in enumerate(slugs) for b in slugs[i + 1:]}
-    assert agreement.score(distances).inversions == [], (
-        "an inversion came back — re-judge the pair blind before accepting it "
-        "as noise, per .reviews/slice-b-predictions.md")
+    inversions = agreement.score(distances).inversions
+    same_pairs = sorted({pair for pair, _, _, _ in inversions})
+    assert same_pairs == ["dentist/law", "hvac/roofer", "threadbare/hvac"], (
+        f"the inversions moved: {same_pairs}. Re-judge blind before accepting "
+        f"it, per .reviews/slice-b-predictions.md")
+
+
+SHEET = Path(".reviews/sheet/index.html")
+
+
+def test_the_committed_sheet_shows_the_corpus_that_shipped():
+    """The pictures a verdict is read off must be the pages that shipped.
+
+    The sheet was captured nine minutes before the fixtures it was committed
+    beside were re-frozen, so the committed copy showed five pre-gate pages
+    while its own captions claimed otherwise — and a blind re-judge taken off
+    it would have been a judgement of pages that no longer existed. Nothing
+    caught it: `_judged_against` says "re-look at the sheet" in prose, and
+    `labels_version` hashes the verdicts rather than the rendering.
+
+    The vector is printed under every thumbnail, so this is checkable. If it
+    fails, regenerate the sheet — do not edit the captions.
+    """
+    import re
+
+    assert SHEET.exists(), "no committed contact sheet to check"
+    html = SHEET.read_text()
+    printed: dict[str, dict[str, str]] = {}
+    for block in re.findall(r"<figure.*?</figure>", html, re.S):
+        found = re.search(r'src="([a-z-]+)-thumb\.png"', block)
+        if not found:
+            continue
+        printed[found.group(1)] = dict(
+            re.findall(r"<dt>(\w+)</dt><dd>(.*?)</dd>", block, re.S))
+
+    prints = fingerprints()
+    assert set(printed) == set(prints), (
+        f"the sheet and the corpus hold different fixtures: "
+        f"{set(printed) ^ set(prints)}")
+    import html as unescape
+
+    stale = {
+        slug: {axis: (was, prints[slug].values[axis])
+               for axis, was in values.items()
+               if unescape.unescape(was) != prints[slug].values.get(axis)}
+        for slug, values in printed.items()}
+    stale = {slug: moved for slug, moved in stale.items() if moved}
+    assert not stale, (
+        f"the committed sheet is older than the corpus — {sorted(stale)} "
+        f"moved since it was captured: {stale}. Regenerate it with "
+        f"tools/contact_sheet.py before reading anything off it.")

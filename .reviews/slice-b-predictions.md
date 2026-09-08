@@ -97,3 +97,28 @@ on the list of things to watch for.
     agreement  35 of 36 cross-comparisons
     same-trade mean  52% distance = 48% identical
     worst pair  contractor-bare / roofer at 27%
+
+## Outcome so far — 2026-09-08
+
+**Still open.** The binding claim needs both axes and only the first-screen
+contract has landed.
+
+`dentist`/`law` did resolve on that axis alone, and it was reported here as
+resolved. It has come back. Re-deciding the corpus under the corrected gate
+rule put both of them on `proof`, and judged blind against the current pages
+they are one page in two colours again: the same band of photograph, the same
+serif name on cream, the same ruled row of figures, the same single button,
+the same coloured band at the foot — teal against burgundy.
+
+That is worth more than the interim pass was. It is the clearest evidence in
+the corpus for what the claim predicted: what a person reads when they call two
+pages the same is the skeleton and the typeface, and the vector has an axis for
+neither. Two more pairs now say the same thing — `hvac`/`roofer` and
+`threadbare`/`hvac`, both judged the same site, both ranked far apart.
+
+**One correction to the record.** The verdicts this file's claim was scored
+against were read off contact-sheet thumbnails captured in a 720-pixel window,
+below the breakpoint where the split hero stacks and the columns collapse. The
+"35 of 36" and "40 of 40" readings were taken against pictures of a narrower
+page than the product ships. Re-judged against half-scale desktop folds, the
+vector scores 19 of 33. Nothing regressed to cause that.

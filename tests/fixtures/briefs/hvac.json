@@ -9,7 +9,7 @@
     "google returns 5 locations under this name in one search"
   ],
   "design_direction": {
-    "accent": "amber",
+    "accent": "blue",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -17,20 +17,20 @@
     },
     "defect": "",
     "emphasis": [
-      "stats",
+      "reviews",
       "services"
     ],
-    "first_screen": "proof",
+    "first_screen": "type",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "reviews",
+    "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "This is a trade business where trust and responsiveness are the whole pitch \u2014 6,203 Google reviews at 4.9 stars and named technicians praised for professionalism are the strongest asset, stronger than any single photo. Leading with proof (the review/rating band, backed by named techs and same-day service claims) before asking for a call matches how someone actually decides to hire a plumber; switching the accent to amber and the lead to reviews instead of stats avoids duplicating the near-identi",
+    "rationale": "This is a trade where a stranger's first question is \"are these people legit and fast,\" and the number that answers it \u2014 4.9 stars across 6,203 reviews \u2014 is more persuasive at a glance than any photo of a water heater; leading with that stat band, in a no-nonsense industrial blue rather than a warm tone, reads like a competent local outfit rather than a diner. To avoid repeating the recent proof/people/reviews/warm site, this swaps in a stats-led facts screen and an industrial mood, while still ",
     "read_by": "claude",
     "suppress": [],
     "understood": [
-      "This is a trade business where trust and responsiveness are the whole pitch \u2014 6,203 Google reviews at 4.9 stars and named technicians praised for professionalism are the strongest asset, stronger than"
+      "This is a trade where a stranger's first question is \"are these people legit and fast,\" and the number that answers it \u2014 4.9 stars across 6,203 reviews \u2014 is more persuasive at a glance than any photo "
     ],
     "unsupported": []
   },

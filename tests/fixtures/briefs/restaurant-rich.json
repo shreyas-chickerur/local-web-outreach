@@ -21,12 +21,12 @@
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "about",
-    "mood": "warm",
-    "rationale": "This is a farm-to-table neighborhood restaurant with a genuine story (whole-animal philosophy, named chef, house-turned-restaurant setting) and strong ratings, so the opening should pair that voice with the room rather than open on gallery alone as the prior site did \u2014 a split screen lets the Heritage Table building and name share the first moment while the about section immediately backs it up with substance. Olive replaces terracotta to read as farm/kitchen rather than repeating the same warm-",
+    "mood": "refined",
+    "rationale": "This is a farm-to-table house restaurant with a genuine story (whole-animal philosophy, named chef, Blackland Prairie ingredients) and strong ratings, so a visitor needs the sense of place and craft, not just another photo-led hero like the last site. Splitting the first screen between the house's evocative name-in-lights and the philosophy text gives it the character-driven, refined feel of a chef-led neighbourhood restaurant, with olive as a warmer, earthier accent than the terracotta already ",
     "read_by": "claude",
     "suppress": [],
     "understood": [
-      "This is a farm-to-table neighborhood restaurant with a genuine story (whole-animal philosophy, named chef, house-turned-restaurant setting) and strong ratings, so the opening should pair that voice wi"
+      "This is a farm-to-table house restaurant with a genuine story (whole-animal philosophy, named chef, Blackland Prairie ingredients) and strong ratings, so a visitor needs the sense of place and craft, "
     ],
     "unsupported": []
   },

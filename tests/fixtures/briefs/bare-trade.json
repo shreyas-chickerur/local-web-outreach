@@ -25,13 +25,13 @@
     "kind": "style",
     "lead_with": "reviews",
     "mood": "refined",
-    "rationale": "A family law client is anxious and vetting for trust, not browsing photographs of an office building, so the page should open with the 4.9-star, 148-review proof and the attorney's own words rather than a mosaic \u2014 only two photos are even large enough to lead with. Navy and a refined mood read as steady, serious counsel; the call to action should be to call, because someone facing a custody or divorce matter needs to talk to a person now.",
+    "rationale": "A family law client is anxious and vetting for trust, not browsing a portfolio \u2014 a 4.9 from 148 reviews and the client testimonials prove reliability faster than any photo can, and with only two images strong enough to feature, a facts-led opening avoids looking thin while a photo-led one would. The navy and refined mood read as serious, calm counsel rather than a friendly storefront, which matches a divorce and custody practice.",
     "read_by": "claude",
     "suppress": [
       "gallery"
     ],
     "understood": [
-      "A family law client is anxious and vetting for trust, not browsing photographs of an office building, so the page should open with the 4.9-star, 148-review proof and the attorney's own words rather th"
+      "A family law client is anxious and vetting for trust, not browsing a portfolio \u2014 a 4.9 from 148 reviews and the client testimonials prove reliability faster than any photo can, and with only two image"
     ],
     "unsupported": []
   },
