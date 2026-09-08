@@ -59,6 +59,7 @@ BRIEF = {
 # they are exercised through the field that reorders them.
 FLIPS: dict[str, tuple[str, object, object]] = {
     "first_screen": ("first_screen", "photo", "proof"),
+    "type_treatment": ("type_treatment", "quiet", "wide"),
     "mood": ("mood", "warm", "night"),
     "accent": ("accent", "navy", "gold"),
     "leads_with": ("lead_with", "gallery", "reviews"),
@@ -71,7 +72,8 @@ FLIPS: dict[str, tuple[str, object, object]] = {
 # Axes whose difference is claimed to show in the first screen. An axis here
 # that only changes the page on scroll is scored as if the owner sees it and
 # does not.
-FIRST_SCREEN = {"first_screen", "mood", "accent", "hero_subject", "action"}
+FIRST_SCREEN = {"first_screen", "type_treatment", "mood", "accent",
+                "hero_subject", "action"}
 
 
 def render(**kw) -> str:
@@ -131,12 +133,13 @@ def test_no_axis_is_a_function_of_another():
     # pairing each mood with its own accent would "prove" mood is a function of
     # accent, which says nothing about the code.
     specs = [SiteSpec(mood=mood, accent=accent, lead_with=lead, cta=cta,
-                      first_screen=screen)
+                      first_screen=screen, type_treatment=treatment)
              for mood in ("warm", "night", "fresh")
              for accent in (None, "navy", "gold")
              for lead in (None, "reviews")
              for cta in ("book", "call")
-             for screen in ("photo", "proof")]
+             for screen in ("photo", "proof")
+             for treatment in ("quiet", "stamped")]
 
     subjects = ("dish", "room", "people", "exterior", "work")
     rows: list[fp.Fingerprint] = []

@@ -49,78 +49,53 @@ FIXTURES = Path("tests/fixtures/briefs")
 # than against a memory. Recorded here rather than in a note because the report
 # should say whether it is better or worse every time it runs.
 #
-# 2026-09-08, eleven fixtures, EIGHT axes, weighted by visibility x
-# decidedness (distance ruler 575db030, gate rule 624e27dc):
+# 2026-09-08, eleven fixtures, NINE axes — type treatment added as axis two —
+# weighted by visibility x decidedness (ruler 4616d461, gate rule a83a0283):
 #
-#   same-trade mean   62% distance  =  38% IDENTICAL   (7 scored pairs)
-#   worst pair        45% distance  —  contractor-bare vs roofer
-#   agreement         14 of 22
+#   same-trade mean   51% distance  =  49% IDENTICAL   (7 scored pairs)
+#   worst pair        44% distance  —  contractor-bare vs roofer
+#   agreement         21 of 36
 #
-# `threadbare` is excluded from every score — see `agreement.UNSCORED`. It was
-# in three of the ten same-trade pairs and, having no design at all, sat 100%,
-# 90% and 75% from its trade-mates, which is not variety. It read as 30%
-# identical with it and 38% without, and the honest headline is the second.
-# Measured both ways across the rule change so the exclusion is not doing the
-# work: 42% -> 38% identical without it, 38% -> 30% with it. The rule fix is
-# real either way and half the reported gain was the empty fixture.
+# NOT COMPARABLE to the 14 of 22 before it: different axes, different corpus,
+# different labels. The number to read is the pre-registered claim, and it
+# FAILED — `agreement.unreachable()` reports two, and the claim was zero.
 #
-# THE AGREEMENT NUMBER FELL FROM "40/40" AND NOTHING REGRESSED. That score was
-# taken against verdicts read off a contact sheet with two faults: it had been
-# captured before the fixtures beside it were re-frozen, so five of the eleven
-# pictures were of pages that no longer existed, and the committed row was shot
-# in a 720-pixel window rather than shrunk from the 1440 one — below the
-# breakpoint where the split hero stacks and the columns collapse. So every
-# verdict this project has taken was a judgement of a narrow rendering, some of
-# them of a corpus that had moved. Both faults now have standing tests, the
-# labels were re-judged blind against what ships, and 19/33 is what the vector
-# scores against the right pictures.
+# The mean went the wrong way too, 38% identical to 49%, and that is expected
+# rather than excused: nine axes describe more difference than eight, so a
+# ninth raises the mean for arithmetic reasons and the mean means less. This is
+# why the claim was written about the blind spot instead.
 #
-# The scored mean improved 42% -> 38% identical because the gate's rule was
-# corrected to
-# the one the brief specifies — four axes, one structural, AND ONE WEIGHTED
-# HIGHLY — and the corpus was re-decided under it. `bare-trade`/`law` at 35%,
-# the pair the last baseline called the case to fix, separated.
+# What the failure says, and it is the opposite of what the axis was for: the
+# pairs a person calls one studio share their GEOMETRY and differ in type
+# treatment, colour and subject — and the judge discounts all three. So the
+# vector now carries a 2.5-weight term exactly where a person sees no
+# difference, which is the failure mode `accent` and `hero_subject` already
+# had. The axis is real and the corpus is more varied for it; as a term in the
+# distance it currently makes the instrument worse. What that weight should be
+# is the next fork, and it is not something to fit against thirteen verdicts.
 #
-# What the agreement says, and it is the finding of this pass: the three pairs
-# a person calls one studio all share a SKELETON and a TYPEFACE and differ in
-# COLOUR — `dentist`/`law`, `hvac`/`roofer`, `threadbare`/`hvac`. The vector has
-# no axis for the typeface and reaches colour through `mood` at weight 2.0, so
-# it ranks them further apart than pairs a person calls different. That is the
-# case for type treatment as axis two, measured rather than assumed, and this
-# is the number it has to move. The mean is not the target; this is.
-#
-# `dentist`/`law` is the pre-registered claim in
-# .reviews/slice-b-predictions.md, and it binds on first-screen contract AND
-# type treatment — only the first has landed, so the claim is still open. It
-# resolved on that axis alone and then came back when the corpus was
-# re-decided: both now open on `proof`. Recorded, because an interim resolution
-# reported as the claim being met is how a prediction stops being binding.
-#
-# An earlier baseline of 40% was taken against a nine-fixture corpus that was
-# the wrong shape — no fixture carried the business's own photographs, so it
-# was measuring a path the product does not have. Re-pinned rather than
-# compared: a number that moved because the corpus changed is not progress.
-BASELINE_SAME_TRADE = 0.62
+# `threadbare` is excluded from every score — see `agreement.UNSCORED`.
+BASELINE_SAME_TRADE = 0.51
 # The closest same-trade pair, kept as a reading rather than as a target:
 # it is judged DIFFERENT, and the pairs worth fixing are the inversions.
-BASELINE_WORST = ("contractor-bare", "roofer", 0.45)
+BASELINE_WORST = ("contractor-bare", "roofer", 0.44)
 # Which ruler the numbers above were taken with. A distance is comparable only
 # to another taken the same way, and comparing across a change of ruler has
 # already produced two false readings — a corpus that changed under a pinned
 # baseline, and a distance that became weighted while the baseline stayed flat.
-BASELINE_METRIC = "575db030"
+BASELINE_METRIC = "4616d461"
 # And which gate rule the corpus was decided under. Every frozen
 # direction is an answer this rule accepted, so a baseline taken under
 # one rule is not comparable to a corpus decided under another.
-BASELINE_RULE = "624e27dc"
+BASELINE_RULE = "a83a0283"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
-BASELINE_LABELS = "371f24fa"
+BASELINE_LABELS = "7e49403b"
 # What it was, so a reader can see that the agreement figure crossed a
 # change of labels rather than falling. "40 of 40" was scored against
 # 449b9ddb, taken from contact-sheet thumbnails of a corpus that had
 # moved, captured below the breakpoint where the layout changes.
-BASELINE_LABELS_WAS = ("449b9ddb", "40 of 40")
+BASELINE_LABELS_WAS = ("371f24fa", "14 of 22")
 # True on the commit that re-pins, false on every commit after. Without
 # it the first run under a new ruler always prints "no better than the
 # baseline" — because the baseline IS that run's own measurement copied

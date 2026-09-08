@@ -71,9 +71,12 @@ def test_enough_movement_including_a_structural_axis_is_not_a_collision():
     taken = [fp.of(plan(("gallery", "reviews")),
                    SiteSpec(mood="warm", accent="navy", lead_with="gallery",
                             cta="book"), Material())]
+    # It has to move on a highly weighted axis too, and since `HIGH_WEIGHT`
+    # became 2.5 that means `first_screen` or `type_treatment` — not `mood`,
+    # whose visible signature between two pages is mostly the colour.
     far = fp.of(plan(("menu", "about", "contact"), bias="editorial"),
                 SiteSpec(mood="night", accent="charcoal", lead_with="menu",
-                         cta="call"), Material())
+                         cta="call", type_treatment="stamped"), Material())
     assert fp.collisions(far, taken, axes=4) == []
 
 

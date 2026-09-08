@@ -5,7 +5,7 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "navy",
+    "accent": "terracotta",
     "contradictions": [],
     "cta": {
       "kind": "quote",
@@ -16,19 +16,20 @@
       "services",
       "reviews"
     ],
-    "first_screen": "proof",
+    "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "A roofing contractor sells competence before atmosphere: a visitor checks the 5.0 rating, 218 reviews, and multi-state W2-managed crews before they ever care what a roof photo looks like, so the stats/proof band belongs first with a free-estimate quote as the action. The gallery has enough real jobsite and crew photography to support a section later, but it should back up the trust case, not lead it.",
+    "rationale": "A roofing contractor sells competence and trust before atmosphere, so the first screen should show the 5.0-rating/218-review proof band rather than a photo hero \u2014 homeowners checking a roofer want credentials and evidence first, and the roof photography, while decent, is mostly aerial work shots that support that proof rather than carry the whole page. I kept the industrial mood and stamped trade-shop lettering since those genuinely fit a W2-crew roofing operation, but swapped the accent to terr",
     "read_by": "claude",
     "suppress": [
       "features"
     ],
+    "type_treatment": "stamped",
     "understood": [
-      "A roofing contractor sells competence before atmosphere: a visitor checks the 5.0 rating, 218 reviews, and multi-state W2-managed crews before they ever care what a roof photo looks like, so the stats"
+      "A roofing contractor sells competence and trust before atmosphere, so the first screen should show the 5.0-rating/218-review proof band rather than a photo hero \u2014 homeowners checking a roofer want cre"
     ],
     "unsupported": []
   },

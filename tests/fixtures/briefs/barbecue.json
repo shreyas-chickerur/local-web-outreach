@@ -23,13 +23,14 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "This is a beloved, high-volume BBQ joint with 10+ strong food and exterior photos and nearly 17,000 combined reviews at 4.7-4.8 stars \u2014 the smoked meat and the packed dining room ARE the sell, so we open on a big photo and let the gallery and stats (rating/review count) do the convincing before anyone reads a word. Catering and merch matter but are secondary to getting a hungry local to walk in or order.",
+    "rationale": "Hutchins BBQ has 10 strong food/exterior photographs and a huge, glowing review base (4.8 from nearly 14,000 people), so the site should open on that smoky, crowded, brick-and-firewood atmosphere rather than text \u2014 a visitor decides where to eat with their eyes and the ratings confirm the choice. Stamped type in a warm, terracotta-accented mood reads as a real Texas smokehouse, not a generic diner, and pushing people toward ordering/catering matches how the business actually makes money beyond w",
     "read_by": "claude",
     "suppress": [
       "features"
     ],
+    "type_treatment": "stamped",
     "understood": [
-      "This is a beloved, high-volume BBQ joint with 10+ strong food and exterior photos and nearly 17,000 combined reviews at 4.7-4.8 stars \u2014 the smoked meat and the packed dining room ARE the sell, so we o"
+      "Hutchins BBQ has 10 strong food/exterior photographs and a huge, glowing review base (4.8 from nearly 14,000 people), so the site should open on that smoky, crowded, brick-and-firewood atmosphere rath"
     ],
     "unsupported": []
   },

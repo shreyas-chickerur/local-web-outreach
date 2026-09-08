@@ -247,3 +247,114 @@ high-visibility cardinality to tighten into. Type treatment is exactly that: it
 adds a highly visible axis that is not colour, which is both what the pair needs
 perceptually and what the rule needs arithmetically. The rule tightens after
 axis two, not before it.
+
+# Pre-registered — axis two, type treatment
+
+Written 2026-09-08, before any axis-two code exists.
+
+## The claim being tested
+
+`agreement.unreachable()` currently reports **two** comparisons that no
+reweighting of the existing axes can order correctly — both `hvac`/`roofer`,
+judged one studio, against `contractor-bare`/`roofer` and
+`contractor-bare`/`hvac`, judged two. The axes it moves on top of them are
+`accent` and `hero_subject`: colour and subject, the two the judging rule says
+cannot alone make a different site.
+
+That is not a calibration gap. It is the vector having no way to say what the
+judge is actually reading, which for those pages is *the same type set the same
+way*.
+
+## Binding claim, primary
+
+**After type treatment lands, `agreement.unreachable()` reports zero.**
+
+Pass or fail is that number and nothing else. Agreement rising while the blind
+spot stays is NOT the claim being met — it would mean the axis moved some
+distances around without giving the vector the thing it was missing.
+
+## Binding claim, secondary
+
+The axis has to be **real** before it counts: every treatment changes the first
+820 pixels, no treatment is a pure function of another axis, and no treatment
+is constant across the corpus. `tests/sitegen/test_axes_are_real.py` is what
+says so, and the axis goes into its manifest in the same commit that adds it to
+`AXES`.
+
+## And the arithmetic it has to fix
+
+`HIGH_WEIGHT = 2.5` was tried and reverted last commit because it left
+`first_screen` alone in the required set — five positions against a window of
+ten, so the gate became unmeetable. Type treatment is weighted 2.5, which puts
+it in that set alongside `first_screen`. With five treatments that is
+twenty-five combinations against a window of ten.
+
+**So this pass ships both**: the axis, and the `HIGH_WEIGHT = 2.5` it makes
+satisfiable. If `test_the_gate_is_satisfiable` still fails after the axis
+lands, the axis is too small and the reweight goes back again — that is the
+falsifier, and it is checkable in milliseconds before any corpus is re-decided.
+
+## What is expected and acceptable
+
+The scored same-trade figure may get worse. Nine axes describe more difference
+than eight, so the mean rises for arithmetic reasons and means less, which is
+why the mean is not the claim.
+
+Tuning-set agreement is what I will iterate against. **The held-out seven are
+not touched until the axis is finished**, and a held-out pair whose page moves
+under it is retired with a reason rather than re-judged.
+
+## Outcome — axis two landed, the claim FAILED
+
+`agreement.unreachable()` reports **two**. The claim was zero. Pass/fail was
+that number and nothing else, so this is a fail, and the reason is worth more
+than the pass would have been.
+
+    barbecue/restaurant-bare (same) contains restaurant-bare/restaurant-rich
+        (different) — extra: action
+    dentist/hvac             (same) contains restaurant-bare/restaurant-rich
+        (different) — extra: action
+
+**The axis is real.** It is in `AXES`, weighted 2.5, in the `FLIPS` manifest and
+the first-screen list, swept by `test_no_axis_is_a_function_of_another`, and it
+visibly separates three restaurants that all open on the same position:
+`HUTCHINS BBQ` in heavy capitals, `The Heritage Table` in a sentence-case serif,
+`I C H I K A` in capitals opened right out. The gate is satisfied by the corpus
+it produced — zero of fifty-five pairs collide — and `HIGH_WEIGHT = 2.5`, which
+was unmeetable last commit, ships with it: five positions by five treatments is
+twenty-five against a window of ten.
+
+**And as a term in the distance it currently makes the instrument worse.** The
+pairs a person calls one studio share their GEOMETRY and differ in type
+treatment, colour and subject — and the judge discounts all three:
+
+    bare-trade / contractor-bare   "a photograph filling the screen washed
+                                   dark, the name at the upper left in white,
+                                   text under it, a star line beneath. The only
+                                   thing that changes is whether the name is a
+                                   serif or blocky capitals"
+    dentist / hvac                 "same arrangement twice — one set in a serif
+                                   and one in heavy capitals, teal against
+                                   amber"
+    barbecue / restaurant-bare     "One name is shouted and the other is spaced
+                                   out, and the plates are different colours"
+
+So the vector now carries a 2.5-weight term exactly where a person sees no
+difference. That is the failure mode `accent` and `hero_subject` already had,
+and the axis was added to fix a blind spot of that shape.
+
+### The counterfactual, which is what makes this a fail rather than a shrug
+
+Scored on the same corpus and the same labels with `type_treatment` removed from
+the vector, `unreachable()` also reported zero at the point the claim was first
+checked, and agreement was identical. The axis was not what moved the number
+either way. It was the corpus and the labels changing underneath.
+
+### What I am NOT doing about it
+
+Not re-weighting. Thirteen verdicts is not enough to fit a weight against, and
+that path was searched and rejected once already. The next question is what
+`type_treatment` should be worth in the distance when the gate needs it at 2.5
+to stay satisfiable — the two weights disagree for the first time, which is the
+case `weight_of`'s `min()` was annotated as waiting for. That is a fork for
+review, not something to settle by fitting.

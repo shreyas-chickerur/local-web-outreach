@@ -37,6 +37,7 @@ from dataclasses import dataclass
 # standing in for.
 AXES: tuple[str, ...] = (
     "first_screen",
+    "type_treatment",
     "mood",
     "accent",
     "leads_with",
@@ -77,6 +78,11 @@ VISIBILITY: dict[str, float] = {
     # counts for more — two pages that open the same way are the same site to
     # the owner being shown them.
     "first_screen": 3.0,
+    # The name is on the first screen whatever else occupies it, and how it is
+    # set is read before the words are. Two pages the judge called one studio
+    # were unreachable by any reweighting of the other eight axes, and what
+    # they shared was this.
+    "type_treatment": 3.0,
     "mood": 2.0,             # the whole feel, and the first thing on screen
     "accent": 1.0,           # immediate, but only paint
     "hero_subject": 1.5,     # the largest thing above the fold
@@ -90,6 +96,9 @@ DECIDEDNESS: dict[str, float] = {
     # Chosen outright, though the material narrows what is offerable: a
     # business with no usable photograph cannot be given a photographic one.
     "first_screen": 2.5,
+    # Chosen outright, though the name's length narrows it: an opened-out
+    # capital setting is not offerable to "Milestone Electric Air Plumbing".
+    "type_treatment": 2.5,
     "mood": 2.0,             # chosen outright
     "accent": 2.0,           # chosen outright
     "hero_subject": 1.5,     # chosen, from what they happen to have
@@ -139,22 +148,27 @@ REQUIRED_AXES = 4
 # added to stop a pair passing on differences nobody sees was itself satisfied
 # by a difference the judge had already ruled out.
 #
-# 2.5 WAS TRIED AND PUT BACK. It leaves `first_screen` alone in the set, which
-# is right about the perception and wrong about the arithmetic: a candidate has
-# to differ from EACH of the last ten, `first_screen` has five positions, and
-# once the window holds all five no site can satisfy the rule at all. Measured
-# rather than argued — the corpus re-decided under it had eight of fifty-five
-# pairs the gate itself would reject, and the scored same-trade figure went
-# from 38% identical to 47%. `test_the_gate_is_satisfiable` now fails in
-# milliseconds on any value that makes the requirement unmeetable, so the next
-# attempt costs a test run rather than a corpus re-decide and a re-judge.
+# 2.5 WAS TRIED ONCE AND PUT BACK, THEN SHIPPED WHEN AXIS TWO MADE IT MEETABLE.
 #
-# At 2.0 the required set is {first_screen, mood} — five positions by six moods
-# is thirty combinations against a window of ten, which is satisfiable. The
-# `dentist`/`law` regression it allows is real and stands unfixed: the fix is
-# more high-visibility cardinality, which is what type treatment adds, so the
-# rule tightens AFTER axis two rather than before it.
-HIGH_WEIGHT = 2.0
+# The first attempt left `first_screen` alone in the required set: a candidate
+# has to differ from EACH of the last ten, `first_screen` has five positions,
+# and once the window holds all five no site can satisfy the rule. Right about
+# the perception, wrong about the arithmetic — the corpus re-decided under it
+# had eight of fifty-five pairs its own gate rejected, and the scored same-trade
+# figure went from 38% identical to 47%.
+#
+# `type_treatment` weighs 2.5 as well, so the set is now {first_screen,
+# type_treatment}: five positions by five treatments is twenty-five against a
+# window of ten. `test_the_gate_is_satisfiable` holds that arithmetic and fails
+# in milliseconds on any value that breaks it, which is what makes shipping this
+# a test run rather than a corpus re-decide and a re-judge.
+#
+# `mood` drops out, and that was the point. It was the axis that let `dentist`
+# and `law` through the gate sharing an opening, because what `mood` does
+# visibly between those two is the colour — and the judging rule written blind
+# at the top of `pairs.json` says a difference in colour alone is not a
+# different site.
+HIGH_WEIGHT = 2.5
 
 
 def weight_of(axis: str) -> float:
@@ -249,6 +263,7 @@ def of(plan, spec, material=None) -> Fingerprint:
             material.photo_labels.get(plan.hero_photo) or "unlabelled")
     return Fingerprint({
         "first_screen": str(spec.first_screen or "photo"),
+        "type_treatment": str(spec.type_treatment or "quiet"),
         "mood": str(spec.mood),
         "accent": str(spec.accent or "theme default"),
         "leads_with": str(spec.lead_with or (sections[0] if sections else "-")),

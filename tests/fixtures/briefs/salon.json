@@ -7,7 +7,7 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "rose",
+    "accent": "gold",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -15,8 +15,8 @@
     },
     "defect": "",
     "emphasis": [
-      "reviews",
-      "gallery"
+      "services",
+      "reviews"
     ],
     "first_screen": "split",
     "hero_offset": 0,
@@ -24,13 +24,14 @@
     "kind": "style",
     "lead_with": "about",
     "mood": "warm",
-    "rationale": "This is actually a suite-rental business for independent beauty professionals, not a walk-in salon \u2014 the real audience is a stylist deciding whether to rent a chair, so the page needs to say that plainly (type half of split) while still showing the well-kept rooms and hallway (photo half), rather than opening on pure atmosphere as a day-spa would. A warm, welcoming mood with a soft rose accent matches the actual language used \u2014 'welcoming,' 'comfortable,' 'support you' \u2014 better than a cooler ref",
+    "rationale": "Salon Boutique is really a suite-rental business for beauty professionals, not a single styling brand \u2014 so the story of independence and support (about) needs to land before the gallery, which is a mix of empty suites and unrelated stylist snapshots rather than one coherent look. A split first screen lets the storefront photo establish the place while the name and message about growing your own business sit in text beside it, and a quiet type treatment plus warm/gold mood reads as an established",
     "read_by": "claude",
     "suppress": [
       "stats"
     ],
+    "type_treatment": "quiet",
     "understood": [
-      "This is actually a suite-rental business for independent beauty professionals, not a walk-in salon \u2014 the real audience is a stylist deciding whether to rent a chair, so the page needs to say that plai"
+      "Salon Boutique is really a suite-rental business for beauty professionals, not a single styling brand \u2014 so the story of independence and support (about) needs to land before the gallery, which is a mi"
     ],
     "unsupported": []
   },

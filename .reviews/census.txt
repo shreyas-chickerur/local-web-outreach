@@ -1,103 +1,103 @@
 
 11 fixtures · model asked 0× for photographs, 0× for direction · second pass asked 0 and 0
 
-  barbecue         Barbecue Restaurant       8/8  sections  blocks   5/14    57.9kB  contrast  5.2
+  barbecue         Barbecue Restaurant       8/8  sections  blocks   5/14    60.1kB  contrast  5.2
                    hero /photo/1/9 (+3.68)
-                   This is a beloved, high-volume BBQ joint with 10+ strong food and exterior photos and nearly 17,000 combined r
-  bare-trade       Attorney                  5/5  sections  blocks    5/8    52.0kB  contrast 16.1
+                   Hutchins BBQ has 10 strong food/exterior photographs and a huge, glowing review base (4.8 from nearly 14,000 p
+  bare-trade       Attorney                  5/5  sections  blocks    5/8    54.1kB  contrast 16.1
                    hero /photo/2/1 (+2.63)
-                   A family law client is anxious and vetting for trust, not browsing a portfolio — a 4.9 from 148 reviews and th
-  contractor-bare  Plumber                   3/3  sections  blocks    0/0    48.9kB  contrast 12.5
+                   A family law client needs to see trust and track record before anything else — a 4.9 rating from 148 reviews a
+  contractor-bare  Plumber                   2/2  sections  blocks    0/0    48.5kB  contrast 12.5
                    hero /photo/3/6 (+2.61)
-                   A plumber sells trust before atmosphere, and with a mixed review record (one detailed complaint about reliabil
-  dentist          Dentist                   8/8  sections  blocks   9/11    56.5kB  contrast  5.7
+                   A plumber sells trust before anything else, and with only one photo big enough to carry a layout, the rating a
+  dentist          Dentist                   8/8  sections  blocks   9/11    58.7kB  contrast  5.7
                    hero /photo/4/6 (+3.31)
-                   This is a dental practice, not a restaurant — a visitor needs reassurance of competence and trustworthiness (r
-  hvac             Plumber                   7/7  sections  blocks    3/3    52.9kB  contrast  6.1
+                   A visitor picking a dentist wants reassurance and trust signals before anything else — strong ratings, friendl
+  hvac             Plumber                   7/7  sections  blocks    3/3    55.3kB  contrast  6.2
                    hero /photo/5/0 (+2.60)
-                   This is a trade where a stranger's first question is "are these people legit and fast," and the number that an
-  law              Attorney                  7/7  sections  blocks   6/13    52.9kB  contrast 16.1
+                   This is a trade call, not a dining room: a homeowner with a leaking pipe wants proof of competence and trustwo
+  law              Attorney                  8/8  sections  blocks   6/13    59.2kB  contrast 16.1
                    hero /photo/6/2 (+3.31)
-                   A personal injury attorney sells trust and competence before anything else, so the first screen should present
-  restaurant-bare  Japanese Restaurant       4/4  sections  blocks    0/0    50.5kB  contrast 12.4
+                   A 4.9-star rating from 254 reviews is the single most persuasive fact for someone deciding whether to trust a 
+  restaurant-bare  Japanese Restaurant       4/4  sections  blocks    0/0    52.7kB  contrast 12.4
                    hero /photo/7/5 (+3.74)
-                   Ichika is a kaiseki counter where the plating and the room are the argument for going — nine strong dish and c
-  restaurant-rich  Restaurant               10/10 sections  blocks    5/5    60.8kB  contrast 10.4
+                   Ichika is a kaiseki restaurant whose case is made almost entirely by the plating itself — nine strong dish pho
+  restaurant-rich  Restaurant               10/10 sections  blocks    5/5    63.1kB  contrast  5.2
                    hero /photo/8/9 (+3.19)
-                   This is a farm-to-table house restaurant with a genuine story (whole-animal philosophy, named chef, Blackland 
-  roofer           Roofing Contractor        6/6  sections  blocks   8/13    54.4kB  contrast 12.5
+                   This is a farm-to-table neighborhood restaurant with strong, plentiful photography (8 lead-worthy shots of the
+  roofer           Roofing Contractor        6/6  sections  blocks   8/13    56.5kB  contrast  5.3
                    hero /photo/9/2 (+3.04)
-                   A roofing contractor sells competence before atmosphere: a visitor checks the 5.0 rating, 218 reviews, and mul
-  salon            Beauty Salon              5/5  sections  blocks   4/10    52.8kB  contrast  5.5
+                   A roofing contractor sells competence and trust before atmosphere, so the first screen should show the 5.0-rat
+  salon            Beauty Salon              5/5  sections  blocks   4/10    55.0kB  contrast  5.5
                    hero /photo/10/0 (+2.23)
-                   This is actually a suite-rental business for independent beauty professionals, not a walk-in salon — the real 
-  threadbare       General Contractor        0/0  sections  blocks    0/0    42.7kB  contrast  6.4
+                   Salon Boutique is really a suite-rental business for beauty professionals, not a single styling brand — so the
+  threadbare       General Contractor        0/0  sections  blocks    0/0    44.8kB  contrast 12.5
                    hero None (-1.41)
-                   With only one small photo and no other sections available, there is nothing here to build a photo-led or proof
+                   A general contractor sells competence, not atmosphere, and there's only one small photo — not enough to carry 
 
   fingerprints
-    barbecue         first_screen=photo mood=warm accent=terracotta leads_with=gallery action=order hero_subject=dish
+    barbecue         first_screen=photo type_treatment=stamped mood=warm accent=terracotta leads_with=gallery action=order hero_subject=dish
                      section_order=gallery>stats>menu>services>about>reviews>hours>contact
                      compositions=about:none;contact:none;gallery:grid;hours:none;menu:grid;reviews:grid;services:grid;stats:none
-    bare-trade       first_screen=facts mood=refined accent=navy leads_with=reviews action=call hero_subject=exterior
+    bare-trade       first_screen=facts type_treatment=quiet mood=refined accent=navy leads_with=reviews action=call hero_subject=exterior
                      section_order=reviews>stats>about>services>features
                      compositions=about:none;features:none;reviews:grid;services:grid;stats:none
-    contractor-bare  first_screen=facts mood=industrial accent=navy leads_with=stats action=call hero_subject=work
-                     section_order=stats>gallery>reviews
-                     compositions=gallery:grid;reviews:grid;stats:none
-    dentist          first_screen=proof mood=warm accent=teal leads_with=reviews action=book hero_subject=people
+    contractor-bare  first_screen=facts type_treatment=stamped mood=industrial accent=navy leads_with=stats action=call hero_subject=work
+                     section_order=stats>reviews
+                     compositions=reviews:grid;stats:none
+    dentist          first_screen=proof type_treatment=quiet mood=warm accent=teal leads_with=reviews action=book hero_subject=people
                      section_order=reviews>stats>services>gallery>about>features>hours>contact
                      compositions=about:none;contact:none;features:none;gallery:grid;hours:none;reviews:grid;services:grid;stats:none
-    hvac             first_screen=type mood=industrial accent=blue leads_with=stats action=call hero_subject=people
-                     section_order=stats>services>reviews>gallery>about>features>contact
+    hvac             first_screen=proof type_treatment=stamped mood=industrial accent=amber leads_with=reviews action=call hero_subject=people
+                     section_order=reviews>stats>services>gallery>about>features>contact
                      compositions=about:none;contact:none;features:none;gallery:grid;reviews:grid;services:editorial;stats:none
-    law              first_screen=proof mood=refined accent=burgundy leads_with=stats action=call hero_subject=people
-                     section_order=stats>services>reviews>about>features>hours>contact
-                     compositions=about:none;contact:none;features:none;hours:none;reviews:grid;services:grid;stats:none
-    restaurant-bare  first_screen=photo mood=refined accent=crimson leads_with=gallery action=book hero_subject=dish
+    law              first_screen=type type_treatment=quiet mood=refined accent=navy leads_with=stats action=call hero_subject=people
+                     section_order=stats>services>reviews>gallery>about>features>hours>contact
+                     compositions=about:none;contact:none;features:none;gallery:grid;hours:none;reviews:grid;services:grid;stats:none
+    restaurant-bare  first_screen=photo type_treatment=wide mood=refined accent=crimson leads_with=gallery action=book hero_subject=dish
                      section_order=gallery>stats>reviews>contact
                      compositions=contact:none;gallery:grid;reviews:grid;stats:none
-    restaurant-rich  first_screen=split mood=refined accent=olive leads_with=about action=book hero_subject=dish
-                     section_order=about>stats>gallery>reviews>recognition>services>features>partners>hours>contact
+    restaurant-rich  first_screen=photo type_treatment=quiet mood=warm accent=terracotta leads_with=gallery action=book hero_subject=dish
+                     section_order=gallery>stats>about>reviews>recognition>services>features>partners>hours>contact
                      compositions=about:none;contact:none;features:none;gallery:grid;hours:none;partners:grid;recognition:none;reviews:grid;services:grid;stats:none
-    roofer           first_screen=proof mood=industrial accent=navy leads_with=stats action=quote hero_subject=work
+    roofer           first_screen=split type_treatment=stamped mood=industrial accent=terracotta leads_with=stats action=quote hero_subject=work
                      section_order=stats>services>reviews>gallery>about>contact
                      compositions=about:none;contact:none;gallery:grid;reviews:grid;services:grid;stats:none
-    salon            first_screen=split mood=warm accent=rose leads_with=about action=call hero_subject=exterior
+    salon            first_screen=split type_treatment=quiet mood=warm accent=gold leads_with=about action=call hero_subject=exterior
                      section_order=about>services>reviews>gallery>features
                      compositions=about:none;features:none;gallery:grid;reviews:grid;services:grid
-    threadbare       first_screen=type mood=bold accent=orange leads_with=- action=quote hero_subject=-
+    threadbare       first_screen=type type_treatment=stamped mood=industrial accent=navy leads_with=- action=quote hero_subject=-
                      section_order=
                      compositions=
 
-  AGREEMENT  14/22 (64%) of cross-comparisons ordered correctly, 0 unsure and not scored  [labels 371f24fa]
-    hvac/roofer (70%) should be closer than contractor-bare/roofer (45%) and is not
-    dentist/law (60%) should be closer than contractor-bare/roofer (45%) and is not
-    hvac/roofer (70%) should be closer than restaurant-bare/restaurant-rich (55%) and is not
-    hvac/roofer (70%) should be closer than contractor-bare/hvac (60%) and is not
-    dentist/law (60%) should be closer than restaurant-bare/restaurant-rich (55%) and is not
-    hvac/roofer (70%) should be closer than law/roofer (65%) and is not
-    FRESHLY RE-PINNED. The previous reading of "40 of 40" was scored against labels 449b9ddb — a different set of verdicts, so this is not that number having fallen. It is the first reading of a new one.
+  AGREEMENT  21/36 (58%) of cross-comparisons ordered correctly, 0 unsure and not scored  [labels 7e49403b]
+    bare-trade/contractor-bare (64%) should be closer than contractor-bare/roofer (44%) and is not
+    barbecue/restaurant-bare (60%) should be closer than contractor-bare/roofer (44%) and is not
+    dentist/hvac (60%) should be closer than contractor-bare/roofer (44%) and is not
+    bare-trade/contractor-bare (64%) should be closer than restaurant-bare/restaurant-rich (52%) and is not
+    barbecue/restaurant-bare (60%) should be closer than restaurant-bare/restaurant-rich (52%) and is not
+    dentist/hvac (60%) should be closer than restaurant-bare/restaurant-rich (52%) and is not
+    FRESHLY RE-PINNED. The previous reading of "14 of 22" was scored against labels 371f24fa — a different set of verdicts, so this is not that number having fallen. It is the first reading of a new one.
     threadbare excluded from every score — no design to compare, only an absence. See agreement.UNSCORED.
 
-  PAIRWISE DISTANCE  mean 86% across 55 pairs
-  SAME TRADE         mean 62% distance = 38% identical, across 7 pairs
-                     (30% identical across all 10 pairs including threadbare — printed so the exclusion is visible, not so the better number is)
-                     baseline 62% (38% identical) — FRESHLY RE-PINNED — this run IS the baseline, so there is nothing to compare yet. The next run is the first that can say better or worse.
+  PAIRWISE DISTANCE  mean 79% across 55 pairs
+  SAME TRADE         mean 51% distance = 49% identical, across 7 pairs
+                     (46% identical across all 10 pairs including threadbare — printed so the exclusion is visible, not so the better number is)
+                     baseline 51% (49% identical) — FRESHLY RE-PINNED — this run IS the baseline, so there is nothing to compare yet. The next run is the first that can say better or worse.
                      <-- the number Slice B has to move
-      45%  contractor-bare vs roofer  <-- judged DIFFERENT
-      50%  barbecue vs restaurant-bare
-      55%  restaurant-bare vs restaurant-rich  <-- judged DIFFERENT
+      36%  barbecue vs restaurant-rich  <-- judged SAME
+      44%  contractor-bare vs roofer  <-- judged DIFFERENT
+      48%  bare-trade vs law
     (the diversity gate is ON — 0 of 7 same-trade pairs would collide)
 
   BLIND SPOT  2 comparison(s) no weighting can reach — the 'same' pair differs on a superset of the 'different' pair's axes,
               so it is further apart under any weights. Only a new axis reaches these.
-    hvac/roofer              (same) contains contractor-bare/roofer   (different) — extra: accent, hero_subject
-    hvac/roofer              (same) contains contractor-bare/hvac     (different) — extra: action
+    barbecue/restaurant-bare (same) contains restaurant-bare/restaurant-rich (different) — extra: action
+    dentist/hvac             (same) contains restaurant-bare/restaurant-rich (different) — extra: action
 
   closest pairs — these are the ones that look like one tool:
-      45%  contractor-bare  vs roofer           same on: accent, hero_subject, leads_with, mood
-      50%  barbecue         vs restaurant-bare  same on: first_screen, hero_subject, leads_with
-      55%  bare-trade       vs contractor-bare  same on: accent, action, first_screen
-      55%  restaurant-bare  vs restaurant-rich  same on: action, hero_subject, mood
-      60%  contractor-bare  vs hvac             same on: action, leads_with, mood
+      36%  barbecue         vs restaurant-rich  same on: accent, first_screen, hero_subject, leads_with, mood
+      44%  contractor-bare  vs roofer           same on: hero_subject, leads_with, mood, type_treatment
+      48%  bare-trade       vs law              same on: accent, action, mood, type_treatment
+      52%  restaurant-bare  vs restaurant-rich  same on: action, first_screen, hero_subject, leads_with
+      56%  contractor-bare  vs hvac             same on: action, mood, type_treatment

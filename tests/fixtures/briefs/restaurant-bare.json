@@ -10,7 +10,8 @@
     },
     "defect": "",
     "emphasis": [
-      "reviews"
+      "reviews",
+      "stats"
     ],
     "first_screen": "photo",
     "hero_offset": 0,
@@ -18,11 +19,12 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "refined",
-    "rationale": "Ichika is a kaiseki counter where the plating and the room are the argument for going \u2014 nine strong dish and counter photographs can carry the opening screen, and the 5.0-star, detailed reviews reinforce that quality once they've seen the food. A refined mood with a lacquer-red accent matches the precision described in the photos and reviews, and booking is the natural next step for a small, reservation-style seating.",
+    "rationale": "Ichika is a kaiseki restaurant whose case is made almost entirely by the plating itself \u2014 nine strong dish photographs and a perfect 5.0 rating across two platforms \u2014 so the site should open on that food, styled like a considered studio rather than a casual diner, and push straight to a booking.",
     "read_by": "claude",
     "suppress": [],
+    "type_treatment": "wide",
     "understood": [
-      "Ichika is a kaiseki counter where the plating and the room are the argument for going \u2014 nine strong dish and counter photographs can carry the opening screen, and the 5.0-star, detailed reviews reinfo"
+      "Ichika is a kaiseki restaurant whose case is made almost entirely by the plating itself \u2014 nine strong dish photographs and a perfect 5.0 rating across two platforms \u2014 so the site should open on that f"
     ],
     "unsupported": []
   },

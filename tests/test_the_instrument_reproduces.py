@@ -30,26 +30,20 @@ FIXTURES = Path("tests/fixtures/briefs")
 # The pinned reading, and the rulers it was taken with. These move only in a
 # commit that says they moved and why — a number that changes because the
 # instrument changed is not a result.
-RULER = "575db030"
-RULE = "624e27dc"
-LABELS = "371f24fa"
+RULER = "4616d461"
+RULE = "a83a0283"
+LABELS = "7e49403b"
 # The held-out third, frozen verbatim. It moves only when a pair is
 # RETIRED, never when one is re-judged.
-HELD_OUT = "10d2af4c"
-SAME_TRADE_MEAN = 0.62
-# 19 of 33, and the drop from "40/40" is a correction rather than a regression.
-# That score was taken against verdicts read off a contact sheet captured in a
-# 720-pixel window — below the breakpoint where the split hero stacks and the
-# columns collapse — of a corpus that had already moved underneath it. Two
-# standing tests now hold the sheet to the corpus and the thumbnails to the
-# desktop fold, the labels were re-judged blind against what actually ships,
-# and this is what the vector scores when the pictures are the right ones.
+HELD_OUT = "3ca286cc"
+SAME_TRADE_MEAN = 0.51
+# 21 of 36, on nine axes, against thirteen verdicts re-judged blind after type
+# treatment landed and the corpus was re-decided under it.
 #
-# What it says: the pages a person calls one studio share a skeleton and a
-# typeface and differ in colour, and the vector has no axis for the typeface
-# and weights colour through `mood` at 2.0. That is the case for type
-# treatment as axis two, and this number is what it has to move.
-AGREEMENT = (14, 22)
+# It is not comparable to the 14 of 22 before it: different axes, different
+# corpus, different labels. What is comparable is the pre-registered claim, and
+# that claim FAILED — see `test_the_blind_spot_did_not_clear`.
+AGREEMENT = (21, 36)
 
 
 def fingerprints() -> dict[str, fp.Fingerprint]:
@@ -186,7 +180,8 @@ def test_the_inversions_are_the_ones_that_were_looked_at():
                  for i, a in enumerate(slugs) for b in slugs[i + 1:]}
     inversions = agreement.score(distances).inversions
     same_pairs = sorted({pair for pair, _, _, _ in inversions})
-    assert same_pairs == ["dentist/law", "hvac/roofer"], (
+    assert same_pairs == ["barbecue/restaurant-bare",
+                          "bare-trade/contractor-bare", "dentist/hvac"], (
         f"the inversions moved: {same_pairs}. Re-judge blind before accepting "
         f"it, per .reviews/slice-b-predictions.md")
 
@@ -228,8 +223,8 @@ def test_the_held_out_third_is_scored_separately():
         "one side of the split has no scorable comparisons — the set is too "
         "small to hold anything out, and saying so is better than reporting a "
         "number taken from nothing")
-    assert (held.ordered, held.comparisons) == (5, 5)
-    assert (tuned.ordered, tuned.comparisons) == (3, 6)
+    assert (held.ordered, held.comparisons) == (0, 2)
+    assert (tuned.ordered, tuned.comparisons) == (15, 21)
 
 
 SHEET = Path(".reviews/sheet/index.html")
@@ -278,22 +273,28 @@ def test_the_committed_sheet_shows_the_corpus_that_shipped():
         f"tools/contact_sheet.py before reading anything off it.")
 
 
-def test_the_blind_spot_is_pinned_and_reweighting_cannot_close_it():
-    """Three comparisons no weighting of the current axes can reach.
+def test_the_blind_spot_did_not_clear():
+    """The pre-registered claim for axis two, and it FAILED.
 
-    A "same" pair that differs on a superset of a "different" pair's axes is
-    further apart under any non-negative weights — exactly, with no threshold
-    and no search. `hvac`/`roofer` is judged one site and differs on six axes;
-    `contractor-bare`/`roofer` is judged two and differs on four of the same
-    six. The two extra are `accent` and `hero_subject` — colour and subject,
-    which the judging rule in `pairs.json` says cannot alone make a different
-    site. The vector counts precisely what the judge discounts.
+    `.reviews/slice-b-predictions.md` bound on one number: after type treatment
+    lands, `agreement.unreachable()` reports zero. It reports two.
 
-    Pinned because "agreement is 58%" invites re-weighting, and this says
-    re-weighting is not the answer for these three. Searching two hundred
-    thousand weightings reached 28/33 and only by zeroing three axes — a
-    five-parameter fit on sixteen verdicts, which is the fitted threshold this
-    project has already thrown out once.
+    Both are pairs a person called one studio that differ from a pair they
+    called two studios on a strict superset of axes — `barbecue`/`restaurant-
+    bare` and `dentist`/`hvac`, each carrying `action` on top of
+    `restaurant-bare`/`restaurant-rich`. No weighting can order them.
+
+    The reason is the interesting part and it is the opposite of what the axis
+    was added for. Those pairs share their geometry and differ in TYPE
+    TREATMENT, colour and subject — and the judge discounted all three. So the
+    vector now counts a 2.5-weight difference exactly where a person sees none,
+    which is the failure mode `accent` and `hero_subject` already had. The axis
+    is real, visible and makes the corpus more varied; as a term in the
+    distance it currently makes the instrument worse.
+
+    Pinned as a failure rather than deleted. The next move is what the weight
+    of this axis should be, not another axis, and that is a fork for review
+    rather than something to fit against thirteen verdicts.
     """
     prints = fingerprints()
     slugs = sorted(prints)
@@ -301,4 +302,6 @@ def test_the_blind_spot_is_pinned_and_reweighting_cannot_close_it():
              for i, a in enumerate(slugs) for b in slugs[i + 1:]}
     blind = agreement.unreachable(moved)
     assert len(blind) == 2, [f"{n} contains {f}" for n, f, _ in blind]
-    assert {near for near, _, _ in blind} == {"hvac/roofer"}
+    assert {near for near, _, _ in blind} == {"barbecue/restaurant-bare",
+                                              "dentist/hvac"}
+    assert all(extra == {"action"} for _, _, extra in blind)

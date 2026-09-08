@@ -231,12 +231,13 @@ def test_the_gate_is_satisfiable():
     and it took a full re-decide and a re-render to notice. This costs
     milliseconds.
     """
-    from app.site import firstscreen
+    from app.site import firstscreen, typetreatment
     from app.site.iterate import MOODS
     from app.store.fingerprints import WINDOW
 
     cardinality = {
         "first_screen": len(firstscreen.POSITIONS),
+        "type_treatment": len(typetreatment.TREATMENTS),
         "mood": len(MOODS),
         "accent": len(theme.ACCENT_NAMES),
     }

@@ -21,11 +21,14 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "A plumber sells trust before atmosphere, and with a mixed review record (one detailed complaint about reliability) the strongest first move is the solid 4.7/57 rating band up front, backed by real work photos and reviews to prove competence \u2014 not a single hero photo doing the talking, since only one image is actually big enough to carry that job.",
+    "rationale": "A plumber sells trust before anything else, and with only one photo big enough to carry a layout, the rating and review count (4.7 from 57 jobs) is the strongest proof a stranger can see in one glance, so it opens the page instead of a thin photo grid. The stamped, workmanlike type and navy accent read as a trade outfit rather than a boutique, and mixed reviews mean surfacing them honestly rather than hiding them builds more credibility than silence would.",
     "read_by": "claude",
-    "suppress": [],
+    "suppress": [
+      "gallery"
+    ],
+    "type_treatment": "stamped",
     "understood": [
-      "A plumber sells trust before atmosphere, and with a mixed review record (one detailed complaint about reliability) the strongest first move is the solid 4.7/57 rating band up front, backed by real wor"
+      "A plumber sells trust before anything else, and with only one photo big enough to carry a layout, the rating and review count (4.7 from 57 jobs) is the strongest proof a stranger can see in one glance"
     ],
     "unsupported": []
   },

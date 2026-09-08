@@ -5,7 +5,7 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "olive",
+    "accent": "terracotta",
     "contradictions": [],
     "cta": {
       "kind": "book",
@@ -13,20 +13,21 @@
     },
     "defect": "",
     "emphasis": [
-      "gallery",
+      "about",
       "reviews"
     ],
-    "first_screen": "split",
+    "first_screen": "photo",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "about",
-    "mood": "refined",
-    "rationale": "This is a farm-to-table house restaurant with a genuine story (whole-animal philosophy, named chef, Blackland Prairie ingredients) and strong ratings, so a visitor needs the sense of place and craft, not just another photo-led hero like the last site. Splitting the first screen between the house's evocative name-in-lights and the philosophy text gives it the character-driven, refined feel of a chef-led neighbourhood restaurant, with olive as a warmer, earthier accent than the terracotta already ",
+    "lead_with": "gallery",
+    "mood": "warm",
+    "rationale": "This is a farm-to-table neighborhood restaurant with strong, plentiful photography (8 lead-worthy shots of the house, dishes, and ingredients) and a warm 4.6-star reputation built on scratch cooking and hospitality \u2014 the room and the food should be the first thing a visitor sees, set against a warm, earthy palette that echoes the wood and porch-light exterior, with a quiet name treatment that lets the photo carry the impression and a clear invitation to book a table.",
     "read_by": "claude",
     "suppress": [],
+    "type_treatment": "quiet",
     "understood": [
-      "This is a farm-to-table house restaurant with a genuine story (whole-animal philosophy, named chef, Blackland Prairie ingredients) and strong ratings, so a visitor needs the sense of place and craft, "
+      "This is a farm-to-table neighborhood restaurant with strong, plentiful photography (8 lead-worthy shots of the house, dishes, and ingredients) and a warm 4.6-star reputation built on scratch cooking a"
     ],
     "unsupported": []
   },

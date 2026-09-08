@@ -23,13 +23,14 @@
     "kind": "style",
     "lead_with": "reviews",
     "mood": "warm",
-    "rationale": "This is a dental practice, not a restaurant \u2014 a visitor needs reassurance of competence and trustworthiness (ratings, patient reviews, friendly staff) before anything else, not a \"menu\" of services dressed up as food. A warm, calm mood with a clinical teal accent fits a comfortable, patient-first office, and leading with the trust signals (stats, reviews) rather than a photo wall suits the modest handful of usable images. \"Book\" is the single action every visitor to a dentist's site wants to tak",
+    "rationale": "A visitor picking a dentist wants reassurance and trust signals before anything else \u2014 strong ratings, friendly staff, and clear services \u2014 not a photo-led atmosphere piece, since only a handful of images are strong enough to carry a big visual layout. Leading with proof (ratings, reviews, services) and a calm, warm teal palette matches a practice that markets itself on gentleness and being treated 'with respect, patience, and clarity,' while the meaningless 'Special' menu item is suppressed sin",
     "read_by": "claude",
     "suppress": [
       "menu"
     ],
+    "type_treatment": "quiet",
     "understood": [
-      "This is a dental practice, not a restaurant \u2014 a visitor needs reassurance of competence and trustworthiness (ratings, patient reviews, friendly staff) before anything else, not a \"menu\" of services dr"
+      "A visitor picking a dentist wants reassurance and trust signals before anything else \u2014 strong ratings, friendly staff, and clear services \u2014 not a photo-led atmosphere piece, since only a handful of im"
     ],
     "unsupported": []
   },

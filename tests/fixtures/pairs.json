@@ -31,34 +31,36 @@
       "verdict": "different",
       "why": "one is a shallow band of photograph above a serif name on cream with a ruled row of figures and one dark red button; the other fills the screen with a photograph washed dark and sets white type over it",
       "_was": "same, twice — once when both filled the screen with a washed photograph and once again after the gate moved neither. The corpus was re-decided under the corrected rule and only one of them still opens that way.",
-      "held_out": true
+      "held_out": true,
+      "retired": "Retired, not re-judged. Adding type treatment as an axis re-decided the corpus and this pair's pages moved with it. A held-out verdict whose rendering is gone is retired with a reason — re-judging it would hand it back to whoever is tuning, which is the one thing the set exists to prevent."
     },
     {
       "a": "restaurant-bare",
       "b": "restaurant-rich",
       "verdict": "different",
-      "why": "one fills the screen with a dark food photograph and sets the name over it; the other rules the screen down the middle, type on cream to the left and the plate to the right",
+      "why": "both fill the screen with a food photograph, but one sets the name in capitals with the letters opened right out and the other in a large sentence-case serif — they read as a counter and a dining room",
       "held_out": false
     },
     {
       "a": "barbecue",
       "b": "restaurant-rich",
-      "verdict": "different",
-      "why": "one is a warm food photograph edge to edge with the name and two buttons over it; the other is divided down the middle, cream and type on one side and the plate on the other",
-      "held_out": false
+      "verdict": "same",
+      "why": "the same warm brown food photograph edge to edge, the same serif, the same pair of buttons in the same place, the same rust-coloured fill. One is shouted in capitals and nothing else about it changes",
+      "held_out": false,
+      "_was": "different, before type treatment was an axis and the corpus was re-decided under it."
     },
     {
       "a": "contractor-bare",
       "b": "roofer",
       "verdict": "different",
-      "why": "one sets heavy white capitals over a photograph that fills the screen; the other puts a shallow band of photograph above dark type on a pale ground",
+      "why": "one sets white capitals over a photograph that fills the screen; the other rules the screen down the middle, dark capitals on pale to the left and the roof to the right",
       "held_out": false
     },
     {
       "a": "contractor-bare",
       "b": "hvac",
       "verdict": "different",
-      "why": "one is a photograph filling the screen with white capitals over it; the other has no photograph at all — black capitals the width of the screen on an off-white ground",
+      "why": "one is a photograph filling the screen with white capitals over it; the other is a shallow band of photograph above dark capitals on a pale ground",
       "held_out": false
     },
     {
@@ -67,13 +69,14 @@
       "verdict": "same",
       "why": "a shallow band of photograph across the top, then the name in a serif on cream, a paragraph, a ruled row of figures and one coloured button, with a band of the same colour at the foot. Only the colour is different",
       "_was": "different, when one opened on a strip above cream type and the other filled the screen with a photograph. The corpus was re-decided and they now open the same way.",
-      "held_out": true
+      "held_out": true,
+      "retired": "Retired, not re-judged. Adding type treatment as an axis re-decided the corpus and this pair's pages moved with it. A held-out verdict whose rendering is gone is retired with a reason — re-judging it would hand it back to whoever is tuning, which is the one thing the set exists to prevent."
     },
     {
       "a": "salon",
       "b": "restaurant-bare",
       "verdict": "different",
-      "why": "one is divided down the middle, serif type on cream beside a shopfront; the other is a dark food photograph edge to edge with the name over it",
+      "why": "one is divided down the middle, a quiet serif on cream beside a shopfront; the other is a dark photograph edge to edge with the name in opened-out capitals over it",
       "held_out": false
     },
     {
@@ -81,27 +84,30 @@
       "b": "salon",
       "verdict": "different",
       "why": "one fills the screen with a photograph washed dark; the other rules it down the middle and keeps its type on clean cream",
-      "held_out": true
+      "held_out": true,
+      "retired": "Retired, not re-judged. Adding type treatment as an axis re-decided the corpus and this pair's pages moved with it. A held-out verdict whose rendering is gone is retired with a reason — re-judging it would hand it back to whoever is tuning, which is the one thing the set exists to prevent."
     },
     {
       "a": "hvac",
       "b": "roofer",
-      "verdict": "same",
-      "why": "the same page with and without a picture strip: heavy condensed dark type on a pale ground, a paragraph, a ruled line of figures, one coloured button and a band of that colour at the foot",
-      "held_out": false
+      "verdict": "different",
+      "why": "the same heavy capitals, but one runs the full width under a band of photograph and the other sits in the left half of a screen split down the middle",
+      "held_out": false,
+      "_was": "same, before type treatment was an axis and the corpus was re-decided under it."
     },
     {
       "a": "law",
       "b": "roofer",
       "verdict": "different",
       "why": "the same arrangement — a band of photograph, a ruled line, one coloured button — but one is set in a quiet serif and the other in heavy condensed capitals, and they read as two different practices",
-      "held_out": true
+      "held_out": true,
+      "retired": "Retired, not re-judged. Adding type treatment as an axis re-decided the corpus and this pair's pages moved with it. A held-out verdict whose rendering is gone is retired with a reason — re-judging it would hand it back to whoever is tuning, which is the one thing the set exists to prevent."
     },
     {
       "a": "salon",
       "b": "contractor-bare",
       "verdict": "different",
-      "why": "elegant serif on cream beside a shopfront against blocky white capitals over a workshop floor",
+      "why": "a quiet serif on cream beside a shopfront against blocky white capitals over a workshop floor",
       "held_out": false
     },
     {
@@ -109,14 +115,16 @@
       "b": "hvac",
       "verdict": "different",
       "why": "a dark food photograph filling the screen with a fine serif over it against black capitals on an off-white ground with no photograph",
-      "held_out": true
+      "held_out": true,
+      "retired": "Retired, not re-judged. Adding type treatment as an axis re-decided the corpus and this pair's pages moved with it. A held-out verdict whose rendering is gone is retired with a reason — re-judging it would hand it back to whoever is tuning, which is the one thing the set exists to prevent."
     },
     {
       "a": "dentist",
       "b": "contractor-bare",
       "verdict": "different",
       "why": "soft serif on cream under a strip of reception desk against white capitals over a bathroom repair",
-      "held_out": true
+      "held_out": true,
+      "retired": "Retired, not re-judged. Adding type treatment as an axis re-decided the corpus and this pair's pages moved with it. A held-out verdict whose rendering is gone is retired with a reason — re-judging it would hand it back to whoever is tuning, which is the one thing the set exists to prevent."
     },
     {
       "a": "threadbare",
@@ -142,9 +150,57 @@
       "why": "one has no photograph and nothing under the name; the other is a photograph edge to edge — the same question as the pair above, and the same reason for not scoring it",
       "held_out": false,
       "retired": "`threadbare` is excluded from the scored corpus. It has no hero, no sections and 42kB of page — there is no design to compare, only an absence, and 'same site or different studios' is not a question it can answer. Retired rather than re-judged, and the fixture stays: it is the only proof the floor refuses a condemned photograph and the only page that opens on type alone."
+    },
+    {
+      "a": "dentist",
+      "b": "restaurant-rich",
+      "verdict": "different",
+      "why": "one is a shallow band of photograph above a serif name on cream with two ruled rows under it; the other fills the screen with a warm food photograph and sets the name over it",
+      "held_out": true,
+      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
+    },
+    {
+      "a": "barbecue",
+      "b": "restaurant-bare",
+      "verdict": "same",
+      "why": "the same page: a food photograph edge to edge, the name over it on the left, a line of figures, two buttons in the same place. One name is shouted and the other is spaced out, and the plates are different colours",
+      "held_out": false,
+      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
+    },
+    {
+      "a": "dentist",
+      "b": "hvac",
+      "verdict": "same",
+      "why": "a shallow band of photograph, then the name on a pale ground, a paragraph, a ruled row of figures and one coloured button. Same arrangement twice — one set in a serif and one in heavy capitals, teal against amber",
+      "held_out": false,
+      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
+    },
+    {
+      "a": "bare-trade",
+      "b": "contractor-bare",
+      "verdict": "same",
+      "why": "a photograph filling the screen washed dark, the name at the upper left in white, text under it, a star line beneath. The only thing that changes is whether the name is a serif or blocky capitals",
+      "held_out": true,
+      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
+    },
+    {
+      "a": "dentist",
+      "b": "salon",
+      "verdict": "different",
+      "why": "one puts a band of photograph across the top with the type beneath it; the other rules the screen down the middle with the type in the left half",
+      "held_out": true,
+      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
+    },
+    {
+      "a": "restaurant-rich",
+      "b": "salon",
+      "verdict": "different",
+      "why": "one is a food photograph edge to edge with the name over it; the other is divided down the middle, type on cream beside a shopfront",
+      "held_out": false,
+      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
     }
   ],
-  "_judged_against": "Rendered pages as of the corpus re-decided under the corrected gate (distance ruler 575db030, gate rule 624e27dc), read off .reviews/sheet — which two standing tests now hold to what shipped: the sheet must match the corpus, and the thumbnails must be a half-scale picture of the desktop fold rather than a 720-pixel rendering of a narrower page, which is what every earlier verdict in this file was actually read off. A verdict describes a rendering, and a rule change re-decides the corpus, so the labels are downstream of the gate and have to be re-taken whenever it moves.",
+  "_judged_against": "The rendering as of axis two (type treatment) landing — distance ruler 4616d461, gate rule a83a0283 — read off .reviews/sheet, which two standing tests hold to the corpus and to the desktop fold. Only the TUNING pairs were judged. Every held-out verdict was retired rather than re-judged: the re-decide moved nine of the eleven folds, and a held-out pair whose page is gone is retired by rule.",
   "_held_out": "One verdict in three, chosen by a hash of the two slugs so that nobody picks which evidence survives. A held-out verdict is never used to choose a rule or a weighting, only to score one afterwards, and it is never re-judged — when the page under it changes it is retired with a reason and the set gets smaller. It starts here, so it says nothing about the rule this commit lands: the first rule it can honestly score is the next one.",
   "_retired": "A retired verdict is scored by nothing and re-judged by nobody. Retiring is what happens to a held-out pair when the page under it changes, and to any pair whose subject turns out not to be judgeable — the set shrinks, which is the honest cost of the number meaning anything."
 }

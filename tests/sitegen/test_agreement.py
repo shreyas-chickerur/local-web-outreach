@@ -15,6 +15,7 @@ from pathlib import Path
 import pytest
 
 from app.site import agreement
+from app.site import fingerprint as fp
 
 pytestmark = pytest.mark.unit
 
@@ -119,7 +120,10 @@ def test_the_labels_record_which_rendering_they_judged():
     kept past the rendering it judged is as stale as a baseline kept past a
     change of ruler."""
     assert "rendering" in agreement.judged_against().lower()
-    assert "575db030" in agreement.judged_against()
+    # The current ruler, not a literal — a hardcoded hash here goes stale
+    # on the next re-pin and the assertion quietly becomes about nothing.
+    assert fp.metric_version() in agreement.judged_against(), (
+        "the labels do not name the ruler they were taken under")
 
 
 def test_a_re_judged_pair_says_what_it_used_to_be_and_why():

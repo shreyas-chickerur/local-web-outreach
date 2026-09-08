@@ -9,7 +9,7 @@
     "google returns 5 locations under this name in one search"
   ],
   "design_direction": {
-    "accent": "blue",
+    "accent": "amber",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -17,20 +17,21 @@
     },
     "defect": "",
     "emphasis": [
-      "reviews",
+      "stats",
       "services"
     ],
-    "first_screen": "type",
+    "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "reviews",
     "mood": "industrial",
-    "rationale": "This is a trade where a stranger's first question is \"are these people legit and fast,\" and the number that answers it \u2014 4.9 stars across 6,203 reviews \u2014 is more persuasive at a glance than any photo of a water heater; leading with that stat band, in a no-nonsense industrial blue rather than a warm tone, reads like a competent local outfit rather than a diner. To avoid repeating the recent proof/people/reviews/warm site, this swaps in a stats-led facts screen and an industrial mood, while still ",
+    "rationale": "This is a trade call, not a dining room: a homeowner with a leaking pipe wants proof of competence and trustworthiness before anything else, and Milestone's real asset is 6,203 Google reviews and named technicians praised for honesty, not atmosphere shots. Keeping the stamped, industrial, call-first read from the prior site (it genuinely fits a plumbing/HVAC outfit) but swapping the lead to reviews \u2014 with stats still emphasized just behind it \u2014 puts the trust signal itself, in the customers' own",
     "read_by": "claude",
     "suppress": [],
+    "type_treatment": "stamped",
     "understood": [
-      "This is a trade where a stranger's first question is \"are these people legit and fast,\" and the number that answers it \u2014 4.9 stars across 6,203 reviews \u2014 is more persuasive at a glance than any photo "
+      "This is a trade call, not a dining room: a homeowner with a leaking pipe wants proof of competence and trustworthiness before anything else, and Milestone's real asset is 6,203 Google reviews and name"
     ],
     "unsupported": []
   },

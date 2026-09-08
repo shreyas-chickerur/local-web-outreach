@@ -756,7 +756,8 @@ def _hero(m: Material, spec: SiteSpec, t: Theme,
                f'<div class="facts">{"".join(facts)}</div>' if facts else "")
             + f'<div class="actions">{_cta(m, spec)}{_secondary(m)}</div></div>')
 
-    classes = f"hero first-{position}" + (" has-photo" if layers else "")
+    classes = (f"hero first-{position} type-{spec.type_treatment or 'quiet'}"
+               + (" has-photo" if layers else ""))
     return (f'<header class="{classes}" id="top">{layers}{body}'
             + ('<div class="scrollcue"></div>' if layers else "")
             + "</header>")
@@ -1531,6 +1532,7 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
         + f'<link href="{theme.fonts_href}" rel="stylesheet">\n'
         + f"<style>{css(theme)}</style>\n{_schema(m)}</head>\n"
         + f'<body data-theme="{e(spec.mood)}" '
+        + f'data-type="{e(spec.type_treatment or "quiet")}" '
         + f'data-theme-layout="{e(theme.layout_bias)}">\n'
         + _nav(m, order, spec) + "\n" + body + "\n"
         + _callbar(m, spec) + "\n" + _footer(m)

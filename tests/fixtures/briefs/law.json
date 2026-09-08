@@ -8,7 +8,7 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "burgundy",
+    "accent": "navy",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -19,19 +19,18 @@
       "reviews",
       "services"
     ],
-    "first_screen": "proof",
+    "first_screen": "type",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "refined",
-    "rationale": "A personal injury attorney sells trust and competence before anything else, so the first screen should present the credibility markers \u2014 rating, review count, case results \u2014 rather than a portrait or office photo; the promotional graphics and mixed-quality photography (only 5 of 12 usable at size) aren't strong enough to carry a photo-led opening anyway. Burgundy instead of navy keeps the same serious, refined register but avoids duplicating the recent site's exact palette, and it reads as a war",
+    "rationale": "A 4.9-star rating from 254 reviews is the single most persuasive fact for someone deciding whether to trust a personal injury lawyer with a frightening, high-stakes moment \u2014 put that number up first rather than a portrait, since a scared prospective client checks credibility before they care about the office or the attorney's face. Setting the name quietly and flush left (rather than the stamped, contractor-workshop mark) reads as measured and trustworthy rather than tough-guy, which matches \"hu",
     "read_by": "claude",
-    "suppress": [
-      "gallery"
-    ],
+    "suppress": [],
+    "type_treatment": "quiet",
     "understood": [
-      "A personal injury attorney sells trust and competence before anything else, so the first screen should present the credibility markers \u2014 rating, review count, case results \u2014 rather than a portrait or "
+      "A 4.9-star rating from 254 reviews is the single most persuasive fact for someone deciding whether to trust a personal injury lawyer with a frightening, high-stakes moment \u2014 put that number up first r"
     ],
     "unsupported": []
   },

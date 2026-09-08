@@ -25,13 +25,14 @@
     "kind": "style",
     "lead_with": "reviews",
     "mood": "refined",
-    "rationale": "A family law client is anxious and vetting for trust, not browsing a portfolio \u2014 a 4.9 from 148 reviews and the client testimonials prove reliability faster than any photo can, and with only two images strong enough to feature, a facts-led opening avoids looking thin while a photo-led one would. The navy and refined mood read as serious, calm counsel rather than a friendly storefront, which matches a divorce and custody practice.",
+    "rationale": "A family law client needs to see trust and track record before anything else \u2014 a 4.9 rating from 148 reviews and genuine client testimonials do more to reassure someone in a custody or divorce dispute than any photograph could. The photography here is thin (only two shots large enough to use, mostly exterior/logo) so the page should open on proof of competence and reputation rather than imagery, with a calm, dignified navy palette that suits a family law practice rather than a flashy trade site.",
     "read_by": "claude",
     "suppress": [
       "gallery"
     ],
+    "type_treatment": "quiet",
     "understood": [
-      "A family law client is anxious and vetting for trust, not browsing a portfolio \u2014 a 4.9 from 148 reviews and the client testimonials prove reliability faster than any photo can, and with only two image"
+      "A family law client needs to see trust and track record before anything else \u2014 a 4.9 rating from 148 reviews and genuine client testimonials do more to reassure someone in a custody or divorce dispute"
     ],
     "unsupported": []
   },

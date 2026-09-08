@@ -62,77 +62,40 @@ against the wrong pictures.
 
 **The instrument's current reading.**
 
-    agreement   14 of 22 cross-pairs (held out 5 of 5, tuning 3 of 6)
-                ruler 575db030, rule 624e27dc, labels 371f24fa
-    census      same-trade mean 62% distance = 38% identical, 7 scored pairs
-                (30% identical across all 10, including the empty fixture)
-                closest pair contractor-bare / roofer at 45%, judged DIFFERENT
-                inversions dentist / law, hvac / roofer
-    tests       754
+    agreement   21 of 36 cross-pairs (tuning 15 of 21, held out 0 of 2)
+                ruler 4616d461, rule a83a0283, labels 7e49403b
+    census      same-trade mean 51% distance = 49% identical, 7 scored pairs
+                closest pair barbecue / restaurant-rich at 36%, judged SAME
+                unreachable 2 — the axis-two claim, and it FAILED
+    gate        0 of 55 pairs collide under its own rule
+    tests       757
 
-**`threadbare` is excluded from every score** — `agreement.UNSCORED`, not
-deleted. It has no hero, no sections and 42kB of page: there is no design to
-compare, only an absence. It was in three of the ten same-trade pairs and, being
-empty, sat 100%, 90% and 75% from its trade-mates, which lifted the headline
-from 38% identical to 30% for reasons that have nothing to do with design. It
-stays in the corpus because it is the only proof the floor refuses a condemned
-photograph and the only page that opens on type alone.
+**Done — Slice B, axis two.** Type treatment in `app/site/typetreatment.py` —
+size, case, alignment, tracking; five treatments; availability constrained by
+the length of the NAME rather than by the photographs. It visibly separates
+three restaurants that all open on the same position. `HIGH_WEIGHT = 2.5` ships
+with it: type treatment weighs 2.5, so the gate's required set is
+`{first_screen, type_treatment}` — twenty-five combinations against a window of
+ten, where `first_screen` alone was five and unmeetable.
 
-**The gate is not sufficient yet, and the pre-registration caught it.**
-`dentist` and `law` both open on `proof`, and a stranger calls them one page in
-two colours. The gate allowed it because `mood` alone satisfied "at least one
-weighted highly" — and what `mood` does visibly there is colour, which the
-judging rule says cannot alone make a different site.
+**And its pre-registered claim failed.** `agreement.unreachable()` reports two,
+not zero. The pairs a person calls one studio share their GEOMETRY and differ in
+type treatment, colour and subject — and the judge discounts all three, so the
+vector now carries a 2.5-weight term exactly where a person sees no difference.
+That is the failure mode `accent` and `hero_subject` already had.
 
-**The pre-registered fix was tried and reverted.** `HIGH_WEIGHT = 2.5` leaves
-`first_screen` alone in the required set, and `first_screen` has five positions
-against a comparison window of ten — so once the window holds all five, no site
-can satisfy the gate. The corpus re-decided under it had eight of fifty-five
-pairs its own gate rejects, and the scored same-trade figure went from 38%
-identical to 47%. `test_the_gate_is_satisfiable` now fails on any value that
-makes the requirement unmeetable, in milliseconds, with the arithmetic in the
-message.
+**The open fork.** `type_treatment` must be worth 2.5 for the gate to stay
+satisfiable and the evidence says it should be worth very little in the
+distance. The two weights disagree for the first time, which is the case
+`weight_of`'s `min()` was annotated as waiting for. Separating the gate's
+required-axis set from the distance's weighting changes the shape of the
+instrument, so it is a fork rather than a tidy-up.
 
-**So the regression is blocked on axis two, not the reverse.** Tightening the
-required set needs more high-visibility cardinality to tighten into, and type
-treatment is a highly visible axis that is not colour — which is what the pair
-needs perceptually and what the rule needs arithmetically.
-
-**And the held-out third cannot score a gate change.** `HIGH_WEIGHT` feeds
-`rule_version` and not `metric_version`; the agreement score is a function of
-the distance, which a gate change does not touch. It can score a change to the
-ruler. What tests a gate rule is how many pairs of the corpus it produces a
-stranger calls the same site — fresh judging, guarded by pre-registration.
-
-**The pre-registered claim is still open.** `dentist`/`law` resolving binds on
-first-screen contract *and* type treatment; it resolved on the first alone and
-came back when the corpus was re-decided under the corrected rule. An interim
-resolution reported as the claim being met is how a prediction stops binding.
-
-**What the inversions say, and it is the plan.** All three pairs a person calls
-one studio share a SKELETON and a TYPEFACE and differ in COLOUR. The vector has
-no axis for the typeface, so it ranks them further apart than pairs a person
-calls different. Type treatment is axis two on evidence rather than on the
-ordering, and the agreement figure — not the mean — is what it has to move.
-
-**It is a blind spot, not a miscalibration, and that is provable.** If a pair
-judged the same site differs on a superset of the axes a pair judged different
-differs on, no non-negative weighting can order them correctly. Three of the
-thirty-three comparisons are unreachable that way — and the axes the vector
-counts where the judge did not are `accent` and `hero_subject`, colour and
-subject, the two the judging rule says cannot alone make a different site.
-Searching two hundred thousand weightings reaches 28 of 33 and only by zeroing
-three axes, which is a five-parameter fit on sixteen verdicts. No weight was
-changed. `agreement.unreachable()` reports this on every census run.
-
-**One verdict in three is held out.** Membership by a hash of the two slugs, not
-by anyone looking at the verdicts. Never used to choose a rule or a weighting,
-only to score one after the fact, and never re-judged — a held-out pair whose
-page has changed is retired with a reason and the set shrinks. This closes the
-loop where changing the gate re-decides the corpus, which re-renders the pages,
-which invites a re-judge, so that a rule ends up scored against labels taken
-from the corpus that rule produced. It begins at the commit that added it and
-therefore says nothing about the rule landing there.
+**The held-out third cannot survive this work.** Emptied twice now, by both
+changes since it was created: every axis re-decides the corpus, every re-decide
+moves the folds, and a held-out verdict whose page is gone is retired by rule. A
+held-out set of PAIR VERDICTS can score a change to the ruler and never a change
+to the gate.
 
 **Not started.** The rest of Slice B, and Slices C, D, E, G, H and the rest of
 F.

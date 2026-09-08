@@ -4,7 +4,7 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "orange",
+    "accent": "navy",
     "contradictions": [],
     "cta": {
       "kind": "quote",
@@ -17,12 +17,13 @@
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": null,
-    "mood": "bold",
-    "rationale": "With only one small photo and no other sections available, there is nothing here to build a photo-led or proof-led opener from, so the name itself must carry the first screen \u2014 bold and confident rather than the previous site's industrial cool, because a handyman selling himself needs to read as approachable and ready-to-work rather than cold machinery. Orange as the accent signals tools-and-trade energy and warmth without repeating the last job's palette, and 'quote' is the one action a homeown",
+    "mood": "industrial",
+    "rationale": "A general contractor sells competence, not atmosphere, and there's only one small photo \u2014 not enough to carry a photo-led opening. Setting the name stamped and heavy reads as a working trade outfit, and it avoids the awkwardness of stretching a single small image into a hero banner.",
     "read_by": "claude",
     "suppress": [],
+    "type_treatment": "stamped",
     "understood": [
-      "With only one small photo and no other sections available, there is nothing here to build a photo-led or proof-led opener from, so the name itself must carry the first screen \u2014 bold and confident rath"
+      "A general contractor sells competence, not atmosphere, and there's only one small photo \u2014 not enough to carry a photo-led opening. Setting the name stamped and heavy reads as a working trade outfit, a"
     ],
     "unsupported": []
   },

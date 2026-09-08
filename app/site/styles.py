@@ -318,6 +318,44 @@ body:has(.hero.first-split) .bar:not(.stuck){{background:var(--bg);
   .hero.first-split .wrap{{padding-right:0;padding-bottom:48%}}
 }}
 
+/* ------------------------------------------------- type treatment (axis 2) --
+   How the name is SET: size, case, alignment, tracking. Not which typeface —
+   that is one decision per axis, and mixing them is how `layout_bias` became a
+   function of `mood`.
+
+   Here because two pages the judge called one studio — `hvac` and `roofer` —
+   were unreachable by any reweighting of the other axes. What the judge was
+   reading was "heavy condensed dark type on a pale ground", twice, and the
+   vector had no way to say it.
+
+   These compose with all five first-screen positions: the name is on the first
+   screen whatever occupies the rest of it. `quiet` carries explicit values
+   rather than being the absence of the other four, so that it reads as a
+   decision somebody made. */
+.hero.type-quiet h1{{letter-spacing:-.005em;line-height:1.02;
+  text-transform:none;max-width:16ch}}
+.hero.type-banner h1{{font-size:clamp(54px,10.5vw,152px);line-height:.88;
+  letter-spacing:-.03em;text-transform:none;max-width:12ch;
+  margin-bottom:.16em}}
+.hero.type-stamped h1{{text-transform:uppercase;font-weight:800;
+  letter-spacing:-.012em;line-height:.94;max-width:14ch}}
+.hero.type-wide h1{{text-transform:uppercase;letter-spacing:.24em;
+  font-size:clamp(22px,3.2vw,44px);line-height:1.3;max-width:20ch;
+  margin-bottom:.7em}}
+/* The one treatment that moves the geometry rather than the letters. Centred
+   sets the whole first screen, not just the heading — a centred name over
+   flush-left facts is not a treatment, it is a mistake. */
+.hero.type-centred .wrap{{text-align:center}}
+.hero.type-centred h1{{margin-left:auto;margin-right:auto;line-height:1.0;
+  letter-spacing:-.01em;max-width:18ch}}
+.hero.type-centred .sub{{margin-left:auto;margin-right:auto}}
+.hero.type-centred .facts,.hero.type-centred .actions,
+.hero.type-centred .proof{{justify-content:center}}
+.hero.type-centred .proof{{display:flex;flex-wrap:wrap;gap:10px 26px}}
+/* A split hero already owns the left half; centring inside it is centring the
+   column, which reads as deliberate. It must not re-centre against the page. */
+.hero.first-split.type-centred .wrap{{margin-inline:auto}}
+
 /* FACTS — the numbers first, at a size that reads as the point of the screen
    rather than as a caption under a headline. */
 .hero.first-facts{{align-items:center}}

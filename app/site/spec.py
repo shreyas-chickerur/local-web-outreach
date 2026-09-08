@@ -74,6 +74,9 @@ class SiteSpec:
     # that decides whether two pages are the same site to the owner being
     # shown them. See `app/site/firstscreen.py`.
     first_screen: str = "photo"
+    # How the name is SET — size, case, alignment, tracking. Not which
+    # typeface; that is a later item and a different decision.
+    type_treatment: str = "quiet"
     one_page: bool = True
     understood: list[str] = field(default_factory=list)
     ignored: list[str] = field(default_factory=list)
