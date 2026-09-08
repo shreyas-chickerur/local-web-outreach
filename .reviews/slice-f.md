@@ -49,7 +49,7 @@
     census     same-trade mean 52% distance = 48% identical
                worst pair contractor-bare / roofer at 27%
                standing inversion dentist / law
-    tests      706
+    tests      710
 
 ## Assumptions I could not verify
 
@@ -66,13 +66,19 @@
     the vector overstates, and it is untested against an axis where the two
     principles disagree the other way.
 
+## Incidental findings, not bugs
+
+    Every hero pick in the unit suite has always been arbitrary. `tests/
+    conftest.py` stubs measurement away so no test reaches the network, so
+    every candidate ties and the picker falls back to upload order. That is
+    correct for the suite and worth knowing: hero BEHAVIOUR is covered by the
+    fixtures and the census, not by the unit tests, and someone will assume
+    otherwise. Tests that care pass their own `size_of`.
+
 ## Questions I want answered before the next slice
 
-    `claude/site-quality-prompt.md` is not in the repository, on this branch or
-    on main, and not anywhere on this machine. Slice B is meant to be built
-    from it, and it supersedes a brief whose amendments were contradicting each
-    other — so I have not started, rather than working from the version it
-    replaces.
+    RESOLVED: the brief is now `docs/BRIEF.md`, committed. It had been living
+    in a chat project the implementer cannot read.
 
     Whether the two `unsure` pairs are unsure. Both are `threadbare` against a
     photographic page, and the question is whether a stranger reads its

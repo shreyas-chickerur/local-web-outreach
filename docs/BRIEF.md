@@ -7,16 +7,40 @@ produced them.
 
 ## 1. Where the work stands
 
-**Done.** Slice A: hero selection fixed and proven, vision labelling with no
-human step, alt text, `app/core/claims.py`, operator-wins-by-construction on
-photo labels, `rebuild_opening`. Slice F part one: eleven fixtures, the quality
-census, the fingerprint, the contact sheet and a fold-cropped second sheet, the
-agreement metric, ruler versioning, the messages table with its prose boundary,
-and the staged build.
+*Kept current as part of every handoff commit. It is the entry point for anyone
+arriving cold, and a status section that goes stale turns a two-minute
+orientation into a directory crawl.*
 
-Bugs closed along the way: the duplicate hero, plan-versus-page disagreement,
-the preview port mismatch, a business name read as a website, and trade-word
-top-level domains breaking that same fix.
+**Done — Slice A.** Hero selection fixed and proven; vision labelling with no
+human step; alt text everywhere; `app/core/claims.py`; operator-wins-by-
+construction on photo labels; `rebuild_opening`; a derived floor so a condemned
+photograph leads nothing.
+
+**Done — Slice F, part one.** Eleven self-sufficient fixtures (their own
+photographs and their vision labels folded in, so a clean clone measures the
+same system); the quality census with its two assertions; the fingerprint,
+computed from decisions and weighted by visibility × decidedness; the contact
+sheet, a fold-cropped second sheet, and a committable half-scale copy; the
+rank-based agreement metric; ruler *and* label versioning, with the census
+refusing to compare across either; the `messages` table and its prose boundary,
+enforced by an AST test; the build in stages, each answer persisted.
+
+**Bugs closed along the way.** The duplicate hero; plan-versus-page
+disagreement; the preview port mismatch; a business name read as a website, and
+the trade-word top-level domains that broke that same fix; the media type
+hardcoded to JPEG, which lost every PNG and WebP a business publishes; a
+photograph vision could not fetch blocking a build forever; a rejected page
+remembered as a finished stage; `layout_bias`, a phantom axis that was a pure
+function of `mood`; `compositions` encoding `section_order` inside itself;
+labels frozen under one lead id silently matching nothing under another.
+
+**The instrument's current reading.**
+
+    agreement   35 of 36 cross-pairs, ruler 563eaa0b, labels 747e4ef5
+    census      same-trade mean 52% distance = 48% identical
+                worst pair contractor-bare / roofer at 27%
+                standing inversion dentist / law
+    tests       710
 
 **Not started.** Slices B, C, D, E, G, H, and the rest of F. The tool now
 measures its own sameness well and has not yet done anything about it. That is
@@ -189,9 +213,21 @@ never trusted, with contrast pairs moved until they pass and the repair
 recorded; the six moods survive as presets and the keyless fallback; the whole
 answer persists into `spec_json`.
 
-Small fixes to clear first: the two weights, the per-axis manifest test,
-`layout_bias`, a derived floor on `pick_hero` with a renderer that can return no
-hero, versioning the label set, and the "Book a table" dentist.
+Small fixes to clear first — **all now done**: the two weights, the per-axis
+manifest test, `layout_bias` (dropped from the vector, see §1), the floor on
+`pick_hero`, versioning the label set, and the "Book a table" dentist.
+
+The floor reads **the sign of the `usable` term** — the one that only goes
+negative when vision condemned the photograph, through a disqualifier or an
+outright "not a hero candidate". Zero is where that term changes meaning, so
+there is no threshold to choose. Below it the answer is no hero and the renderer
+says so; `hero_offset` overrides, because the operator has seen the picture.
+
+An earlier version of this section proposed comparing the whole score against
+what an unlabelled photograph with neutral everything is worth, about 0.35. That
+reading took the hero away from a merely mediocre picture — quality two of five
+in a mixed-luminance frame — and mediocre is a reason to crop, as is shape. The
+floor is for condemnation.
 
 First point where sites should stop looking related.
 
