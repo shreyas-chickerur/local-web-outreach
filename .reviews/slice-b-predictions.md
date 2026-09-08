@@ -358,3 +358,17 @@ that path was searched and rejected once already. The next question is what
 to stay satisfiable — the two weights disagree for the first time, which is the
 case `weight_of`'s `min()` was annotated as waiting for. That is a fork for
 review, not something to settle by fitting.
+
+## The `mood` weight — measured, and no claim registered
+
+A round was scoped to lower `mood`'s weight below `HIGH_WEIGHT` so that it stops
+satisfying "weighted highly". No pre-registration was written, because there is
+nothing to predict: `mood` left `highly_weighted()` two commits ago when
+`type_treatment` joined `first_screen` at 2.5, and lowering it now touches only
+the distance.
+
+Measured across four weights on the shipped corpus, agreement moves 21/36 →
+30/36 and the held-out set moves 0/2 → 2/2, while **`unreachable()` stays at two
+and the inversion set does not change at all**. The score is a function of the
+weights; the defect is not. Recorded in `.reviews/slice-b-mood-weight.md` and
+not made.
