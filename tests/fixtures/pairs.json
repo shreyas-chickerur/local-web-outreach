@@ -52,31 +52,31 @@
     {
       "a": "restaurant-bare",
       "b": "restaurant-rich",
-      "verdict": "same",
-      "why": "a food photograph filling the screen, the name over it on the left, a line of figures under that, two buttons in the same place. The lettering is set differently and the plates are different colours",
+      "verdict": "different",
+      "why": "one is a food photograph filling the screen with the name over it; the other rules the screen down the middle, type on cream beside the plate",
       "held_out": false,
-      "_was": "different, on the reasoning that one sets the name in opened-out capitals and the other in a large sentence-case serif. The type-setting rule added above says that is a setting applied to the same arrangement, not a different site — and it was stated before this verdict was looked at."
+      "_was": "same, before page architecture was an axis and the corpus was re-decided under it."
     },
     {
       "a": "barbecue",
       "b": "restaurant-rich",
-      "verdict": "same",
-      "why": "the same warm brown food photograph edge to edge, the same serif, the same pair of buttons in the same place, the same rust-coloured fill. One is shouted in capitals and nothing else about it changes",
+      "verdict": "different",
+      "why": "one fills the screen with a food photograph and sets the name over it; the other divides the screen down the middle",
       "held_out": false,
-      "_was": "different, before type treatment was an axis and the corpus was re-decided under it."
+      "_was": "same, before page architecture was an axis and the corpus was re-decided under it."
     },
     {
       "a": "contractor-bare",
       "b": "roofer",
       "verdict": "different",
-      "why": "one opens on a rating at display size over a photograph filling the screen; the other rules the screen down the middle, type on pale to the left and the roof to the right",
+      "why": "one opens on a rating at display size over a photograph filling the screen; the other puts a band of photograph across the top with the name beneath it on a pale ground",
       "held_out": false
     },
     {
       "a": "contractor-bare",
       "b": "hvac",
       "verdict": "different",
-      "why": "one opens on a rating at display size over a photograph filling the screen; the other puts a shallow band of photograph above the name on a pale ground",
+      "why": "one opens on a rating at display size over a photograph filling the screen; the other puts a band of photograph across the top with the name beneath it",
       "held_out": false
     },
     {
@@ -92,7 +92,7 @@
       "a": "salon",
       "b": "restaurant-bare",
       "verdict": "different",
-      "why": "one is divided down the middle, a quiet serif on cream beside a shopfront; the other is a dark photograph edge to edge with the name in opened-out capitals over it",
+      "why": "one rules the screen down the middle, type on cream beside a shopfront; the other is a food photograph filling the screen with the name over it",
       "held_out": false
     },
     {
@@ -106,10 +106,10 @@
     {
       "a": "hvac",
       "b": "roofer",
-      "verdict": "different",
-      "why": "the same heavy capitals, but one runs the full width under a band of photograph and the other sits in the left half of a screen split down the middle",
+      "verdict": "same",
+      "why": "a band of photograph across the top, then the name in heavy capitals on a pale ground, a paragraph, a ruled line of figures and one coloured button. The same page twice, in two colours",
       "held_out": false,
-      "_was": "same, before type treatment was an axis and the corpus was re-decided under it."
+      "_was": "different, before page architecture was an axis and the corpus was re-decided under it."
     },
     {
       "a": "law",
@@ -123,7 +123,7 @@
       "a": "salon",
       "b": "contractor-bare",
       "verdict": "different",
-      "why": "one is divided down the middle, a quiet serif on cream beside a shopfront; the other fills the screen with a photograph and a rating set large over it",
+      "why": "one rules the screen down the middle with type on cream; the other fills the screen with a photograph and a rating set large over it",
       "held_out": false
     },
     {
@@ -173,23 +173,23 @@
       "verdict": "different",
       "why": "one is a shallow band of photograph above a serif name on cream with two ruled rows under it; the other fills the screen with a warm food photograph and sets the name over it",
       "held_out": true,
-      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
+      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike.",
+      "retired": "Retired, not re-judged. Page architecture was added as an axis and the corpus was re-decided under it; every fold in the corpus moved. A held-out verdict whose page is gone is retired by rule. This is the fourth time the held-out set has been emptied by a re-decide, and it is the finding rather than the accident."
     },
     {
       "a": "barbecue",
       "b": "restaurant-bare",
       "verdict": "same",
-      "why": "the same page: a food photograph edge to edge, the name over it on the left, a line of figures, two buttons in the same place. One name is shouted and the other is spaced out, and the plates are different colours",
-      "held_out": false,
-      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
+      "why": "a food photograph filling the screen, the name over it on the left, a line of figures, two buttons in the same place. The lettering is set differently and the plates are different colours",
+      "held_out": false
     },
     {
       "a": "dentist",
       "b": "hvac",
-      "verdict": "same",
-      "why": "a shallow band of photograph, then the name on a pale ground, a paragraph, a ruled row of figures and one coloured button. Same arrangement twice — one set in a serif and one in heavy capitals, teal against amber",
+      "verdict": "different",
+      "why": "one opens on a rating at display size over a photograph filling the screen; the other puts a band of photograph across the top with the name beneath it",
       "held_out": false,
-      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
+      "_was": "same, before page architecture was an axis and the corpus was re-decided under it."
     },
     {
       "a": "bare-trade",
@@ -206,15 +206,16 @@
       "verdict": "different",
       "why": "one puts a band of photograph across the top with the type beneath it; the other rules the screen down the middle with the type in the left half",
       "held_out": true,
-      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
+      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike.",
+      "retired": "Retired, not re-judged. Page architecture was added as an axis and the corpus was re-decided under it; every fold in the corpus moved. A held-out verdict whose page is gone is retired by rule. This is the fourth time the held-out set has been emptied by a re-decide, and it is the finding rather than the accident."
     },
     {
       "a": "restaurant-rich",
       "b": "salon",
-      "verdict": "different",
-      "why": "one is a food photograph edge to edge with the name over it; the other is divided down the middle, type on cream beside a shopfront",
+      "verdict": "same",
+      "why": "both rule the screen down the middle, the name and a paragraph and a line of figures in the left half on cream, a photograph filling the right",
       "held_out": false,
-      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
+      "_was": "different, before page architecture was an axis and the corpus was re-decided under it."
     },
     {
       "a": "roofer",
@@ -222,23 +223,22 @@
       "verdict": "same",
       "why": "both rule the screen down the middle, the name and a paragraph and a line of figures in the left half, a photograph filling the right. One carries a button and the other does not",
       "held_out": true,
-      "_was": "newly judged after the `facts` repair, which made two positions that had rendered the same first screen render different ones."
+      "_was": "newly judged after the `facts` repair, which made two positions that had rendered the same first screen render different ones.",
+      "retired": "Retired, not re-judged. Page architecture was added as an axis and the corpus was re-decided under it; every fold in the corpus moved. A held-out verdict whose page is gone is retired by rule. This is the fourth time the held-out set has been emptied by a re-decide, and it is the finding rather than the accident."
     },
     {
       "a": "barbecue",
       "b": "contractor-bare",
       "verdict": "different",
       "why": "both fill the screen with a photograph, but one sets the name over it and the other a rating at display size — the number is the first thing read on one and absent from the top of the other",
-      "held_out": false,
-      "_was": "newly judged after the `facts` repair, which made two positions that had rendered the same first screen render different ones."
+      "held_out": false
     },
     {
       "a": "bare-trade",
       "b": "restaurant-rich",
       "verdict": "different",
-      "why": "one opens on a rating at display size, the other on the name over a food photograph filling the screen",
-      "held_out": false,
-      "_was": "newly judged after the `facts` repair, which made two positions that had rendered the same first screen render different ones."
+      "why": "one fills the screen with a photograph and a rating set large over it; the other rules the screen down the middle",
+      "held_out": false
     },
     {
       "a": "bare-trade",
@@ -246,10 +246,11 @@
       "verdict": "different",
       "why": "one fills the screen with a photograph and a rating set large over it; the other puts a shallow band of photograph above the name on cream",
       "held_out": true,
-      "_was": "newly judged after the `facts` repair, which made two positions that had rendered the same first screen render different ones."
+      "_was": "newly judged after the `facts` repair, which made two positions that had rendered the same first screen render different ones.",
+      "retired": "Retired, not re-judged. Page architecture was added as an axis and the corpus was re-decided under it; every fold in the corpus moved. A held-out verdict whose page is gone is retired by rule. This is the fourth time the held-out set has been emptied by a re-decide, and it is the finding rather than the accident."
     }
   ],
-  "_judged_against": "The rendering as of the `facts` repair — distance ruler 4616d461, gate rule a83a0283 — read off .reviews/sheet, which two standing tests hold to the corpus and to the desktop fold. No re-decide: no fingerprint moved, only what `facts` renders.",
+  "_judged_against": "The rendering as of page architecture landing — distance ruler aece36b7, gate rule 95f4d93e — read off .reviews/sheet, half-scale pictures of the desktop FIRST VIEWPORT, which is the method and which is the problem this round found: an axis that lives below the fold cannot be judged from a picture of the fold.",
   "_held_out": "One verdict in three, chosen by a hash of the two slugs so that nobody picks which evidence survives. A held-out verdict is never used to choose a rule or a weighting, only to score one afterwards, and it is never re-judged — when the page under it changes it is retired with a reason and the set gets smaller. It starts here, so it says nothing about the rule this commit lands: the first rule it can honestly score is the next one.",
   "_retired": "A retired verdict is scored by nothing and re-judged by nobody. Retiring is what happens to a held-out pair when the page under it changes, and to any pair whose subject turns out not to be judgeable — the set shrinks, which is the honest cost of the number meaning anything."
 }

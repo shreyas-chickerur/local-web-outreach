@@ -7,6 +7,7 @@
   ],
   "design_direction": {
     "accent": "terracotta",
+    "architecture": "gallery",
     "contradictions": [],
     "cta": {
       "kind": "order",
@@ -14,8 +15,8 @@
     },
     "defect": "",
     "emphasis": [
-      "stats",
-      "menu"
+      "reviews",
+      "services"
     ],
     "first_screen": "photo",
     "hero_offset": 0,
@@ -23,14 +24,12 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "Hutchins BBQ has 10 strong food/exterior photographs and a huge, glowing review base (4.8 from nearly 14,000 people), so the site should open on that smoky, crowded, brick-and-firewood atmosphere rather than text \u2014 a visitor decides where to eat with their eyes and the ratings confirm the choice. Stamped type in a warm, terracotta-accented mood reads as a real Texas smokehouse, not a generic diner, and pushing people toward ordering/catering matches how the business actually makes money beyond w",
+    "rationale": "Hutchins BBQ has huge review volume (13,880 on Google at 4.8) and ten strong, appetite-driven photographs of smoked meat, the room, and the crowd \u2014 this is a place whose pictures and reputation sell it before any words do. A photo-led first screen with a stamped, trade-shop wordmark reads as a real Texas smokehouse, and surfacing reviews and catering/services early answers what a hungry local or a corporate-catering customer needs to know, while the gallery-forward layout gives the food-and-fire",
     "read_by": "claude",
-    "suppress": [
-      "features"
-    ],
+    "suppress": [],
     "type_treatment": "stamped",
     "understood": [
-      "Hutchins BBQ has 10 strong food/exterior photographs and a huge, glowing review base (4.8 from nearly 14,000 people), so the site should open on that smoky, crowded, brick-and-firewood atmosphere rath"
+      "Hutchins BBQ has huge review volume (13,880 on Google at 4.8) and ten strong, appetite-driven photographs of smoked meat, the room, and the crowd \u2014 this is a place whose pictures and reputation sell i"
     ],
     "unsupported": []
   },

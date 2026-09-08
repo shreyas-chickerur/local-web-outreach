@@ -23,6 +23,7 @@ from pathlib import Path
 import pytest
 
 from app.site import fingerprint as fp
+from app.site.architecture import ARRANGEMENTS
 from app.site.firstscreen import POSITIONS
 from app.site.render import build_from_spec
 from app.site.spec import SiteSpec
@@ -61,6 +62,7 @@ BRIEF = {
 FLIPS: dict[str, tuple[str, object, object]] = {
     "first_screen": ("first_screen", "photo", "proof"),
     "type_treatment": ("type_treatment", "quiet", "wide"),
+    "architecture": ("architecture", "stacked", "ledger"),
     "mood": ("mood", "warm", "night"),
     "accent": ("accent", "navy", "gold"),
     "leads_with": ("lead_with", "gallery", "reviews"),
@@ -139,6 +141,50 @@ def test_every_first_screen_position_renders_a_different_first_screen():
         f"above-the-fold consequence or drop the axis's weight — BRIEF §3.")
 
 
+def test_every_architecture_renders_a_different_page():
+    """The same check `photo`/`facts` failed, applied to this axis on purpose.
+
+    Two positions that differ only by what they are called is a defect this
+    project shipped once, in the axis weighted heaviest, for two commits. So
+    the class attribute comes out before comparing here too — an arrangement
+    has to be legible in what the page says, not in the hook it hangs on.
+
+    Whole page rather than the first screen: this axis is deliberately below
+    the fold, and `test_the_hero_is_untouched_by_the_arrangement` holds that.
+    """
+    import itertools
+    import re
+
+    def page(arrangement: str) -> str:
+        return re.sub(r'class="[^"]*"', 'class=""',
+                      render(architecture=arrangement))
+
+    same = [(one, two) for one, two in itertools.combinations(ARRANGEMENTS, 2)
+            if page(one) == page(two)]
+    assert not same, (
+        f"these arrangements render an identical page once the class "
+        f"attribute is taken out of it: {same}")
+
+
+def test_the_hero_is_untouched_by_the_arrangement():
+    """Axis three must not reach into axis one's decision.
+
+    One decision, one axis — and if the arrangement moved the first screen it
+    would be competing with `first_screen` for the same difference, which is
+    how `layout_bias` came to be a function of `mood`.
+    """
+    def header(page: str) -> str:
+        # From inside <body>: the stylesheet carries a comment mentioning
+        # "<header>", and searching the whole document found that instead.
+        body = page.index("<body")
+        start = page.index("<header", body)
+        return page[start:page.index("</header>", start)]
+
+    folds = {header(render(architecture=a)) for a in ARRANGEMENTS}
+    assert len(folds) == 1, (
+        "an arrangement changed the first screen, which belongs to axis one")
+
+
 def test_no_axis_is_a_function_of_another():
     """One decision, one axis.
 
@@ -165,13 +211,15 @@ def test_no_axis_is_a_function_of_another():
     # pairing each mood with its own accent would "prove" mood is a function of
     # accent, which says nothing about the code.
     specs = [SiteSpec(mood=mood, accent=accent, lead_with=lead, cta=cta,
-                      first_screen=screen, type_treatment=treatment)
+                      first_screen=screen, type_treatment=treatment,
+                      architecture=arch)
              for mood in ("warm", "night", "fresh")
              for accent in (None, "navy", "gold")
              for lead in (None, "reviews")
              for cta in ("book", "call")
              for screen in ("photo", "proof")
-             for treatment in ("quiet", "stamped")]
+             for treatment in ("quiet", "stamped")
+             for arch in ("stacked", "ledger")]
 
     subjects = ("dish", "room", "people", "exterior", "work")
     rows: list[fp.Fingerprint] = []

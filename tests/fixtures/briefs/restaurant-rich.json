@@ -6,6 +6,7 @@
   "chain_signals": [],
   "design_direction": {
     "accent": "terracotta",
+    "architecture": "gallery",
     "contradictions": [],
     "cta": {
       "kind": "book",
@@ -16,18 +17,18 @@
       "about",
       "reviews"
     ],
-    "first_screen": "photo",
+    "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "This is a farm-to-table neighborhood restaurant with strong, plentiful photography (8 lead-worthy shots of the house, dishes, and ingredients) and a warm 4.6-star reputation built on scratch cooking and hospitality \u2014 the room and the food should be the first thing a visitor sees, set against a warm, earthy palette that echoes the wood and porch-light exterior, with a quiet name treatment that lets the photo carry the impression and a clear invitation to book a table.",
+    "rationale": "This is a farm-to-table neighborhood restaurant with a strong house-and-porch identity and 8 lead-worthy photos of dish, room and building, so the picture still needs to carry the first impression \u2014 but rather than repeat the recent site's full-photo hero, splitting the screen between the name and a single strong image (the lit-up house at night, not another dish shot) gives it a distinct, calmer arrival while still trading on its best asset. The wide gallery rhythm and quiet name-set let the fo",
     "read_by": "claude",
     "suppress": [],
     "type_treatment": "quiet",
     "understood": [
-      "This is a farm-to-table neighborhood restaurant with strong, plentiful photography (8 lead-worthy shots of the house, dishes, and ingredients) and a warm 4.6-star reputation built on scratch cooking a"
+      "This is a farm-to-table neighborhood restaurant with a strong house-and-porch identity and 8 lead-worthy photos of dish, room and building, so the picture still needs to carry the first impression \u2014 b"
     ],
     "unsupported": []
   },

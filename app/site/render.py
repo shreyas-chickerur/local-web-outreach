@@ -1518,9 +1518,15 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
     order = _order(spec, available)
 
     body = _hero(m, spec, theme, hero_photo)
+    bands = ""
     for key in order:
         if key != "hero":
-            body += "\n" + sections[key]
+            bands += "\n" + sections[key]
+    # The arrangement applies to the sections, never to the hero: what occupies
+    # the first screen is axis one's decision and this must not reach into it.
+    from app.site.architecture import arrange
+
+    body += arrange(bands, spec.architecture or "stacked")
 
     description = m.tagline or m.about or ""
     # The share image is the hero — the same object, not a second call that
@@ -1553,6 +1559,7 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
         + f"<style>{css(theme)}</style>\n{_schema(m)}</head>\n"
         + f'<body data-theme="{e(spec.mood)}" '
         + f'data-type="{e(spec.type_treatment or "quiet")}" '
+        + f'data-arch="{e(spec.architecture or "stacked")}" '
         + f'data-theme-layout="{e(theme.layout_bias)}">\n'
         + _nav(m, order, spec) + "\n" + body + "\n"
         + _callbar(m, spec) + "\n" + _footer(m)

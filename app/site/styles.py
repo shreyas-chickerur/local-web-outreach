@@ -318,6 +318,51 @@ body:has(.hero.first-split) .bar:not(.stuck){{background:var(--bg);
   .hero.first-split .wrap{{padding-right:0;padding-bottom:48%}}
 }}
 
+/* ------------------------------------------------ page architecture (axis 3) --
+   How the bands sit against each other: rhythm, measure, ground, separator.
+   Not which bands exist — that is mostly what the business publishes, which is
+   why `section_order` and `compositions` carry 0.5 decidedness and this does
+   not.
+
+   Keyed on attributes the renderer writes onto the sections themselves, not on
+   a class on the body. A body class is a hook, and a hook is what `photo` and
+   `facts` differed by for two commits while the vector weighted the difference
+   at 2.5. An arrangement has to be legible in what the page says.
+
+   The hero is deliberately untouched by all of this: the first screen is axis
+   one's decision. */
+
+/* BANDED — the ground alternates on every section, hard-edged. The slabs draw
+   the boundary, so the hairline would be a second line saying the same thing. */
+body:has(section[data-ground]) section+section::before{{opacity:1}}
+[data-arch="banded"] section+section::before{{display:none}}
+[data-arch="banded"] section{{padding:clamp(80px,9vw,132px) 0}}
+
+/* LEDGER — tight rhythm, a rule above every band, a narrow measure. A printed
+   document rather than a brochure. */
+[data-arch="ledger"] section{{padding:clamp(48px,5.5vw,84px) 0}}
+[data-arch="ledger"] section[data-rule="on"]+section[data-rule="on"]::before{{
+  display:none}}
+[data-arch="ledger"] section[data-rule="on"]>.wrap{{border-top:1px solid
+  {hairline};padding-top:clamp(28px,3.4vw,52px)}}
+[data-arch="ledger"] .wrap[data-measure="tight"]{{
+  width:min(880px,100% - var(--pad)*2)}}
+[data-arch="ledger"] h2{{font-size:clamp(20px,2.2vw,30px)}}
+
+/* COLUMN — the content held against a wide empty margin, which is the
+   arrangement a margin note lives in. */
+[data-arch="column"] .wrap[data-measure="column"]{{
+  width:min(720px,100% - var(--pad)*2);margin-inline:max(var(--pad),
+  (100% - 1180px)/2) auto}}
+[data-arch="column"] section{{padding:clamp(72px,8vw,120px) 0}}
+
+/* GALLERY — a wide measure and a lot of air, for a business whose pictures are
+   the argument. */
+[data-arch="gallery"] .wrap[data-measure="wide"]{{
+  width:min(1560px,100% - var(--pad)*2)}}
+[data-arch="gallery"] section{{padding:clamp(120px,14vw,220px) 0}}
+[data-arch="gallery"] section+section::before{{display:none}}
+
 /* ------------------------------------------------- type treatment (axis 2) --
    How the name is SET: size, case, alignment, tracking. Not which typeface —
    that is one decision per axis, and mixing them is how `layout_bias` became a

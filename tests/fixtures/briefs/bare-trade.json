@@ -9,6 +9,7 @@
   ],
   "design_direction": {
     "accent": "navy",
+    "architecture": "ledger",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -16,8 +17,8 @@
     },
     "defect": "",
     "emphasis": [
-      "stats",
-      "about"
+      "reviews",
+      "stats"
     ],
     "first_screen": "facts",
     "hero_offset": 0,
@@ -25,14 +26,14 @@
     "kind": "style",
     "lead_with": "reviews",
     "mood": "refined",
-    "rationale": "A family law client needs to see trust and track record before anything else \u2014 a 4.9 rating from 148 reviews and genuine client testimonials do more to reassure someone in a custody or divorce dispute than any photograph could. The photography here is thin (only two shots large enough to use, mostly exterior/logo) so the page should open on proof of competence and reputation rather than imagery, with a calm, dignified navy palette that suits a family law practice rather than a flashy trade site.",
+    "rationale": "A family law client's first question is \"can I trust this person with my divorce or custody case,\" and a 4.9 rating from 148 reviews plus direct client testimony answers that faster than any photograph \u2014 this practice has only two usable images, not enough to build a gallery-led page around. The ledger arrangement and quiet type keep the tone serious and document-like, as befits a firm handling emotionally charged family matters, with navy reading as trustworthy and legal rather than decorative.",
     "read_by": "claude",
     "suppress": [
       "gallery"
     ],
     "type_treatment": "quiet",
     "understood": [
-      "A family law client needs to see trust and track record before anything else \u2014 a 4.9 rating from 148 reviews and genuine client testimonials do more to reassure someone in a custody or divorce dispute"
+      "A family law client's first question is \"can I trust this person with my divorce or custody case,\" and a 4.9 rating from 148 reviews plus direct client testimony answers that faster than any photograp"
     ],
     "unsupported": []
   },

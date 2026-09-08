@@ -3,6 +3,7 @@
   "chain_signals": [],
   "design_direction": {
     "accent": "crimson",
+    "architecture": "gallery",
     "contradictions": [],
     "cta": {
       "kind": "book",
@@ -10,8 +11,7 @@
     },
     "defect": "",
     "emphasis": [
-      "reviews",
-      "stats"
+      "reviews"
     ],
     "first_screen": "photo",
     "hero_offset": 0,
@@ -19,12 +19,12 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "refined",
-    "rationale": "Ichika is a kaiseki restaurant whose case is made almost entirely by the plating itself \u2014 nine strong dish photographs and a perfect 5.0 rating across two platforms \u2014 so the site should open on that food, styled like a considered studio rather than a casual diner, and push straight to a booking.",
+    "rationale": "Ichika's own photography is the strongest evidence they have \u2014 nine large, carefully composed dish shots that show the precision and kaiseki craft reviewers rave about, so the site should open on a photograph and let a wide, airy gallery carry the case, with the perfect ratings and quoted reviews raised right after to confirm what the pictures promise. A quiet, sentence-case name over that photo reads as confident and refined rather than shouting, which matches a kaiseki counter, not a casual di",
     "read_by": "claude",
     "suppress": [],
-    "type_treatment": "wide",
+    "type_treatment": "quiet",
     "understood": [
-      "Ichika is a kaiseki restaurant whose case is made almost entirely by the plating itself \u2014 nine strong dish photographs and a perfect 5.0 rating across two platforms \u2014 so the site should open on that f"
+      "Ichika's own photography is the strongest evidence they have \u2014 nine large, carefully composed dish shots that show the precision and kaiseki craft reviewers rave about, so the site should open on a ph"
     ],
     "unsupported": []
   },

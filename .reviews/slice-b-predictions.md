@@ -539,3 +539,25 @@ new axis's own values, which is the same defect caught earlier.
 wider vector can only make superset relations rarer. And not that agreement
 rises: a ninth axis raises the mean arithmetically, and `BRIEF` §3 says an axis
 earns no credit for that.
+
+### Phase 2 outcome — FAILED, as registered
+
+    verdicts determined by first_screen alone, before   16 of 16
+    verdicts determined by first_screen alone, after    12 of 12
+
+Held to the claim as written. The axis is real — ten value pairs distinct with
+the class attribute stripped, the hero provably untouched, availability
+constrained by section count, 0 of 55 pairs colliding under the gate — and none
+of that could have moved the number.
+
+**The ground truth is read from the first viewport and this axis lives below
+it.** Measured: `ledger` is byte-identical to `stacked` in a 1440x820 fold
+capture, and `banded` and `gallery` differ only in the sliver of the next
+section reaching the bottom edge, which reads as colour and is discounted by
+name.
+
+This corrects Phase 1's conclusion. The generator does not have one arrangement
+dimension; **the instrument only looks at one screen**, so it can only validate
+first-screen axes. Section edges and most of the signature device are below the
+fold too, so phases 3 through 8 would build axes whose claims cannot be tested.
+The run stops here.

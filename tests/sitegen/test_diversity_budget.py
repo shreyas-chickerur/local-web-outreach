@@ -235,13 +235,14 @@ def test_the_gate_is_satisfiable():
     last time and adds a new one — a hand-kept list can be added to without
     anybody checking the arithmetic. That is what this holds.
     """
-    from app.site import firstscreen, typetreatment
+    from app.site import architecture, firstscreen, typetreatment
     from app.site.iterate import MOODS
     from app.store.fingerprints import WINDOW
 
     cardinality = {
         "first_screen": len(firstscreen.POSITIONS),
         "type_treatment": len(typetreatment.TREATMENTS),
+        "architecture": len(architecture.ARRANGEMENTS),
         "mood": len(MOODS),
         "accent": len(theme.ACCENT_NAMES),
     }

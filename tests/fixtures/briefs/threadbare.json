@@ -4,10 +4,11 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "navy",
+    "accent": "orange",
+    "architecture": "stacked",
     "contradictions": [],
     "cta": {
-      "kind": "quote",
+      "kind": "call",
       "label": ""
     },
     "defect": "",
@@ -18,12 +19,12 @@
     "kind": "style",
     "lead_with": null,
     "mood": "industrial",
-    "rationale": "A general contractor sells competence, not atmosphere, and there's only one small photo \u2014 not enough to carry a photo-led opening. Setting the name stamped and heavy reads as a working trade outfit, and it avoids the awkwardness of stretching a single small image into a hero banner.",
+    "rationale": "A general contractor with only one small, unusable photo shouldn't lean on imagery \u2014 the name set hard and heavy like a trade stamp signals competence and reliability at a glance, which is what someone hiring a handyman actually checks for before ringing.",
     "read_by": "claude",
     "suppress": [],
     "type_treatment": "stamped",
     "understood": [
-      "A general contractor sells competence, not atmosphere, and there's only one small photo \u2014 not enough to carry a photo-led opening. Setting the name stamped and heavy reads as a working trade outfit, a"
+      "A general contractor with only one small, unusable photo shouldn't lean on imagery \u2014 the name set hard and heavy like a trade stamp signals competence and reliability at a glance, which is what someon"
     ],
     "unsupported": []
   },

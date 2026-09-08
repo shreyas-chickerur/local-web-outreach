@@ -5,7 +5,8 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "terracotta",
+    "accent": "navy",
+    "architecture": "ledger",
     "contradictions": [],
     "cta": {
       "kind": "quote",
@@ -16,20 +17,20 @@
       "services",
       "reviews"
     ],
-    "first_screen": "split",
+    "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "A roofing contractor sells competence and trust before atmosphere, so the first screen should show the 5.0-rating/218-review proof band rather than a photo hero \u2014 homeowners checking a roofer want credentials and evidence first, and the roof photography, while decent, is mostly aerial work shots that support that proof rather than carry the whole page. I kept the industrial mood and stamped trade-shop lettering since those genuinely fit a W2-crew roofing operation, but swapped the accent to terr",
+    "rationale": "A roofing contractor sells trust and competence before atmosphere \u2014 a visitor deciding on a roof replacement needs to see the 5.0 rating, review count, and multi-state W2-insured operation before anything else, not a mood shot. The stamped, ledger-style trade look with navy accent reads as a serious, professional operation across four states rather than a boutique, and leading with proof (stats, services, reviews) followed by real jobsite photography backs up the claims with evidence.",
     "read_by": "claude",
     "suppress": [
       "features"
     ],
     "type_treatment": "stamped",
     "understood": [
-      "A roofing contractor sells competence and trust before atmosphere, so the first screen should show the 5.0-rating/218-review proof band rather than a photo hero \u2014 homeowners checking a roofer want cre"
+      "A roofing contractor sells trust and competence before atmosphere \u2014 a visitor deciding on a roof replacement needs to see the 5.0 rating, review count, and multi-state W2-insured operation before anyt"
     ],
     "unsupported": []
   },

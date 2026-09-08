@@ -5,7 +5,8 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "navy",
+    "accent": "blue",
+    "architecture": "ledger",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -21,14 +22,14 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "A plumber sells trust before anything else, and with only one photo big enough to carry a layout, the rating and review count (4.7 from 57 jobs) is the strongest proof a stranger can see in one glance, so it opens the page instead of a thin photo grid. The stamped, workmanlike type and navy accent read as a trade outfit rather than a boutique, and mixed reviews mean surfacing them honestly rather than hiding them builds more credibility than silence would.",
+    "rationale": "A plumber sells competence before atmosphere, and with only one photo strong enough to lead with, the rating and review count are the more convincing first thing a stranger sees. The mixed reviews (including a complaint about responsiveness) mean we should surface the solid 4.7 rating prominently but keep it honest with real quotes rather than hide behind a slideshow of mismatched work photos.",
     "read_by": "claude",
     "suppress": [
       "gallery"
     ],
     "type_treatment": "stamped",
     "understood": [
-      "A plumber sells trust before anything else, and with only one photo big enough to carry a layout, the rating and review count (4.7 from 57 jobs) is the strongest proof a stranger can see in one glance"
+      "A plumber sells competence before atmosphere, and with only one photo strong enough to lead with, the rating and review count are the more convincing first thing a stranger sees. The mixed reviews (in"
     ],
     "unsupported": []
   },

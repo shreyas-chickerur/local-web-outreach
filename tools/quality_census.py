@@ -83,19 +83,19 @@ BASELINE_WORST = ("contractor-bare", "roofer", 0.44)
 # to another taken the same way, and comparing across a change of ruler has
 # already produced two false readings — a corpus that changed under a pinned
 # baseline, and a distance that became weighted while the baseline stayed flat.
-BASELINE_METRIC = "4616d461"
+BASELINE_METRIC = "aece36b7"
 # And which gate rule the corpus was decided under. Every frozen
 # direction is an answer this rule accepted, so a baseline taken under
 # one rule is not comparable to a corpus decided under another.
-BASELINE_RULE = "a83a0283"
+BASELINE_RULE = "95f4d93e"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
-BASELINE_LABELS = "69061e09"
+BASELINE_LABELS = "dafe510d"
 # What it was, so a reader can see that the agreement figure crossed a
 # change of labels rather than falling. "40 of 40" was scored against
 # 449b9ddb, taken from contact-sheet thumbnails of a corpus that had
 # moved, captured below the breakpoint where the layout changes.
-BASELINE_LABELS_WAS = ("c6ea7551", "27 of 40")
+BASELINE_LABELS_WAS = ("69061e09", "39 of 55")
 # True on the commit that re-pins, false on every commit after. Without
 # it the first run under a new ruler always prints "no better than the
 # baseline" — because the baseline IS that run's own measurement copied

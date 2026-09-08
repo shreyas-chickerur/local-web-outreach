@@ -77,6 +77,9 @@ class SiteSpec:
     # How the name is SET — size, case, alignment, tracking. Not which
     # typeface; that is a later item and a different decision.
     type_treatment: str = "quiet"
+    # How the sections sit against each other — rhythm, measure,
+    # grounds, separators. Not which sections exist.
+    architecture: str = "stacked"
     one_page: bool = True
     understood: list[str] = field(default_factory=list)
     ignored: list[str] = field(default_factory=list)

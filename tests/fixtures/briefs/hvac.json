@@ -10,6 +10,7 @@
   ],
   "design_direction": {
     "accent": "amber",
+    "architecture": "banded",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -17,21 +18,23 @@
     },
     "defect": "",
     "emphasis": [
-      "stats",
+      "reviews",
       "services"
     ],
     "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "reviews",
+    "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "This is a trade call, not a dining room: a homeowner with a leaking pipe wants proof of competence and trustworthiness before anything else, and Milestone's real asset is 6,203 Google reviews and named technicians praised for honesty, not atmosphere shots. Keeping the stamped, industrial, call-first read from the prior site (it genuinely fits a plumbing/HVAC outfit) but swapping the lead to reviews \u2014 with stats still emphasized just behind it \u2014 puts the trust signal itself, in the customers' own",
+    "rationale": "This is a trade business where trust and speed of response sell the job, not atmosphere \u2014 the 4.9 rating across 6,203 reviews and named technicians are the real evidence, so the first screen should present that proof band (rating, review count, response promise) rather than a photo. To differ from the prior near-identical site, I've kept the stats lead but moved to a banded page rhythm instead of the tight ledger, which lets the strong review quotes and service list breathe as distinct slabs rat",
     "read_by": "claude",
-    "suppress": [],
+    "suppress": [
+      "features"
+    ],
     "type_treatment": "stamped",
     "understood": [
-      "This is a trade call, not a dining room: a homeowner with a leaking pipe wants proof of competence and trustworthiness before anything else, and Milestone's real asset is 6,203 Google reviews and name"
+      "This is a trade business where trust and speed of response sell the job, not atmosphere \u2014 the 4.9 rating across 6,203 reviews and named technicians are the real evidence, so the first screen should pr"
     ],
     "unsupported": []
   },

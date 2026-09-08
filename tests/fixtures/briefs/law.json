@@ -8,7 +8,8 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "navy",
+    "accent": "burgundy",
+    "architecture": "stacked",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -19,18 +20,20 @@
       "reviews",
       "services"
     ],
-    "first_screen": "type",
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
-    "mood": "refined",
-    "rationale": "A 4.9-star rating from 254 reviews is the single most persuasive fact for someone deciding whether to trust a personal injury lawyer with a frightening, high-stakes moment \u2014 put that number up first rather than a portrait, since a scared prospective client checks credibility before they care about the office or the attorney's face. Setting the name quietly and flush left (rather than the stamped, contractor-workshop mark) reads as measured and trustworthy rather than tough-guy, which matches \"hu",
+    "mood": "bold",
+    "rationale": "Someone hurt in a wreck wants proof this firm wins before anything else, so the 4.9-star rating and case volume lead, and a bold, confident mood with a stamped, tight-set name reads as a firm ready to fight rather than a quiet boutique. Photography is a mix of promo graphics and only a handful of real, large-enough shots, so facts still lead but the rhythm underneath is an even, generous stacked flow rather than the tense ledger the last firm used \u2014 services and reviews get pulled forward since ",
     "read_by": "claude",
-    "suppress": [],
-    "type_treatment": "quiet",
+    "suppress": [
+      "features"
+    ],
+    "type_treatment": "stamped",
     "understood": [
-      "A 4.9-star rating from 254 reviews is the single most persuasive fact for someone deciding whether to trust a personal injury lawyer with a frightening, high-stakes moment \u2014 put that number up first r"
+      "Someone hurt in a wreck wants proof this firm wins before anything else, so the 4.9-star rating and case volume lead, and a bold, confident mood with a stamped, tight-set name reads as a firm ready to"
     ],
     "unsupported": []
   },

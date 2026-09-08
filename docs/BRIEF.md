@@ -62,14 +62,38 @@ against the wrong pictures.
 
 **The instrument's current reading.**
 
-    agreement   39 of 55 cross-pairs (tuning 27 of 32, held out 0 of 3)
-                ruler 4616d461, rule a83a0283, labels 69061e09,
-                held-out f4ed374b
+    agreement   19 of 27 cross-pairs (tuning 19 of 27, held out 0 of 0)
+                ruler aece36b7, rule 95f4d93e, labels dafe510d,
+                held-out e3b0c442
     census      same-trade mean 51% distance = 49% identical, 7 scored pairs
-                closest pair barbecue / restaurant-rich at 36%, judged SAME
+                closest pair hvac / roofer at 37%, judged SAME
     unreachable 0
     gate        0 of 55 pairs collide under its own rule
-    tests       758
+    tests       760
+
+**Done — Slice B, axis three: page architecture.** `app/site/architecture.py` —
+five arrangements (stacked, banded, ledger, column, gallery) covering rhythm,
+measure, ground and separator, applied to the sections and never to the hero.
+Offered only where the section count can carry it. Proven with the stripped-class
+test phase 1's defect made necessary: all ten value pairs render differently once
+`class="..."` is taken out of the comparison, and a standing test holds that the
+arrangement never reaches into the first screen.
+
+**Its binding claim FAILED, and the reason is the instrument.** The claim was
+that the count of verdicts determined by `first_screen` alone would fall below
+the total. It went 16 of 16 to 12 of 12. **The ground truth is read from the
+first viewport and this axis lives below it** — measured, `ledger` is
+byte-identical to `stacked` in a fold capture, and `banded` and `gallery` differ
+only in the sliver of the next section reaching the bottom edge, which reads as
+colour and is discounted by name.
+
+**So the instrument can only validate first-screen axes.** That corrects what
+was recorded here after axis two: the generator does not have one arrangement
+dimension, the measurement only looks at one screen. Section edges and most of
+the signature device are below the fold as well, so building them now would
+produce axes whose claims cannot be tested. **Whether the ground truth moves off
+the fold is the open question, and it is a change to the instrument's
+definition rather than a tuning.**
 
 **Done — the type-setting rule, and the blind spot closed.** `pairs.json` named
 colour and subject and was silent on how the name is set; two verdicts fell into

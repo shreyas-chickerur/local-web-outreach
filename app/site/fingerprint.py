@@ -38,6 +38,7 @@ from dataclasses import dataclass
 AXES: tuple[str, ...] = (
     "first_screen",
     "type_treatment",
+    "architecture",
     "mood",
     "accent",
     "leads_with",
@@ -83,6 +84,11 @@ VISIBILITY: dict[str, float] = {
     # were unreachable by any reweighting of the other eight axes, and what
     # they shared was this.
     "type_treatment": 3.0,
+    # Below the fold, and this table scores WHERE a difference is seen rather
+    # than how much of it there is — every scrolled entry here is 1.0. It
+    # governs every band on the page and none of the first screen, which
+    # `test_the_hero_is_untouched_by_the_arrangement` holds.
+    "architecture": 1.0,
     "mood": 2.0,             # the whole feel, and the first thing on screen
     "accent": 1.0,           # immediate, but only paint
     "hero_subject": 1.5,     # the largest thing above the fold
@@ -99,6 +105,9 @@ DECIDEDNESS: dict[str, float] = {
     # Chosen outright, though the name's length narrows it: an opened-out
     # capital setting is not offerable to "Milestone Electric Air Plumbing".
     "type_treatment": 2.5,
+    # Chosen outright; the number of sections narrows what is offerable, the
+    # way the name's length narrows the type treatment.
+    "architecture": 2.5,
     "mood": 2.0,             # chosen outright
     "accent": 2.0,           # chosen outright
     "hero_subject": 1.5,     # chosen, from what they happen to have
@@ -153,7 +162,8 @@ REQUIRED_AXES = 4
 # that would justify it is the same score the change would improve, which is
 # the fitted threshold this project has thrown out twice. See
 # .reviews/slice-b-weight-split.md for what it would take to settle it.
-REQUIRED_HIGH: frozenset[str] = frozenset({"first_screen", "type_treatment"})
+REQUIRED_HIGH: frozenset[str] = frozenset({"first_screen", "type_treatment",
+                                           "architecture"})
 
 
 def required_high() -> frozenset[str]:
@@ -245,6 +255,7 @@ def of(plan, spec, material=None) -> Fingerprint:
     return Fingerprint({
         "first_screen": str(spec.first_screen or "photo"),
         "type_treatment": str(spec.type_treatment or "quiet"),
+        "architecture": str(spec.architecture or "stacked"),
         "mood": str(spec.mood),
         "accent": str(spec.accent or "theme default"),
         "leads_with": str(spec.lead_with or (sections[0] if sections else "-")),

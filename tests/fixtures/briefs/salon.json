@@ -8,30 +8,31 @@
   ],
   "design_direction": {
     "accent": "gold",
+    "architecture": "gallery",
     "contradictions": [],
     "cta": {
-      "kind": "call",
+      "kind": "visit",
       "label": ""
     },
     "defect": "",
     "emphasis": [
-      "services",
-      "reviews"
+      "features",
+      "gallery"
     ],
     "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "about",
-    "mood": "warm",
-    "rationale": "Salon Boutique is really a suite-rental business for beauty professionals, not a single styling brand \u2014 so the story of independence and support (about) needs to land before the gallery, which is a mix of empty suites and unrelated stylist snapshots rather than one coherent look. A split first screen lets the storefront photo establish the place while the name and message about growing your own business sit in text beside it, and a quiet type treatment plus warm/gold mood reads as an established",
+    "mood": "refined",
+    "rationale": "This isn't a business selling a haircut to walk-in customers \u2014 it's a suite-rental business selling independence and a beautiful, professional space to beauty professionals, so the page needs to lead with the story and the room (about, features) rather than a service menu or a thin review count. The wide, boutique-style type and gold accent match the \"luxury salon suites\" positioning, and the split first screen lets the storefront and interior photos carry real weight without pretending the revi",
     "read_by": "claude",
     "suppress": [
       "stats"
     ],
-    "type_treatment": "quiet",
+    "type_treatment": "wide",
     "understood": [
-      "Salon Boutique is really a suite-rental business for beauty professionals, not a single styling brand \u2014 so the story of independence and support (about) needs to land before the gallery, which is a mi"
+      "This isn't a business selling a haircut to walk-in customers \u2014 it's a suite-rental business selling independence and a beautiful, professional space to beauty professionals, so the page needs to lead "
     ],
     "unsupported": []
   },

@@ -7,6 +7,7 @@
   "chain_signals": [],
   "design_direction": {
     "accent": "teal",
+    "architecture": "stacked",
     "contradictions": [],
     "cta": {
       "kind": "book",
@@ -14,23 +15,23 @@
     },
     "defect": "",
     "emphasis": [
-      "stats",
+      "reviews",
       "services"
     ],
-    "first_screen": "proof",
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "reviews",
     "mood": "warm",
-    "rationale": "A visitor picking a dentist wants reassurance and trust signals before anything else \u2014 strong ratings, friendly staff, and clear services \u2014 not a photo-led atmosphere piece, since only a handful of images are strong enough to carry a big visual layout. Leading with proof (ratings, reviews, services) and a calm, warm teal palette matches a practice that markets itself on gentleness and being treated 'with respect, patience, and clarity,' while the meaningless 'Special' menu item is suppressed sin",
+    "rationale": "A dental practice sells trust and comfort before anything else, and this one already has the proof: strong ratings and warm, specific patient reviews about being treated gently and fairly. Leading with the stats/facts and then the reviews gets a nervous patient to the reassurance they need faster than a photo of the office ever could, while a calm teal keeps the clinical mood approachable rather than cold; the \"menu\" section is meaningless here (only \"Special\" exists) so it's suppressed.",
     "read_by": "claude",
     "suppress": [
       "menu"
     ],
     "type_treatment": "quiet",
     "understood": [
-      "A visitor picking a dentist wants reassurance and trust signals before anything else \u2014 strong ratings, friendly staff, and clear services \u2014 not a photo-led atmosphere piece, since only a handful of im"
+      "A dental practice sells trust and comfort before anything else, and this one already has the proof: strong ratings and warm, specific patient reviews about being treated gently and fairly. Leading wit"
     ],
     "unsupported": []
   },
