@@ -84,6 +84,374 @@
   "open_questions": [
     "What is their street address?"
   ],
+  "photo_labels": {
+    "/photo/6/0": "exterior",
+    "/photo/6/1": "people",
+    "/photo/6/2": "people",
+    "/photo/6/3": "people",
+    "/photo/6/4": "other",
+    "/photo/6/5": "people",
+    "/photo/6/6": "other",
+    "/photo/6/7": "other",
+    "/photo/6/8": "other",
+    "/photo/6/9": "people",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2020/05/Snellings_Horizontal_PLLC.png": "logo",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/Snellings-Law-PLLC.jpg": "team",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/BSL_TopVerdict.png": "award",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/justia-10.0.png": "award",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/two-drivers-having-argument-over-who-is-guilty-in-a-crash.jpg": "unclear",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/08/Best-of-NTX-Prosper-Celina.png": "award",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2026/04/Snellings-Solo-Hero-rs.webp": "people",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2026/08/Personal-Injury-Attorneys-Home-v4.webp": "people"
+  },
+  "photo_notes": {
+    "/photo/6/0": "A single-story office building with large windows, trees, and a paved walkway in front.",
+    "/photo/6/1": "A smiling man in a gray suit and striped tie standing in front of a glass building exterior.",
+    "/photo/6/2": "A smiling man in a gray suit standing between two bookshelves in front of a wall with a company logo.",
+    "/photo/6/3": "A smiling man in a gray suit and blue tie standing indoors near a plant.",
+    "/photo/6/4": "A severely damaged car with its front end torn open at a nighttime intersection with police vehicles present.",
+    "/photo/6/5": "A promotional graphic with a man's portrait in a circle, text reading Scott Snellings Super Lawyer, and a law firm logo.",
+    "/photo/6/6": "A promotional graphic showing a semi truck on a highway with text reading 18 Wheeler Accidents and a law firm logo.",
+    "/photo/6/7": "A promotional graphic showing two beer glasses in front of a stadium field with text reading Enjoy The Game and a law firm logo.",
+    "/photo/6/8": "A wooden deck with an outdoor table, chairs, and umbrella beside a green hedge, with a text panel reading Premises Liability.",
+    "/photo/6/9": "A man in a dark suit and red striped tie standing in a colonnade, shown inside a circular frame with a Trial Lawyer text overlay.",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2020/05/Snellings_Horizontal_PLLC.png": "A logo reading Snellings Law PLLC with a stylized S icon in dark grey and orange.",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/Snellings-Law-PLLC.jpg": "Four people in business attire sitting together on steps in an indoor space with a geometric wall design behind them.",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/BSL_TopVerdict.png": "A badge reading 'The Texas Lawyer's Top Verdicts & Settlements, #7 in Motor Vehicle, 2015'",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/justia-10.0.png": "A blue shield-shaped badge reading Justia 10.0 Lawyer Rating.",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/08/Best-of-NTX-Prosper-Celina.png": "A black badge reading 'Living Magazine, Best of Prosper & Celina, Readers' Choice, 2022'",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2026/04/Snellings-Solo-Hero-rs.webp": "A smiling man in a dark blue suit sitting on a modern staircase structure against a plain white background.",
+    "https://snellingsinjurylaw.com/wp-content/uploads/2026/08/Personal-Injury-Attorneys-Home-v4.webp": "A man and a woman in dark business suits standing together against a plain white background."
+  },
+  "photo_vision": {
+    "/photo/6/0": {
+      "alt_text": "A single-story office building with large windows, trees, and a paved walkway in front.",
+      "dominant_colours": [
+        "#8a9a7a",
+        "#c9c4b8",
+        "#4a5a3a",
+        "#5a6a8a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/6/0",
+      "why_not": ""
+    },
+    "/photo/6/1": {
+      "alt_text": "A smiling man in a gray suit and striped tie standing in front of a glass building exterior.",
+      "dominant_colours": [
+        "#8a9a9a",
+        "#c9b8a8",
+        "#3a3a3a",
+        "#d4c8b0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/6/1",
+      "why_not": ""
+    },
+    "/photo/6/2": {
+      "alt_text": "A smiling man in a gray suit standing between two bookshelves in front of a wall with a company logo.",
+      "dominant_colours": [
+        "#d8d0c0",
+        "#5a4a3a",
+        "#8a8a8a",
+        "#c07030"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/6/2",
+      "why_not": ""
+    },
+    "/photo/6/3": {
+      "alt_text": "A smiling man in a gray suit and blue tie standing indoors near a plant.",
+      "dominant_colours": [
+        "#3a3a3a",
+        "#c8c8c8",
+        "#2a6a9a",
+        "#6a8a5a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/6/3",
+      "why_not": ""
+    },
+    "/photo/6/4": {
+      "alt_text": "A severely damaged car with its front end torn open at a nighttime intersection with police vehicles present.",
+      "dominant_colours": [
+        "#0a0a0a",
+        "#2a2a2a",
+        "#8a1a1a",
+        "#c0c0c0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "other",
+      "subject_position": "full",
+      "url": "/photo/6/4",
+      "why_not": "Depicts a severe vehicle accident scene at night, not suitable as a hero image"
+    },
+    "/photo/6/5": {
+      "alt_text": "A promotional graphic with a man's portrait in a circle, text reading Scott Snellings Super Lawyer, and a law firm logo.",
+      "dominant_colours": [
+        "#ffffff",
+        "#e8632a",
+        "#2a2a2a",
+        "#c8c8c8"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": true,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "right",
+      "url": "/photo/6/5",
+      "why_not": "Contains promotional text overlay and graphic design elements, not a plain photograph"
+    },
+    "/photo/6/6": {
+      "alt_text": "A promotional graphic showing a semi truck on a highway with text reading 18 Wheeler Accidents and a law firm logo.",
+      "dominant_colours": [
+        "#1a2a3a",
+        "#ffffff",
+        "#e8632a",
+        "#c8a878"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": true,
+      "quality": 3,
+      "subject": "other",
+      "subject_position": "full",
+      "url": "/photo/6/6",
+      "why_not": "Stock-style promotional graphic with text overlay, not a real photograph of the business"
+    },
+    "/photo/6/7": {
+      "alt_text": "A promotional graphic showing two beer glasses in front of a stadium field with text reading Enjoy The Game and a law firm logo.",
+      "dominant_colours": [
+        "#e8632a",
+        "#2a2a2a",
+        "#c8a030",
+        "#8ac03a"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": true,
+      "quality": 3,
+      "subject": "other",
+      "subject_position": "full",
+      "url": "/photo/6/7",
+      "why_not": "Stock-style promotional graphic with text overlay advertising an unrelated theme, not a real photograph of the business"
+    },
+    "/photo/6/8": {
+      "alt_text": "A wooden deck with an outdoor table, chairs, and umbrella beside a green hedge, with a text panel reading Premises Liability.",
+      "dominant_colours": [
+        "#7bb0d6",
+        "#7a9c4e",
+        "#e0d0a0",
+        "#ffffff"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "other",
+      "subject_position": "left",
+      "url": "/photo/6/8",
+      "why_not": "Marketing graphic with text overlay and design elements, not a plain photograph"
+    },
+    "/photo/6/9": {
+      "alt_text": "A man in a dark suit and red striped tie standing in a colonnade, shown inside a circular frame with a Trial Lawyer text overlay.",
+      "dominant_colours": [
+        "#e8622f",
+        "#1a1a1a",
+        "#ffffff",
+        "#c9a876"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "right",
+      "url": "/photo/6/9",
+      "why_not": "Composite graphic with heavy text overlay and shape framing, not a plain photograph"
+    },
+    "https://snellingsinjurylaw.com/wp-content/uploads/2020/05/Snellings_Horizontal_PLLC.png": {
+      "alt_text": "A logo reading Snellings Law PLLC with a stylized S icon in dark grey and orange.",
+      "dominant_colours": [
+        "#ffffff",
+        "#4d4d4d",
+        "#e8622f"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "logo",
+      "subject_position": "full",
+      "url": "https://snellingsinjurylaw.com/wp-content/uploads/2020/05/Snellings_Horizontal_PLLC.png",
+      "why_not": "Logo graphic, not a photograph"
+    },
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/Snellings-Law-PLLC.jpg": {
+      "alt_text": "Four people in business attire sitting together on steps in an indoor space with a geometric wall design behind them.",
+      "dominant_colours": [
+        "#1a2430",
+        "#c9a876",
+        "#3a3f47",
+        "#e8e4de"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "team",
+      "subject_position": "full",
+      "url": "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/Snellings-Law-PLLC.jpg",
+      "why_not": ""
+    },
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/BSL_TopVerdict.png": {
+      "alt_text": "A badge reading 'The Texas Lawyer's Top Verdicts & Settlements, #7 in Motor Vehicle, 2015'",
+      "dominant_colours": [
+        "#8b1a1a",
+        "#ffffff",
+        "#f2f2f2",
+        "#000000"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": true,
+      "quality": 4,
+      "subject": "award",
+      "subject_position": "centre",
+      "url": "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/BSL_TopVerdict.png",
+      "why_not": "logo/badge graphic, not a photograph suitable for hero use"
+    },
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/justia-10.0.png": {
+      "alt_text": "A blue shield-shaped badge reading Justia 10.0 Lawyer Rating.",
+      "dominant_colours": [
+        "#1e3a6e",
+        "#ffffff",
+        "#c9a876"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "award",
+      "subject_position": "centre",
+      "url": "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/justia-10.0.png",
+      "why_not": "Badge graphic, not a photograph of the business"
+    },
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/two-drivers-having-argument-over-who-is-guilty-in-a-crash.jpg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/08/Best-of-NTX-Prosper-Celina.png": {
+      "alt_text": "A black badge reading 'Living Magazine, Best of Prosper & Celina, Readers' Choice, 2022'",
+      "dominant_colours": [
+        "#000000",
+        "#ffffff",
+        "#a4c639",
+        "#333333"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": true,
+      "quality": 4,
+      "subject": "award",
+      "subject_position": "centre",
+      "url": "https://snellingsinjurylaw.com/wp-content/uploads/2025/08/Best-of-NTX-Prosper-Celina.png",
+      "why_not": "logo/badge graphic, not a photograph suitable for hero use"
+    },
+    "https://snellingsinjurylaw.com/wp-content/uploads/2026/04/Snellings-Solo-Hero-rs.webp": {
+      "alt_text": "A smiling man in a dark blue suit sitting on a modern staircase structure against a plain white background.",
+      "dominant_colours": [
+        "#ffffff",
+        "#1a2430",
+        "#c9a876",
+        "#2f3540"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://snellingsinjurylaw.com/wp-content/uploads/2026/04/Snellings-Solo-Hero-rs.webp",
+      "why_not": ""
+    },
+    "https://snellingsinjurylaw.com/wp-content/uploads/2026/08/Personal-Injury-Attorneys-Home-v4.webp": {
+      "alt_text": "A man and a woman in dark business suits standing together against a plain white background.",
+      "dominant_colours": [
+        "#ffffff",
+        "#1a1a2e",
+        "#3d2b1f"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://snellingsinjurylaw.com/wp-content/uploads/2026/08/Personal-Injury-Attorneys-Home-v4.webp",
+      "why_not": ""
+    }
+  },
   "place_photos": [
     "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXQR2O9VncPDghypdG7HSevvZbpEOyqtzIWMsIwZ0XxBNjcLcpshUcJVPoVJriErOgke757RfcZ8GiieMdj0d4Hi3E4t9uFm_jviwbIAmfoj6ZouflkOclUoRY2BK676U2Ct0EKkuEAPmGFdnCG6x3QYcouJZNe9Qx3aCme31i6Cg944F8ccRtYwEPNihUjyvLY7dhypeE1cNs-pCwt3AWY6OflzNotJbiz46Ur6wHjEUURYzFQs-xTzWxDVpCthYgHD-D8ueaXeh4WafKazTwijECngofY2K2OhINVyQLkc1JOhs8-R3JFST79BblGR3VCgFZxt-x_EdKnFY0SemqmHos3aZxDyzCfV24XDMEV9VOKeDtWcS-h_p7JTxIm-GXXkqR9egfsNOIcR357PQfdPb7s1Wi4NxwzqOyVdTNM",
     "places/ChIJRwyS7Ac8TIYRcLtBOLZ1xKA/photos/AVoNoXSHImLeKwZcChgxwatxXMeqPGUIbkE5qdXlWNeLOlvuWe4FsPOhiaZomKvl9GyJQJBcsQWSF5YeLbPqsnYoE81ZFOj9dG4Aeghq_RASlDj72DqIaR4N7BNUkh5VBB7p9X2U46FoqPa5htFiMdCtg4TjkdDq3JG2x2Lro4lrQkv0ZBLJqJ3zlU-gFDero4mQLt62wXJnVBuFyxxbKJcxZplmOgEuhqsm1Sww1-ezne8f2qr-XcYF8B2xcyx0GHJsmCnMDHv3nGtzvgN1G4SlORfhnGwPwFsNzMINTDRYyIFDuOmQesGJ74Ug2uNFWT8NKN4FmCsPHoVyOJ1Ye0htbFEnRy4go7mrXsZivO9VxLpawcJoS67FwXyHv2XRgXANSMs61Gj6YzXs0yNrAHgb5c09LaOc5osfU50Rk4JeuO7_72Dk",

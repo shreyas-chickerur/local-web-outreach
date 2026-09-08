@@ -80,6 +80,251 @@
     "What number do customers actually call?",
     "What are their opening hours?"
   ],
+  "photo_labels": {
+    "/photo/10/0": "exterior",
+    "/photo/10/1": "room",
+    "/photo/10/2": "room",
+    "/photo/10/3": "room",
+    "/photo/10/4": "detail",
+    "/photo/10/5": "people",
+    "/photo/10/6": "exterior",
+    "/photo/10/7": "people",
+    "/photo/10/8": "people",
+    "/photo/10/9": "product",
+    "https://salonboutique.com/wp-content/uploads/2025/10/1U9jSMngcMuKLWoW5hfjYUOqmYqQ_wOr0.webp": "unclear",
+    "https://salonboutique.com/wp-content/uploads/2025/10/1x3P_JBvEA66eHfQQWOwuSxYNInin3ILY.webp": "people"
+  },
+  "photo_notes": {
+    "/photo/10/0": "Storefront of a salon with Salon Boutique signage reading Hair, Nails, Skin, Body under a bright blue sky",
+    "/photo/10/1": "Interior hallway of a salon with a chandelier, patterned carpet, potted plants, and a person seated at the end",
+    "/photo/10/2": "Empty room with beige tile floor, dark trim, a window with blinds, and a small sink cabinet",
+    "/photo/10/3": "Empty corner room with beige tile floor, dark window frames, and closed blinds",
+    "/photo/10/4": "Salon styling station with a round mirror, wooden cabinet with drawers, and a black leather chair against a wood-panel wall",
+    "/photo/10/5": "Reflection in a round mirror of a woman taking a photo of a child wearing a black salon cape",
+    "/photo/10/6": "Close-up of a salon storefront entrance with ornate metal door design and a potted plant, partial signage visible above",
+    "/photo/10/7": "Close-up selfie of a smiling woman with long blonde hair and glasses, indoors near a doorway",
+    "/photo/10/8": "A woman with long blonde-highlighted hair leaning forward under a dark salon cape, seen from above in a salon chair.",
+    "/photo/10/9": "A green bottle of Nature's Bounty B-12 quick dissolve tablets sitting on a dark countertop.",
+    "https://salonboutique.com/wp-content/uploads/2025/10/1x3P_JBvEA66eHfQQWOwuSxYNInin3ILY.webp": "A smiling woman with an updo hairstyle wearing a black dress and jewelry, sitting sideways on a chair against a plain white background."
+  },
+  "photo_vision": {
+    "/photo/10/0": {
+      "alt_text": "Storefront of a salon with Salon Boutique signage reading Hair, Nails, Skin, Body under a bright blue sky",
+      "dominant_colours": [
+        "#7bbbe0",
+        "#c9a06a",
+        "#1a1a1a",
+        "#e8e4da"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/10/0",
+      "why_not": ""
+    },
+    "/photo/10/1": {
+      "alt_text": "Interior hallway of a salon with a chandelier, patterned carpet, potted plants, and a person seated at the end",
+      "dominant_colours": [
+        "#2b2b2b",
+        "#e6e6e6",
+        "#4a4a4a",
+        "#8a8a6a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "room",
+      "subject_position": "centre",
+      "url": "/photo/10/1",
+      "why_not": ""
+    },
+    "/photo/10/2": {
+      "alt_text": "Empty room with beige tile floor, dark trim, a window with blinds, and a small sink cabinet",
+      "dominant_colours": [
+        "#e8e0cf",
+        "#2b2b2b",
+        "#ffffff",
+        "#8a7a5a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/10/2",
+      "why_not": "empty utilitarian space, low visual interest"
+    },
+    "/photo/10/3": {
+      "alt_text": "Empty corner room with beige tile floor, dark window frames, and closed blinds",
+      "dominant_colours": [
+        "#e8e0cf",
+        "#2b2b2b",
+        "#ffffff",
+        "#8a7a5a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/10/3",
+      "why_not": "empty space, no distinguishing feature"
+    },
+    "/photo/10/4": {
+      "alt_text": "Salon styling station with a round mirror, wooden cabinet with drawers, and a black leather chair against a wood-panel wall",
+      "dominant_colours": [
+        "#5a4a3a",
+        "#1a1a1a",
+        "#8a8a8a",
+        "#d9c9a0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "detail",
+      "subject_position": "centre",
+      "url": "/photo/10/4",
+      "why_not": ""
+    },
+    "/photo/10/5": {
+      "alt_text": "Reflection in a round mirror of a woman taking a photo of a child wearing a black salon cape",
+      "dominant_colours": [
+        "#2b2b2b",
+        "#8a7a5a",
+        "#d9c9a0",
+        "#ffffff"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 2,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/10/5",
+      "why_not": "candid mirror selfie, not a polished shot"
+    },
+    "/photo/10/6": {
+      "alt_text": "Close-up of a salon storefront entrance with ornate metal door design and a potted plant, partial signage visible above",
+      "dominant_colours": [
+        "#c9a06a",
+        "#1a1a1a",
+        "#8a8a8a",
+        "#e8e4da"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/10/6",
+      "why_not": "car mirror visible in frame, partial cropped signage"
+    },
+    "/photo/10/7": {
+      "alt_text": "Close-up selfie of a smiling woman with long blonde hair and glasses, indoors near a doorway",
+      "dominant_colours": [
+        "#e8c9a0",
+        "#3a2a1a",
+        "#8a6a4a",
+        "#ffffff"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 2,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/10/7",
+      "why_not": "personal selfie, not representative of business space or services"
+    },
+    "/photo/10/8": {
+      "alt_text": "A woman with long blonde-highlighted hair leaning forward under a dark salon cape, seen from above in a salon chair.",
+      "dominant_colours": [
+        "#3a3a4a",
+        "#c9a15a",
+        "#8c8c8c",
+        "#d9d2c5"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/10/8",
+      "why_not": ""
+    },
+    "/photo/10/9": {
+      "alt_text": "A green bottle of Nature's Bounty B-12 quick dissolve tablets sitting on a dark countertop.",
+      "dominant_colours": [
+        "#1e3d1e",
+        "#0a0a0a",
+        "#c9a15a",
+        "#d9d2c5"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "product",
+      "subject_position": "centre",
+      "url": "/photo/10/9",
+      "why_not": "unrelated retail product photo, not salon service related"
+    },
+    "https://salonboutique.com/wp-content/uploads/2025/10/1U9jSMngcMuKLWoW5hfjYUOqmYqQ_wOr0.webp": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://salonboutique.com/wp-content/uploads/2025/10/1x3P_JBvEA66eHfQQWOwuSxYNInin3ILY.webp": {
+      "alt_text": "A smiling woman with an updo hairstyle wearing a black dress and jewelry, sitting sideways on a chair against a plain white background.",
+      "dominant_colours": [
+        "#f0ede8",
+        "#1a1a1a",
+        "#c9a37a",
+        "#8b5a2b"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://salonboutique.com/wp-content/uploads/2025/10/1x3P_JBvEA66eHfQQWOwuSxYNInin3ILY.webp",
+      "why_not": ""
+    }
+  },
   "place_photos": [
     "places/ChIJ4REd0U05TIYR9My4sNbJcQM/photos/AVoNoXTPnDu22CUQA-cL6zdB49BqGg2_d10yudHYloHCKXATnSo5mNJqWXH1aeeuN8uc2NJjayBx0cpglBNG0aqF4-ptSQDDJjWblhmwcDY4ngI11dkF6AHvJ3rNDC4UpNpP-wVnzSwaZBOs7jdj6u_aBj0UkSIGs1zfsWYc1YobGhgOnXS9RvNREva8Ch0LMhDofzuXGr3mWYg9rXsf3KoRWKlocGgIZSiKfZvDhnX9B2nbFTJOj9iUteydqfvPfQJQYlcp22GwBpmI7-si77pokSL9aZBg-dBc4IV0_Neq96nlCSzm9YVDKcm5DIPISCF0Pc-krtsVAgQ66q7VUvnjQRehnkGxyfNhZjRKvEeKUsNZW_z7ZrE8IA9LBh2AVg0Y1WHLxw95zdo9XpBIp9oevNBptwIHHa3Iu6xQdnWCLbXgSAqz",
     "places/ChIJ4REd0U05TIYR9My4sNbJcQM/photos/AVoNoXTvAkxhHKR1KLFqd80uzy5k4SnGGaeo_dug2j14YgPBanl6Y5m40JinPFvHM_GOLhD5rt-a1u41hAvPSJvyJnluKafg3wr6-JY6Z2YxoaAgQwlG8GoYYgRjMd4Bh2gXr2oGh9ciUfwXlqfD-J4aykjwdtyD5HRo56YXhYprTyBXHAfXce29NhF_i_P4KEvb02dUAAzhjanMuRVeheIOwExI7EhpWtZPZZLzsmQhZKUQcQyL-ZkKEk3OYn5x0SaBgpGhT2CC81pYDXHYxvumG5dpCvocz4o7Ffd_8bpUTedXxpty9He1gOG5gAkNArxFWFE2kviku9GwT5fiDncVpTCZr0xr2lJPKxeNwsT90-NMGCwVNHZW8Ro6uxktDrxv7aFttzQlECre2RPkpqPTsgw6O5Fsxostv24u_q0fZFKi_g",

@@ -15,6 +15,7 @@ changing rather than a directory listing changing underneath it.
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -67,12 +68,59 @@ def _strip_fetched_html(payload: dict) -> None:
                 entry["html"] = ""
 
 
+def freeze_vision(payload: dict) -> int:
+    """Fold what the vision pass saw into the fixture itself.
+
+    Without this a census run depends on `artifacts/fixtures.db`, which is
+    uncommitted, so a clean clone measures a different system — `hero_subject`
+    is constant, the hero scores change, and the fingerprints move. The ruler
+    is versioned and its inputs were not, which makes the versioning worth
+    less than it looks.
+
+    Same class as the `published.photos` gap: the corpus differed from
+    production in a way that hid the thing it exists to catch.
+    """
+    from app.site.pipeline import BuildFailed, run_stage
+    from app.store import db, leads, photos
+
+    with db.session(Path("artifacts/fixtures.db")) as conn:
+        stored = leads.save_brief(conn, {**payload, "name": payload["name"]})
+        try:
+            run_stage(conn, stored, "photographs")
+        except BuildFailed:
+            pass
+        payload["photo_labels"] = photos.labels_for(conn, stored)
+        payload["photo_vision"] = photos.vision_for(conn, stored)
+        payload["photo_notes"] = {
+            url: said["description"]
+            for url, said in photos.described(conn, stored).items()
+            if said.get("description")}
+    return len(payload["photo_vision"])
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--refresh", action="store_true",
+                        help="re-research and re-freeze even if the file exists")
+    parser.add_argument("--vision-only", action="store_true",
+                        help="keep the researched brief, refold its vision "
+                             "labels into it")
+    args = parser.parse_args()
+    refresh = args.refresh
+
+    if args.vision_only:
+        for target in sorted(OUT.glob("*.json")):
+            payload = json.loads(target.read_text())
+            seen = freeze_vision(payload)
+            target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+            print(f"  {target.stem:18} vision={seen}")
+        return 0
+
     OUT.mkdir(parents=True, exist_ok=True)
     directories = available_directories()
     for slug, name, where in WANTED:
         target = OUT / f"{slug}.json"
-        if target.exists():
+        if target.exists() and not refresh:
             print(f"  {slug:18} already frozen")
             continue
         try:
@@ -92,9 +140,10 @@ def main() -> int:
         # otherwise point at somebody else's pictures.
         payload.pop("lead_id", None)
         _strip_fetched_html(payload)
+        seen = freeze_vision(payload)
         target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
         published = payload.get("published") or {}
-        print(f"  {slug:18} {payload.get('trade')!r:34} "
+        print(f"  {slug:18} {payload.get('trade')!r:34} vision={seen:2} "
               f"site={'yes' if payload.get('website_url') else 'no ':3} "
               f"photos={len(payload.get('place_photos') or [])+len(published.get('photos') or [])} "
               f"blocks={len(published.get('blocks') or [])}")

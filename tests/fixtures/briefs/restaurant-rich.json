@@ -89,6 +89,377 @@
   "name": "The Heritage Table",
   "notes": null,
   "open_questions": [],
+  "photo_labels": {
+    "/photo/8/0": "room",
+    "/photo/8/1": "dish",
+    "/photo/8/2": "exterior",
+    "/photo/8/3": "exterior",
+    "/photo/8/4": "exterior",
+    "/photo/8/5": "dish",
+    "/photo/8/6": "dish",
+    "/photo/8/7": "drink",
+    "/photo/8/8": "exterior",
+    "/photo/8/9": "dish",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2019/09/mg_2795.jpeg": "unclear",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/garden-tomatoes.jpg": "ingredients",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/housemade-bread.jpg": "ingredients",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Fig-and-Goat-Cheese.jpg": "dish",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/IMG-0959-scaled.jpg": "ingredients",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Peaches.jpg": "ingredients",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Short-Rib.jpg": "dish",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2024/06/HTPC-1.png": "product"
+  },
+  "photo_notes": {
+    "/photo/8/0": "An empty restaurant dining room with wooden tables, wicker-back chairs, dark wood floors, and framed pictures on light green wainscoted walls",
+    "/photo/8/1": "An overhead view of a bowl of creamy grits topped with shredded meat, saut\u00e9ed greens, radish slices, and a drizzle of sauce",
+    "/photo/8/2": "A two-story house-style building lit up with string lights along its roofline at night, with a sign reading Heritage Table in front",
+    "/photo/8/3": "A daytime view of a green house-style building with white trim, a wraparound porch, pumpkins on the steps, and a sign reading Heritage Table",
+    "/photo/8/4": "A nighttime view of a large house-style building outlined with string lights, viewed from an angle beneath a large tree",
+    "/photo/8/5": "An overhead view of a table set with a steak and vegetable dish, a bowl of salad, bread rolls, a rice dish, and two glasses of red wine",
+    "/photo/8/6": "A plated piece of cooked salmon over greens with a sauce, set on a wooden table alongside other dishes and glasses",
+    "/photo/8/7": "A close-up of an orange cocktail in a coupe glass with a folded paper garnish printed with a monogram, on a wooden table",
+    "/photo/8/8": "An illuminated sign reading Heritage Table stands beside a porch at night with a street visible in the background.",
+    "/photo/8/9": "A slice of chocolate cream pie topped with whipped cream on a polka-dot plate atop a wooden table.",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/garden-tomatoes.jpg": "A metal bowl filled with freshly picked cherry tomatoes sitting on dark soil beneath tomato plants.",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/housemade-bread.jpg": "Rows of shaped dough pieces on a baking tray next to a ball of dough being cut with a pastry wheel on a floured, dark work surface.",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Fig-and-Goat-Cheese.jpg": "A salad with mixed greens, figs, citrus segments, beets, and crumbled cheese on a white plate beside a card reading The Heritage Table Fall 2022.",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/IMG-0959-scaled.jpg": "A close-up pile of colorful peppers in green, red, orange, yellow, and purple.",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Peaches.jpg": "A cardboard box labeled Efurd Orchard Peaches filled with fresh peaches.",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Short-Rib.jpg": "A plated dish of seared meat with mixed greens, sliced radishes, and sauce on a white plate set on a wooden board.",
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2024/06/HTPC-1.png": "An overhead view of packaged food products including eggs, jam, granola, and bacon labeled with Heritage Table branding, overlaid with Provisions Club text."
+  },
+  "photo_vision": {
+    "/photo/8/0": {
+      "alt_text": "An empty restaurant dining room with wooden tables, wicker-back chairs, dark wood floors, and framed pictures on light green wainscoted walls",
+      "dominant_colours": [
+        "#e8e4d8",
+        "#5a3a26",
+        "#1a1a1a",
+        "#3b3b2f"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/8/0",
+      "why_not": ""
+    },
+    "/photo/8/1": {
+      "alt_text": "An overhead view of a bowl of creamy grits topped with shredded meat, saut\u00e9ed greens, radish slices, and a drizzle of sauce",
+      "dominant_colours": [
+        "#e8ddc8",
+        "#3f4a2b",
+        "#7a4a2f",
+        "#c9a13b"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "centre",
+      "url": "/photo/8/1",
+      "why_not": ""
+    },
+    "/photo/8/2": {
+      "alt_text": "A two-story house-style building lit up with string lights along its roofline at night, with a sign reading Heritage Table in front",
+      "dominant_colours": [
+        "#0a0a14",
+        "#e8d9a0",
+        "#4a5a3a",
+        "#1a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/8/2",
+      "why_not": ""
+    },
+    "/photo/8/3": {
+      "alt_text": "A daytime view of a green house-style building with white trim, a wraparound porch, pumpkins on the steps, and a sign reading Heritage Table",
+      "dominant_colours": [
+        "#7a8a5a",
+        "#e8e4d8",
+        "#8a5a3a",
+        "#3a3a2a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/8/3",
+      "why_not": ""
+    },
+    "/photo/8/4": {
+      "alt_text": "A nighttime view of a large house-style building outlined with string lights, viewed from an angle beneath a large tree",
+      "dominant_colours": [
+        "#0a0a14",
+        "#e8d9a0",
+        "#2a3a1a",
+        "#1a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/8/4",
+      "why_not": ""
+    },
+    "/photo/8/5": {
+      "alt_text": "An overhead view of a table set with a steak and vegetable dish, a bowl of salad, bread rolls, a rice dish, and two glasses of red wine",
+      "dominant_colours": [
+        "#5a3a26",
+        "#e8e4d8",
+        "#4a2a1a",
+        "#7a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/8/5",
+      "why_not": ""
+    },
+    "/photo/8/6": {
+      "alt_text": "A plated piece of cooked salmon over greens with a sauce, set on a wooden table alongside other dishes and glasses",
+      "dominant_colours": [
+        "#e8e4d8",
+        "#3f4a2b",
+        "#c97a4a",
+        "#5a3a26"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "centre",
+      "url": "/photo/8/6",
+      "why_not": ""
+    },
+    "/photo/8/7": {
+      "alt_text": "A close-up of an orange cocktail in a coupe glass with a folded paper garnish printed with a monogram, on a wooden table",
+      "dominant_colours": [
+        "#c9863f",
+        "#e8e4d8",
+        "#3a3a2a",
+        "#1a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "drink",
+      "subject_position": "centre",
+      "url": "/photo/8/7",
+      "why_not": ""
+    },
+    "/photo/8/8": {
+      "alt_text": "An illuminated sign reading Heritage Table stands beside a porch at night with a street visible in the background.",
+      "dominant_colours": [
+        "#1a1a2e",
+        "#0d0d0d",
+        "#e8b84b",
+        "#ffffff"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "left",
+      "url": "/photo/8/8",
+      "why_not": ""
+    },
+    "/photo/8/9": {
+      "alt_text": "A slice of chocolate cream pie topped with whipped cream on a polka-dot plate atop a wooden table.",
+      "dominant_colours": [
+        "#3d2b1f",
+        "#8c6b4f",
+        "#e8e4d8",
+        "#5c4033"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "dish",
+      "subject_position": "centre",
+      "url": "/photo/8/9",
+      "why_not": ""
+    },
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2019/09/mg_2795.jpeg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/garden-tomatoes.jpg": {
+      "alt_text": "A metal bowl filled with freshly picked cherry tomatoes sitting on dark soil beneath tomato plants.",
+      "dominant_colours": [
+        "#3b2a1e",
+        "#5a7d3c",
+        "#8b3a2a",
+        "#c0c0c0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "ingredients",
+      "subject_position": "full",
+      "url": "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/garden-tomatoes.jpg",
+      "why_not": ""
+    },
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/housemade-bread.jpg": {
+      "alt_text": "Rows of shaped dough pieces on a baking tray next to a ball of dough being cut with a pastry wheel on a floured, dark work surface.",
+      "dominant_colours": [
+        "#2b2b2b",
+        "#e8dcc4",
+        "#ffffff",
+        "#8c8c8c"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "ingredients",
+      "subject_position": "full",
+      "url": "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/housemade-bread.jpg",
+      "why_not": ""
+    },
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Fig-and-Goat-Cheese.jpg": {
+      "alt_text": "A salad with mixed greens, figs, citrus segments, beets, and crumbled cheese on a white plate beside a card reading The Heritage Table Fall 2022.",
+      "dominant_colours": [
+        "#5c7a3d",
+        "#8b5a3c",
+        "#e8e4d8",
+        "#7a7a7a"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "left",
+      "url": "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Fig-and-Goat-Cheese.jpg",
+      "why_not": ""
+    },
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/IMG-0959-scaled.jpg": {
+      "alt_text": "A close-up pile of colorful peppers in green, red, orange, yellow, and purple.",
+      "dominant_colours": [
+        "#4a7d2f",
+        "#c0392b",
+        "#6b2d5c",
+        "#e8a33d"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "ingredients",
+      "subject_position": "full",
+      "url": "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/IMG-0959-scaled.jpg",
+      "why_not": ""
+    },
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Peaches.jpg": {
+      "alt_text": "A cardboard box labeled Efurd Orchard Peaches filled with fresh peaches.",
+      "dominant_colours": [
+        "#e8a95c",
+        "#c0392b",
+        "#f5e6c8",
+        "#4a7d2f"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "ingredients",
+      "subject_position": "full",
+      "url": "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Peaches.jpg",
+      "why_not": ""
+    },
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Short-Rib.jpg": {
+      "alt_text": "A plated dish of seared meat with mixed greens, sliced radishes, and sauce on a white plate set on a wooden board.",
+      "dominant_colours": [
+        "#2b2b2b",
+        "#3d5c2e",
+        "#c17a3d",
+        "#e8e0d0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "dish",
+      "subject_position": "centre",
+      "url": "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Short-Rib.jpg",
+      "why_not": ""
+    },
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2024/06/HTPC-1.png": {
+      "alt_text": "An overhead view of packaged food products including eggs, jam, granola, and bacon labeled with Heritage Table branding, overlaid with Provisions Club text.",
+      "dominant_colours": [
+        "#c9a876",
+        "#8b6f47",
+        "#f5f0e1",
+        "#4a3728"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "product",
+      "subject_position": "full",
+      "url": "https://www.theheritagetable.com/dev/wp-content/uploads/2024/06/HTPC-1.png",
+      "why_not": "graphic overlay with promotional text, not a clean photograph"
+    }
+  },
   "place_photos": [
     "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXRWy5DQTYMzXX775TFQEWhpDrT2tOEw_iAambzNjET23o50wPtnvuAjU8AVMUwrAphMQPETipubqcvsczeeKPAy2KTNZSRuEN83eGXo6xl50GQev1qR64IWJvEGVz0_G7m8mvGa4lKZTZLiTV-l7lmVeIBLK3OUOi6Q2vhgYlHc_Rwrtoq5iK-6xB5ORgPKclOA2iUFdQhARXQrwhPIFA4T_XnxILAxENjy7ZeoZlMuTf2t7etFsiOc8MO4wstQX97fII3FyA9yH7KwIxIb_SIF8-7mSlr1EclpLhfwp9LzKEvs4B2vGtKchMJ8X2rIkgo8KcglZ1MhN7D6Be0dzq3C_R7HLhPRaWUBvvFxB7uROLJGfWiEjWWEgAHGCyGCBT8warD89eGuPlNi2oRM8Ieb0EUMaBDcUff6x3l18qWlu6k",
     "places/ChIJPVl0dxA8TIYRA0NIP2Rc534/photos/AVoNoXTz6B2v766w_Orj44pNCVHj7ekrRwAJDINWnjb0pthvtBNoy2gN8ZIJhbcI3np4WcZcXdYWOEgb80Zps-vjGeYlOnpCVwSgi7ZOQZugob4dDv7VN_SOoRMfNWmhzCT8INZ09j4jNV6MHk8HTO7yNo07WcNMHxuIB90vOlgRtBEUg56CEL51AbyjAVXZR938r8tPcZxtLScdp_shBZYVmo5se12rRNcZLthq-EhhH56Sa39pFkFY1su7bX5ciOeyDr0RxAPSX8T8sEC2ZQOUsNQMcImaRynRahDwYZ_e2ZGnHOBk-3cCpI8XVEBRWcygxx4hwqKBEYgH4vTk_s_s5CH2WyDsB5wR148JBYcc98TBJUPeQZl0pvtldMWUsrLMErhCHFVM55x04CudJGFOlQ36Gog98Bdf3V2j-oLiuF6XA61IAPO6Agqcna8NzA",

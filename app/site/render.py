@@ -222,6 +222,31 @@ class Material:
         return proxied + self.photos
 
 
+_PROXIED_KEY = re.compile(r"^/photo/\d+/(\d+)$")
+
+
+def _for_this_lead(said: dict | None, lead_id: object) -> dict:
+    """Re-key anything said about a proxied photograph onto this lead.
+
+    A proxied URL carries the lead id, so labels frozen into a fixture under
+    one id do not match the same photographs loaded under another — the
+    fixtures were carrying vision for `/photo/12/0` and being read as
+    `/photo/1/0`, silently, with every candidate then scoring identically.
+
+    Keyed by position rather than by URL would have avoided it, and is a bigger
+    change than it looks: the operator's own labels are stored by URL too.
+    """
+    if not said:
+        return {}
+    if lead_id is None:
+        return dict(said)
+    out: dict = {}
+    for key, value in said.items():
+        match = _PROXIED_KEY.match(str(key))
+        out[f"/photo/{lead_id}/{match.group(1)}" if match else key] = value
+    return out
+
+
 def material_from_brief(brief: dict) -> Material:
     """Pull the usable content out of a brief.
 
@@ -257,8 +282,10 @@ def material_from_brief(brief: dict) -> Material:
         place_photos=tuple(brief.get("place_photos") or ()),
         lead_id=brief.get("lead_id"),
         blocks=tuple(published.get("blocks") or ()),
-        photo_labels=dict(brief.get("photo_labels") or {}),
-        photo_vision=dict(brief.get("photo_vision") or {}),
+        photo_labels=_for_this_lead(brief.get("photo_labels"),
+                                    brief.get("lead_id")),
+        photo_vision=_for_this_lead(brief.get("photo_vision"),
+                                    brief.get("lead_id")),
         photo_notes=dict(brief.get("photo_notes") or {}),
         trade_kind=trade_kind(brief.get("trade")),
         latitude=brief.get("latitude"),
@@ -386,6 +413,21 @@ def trade_kind(trade: str | None) -> str:
         if any(word in name for word in words):
             return kind
     return "default"
+
+
+class AllCandidatesTied(RuntimeError):
+    """Every photograph scored the same, which means none of them was measured.
+
+    Raised rather than returned, because there is no sensible page to build
+    from it: the picker would choose by upload order and produce a plausible
+    site nobody could tell was wrong.
+
+    The condition is narrower than "everything ties". Four equally good
+    photographs of the same dish tie honestly, and a build with nothing
+    measurable at all — offline, no key — genuinely has nothing to choose
+    between. What is never valid is data being handed in and matching none of
+    the candidates, which is what a lead-id mismatch looks like from here.
+    """
 
 
 # A hero is full-bleed at whatever width the screen is. Below this it is
@@ -585,9 +627,34 @@ def hero_scores(images: tuple[str, ...], labels: dict | None = None,
         scored.append(HeroScore(url=url, total=sum(reasons.values()),
                                 reasons=reasons, size=size, label=label,
                                 position=position))
-    # Position breaks ties: it is deterministic, and it is not arbitrary —
-    # Google returns its photographs in its own order of preference, and with
-    # nothing measurable to go on that is the best signal available.
+    # Every candidate scoring alike is an ERROR CONDITION, not a valid state.
+    #
+    # Labels frozen into a fixture under one lead id did not match the same
+    # photographs loaded under another — the keys carry the id — so every
+    # score collapsed to the same number and the picker fell back to raw
+    # order. Nothing complained, because "they all tie" looks exactly like
+    # "there is nothing to choose between them".
+    #
+    # It is the same insight as a constant axis looking like a function of
+    # every other one, applied to scoring instead of to the fingerprint. With
+    # more than one candidate there is always something to separate them —
+    # size, shape, subject, what somebody saw — and if there is not, the
+    # inputs did not arrive.
+    # Data was handed in and none of it reached a single candidate. Identical
+    # scores on their own are fine — four equally good photographs of the same
+    # dish tie honestly — so the condition is not "everything ties", it is
+    # "something was provided and nothing matched".
+    said = vision or {}
+    named = labels or {}
+    for offered, matched in ((said, sum(1 for c in scored if c.url in said)),
+                             (named, sum(1 for c in scored
+                                         if c.label is not None))):
+        if offered and not matched:
+            raise AllCandidatesTied(
+                f"{len(offered)} entries were provided for "
+                f"{len(scored)} photographs and none of them matched. The "
+                f"keys are for different photographs — proxied URLs carry the "
+                f"lead id, so labels frozen under one do not match another")
     return sorted(scored, key=lambda c: (-c.total, c.position))
 
 

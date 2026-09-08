@@ -67,6 +67,376 @@
     "Their street address: only google lists it \u2014 confirm 1927 Old Witt Rd Ste 100, Frisco, TX 75036, USA?",
     "Their opening hours: only google lists it \u2014 confirm Mon-Sun 8am-5pm?"
   ],
+  "photo_labels": {
+    "/photo/9/0": "work",
+    "/photo/9/1": "exterior",
+    "/photo/9/2": "work",
+    "/photo/9/3": "exterior",
+    "/photo/9/4": "other",
+    "/photo/9/5": "exterior",
+    "/photo/9/6": "exterior",
+    "/photo/9/7": "team",
+    "/photo/9/8": "exterior",
+    "/photo/9/9": "exterior",
+    "https://www.statusroofingllc.com/assets/four-states-clean.png": "logo",
+    "https://www.statusroofingllc.com/assets/img/arial-job.jpg": "work",
+    "https://www.statusroofingllc.com/assets/img/commercial-header.jpeg": "unclear",
+    "https://www.statusroofingllc.com/assets/img/commercial-roofing.jpeg": "exterior",
+    "https://www.statusroofingllc.com/assets/img/other-services-header.jpeg": "detail",
+    "https://www.statusroofingllc.com/assets/img/realtor-header.jpeg": "people",
+    "https://www.statusroofingllc.com/assets/img/roof-repair-header.png": "work",
+    "https://www.statusroofingllc.com/assets/img/roof-replacement-header.png": "work"
+  },
+  "photo_notes": {
+    "/photo/9/0": "Aerial view of a house roof mid-installation with workers and exposed underlayment paper among grey shingles.",
+    "/photo/9/1": "Side view of a brick house with a new dark roof and chimney under a clear blue sky.",
+    "/photo/9/2": "Two workers installing grey shingles on a steep roof with exposed underlayment and a red tree in the background.",
+    "/photo/9/3": "Aerial view of a brick house with a grey roof surrounded by dense green trees and neighboring rooftops.",
+    "/photo/9/4": "A company yard sign with logo and phone number placed on grass in front of a house with hedges and trees.",
+    "/photo/9/5": "Side view of a white brick house with a dark shingle roof, a patio table, and trees overhead under a partly cloudy sky.",
+    "/photo/9/6": "Front view of a brick single-story house with a chimney and a new dark roof under a clear blue sky.",
+    "/photo/9/7": "A group of people standing in front of a building, flanked by five white company trucks parked in a row.",
+    "/photo/9/8": "A tall feather flag advertising a roofing company stands on a lawn in front of a house with a ladder against the roof and a work trailer in the driveway.",
+    "/photo/9/9": "An aerial view of a house with a gray shingle roof surrounded by trees, with a work vehicle parked in the driveway.",
+    "https://www.statusroofingllc.com/assets/four-states-clean.png": "A graphic showing four gold-colored raised relief maps of Texas, Oklahoma, Kansas, and Missouri on a white background.",
+    "https://www.statusroofingllc.com/assets/img/arial-job.jpg": "An aerial view looking straight down at a large house roof with new gray shingles, workers, tools, and underlayment printed with the Status Roofing logo, surrounded by a yard and trees.",
+    "https://www.statusroofingllc.com/assets/img/commercial-roofing.jpeg": "An aerial view of a large flat commercial building with a white roof covered in vents, surrounded by parking lots and other buildings.",
+    "https://www.statusroofingllc.com/assets/img/other-services-header.jpeg": "A close-up of a pressure washer nozzle spraying a stream of water against a wooden fence.",
+    "https://www.statusroofingllc.com/assets/img/realtor-header.jpeg": "A group of business people shaking hands over a conference table with an architectural model, laptops, and papers.",
+    "https://www.statusroofingllc.com/assets/img/roof-repair-header.png": "Three roofers install gray shingles on a roof partially covered with underlayment marked with the Status Roofing logo, on a sunny day.",
+    "https://www.statusroofingllc.com/assets/img/roof-replacement-header.png": "An aerial view of several roofers working on a large peaked roof covered partly with underlayment printed with the Status Roofing logo, next to trees with autumn foliage."
+  },
+  "photo_vision": {
+    "/photo/9/0": {
+      "alt_text": "Aerial view of a house roof mid-installation with workers and exposed underlayment paper among grey shingles.",
+      "dominant_colours": [
+        "#8a8f94",
+        "#5c5f61",
+        "#4a6b3a",
+        "#c9ccc9"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "work",
+      "subject_position": "full",
+      "url": "/photo/9/0",
+      "why_not": ""
+    },
+    "/photo/9/1": {
+      "alt_text": "Side view of a brick house with a new dark roof and chimney under a clear blue sky.",
+      "dominant_colours": [
+        "#3a75c4",
+        "#8a6a4b",
+        "#4a6b3a",
+        "#2b2b2b"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/9/1",
+      "why_not": ""
+    },
+    "/photo/9/2": {
+      "alt_text": "Two workers installing grey shingles on a steep roof with exposed underlayment and a red tree in the background.",
+      "dominant_colours": [
+        "#6b6f70",
+        "#c9ccc9",
+        "#2b2b2b",
+        "#7a3b2e"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "work",
+      "subject_position": "full",
+      "url": "/photo/9/2",
+      "why_not": ""
+    },
+    "/photo/9/3": {
+      "alt_text": "Aerial view of a brick house with a grey roof surrounded by dense green trees and neighboring rooftops.",
+      "dominant_colours": [
+        "#3d5c2a",
+        "#7a7d7a",
+        "#8a6a4b",
+        "#4a6b3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/9/3",
+      "why_not": ""
+    },
+    "/photo/9/4": {
+      "alt_text": "A company yard sign with logo and phone number placed on grass in front of a house with hedges and trees.",
+      "dominant_colours": [
+        "#1a1a1a",
+        "#4caf50",
+        "#8a9b5a",
+        "#3a75c4"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "other",
+      "subject_position": "left",
+      "url": "/photo/9/4",
+      "why_not": "sign and yard, not a hero shot of finished work"
+    },
+    "/photo/9/5": {
+      "alt_text": "Side view of a white brick house with a dark shingle roof, a patio table, and trees overhead under a partly cloudy sky.",
+      "dominant_colours": [
+        "#c9c9c1",
+        "#3a75c4",
+        "#4a6b3a",
+        "#2b2b2b"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/9/5",
+      "why_not": "cluttered composition with furniture and shadows"
+    },
+    "/photo/9/6": {
+      "alt_text": "Front view of a brick single-story house with a chimney and a new dark roof under a clear blue sky.",
+      "dominant_colours": [
+        "#3a75c4",
+        "#8a6a4b",
+        "#2b2b2b",
+        "#4a6b3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/9/6",
+      "why_not": ""
+    },
+    "/photo/9/7": {
+      "alt_text": "A group of people standing in front of a building, flanked by five white company trucks parked in a row.",
+      "dominant_colours": [
+        "#ffffff",
+        "#3a75c4",
+        "#2b2b2b",
+        "#8a9b5a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "team",
+      "subject_position": "full",
+      "url": "/photo/9/7",
+      "why_not": ""
+    },
+    "/photo/9/8": {
+      "alt_text": "A tall feather flag advertising a roofing company stands on a lawn in front of a house with a ladder against the roof and a work trailer in the driveway.",
+      "dominant_colours": [
+        "#5b6b3a",
+        "#87a8d1",
+        "#3a3a3a",
+        "#8a8a5a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "right",
+      "url": "/photo/9/8",
+      "why_not": ""
+    },
+    "/photo/9/9": {
+      "alt_text": "An aerial view of a house with a gray shingle roof surrounded by trees, with a work vehicle parked in the driveway.",
+      "dominant_colours": [
+        "#6b6b6b",
+        "#3d5a2a",
+        "#8a7a5a",
+        "#2f2f2f"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/9/9",
+      "why_not": ""
+    },
+    "https://www.statusroofingllc.com/assets/four-states-clean.png": {
+      "alt_text": "A graphic showing four gold-colored raised relief maps of Texas, Oklahoma, Kansas, and Missouri on a white background.",
+      "dominant_colours": [
+        "#c9a13a",
+        "#ffffff",
+        "#8a6a2a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "logo",
+      "subject_position": "full",
+      "url": "https://www.statusroofingllc.com/assets/four-states-clean.png",
+      "why_not": "illustrative map graphic, not a photograph of the business"
+    },
+    "https://www.statusroofingllc.com/assets/img/arial-job.jpg": {
+      "alt_text": "An aerial view looking straight down at a large house roof with new gray shingles, workers, tools, and underlayment printed with the Status Roofing logo, surrounded by a yard and trees.",
+      "dominant_colours": [
+        "#5a5a5a",
+        "#3d5a2a",
+        "#c9c9c9",
+        "#8a7a5a"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "work",
+      "subject_position": "full",
+      "url": "https://www.statusroofingllc.com/assets/img/arial-job.jpg",
+      "why_not": ""
+    },
+    "https://www.statusroofingllc.com/assets/img/commercial-header.jpeg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://www.statusroofingllc.com/assets/img/commercial-roofing.jpeg": {
+      "alt_text": "An aerial view of a large flat commercial building with a white roof covered in vents, surrounded by parking lots and other buildings.",
+      "dominant_colours": [
+        "#d8d8d8",
+        "#f0e6b0",
+        "#3a3a3a",
+        "#5a7a8a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "https://www.statusroofingllc.com/assets/img/commercial-roofing.jpeg",
+      "why_not": ""
+    },
+    "https://www.statusroofingllc.com/assets/img/other-services-header.jpeg": {
+      "alt_text": "A close-up of a pressure washer nozzle spraying a stream of water against a wooden fence.",
+      "dominant_colours": [
+        "#c9822a",
+        "#8a5a2a",
+        "#ffffff",
+        "#3a3a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "detail",
+      "subject_position": "full",
+      "url": "https://www.statusroofingllc.com/assets/img/other-services-header.jpeg",
+      "why_not": ""
+    },
+    "https://www.statusroofingllc.com/assets/img/realtor-header.jpeg": {
+      "alt_text": "A group of business people shaking hands over a conference table with an architectural model, laptops, and papers.",
+      "dominant_colours": [
+        "#1c1c2e",
+        "#d9cbb5",
+        "#8c7b63",
+        "#4a4a4a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "full",
+      "url": "https://www.statusroofingllc.com/assets/img/realtor-header.jpeg",
+      "why_not": ""
+    },
+    "https://www.statusroofingllc.com/assets/img/roof-repair-header.png": {
+      "alt_text": "Three roofers install gray shingles on a roof partially covered with underlayment marked with the Status Roofing logo, on a sunny day.",
+      "dominant_colours": [
+        "#8a8a8a",
+        "#3a3a3a",
+        "#c9c9c9",
+        "#87a8c9"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "work",
+      "subject_position": "centre",
+      "url": "https://www.statusroofingllc.com/assets/img/roof-repair-header.png",
+      "why_not": ""
+    },
+    "https://www.statusroofingllc.com/assets/img/roof-replacement-header.png": {
+      "alt_text": "An aerial view of several roofers working on a large peaked roof covered partly with underlayment printed with the Status Roofing logo, next to trees with autumn foliage.",
+      "dominant_colours": [
+        "#c9a15a",
+        "#7a8c3a",
+        "#4a4a4a",
+        "#87a8c9"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "work",
+      "subject_position": "full",
+      "url": "https://www.statusroofingllc.com/assets/img/roof-replacement-header.png",
+      "why_not": ""
+    }
+  },
   "place_photos": [
     "places/ChIJ7Y2uGsQ7TIYRwEdrwWU58QI/photos/AVoNoXTsM3PabRRSbG0k4yH2Psu9WiO8FLtCb9tWVYQTZZvZjcT4_oJ9zCZtkLoJnWkrhm5xkhfwi-YRIeAlaTaJ7VwR9sSS53C5vpyWcH4X3M4Zsr0q7cUHnSxsdBAhDPlRsq8NzNiCjqR_fv2phCxrLPprDdMcAr0NrVOTo5q8S0KA-PMuJWTKjuPFFBWQTBzDmNRw7ubCQOVRzHXMRSvdQxie20TjLjvgHcJPFnWOO3dbO-0OQIRII_UivV13ZPHfFjTrZms1li3RF706UNZ6m_WaHCTYT4NNI4mdfscdUTY3wW_Gi32kMDLdJeRjn_fYT4JSzpaWuyKnd6A8PTdB-uxoKbVxUuG53Lh_QPQrDq1DYUX4s7DR5mbtWB-cjW-6wWtKmSJOQsAMZUIAba-vUxlQUSfqabz47fqG2F_6Ks6ZGBTBzmMmN_-oValbfQ",
     "places/ChIJ7Y2uGsQ7TIYRwEdrwWU58QI/photos/AVoNoXSzB4kSbdzBr6anFeEUGf8-uiF1hHrLQ-KPI70-N6sBmY2rUd4lT_hb_1_8absMiOb3DABXF0daiQ1QDDtDyuIh3LQ-T2CGkzNLz0cwnpjD8e1iHetB0XLpuNHk60VoF6B4wW58uI4zJmPrHdmVlFYmhtrNi21_Voyol6D3lJ0U1iPs6FZz1Af4c-AWhobTAdMf078q4SzZN3f3CdzhqnMjZBe3uvf0vjp3gSJS0G4H_8nPLWTvGR_smZpnyTHBz_GkKqJQS99hrz3ebPM1WJJ086-I3AJAs1H_lSwHG_9d5WT97jLl0qqEUpdu1mJQSTBDr-6PVU-aP4YYgFbYaln60Z2NkuSHkMVPh7oumF2NEBJiGZbN81YUsGSepKWByzBB1cEtBXspxi8Zddb7mgve_dLyBnXP5lxBnXuICmj9AiUjhdUc2Fx8DJHW--aE",

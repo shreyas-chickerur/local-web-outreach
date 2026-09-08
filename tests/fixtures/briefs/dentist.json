@@ -101,6 +101,286 @@
   "open_questions": [
     "What is their street address?"
   ],
+  "photo_labels": {
+    "/photo/4/0": "exterior",
+    "/photo/4/1": "room",
+    "/photo/4/2": "people",
+    "/photo/4/3": "people",
+    "/photo/4/4": "people",
+    "/photo/4/5": "room",
+    "/photo/4/6": "people",
+    "/photo/4/7": "people",
+    "/photo/4/8": "unclear",
+    "/photo/4/9": "unclear",
+    "https://www.friscodentalcare.com/assets/images/index-banner.jpg": "unclear",
+    "https://www.friscodentalcare.com/assets/images/index-financial.png": "unclear",
+    "https://www.friscodentalcare.com/assets/images/index-join.jpg": "unclear",
+    "https://www.friscodentalcare.com/assets/images/index-offer.jpg": "unclear",
+    "https://www.friscodentalcare.com/assets/images/index-services.jpg": "unclear",
+    "https://www.friscodentalcare.com/assets/images/reviews-joyelle.png": "people",
+    "https://www.friscodentalcare.com/assets/images/reviews-julie-ann.png": "unclear",
+    "https://www.friscodentalcare.com/assets/images/reviews-tracie.png": "people"
+  },
+  "photo_notes": {
+    "/photo/4/0": "Storefront of a dental care office with a blue illuminated sign, stone facade, and landscaped bushes and flowers out front",
+    "/photo/4/1": "An empty dental treatment chair with overhead light and monitor arm in a clinic room decorated with a train photograph",
+    "/photo/4/2": "A dental professional in a mask and gloves working on a patient reclined in a treatment chair",
+    "/photo/4/3": "A smiling man in a plaid shirt sitting in an office chair at a desk with a computer monitor and clock",
+    "/photo/4/4": "A smiling woman at a reception desk holding papers next to a computer monitor and printer",
+    "/photo/4/5": "An empty dental treatment chair with overhead light and a monitor showing a purple flower image",
+    "/photo/4/6": "A man in a white coat shaking hands with a woman at a reception counter while another woman looks on smiling",
+    "/photo/4/7": "A smiling woman at a front desk speaking with a man in a striped shirt across the counter",
+    "https://www.friscodentalcare.com/assets/images/reviews-joyelle.png": "Circular profile photo of a smiling woman with dark hair standing outdoors",
+    "https://www.friscodentalcare.com/assets/images/reviews-tracie.png": "Circular profile photo of a smiling woman with light brown hair"
+  },
+  "photo_vision": {
+    "/photo/4/0": {
+      "alt_text": "Storefront of a dental care office with a blue illuminated sign, stone facade, and landscaped bushes and flowers out front",
+      "dominant_colours": [
+        "#a89a7f",
+        "#5a8f2e",
+        "#1e3a8a",
+        "#d9d9d9"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/4/0",
+      "why_not": ""
+    },
+    "/photo/4/1": {
+      "alt_text": "An empty dental treatment chair with overhead light and monitor arm in a clinic room decorated with a train photograph",
+      "dominant_colours": [
+        "#d9d3c5",
+        "#8c8577",
+        "#c2b8a3",
+        "#3a3a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "room",
+      "subject_position": "centre",
+      "url": "/photo/4/1",
+      "why_not": ""
+    },
+    "/photo/4/2": {
+      "alt_text": "A dental professional in a mask and gloves working on a patient reclined in a treatment chair",
+      "dominant_colours": [
+        "#8c7355",
+        "#3a3a3a",
+        "#c7418e",
+        "#d9d3c5"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/4/2",
+      "why_not": ""
+    },
+    "/photo/4/3": {
+      "alt_text": "A smiling man in a plaid shirt sitting in an office chair at a desk with a computer monitor and clock",
+      "dominant_colours": [
+        "#c2a878",
+        "#3a3a3a",
+        "#e8e4d8",
+        "#8c7355"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/4/3",
+      "why_not": ""
+    },
+    "/photo/4/4": {
+      "alt_text": "A smiling woman at a reception desk holding papers next to a computer monitor and printer",
+      "dominant_colours": [
+        "#c2a878",
+        "#d9d3c5",
+        "#3a3a3a",
+        "#e8e4d8"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/4/4",
+      "why_not": ""
+    },
+    "/photo/4/5": {
+      "alt_text": "An empty dental treatment chair with overhead light and a monitor showing a purple flower image",
+      "dominant_colours": [
+        "#d9d3c5",
+        "#8c8577",
+        "#3a3a3a",
+        "#5a8f2e"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 2,
+      "subject": "room",
+      "subject_position": "centre",
+      "url": "/photo/4/5",
+      "why_not": "low resolution and dated appearance with visible border artifact"
+    },
+    "/photo/4/6": {
+      "alt_text": "A man in a white coat shaking hands with a woman at a reception counter while another woman looks on smiling",
+      "dominant_colours": [
+        "#e8e4d8",
+        "#3a3a3a",
+        "#8c7355",
+        "#c2a878"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "full",
+      "url": "/photo/4/6",
+      "why_not": ""
+    },
+    "/photo/4/7": {
+      "alt_text": "A smiling woman at a front desk speaking with a man in a striped shirt across the counter",
+      "dominant_colours": [
+        "#e8e4d8",
+        "#3a3a3a",
+        "#c2a878",
+        "#4a4a4a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/4/7",
+      "why_not": ""
+    },
+    "/photo/4/8": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "/photo/4/9": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://www.friscodentalcare.com/assets/images/index-banner.jpg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://www.friscodentalcare.com/assets/images/index-financial.png": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://www.friscodentalcare.com/assets/images/index-join.jpg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://www.friscodentalcare.com/assets/images/index-offer.jpg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://www.friscodentalcare.com/assets/images/index-services.jpg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://www.friscodentalcare.com/assets/images/reviews-joyelle.png": {
+      "alt_text": "Circular profile photo of a smiling woman with dark hair standing outdoors",
+      "dominant_colours": [
+        "#8a8f7a",
+        "#e3c9a8",
+        "#3d2b1f",
+        "#cfd2c4"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 2,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://www.friscodentalcare.com/assets/images/reviews-joyelle.png",
+      "why_not": "small circular review avatar, low resolution, not a hero image"
+    },
+    "https://www.friscodentalcare.com/assets/images/reviews-julie-ann.png": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://www.friscodentalcare.com/assets/images/reviews-tracie.png": {
+      "alt_text": "Circular profile photo of a smiling woman with light brown hair",
+      "dominant_colours": [
+        "#e8c9a0",
+        "#f5f0e8",
+        "#6b4a33",
+        "#c9c9c9"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 2,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://www.friscodentalcare.com/assets/images/reviews-tracie.png",
+      "why_not": "small circular review avatar, low resolution, not a hero image"
+    }
+  },
   "place_photos": [
     "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXSNblEIlukgGdt95QUuIMJ873zeFd8WekEl86XmP5HssRm2KOvN_39xHdgq2kg3afAXwAluITzmpCjXTYeJFeuBnq6rUxvGKNfH1N-ZV9zrH6osZxJzKJEEgmsKrNJjS3RzfHlEPEkbOSEqZA7L0liS61TTyRwKw3_vPzkWCBUGqXNxhS7377i095O9XXd2_y1_Q4asxphS5Nhs-p5f5CMn8brrwi3AM6gujlZ0E3Fr6jTPyuZ5rPks9_rrlpw8zJSSSn3D0fPUPjNqmaVMFf_Up2wQmL8_B_YbjbabFfqHnYaU1lD9VK2gMyc_lxb-tvYt0Lky0oKi9JJWZgE20gumey5zVFDGty2RTQnUE8ceWPzxRF3WSOGF5K5NWLi6BTbJDr3WZ3lfCJ6_aVz8YWFn-bf-KPwI5fquo0s-plWtmNwq",
     "places/ChIJxcxhbAY8TIYRQeqCjp4NvN0/photos/AVoNoXQ1iEPm53rq3-9pAEOmg_7cA42_yzWNbnnNd5CEm84GjGIFxkfK5LTXbP5x6b-2bodakoTElA_L869dn4v3ytq-j2x3x-baO4Gz7Hfwy8bGlv22Z-zMCqoOYDgnFaBLGFjRJgWtrp7C4ea7HJt5U-SZII9HZuVS_Jt1oC4KjFuotk69SseKZo3scYwlgxQjel2_gWfkIieKpd3wiEVIz4AK5Ds2hrViwjDcWW5YkWpxdmf4EsJz2HJDCE_8xXPb3Wfj7HxxvYeONMosXaG6ltXlTssWWJKm0AIb1EEx2ivebZbMCXFlKToYUWXBB-zhODDqAPfYEH2c_aEKM9JIIrxzkUPSDLZCE7j5M694dQ5kBKJc-ko02t0irybQ_Kb42uZCCpHvPD_xBoE99VNQC_1NEYw0C2Kv3pyqIaw5dmAOYA",

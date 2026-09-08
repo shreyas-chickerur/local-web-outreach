@@ -49,6 +49,222 @@
     "Their phone number: only google lists it \u2014 confirm (469) 486-0687?",
     "What are their opening hours?"
   ],
+  "photo_labels": {
+    "/photo/3/0": "work",
+    "/photo/3/1": "work",
+    "/photo/3/2": "work",
+    "/photo/3/3": "detail",
+    "/photo/3/4": "work",
+    "/photo/3/5": "product",
+    "/photo/3/6": "work",
+    "/photo/3/7": "work",
+    "/photo/3/8": "detail",
+    "/photo/3/9": "people"
+  },
+  "photo_notes": {
+    "/photo/3/0": "A man in a blue work uniform kneels to repair pipes beneath a wall-mounted bathroom sink with a toilet visible nearby.",
+    "/photo/3/1": "A man in a plaid shirt and blue overalls uses a plunger in a stainless steel kitchen sink.",
+    "/photo/3/2": "An overhead view of a man lying on the floor working on pipes under a kitchen sink, with tools and a wrench beside him.",
+    "/photo/3/3": "Close-up of two hands using a wrench and adjusting a valve on plumbing pipes under a sink.",
+    "/photo/3/4": "A man in an orange shirt uses a plunger on a toilet in a bathroom with tiled walls.",
+    "/photo/3/5": "Two gray gas water heaters installed side by side against a beige wall.",
+    "/photo/3/6": "A man in a blue cap and overalls kneels to work under a bathroom sink beside an open tool bag with tools scattered on the floor.",
+    "/photo/3/7": "A man in blue overalls kneels to inspect a garbage disposal unit under a kitchen sink, with a tool bag on the wooden floor beside him.",
+    "/photo/3/8": "A worker's torso wearing a tool belt with gloves, holding a pipe wrench and a loaded tool bag against a white background",
+    "/photo/3/9": "A man in a tan uniform and cap kneeling by an open cabinet under a sink, reaching into a toolbox with pliers"
+  },
+  "photo_vision": {
+    "/photo/3/0": {
+      "alt_text": "A man in a blue work uniform kneels to repair pipes beneath a wall-mounted bathroom sink with a toilet visible nearby.",
+      "dominant_colours": [
+        "#3b4a6b",
+        "#e8e2d8",
+        "#c9c2b3",
+        "#8a8f94"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "work",
+      "subject_position": "centre",
+      "url": "/photo/3/0",
+      "why_not": ""
+    },
+    "/photo/3/1": {
+      "alt_text": "A man in a plaid shirt and blue overalls uses a plunger in a stainless steel kitchen sink.",
+      "dominant_colours": [
+        "#c9c2b3",
+        "#4a5a8a",
+        "#8a8f94",
+        "#e8e2d8"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "work",
+      "subject_position": "centre",
+      "url": "/photo/3/1",
+      "why_not": ""
+    },
+    "/photo/3/2": {
+      "alt_text": "An overhead view of a man lying on the floor working on pipes under a kitchen sink, with tools and a wrench beside him.",
+      "dominant_colours": [
+        "#8a6a4a",
+        "#3a3a3a",
+        "#2f6b3a",
+        "#c9c2b3"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "work",
+      "subject_position": "full",
+      "url": "/photo/3/2",
+      "why_not": ""
+    },
+    "/photo/3/3": {
+      "alt_text": "Close-up of two hands using a wrench and adjusting a valve on plumbing pipes under a sink.",
+      "dominant_colours": [
+        "#c9c2b3",
+        "#2a2a2a",
+        "#e0a020",
+        "#7a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "detail",
+      "subject_position": "full",
+      "url": "/photo/3/3",
+      "why_not": "close crop of hands and tools, no full scene or context"
+    },
+    "/photo/3/4": {
+      "alt_text": "A man in an orange shirt uses a plunger on a toilet in a bathroom with tiled walls.",
+      "dominant_colours": [
+        "#e07a1a",
+        "#8a8f94",
+        "#c9c2b3",
+        "#4a4a4a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "work",
+      "subject_position": "centre",
+      "url": "/photo/3/4",
+      "why_not": ""
+    },
+    "/photo/3/5": {
+      "alt_text": "Two gray gas water heaters installed side by side against a beige wall.",
+      "dominant_colours": [
+        "#a8a8a0",
+        "#d8c8b0",
+        "#2a2a2a",
+        "#c02020"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "product",
+      "subject_position": "full",
+      "url": "/photo/3/5",
+      "why_not": "static equipment shot, not action or people focused"
+    },
+    "/photo/3/6": {
+      "alt_text": "A man in a blue cap and overalls kneels to work under a bathroom sink beside an open tool bag with tools scattered on the floor.",
+      "dominant_colours": [
+        "#e8e2d8",
+        "#3b4a6b",
+        "#1a1a1a",
+        "#c9c2b3"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "work",
+      "subject_position": "centre",
+      "url": "/photo/3/6",
+      "why_not": ""
+    },
+    "/photo/3/7": {
+      "alt_text": "A man in blue overalls kneels to inspect a garbage disposal unit under a kitchen sink, with a tool bag on the wooden floor beside him.",
+      "dominant_colours": [
+        "#e8e2d8",
+        "#3b4a6b",
+        "#8a6a4a",
+        "#1a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "work",
+      "subject_position": "centre",
+      "url": "/photo/3/7",
+      "why_not": ""
+    },
+    "/photo/3/8": {
+      "alt_text": "A worker's torso wearing a tool belt with gloves, holding a pipe wrench and a loaded tool bag against a white background",
+      "dominant_colours": [
+        "#f2b134",
+        "#1a1a1a",
+        "#c9c9c9",
+        "#8a5a2b"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "detail",
+      "subject_position": "left",
+      "url": "/photo/3/8",
+      "why_not": ""
+    },
+    "/photo/3/9": {
+      "alt_text": "A man in a tan uniform and cap kneeling by an open cabinet under a sink, reaching into a toolbox with pliers",
+      "dominant_colours": [
+        "#d9c7a3",
+        "#ffffff",
+        "#4a3c2a",
+        "#7d8a99"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "right",
+      "url": "/photo/3/9",
+      "why_not": ""
+    }
+  },
   "place_photos": [
     "places/ChIJXaZLCl49TIYRDXYty7DEayo/photos/AVoNoXS42kSxBxnR_s6FaPvZCB8dlaUhV0T93r4WUukLLjunz9S5C1WZmNbKNISf-gYifAIqNET_Iq56fz3UWH8o9iiyiF4uv5mj3BbyVHuDGjC_OLyU1vBm-AQW7HTKJ3u2rn4eP6Imd95GLOLEO6iKF7RvpJOAt7H1j3iS9UohiHV3qIWe0eAyPGhHpQ_PqXK4o_CRR12A2Y-FsJG86BQ6HM-S8Xx-OFhSvRbR_n3eRRRRum6unggyoku1JWgXDz5-hR8RHEoESHNRKZ5eGt3B4q7LUu85D8efvTPMhzPg8TN1xb3fMwfW5hiXWZAYXxQQ_bA4ATJpNQ0-Sw3_EX-YRyhXJD8rHhVRIH3TSelhbWbqGWb1AUjvvybrHUgbtd3uvZWLZ61arG9ZZUtw5d7ILr_N0V5mYQ44L-qQiFnZUQvbxg",
     "places/ChIJXaZLCl49TIYRDXYty7DEayo/photos/AVoNoXSYRcWOleol2Y7UGZZt8O1UccCM5Ruz5brD-BlEIpgRKOkGudTVAdMj33REnzJWN3OslzIv8i4Yk2fZHfIdgOTLrVofuzeLj13kb1s7sMqsUl29pixHoLNXcQ2JO3zh3OVZCmaQrOJcEruMI26hMvJ1pX2PGax4O0f5PbMOu7bBVRCKqn5Y9Oedyt6OJWu6bD6lFhJ151Gob-8mNhMMG2OuYtGalIglhnMNd0LuOgAZW3zpH0xyj2Jbh_j6q-9z4DGFE7Fs5YG-qQ7HfJ2GJlEwyAr16MuNbsr5voSienUl8QHQ2lXTog6GrtPYcz8zchJI7q_fVz0rangbNH6-RrNMGwL8muMccOYEWaO9rsJ9oR0qIdkU5naSc-LQEQqkctjIp3VtdlKRrfeZSg1RxP9NTgtMBn5O6m4t7bg75fMbkiEe",

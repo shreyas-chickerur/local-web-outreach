@@ -378,3 +378,44 @@ def test_every_trade_bucket_has_wording_that_reads_for_that_trade():
         assert trade in _CTA_BY_TRADE, f"{trade} has no wording of its own"
         for kind in ("book", "call", "quote", "order", "visit"):
             assert cta_words(kind, trade), (trade, kind)
+
+
+# --- data that was provided and never arrived ---------------------------- #
+
+def test_labels_for_the_wrong_lead_are_an_error_not_a_silent_tie():
+    """The bug this guards. Labels frozen into a fixture under one lead id did
+    not match the same photographs under another — proxied URLs carry the id —
+    so every candidate scored the same, the picker fell back to upload order,
+    and nothing complained. "They all tie" looks exactly like "there is nothing
+    to choose between them"."""
+    from app.site.render import AllCandidatesTied
+
+    pool = ("/photo/1/0", "/photo/1/1", "/photo/1/2")
+    frozen_elsewhere = {f"/photo/9/{n}": seen(quality=5) for n in range(3)}
+    with pytest.raises(AllCandidatesTied) as raised:
+        pick_hero(pool, size_of=lambda url: None, vision=frozen_elsewhere)
+    assert "lead id" in str(raised.value)
+
+
+def test_equally_good_photographs_are_allowed_to_tie():
+    """Four equally good pictures of the same dish tie honestly. The condition
+    is not "everything ties", it is "something was provided and nothing
+    matched"."""
+    pool = ("/a", "/b", "/c")
+    same = {url: seen(quality=4) for url in pool}
+    assert pick_hero(pool, size_of=lambda url: None, vision=same) == "/a"
+
+
+def test_a_build_with_nothing_measurable_is_not_an_error():
+    """Offline, no key, no sizes — there is genuinely nothing to choose
+    between, and upload order is the honest answer rather than a symptom."""
+    assert pick_hero(("/a", "/b"), size_of=lambda url: None) == "/a"
+
+
+def test_operator_labels_for_the_wrong_lead_are_caught_too():
+    from app.site.render import AllCandidatesTied
+
+    pool = ("/photo/1/0", "/photo/1/1")
+    with pytest.raises(AllCandidatesTied):
+        pick_hero(pool, labels={"/photo/9/0": "dish", "/photo/9/1": "room"},
+                  size_of=lambda url: None)

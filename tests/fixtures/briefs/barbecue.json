@@ -89,6 +89,362 @@
   "name": "Hutchins BBQ",
   "notes": null,
   "open_questions": [],
+  "photo_labels": {
+    "/photo/1/0": "exterior",
+    "/photo/1/1": "exterior",
+    "/photo/1/2": "dish",
+    "/photo/1/3": "dish",
+    "/photo/1/4": "people",
+    "/photo/1/5": "exterior",
+    "/photo/1/6": "dish",
+    "/photo/1/7": "other",
+    "/photo/1/8": "exterior",
+    "/photo/1/9": "dish",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/13.png": "dish",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK-1.png": "logo",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK.png": "logo",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/catering-1.jpg": "people",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/doordash.avif": "unclear",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/frisco.jpg": "exterior",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/mg_1859.jpg": "people",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/ubereasts.avif": "unclear"
+  },
+  "photo_notes": {
+    "/photo/1/0": "Exterior of a brick barbecue restaurant with a large sign and stacks of split firewood along the covered porch",
+    "/photo/1/1": "Front view of a barbecue restaurant building with a parking lot, patio umbrellas, and smokers outside under a blue sky",
+    "/photo/1/2": "Overhead view of a large spread of smoked meats including ribs, sausage, brisket, and mac and cheese on butcher paper",
+    "/photo/1/3": "A metal tray with sliced ribs, brisket, pulled pork, and a glazed meatball on parchment paper next to receipts",
+    "/photo/1/4": "Crowd of customers standing and seated inside a busy barbecue restaurant near a service counter with neon signs",
+    "/photo/1/5": "Evening view of a barbecue restaurant entrance with illuminated signage, string lights, and people standing outside near cars",
+    "/photo/1/6": "A tray of barbecue with sliced brisket, sausage, coleslaw, potato salad, and fries on a wooden table",
+    "/photo/1/7": "A chalkboard menu listing smoked meats, specialties, and side dishes with prices",
+    "/photo/1/8": "A restaurant entrance with neon signs reading Sausage and House Made above a wood-plank facade decorated with framed pictures.",
+    "/photo/1/9": "A metal tray of smoked ribs and sausages alongside green beans and a chopped green salad.",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/13.png": "An overhead view of a spread of smoked meats including ribs, brisket, and sausage links with sliced bread, pickles, onions, and jalapenos.",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK-1.png": "A white logo outline of the state of Texas above decorative lines on a black background.",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK.png": "A white logo outline of the state of Texas above decorative lines on a black background.",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/catering-1.jpg": "Hands assembling a sausage sandwich and serving smoked meats from a large spread of barbecue dishes including ribs, sausage, mac and cheese, and coleslaw.",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/frisco.jpg": "A restaurant building lit up at dusk with red neon trim, string lights, and light trails from passing cars in front.",
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/mg_1859.jpg": "A large crowd gathered outdoors around long tables covered with trays of food, with two men in cowboy hats serving in the foreground."
+  },
+  "photo_vision": {
+    "/photo/1/0": {
+      "alt_text": "Exterior of a brick barbecue restaurant with a large sign and stacks of split firewood along the covered porch",
+      "dominant_colours": [
+        "#7a4a2b",
+        "#a9743c",
+        "#87b8d9",
+        "#2b2320"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/1/0",
+      "why_not": ""
+    },
+    "/photo/1/1": {
+      "alt_text": "Front view of a barbecue restaurant building with a parking lot, patio umbrellas, and smokers outside under a blue sky",
+      "dominant_colours": [
+        "#8a6a4a",
+        "#3a6ea5",
+        "#c9c2b3",
+        "#5a3d2b"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/1/1",
+      "why_not": ""
+    },
+    "/photo/1/2": {
+      "alt_text": "Overhead view of a large spread of smoked meats including ribs, sausage, brisket, and mac and cheese on butcher paper",
+      "dominant_colours": [
+        "#6b3d24",
+        "#a9742c",
+        "#3a2318",
+        "#c9a35a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/1/2",
+      "why_not": ""
+    },
+    "/photo/1/3": {
+      "alt_text": "A metal tray with sliced ribs, brisket, pulled pork, and a glazed meatball on parchment paper next to receipts",
+      "dominant_colours": [
+        "#7a3b2b",
+        "#4a2a1a",
+        "#c9a35a",
+        "#8a8a7a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/1/3",
+      "why_not": ""
+    },
+    "/photo/1/4": {
+      "alt_text": "Crowd of customers standing and seated inside a busy barbecue restaurant near a service counter with neon signs",
+      "dominant_colours": [
+        "#3a2a1a",
+        "#8a2a1a",
+        "#c9a35a",
+        "#1a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "full",
+      "url": "/photo/1/4",
+      "why_not": "busy, crowded scene without a clear single subject"
+    },
+    "/photo/1/5": {
+      "alt_text": "Evening view of a barbecue restaurant entrance with illuminated signage, string lights, and people standing outside near cars",
+      "dominant_colours": [
+        "#2a2a2a",
+        "#8a3a2a",
+        "#c9a35a",
+        "#4a3a2a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/1/5",
+      "why_not": ""
+    },
+    "/photo/1/6": {
+      "alt_text": "A tray of barbecue with sliced brisket, sausage, coleslaw, potato salad, and fries on a wooden table",
+      "dominant_colours": [
+        "#7a4a2b",
+        "#c9c2b3",
+        "#4a2a1a",
+        "#d9a94a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/1/6",
+      "why_not": ""
+    },
+    "/photo/1/7": {
+      "alt_text": "A chalkboard menu listing smoked meats, specialties, and side dishes with prices",
+      "dominant_colours": [
+        "#1a1a1a",
+        "#c9a35a",
+        "#3a2a1a",
+        "#8a6a4a"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": true,
+      "quality": 3,
+      "subject": "other",
+      "subject_position": "full",
+      "url": "/photo/1/7",
+      "why_not": "menu board text, not a photographic hero image"
+    },
+    "/photo/1/8": {
+      "alt_text": "A restaurant entrance with neon signs reading Sausage and House Made above a wood-plank facade decorated with framed pictures.",
+      "dominant_colours": [
+        "#8b3a1a",
+        "#d94f2a",
+        "#e8b800",
+        "#2b1a12"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/1/8",
+      "why_not": ""
+    },
+    "/photo/1/9": {
+      "alt_text": "A metal tray of smoked ribs and sausages alongside green beans and a chopped green salad.",
+      "dominant_colours": [
+        "#4a2015",
+        "#6b3a24",
+        "#3d5a2a",
+        "#c9c2a8"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/1/9",
+      "why_not": ""
+    },
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/13.png": {
+      "alt_text": "An overhead view of a spread of smoked meats including ribs, brisket, and sausage links with sliced bread, pickles, onions, and jalapenos.",
+      "dominant_colours": [
+        "#5a2e1a",
+        "#8b4a2a",
+        "#c9a86b",
+        "#2b1a12"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "https://hutchinsbbq.com/wp-content/uploads/2025/11/13.png",
+      "why_not": ""
+    },
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK-1.png": {
+      "alt_text": "A white logo outline of the state of Texas above decorative lines on a black background.",
+      "dominant_colours": [
+        "#ffffff",
+        "#000000",
+        "#e8681f"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "logo",
+      "subject_position": "centre",
+      "url": "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK-1.png",
+      "why_not": "logo graphic, not a photograph"
+    },
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK.png": {
+      "alt_text": "A white logo outline of the state of Texas above decorative lines on a black background.",
+      "dominant_colours": [
+        "#ffffff",
+        "#000000",
+        "#e8681f"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "logo",
+      "subject_position": "centre",
+      "url": "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK.png",
+      "why_not": "logo graphic, not a photograph"
+    },
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/catering-1.jpg": {
+      "alt_text": "Hands assembling a sausage sandwich and serving smoked meats from a large spread of barbecue dishes including ribs, sausage, mac and cheese, and coleslaw.",
+      "dominant_colours": [
+        "#7a3a1e",
+        "#c9843a",
+        "#3a2416",
+        "#e8b86b"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "full",
+      "url": "https://hutchinsbbq.com/wp-content/uploads/2025/11/catering-1.jpg",
+      "why_not": ""
+    },
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/doordash.avif": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/frisco.jpg": {
+      "alt_text": "A restaurant building lit up at dusk with red neon trim, string lights, and light trails from passing cars in front.",
+      "dominant_colours": [
+        "#1a1f2e",
+        "#d4622a",
+        "#f2b636",
+        "#3a3530"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "https://hutchinsbbq.com/wp-content/uploads/2025/11/frisco.jpg",
+      "why_not": ""
+    },
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/mg_1859.jpg": {
+      "alt_text": "A large crowd gathered outdoors around long tables covered with trays of food, with two men in cowboy hats serving in the foreground.",
+      "dominant_colours": [
+        "#8a8f8a",
+        "#c9c2b0",
+        "#3a3a3a",
+        "#5b6b4f"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "full",
+      "url": "https://hutchinsbbq.com/wp-content/uploads/2025/11/mg_1859.jpg",
+      "why_not": ""
+    },
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/ubereasts.avif": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    }
+  },
   "place_photos": [
     "places/ChIJdZp5CSU8TIYRBpdHipsQKBo/photos/AVoNoXSc-Cj4g_tfm5QP-BpK4PjdQCsOf6Y3N99gO0oX9k83WkQvVsxqdcM3ufSKfIaS-IoFUtMZw1-5bRdnBhS3T_jkCVW4HJV9vepKgvV_IOfh_GwTfw1SUnZ5euDUFTqB6v7ABncAaAiUsuvHoTOoSIOU4PupCQTrZC_Ejr1Dj-kPTzl4A3MVmqGhhoelgKCnBAiN-2E6CiIEG4ebtmQm8CcXitvQnL5pbpjxNxYpOAiEijanX75k9PlFIBHGlDqKLh4HAcFRhNncnvSi9kgoUGnExngMFQlMBXHlOrUbFvos5aWdILxQW70EY-mIrhjjGZlKONUq1D3LDn6aSz8L8TI9wt3_kqjS0U9o-QV7H6c1fr0NNS7QBxHOu3Yf90yhkF42wS1Wyxwe0RhduvIq1Z44sBMnwgvrKex-9TExGchm49kvCgbf6AbV_1AWDg3X",
     "places/ChIJdZp5CSU8TIYRBpdHipsQKBo/photos/AVoNoXQqE7H8sbk_hNhODKDbuWT0ilPhNdL6DUFYQ8pymg7pZFuQy47p_n2DbLQz1fre5JmO-MZhk2WZl-WBA7hOo_FFyheINmPGUNXCZwtuP-laCoxzztyDYK96ny2oJ9uTzu2EQwjgt_d4zqWv7p3HmBRdmTg1PAVwxzmPz3AKCpSRch6hm5Dc8Rsf3BubCwJATR9amnFgivqHKv93cEs6BAUXThq4l_rmsddR80u3X0AxYCAY0UjreAtqf09jg_nllXoDLT4JSRETE_ORkIPqRdgaW1Gup05wSkrGuxMutPoVtiHwGKeBGuiJyinn26os7GiNDmAquTD7qfNWlCAtztx1f8P2sWAp1Bfsnm2k8TgHXCcpbJW5dUmUW_M3MnrgLG9n08CqZjpCRfrdwBMQL1AvK3xCy41e5dMN6TQWr-NEOPdBxNw2tBC0r0uGFeyi",

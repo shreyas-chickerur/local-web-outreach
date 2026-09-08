@@ -76,6 +76,243 @@
     "What is their street address?",
     "What are their opening hours?"
   ],
+  "photo_labels": {
+    "/photo/5/0": "people",
+    "/photo/5/1": "product",
+    "/photo/5/2": "work",
+    "/photo/5/3": "product",
+    "/photo/5/4": "room",
+    "/photo/5/5": "detail",
+    "/photo/5/6": "product",
+    "/photo/5/7": "room",
+    "/photo/5/8": "work",
+    "/photo/5/9": "detail",
+    "https://callmilestone.com/plano/wp-content/uploads/sites/7/2022/10/9A0A9697-2-web-res-med-quality.jpg": "people"
+  },
+  "photo_notes": {
+    "/photo/5/0": "A smiling bald man in a white polo shirt holding folders, standing in front of a branded yellow service van",
+    "/photo/5/1": "An outdoor air conditioning condenser unit next to a brick wall and green shrubs",
+    "/photo/5/2": "A hand adjusting colorful wiring inside an open furnace control panel",
+    "/photo/5/3": "Two gray gas water heaters installed side by side in a utility closet",
+    "/photo/5/4": "A tall entryway hallway with a crystal chandelier hanging from a high ceiling and a staircase to the side",
+    "/photo/5/5": "The underside of a kitchen sink showing a garbage disposal unit and connected pipes",
+    "/photo/5/6": "An outdoor standby generator and electrical panels mounted on a white brick wall next to an air conditioning unit",
+    "/photo/5/7": "A white toilet and bathtub in a bathroom with patterned wallpaper and tile flooring",
+    "/photo/5/8": "A person's hands using a yellow clamp meter to test electrical wiring inside an open equipment panel.",
+    "/photo/5/9": "A close-up of a brushed nickel bathroom faucet and sink basin with water droplets.",
+    "https://callmilestone.com/plano/wp-content/uploads/sites/7/2022/10/9A0A9697-2-web-res-med-quality.jpg": "A smiling bald man in a white work shirt standing in front of a yellow and red branded service van parked outside a house."
+  },
+  "photo_vision": {
+    "/photo/5/0": {
+      "alt_text": "A smiling bald man in a white polo shirt holding folders, standing in front of a branded yellow service van",
+      "dominant_colours": [
+        "#e8d61a",
+        "#1a3f8f",
+        "#e8e8e8",
+        "#c41e1e"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "right",
+      "url": "/photo/5/0",
+      "why_not": ""
+    },
+    "/photo/5/1": {
+      "alt_text": "An outdoor air conditioning condenser unit next to a brick wall and green shrubs",
+      "dominant_colours": [
+        "#9a9a8c",
+        "#4a7d3c",
+        "#c9c9bd",
+        "#7a8478"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "product",
+      "subject_position": "centre",
+      "url": "/photo/5/1",
+      "why_not": ""
+    },
+    "/photo/5/2": {
+      "alt_text": "A hand adjusting colorful wiring inside an open furnace control panel",
+      "dominant_colours": [
+        "#c9c9c9",
+        "#e8c020",
+        "#3a3a3a",
+        "#c41e1e"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "work",
+      "subject_position": "centre",
+      "url": "/photo/5/2",
+      "why_not": "Close-up technical detail, not a broad appealing scene"
+    },
+    "/photo/5/3": {
+      "alt_text": "Two gray gas water heaters installed side by side in a utility closet",
+      "dominant_colours": [
+        "#7a7a7a",
+        "#e8e0d0",
+        "#c9a020",
+        "#3a3a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "product",
+      "subject_position": "centre",
+      "url": "/photo/5/3",
+      "why_not": "Utilitarian equipment shot, low visual interest for a hero image"
+    },
+    "/photo/5/4": {
+      "alt_text": "A tall entryway hallway with a crystal chandelier hanging from a high ceiling and a staircase to the side",
+      "dominant_colours": [
+        "#d9d3c8",
+        "#3a3a3a",
+        "#b8a888",
+        "#e8e4dc"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "room",
+      "subject_position": "centre",
+      "url": "/photo/5/4",
+      "why_not": ""
+    },
+    "/photo/5/5": {
+      "alt_text": "The underside of a kitchen sink showing a garbage disposal unit and connected pipes",
+      "dominant_colours": [
+        "#d9d0c0",
+        "#3a3a3a",
+        "#c9c9c9",
+        "#8a6040"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "detail",
+      "subject_position": "centre",
+      "url": "/photo/5/5",
+      "why_not": "Plumbing detail shot, not visually engaging for hero use"
+    },
+    "/photo/5/6": {
+      "alt_text": "An outdoor standby generator and electrical panels mounted on a white brick wall next to an air conditioning unit",
+      "dominant_colours": [
+        "#e8e4dc",
+        "#3a3a3a",
+        "#c41e1e",
+        "#7d9c4a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "product",
+      "subject_position": "centre",
+      "url": "/photo/5/6",
+      "why_not": ""
+    },
+    "/photo/5/7": {
+      "alt_text": "A white toilet and bathtub in a bathroom with patterned wallpaper and tile flooring",
+      "dominant_colours": [
+        "#e8e4dc",
+        "#c9c0a8",
+        "#d9d9d9",
+        "#3a3a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "room",
+      "subject_position": "centre",
+      "url": "/photo/5/7",
+      "why_not": "Plain bathroom fixture shot, limited visual appeal for hero use"
+    },
+    "/photo/5/8": {
+      "alt_text": "A person's hands using a yellow clamp meter to test electrical wiring inside an open equipment panel.",
+      "dominant_colours": [
+        "#c9a63b",
+        "#8a8a8a",
+        "#d9d9d9",
+        "#c0392b"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "work",
+      "subject_position": "centre",
+      "url": "/photo/5/8",
+      "why_not": ""
+    },
+    "/photo/5/9": {
+      "alt_text": "A close-up of a brushed nickel bathroom faucet and sink basin with water droplets.",
+      "dominant_colours": [
+        "#d9d3c8",
+        "#a8a8a8",
+        "#ffffff",
+        "#8c8c8c"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "detail",
+      "subject_position": "centre",
+      "url": "/photo/5/9",
+      "why_not": "close-up utility shot of a sink faucet, not a striking hero image"
+    },
+    "https://callmilestone.com/plano/wp-content/uploads/sites/7/2022/10/9A0A9697-2-web-res-med-quality.jpg": {
+      "alt_text": "A smiling bald man in a white work shirt standing in front of a yellow and red branded service van parked outside a house.",
+      "dominant_colours": [
+        "#f2c200",
+        "#c0392b",
+        "#ffffff",
+        "#4a7043"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "left",
+      "url": "https://callmilestone.com/plano/wp-content/uploads/sites/7/2022/10/9A0A9697-2-web-res-med-quality.jpg",
+      "why_not": ""
+    }
+  },
   "place_photos": [
     "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXQmJDKzR3XZQOvs7CYXqkDZO-6rH1ZvqGo1NB66jHCP32eWia2Ej5zFBv1DlhpJwHMpiODQ3_VaNk9vaKnnIErKEU4PvG0dY8kUHOlqiPd48pkgCGBezTJBIKp3SSgl8fv65YMyaFWA4BOs1bvyQUtae2VJnZo0GxBhMFmG8o5AUrhxpqRWpRygGn7zmBPbPni0T89RkLn_mhgaSbcz6UhXM2I6NEuI5KrQhk_cMsdcrKl3Vn7FZ2rQXbyIts30T9Qxqjfukn1W8w-3_FjpWCcVSzW_HEflAydvSeSS97ryTpi8yn3GgQ7W3ONynBzeJXZ6B5tDx_sWblsYD_w1aLxnMI0xKv5DzGc1mnNlGl3SwZ1iM__6fsLhBa833iGu8M804Zxooaw3KlJTZw6ns6TqNAV8TqIEnptbLMhC21Tll9aTo6FKZAo0U8EyuAHP",
     "places/ChIJRX6XINOGToYRVUJZ4Z0bb9U/photos/AVoNoXQxUa7mVrEjKQ5hOphLHPWPwsCHZHednJVKAuHbFE2lmVV3IAV7Y7SepwBu1sRzgivFi9yVMetQC1E-OMCss8Eh0_VIeKFlzt4oDAmKgaOZTNLK5UExMO3wHO-PH8wlQcL5ud5AT1DJ6UXjU5BLZ2QwMS2nPDEQUFw3j08IB9pNcL7OWir6RfeEG_6EuqgNRmvad0kyaoDOS85LtpleJwy5zn5HYk0FIqbr1qN4rltPxgjueEuTWnWDsRSjj3_lspisst5beqbJv50MIo8P6W6PJEkGpi4TWQZSqYKb5YIVvfW5RSSJSOsbyR_StBQu4w3wjiQtMvkzEmz5wiYhpG9maSzNzkxsx-VVX022njIhq6GMa67cseU2898DD4o8XudVOnn66weJrW-cg0vTlAG5yXp5H0ChCULvGzRSOz9YWwB4PQ9Ei9IHrD4y6gV3",

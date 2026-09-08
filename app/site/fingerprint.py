@@ -97,6 +97,17 @@ def weight_of(axis: str) -> float:
 
     The weaker of the two principles caps it, so an axis that is invisible or
     undecided counts for little however well it scores on the other.
+
+    `min` IS THE SAFE CHOICE TODAY AND WILL BE WRONG. The vector's known
+    failure is overstating difference, and capping suppresses — so it errs in
+    the direction of the error we have. But it also suppresses a strong,
+    deliberate choice that happens to sit below the fold, and the signature
+    device is exactly that: high decidedness, often below the fold, one per
+    site and the thing a person remembers about it. That is the axis where the
+    two principles disagree in the other direction.
+
+    Revisit when the signature device lands rather than inheriting this by
+    default. `min` is a decision for the shape of the vector today, not a law.
     """
     return min(VISIBILITY.get(axis, 1.0), DECIDEDNESS.get(axis, 1.0))
 

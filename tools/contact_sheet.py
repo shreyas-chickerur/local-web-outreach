@@ -13,8 +13,13 @@ numbers you are left arguing about taste.
 
 Headless Chrome rather than Playwright. Chrome is already on the machine and
 Playwright would be 150MB of browsers to do the same job; the capture is one
-command per width and nothing here needs a driver. If this ever has to run on
-a machine without Chrome, that is the moment to add it.
+command per width and nothing here needs a driver.
+
+NOTHING INLINED IS EVER COMMITTED. The pages written here embed every
+photograph as a data URI so a file:// capture can load them, which takes the
+directory to 400MB. That is a property of the capture, not of the sheet — the
+committed copy under `.reviews/sheet` references its images as files and stays
+small. `artifacts/` is gitignored; regenerate the full-size sheets on demand.
 """
 
 from __future__ import annotations
@@ -58,7 +63,12 @@ CHROME = ("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
 # still indistinguishable in the first viewport after an axis is added, that
 # axis was not doing the work.
 WIDTHS = (("desktop", 1440, 1100), ("mobile", 390, 844),
-          ("fold", 1440, 820))
+          ("fold", 1440, 820),
+          # Half scale, small enough to commit. The full-size sheets run to
+          # 400MB because every photograph is inlined as a data URI, so what
+          # goes in the repository beside the census is this row — still
+          # legible for the only question the sheet asks.
+          ("thumb", 720, 410))
 
 
 def chrome() -> str | None:
@@ -123,6 +133,17 @@ def main() -> int:
     (OUT / "fold.html").write_text(_sheet(cards, fold=True))
     print(f"\n  {OUT / 'index.html'}")
     print(f"  {OUT / 'fold.html'}   <- the first viewport, the one that decides")
+
+    # The committable copy: half-scale first viewports and the vectors, so a
+    # reviewer reads the numbers from the branch rather than being told them.
+    keep = Path(".reviews/sheet")
+    keep.mkdir(parents=True, exist_ok=True)
+    for card in cards:
+        thumb = card["shots"].get("thumb")
+        if thumb:
+            shutil.copy(OUT / thumb, keep / thumb)
+    (keep / "index.html").write_text(_sheet(cards, fold=True, shot="thumb"))
+    print(f"  {keep / 'index.html'}   <- committed beside the census")
     return 0
 
 
@@ -189,9 +210,10 @@ def _closest_first(cards: list[dict]) -> list[dict]:
     return lead + rest
 
 
-def _sheet(cards: list[dict], *, fold: bool = False) -> str:
+def _sheet(cards: list[dict], *, fold: bool = False,
+           shot: str | None = None) -> str:
     e = html.escape
-    shot = "fold" if fold else "desktop"
+    shot = shot or ("fold" if fold else "desktop")
     tiles = "\n".join(f'''
       <figure>
         <a href="{e(card['page'])}" target="_blank">

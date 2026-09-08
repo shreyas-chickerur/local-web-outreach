@@ -55,6 +55,222 @@
     "What number do customers actually call?",
     "Their opening hours: only google lists it \u2014 confirm Mon closed \u00b7 Tue-Sat 6:30am-11pm \u00b7 Sun closed?"
   ],
+  "photo_labels": {
+    "/photo/7/0": "room",
+    "/photo/7/1": "dish",
+    "/photo/7/2": "dish",
+    "/photo/7/3": "dish",
+    "/photo/7/4": "dish",
+    "/photo/7/5": "dish",
+    "/photo/7/6": "dish",
+    "/photo/7/7": "ingredients",
+    "/photo/7/8": "dish",
+    "/photo/7/9": "dish"
+  },
+  "photo_notes": {
+    "/photo/7/0": "Diners sit at a wooden counter watching two chefs work behind an open kitchen counter under a wood-slatted ceiling feature.",
+    "/photo/7/1": "A small glass bowl with a polka-dot pattern holds green noodles topped with a piece of sea urchin, served with chopsticks on a patterned rest.",
+    "/photo/7/2": "A white bowl of clear broth with a piece of fish and a leaf garnish, placed on a black tray with a red lacquered spoon beside it.",
+    "/photo/7/3": "A wooden tray holding five small dishes of assorted Japanese food including oysters, vegetables, and a piece of fish.",
+    "/photo/7/4": "A red lacquered bowl of rice topped with a piece of grilled fish and dark garnish, next to a matching lid.",
+    "/photo/7/5": "Two pieces of raw meat with wasabi, grated radish, and pickled ginger arranged on an ornate red and blue porcelain plate.",
+    "/photo/7/6": "An assortment of sliced sashimi arranged on a fan-shaped porcelain plate with a dab of wasabi.",
+    "/photo/7/7": "A piece of raw red fish sits on a paper towel on a wooden board in front of a stainless steel stove.",
+    "/photo/7/8": "A single piece of sushi with white and pink fish on a clear cut-glass plate.",
+    "/photo/7/9": "Two pieces of tempura on a plate in the foreground with a chef working in a kitchen behind."
+  },
+  "photo_vision": {
+    "/photo/7/0": {
+      "alt_text": "Diners sit at a wooden counter watching two chefs work behind an open kitchen counter under a wood-slatted ceiling feature.",
+      "dominant_colours": [
+        "#6b4a30",
+        "#2c2a28",
+        "#c9c2b5",
+        "#8a8a86"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/7/0",
+      "why_not": ""
+    },
+    "/photo/7/1": {
+      "alt_text": "A small glass bowl with a polka-dot pattern holds green noodles topped with a piece of sea urchin, served with chopsticks on a patterned rest.",
+      "dominant_colours": [
+        "#d4c07a",
+        "#4f6b3a",
+        "#e8a94a",
+        "#f0ead6"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "dish",
+      "subject_position": "centre",
+      "url": "/photo/7/1",
+      "why_not": ""
+    },
+    "/photo/7/2": {
+      "alt_text": "A white bowl of clear broth with a piece of fish and a leaf garnish, placed on a black tray with a red lacquered spoon beside it.",
+      "dominant_colours": [
+        "#d8d2c0",
+        "#8c8577",
+        "#c46a52",
+        "#2c2a28"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "centre",
+      "url": "/photo/7/2",
+      "why_not": ""
+    },
+    "/photo/7/3": {
+      "alt_text": "A wooden tray holding five small dishes of assorted Japanese food including oysters, vegetables, and a piece of fish.",
+      "dominant_colours": [
+        "#5a3a26",
+        "#c9c2b0",
+        "#6b7a5a",
+        "#8c7050"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/7/3",
+      "why_not": ""
+    },
+    "/photo/7/4": {
+      "alt_text": "A red lacquered bowl of rice topped with a piece of grilled fish and dark garnish, next to a matching lid.",
+      "dominant_colours": [
+        "#7a1c1c",
+        "#e8e2d0",
+        "#2c2a28",
+        "#c9a25a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "centre",
+      "url": "/photo/7/4",
+      "why_not": ""
+    },
+    "/photo/7/5": {
+      "alt_text": "Two pieces of raw meat with wasabi, grated radish, and pickled ginger arranged on an ornate red and blue porcelain plate.",
+      "dominant_colours": [
+        "#a83232",
+        "#e8e2d0",
+        "#2a4a7a",
+        "#c9a25a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "dish",
+      "subject_position": "centre",
+      "url": "/photo/7/5",
+      "why_not": ""
+    },
+    "/photo/7/6": {
+      "alt_text": "An assortment of sliced sashimi arranged on a fan-shaped porcelain plate with a dab of wasabi.",
+      "dominant_colours": [
+        "#a83232",
+        "#e8e2d0",
+        "#d99a5a",
+        "#2c2a28"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "dish",
+      "subject_position": "centre",
+      "url": "/photo/7/6",
+      "why_not": ""
+    },
+    "/photo/7/7": {
+      "alt_text": "A piece of raw red fish sits on a paper towel on a wooden board in front of a stainless steel stove.",
+      "dominant_colours": [
+        "#c9302c",
+        "#8c8c8c",
+        "#e8e2d0",
+        "#5a3a26"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "ingredients",
+      "subject_position": "centre",
+      "url": "/photo/7/7",
+      "why_not": "Kitchen background and paper towel make it feel like a prep shot rather than a finished presentation"
+    },
+    "/photo/7/8": {
+      "alt_text": "A single piece of sushi with white and pink fish on a clear cut-glass plate.",
+      "dominant_colours": [
+        "#e8ddd0",
+        "#f2b8a8",
+        "#ffffff",
+        "#c9a876"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "centre",
+      "url": "/photo/7/8",
+      "why_not": ""
+    },
+    "/photo/7/9": {
+      "alt_text": "Two pieces of tempura on a plate in the foreground with a chef working in a kitchen behind.",
+      "dominant_colours": [
+        "#d9c9a3",
+        "#8c8c8c",
+        "#e8e0d0",
+        "#4a4a4a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "dish",
+      "subject_position": "left",
+      "url": "/photo/7/9",
+      "why_not": "background chef blurred and distracting, focus split between subject and background"
+    }
+  },
   "place_photos": [
     "places/ChIJaa50-2M9TIYRLrfoI7YcaBc/photos/AVoNoXSkMA-U1CeoLENowrZIj5nWB5IjipFr4m0bAxiUhY4oB80kkKxAvhPllFFxM1-qEb7GZRA9b1UcU1nbB2pESKqAYzh374LJonv6wOSwW8Ggi5ZooMyQclbL-DRL-xoIScwih1VvR5jRqguYAC1gX_jhsjN5WuXiog5vl_hkhWtZw7RbTXuJgGk0wRppo9e7kBLJYMmTyHcdS2zMPNRlHfnG1PZJc9k9QULewbOH4i2wqfwJnJB9X0_8hExslp48HhSGtNYtOP3iJc-SF0FBvgAGZZcJaEWV0tKAb1Hs46I4eUGJ3o6jW0nxCGW8LSbcrRdKyYTwbgx5i5nzngr_0QJIHSrQHJqifTzwro9N8iG1zlI6npVdN4CEPAmYNgCjX7qSC3MKj_fCbbjDHGDZkB1X-ZWkQWIrrlEezDvgIQR6HjhisKPb8Vgzo-j5ldyl",
     "places/ChIJaa50-2M9TIYRLrfoI7YcaBc/photos/AVoNoXQRn6WdhDY3yXYtEjyswEwpkNsVbTxaPWoqU7Mh57XGf_xnrDN8yk4b4qAVJAaCCqikxFt2XvMSJOjz2YPcb1aSnYg9WXFJ-W_XzaskP1_XHoKEv5raihPRpE04YSymYNJRl4UdRvVrxz6OCg3hxb3YEhhzrtxcReiuHImN67Lf63eKUDk2Knp2nIcq6fqI0ssYngk4lU1-B3F5dRw4UE2pGeUwxpgGIE4AqUiLWTzCYDnObZ51DwjaSAomjZ2qrVTdVEvU2_SHk5r82IFrCFoJgemtlf_6OknOGiuO_u16BiYO4F7WO46WAA491NUhfxqxRvKemNgqUmohxWYJP5nG5hfhr0gH15b8QfNe-g_Em-QQTpnzumqGPMoybQogkNWDVDWq3RgzKrpdPFkGcz-mwUACsyg5G863SiRR4mJGjXJyR395neaCSmqM3g",

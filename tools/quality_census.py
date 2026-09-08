@@ -274,6 +274,9 @@ def _report(rows, first_pass, again) -> None:
                  for i, a in enumerate(prints)
                  for j, b in enumerate(prints) if i < j}
     print()
+    # The inversion list prints with the rate, always. "Worse" has to be
+    # inspectable rather than a single number with an explanation attached —
+    # see .reviews/slice-b-predictions.md.
     print(agreement.score(distances).report())
     pairs = [(fp.distance(a, b), rows[i]["slug"], rows[j]["slug"])
              for i, a in enumerate(prints)

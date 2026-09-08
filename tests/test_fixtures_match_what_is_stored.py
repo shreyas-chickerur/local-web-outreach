@@ -84,3 +84,41 @@ def test_the_serialiser_puts_photographs_where_the_renderer_reads_them():
     material = material_from_brief({**stored, "lead_id": 1})
     for url in site.images:
         assert url in material.images
+
+
+def test_every_fixture_carries_what_the_vision_pass_saw():
+    """Without this a census depends on `artifacts/fixtures.db`, which is not
+    committed — so a clean clone measures a different system, `hero_subject` is
+    constant, and the fingerprints move. The ruler was versioned and its inputs
+    were not, which makes the versioning worth less than it looks."""
+    for slug, brief in fixtures():
+        # Read through Material, which re-keys proxied photographs onto the
+        # lead they are loaded under — the URLs carry the id, so the raw
+        # fixture keys never match.
+        material = material_from_brief({**brief, "lead_id": 1})
+        if not material.images:
+            continue
+        assert material.photo_vision, f"{slug} carries no vision labels"
+        missing = [url for url in material.images
+                   if url not in material.photo_vision]
+        assert not missing, f"{slug}: {len(missing)} photographs unaccounted for"
+
+
+def test_a_fixture_is_enough_on_its_own_to_score_a_hero():
+    """The specific thing the missing labels hid: with no vision in the brief,
+    every candidate scores the same and the sweep cannot tell axes apart."""
+    from app.site.render import hero_scores
+
+    subjects = set()
+    for slug, brief in fixtures():
+        loaded = {**brief, "lead_id": 1}
+        material = material_from_brief(loaded)
+        if not material.images:
+            continue
+        scored = hero_scores(material.images, material.photo_labels,
+                             material.trade_kind, lambda url: None,
+                             material.photo_vision)
+        assert len({s.total for s in scored}) > 1 or len(scored) == 1, slug
+        subjects.add(scored[0].label)
+    assert len(subjects) > 1, \
+        "every fixture's hero has the same subject — the corpus cannot vary"

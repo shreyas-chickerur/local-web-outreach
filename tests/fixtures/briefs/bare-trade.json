@@ -66,6 +66,146 @@
     "What number do customers actually call?",
     "What are their opening hours?"
   ],
+  "photo_labels": {
+    "/photo/2/0": "people",
+    "/photo/2/1": "exterior",
+    "/photo/2/2": "exterior",
+    "https://towsonfirm.com/wp-content/uploads/2026/02/TowsonTop10.png": "award",
+    "https://towsonfirm.com/wp-content/uploads/2026/03/about_image.webp": "people",
+    "https://towsonfirm.com/wp-content/uploads/2026/03/towson-law-gfirm-1.webp": "logo",
+    "https://towsonfirm.com/wp-content/uploads/2026/04/towson-law-firm-pllc-plaque-scaled.png": "unclear"
+  },
+  "photo_notes": {
+    "/photo/2/0": "A smiling man with brown hair wearing a dark blue suit, white shirt, and blue tie against a plain grey background.",
+    "/photo/2/1": "A brick and stone office building with a sign reading Towson above the entrance, parked cars in front under a cloudy sky.",
+    "/photo/2/2": "A brick and stone office building with a Towson Law Firm sign above the entrance, a young tree and lawn in front under a clear blue sky.",
+    "https://towsonfirm.com/wp-content/uploads/2026/02/TowsonTop10.png": "A green badge with five stars reading Top 10 Frisco Divorce Attorney 2026 from TrustAnalytica.",
+    "https://towsonfirm.com/wp-content/uploads/2026/03/about_image.webp": "Three people in a bright room with a fur rug, one man sitting in an armchair while a man and woman sit on a sofa reviewing papers, with text overlay reading Towson Law Firm, LLC.",
+    "https://towsonfirm.com/wp-content/uploads/2026/03/towson-law-gfirm-1.webp": "A silver logo featuring a scale of justice icon with the letter T beside the words Towson Law Firm, PLLC."
+  },
+  "photo_vision": {
+    "/photo/2/0": {
+      "alt_text": "A smiling man with brown hair wearing a dark blue suit, white shirt, and blue tie against a plain grey background.",
+      "dominant_colours": [
+        "#c9cdd0",
+        "#1f2d4d",
+        "#f2f0eb",
+        "#3a2a20"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/2/0",
+      "why_not": ""
+    },
+    "/photo/2/1": {
+      "alt_text": "A brick and stone office building with a sign reading Towson above the entrance, parked cars in front under a cloudy sky.",
+      "dominant_colours": [
+        "#7a3b2e",
+        "#c9b98a",
+        "#8c9a8c",
+        "#b7bcc0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/2/1",
+      "why_not": ""
+    },
+    "/photo/2/2": {
+      "alt_text": "A brick and stone office building with a Towson Law Firm sign above the entrance, a young tree and lawn in front under a clear blue sky.",
+      "dominant_colours": [
+        "#1e6fbf",
+        "#7a3b2e",
+        "#c9b98a",
+        "#4a7a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/2/2",
+      "why_not": ""
+    },
+    "https://towsonfirm.com/wp-content/uploads/2026/02/TowsonTop10.png": {
+      "alt_text": "A green badge with five stars reading Top 10 Frisco Divorce Attorney 2026 from TrustAnalytica.",
+      "dominant_colours": [
+        "#1b7a4d",
+        "#f2c94c",
+        "#ffffff",
+        "#0a3d24"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "award",
+      "subject_position": "full",
+      "url": "https://towsonfirm.com/wp-content/uploads/2026/02/TowsonTop10.png",
+      "why_not": "Award badge graphic, not a photograph"
+    },
+    "https://towsonfirm.com/wp-content/uploads/2026/03/about_image.webp": {
+      "alt_text": "Three people in a bright room with a fur rug, one man sitting in an armchair while a man and woman sit on a sofa reviewing papers, with text overlay reading Towson Law Firm, LLC.",
+      "dominant_colours": [
+        "#e8e0d5",
+        "#8a6a4a",
+        "#c9a97a",
+        "#3a3a3a"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "full",
+      "url": "https://towsonfirm.com/wp-content/uploads/2026/03/about_image.webp",
+      "why_not": ""
+    },
+    "https://towsonfirm.com/wp-content/uploads/2026/03/towson-law-gfirm-1.webp": {
+      "alt_text": "A silver logo featuring a scale of justice icon with the letter T beside the words Towson Law Firm, PLLC.",
+      "dominant_colours": [
+        "#ffffff",
+        "#9aa5ad",
+        "#5a6470",
+        "#c8ccd0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "logo",
+      "subject_position": "full",
+      "url": "https://towsonfirm.com/wp-content/uploads/2026/03/towson-law-gfirm-1.webp",
+      "why_not": "Logo graphic, not a photograph"
+    },
+    "https://towsonfirm.com/wp-content/uploads/2026/04/towson-law-firm-pllc-plaque-scaled.png": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    }
+  },
   "place_photos": [
     "places/ChIJxfJQLbFyOYgRA4jnL9WCV-c/photos/AVoNoXTA2vIZFVLSEDe9nPlTpTqSWY18_F14eFQKDs2yhk2yYvZD2IX5KbaIr8euGcCaPk5DOCofBDTY7klxupfP92_WcXgPSdW5J21GIJF1Q7WcSF3dTQOgQMRBzKSrj9twzzqipSReu8RBsGCQViJdT9HnTS0pMujIQ_MHdV_oW8X9NfmLCvp6oMpVZ2uDcEJKs_RYxlzBVtvMcF34NK6TOlQ87vbBoYgp7L6BpWcgMqaDHAK0gfIoW9edPY0Q4oDO8owu-qOcAUwwnpOpPVclsYmtEfaOkLX9F6JLaqGrQTweEpVzKw9ycsFAApW3edHwHgAUHbc9Xh1cd2Npcx3bJ0Z66e8q_tLKPOii8aB-YNvx2UN8dFpI2TRhoIOYeuq3W2D6751yjB4xP8y9gK1lOKukkvt8jxr48z5p5I2HCqJ4-DJ6Uxjwno1Ko7WaE1_C",
     "places/ChIJxfJQLbFyOYgRA4jnL9WCV-c/photos/AVoNoXTB571ekDvQwPtNB1KhE_ZffO-9n94n49JymEw97jxW3oBnL3YZMkSy5NdMkBNemqNZME3KwzQkml_koBXSD6btBoNeUpt8__HAXbhDeUTbmQ4W6prfhJOoWjGiJD1kzCPXgoPkbrjnoXx9oGraA2UluA473Sb82vIRNw3iURtyx4jx6ofVmq99_BujylBGGJ-YCJHXOaesH53bj67X6pfZ1--P88NZnVi7xbqF1yQVUboW7Z1VYsA1Jhy8eanvY32k1QLoG146N898Zzki1IaOkOzvodHM2hXXc548H0kQdNa4uKex3FdylwsXccSw_EIE4HJgVh4TqAyEvGS_I0-aUe5HwtR28hkl1h2EDLGYU0Wih9APD8eopQvsakDkLqZ5P_eTE2PhpKLCOfFtBoOyqZHI13XVSiHSl6Eo0AmTsxoGCBt0G1Lj81sA942A",

@@ -48,6 +48,33 @@
     "Their phone number: only google lists it \u2014 confirm (945) 289-8844?",
     "What are their opening hours?"
   ],
+  "photo_labels": {
+    "/photo/12/0": "people"
+  },
+  "photo_notes": {
+    "/photo/12/0": "A smiling man in a navy polo shirt holding a power drill and rolled papers, wearing a tool belt, standing in a kitchen with badge graphics and text reading Best Handyman overlaid on the image."
+  },
+  "photo_vision": {
+    "/photo/12/0": {
+      "alt_text": "A smiling man in a navy polo shirt holding a power drill and rolled papers, wearing a tool belt, standing in a kitchen with badge graphics and text reading Best Handyman overlaid on the image.",
+      "dominant_colours": [
+        "#2b2320",
+        "#3a3f4a",
+        "#c9a35a",
+        "#8a6f4a"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/12/0",
+      "why_not": "Heavily stocked marketing graphic with text overlay and badges rather than a plain photograph"
+    }
+  },
   "place_photos": [
     "places/ChIJJQS6p1I9TIYRLU9N_5I-sW8/photos/AVoNoXTJhfWDw_CaSzztQQvyE5EVrsR91cEWG7W261QHDOepJ5vqZ8HBOQMVsdLtHVSHAkUGwMakrdnDO4EMomTUPwXGA9ciLpYleyPCggijnlFldGSZqt6H7tnC0RU-KSboXarUxExtI2_nm5DvGC9BXgd67DIW6k5qwdHjpb68iQhevIzEDN-WRl7R4XfmshCDc3Karh_zePhvkkaI8Z_N6QaivEcz993vCNfPbu1Tq25DFhndL0VbnxT2B5hylyQiZUOyaKyev8xyJKgQNll9C9YB4VSnQJBXUlTNYXCkat7LChuEqystFOoMQg9lySUzE-vJ7vThheRht7JPzQ7tU4YCl2E39HrzsBlrnhnfFZI2RThEqo1ONOQDfox0_1mvlp2XZZe3Th1DSw67aAMppCOUBiwnSoZX_frHezFSY8PEILtC3LhiWKbUMuSlDQ"
   ],
