@@ -76,10 +76,28 @@ resolution reported as the claim being met is how a prediction stops binding.
 
 **What the inversions say, and it is the plan.** All three pairs a person calls
 one studio share a SKELETON and a TYPEFACE and differ in COLOUR. The vector has
-no axis for the typeface and reaches colour through `mood` at weight 2.0, so it
-ranks them further apart than pairs a person calls different. Type treatment is
-axis two on evidence rather than on the ordering, and the agreement figure — not
-the mean — is what it has to move.
+no axis for the typeface, so it ranks them further apart than pairs a person
+calls different. Type treatment is axis two on evidence rather than on the
+ordering, and the agreement figure — not the mean — is what it has to move.
+
+**It is a blind spot, not a miscalibration, and that is provable.** If a pair
+judged the same site differs on a superset of the axes a pair judged different
+differs on, no non-negative weighting can order them correctly. Three of the
+thirty-three comparisons are unreachable that way — and the axes the vector
+counts where the judge did not are `accent` and `hero_subject`, colour and
+subject, the two the judging rule says cannot alone make a different site.
+Searching two hundred thousand weightings reaches 28 of 33 and only by zeroing
+three axes, which is a five-parameter fit on sixteen verdicts. No weight was
+changed. `agreement.unreachable()` reports this on every census run.
+
+**One verdict in three is held out.** Membership by a hash of the two slugs, not
+by anyone looking at the verdicts. Never used to choose a rule or a weighting,
+only to score one after the fact, and never re-judged — a held-out pair whose
+page has changed is retired with a reason and the set shrinks. This closes the
+loop where changing the gate re-decides the corpus, which re-renders the pages,
+which invites a re-judge, so that a rule ends up scored against labels taken
+from the corpus that rule produced. It begins at the commit that added it and
+therefore says nothing about the rule landing there.
 
 **Not started.** The rest of Slice B, and Slices C, D, E, G, H and the rest of
 F.

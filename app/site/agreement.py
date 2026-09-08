@@ -74,11 +74,48 @@ class Agreement:
         return "\n".join(lines)
 
 
-def load(path: Path | None = None) -> list[dict]:
+# One verdict in three is held out: never used to choose a rule or a weighting,
+# only to score one afterwards.
+#
+# The loop this closes: changing the gate's rule re-decides the corpus, which
+# re-renders the pages, which makes the verdicts describing them stale, which
+# invites a re-judge — and a rule tuned against labels taken from the corpus
+# that rule produced is fitting with extra steps. "It settled and satisfies its
+# own gate" is the only result that loop can produce, whether the rule is right
+# or not.
+#
+# Membership is decided by a hash of the two slugs, not by anyone looking at
+# the verdicts. Choosing which evidence to keep is the failure this is meant to
+# prevent, so it must not be a choice.
+#
+# A held-out verdict is never re-judged. When the rendering under it changes it
+# is RETIRED — `retired` says why, and it stops being scored — because
+# re-judging it hands it back to whoever is tuning. Retiring shrinks the set,
+# which is the honest cost: it is the price of the number meaning anything.
+HELD_OUT_IN = 3
+
+
+def is_held_out(pair: dict) -> bool:
+    material = f"{pair.get('a')}~{pair.get('b')}".encode()
+    return hashlib.sha256(material).digest()[0] % HELD_OUT_IN == 0
+
+
+def load(path: Path | None = None, *,
+         held_out: bool | None = None) -> list[dict]:
+    """The verdicts. `held_out=False` is the tuning set, `True` the scoring
+    set, `None` everything.
+
+    A retired verdict is in neither: its rendering is gone and it was not
+    re-judged on purpose.
+    """
     source = path or PAIRS
     if not source.exists():
         return []
-    return list(json.loads(source.read_text()).get("pairs") or [])
+    pairs = [pair for pair in json.loads(source.read_text()).get("pairs") or []
+             if not pair.get("retired")]
+    if held_out is None:
+        return pairs
+    return [pair for pair in pairs if pair.get("held_out", False) is held_out]
 
 
 def labels_version(path: Path | None = None) -> str:
@@ -92,7 +129,23 @@ def labels_version(path: Path | None = None) -> str:
     """
     material = "|".join(
         f"{p.get('a')}~{p.get('b')}={p.get('verdict')}"
-        for p in sorted(load(path),
+        for p in sorted(load(path, held_out=None),
+                        key=lambda row: (str(row.get("a")), str(row.get("b")))))
+    return hashlib.sha256(material.encode()).hexdigest()[:8]
+
+
+def held_out_version(path: Path | None = None) -> str:
+    """The held-out verdicts, verbatim — including what was written about them.
+
+    Hashed over the reasoning as well as the verdict, because the way to
+    quietly recover a held-out pair is not to flip it but to reword why it was
+    called what it was called. If this moves, either a pair was re-judged —
+    which is the one thing the set forbids — or one was retired, which is
+    allowed and has to be said out loud in the same commit.
+    """
+    material = "|".join(
+        f"{p.get('a')}~{p.get('b')}={p.get('verdict')}:{p.get('why')}"
+        for p in sorted(load(path, held_out=True),
                         key=lambda row: (str(row.get("a")), str(row.get("b")))))
     return hashlib.sha256(material.encode()).hexdigest()[:8]
 
@@ -110,6 +163,39 @@ def judged_against(path: Path | None = None) -> str:
     if not source.exists():
         return ""
     return str(json.loads(source.read_text()).get("_judged_against") or "")
+
+
+def unreachable(moved: dict[tuple[str, str], set[str]],
+                pairs: list[dict] | None = None) -> list[tuple[str, str, set[str]]]:
+    """Comparisons no weighting of the current axes can ever get right.
+
+    If a pair somebody called the SAME site differs on a superset of the axes a
+    pair they called DIFFERENT differs on, then for any non-negative weights the
+    same-pair is at least as far apart, and the comparison is lost. No amount of
+    re-weighting reaches it; only an axis the vector does not have.
+
+    This is the difference between a calibration problem and a blind spot, and
+    it is exact — no threshold, no fitting, no search. Reported by the census
+    because "agreement is low" invites tuning, and three of these say tuning
+    cannot be the answer.
+
+    Returns (same-pair, different-pair, the axes the same-pair moves on top).
+    """
+    judged = pairs if pairs is not None else load()
+
+    def axes(pair: dict) -> set[str] | None:
+        a, b = str(pair.get("a")), str(pair.get("b"))
+        found = moved.get((a, b))
+        return found if found is not None else moved.get((b, a))
+
+    same = [(f"{p.get('a')}/{p.get('b')}", axes(p)) for p in judged
+            if p.get("verdict") == "same"]
+    apart = [(f"{p.get('a')}/{p.get('b')}", axes(p)) for p in judged
+             if p.get("verdict") == "different"]
+    return [(near_name, far_name, near - far)
+            for near_name, near in same if near is not None
+            for far_name, far in apart
+            if far is not None and near >= far]
 
 
 def score(distances: dict[tuple[str, str], float],

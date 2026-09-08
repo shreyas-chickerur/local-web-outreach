@@ -92,6 +92,8 @@ FIXTURES = Path("tests/fixtures/briefs")
 # was measuring a path the product does not have. Re-pinned rather than
 # compared: a number that moved because the corpus changed is not progress.
 BASELINE_SAME_TRADE = 0.70
+# The closest same-trade pair, kept as a reading rather than as a target:
+# it is judged DIFFERENT, and the pairs worth fixing are the inversions.
 BASELINE_WORST = ("contractor-bare", "roofer", 0.45)
 # Which ruler the numbers above were taken with. A distance is comparable only
 # to another taken the same way, and comparing across a change of ruler has
@@ -349,9 +351,16 @@ def _report(rows, first_pass, again) -> None:
         print(f"                     baseline {BASELINE_SAME_TRADE:.0%} "
               f"({1 - BASELINE_SAME_TRADE:.0%} identical) — {verdict}")
         print("                     <-- the number Slice B has to move")
+        # The verdict rather than the distance rank. "The case B has to fix"
+        # used to flag whichever pair scored closest, which is now
+        # `contractor-bare`/`roofer` — a pair somebody judged DIFFERENT. The
+        # case to fix is the inversion list above; this column just says what
+        # was actually seen, where anybody looked.
+        seen = {frozenset((p["a"], p["b"])): p["verdict"]
+                for p in agreement.load()}
         for score, one, two in sorted(same)[:3]:
-            flag = ("  <-- the case B has to fix"
-                    if {one, two} == set(BASELINE_WORST[:2]) else "")
+            verdict = seen.get(frozenset((one, two)))
+            flag = f"  <-- judged {verdict.upper()}" if verdict else ""
             print(f"    {score:>5.0%}  {one} vs {two}{flag}")
         # What the gate would say about the corpus it produced, recomputed
         # here rather than asserted. A constant claiming the gate was off
@@ -365,6 +374,20 @@ def _report(rows, first_pass, again) -> None:
               f"{len(collided)} of {len(same)} same-trade pairs would collide"
               + (": " + ", ".join(f"{a}/{b}" for a, b in collided)
                  if collided else "") + ")")
+    blind = agreement.unreachable(
+        {(a, b): prints[[r["slug"] for r in rows].index(a)].differs_from(
+            prints[[r["slug"] for r in rows].index(b)])
+         for a in [r["slug"] for r in rows] for b in [r["slug"] for r in rows]
+         if a < b})
+    if blind:
+        print(f"\n  BLIND SPOT  {len(blind)} comparison(s) no weighting can "
+              f"reach — the 'same' pair differs on a superset of the "
+              f"'different' pair's axes,")
+        print("              so it is further apart under any weights. Only a "
+              "new axis reaches these.")
+        for near, far, extra in blind:
+            print(f"    {near:24} (same) contains {far:24} (different) "
+                  f"— extra: {', '.join(sorted(extra)) or 'nothing'}")
     print("\n  closest pairs — these are the ones that look like one tool:")
     for score, one, two in pairs[:5]:
         shared = set(fp.AXES) - prints[

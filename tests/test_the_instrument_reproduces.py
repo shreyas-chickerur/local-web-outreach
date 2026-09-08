@@ -33,6 +33,9 @@ FIXTURES = Path("tests/fixtures/briefs")
 RULER = "575db030"
 RULE = "624e27dc"
 LABELS = "4f147671"
+# The held-out third, frozen verbatim. It moves only when a pair is
+# RETIRED, never when one is re-judged.
+HELD_OUT = "a8c63664"
 SAME_TRADE_MEAN = 0.70
 # 19 of 33, and the drop from "40/40" is a correction rather than a regression.
 # That score was taken against verdicts read off a contact sheet captured in a
@@ -180,6 +183,47 @@ def test_the_inversions_are_the_ones_that_were_looked_at():
         f"it, per .reviews/slice-b-predictions.md")
 
 
+def test_the_held_out_verdicts_are_not_re_judged():
+    """The set exists to be unavailable to whoever is tuning.
+
+    Changing the gate's rule re-decides the corpus, which re-renders the pages,
+    which makes the verdicts describing them stale, which invites a re-judge —
+    and a rule tuned against labels taken from the corpus that rule produced is
+    fitting with extra steps. That loop can only ever produce "it settled and
+    satisfies its own gate", whether the rule is right or not.
+
+    So one verdict in three, chosen by a hash of the slugs rather than by
+    anybody, is scored and never tuned against. When its rendering goes stale
+    it is retired with a reason, which shrinks the set — that is the cost, and
+    it is cheaper than a number that cannot mean anything.
+
+    This is hashed over the reasoning as well as the verdict, because the quiet
+    way back in is not to flip a verdict but to reword it.
+    """
+    assert agreement.held_out_version() == HELD_OUT, (
+        "a held-out verdict changed. If a page moved under one, RETIRE it — "
+        "add `retired` saying why, and re-pin HELD_OUT in the same commit. Do "
+        "not re-judge it.")
+
+
+def test_the_held_out_third_is_scored_separately():
+    """Reported apart from the tuning set, so the two numbers cannot be
+    confused. It starts at this commit, so it says nothing about the rule
+    landing here — the first rule it can honestly score is the next one."""
+    prints = fingerprints()
+    slugs = sorted(prints)
+    distances = {(a, b): fp.distance(prints[a], prints[b])
+                 for i, a in enumerate(slugs) for b in slugs[i + 1:]}
+    held = agreement.score(distances, agreement.load(held_out=True))
+    tuned = agreement.score(distances, agreement.load(held_out=False))
+    assert held.comparisons and tuned.comparisons, (
+        "one side of the split has no scorable comparisons — the set is too "
+        "small to hold anything out, and saying so is better than reporting a "
+        "number taken from nothing")
+    assert (held.ordered, held.comparisons) == (5, 5)
+    assert (tuned.ordered, tuned.comparisons) == (6, 12)
+
+
 SHEET = Path(".reviews/sheet/index.html")
 
 
@@ -224,3 +268,29 @@ def test_the_committed_sheet_shows_the_corpus_that_shipped():
         f"the committed sheet is older than the corpus — {sorted(stale)} "
         f"moved since it was captured: {stale}. Regenerate it with "
         f"tools/contact_sheet.py before reading anything off it.")
+
+
+def test_the_blind_spot_is_pinned_and_reweighting_cannot_close_it():
+    """Three comparisons no weighting of the current axes can reach.
+
+    A "same" pair that differs on a superset of a "different" pair's axes is
+    further apart under any non-negative weights — exactly, with no threshold
+    and no search. `hvac`/`roofer` is judged one site and differs on six axes;
+    `contractor-bare`/`roofer` is judged two and differs on four of the same
+    six. The two extra are `accent` and `hero_subject` — colour and subject,
+    which the judging rule in `pairs.json` says cannot alone make a different
+    site. The vector counts precisely what the judge discounts.
+
+    Pinned because "agreement is 58%" invites re-weighting, and this says
+    re-weighting is not the answer for these three. Searching two hundred
+    thousand weightings reached 28/33 and only by zeroing three axes — a
+    five-parameter fit on sixteen verdicts, which is the fitted threshold this
+    project has already thrown out once.
+    """
+    prints = fingerprints()
+    slugs = sorted(prints)
+    moved = {(a, b): prints[a].differs_from(prints[b])
+             for i, a in enumerate(slugs) for b in slugs[i + 1:]}
+    blind = agreement.unreachable(moved)
+    assert len(blind) == 3, [f"{n} contains {f}" for n, f, _ in blind]
+    assert {near for near, _, _ in blind} == {"hvac/roofer", "threadbare/hvac"}

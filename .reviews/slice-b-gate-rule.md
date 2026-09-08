@@ -140,3 +140,83 @@ would hide it.
 fix".** That pair is now `contractor-bare`/`roofer`, which a person judged
 *different*. The case to fix is the inversion list. The flag is a leftover from
 before there was an agreement metric.
+
+---
+
+# Second pass — the two second opinions, acted on
+
+## The `mood` experiment: your number reproduces, and it is not the answer
+
+`mood` at 0.5/0.5 gives 20/33, exactly as you measured. But it does not isolate:
+
+    shipped                       19/33
+    mood 0.5/0.5                  20/33     <- your check
+    mood 1.0/1.0                  21/33
+    leads_with 0.5, action 0.5    21/33
+    mood/leads_with/action 0.5    23/33
+    only first_screen and accent  25/33
+
+It is monotone in *how much weight you take away from everything that is not
+`first_screen` or `accent`*. That is not a miscalibrated axis; it is your
+sharpening, confirmed: the decidedness-weighted axes are not producing
+differences a stranger registers on this corpus.
+
+So I searched for the ceiling — two hundred thousand weightings over the eight
+axes. **The best is 28 of 33, and it gets there by zeroing `mood`,
+`compositions` and `hero_subject`.** A five-parameter fit on sixteen verdicts
+that recommends deleting three axes is the fitted threshold this project
+already threw out once. I have not changed any weight.
+
+## Why no weighting can work, exactly
+
+The search was unnecessary. If a pair judged the SAME site differs on a
+superset of the axes a pair judged DIFFERENT differs on, then under any
+non-negative weights the same-pair is at least as far apart. The comparison is
+unreachable — no threshold, no search, no fitting.
+
+    hvac/roofer      (same, 6 axes) contains contractor-bare/roofer (different, 4)
+        extra: accent, hero_subject
+    hvac/roofer      (same, 6 axes) contains contractor-bare/hvac   (different, 5)
+        extra: action
+    threadbare/hvac  (same, 7 axes) contains law/roofer             (different, 6)
+        extra: leads_with
+
+Three of thirty-three. And look at the first one: the two axes the vector
+counts and the judge did not are **`accent` and `hero_subject`** — colour and
+subject, which the judging rule written into `pairs.json` says cannot alone
+make a different site. The vector counts precisely what the judge discounts.
+
+This is now `agreement.unreachable()`, printed by the census under BLIND SPOT
+and pinned by a test, because "agreement is 58%" invites tuning and this says
+tuning cannot reach these three. **It is the difference between a calibration
+problem and a missing dimension**, and it settles the axis-two question on
+something firmer than a preference.
+
+## The held-out third — built, and it starts empty of authority
+
+One verdict in three, membership decided by `sha256(a~b)` rather than by
+anybody looking at the verdicts, because choosing which evidence survives is
+the failure it exists to prevent. Never used to choose a rule or a weighting,
+only to score one afterwards. Never re-judged: when the page under it changes
+it is RETIRED with a reason and the set shrinks, which is the honest cost.
+
+    all         19/33   (16 verdicts)
+    tuning       6/12   (9 verdicts)
+    held out     5/5    (7 verdicts)
+
+`held_out_version()` hashes the verdicts *and the reasoning*, because the quiet
+way to recover a held-out pair is not to flip it but to reword why it was
+called what it was called. `test_the_held_out_verdicts_are_not_re_judged` pins
+it.
+
+**It says nothing about the rule this commit lands.** It was carved out of
+labels that were all available while the rule was being chosen. The first rule
+it can honestly score is the next one, and I would rather write that down than
+have the 5/5 read as a validation.
+
+## The flag you noted
+
+Fixed rather than deferred — it was two lines and it was actively misleading in
+a committed artefact. The closest same-trade pairs now print the blind verdict
+instead of a "case B has to fix" flag pointing at a pair somebody judged
+different.

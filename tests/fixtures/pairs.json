@@ -30,100 +30,117 @@
       "b": "bare-trade",
       "verdict": "different",
       "why": "one is a shallow band of photograph above a serif name on cream with a ruled row of figures and one dark red button; the other fills the screen with a photograph washed dark and sets white type over it",
-      "_was": "same, twice — once when both filled the screen with a washed photograph and once again after the gate moved neither. The corpus was re-decided under the corrected rule and only one of them still opens that way."
+      "_was": "same, twice — once when both filled the screen with a washed photograph and once again after the gate moved neither. The corpus was re-decided under the corrected rule and only one of them still opens that way.",
+      "held_out": true
     },
     {
       "a": "restaurant-bare",
       "b": "restaurant-rich",
       "verdict": "different",
-      "why": "one fills the screen with a dark food photograph and sets the name over it; the other rules the screen down the middle, type on cream to the left and the plate to the right"
+      "why": "one fills the screen with a dark food photograph and sets the name over it; the other rules the screen down the middle, type on cream to the left and the plate to the right",
+      "held_out": false
     },
     {
       "a": "barbecue",
       "b": "restaurant-rich",
       "verdict": "different",
-      "why": "one is a warm food photograph edge to edge with the name and two buttons over it; the other is divided down the middle, cream and type on one side and the plate on the other"
+      "why": "one is a warm food photograph edge to edge with the name and two buttons over it; the other is divided down the middle, cream and type on one side and the plate on the other",
+      "held_out": false
     },
     {
       "a": "contractor-bare",
       "b": "roofer",
       "verdict": "different",
-      "why": "one sets heavy white capitals over a photograph that fills the screen; the other puts a shallow band of photograph above dark type on a pale ground"
+      "why": "one sets heavy white capitals over a photograph that fills the screen; the other puts a shallow band of photograph above dark type on a pale ground",
+      "held_out": false
     },
     {
       "a": "contractor-bare",
       "b": "hvac",
       "verdict": "different",
-      "why": "one is a photograph filling the screen with white capitals over it; the other has no photograph at all — black capitals the width of the screen on an off-white ground"
+      "why": "one is a photograph filling the screen with white capitals over it; the other has no photograph at all — black capitals the width of the screen on an off-white ground",
+      "held_out": false
     },
     {
       "a": "dentist",
       "b": "law",
       "verdict": "same",
       "why": "a shallow band of photograph across the top, then the name in a serif on cream, a paragraph, a ruled row of figures and one coloured button, with a band of the same colour at the foot. Only the colour is different",
-      "_was": "different, when one opened on a strip above cream type and the other filled the screen with a photograph. The corpus was re-decided and they now open the same way."
+      "_was": "different, when one opened on a strip above cream type and the other filled the screen with a photograph. The corpus was re-decided and they now open the same way.",
+      "held_out": true
     },
     {
       "a": "salon",
       "b": "restaurant-bare",
       "verdict": "different",
-      "why": "one is divided down the middle, serif type on cream beside a shopfront; the other is a dark food photograph edge to edge with the name over it"
+      "why": "one is divided down the middle, serif type on cream beside a shopfront; the other is a dark food photograph edge to edge with the name over it",
+      "held_out": false
     },
     {
       "a": "bare-trade",
       "b": "salon",
       "verdict": "different",
-      "why": "one fills the screen with a photograph washed dark; the other rules it down the middle and keeps its type on clean cream"
+      "why": "one fills the screen with a photograph washed dark; the other rules it down the middle and keeps its type on clean cream",
+      "held_out": true
     },
     {
       "a": "hvac",
       "b": "roofer",
       "verdict": "same",
-      "why": "the same page with and without a picture strip: heavy condensed dark type on a pale ground, a paragraph, a ruled line of figures, one coloured button and a band of that colour at the foot"
+      "why": "the same page with and without a picture strip: heavy condensed dark type on a pale ground, a paragraph, a ruled line of figures, one coloured button and a band of that colour at the foot",
+      "held_out": false
     },
     {
       "a": "law",
       "b": "roofer",
       "verdict": "different",
-      "why": "the same arrangement — a band of photograph, a ruled line, one coloured button — but one is set in a quiet serif and the other in heavy condensed capitals, and they read as two different practices"
+      "why": "the same arrangement — a band of photograph, a ruled line, one coloured button — but one is set in a quiet serif and the other in heavy condensed capitals, and they read as two different practices",
+      "held_out": true
     },
     {
       "a": "salon",
       "b": "contractor-bare",
       "verdict": "different",
-      "why": "elegant serif on cream beside a shopfront against blocky white capitals over a workshop floor"
+      "why": "elegant serif on cream beside a shopfront against blocky white capitals over a workshop floor",
+      "held_out": false
     },
     {
       "a": "restaurant-bare",
       "b": "hvac",
       "verdict": "different",
-      "why": "a dark food photograph filling the screen with a fine serif over it against black capitals on an off-white ground with no photograph"
+      "why": "a dark food photograph filling the screen with a fine serif over it against black capitals on an off-white ground with no photograph",
+      "held_out": true
     },
     {
       "a": "dentist",
       "b": "contractor-bare",
       "verdict": "different",
-      "why": "soft serif on cream under a strip of reception desk against white capitals over a bathroom repair"
+      "why": "soft serif on cream under a strip of reception desk against white capitals over a bathroom repair",
+      "held_out": true
     },
     {
       "a": "threadbare",
       "b": "hvac",
       "verdict": "same",
       "why": "both open on the name alone at the width of the screen, black condensed capitals on off-white, the trade word small underneath; one carries a paragraph and a button and the other carries nothing",
-      "_was": "newly judged. The corpus had no two pages that opened on type alone until it was re-decided, so this pair could not be asked before."
+      "_was": "newly judged. The corpus had no two pages that opened on type alone until it was re-decided, so this pair could not be asked before.",
+      "held_out": false
     },
     {
       "a": "barbecue",
       "b": "threadbare",
       "verdict": "unsure",
-      "why": "one is a food photograph edge to edge; the other has no photograph and almost nothing on the screen — still unclear whether a stranger reads that as a different page or as an unfinished one"
+      "why": "one is a food photograph edge to edge; the other has no photograph and almost nothing on the screen — still unclear whether a stranger reads that as a different page or as an unfinished one",
+      "held_out": true
     },
     {
       "a": "threadbare",
       "b": "restaurant-bare",
       "verdict": "unsure",
-      "why": "one has no photograph and nothing under the name; the other is a photograph edge to edge — the same question as the pair above, and the same reason for not scoring it"
+      "why": "one has no photograph and nothing under the name; the other is a photograph edge to edge — the same question as the pair above, and the same reason for not scoring it",
+      "held_out": false
     }
   ],
-  "_judged_against": "Rendered pages as of the corpus re-decided under the corrected gate (distance ruler 575db030, gate rule 624e27dc), read off .reviews/sheet — which two standing tests now hold to what shipped: the sheet must match the corpus, and the thumbnails must be a half-scale picture of the desktop fold rather than a 720-pixel rendering of a narrower page, which is what every earlier verdict in this file was actually read off. A verdict describes a rendering, and a rule change re-decides the corpus, so the labels are downstream of the gate and have to be re-taken whenever it moves."
+  "_judged_against": "Rendered pages as of the corpus re-decided under the corrected gate (distance ruler 575db030, gate rule 624e27dc), read off .reviews/sheet — which two standing tests now hold to what shipped: the sheet must match the corpus, and the thumbnails must be a half-scale picture of the desktop fold rather than a 720-pixel rendering of a narrower page, which is what every earlier verdict in this file was actually read off. A verdict describes a rendering, and a rule change re-decides the corpus, so the labels are downstream of the gate and have to be re-taken whenever it moves.",
+  "_held_out": "One verdict in three, chosen by a hash of the two slugs so that nobody picks which evidence survives. A held-out verdict is never used to choose a rule or a weighting, only to score one afterwards, and it is never re-judged — when the page under it changes it is retired with a reason and the set gets smaller. It starts here, so it says nothing about the rule this commit lands: the first rule it can honestly score is the next one."
 }
