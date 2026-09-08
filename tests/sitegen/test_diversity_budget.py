@@ -14,7 +14,7 @@ from pathlib import Path
 import pytest
 
 from app.site import fingerprint as fp
-from app.site import identity
+from app.site import identity, theme
 from app.store import db, fingerprints, leads
 
 pytestmark = pytest.mark.unit
@@ -213,3 +213,43 @@ def test_a_rebuild_after_better_labels_is_gated(conn, other, monkeypatch):
     monkeypatch.setattr(identity, "decide", watched)
     pipeline.rebuild_opening(conn, lead)
     assert seen == ["gated"]
+
+
+def test_the_gate_is_satisfiable():
+    """A rule no site can meet is not a strict rule, it is a broken one.
+
+    The gate asks a candidate to differ from EACH of the last `WINDOW` sites on
+    at least one highly weighted axis. So the highly weighted axes have to be
+    able to describe more distinct sites than the window holds — otherwise the
+    pigeonhole does the deciding, every build past the first few is an
+    unresolvable collision, and the corpus quietly fills with pages the gate
+    would reject if anybody asked it.
+
+    This was not hypothetical. Raising `HIGH_WEIGHT` to 2.5 left `first_screen`
+    alone in the set: five positions against a window of ten. The corpus
+    re-decided under it had eight of fifty-five pairs the gate itself rejected,
+    and it took a full re-decide and a re-render to notice. This costs
+    milliseconds.
+    """
+    from app.site import firstscreen
+    from app.site.iterate import MOODS
+    from app.store.fingerprints import WINDOW
+
+    cardinality = {
+        "first_screen": len(firstscreen.POSITIONS),
+        "mood": len(MOODS),
+        "accent": len(theme.ACCENT_NAMES),
+    }
+    room = 1
+    for axis in fp.highly_weighted():
+        assert axis in cardinality, (
+            f"{axis} is weighted highly and this test cannot say how many "
+            f"values it has. Add it to `cardinality` — a required axis whose "
+            f"range is unknown is a rule whose satisfiability is unknown")
+        room *= cardinality[axis]
+    assert room > WINDOW, (
+        f"the highly weighted axes {sorted(fp.highly_weighted())} describe "
+        f"{room} distinct sites and the gate compares against the last "
+        f"{WINDOW}. Every build past the {room}th can only be an unresolved "
+        f"collision. Widen the required set, add an axis to it, or shrink the "
+        f"window — do not re-decide the corpus and find out.")

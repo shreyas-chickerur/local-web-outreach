@@ -129,6 +129,31 @@ REQUIRED_AXES = 4
 # Recorded as measured, on thirteen verdicts, against four alternatives. If the
 # corpus grows and a different reading wins, this moves and `rule_version`
 # says so.
+#
+# 2.5, NOT 2.0, AND THE REASON IS A REGRESSION THIS RULE CAUSED. At 2.0 the set
+# is {first_screen, mood}, and `mood` alone let `dentist` and `law` through the
+# gate: both opened on `proof`, and a stranger called them one page in two
+# colours. What `mood` does visibly for that pair IS the colour — teal against
+# burgundy — and the judging rule written blind at the top of `pairs.json` says
+# a difference in colour alone is not a different site. So the requirement
+# added to stop a pair passing on differences nobody sees was itself satisfied
+# by a difference the judge had already ruled out.
+#
+# 2.5 WAS TRIED AND PUT BACK. It leaves `first_screen` alone in the set, which
+# is right about the perception and wrong about the arithmetic: a candidate has
+# to differ from EACH of the last ten, `first_screen` has five positions, and
+# once the window holds all five no site can satisfy the rule at all. Measured
+# rather than argued — the corpus re-decided under it had eight of fifty-five
+# pairs the gate itself would reject, and the scored same-trade figure went
+# from 38% identical to 47%. `test_the_gate_is_satisfiable` now fails in
+# milliseconds on any value that makes the requirement unmeetable, so the next
+# attempt costs a test run rather than a corpus re-decide and a re-judge.
+#
+# At 2.0 the required set is {first_screen, mood} — five positions by six moods
+# is thirty combinations against a window of ten, which is satisfiable. The
+# `dentist`/`law` regression it allows is real and stands unfixed: the fix is
+# more high-visibility cardinality, which is what type treatment adds, so the
+# rule tightens AFTER axis two rather than before it.
 HIGH_WEIGHT = 2.0
 
 

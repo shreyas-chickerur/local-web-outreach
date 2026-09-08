@@ -79,13 +79,30 @@ stays in the corpus because it is the only proof the floor refuses a condemned
 photograph and the only page that opens on type alone.
 
 **The gate is not sufficient yet, and the pre-registration caught it.**
-`dentist` and `law` both open on `proof` after the corpus was re-decided, and a
-stranger calls them one page in two colours. The gate allowed it because `mood`
-alone satisfied "at least one weighted highly" — and what `mood` does visibly
-there is colour, which the judging rule says cannot alone make a different site.
-The next rule change is pre-registered in `.reviews/slice-b-predictions.md`
-rather than made inline, because it re-decides the corpus and the held-out third
-is what can score it.
+`dentist` and `law` both open on `proof`, and a stranger calls them one page in
+two colours. The gate allowed it because `mood` alone satisfied "at least one
+weighted highly" — and what `mood` does visibly there is colour, which the
+judging rule says cannot alone make a different site.
+
+**The pre-registered fix was tried and reverted.** `HIGH_WEIGHT = 2.5` leaves
+`first_screen` alone in the required set, and `first_screen` has five positions
+against a comparison window of ten — so once the window holds all five, no site
+can satisfy the gate. The corpus re-decided under it had eight of fifty-five
+pairs its own gate rejects, and the scored same-trade figure went from 38%
+identical to 47%. `test_the_gate_is_satisfiable` now fails on any value that
+makes the requirement unmeetable, in milliseconds, with the arithmetic in the
+message.
+
+**So the regression is blocked on axis two, not the reverse.** Tightening the
+required set needs more high-visibility cardinality to tighten into, and type
+treatment is a highly visible axis that is not colour — which is what the pair
+needs perceptually and what the rule needs arithmetically.
+
+**And the held-out third cannot score a gate change.** `HIGH_WEIGHT` feeds
+`rule_version` and not `metric_version`; the agreement score is a function of
+the distance, which a gate change does not touch. It can score a change to the
+ruler. What tests a gate rule is how many pairs of the corpus it produces a
+stranger calls the same site — fresh judging, guarded by pre-registration.
 
 **The pre-registered claim is still open.** `dentist`/`law` resolving binds on
 first-screen contract *and* type treatment; it resolved on the first alone and

@@ -176,3 +176,74 @@ worse. Requiring `first_screen` to move on every build is a strong constraint
 on a five-position axis with eleven fixtures, and there may not be room for it.
 If the mean gets worse and agreement gets better, that is the trade this
 project has said it wants: the number is not the target, the judgement is.
+
+### Outcome — tried, refuted, not shipped
+
+`HIGH_WEIGHT = 2.5` was applied, the corpus re-decided under it, and the result
+checked against the three bound claims. It is reverted. All three, in order,
+pass or fail:
+
+**1. `dentist`/`law` no longer both open on `proof` — PASSED.** `dentist` moved
+to `split` and `law` to `facts`. Side by side they are plainly two pages: one a
+hard split, cream and serif beside a reception photograph; the other a full
+photograph washed dark with white type over it. The reweighting did what it was
+predicted to do for the pair it was predicted to do it for.
+
+**2. The held-out third — NOT MEASURABLE, and the criterion was invalid.**
+Every one of its six live verdicts was stale: the re-decide changed the fold of
+eight of the eleven fixtures. Retiring them all leaves nothing to score.
+
+That is not bad luck, it is the criterion being wrong, and the reason is worth
+keeping. `HIGH_WEIGHT` feeds `rule_version()` and not `metric_version()` — the
+distance is untouched by it, and `metric_version()` stayed `575db030` through
+the whole change. **The held-out agreement score is a function of the distance.
+Scored against the pages it judged, it would return exactly what it returned
+before, whatever `HIGH_WEIGHT` is.** A held-out set of pair verdicts can score a
+change to the ruler. It cannot score a change to the gate, because the gate
+does not move the ruler — it moves which corpus gets produced.
+
+So "does the held-out score fall" was never a test of this fix. What *would*
+test a gate rule is how many pairs of the corpus it produces a stranger calls
+the same site, and that needs fresh judging every time, guarded by
+pre-registration rather than by holding verdicts back.
+
+**3. The scored same-trade figure — WORSE, 38% → 47% identical.** Reported as
+required. The pre-registration says a worse mean is acceptable if the held-out
+score holds; it did not hold, it could not be taken.
+
+### And the thing that decides it, which the pre-registration half-saw
+
+"There may not be room for it" was closer to the truth than it reads.
+
+A candidate must differ from **each** of the last ten sites on at least one
+highly weighted axis. At 2.5 that set is `{first_screen}` alone, and
+`first_screen` has five positions. Once the window holds all five, **no site can
+satisfy the rule at all** — the gate stops being strict and starts being
+unmeetable, every build past the fifth is an unresolvable collision, and the
+corpus quietly fills with pages the gate would reject if anybody asked it.
+
+Measured, not argued: the corpus re-decided under 2.5 has **eight of its
+fifty-five pairs collide under its own gate**, including `dentist`/`salon`,
+which the gate tried to separate, could not — every first-screen position was
+already taken — and shipped anyway with the collision recorded and then
+discarded, because `make_fixtures` keeps the config and not the `unresolved`
+flag.
+
+At 2.0 the required set is `{first_screen, mood}`: five positions by six moods
+is thirty combinations against a window of ten, which is satisfiable. That is
+why 2.0 works and 2.5 does not, and it has nothing to do with which of them
+describes perception better.
+
+`test_the_gate_is_satisfiable` now asserts that the highly weighted axes can
+describe more distinct sites than the window holds. It fails on 2.5 in
+milliseconds with the arithmetic in the message. The next attempt at this costs
+a test run rather than a corpus re-decide, a re-render and a re-judge.
+
+### What this does to the order of work
+
+**The `dentist`/`law` regression stands unfixed, and it is blocked on axis two
+rather than the other way round.** Tightening the required set needs more
+high-visibility cardinality to tighten into. Type treatment is exactly that: it
+adds a highly visible axis that is not colour, which is both what the pair needs
+perceptually and what the rule needs arithmetically. The rule tightens after
+axis two, not before it.
