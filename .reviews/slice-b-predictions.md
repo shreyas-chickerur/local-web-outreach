@@ -449,3 +449,93 @@ contradictory pairs are re-judged by applying it rather than by choosing.
 **Held-out.** Untouched. No re-decide is involved, so no held-out verdict goes
 stale and none may be re-judged — the rule applies to the tuning set only, and
 the held-out three stay as the check on whatever comes out of it.
+
+## Phase 1 found a defect in axis one, and it is pre-registered before the fix
+
+Judging the remaining pairs turned up something that changes what the later
+phases can be measured against. `first_screen` declares five positions. Two of
+them render the same arrangement:
+
+    above-the-fold markup differences between photo and facts: 2
+       -<header class="hero first-photo type-quiet has-photo" id="top"
+       +<header class="hero first-facts type-quiet has-photo" id="top"
+
+**The class attribute is the only thing that differs.** The CSS then adds
+`align-items:center`, a smaller heading clamp and wider gaps between the
+figures — a setting applied to the same arrangement, which is exactly what the
+type-setting rule written in Phase 0 says is not a different site.
+
+Side by side, `barbecue` (`photo`) and `contractor-bare` (`facts`) are the same
+page: a photograph filling the screen, the name in white at the left, text under
+it, a line of figures. So is `bare-trade`, also `facts`.
+
+This is `layout_bias` again — `BRIEF` §3 already records that one as "declares
+itself structural and renders nothing above the fold" — in the axis the vector
+weights heaviest at 2.5. Every distance involving a photo-versus-facts pair is
+overstated by a quarter.
+
+`test_a_first_screen_axis_changes_the_first_screen` passes it, because the
+markup does change: the class name is markup.
+
+### Binding claim
+
+**A strengthened axes-are-real test, with the class attribute stripped from the
+comparison, passes for every pair of first-screen positions.** Ten pairs, five
+positions. It must fail on `photo`/`facts` before the fix and pass after it.
+
+`facts` gets above-the-fold consequence rather than having its weight dropped,
+because `BRIEF` §2.1 already says what the position is for — "the numbers first,
+at a size that reads as the point of the screen" — and the renderer does not do
+that. It leads with the name and puts the figures underneath, which is `photo`.
+
+### Falsification
+
+The strengthened test still failing for any pair after the fix; or the fix
+changing the fold of a page whose position is not `facts`.
+
+### What it costs, stated in advance
+
+Rendering changes the pictures for `bare-trade` and `contractor-bare` without
+changing any fingerprint, so no re-decide and no hash moves. But verdicts about
+those two pages go stale, and **`bare-trade`/`contractor-bare` is the held-out
+set's only "same" verdict.** Retiring it by rule takes the held-out set to zero
+scorable comparisons. That is the cost of the repair and it is not a reason to
+skip it.
+
+### Phase 1 outcome — the repair held, the corpus did not grow usefully
+
+The strengthened test failed on `('photo', 'facts')` before the repair and
+passes on all ten position pairs after it. No fingerprint moved, so no
+re-decide and no ruler or rule change; `bare-trade`/`contractor-bare` was
+retired by rule as the pre-registration said it would be.
+
+Held-out reached three scorable comparisons, short of the four to five the
+phase asked for. The shortfall does not matter next to what judging showed:
+**sixteen of sixteen live verdicts are exactly "do they share `first_screen`"**
+— thirteen of thirteen before the repair, and the repair restored the relation
+rather than breaking it. The generator has one arrangement dimension. Judging
+more pairs adds determined verdicts, which makes agreement look better
+supported while measuring the same single axis.
+
+## Phase 2 — page architecture, and the claim registered before it is built
+
+The evidence check has one answer and it is not `BRIEF` §2.1's ordering.
+Colour structure remains predicted to fail — every "same" verdict that mentions
+colour dismisses it — but that is not why page architecture is next. It is next
+because **the instrument cannot validate anything until a second arrangement
+dimension exists**, and page architecture is that dimension.
+
+**Binding claim.** After page architecture lands and the corpus is re-decided:
+the count of live verdicts determined by `first_screen` alone falls below the
+total. One verdict that is not a restatement of the opening position is enough
+to have broken the degeneracy; the number to report is how many.
+
+**Falsification.** All verdicts still determined by `first_screen`, which would
+mean the new axis changes nothing a stranger reads and is a fourth instance of
+declared-but-not-in-force; or the strengthened position test failing for the
+new axis's own values, which is the same defect caught earlier.
+
+**Not claimed.** That `unreachable()` stays at zero — it is zero now and a
+wider vector can only make superset relations rarer. And not that agreement
+rises: a ninth axis raises the mean arithmetically, and `BRIEF` §3 says an axis
+earns no credit for that.

@@ -359,7 +359,22 @@ body:has(.hero.first-split) .bar:not(.stuck){{background:var(--bg);
 /* FACTS — the numbers first, at a size that reads as the point of the screen
    rather than as a caption under a headline. */
 .hero.first-facts{{align-items:center}}
-.hero.first-facts h1{{font-size:clamp(30px,4.4vw,58px);margin-bottom:.5em}}
+/* The rating carries the screen and the name comes second. Set at display
+   size with the count as a caption, because "the numbers first" has to be
+   legible as the point of the page rather than as a line under a headline —
+   which is what it was, and it made this position identical to `photo`. */
+/* line-height under 1 clipped the box shorter than the glyphs, and a serif
+   4.9 at 168px then sat on top of the name. */
+.hero.first-facts .tally{{margin:0 0 .22em;line-height:1;
+  font-family:{t.display.stack};display:flex;align-items:baseline;
+  gap:clamp(12px,1.6vw,22px);flex-wrap:wrap}}
+.hero.first-facts .tally b{{font-size:clamp(64px,11vw,168px);font-weight:400;
+  letter-spacing:-.03em}}
+.hero.first-facts .tally span{{font-family:{t.body.stack};
+  font-size:clamp(14px,1.5vw,18px);letter-spacing:.02em;opacity:.86;
+  font-weight:600;text-transform:uppercase}}
+.hero.first-facts h1{{font-size:clamp(22px,2.6vw,34px);margin-bottom:.5em;
+  opacity:.92;max-width:24ch}}
 .hero.first-facts .facts{{display:grid;gap:clamp(18px,3vw,52px);
   grid-template-columns:repeat(auto-fit,minmax(150px,max-content));
   font-size:clamp(19px,2.4vw,30px);font-weight:700;opacity:1;

@@ -1,37 +1,37 @@
 
 11 fixtures · model asked 0× for photographs, 0× for direction · second pass asked 0 and 0
 
-  barbecue         Barbecue Restaurant       8/8  sections  blocks   5/14    60.1kB  contrast  5.2
+  barbecue         Barbecue Restaurant       8/8  sections  blocks   5/14    61.0kB  contrast  5.2
                    hero /photo/1/9 (+3.68)
                    Hutchins BBQ has 10 strong food/exterior photographs and a huge, glowing review base (4.8 from nearly 14,000 p
-  bare-trade       Attorney                  5/5  sections  blocks    5/8    54.1kB  contrast 16.1
+  bare-trade       Attorney                  5/5  sections  blocks    5/8    55.0kB  contrast 16.1
                    hero /photo/2/1 (+2.63)
                    A family law client needs to see trust and track record before anything else — a 4.9 rating from 148 reviews a
-  contractor-bare  Plumber                   2/2  sections  blocks    0/0    48.5kB  contrast 12.5
+  contractor-bare  Plumber                   2/2  sections  blocks    0/0    49.4kB  contrast 12.5
                    hero /photo/3/6 (+2.61)
                    A plumber sells trust before anything else, and with only one photo big enough to carry a layout, the rating a
-  dentist          Dentist                   8/8  sections  blocks   9/11    58.7kB  contrast  5.7
+  dentist          Dentist                   8/8  sections  blocks   9/11    59.6kB  contrast  5.7
                    hero /photo/4/6 (+3.31)
                    A visitor picking a dentist wants reassurance and trust signals before anything else — strong ratings, friendl
-  hvac             Plumber                   7/7  sections  blocks    3/3    55.3kB  contrast  6.2
+  hvac             Plumber                   7/7  sections  blocks    3/3    56.3kB  contrast  6.2
                    hero /photo/5/0 (+2.60)
                    This is a trade call, not a dining room: a homeowner with a leaking pipe wants proof of competence and trustwo
-  law              Attorney                  8/8  sections  blocks   6/13    59.2kB  contrast 16.1
+  law              Attorney                  8/8  sections  blocks   6/13    60.2kB  contrast 16.1
                    hero /photo/6/2 (+3.31)
                    A 4.9-star rating from 254 reviews is the single most persuasive fact for someone deciding whether to trust a 
-  restaurant-bare  Japanese Restaurant       4/4  sections  blocks    0/0    52.7kB  contrast 12.4
+  restaurant-bare  Japanese Restaurant       4/4  sections  blocks    0/0    53.6kB  contrast 12.4
                    hero /photo/7/5 (+3.74)
                    Ichika is a kaiseki restaurant whose case is made almost entirely by the plating itself — nine strong dish pho
-  restaurant-rich  Restaurant               10/10 sections  blocks    5/5    63.1kB  contrast  5.2
+  restaurant-rich  Restaurant               10/10 sections  blocks    5/5    64.1kB  contrast  5.2
                    hero /photo/8/9 (+3.19)
                    This is a farm-to-table neighborhood restaurant with strong, plentiful photography (8 lead-worthy shots of the
-  roofer           Roofing Contractor        6/6  sections  blocks   8/13    56.5kB  contrast  5.3
+  roofer           Roofing Contractor        6/6  sections  blocks   8/13    57.5kB  contrast  5.3
                    hero /photo/9/2 (+3.04)
                    A roofing contractor sells competence and trust before atmosphere, so the first screen should show the 5.0-rat
-  salon            Beauty Salon              5/5  sections  blocks   4/10    55.0kB  contrast  5.5
+  salon            Beauty Salon              5/5  sections  blocks   4/10    55.9kB  contrast  5.5
                    hero /photo/10/0 (+2.23)
                    Salon Boutique is really a suite-rental business for beauty professionals, not a single styling brand — so the
-  threadbare       General Contractor        0/0  sections  blocks    0/0    44.8kB  contrast 12.5
+  threadbare       General Contractor        0/0  sections  blocks    0/0    45.8kB  contrast 12.5
                    hero None (-1.41)
                    A general contractor sells competence, not atmosphere, and there's only one small photo — not enough to carry 
 
@@ -70,14 +70,14 @@
                      section_order=
                      compositions=
 
-  AGREEMENT  21/36 (58%) of cross-comparisons ordered correctly, 0 unsure and not scored  [labels 7e49403b]
-    bare-trade/contractor-bare (64%) should be closer than contractor-bare/roofer (44%) and is not
-    barbecue/restaurant-bare (60%) should be closer than contractor-bare/roofer (44%) and is not
-    dentist/hvac (60%) should be closer than contractor-bare/roofer (44%) and is not
-    bare-trade/contractor-bare (64%) should be closer than restaurant-bare/restaurant-rich (52%) and is not
-    barbecue/restaurant-bare (60%) should be closer than restaurant-bare/restaurant-rich (52%) and is not
-    dentist/hvac (60%) should be closer than restaurant-bare/restaurant-rich (52%) and is not
-    FRESHLY RE-PINNED. The previous reading of "14 of 22" was scored against labels 371f24fa — a different set of verdicts, so this is not that number having fallen. It is the first reading of a new one.
+  AGREEMENT  39/55 (71%) of cross-comparisons ordered correctly, 0 unsure and not scored  [labels 69061e09]
+    roofer/salon (80%) should be closer than contractor-bare/roofer (44%) and is not
+    roofer/salon (80%) should be closer than contractor-bare/hvac (56%) and is not
+    roofer/salon (80%) should be closer than dentist/restaurant-rich (56%) and is not
+    roofer/salon (80%) should be closer than hvac/roofer (64%) and is not
+    roofer/salon (80%) should be closer than dentist/salon (64%) and is not
+    roofer/salon (80%) should be closer than restaurant-rich/salon (64%) and is not
+    FRESHLY RE-PINNED. The previous reading of "27 of 40" was scored against labels c6ea7551 — a different set of verdicts, so this is not that number having fallen. It is the first reading of a new one.
     threadbare excluded from every score — no design to compare, only an absence. See agreement.UNSCORED.
 
   PAIRWISE DISTANCE  mean 79% across 55 pairs
@@ -89,12 +89,6 @@
       44%  contractor-bare vs roofer  <-- judged DIFFERENT
       48%  bare-trade vs law
     (the diversity gate is ON — 0 of 7 same-trade pairs would collide)
-
-  BLIND SPOT  2 comparison(s) no weighting can reach — the 'same' pair differs on a superset of the 'different' pair's axes,
-              so it is further apart under any weights. Two causes look identical here: an axis the vector lacks, or two verdicts that contradict
-              each other. Check whether the 'different' pair's axes are a SUBSET of the 'same' pair's before reading it as evidence about axes.
-    barbecue/restaurant-bare (same) contains restaurant-bare/restaurant-rich (different) — extra: action
-    dentist/hvac             (same) contains restaurant-bare/restaurant-rich (different) — extra: action
 
   closest pairs — these are the ones that look like one tool:
       36%  barbecue         vs restaurant-rich  same on: accent, first_screen, hero_subject, leads_with, mood

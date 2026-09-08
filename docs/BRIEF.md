@@ -62,13 +62,41 @@ against the wrong pictures.
 
 **The instrument's current reading.**
 
-    agreement   21 of 36 cross-pairs (tuning 15 of 21, held out 0 of 2)
-                ruler 4616d461, rule a83a0283, labels 7e49403b
+    agreement   39 of 55 cross-pairs (tuning 27 of 32, held out 0 of 3)
+                ruler 4616d461, rule a83a0283, labels 69061e09,
+                held-out f4ed374b
     census      same-trade mean 51% distance = 49% identical, 7 scored pairs
                 closest pair barbecue / restaurant-rich at 36%, judged SAME
-                unreachable 2 — the axis-two claim, and it FAILED
+    unreachable 0
     gate        0 of 55 pairs collide under its own rule
-    tests       757
+    tests       758
+
+**Done — the type-setting rule, and the blind spot closed.** `pairs.json` named
+colour and subject and was silent on how the name is set; two verdicts fell into
+that silence in opposite directions and produced both unreachable comparisons.
+The rule was written before the verdicts were looked at and moved exactly one.
+`unreachable()` is zero, and **axis two's justification is gone with it** — type
+treatment was built to close a blind spot that was never evidence about axes.
+The axis stays; it renders, it varies the corpus, the gate needs it. See
+`.reviews/slice-b-type-rule.md`.
+
+**Done — a defect in axis one, found by judging and repaired.** `first_screen`
+declared five positions and two of them rendered the same first screen: `photo`
+and `facts` differed above the fold by the class attribute and nothing else.
+That is `layout_bias` again — see §3 — in the axis weighted heaviest at 2.5, so
+every distance across such a pair was overstated by a quarter, and
+`test_a_first_screen_axis_changes_the_first_screen` passed it because a class
+name is markup. `facts` now opens on the rating at display size with the name
+second, which is what §2.1 says the position is for. A strengthened test strips
+the class attribute before comparing and holds all ten position pairs.
+
+**The instrument cannot validate anything yet, and this is the reason.** All
+sixteen live verdicts are exactly "do they share `first_screen`". With colour,
+subject and type setting discounted by the judging rules, the generator has
+**one arrangement dimension**. Judging more pairs adds verdicts already
+determined by the vector, which is self-consistency rather than validity. Page
+architecture is next — not by §2.1's ordering, but because it is the second
+arrangement dimension and nothing can be measured until there is one.
 
 **Done — Slice B, axis two.** Type treatment in `app/site/typetreatment.py` —
 size, case, alignment, tracking; five treatments; availability constrained by

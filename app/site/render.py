@@ -750,11 +750,31 @@ def _hero(m: Material, spec: SiteSpec, t: Theme,
         proof = ("".join(f'<li>{e(point)}</li>' for point in points))
         proof = f'<ul class="proof">{proof}</ul>' if proof else ""
 
-    body = (f'<div class="wrap"><h1>{e(m.name)}</h1>'
-            + (f'<p class="sub">{e(sub)}</p>' if sub else "")
-            + (proof if position == "proof" else
-               f'<div class="facts">{"".join(facts)}</div>' if facts else "")
-            + f'<div class="actions">{_cta(m, spec)}{_secondary(m)}</div></div>')
+    if position == "facts" and m.rating and m.reviews:
+        # THE NUMBERS FIRST, which is what the position is named for. It used
+        # to render the name first and the figures underneath — which is
+        # `photo`, and the two were the same page above the fold with only the
+        # class attribute between them. See
+        # test_every_first_screen_position_renders_a_different_first_screen.
+        #
+        # Nothing here is invented: rating and review count are read off
+        # `Material` exactly as the small version reads them.
+        rest = "".join(facts[1:])
+        body = (f'<div class="wrap">'
+                f'<p class="tally"><b>{e(m.rating)}</b>'
+                f'<span>from {e(m.reviews)} Google reviews</span></p>'
+                f'<h1>{e(m.name)}</h1>'
+                + (f'<p class="sub">{e(sub)}</p>' if sub else "")
+                + (f'<div class="facts">{rest}</div>' if rest else "")
+                + f'<div class="actions">{_cta(m, spec)}{_secondary(m)}</div>'
+                  f'</div>')
+    else:
+        body = (f'<div class="wrap"><h1>{e(m.name)}</h1>'
+                + (f'<p class="sub">{e(sub)}</p>' if sub else "")
+                + (proof if position == "proof" else
+                   f'<div class="facts">{"".join(facts)}</div>' if facts else "")
+                + f'<div class="actions">{_cta(m, spec)}{_secondary(m)}</div>'
+                  f'</div>')
 
     classes = (f"hero first-{position} type-{spec.type_treatment or 'quiet'}"
                + (" has-photo" if layers else ""))

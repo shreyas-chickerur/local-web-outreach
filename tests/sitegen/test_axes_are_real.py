@@ -23,6 +23,7 @@ from pathlib import Path
 import pytest
 
 from app.site import fingerprint as fp
+from app.site.firstscreen import POSITIONS
 from app.site.render import build_from_spec
 from app.site.spec import SiteSpec
 
@@ -105,6 +106,37 @@ def test_a_first_screen_axis_changes_the_first_screen(axis):
     assert above_the_fold(render(**{field: one})) != \
         above_the_fold(render(**{field: two})), (
         f"{axis} is weighted as visible in the first screen and is not")
+
+
+def test_every_first_screen_position_renders_a_different_first_screen():
+    """Five declared positions, and two of them were the same page.
+
+    `photo` and `facts` differed above the fold by the class attribute and
+    nothing else — the CSS then centred the block, shrank the heading and
+    spaced the figures out, which is a setting applied to the same arrangement.
+    Side by side, `barbecue` and `contractor-bare` were one page.
+
+    `test_a_first_screen_axis_changes_the_first_screen` passed it, because a
+    class name is markup. This strips the class attribute before comparing, so
+    a position has to earn its difference in what is rendered rather than in
+    what it is called.
+
+    This is `layout_bias` in the axis weighted heaviest — see `BRIEF` §3. Every
+    distance across a colliding pair of positions was overstated by a quarter.
+    """
+    import itertools
+    import re
+
+    def fold(position: str) -> str:
+        page = above_the_fold(render(first_screen=position))
+        return re.sub(r'class="[^"]*"', 'class=""', page)
+
+    same = [(one, two) for one, two in itertools.combinations(POSITIONS, 2)
+            if fold(one) == fold(two)]
+    assert not same, (
+        f"these first-screen positions render an identical first screen once "
+        f"the class attribute is taken out of it: {same}. Give them "
+        f"above-the-fold consequence or drop the axis's weight — BRIEF §3.")
 
 
 def test_no_axis_is_a_function_of_another():

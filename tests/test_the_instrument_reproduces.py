@@ -32,10 +32,10 @@ FIXTURES = Path("tests/fixtures/briefs")
 # instrument changed is not a result.
 RULER = "4616d461"
 RULE = "a83a0283"
-LABELS = "7e49403b"
+LABELS = "69061e09"
 # The held-out third, frozen verbatim. It moves only when a pair is
 # RETIRED, never when one is re-judged.
-HELD_OUT = "3ca286cc"
+HELD_OUT = "f4ed374b"
 SAME_TRADE_MEAN = 0.51
 # 21 of 36, on nine axes, against thirteen verdicts re-judged blind after type
 # treatment landed and the corpus was re-decided under it.
@@ -43,7 +43,7 @@ SAME_TRADE_MEAN = 0.51
 # It is not comparable to the 14 of 22 before it: different axes, different
 # corpus, different labels. What is comparable is the pre-registered claim, and
 # that claim FAILED — see `test_the_blind_spot_did_not_clear`.
-AGREEMENT = (21, 36)
+AGREEMENT = (39, 55)
 
 
 def fingerprints() -> dict[str, fp.Fingerprint]:
@@ -180,8 +180,9 @@ def test_the_inversions_are_the_ones_that_were_looked_at():
                  for i, a in enumerate(slugs) for b in slugs[i + 1:]}
     inversions = agreement.score(distances).inversions
     same_pairs = sorted({pair for pair, _, _, _ in inversions})
-    assert same_pairs == ["barbecue/restaurant-bare",
-                          "bare-trade/contractor-bare", "dentist/hvac"], (
+    assert same_pairs == ["barbecue/restaurant-bare", "dentist/hvac",
+                          "restaurant-bare/restaurant-rich",
+                          "roofer/salon"], (
         f"the inversions moved: {same_pairs}. Re-judge blind before accepting "
         f"it, per .reviews/slice-b-predictions.md")
 
@@ -223,8 +224,8 @@ def test_the_held_out_third_is_scored_separately():
         "one side of the split has no scorable comparisons — the set is too "
         "small to hold anything out, and saying so is better than reporting a "
         "number taken from nothing")
-    assert (held.ordered, held.comparisons) == (0, 2)
-    assert (tuned.ordered, tuned.comparisons) == (15, 21)
+    assert (held.ordered, held.comparisons) == (0, 3)
+    assert (tuned.ordered, tuned.comparisons) == (27, 32)
 
 
 SHEET = Path(".reviews/sheet/index.html")
@@ -273,35 +274,47 @@ def test_the_committed_sheet_shows_the_corpus_that_shipped():
         f"tools/contact_sheet.py before reading anything off it.")
 
 
-def test_the_blind_spot_did_not_clear():
-    """The pre-registered claim for axis two, and it FAILED.
+def test_the_blind_spot_cleared_and_the_labels_went_degenerate():
+    """Phase 0: the axis-two blind spot WAS a labelling artefact, and clearing
+    it exposed a worse problem than the one it solved.
 
-    `.reviews/slice-b-predictions.md` bound on one number: after type treatment
-    lands, `agreement.unreachable()` reports zero. It reports two.
+    `agreement.unreachable()` reports zero. It reported two, and both traced to
+    a pair of verdicts that could not both be right — one called two pages the
+    same site because only the lettering changed, the other called two pages
+    two studios for the same reason. `pairs.json` names colour and subject and
+    was silent on type setting; the rule was written into it before the
+    verdicts were looked at, and it moved exactly one.
 
-    Both are pairs a person called one studio that differ from a pair they
-    called two studios on a strict superset of axes — `barbecue`/`restaurant-
-    bare` and `dentist`/`hvac`, each carrying `action` on top of
-    `restaurant-bare`/`restaurant-rich`. No weighting can order them.
+    So axis two's justification is gone. It was built to close this blind spot
+    and the blind spot was never evidence about axes.
 
-    The reason is the interesting part and it is the opposite of what the axis
-    was added for. Those pairs share their geometry and differ in TYPE
-    TREATMENT, colour and subject — and the judge discounted all three. So the
-    vector now counts a 2.5-weight difference exactly where a person sees none,
-    which is the failure mode `accent` and `hero_subject` already had. The axis
-    is real, visible and makes the corpus more varied; as a term in the
-    distance it currently makes the instrument worse.
+    AND THE LABELS ARE NOW A PURE FUNCTION OF `first_screen` — all thirteen of
+    them. That is not a coincidence and it is the finding that matters: with
+    colour, subject and type setting all discounted by the judging rules, the
+    only arrangement the generator can vary is which of five first screens it
+    opens on. A fold verdict has nothing else to rest on.
 
-    Pinned as a failure rather than deleted. The next move is what the weight
-    of this axis should be, not another axis, and that is a fork for review
-    rather than something to fit against thirteen verdicts.
+    Labels that restate one axis measure self-consistency, not validity, which
+    is the contamination `pairs.json` was rewritten once to escape — arriving
+    this time through the back door, not through vocabulary. Until the corpus
+    has a SECOND arrangement dimension, agreement cannot validate anything, and
+    that is the evidenced case for page architecture as the next axis.
+
+    This test pins both halves. If a later axis breaks the degeneracy, this
+    fails and should — say so in the commit that breaks it.
     """
     prints = fingerprints()
     slugs = sorted(prints)
     moved = {(a, b): prints[a].differs_from(prints[b])
              for i, a in enumerate(slugs) for b in slugs[i + 1:]}
-    blind = agreement.unreachable(moved)
-    assert len(blind) == 2, [f"{n} contains {f}" for n, f, _ in blind]
-    assert {near for near, _, _ in blind} == {"barbecue/restaurant-bare",
-                                              "dentist/hvac"}
-    assert all(extra == {"action"} for _, _, extra in blind)
+    assert agreement.unreachable(moved) == []
+
+    determined = sum(
+        1 for row in agreement.load()
+        if ((prints[row["a"]].values["first_screen"]
+             == prints[row["b"]].values["first_screen"])
+            == (row["verdict"] == "same")))
+    assert determined == len(agreement.load()), (
+        f"{determined} of {len(agreement.load())} verdicts are 'do they share "
+        f"first_screen'. If this dropped, the corpus grew a second arrangement "
+        f"dimension and agreement means something again — re-pin and say so")

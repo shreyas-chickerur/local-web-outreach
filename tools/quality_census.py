@@ -90,12 +90,12 @@ BASELINE_METRIC = "4616d461"
 BASELINE_RULE = "a83a0283"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
-BASELINE_LABELS = "7e49403b"
+BASELINE_LABELS = "69061e09"
 # What it was, so a reader can see that the agreement figure crossed a
 # change of labels rather than falling. "40 of 40" was scored against
 # 449b9ddb, taken from contact-sheet thumbnails of a corpus that had
 # moved, captured below the breakpoint where the layout changes.
-BASELINE_LABELS_WAS = ("371f24fa", "14 of 22")
+BASELINE_LABELS_WAS = ("c6ea7551", "27 of 40")
 # True on the commit that re-pins, false on every commit after. Without
 # it the first run under a new ruler always prints "no better than the
 # baseline" — because the baseline IS that run's own measurement copied

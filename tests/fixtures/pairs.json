@@ -16,6 +16,21 @@
     "treatment and a first screen are the same site painted twice, whatever the",
     "accent and whoever is in the photograph.",
     "",
+    "A difference in how the name is SET — its size, its case, the spacing of",
+    "its letters — is not by itself a different site either, and for the same",
+    "reason. The words differ between any two businesses, so the lettering",
+    "always differs; what a stranger recognises is the arrangement, and a",
+    "setting applied to the same arrangement is the same page in another font.",
+    "It counts only when it MOVES the type somewhere else on the screen, or",
+    "changes what shares the screen with it — that is a change of arrangement",
+    "rather than of setting.",
+    "",
+    "Written 2026-09-08, before looking at which verdicts it moves, because the",
+    "two it was written to resolve contradict each other and whichever way it",
+    "is stated it decides one of them. The gap it fills: the rule above names",
+    "colour and subject and is silent on type setting, and two verdicts fell",
+    "into that silence in opposite directions.",
+    "",
     "Claude's readings on 2026-09-07, from artifacts/contact-sheet/fold.html.",
     "Shreyas sells these pages and should overwrite any of them."
   ],
@@ -37,9 +52,10 @@
     {
       "a": "restaurant-bare",
       "b": "restaurant-rich",
-      "verdict": "different",
-      "why": "both fill the screen with a food photograph, but one sets the name in capitals with the letters opened right out and the other in a large sentence-case serif — they read as a counter and a dining room",
-      "held_out": false
+      "verdict": "same",
+      "why": "a food photograph filling the screen, the name over it on the left, a line of figures under that, two buttons in the same place. The lettering is set differently and the plates are different colours",
+      "held_out": false,
+      "_was": "different, on the reasoning that one sets the name in opened-out capitals and the other in a large sentence-case serif. The type-setting rule added above says that is a setting applied to the same arrangement, not a different site — and it was stated before this verdict was looked at."
     },
     {
       "a": "barbecue",
@@ -53,14 +69,14 @@
       "a": "contractor-bare",
       "b": "roofer",
       "verdict": "different",
-      "why": "one sets white capitals over a photograph that fills the screen; the other rules the screen down the middle, dark capitals on pale to the left and the roof to the right",
+      "why": "one opens on a rating at display size over a photograph filling the screen; the other rules the screen down the middle, type on pale to the left and the roof to the right",
       "held_out": false
     },
     {
       "a": "contractor-bare",
       "b": "hvac",
       "verdict": "different",
-      "why": "one is a photograph filling the screen with white capitals over it; the other is a shallow band of photograph above dark capitals on a pale ground",
+      "why": "one opens on a rating at display size over a photograph filling the screen; the other puts a shallow band of photograph above the name on a pale ground",
       "held_out": false
     },
     {
@@ -107,7 +123,7 @@
       "a": "salon",
       "b": "contractor-bare",
       "verdict": "different",
-      "why": "a quiet serif on cream beside a shopfront against blocky white capitals over a workshop floor",
+      "why": "one is divided down the middle, a quiet serif on cream beside a shopfront; the other fills the screen with a photograph and a rating set large over it",
       "held_out": false
     },
     {
@@ -181,7 +197,8 @@
       "verdict": "same",
       "why": "a photograph filling the screen washed dark, the name at the upper left in white, text under it, a star line beneath. The only thing that changes is whether the name is a serif or blocky capitals",
       "held_out": true,
-      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
+      "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike.",
+      "retired": "Retired, not re-judged. `facts` was repaired to lead with the rating at display size — it had been rendering the same first screen as `photo` — so both pages under this verdict changed. It was the held-out set's only 'same' verdict, which takes the held-out set to zero scorable comparisons; that cost was stated in the pre-registration before the repair was written."
     },
     {
       "a": "dentist",
@@ -198,9 +215,41 @@
       "why": "one is a food photograph edge to edge with the name over it; the other is divided down the middle, type on cream beside a shopfront",
       "held_out": false,
       "_was": "newly judged. The label set had fallen to seven live verdicts after the held-out third was retired, which the guard in test_agreement rightly calls too few to say anything. Selected as the closest unjudged scoreable pairs by distance — a rule, not a preference, and one that biases towards finding pairs that look alike."
+    },
+    {
+      "a": "roofer",
+      "b": "salon",
+      "verdict": "same",
+      "why": "both rule the screen down the middle, the name and a paragraph and a line of figures in the left half, a photograph filling the right. One carries a button and the other does not",
+      "held_out": true,
+      "_was": "newly judged after the `facts` repair, which made two positions that had rendered the same first screen render different ones."
+    },
+    {
+      "a": "barbecue",
+      "b": "contractor-bare",
+      "verdict": "different",
+      "why": "both fill the screen with a photograph, but one sets the name over it and the other a rating at display size — the number is the first thing read on one and absent from the top of the other",
+      "held_out": false,
+      "_was": "newly judged after the `facts` repair, which made two positions that had rendered the same first screen render different ones."
+    },
+    {
+      "a": "bare-trade",
+      "b": "restaurant-rich",
+      "verdict": "different",
+      "why": "one opens on a rating at display size, the other on the name over a food photograph filling the screen",
+      "held_out": false,
+      "_was": "newly judged after the `facts` repair, which made two positions that had rendered the same first screen render different ones."
+    },
+    {
+      "a": "bare-trade",
+      "b": "dentist",
+      "verdict": "different",
+      "why": "one fills the screen with a photograph and a rating set large over it; the other puts a shallow band of photograph above the name on cream",
+      "held_out": true,
+      "_was": "newly judged after the `facts` repair, which made two positions that had rendered the same first screen render different ones."
     }
   ],
-  "_judged_against": "The rendering as of axis two (type treatment) landing — distance ruler 4616d461, gate rule a83a0283 — read off .reviews/sheet, which two standing tests hold to the corpus and to the desktop fold. Only the TUNING pairs were judged. Every held-out verdict was retired rather than re-judged: the re-decide moved nine of the eleven folds, and a held-out pair whose page is gone is retired by rule.",
+  "_judged_against": "The rendering as of the `facts` repair — distance ruler 4616d461, gate rule a83a0283 — read off .reviews/sheet, which two standing tests hold to the corpus and to the desktop fold. No re-decide: no fingerprint moved, only what `facts` renders.",
   "_held_out": "One verdict in three, chosen by a hash of the two slugs so that nobody picks which evidence survives. A held-out verdict is never used to choose a rule or a weighting, only to score one afterwards, and it is never re-judged — when the page under it changes it is retired with a reason and the set gets smaller. It starts here, so it says nothing about the rule this commit lands: the first rule it can honestly score is the next one.",
   "_retired": "A retired verdict is scored by nothing and re-judged by nobody. Retiring is what happens to a held-out pair when the page under it changes, and to any pair whose subject turns out not to be judgeable — the set shrinks, which is the honest cost of the number meaning anything."
 }
