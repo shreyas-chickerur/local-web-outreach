@@ -10,7 +10,6 @@ from app.adapters import claude
 from app.adapters.claude import ClaudeError
 from app.site.iterate import DEFAULT_SPEC
 from app.site.understand import (
-    CTA_LABEL,
     SECTIONS,
     apply_answer,
     understand,
@@ -43,7 +42,12 @@ def test_the_model_cannot_write_the_button_text():
     out = apply_answer({"kind": "style", "cta": "book",
                         "cta_label": "Voted Best in Texas — Book Now!",
                         "understood": []}, dict(DEFAULT_SPEC))
-    assert out["cta"] == {"kind": "book", "label": CTA_LABEL["book"]}
+    # The kind, and no words at all. Carrying our own table's wording here was
+    # how "Book a table" reached a dentist: `CTA_LABEL` is derived from the
+    # phrases a PERSON can type, and putting one in the spec overrode the
+    # trade-aware default. The renderer knows the trade and where the link
+    # goes, and it decides.
+    assert out["cta"] == {"kind": "book", "label": ""}
     assert "Texas" not in str(out)
 
 

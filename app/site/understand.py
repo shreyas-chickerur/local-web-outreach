@@ -236,8 +236,21 @@ def apply_answer(answer: dict, current: dict) -> dict:
             spec["lead_with"] = None
     cta = _enum(answer.get("cta"), CTA_KINDS)
     if cta:
-        # The wording comes from our table, never from the answer.
-        spec["cta"] = {"kind": cta, "label": CTA_LABEL[cta]}
+        # The KIND, and no words. The model has none to contribute here: it is
+        # choosing what a visitor should do, and the renderer knows the trade
+        # and where the link goes, which is what decides the wording.
+        #
+        # Baking a label in was how "Book a table" came back on a dentist after
+        # the brief had already closed it. `CTA_LABEL` here is derived from the
+        # operator's own phrase table — "book a table" is one of the phrases a
+        # PERSON can type — and putting it in the spec let it override the
+        # trade-aware default unconditionally. Two tables for one decision, and
+        # the wrong one won.
+        #
+        # An operator typing "book a table" still gets those words, because
+        # `iterate.py` sets the label from what they said. That is their
+        # phrasing, not an invention.
+        spec["cta"] = {"kind": cta, "label": ""}
     if answer.get("next_hero_photo") is True:
         spec["hero_offset"] = int(spec.get("hero_offset") or 0) + 1
 

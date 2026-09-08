@@ -419,3 +419,55 @@ def test_operator_labels_for_the_wrong_lead_are_caught_too():
     with pytest.raises(AllCandidatesTied):
         pick_hero(pool, labels={"/photo/9/0": "dish", "/photo/9/1": "room"},
                   size_of=lambda url: None)
+
+
+def test_a_model_chosen_action_carries_no_words_of_its_own():
+    """"Book a table" came back on a dentist after the brief had closed it.
+
+    `understand.CTA_LABEL` is derived from the phrases a PERSON can type, and
+    baking one into the spec let it override the trade-aware wording
+    unconditionally — two tables for one decision, and the wrong one won. The
+    model chooses a kind; the renderer knows the trade and where the link goes.
+    """
+    from app.site.iterate import DEFAULT_SPEC
+    from app.site.understand import apply_answer
+
+    out = apply_answer({"kind": "style", "cta": "book", "understood": []},
+                       dict(DEFAULT_SPEC))
+    assert out["cta"] == {"kind": "book", "label": ""}
+
+
+def test_an_operator_typing_their_own_words_still_gets_them():
+    """The other half. "book a table" is their phrasing, not an invention."""
+    from app.site.iterate import DEFAULT_SPEC, parse_iteration_instruction
+
+    out = parse_iteration_instruction("add a book a table button",
+                                      dict(DEFAULT_SPEC))
+    assert out["cta"]["label"] == "Book a table"
+
+
+def test_no_frozen_fixture_ships_wording_from_the_wrong_trade():
+    """The regression as it actually reached a page: every census run was
+    rendering a dentist a button offering a table."""
+    import json
+    import re
+    from pathlib import Path
+
+    from app.site.pipeline import spec_from_config
+    from app.site.render import build_from_spec
+
+    for path in sorted(Path("tests/fixtures/briefs").glob("*.json")):
+        brief = {**json.loads(path.read_text()), "lead_id": 1}
+        direction = brief.get("design_direction") or {}
+        cta = direction.get("cta")
+        if isinstance(cta, dict):
+            assert not cta.get("label"), (
+                f"{path.stem} carries baked wording {cta['label']!r} — the "
+                f"renderer decides the words")
+        page = build_from_spec(brief, spec_from_config(direction))
+        for label in re.findall(r'<a class="(?:book|cta)"[^>]*>([^<]+)</a>',
+                                page):
+            if "table" in label.lower():
+                from app.site.render import material_from_brief
+                assert material_from_brief(brief).trade_kind == "food", (
+                    f"{path.stem} offers {label!r} and is not a restaurant")

@@ -97,6 +97,21 @@ def labels_version(path: Path | None = None) -> str:
     return hashlib.sha256(material.encode()).hexdigest()[:8]
 
 
+def judged_against(path: Path | None = None) -> str:
+    """Which rendering the verdicts were taken from.
+
+    A verdict describes a page. When the page changes the verdict has to be
+    re-taken, and one kept past the rendering it judged is as stale as a
+    baseline kept past a change of ruler — `dentist`/`law` was labelled "the
+    same page twice" when both opened on a photograph with white type, and
+    stayed labelled that after one moved to `proof` and the other to `facts`.
+    """
+    source = path or PAIRS
+    if not source.exists():
+        return ""
+    return str(json.loads(source.read_text()).get("_judged_against") or "")
+
+
 def score(distances: dict[tuple[str, str], float],
           pairs: list[dict] | None = None) -> Agreement:
     """Rank the vector's distances against the hand-judged verdicts."""

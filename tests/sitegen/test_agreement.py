@@ -110,3 +110,22 @@ def test_the_file_says_whose_judgement_it_is_and_that_it_was_blind():
     raw = json.loads(Path("tests/fixtures/pairs.json").read_text())
     why = " ".join(raw.get("_why") or [])
     assert "Claude" in why and "BLIND" in why
+
+
+def test_the_labels_record_which_rendering_they_judged():
+    """A verdict describes a page. `dentist`/`law` was labelled "the same page
+    twice" when both opened on a photograph with white type over it, and stayed
+    labelled that after one moved to `proof` and the other to `facts` — a label
+    kept past the rendering it judged is as stale as a baseline kept past a
+    change of ruler."""
+    assert "rendering" in agreement.judged_against().lower()
+    assert "575db030" in agreement.judged_against()
+
+
+def test_a_re_judged_pair_says_what_it_used_to_be_and_why():
+    """A verdict that changed has to be traceable, or the ground truth becomes
+    something that quietly moves whenever a number is inconvenient."""
+    changed = [p for p in agreement.load() if p.get("_was")]
+    assert changed, "no re-judgement recorded"
+    for pair in changed:
+        assert len(pair["_was"]) > 40, pair

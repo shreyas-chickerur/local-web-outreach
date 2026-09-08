@@ -92,7 +92,13 @@ BASELINE_WORST = ("barbecue", "restaurant-rich", 0.20)
 BASELINE_METRIC = "575db030"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
-BASELINE_LABELS = "747e4ef5"
+BASELINE_LABELS = "449b9ddb"
+# True on the commit that re-pins, false on every commit after. Without
+# it the first run under a new ruler always prints "no better than the
+# baseline" — because the baseline IS that run's own measurement copied
+# into a constant, and a self-comparison reads exactly like a confirmed
+# unchanged result.
+BASELINE_IS_FRESH = True
 
 # The gate is NOT on. With eight axes and four structural, "differ on four
 # including one structural" fails almost everything the generator can currently
@@ -318,6 +324,10 @@ def _report(rows, first_pass, again) -> None:
                        f"ruler {BASELINE_METRIC} and this is "
                        f"{fp.metric_version()}. Re-pin it rather than reading "
                        f"the difference.")
+        elif BASELINE_IS_FRESH:
+            verdict = ("FRESHLY RE-PINNED — this run IS the baseline, so there "
+                       "is nothing to compare yet. The next run is the first "
+                       "that can say better or worse.")
         else:
             verdict = ("no better than the baseline" if abs(moved) < 0.01
                        else f"{abs(moved):.0%} "

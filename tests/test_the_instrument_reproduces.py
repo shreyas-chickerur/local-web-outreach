@@ -31,9 +31,9 @@ FIXTURES = Path("tests/fixtures/briefs")
 # commit that says they moved and why — a number that changes because the
 # instrument changed is not a result.
 RULER = "575db030"
-LABELS = "747e4ef5"
+LABELS = "449b9ddb"
 SAME_TRADE_MEAN = 0.52
-AGREEMENT = (36, 36)
+AGREEMENT = (40, 40)
 
 
 def fingerprints() -> dict[str, fp.Fingerprint]:

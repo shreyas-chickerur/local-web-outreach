@@ -4,7 +4,7 @@
     "one tool, or from two different studios?",
     "",
     "Judged BLIND, from the first-viewport screenshots alone, with no axis",
-    "values in view. The first version of this file was contaminated — four of",
+    "values in view. The first version of this file was contaminated \u2014 four of",
     "four 'different' verdicts were justified in the vector's own vocabulary",
     "(mood, accent, layout bias, leads-with), so agreement was measuring the",
     "instrument against a restatement of itself. Every `why` below describes",
@@ -19,37 +19,103 @@
     "Claude's readings on 2026-09-07, from artifacts/contact-sheet/fold.html.",
     "Shreyas sells these pages and should overwrite any of them."
   ],
-  "_verdicts": ["same", "different", "unsure"],
+  "_verdicts": [
+    "same",
+    "different",
+    "unsure"
+  ],
   "pairs": [
-    {"a": "law", "b": "bare-trade", "verdict": "same",
-     "why": "both open on a photograph washed dark, the name in big white serif down the left, a paragraph under it and a star line under that"},
-    {"a": "restaurant-bare", "b": "restaurant-rich", "verdict": "same",
-     "why": "a close food photograph filling the screen, white serif name over it at the same height, two buttons in the same place"},
-    {"a": "barbecue", "b": "restaurant-rich", "verdict": "same",
-     "why": "same food photograph treatment, same serif, same pair of buttons, same warm cast"},
-    {"a": "contractor-bare", "b": "roofer", "verdict": "same",
-     "why": "a wide photograph of a man working, heavy condensed white type across the left half, everything else in the same spot"},
-    {"a": "contractor-bare", "b": "hvac", "verdict": "same",
-     "why": "both a tradesman photographed on the job with heavy condensed type over him; only the shirt colour changes"},
-    {"a": "dentist", "b": "law", "verdict": "same",
-     "why": "a person photographed indoors, dark wash, white serif name left, long paragraph beneath — the same page twice"},
-    {"a": "salon", "b": "restaurant-bare", "verdict": "same",
-     "why": "photograph edge to edge, white serif name at the same height on the left, star line below"},
-    {"a": "bare-trade", "b": "salon", "verdict": "same",
-     "why": "identical arrangement: building photograph, dark wash, serif name, small rating line"},
-    {"a": "hvac", "b": "roofer", "verdict": "same",
-     "why": "condensed white type over a working photograph, name wrapping to two lines the same way"},
-    {"a": "law", "b": "roofer", "verdict": "different",
-     "why": "one is a quiet serif over an interior portrait, the other is heavy condensed type over a roof in daylight — they read as different kinds of page"},
-    {"a": "salon", "b": "contractor-bare", "verdict": "different",
-     "why": "elegant serif over a shopfront against blocky uppercase over a workshop floor"},
-    {"a": "restaurant-bare", "b": "hvac", "verdict": "different",
-     "why": "a dark, still food photograph with fine serif against a bright van and bold condensed type"},
-    {"a": "dentist", "b": "contractor-bare", "verdict": "different",
-     "why": "soft serif over a reception desk against uppercase slab over a bathroom repair"},
-    {"a": "barbecue", "b": "threadbare", "verdict": "unsure",
-     "why": "same photographic hero, but the handyman page has no buttons, no rating and almost nothing under it — emptiness may read as a different page or as a broken one"},
-    {"a": "threadbare", "b": "restaurant-bare", "verdict": "unsure",
-     "why": "same arrangement, but one has content beneath the fold and the other has none; unclear whether a stranger sees design or absence"}
-  ]
+    {
+      "a": "law",
+      "b": "bare-trade",
+      "verdict": "same",
+      "why": "both open on a photograph washed dark, the name in big white serif down the left, a paragraph under it and a star line under that"
+    },
+    {
+      "a": "restaurant-bare",
+      "b": "restaurant-rich",
+      "verdict": "same",
+      "why": "a close food photograph filling the screen, white serif name over it at the same height, two buttons in the same place"
+    },
+    {
+      "a": "barbecue",
+      "b": "restaurant-rich",
+      "verdict": "same",
+      "why": "same food photograph treatment, same serif, same pair of buttons, same warm cast"
+    },
+    {
+      "a": "contractor-bare",
+      "b": "roofer",
+      "verdict": "same",
+      "why": "a wide photograph of a man working, heavy condensed white type across the left half, everything else in the same spot"
+    },
+    {
+      "a": "contractor-bare",
+      "b": "hvac",
+      "verdict": "same",
+      "why": "both a tradesman photographed on the job with heavy condensed type over him; only the shirt colour changes"
+    },
+    {
+      "a": "dentist",
+      "b": "law",
+      "verdict": "different",
+      "why": "one is a narrow photograph strip above black type on cream with a ruled row of figures under it; the other is a photograph filling the screen with white type over it \u2014 different kinds of page",
+      "_was": "same, when both opened on a photograph with white serif type over it. That page no longer exists: they now open differently, and the old verdict was describing a rendering rather than these two businesses."
+    },
+    {
+      "a": "salon",
+      "b": "restaurant-bare",
+      "verdict": "same",
+      "why": "photograph edge to edge, white serif name at the same height on the left, star line below"
+    },
+    {
+      "a": "bare-trade",
+      "b": "salon",
+      "verdict": "same",
+      "why": "identical arrangement: building photograph, dark wash, serif name, small rating line"
+    },
+    {
+      "a": "hvac",
+      "b": "roofer",
+      "verdict": "same",
+      "why": "condensed white type over a working photograph, name wrapping to two lines the same way"
+    },
+    {
+      "a": "law",
+      "b": "roofer",
+      "verdict": "different",
+      "why": "one is a quiet serif over an interior portrait, the other is heavy condensed type over a roof in daylight \u2014 they read as different kinds of page"
+    },
+    {
+      "a": "salon",
+      "b": "contractor-bare",
+      "verdict": "different",
+      "why": "elegant serif over a shopfront against blocky uppercase over a workshop floor"
+    },
+    {
+      "a": "restaurant-bare",
+      "b": "hvac",
+      "verdict": "different",
+      "why": "a dark, still food photograph with fine serif against a bright van and bold condensed type"
+    },
+    {
+      "a": "dentist",
+      "b": "contractor-bare",
+      "verdict": "different",
+      "why": "soft serif over a reception desk against uppercase slab over a bathroom repair"
+    },
+    {
+      "a": "barbecue",
+      "b": "threadbare",
+      "verdict": "unsure",
+      "why": "same photographic hero, but the handyman page has no buttons, no rating and almost nothing under it \u2014 emptiness may read as a different page or as a broken one"
+    },
+    {
+      "a": "threadbare",
+      "b": "restaurant-bare",
+      "verdict": "unsure",
+      "why": "same arrangement, but one has content beneath the fold and the other has none; unclear whether a stranger sees design or absence"
+    }
+  ],
+  "_judged_against": "Rendered pages as of the first-screen contract landing (ruler 575db030). A verdict describes a rendering, so when the rendering changes the verdict has to be re-taken \u2014 a label kept past the page it judged is as stale as a baseline kept past a change of ruler. Re-look at .reviews/sheet before trusting any verdict here."
 }

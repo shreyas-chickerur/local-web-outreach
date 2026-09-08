@@ -55,6 +55,41 @@ labels or recorded as a real miss.
 * The proof-forward position is what separates the two attorneys from the two
   restaurants, rather than separating each pair from the other.
 
+## Checked, after axis one (first-screen contract)
+
+**The binding claim held.** `dentist`/`law` is no longer inverted. Agreement
+went 35/36 to 36/36 on the labels as they stood, and 40/40 after the pair was
+re-judged — see below.
+
+**Wrong: the dip.** I forecast agreement falling to around 30/36 before
+recovering. It rose immediately. The reasoning — a new axis with few positions
+separates pairs a person groups together — did not apply, because the pair in
+question was one a person had grouped WRONGLY under the old rendering.
+
+**Wrong, and more concretely: the separation.** I predicted that
+`contractor-bare`/`roofer` and `barbecue`/`restaurant-rich`, the two closest
+same-trade pairs, would "separate on first-screen contract before they separate
+on anything else". `contractor-bare`/`roofer` did. `barbecue`/`restaurant-rich`
+did not — both chose `photo`, and they remain the worst same-trade pair at 20%.
+The direction call, offered a real choice, picked the same obvious default for
+two businesses that both have strong photography, and nothing yet stops it: the
+diversity budget that would push the second away from the first is
+`identity.py`, which does not exist. An axis being real and a collision gate
+being wired are different pieces of work.
+
+**Right: the mean did not move**, 52% to 52%, and no credit is claimed for it.
+`dentist`/`law` is not a same-trade pair — a dentist and an attorney are
+different trade kinds — so resolving it could not move that number by
+construction, whatever axis one did.
+
+**A category I had not predicted: the label went stale.** The verdict on
+`dentist`/`law` described a rendering where both opened on a photograph with
+white type. After axis one one opens on `proof` and the other on `facts`, and a
+blind re-look says they are plainly different pages. Re-judged, and the labels
+now record which rendering they were taken from. A label kept past the page it
+judged is as stale as a baseline kept past a change of ruler, and that was not
+on the list of things to watch for.
+
 ## Baseline this is measured against
 
     ruler   563eaa0b        (seven axes, visibility x decidedness)
