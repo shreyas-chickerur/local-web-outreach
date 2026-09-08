@@ -116,59 +116,49 @@ DECIDEDNESS: dict[str, float] = {
 # real leads, not eleven fixtures.
 REQUIRED_AXES = 4
 
-# What "weighted highly" means, for the gate's rule rather than the distance.
+# THE GATE'S REQUIRED SET, and it is no longer derived from the weights.
 #
-# `BRIEF` §2.5 asks for "difference on at least four axes including at least
-# one weighted highly", and the gate checked STRUCTURAL instead. They are not
-# the same set: three of the four structural axes weigh 1.0 or less, so the
-# rule could be satisfied entirely below the fold while `first_screen` and
-# `mood` — the two heaviest things in the vector — stayed identical. That is
-# what let two attorneys through sharing their opening, their feel, their
-# colour and their button.
+# `BRIEF` §2.5 asks for "four axes, one structural, one weighted highly", and
+# "weighted highly" was read off `weight_of()` — which coupled two questions
+# that turn out not to be the same question:
 #
-# 2.0 is not picked. Five readings of "weighted highly" were scored against
-# the blind verdicts, and this is the only one that reaches 12 of 13:
+#   the GATE asks     is this site's DECISION SET different enough from the
+#                     last ten that the generator is not repeating itself?
+#   the DISTANCE asks would a stranger say these two pages came from one tool?
 #
-#     one axis at or above 2.0                12/13
-#     four axes that are not colour or subject 11/13
-#     two axes chosen outright                10/13
-#     one axis above the mean weight (1.25)     9/13   — hero_subject dilutes it
-#     structural only (what shipped)            9/13
+# `type_treatment` is where they came apart. The gate needs it: with only
+# `first_screen` required, five positions against a window of ten is unmeetable
+# — that is the arithmetic that reverted `HIGH_WEIGHT = 2.5` once already. But
+# four blind verdicts describe a type difference and dismiss it: "one is
+# shouted and the other is spaced out", "one set in a serif and one in heavy
+# capitals", "the only thing that changes is whether the name is a serif or
+# blocky capitals". All four are "same site".
 #
-# Recorded as measured, on thirteen verdicts, against four alternatives. If the
-# corpus grows and a different reading wins, this moves and `rule_version`
-# says so.
+# So an axis can be mandatory for variety and cheap in the metric, and while
+# the two were one number that was not sayable. Splitting them is what
+# `weight_of`'s `min()` comment anticipated, arriving from a third direction:
+# not visibility against decidedness, but either of them against what the gate
+# has to require to stay satisfiable.
 #
-# 2.5, NOT 2.0, AND THE REASON IS A REGRESSION THIS RULE CAUSED. At 2.0 the set
-# is {first_screen, mood}, and `mood` alone let `dentist` and `law` through the
-# gate: both opened on `proof`, and a stranger called them one page in two
-# colours. What `mood` does visibly for that pair IS the colour — teal against
-# burgundy — and the judging rule written blind at the top of `pairs.json` says
-# a difference in colour alone is not a different site. So the requirement
-# added to stop a pair passing on differences nobody sees was itself satisfied
-# by a difference the judge had already ruled out.
+# LISTED, NOT DERIVED, and that is the cost. A hand-kept set is exactly the
+# "two definitions of one thing" this project keeps finding, so it carries a
+# stated principle and two standing tests: `test_the_gate_is_satisfiable` holds
+# the arithmetic, and the axes here must be ones a page's FORM depends on
+# rather than its palette — `mood` and `accent` are deliberately absent because
+# what they change is the colour, and the judging rule says a difference in
+# colour alone is not a different site.
 #
-# 2.5 WAS TRIED ONCE AND PUT BACK, THEN SHIPPED WHEN AXIS TWO MADE IT MEETABLE.
-#
-# The first attempt left `first_screen` alone in the required set: a candidate
-# has to differ from EACH of the last ten, `first_screen` has five positions,
-# and once the window holds all five no site can satisfy the rule. Right about
-# the perception, wrong about the arithmetic — the corpus re-decided under it
-# had eight of fifty-five pairs its own gate rejected, and the scored same-trade
-# figure went from 38% identical to 47%.
-#
-# `type_treatment` weighs 2.5 as well, so the set is now {first_screen,
-# type_treatment}: five positions by five treatments is twenty-five against a
-# window of ten. `test_the_gate_is_satisfiable` holds that arithmetic and fails
-# in milliseconds on any value that breaks it, which is what makes shipping this
-# a test run rather than a corpus re-decide and a re-judge.
-#
-# `mood` drops out, and that was the point. It was the axis that let `dentist`
-# and `law` through the gate sharing an opening, because what `mood` does
-# visibly between those two is the colour — and the judging rule written blind
-# at the top of `pairs.json` says a difference in colour alone is not a
-# different site.
-HIGH_WEIGHT = 2.5
+# NO WEIGHT CHANGED IN THE COMMIT THAT SPLIT THESE. The freedom to reweight
+# `type_treatment` is now available and deliberately not taken: the evidence
+# that would justify it is the same score the change would improve, which is
+# the fitted threshold this project has thrown out twice. See
+# .reviews/slice-b-weight-split.md for what it would take to settle it.
+REQUIRED_HIGH: frozenset[str] = frozenset({"first_screen", "type_treatment"})
+
+
+def required_high() -> frozenset[str]:
+    """The axes the gate requires a difference on. See `REQUIRED_HIGH`."""
+    return REQUIRED_HIGH
 
 
 def weight_of(axis: str) -> float:
@@ -191,15 +181,6 @@ def weight_of(axis: str) -> float:
     return min(VISIBILITY.get(axis, 1.0), DECIDEDNESS.get(axis, 1.0))
 
 
-def highly_weighted() -> frozenset[str]:
-    """The axes a difference has to touch to count as one somebody notices.
-
-    Derived from the weights rather than listed, so it cannot drift out of step
-    with them the way `layout_bias` drifted out of step with `mood`.
-    """
-    return frozenset(axis for axis in AXES if weight_of(axis) >= HIGH_WEIGHT)
-
-
 def rule_version() -> str:
     """What the GATE was set to, as against what the distance was measured with.
 
@@ -213,7 +194,7 @@ def rule_version() -> str:
     import hashlib
 
     material = (f"axes={REQUIRED_AXES}|structural={sorted(STRUCTURAL)}"
-                f"|high={sorted(highly_weighted())}")
+                f"|high={sorted(required_high())}")
     return hashlib.sha256(material.encode()).hexdigest()[:8]
 
 
@@ -308,7 +289,7 @@ def collisions(candidate: Fingerprint, previous: list[Fingerprint],
     different".
     """
     found: list[tuple[int, set[str]]] = []
-    high = highly_weighted()
+    high = required_high()
     for index, other in enumerate(previous):
         moved = candidate.differs_from(other)
         # Three requirements, not two. Enough axes, at least one of them

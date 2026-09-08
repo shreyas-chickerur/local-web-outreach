@@ -84,12 +84,32 @@ type treatment, colour and subject — and the judge discounts all three, so the
 vector now carries a 2.5-weight term exactly where a person sees no difference.
 That is the failure mode `accent` and `hero_subject` already had.
 
-**The open fork.** `type_treatment` must be worth 2.5 for the gate to stay
-satisfiable and the evidence says it should be worth very little in the
-distance. The two weights disagree for the first time, which is the case
-`weight_of`'s `min()` was annotated as waiting for. Separating the gate's
-required-axis set from the distance's weighting changes the shape of the
-instrument, so it is a fork rather than a tidy-up.
+**The fork is decided: the gate's required set is split from the distance's
+weighting.** `fingerprint.REQUIRED_HIGH` is what `collisions()` reads;
+`HIGH_WEIGHT` and `highly_weighted()` are gone. The two were one number and are
+not one question — the gate asks whether a site's decision set repeats a recent
+one, the distance asks whether a stranger would say two pages came from one
+tool, and `type_treatment` is where they came apart: the gate needs it or it
+becomes unmeetable, and four blind verdicts describe a type difference and
+dismiss it. An axis can be mandatory for variety and cheap in the metric, and
+while they were coupled that sentence had nowhere to live.
+
+Both hashes are unchanged by the split, which is the point: it is a structural
+change that provably alters no output. **No weight was changed.** The freedom is
+now available and deliberately not taken — lowering `type_treatment` moves
+agreement 21/36 to 30/36 and the held-out set 0/2 to 2/2, which is a change
+arriving pre-validated by the score it improves. See
+`.reviews/slice-b-weight-split.md`.
+
+**The blind spot is a label contradiction, not a missing axis.** Both remaining
+unreachable comparisons trace to two verdicts of mine that cannot both be right:
+`restaurant-bare`/`restaurant-rich` differs on a strict subset of what
+`barbecue`/`restaurant-bare` differs on, both `why` texts rest on how the name
+is set, and one is called the same site while the other is called two studios.
+No axis can clear that. `pairs.json`'s judging rule covers colour and subject
+and says nothing about type setting, which is the gap they fell into — stating
+that rule and re-judging against it comes before axis three, and is
+pre-registered in `.reviews/slice-b-predictions.md`.
 
 **The held-out third cannot survive this work.** Emptied twice now, by both
 changes since it was created: every axis re-decides the corpus, every re-decide

@@ -409,8 +409,12 @@ def _report(rows, first_pass, again) -> None:
         print(f"\n  BLIND SPOT  {len(blind)} comparison(s) no weighting can "
               f"reach — the 'same' pair differs on a superset of the "
               f"'different' pair's axes,")
-        print("              so it is further apart under any weights. Only a "
-              "new axis reaches these.")
+        print("              so it is further apart under any weights. Two "
+              "causes look identical here: an axis the vector lacks, or two "
+              "verdicts that contradict")
+        print("              each other. Check whether the 'different' pair's "
+              "axes are a SUBSET of the 'same' pair's before reading it as "
+              "evidence about axes.")
         for near, far, extra in blind:
             print(f"    {near:24} (same) contains {far:24} (different) "
                   f"— extra: {', '.join(sorted(extra)) or 'nothing'}")

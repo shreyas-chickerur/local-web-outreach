@@ -91,7 +91,8 @@
     (the diversity gate is ON — 0 of 7 same-trade pairs would collide)
 
   BLIND SPOT  2 comparison(s) no weighting can reach — the 'same' pair differs on a superset of the 'different' pair's axes,
-              so it is further apart under any weights. Only a new axis reaches these.
+              so it is further apart under any weights. Two causes look identical here: an axis the vector lacks, or two verdicts that contradict
+              each other. Check whether the 'different' pair's axes are a SUBSET of the 'same' pair's before reading it as evidence about axes.
     barbecue/restaurant-bare (same) contains restaurant-bare/restaurant-rich (different) — extra: action
     dentist/hvac             (same) contains restaurant-bare/restaurant-rich (different) — extra: action
 

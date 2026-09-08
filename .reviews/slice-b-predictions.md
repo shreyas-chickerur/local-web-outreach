@@ -372,3 +372,80 @@ Measured across four weights on the shipped corpus, agreement moves 21/36 →
 and the inversion set does not change at all**. The score is a function of the
 weights; the defect is not. Recorded in `.reviews/slice-b-mood-weight.md` and
 not made.
+
+## Axis three — NOT pre-registered, and why
+
+The round was scoped to pick the next axis against the blind spot rather than
+against `BRIEF` §2.1's default order, and to pre-register it before coding.
+Neither axis is registered, because the check says the blind spot is not
+evidence about axes at all.
+
+### What the two unreachable comparisons are made of
+
+    barbecue / restaurant-bare       [SAME]
+      differs on: accent, action, compositions, mood, section_order,
+                  type_treatment
+      why: "the same page: a food photograph edge to edge, the name over it on
+            the left, a line of figures, two buttons in the same place. One
+            name is shouted and the other is spaced out, and the plates are
+            different colours"
+
+    restaurant-bare / restaurant-rich  [DIFFERENT]
+      differs on: accent, compositions, mood, section_order, type_treatment
+      why: "both fill the screen with a food photograph, but one sets the name
+            in capitals with the letters opened right out and the other in a
+            large sentence-case serif — they read as a counter and a dining
+            room"
+
+The second pair's differing set is a **strict subset** of the first's — the
+same five axes, and the first adds `action`. Both `why` texts describe three
+food photographs filling the screen and rest the verdict on how the name is
+set. One of those is called the same site and the other two different studios.
+
+**They cannot both be right.** That is a judging inconsistency in my own
+verdicts, and it is what produces both unreachable comparisons.
+
+### So no axis can clear it
+
+Clearing comparison one requires an axis where, simultaneously:
+
+    axis(restaurant-bare) != axis(restaurant-rich)     the DIFFERENT pair
+    axis(barbecue)        == axis(restaurant-bare)     the SAME pair
+    axis(dentist)         == axis(hvac)                the other SAME pair
+
+Nothing in the judged text names a property that separates Ichika from The
+Heritage Table while joining Ichika to Hutchins — the whys describe all three
+as a food photograph filling the screen with the name over it. Colour structure
+would not do it, and neither would page architecture. **The requirement is
+unsatisfiable because the labels contradict, not because the vector is thin.**
+
+### And on colour structure specifically, the answer would be no anyway
+
+Every one of the four "same" verdicts names the colour and dismisses it: "the
+plates are different colours", "teal against amber", "the same rust-coloured
+fill". Colour is the property the judging rule already discounts by name. An
+axis built on it would be weighted into the distance and discounted by the
+judge — the exact sequence that made type treatment's binding claim fail. That
+is a prediction I am willing to be held to, and it is why colour structure is
+not next whatever happens to the labels.
+
+### The claim I am registering instead
+
+Before any axis three: **state the missing judging rule and re-judge against
+it.** The rule in `pairs.json` covers colour and subject and says nothing about
+type setting, which is the gap these verdicts fell into.
+
+**Binding claim.** After the rule is stated and every live verdict re-judged
+against it — not just the contradictory ones — `agreement.unreachable()` is
+recomputed and reported. If it reaches zero with no axis added, the axis-two
+blind spot was a label artefact and the case for axis three has to be made
+again from scratch. If it does not, what remains is evidence about the vector
+and names the axis.
+
+**Falsification.** Re-judging that moves the score without a rule stated in
+advance. The rule goes in `pairs.json` first, then the verdicts, and the two
+contradictory pairs are re-judged by applying it rather than by choosing.
+
+**Held-out.** Untouched. No re-decide is involved, so no held-out verdict goes
+stale and none may be re-judged — the rule applies to the tuning set only, and
+the held-out three stay as the check on whatever comes out of it.

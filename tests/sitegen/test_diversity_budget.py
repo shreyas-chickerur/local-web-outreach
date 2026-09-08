@@ -225,11 +225,15 @@ def test_the_gate_is_satisfiable():
     unresolvable collision, and the corpus quietly fills with pages the gate
     would reject if anybody asked it.
 
-    This was not hypothetical. Raising `HIGH_WEIGHT` to 2.5 left `first_screen`
-    alone in the set: five positions against a window of ten. The corpus
-    re-decided under it had eight of fifty-five pairs the gate itself rejected,
-    and it took a full re-decide and a re-render to notice. This costs
-    milliseconds.
+    This was not hypothetical. When the set was derived from the weights, a
+    `HIGH_WEIGHT` of 2.5 left `first_screen` alone in it: five positions against
+    a window of ten. The corpus re-decided under it had eight of fifty-five
+    pairs the gate itself rejected, and it took a full re-decide and a re-render
+    to notice. This costs milliseconds.
+
+    The set is listed now rather than derived, which removes the way it broke
+    last time and adds a new one — a hand-kept list can be added to without
+    anybody checking the arithmetic. That is what this holds.
     """
     from app.site import firstscreen, typetreatment
     from app.site.iterate import MOODS
@@ -242,14 +246,14 @@ def test_the_gate_is_satisfiable():
         "accent": len(theme.ACCENT_NAMES),
     }
     room = 1
-    for axis in fp.highly_weighted():
+    for axis in fp.required_high():
         assert axis in cardinality, (
             f"{axis} is weighted highly and this test cannot say how many "
             f"values it has. Add it to `cardinality` — a required axis whose "
             f"range is unknown is a rule whose satisfiability is unknown")
         room *= cardinality[axis]
     assert room > WINDOW, (
-        f"the highly weighted axes {sorted(fp.highly_weighted())} describe "
+        f"the required axes {sorted(fp.required_high())} describe "
         f"{room} distinct sites and the gate compares against the last "
         f"{WINDOW}. Every build past the {room}th can only be an unresolved "
         f"collision. Widen the required set, add an axis to it, or shrink the "
