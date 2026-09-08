@@ -7,6 +7,33 @@
   "chain_signals": [
     "their own site has a locations page"
   ],
+  "design_direction": {
+    "accent": "navy",
+    "contradictions": [],
+    "cta": {
+      "kind": "call",
+      "label": "Call us"
+    },
+    "defect": "",
+    "emphasis": [
+      "stats",
+      "about"
+    ],
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "reviews",
+    "mood": "refined",
+    "rationale": "This is a family-law attorney where trust and a track record matter far more than atmosphere, and with only one photo strong enough to feature, the gallery would look thin \u2014 so lead with the 4.9-star reviews and client testimonials to show proven care and results, backing that up with the mission/about copy, in a refined navy palette that reads as serious and trustworthy rather than flashy.",
+    "read_by": "frozen",
+    "suppress": [
+      "gallery"
+    ],
+    "understood": [
+      "This is a family-law attorney where trust and a track record matter far more than atmosphere, and with only one photo strong enough to feature, the gallery would look thin \u2014 so lead with the 4.9-star "
+    ],
+    "unsupported": []
+  },
   "facts": [
     {
       "candidates": [],
@@ -82,6 +109,36 @@
     "https://towsonfirm.com/wp-content/uploads/2026/02/TowsonTop10.png": "A green badge with five stars reading Top 10 Frisco Divorce Attorney 2026 from TrustAnalytica.",
     "https://towsonfirm.com/wp-content/uploads/2026/03/about_image.webp": "Three people in a bright room with a fur rug, one man sitting in an armchair while a man and woman sit on a sofa reviewing papers, with text overlay reading Towson Law Firm, LLC.",
     "https://towsonfirm.com/wp-content/uploads/2026/03/towson-law-gfirm-1.webp": "A silver logo featuring a scale of justice icon with the letter T beside the words Towson Law Firm, PLLC."
+  },
+  "photo_sizes": {
+    "/photo/2/0": [
+      1024,
+      1430
+    ],
+    "/photo/2/1": [
+      1920,
+      1440
+    ],
+    "/photo/2/2": [
+      1179,
+      1490
+    ],
+    "https://towsonfirm.com/wp-content/uploads/2026/02/TowsonTop10.png": [
+      246,
+      268
+    ],
+    "https://towsonfirm.com/wp-content/uploads/2026/03/about_image.webp": [
+      643,
+      620
+    ],
+    "https://towsonfirm.com/wp-content/uploads/2026/03/towson-law-gfirm-1.webp": [
+      1006,
+      273
+    ],
+    "https://towsonfirm.com/wp-content/uploads/2026/04/towson-law-firm-pllc-plaque-scaled.png": [
+      2045,
+      2560
+    ]
   },
   "photo_vision": {
     "/photo/2/0": {

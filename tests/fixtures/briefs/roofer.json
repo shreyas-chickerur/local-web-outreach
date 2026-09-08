@@ -4,6 +4,31 @@
     "ignored a yelp result for 'Dwell Roofing & Exteriors' \u2014 different business"
   ],
   "chain_signals": [],
+  "design_direction": {
+    "accent": "navy",
+    "contradictions": [],
+    "cta": {
+      "kind": "quote",
+      "label": "Get a quote"
+    },
+    "defect": "",
+    "emphasis": [
+      "services",
+      "gallery"
+    ],
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "stats",
+    "mood": "industrial",
+    "rationale": "A multi-state roofing contractor needs to prove scale and trustworthiness fast \u2014 the 5.0 rating over 218 reviews, BBB A+, and four-state coverage are the strongest credibility signals a first-time visitor (often mid-insurance-claim or comparing contractors) needs before anything else. The industrial mood with a navy accent reads as sturdy and professional rather than decorative, matching a trade business, and leading with stats before services and the strong roof-work gallery lets the proof carr",
+    "read_by": "frozen",
+    "suppress": [],
+    "understood": [
+      "A multi-state roofing contractor needs to prove scale and trustworthiness fast \u2014 the 5.0 rating over 218 reviews, BBB A+, and four-state coverage are the strongest credibility signals a first-time vis"
+    ],
+    "unsupported": []
+  },
   "facts": [
     {
       "candidates": [],
@@ -105,6 +130,80 @@
     "https://www.statusroofingllc.com/assets/img/realtor-header.jpeg": "A group of business people shaking hands over a conference table with an architectural model, laptops, and papers.",
     "https://www.statusroofingllc.com/assets/img/roof-repair-header.png": "Three roofers install gray shingles on a roof partially covered with underlayment marked with the Status Roofing logo, on a sunny day.",
     "https://www.statusroofingllc.com/assets/img/roof-replacement-header.png": "An aerial view of several roofers working on a large peaked roof covered partly with underlayment printed with the Status Roofing logo, next to trees with autumn foliage."
+  },
+  "photo_sizes": {
+    "/photo/9/0": [
+      1360,
+      765
+    ],
+    "/photo/9/1": [
+      2400,
+      1800
+    ],
+    "/photo/9/2": [
+      1360,
+      906
+    ],
+    "/photo/9/3": [
+      1440,
+      1080
+    ],
+    "/photo/9/4": [
+      2400,
+      3200
+    ],
+    "/photo/9/5": [
+      2400,
+      3200
+    ],
+    "/photo/9/6": [
+      2400,
+      1800
+    ],
+    "/photo/9/7": [
+      2400,
+      1600
+    ],
+    "/photo/9/8": [
+      2400,
+      3200
+    ],
+    "/photo/9/9": [
+      1440,
+      1080
+    ],
+    "https://www.statusroofingllc.com/assets/four-states-clean.png": [
+      2754,
+      1536
+    ],
+    "https://www.statusroofingllc.com/assets/img/arial-job.jpg": [
+      2000,
+      1500
+    ],
+    "https://www.statusroofingllc.com/assets/img/commercial-header.jpeg": [
+      3583,
+      1200
+    ],
+    "https://www.statusroofingllc.com/assets/img/commercial-roofing.jpeg": [
+      1920,
+      548
+    ],
+    "https://www.statusroofingllc.com/assets/img/other-services-header.jpeg": [
+      1920,
+      750
+    ],
+    "https://www.statusroofingllc.com/assets/img/realtor-header.jpeg": [
+      1920,
+      1280
+    ],
+    "https://www.statusroofingllc.com/assets/img/roof-repair-header.png": [
+      1500,
+      999
+    ],
+    "https://www.statusroofingllc.com/assets/img/roof-replacement-header.png": [
+      1500,
+      999
+    ]
   },
   "photo_vision": {
     "/photo/9/0": {

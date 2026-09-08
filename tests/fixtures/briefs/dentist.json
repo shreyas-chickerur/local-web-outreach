@@ -5,6 +5,33 @@
     "openstreetmap had only a town for this business, so it neither confirms nor contradicts the street address: Main Street, Frisco, Texas, 75034"
   ],
   "chain_signals": [],
+  "design_direction": {
+    "accent": "teal",
+    "contradictions": [],
+    "cta": {
+      "kind": "book",
+      "label": "Book a table"
+    },
+    "defect": "",
+    "emphasis": [
+      "stats",
+      "about"
+    ],
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "reviews",
+    "mood": "warm",
+    "rationale": "People choosing a dentist want reassurance about comfort and trust before anything else, and this practice has strong ratings (4.7/4.6) and warm, specific patient reviews praising gentleness and honesty \u2014 that's the proof a nervous visitor needs first. Teal reads as clean and clinical-but-calm (a dental staple without being cold), and 'book' is the one action that matters; the 'menu' section is suppressed since 'Special' is not real menu content for a dental office.",
+    "read_by": "frozen",
+    "suppress": [
+      "menu"
+    ],
+    "understood": [
+      "People choosing a dentist want reassurance about comfort and trust before anything else, and this practice has strong ratings (4.7/4.6) and warm, specific patient reviews praising gentleness and hones"
+    ],
+    "unsupported": []
+  },
   "facts": [
     {
       "candidates": [
@@ -132,6 +159,80 @@
     "/photo/4/7": "A smiling woman at a front desk speaking with a man in a striped shirt across the counter",
     "https://www.friscodentalcare.com/assets/images/reviews-joyelle.png": "Circular profile photo of a smiling woman with dark hair standing outdoors",
     "https://www.friscodentalcare.com/assets/images/reviews-tracie.png": "Circular profile photo of a smiling woman with light brown hair"
+  },
+  "photo_sizes": {
+    "/photo/4/0": [
+      2400,
+      1600
+    ],
+    "/photo/4/1": [
+      2400,
+      3200
+    ],
+    "/photo/4/2": [
+      810,
+      1080
+    ],
+    "/photo/4/3": [
+      810,
+      1080
+    ],
+    "/photo/4/4": [
+      810,
+      1080
+    ],
+    "/photo/4/5": [
+      1000,
+      1000
+    ],
+    "/photo/4/6": [
+      2400,
+      1600
+    ],
+    "/photo/4/7": [
+      2400,
+      1600
+    ],
+    "/photo/4/8": [
+      2338,
+      2000
+    ],
+    "/photo/4/9": [
+      500,
+      500
+    ],
+    "https://www.friscodentalcare.com/assets/images/index-banner.jpg": [
+      804,
+      759
+    ],
+    "https://www.friscodentalcare.com/assets/images/index-financial.png": [
+      406,
+      348
+    ],
+    "https://www.friscodentalcare.com/assets/images/index-join.jpg": [
+      1400,
+      366
+    ],
+    "https://www.friscodentalcare.com/assets/images/index-offer.jpg": [
+      772,
+      432
+    ],
+    "https://www.friscodentalcare.com/assets/images/index-services.jpg": [
+      568,
+      568
+    ],
+    "https://www.friscodentalcare.com/assets/images/reviews-joyelle.png": [
+      60,
+      60
+    ],
+    "https://www.friscodentalcare.com/assets/images/reviews-julie-ann.png": [
+      60,
+      60
+    ],
+    "https://www.friscodentalcare.com/assets/images/reviews-tracie.png": [
+      60,
+      60
+    ]
   },
   "photo_vision": {
     "/photo/4/0": {

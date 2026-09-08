@@ -8,6 +8,33 @@
     "sources point at 2 different street addresses \u2014 each likely a separate branch",
     "google returns 5 locations under this name in one search"
   ],
+  "design_direction": {
+    "accent": "amber",
+    "contradictions": [],
+    "cta": {
+      "kind": "call",
+      "label": "Call us"
+    },
+    "defect": "",
+    "emphasis": [
+      "reviews",
+      "services"
+    ],
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "stats",
+    "mood": "industrial",
+    "rationale": "This is a home-services plumber/electrician whose whole pitch is trust and speed proven by volume \u2014 6,203 Google reviews at 4.9 stars is the strongest asset they have, so numbers should hit first, followed by named-technician reviews and the service list; the industrial mood and amber accent match vans, panels, and pipework rather than a soft residential feel, and a single 'Call' CTA fits an urgent, same-day trade.",
+    "read_by": "frozen",
+    "suppress": [
+      "features"
+    ],
+    "understood": [
+      "This is a home-services plumber/electrician whose whole pitch is trust and speed proven by volume \u2014 6,203 Google reviews at 4.9 stars is the strongest asset they have, so numbers should hit first, fol"
+    ],
+    "unsupported": []
+  },
   "facts": [
     {
       "candidates": [
@@ -101,6 +128,52 @@
     "/photo/5/8": "A person's hands using a yellow clamp meter to test electrical wiring inside an open equipment panel.",
     "/photo/5/9": "A close-up of a brushed nickel bathroom faucet and sink basin with water droplets.",
     "https://callmilestone.com/plano/wp-content/uploads/sites/7/2022/10/9A0A9697-2-web-res-med-quality.jpg": "A smiling bald man in a white work shirt standing in front of a yellow and red branded service van parked outside a house."
+  },
+  "photo_sizes": {
+    "/photo/5/0": [
+      2400,
+      1664
+    ],
+    "/photo/5/1": [
+      1920,
+      1440
+    ],
+    "/photo/5/2": [
+      2400,
+      1600
+    ],
+    "/photo/5/3": [
+      1440,
+      1920
+    ],
+    "/photo/5/4": [
+      2400,
+      3200
+    ],
+    "/photo/5/5": [
+      1440,
+      1920
+    ],
+    "/photo/5/6": [
+      1440,
+      1920
+    ],
+    "/photo/5/7": [
+      2400,
+      3200
+    ],
+    "/photo/5/8": [
+      680,
+      840
+    ],
+    "/photo/5/9": [
+      2160,
+      2880
+    ],
+    "https://callmilestone.com/plano/wp-content/uploads/sites/7/2022/10/9A0A9697-2-web-res-med-quality.jpg": [
+      1280,
+      853
+    ]
   },
   "photo_vision": {
     "/photo/5/0": {

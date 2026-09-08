@@ -32,7 +32,7 @@
                    hero /photo/10/0 (+2.23)
                    This is actually a salon-suite rental business, not a walk-in salon — the real customer is a beauty profession
   threadbare       General Contractor        0/1  sections  blocks    0/0    37.9kB  contrast  5.0
-                   hero None (-1.65)
+                   hero None (-1.41)
                    A general handyman needs to show what jobs he covers and how to reach him fast — that's what earns trust, not 
 
   fingerprints

@@ -197,6 +197,60 @@ def record_vision(conn: sqlite3.Connection, lead_id: int, url: str,
     return True
 
 
+_PROXIED_KEY = re.compile(r"^/photo/\d+/(\d+)$")
+
+
+def rekey_for_lead(said: dict | None, lead_id: object) -> dict:
+    """Re-point anything said about a proxied photograph at this lead.
+
+    A proxied URL carries the lead id, so labels frozen into a fixture under
+    one id do not match the same photographs loaded under another. The corpus
+    appeared to work only because a fresh database happened to assign the same
+    ids in the same order — until one fixture was frozen later than the rest
+    and got a different one.
+
+    One definition, used by the store when it seeds a frozen brief and by
+    `Material` when it reads one, because two would drift.
+    """
+    if not said:
+        return {}
+    if lead_id is None:
+        return dict(said)
+    out: dict = {}
+    for key, value in said.items():
+        match = _PROXIED_KEY.match(str(key))
+        out[f"/photo/{lead_id}/{match.group(1)}" if match else key] = value
+    return out
+
+
+def seed_from_brief(conn: sqlite3.Connection, lead_id: int,
+                    brief: dict) -> int:
+    """Load a frozen brief's own labels into the table, if it has none yet.
+
+    A fixture carries its vision so a clean checkout measures the same system.
+    But `unreviewed` and the photographs stage read the TABLE, so a loaded
+    fixture still looked unexamined and the census re-ran the whole vision pass
+    — paid for, slow, and producing numbers nobody without a key could
+    reproduce.
+
+    Only when the table is empty for this lead, and never over a person: a real
+    lead's labels are already there and are the source of truth.
+    """
+    if labels_for(conn, lead_id):
+        return 0
+    seen = rekey_for_lead(brief.get("photo_vision"), lead_id)
+    named = rekey_for_lead(brief.get("photo_labels"), lead_id)
+    written = 0
+    for url in dict.fromkeys(list(seen) + list(named)):
+        entry = dict(seen.get(url) or {})
+        if url in named:
+            entry.setdefault("subject", named[url])
+        entry.setdefault("subject", "unclear")
+        if record_vision(conn, lead_id, url, entry):
+            written += 1
+    return written
+
+
 def vision_for(conn: sqlite3.Connection, lead_id: int) -> dict[str, dict]:
     """Everything the vision pass recorded, by photograph URL."""
     out: dict[str, dict] = {}

@@ -78,12 +78,19 @@ def save_brief(conn: sqlite3.Connection, brief_json: dict) -> int:
             " created_at, updated_at) VALUES (?,?,?,?,?,?,?)",
             (key, brief_json["name"], brief_json.get("location"),
              brief_json.get("website_url"), payload, now, now))
-        return int(cur.lastrowid or 0)
+        made = int(cur.lastrowid or 0)
+        # A frozen brief carries its own vision. Without this the photographs
+        # stage reads an empty table, decides nobody has looked, and re-runs
+        # the whole pass — which is what made the census unreproducible and
+        # expensive at the same time.
+        photos.seed_from_brief(conn, made, brief_json)
+        return made
     conn.execute(
         "UPDATE leads SET name=?, location=?, website_url=?, brief_json=?,"
         " updated_at=? WHERE id=?",
         (brief_json["name"], brief_json.get("location"),
          brief_json.get("website_url"), payload, now, row["id"]))
+    photos.seed_from_brief(conn, int(row["id"]), brief_json)
     return int(row["id"])
 
 
@@ -164,12 +171,21 @@ def brief_with_overrides(conn: sqlite3.Connection, lead_id: int) -> dict:
     brief["lead_id"] = lead_id
     brief["status"] = row["status"]
     brief["events"] = events(conn, lead_id)
-    brief["photo_labels"] = photos.labels_for(conn, lead_id)
-    brief["photo_vision"] = photos.vision_for(conn, lead_id)
+    # What the table holds wins; what the brief already carried is the
+    # fallback. A frozen fixture carries its own labels and vision, and loading
+    # one into an empty database used to discard them — so the census re-ran
+    # the whole vision pass, paid for it, and measured a system nobody could
+    # reproduce without a key. The table is still the source of truth for a
+    # real lead, because that is where a person's corrections live.
+    said = photos.labels_for(conn, lead_id)
+    brief["photo_labels"] = said or dict(brief.get("photo_labels") or {})
+    seen = photos.vision_for(conn, lead_id)
+    brief["photo_vision"] = seen or dict(brief.get("photo_vision") or {})
     # The words you wrote, kept for alt text on the finished page.
-    brief["photo_notes"] = {url: said["description"]
-                            for url, said in photos.described(conn, lead_id).items()
-                            if said["description"]}
+    written = {url: what["description"]
+               for url, what in photos.described(conn, lead_id).items()
+               if what["description"]}
+    brief["photo_notes"] = written or dict(brief.get("photo_notes") or {})
 
     overrides = _overrides(conn, lead_id)
     facts = brief.get("facts", [])

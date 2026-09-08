@@ -232,7 +232,17 @@ def fallback_opening(brief: dict) -> dict:
 
 
 def opening_spec(brief: dict, *, client: httpx.Client | None = None) -> dict:
-    """The configuration a new lead's first version is built from."""
+    """The configuration a new lead's first version is built from.
+
+    A brief carrying `design_direction` replays it instead of asking. That is
+    the "never re-ask on a rebuild" invariant, and it is what makes the fixture
+    corpus reproducible: the pinned baseline was taken with the model, so
+    without this a reviewer with no key measures a different system and the
+    numbers they cannot reproduce are the ones the whole instrument rests on.
+    """
+    frozen = brief.get("design_direction")
+    if isinstance(frozen, dict) and frozen:
+        return {**frozen, "read_by": "frozen"}
     if not claude.available():
         return fallback_opening(brief)
     try:

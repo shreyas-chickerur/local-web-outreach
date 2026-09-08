@@ -81,7 +81,8 @@ def freeze_vision(payload: dict) -> int:
     production in a way that hid the thing it exists to catch.
     """
     from app.site.pipeline import BuildFailed, run_stage
-    from app.store import db, leads, photos
+    from app.site.render import material_from_brief
+    from app.store import db, leads, photos, sites
 
     with db.session(Path("artifacts/fixtures.db")) as conn:
         stored = leads.save_brief(conn, {**payload, "name": payload["name"]})
@@ -89,8 +90,32 @@ def freeze_vision(payload: dict) -> int:
             run_stage(conn, stored, "photographs")
         except BuildFailed:
             pass
-        payload["photo_labels"] = photos.labels_for(conn, stored)
-        payload["photo_vision"] = photos.vision_for(conn, stored)
+        # The design direction too, for the same reason. Without it a clean
+        # checkout with no key measures a different system, and the pinned
+        # baseline means nothing to anyone who was not here when it was taken.
+        try:
+            run_stage(conn, stored, "direction")
+        except BuildFailed:
+            pass
+        direction = sites.recall_stage(conn, stored, "direction") or {}
+        payload["design_direction"] = dict(direction.get("config") or {})
+        # And the measurements, the last input that lived outside the corpus:
+        # sizes come from `.cache/photos`, which is as uncommitted as the
+        # fixture database was.
+        material = material_from_brief(leads.brief_with_overrides(conn, stored))
+        payload["photo_sizes"] = {
+            url: list(size) for url in material.images
+            if (size := material.size_of(url)) is not None}
+        # Only what this brief's photographs actually are. Re-freezing under a
+        # different lead id otherwise leaves the old keys behind, and stale
+        # entries would mask a real mismatch rather than showing one.
+        current = set(material.images)
+        payload["photo_labels"] = {
+            url: what for url, what in photos.labels_for(conn, stored).items()
+            if url in current}
+        payload["photo_vision"] = {
+            url: what for url, what in photos.vision_for(conn, stored).items()
+            if url in current}
         payload["photo_notes"] = {
             url: said["description"]
             for url, said in photos.described(conn, stored).items()

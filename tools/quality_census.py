@@ -29,7 +29,7 @@ import re
 import sys
 from pathlib import Path
 
-from app.adapters import claude, vision
+from app.adapters import vision
 from app.site import agreement
 from app.site import fingerprint as fp
 from app.site.opening import opening_spec
@@ -114,17 +114,23 @@ class Counter:
         real_look, real_open = vision.look, opening_spec
 
         def counted_look(urls, place_photos=(), **kw):
-            if urls and claude.available():
+            answer = real_look(urls, place_photos, **kw)
+            if answer:
                 self.vision += 1
-            return real_look(urls, place_photos, **kw)
+            return answer
 
         vision.look = counted_look                              # type: ignore[assignment]
 
         import app.site.pipeline as pipeline
 
         def counted_open(brief, **kw):
-            self.direction += 1
-            return real_open(brief, **kw)
+            answer = real_open(brief, **kw)
+            # Count model calls, not invocations. A frozen brief replays its
+            # direction and never reaches the API, and counting the call made
+            # the census report eleven questions it had not asked.
+            if answer.get("read_by") == "claude":
+                self.direction += 1
+            return answer
 
         pipeline.opening_spec = counted_open                    # type: ignore[assignment]
         pipeline.vision.look = counted_look                     # type: ignore[assignment]

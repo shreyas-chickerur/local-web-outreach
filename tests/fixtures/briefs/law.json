@@ -7,6 +7,33 @@
   "chain_signals": [
     "their own site has a locations page"
   ],
+  "design_direction": {
+    "accent": "navy",
+    "contradictions": [],
+    "cta": {
+      "kind": "call",
+      "label": "Call us"
+    },
+    "defect": "",
+    "emphasis": [
+      "reviews",
+      "services"
+    ],
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "stats",
+    "mood": "refined",
+    "rationale": "A personal injury attorney needs to establish trust and results fast \u2014 the 4.9-star rating with 254 reviews and clear case-type expertise reassure an anxious, injured visitor before anything else, and a direct call-to-action fits someone who needs help now. The mood should read as competent and serious rather than playful, and the photo mix (mostly small headshots and promo graphics, not a real gallery-worthy set) is better folded into services/about than showcased as a lead gallery.",
+    "read_by": "frozen",
+    "suppress": [
+      "gallery"
+    ],
+    "understood": [
+      "A personal injury attorney needs to establish trust and results fast \u2014 the 4.9-star rating with 254 reviews and clear case-type expertise reassure an anxious, injured visitor before anything else, and"
+    ],
+    "unsupported": []
+  },
   "facts": [
     {
       "candidates": [
@@ -122,6 +149,72 @@
     "https://snellingsinjurylaw.com/wp-content/uploads/2025/08/Best-of-NTX-Prosper-Celina.png": "A black badge reading 'Living Magazine, Best of Prosper & Celina, Readers' Choice, 2022'",
     "https://snellingsinjurylaw.com/wp-content/uploads/2026/04/Snellings-Solo-Hero-rs.webp": "A smiling man in a dark blue suit sitting on a modern staircase structure against a plain white background.",
     "https://snellingsinjurylaw.com/wp-content/uploads/2026/08/Personal-Injury-Attorneys-Home-v4.webp": "A man and a woman in dark business suits standing together against a plain white background."
+  },
+  "photo_sizes": {
+    "/photo/6/0": [
+      1650,
+      876
+    ],
+    "/photo/6/1": [
+      1080,
+      1080
+    ],
+    "/photo/6/2": [
+      2400,
+      1600
+    ],
+    "/photo/6/3": [
+      2400,
+      3600
+    ],
+    "/photo/6/4": [
+      2400,
+      3200
+    ],
+    "/photo/6/5": [
+      1200,
+      1200
+    ],
+    "/photo/6/6": [
+      1200,
+      1200
+    ],
+    "/photo/6/7": [
+      1200,
+      1200
+    ],
+    "/photo/6/8": [
+      1200,
+      1200
+    ],
+    "/photo/6/9": [
+      1200,
+      1200
+    ],
+    "https://snellingsinjurylaw.com/wp-content/uploads/2020/05/Snellings_Horizontal_PLLC.png": [
+      1975,
+      265
+    ],
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/Snellings-Law-PLLC.jpg": [
+      1200,
+      800
+    ],
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/BSL_TopVerdict.png": [
+      200,
+      123
+    ],
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/justia-10.0.png": [
+      200,
+      212
+    ],
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/two-drivers-having-argument-over-who-is-guilty-in-a-crash.jpg": [
+      1200,
+      800
+    ],
+    "https://snellingsinjurylaw.com/wp-content/uploads/2025/08/Best-of-NTX-Prosper-Celina.png": [
+      200,
+      262
+    ]
   },
   "photo_vision": {
     "/photo/6/0": {

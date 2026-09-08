@@ -1,6 +1,31 @@
 {
   "assumptions": [],
   "chain_signals": [],
+  "design_direction": {
+    "accent": "crimson",
+    "contradictions": [],
+    "cta": {
+      "kind": "book",
+      "label": "Book a table"
+    },
+    "defect": "",
+    "emphasis": [
+      "reviews",
+      "stats"
+    ],
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "gallery",
+    "mood": "refined",
+    "rationale": "Ichika's own photos of precise, seasonal kaiseki dishes are the strongest proof of quality it has, and with nine strong images the site should open on the food and room rather than tell people about it. A perfect 5.0 rating across dozens of reviews and quotes comparing service to Michelin-starred restaurants back that up immediately after, with a refined, quietly formal mood and a deep crimson accent echoing the lacquered dishware, driving straight to a reservation.",
+    "read_by": "frozen",
+    "suppress": [],
+    "understood": [
+      "Ichika's own photos of precise, seasonal kaiseki dishes are the strongest proof of quality it has, and with nine strong images the site should open on the food and room rather than tell people about i"
+    ],
+    "unsupported": []
+  },
   "facts": [
     {
       "candidates": [],
@@ -78,6 +103,48 @@
     "/photo/7/7": "A piece of raw red fish sits on a paper towel on a wooden board in front of a stainless steel stove.",
     "/photo/7/8": "A single piece of sushi with white and pink fish on a clear cut-glass plate.",
     "/photo/7/9": "Two pieces of tempura on a plate in the foreground with a chef working in a kitchen behind."
+  },
+  "photo_sizes": {
+    "/photo/7/0": [
+      1226,
+      843
+    ],
+    "/photo/7/1": [
+      2400,
+      1679
+    ],
+    "/photo/7/2": [
+      2400,
+      1800
+    ],
+    "/photo/7/3": [
+      2400,
+      1800
+    ],
+    "/photo/7/4": [
+      2400,
+      1800
+    ],
+    "/photo/7/5": [
+      2400,
+      1800
+    ],
+    "/photo/7/6": [
+      2400,
+      1800
+    ],
+    "/photo/7/7": [
+      2400,
+      1800
+    ],
+    "/photo/7/8": [
+      2400,
+      1351
+    ],
+    "/photo/7/9": [
+      2400,
+      2086
+    ]
   },
   "photo_vision": {
     "/photo/7/0": {

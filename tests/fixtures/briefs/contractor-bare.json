@@ -4,6 +4,32 @@
     "ignored a yelp result for 'Legacy Plumbing' \u2014 different business"
   ],
   "chain_signals": [],
+  "design_direction": {
+    "accent": "navy",
+    "contradictions": [],
+    "cta": {
+      "kind": "call",
+      "label": "Call us"
+    },
+    "defect": "",
+    "emphasis": [
+      "gallery"
+    ],
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "stats",
+    "mood": "industrial",
+    "rationale": "This is a hands-on trade business, so a rating built on 57 reviews is the fastest trust signal a passer-by needs, backed up by real on-the-job photos of the work; the reviews text itself is mixed (including a complaint about reliability and cost), so quoting it directly would undercut trust rather than build it, while the plain star rating still shows credibility without repeating the negative details.",
+    "read_by": "frozen",
+    "suppress": [
+      "reviews"
+    ],
+    "understood": [
+      "This is a hands-on trade business, so a rating built on 57 reviews is the fastest trust signal a passer-by needs, backed up by real on-the-job photos of the work; the reviews text itself is mixed (inc"
+    ],
+    "unsupported": []
+  },
   "facts": [
     {
       "candidates": [],
@@ -72,6 +98,48 @@
     "/photo/3/7": "A man in blue overalls kneels to inspect a garbage disposal unit under a kitchen sink, with a tool bag on the wooden floor beside him.",
     "/photo/3/8": "A worker's torso wearing a tool belt with gloves, holding a pipe wrench and a loaded tool bag against a white background",
     "/photo/3/9": "A man in a tan uniform and cap kneeling by an open cabinet under a sink, reaching into a toolbox with pliers"
+  },
+  "photo_sizes": {
+    "/photo/3/0": [
+      1083,
+      720
+    ],
+    "/photo/3/1": [
+      474,
+      316
+    ],
+    "/photo/3/2": [
+      812,
+      720
+    ],
+    "/photo/3/3": [
+      1080,
+      720
+    ],
+    "/photo/3/4": [
+      1080,
+      720
+    ],
+    "/photo/3/5": [
+      2400,
+      3200
+    ],
+    "/photo/3/6": [
+      1080,
+      720
+    ],
+    "/photo/3/7": [
+      480,
+      720
+    ],
+    "/photo/3/8": [
+      666,
+      375
+    ],
+    "/photo/3/9": [
+      1080,
+      720
+    ]
   },
   "photo_vision": {
     "/photo/3/0": {

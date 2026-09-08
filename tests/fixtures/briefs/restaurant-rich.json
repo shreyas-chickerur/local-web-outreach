@@ -4,6 +4,33 @@
     "ignored 1 social link(s) belonging to other businesses their site credits"
   ],
   "chain_signals": [],
+  "design_direction": {
+    "accent": "terracotta",
+    "contradictions": [],
+    "cta": {
+      "kind": "book",
+      "label": "Book a table"
+    },
+    "defect": "",
+    "emphasis": [
+      "about",
+      "reviews"
+    ],
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "gallery",
+    "mood": "warm",
+    "rationale": "This is a farm-to-table neighborhood restaurant in a converted house, and it has 8 strong photos of the dish, room, and building that should sell the atmosphere before anything else; the chef's sourcing philosophy and glowing reviews back that up, while the thin partner list would look bare if featured. A \"book\" call-to-action fits a scratch-kitchen dinner spot people plan a visit around.",
+    "read_by": "frozen",
+    "suppress": [
+      "partners"
+    ],
+    "understood": [
+      "This is a farm-to-table neighborhood restaurant in a converted house, and it has 8 strong photos of the dish, room, and building that should sell the atmosphere before anything else; the chef's sourci"
+    ],
+    "unsupported": []
+  },
   "facts": [
     {
       "candidates": [],
@@ -127,6 +154,76 @@
     "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Peaches.jpg": "A cardboard box labeled Efurd Orchard Peaches filled with fresh peaches.",
     "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Short-Rib.jpg": "A plated dish of seared meat with mixed greens, sliced radishes, and sauce on a white plate set on a wooden board.",
     "https://www.theheritagetable.com/dev/wp-content/uploads/2024/06/HTPC-1.png": "An overhead view of packaged food products including eggs, jam, granola, and bacon labeled with Heritage Table branding, overlaid with Provisions Club text."
+  },
+  "photo_sizes": {
+    "/photo/8/0": [
+      2400,
+      1800
+    ],
+    "/photo/8/1": [
+      1224,
+      1469
+    ],
+    "/photo/8/2": [
+      2400,
+      1800
+    ],
+    "/photo/8/3": [
+      1320,
+      880
+    ],
+    "/photo/8/4": [
+      2400,
+      1800
+    ],
+    "/photo/8/5": [
+      2400,
+      2932
+    ],
+    "/photo/8/6": [
+      2048,
+      1536
+    ],
+    "/photo/8/7": [
+      2400,
+      3200
+    ],
+    "/photo/8/8": [
+      2400,
+      1800
+    ],
+    "/photo/8/9": [
+      2400,
+      1800
+    ],
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2019/09/mg_2795.jpeg": [
+      3231,
+      2155
+    ],
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/garden-tomatoes.jpg": [
+      1440,
+      1440
+    ],
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Fig-and-Goat-Cheese.jpg": [
+      1207,
+      1176
+    ],
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/IMG-0959-scaled.jpg": [
+      1920,
+      2560
+    ],
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Peaches.jpg": [
+      1440,
+      1439
+    ],
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Short-Rib.jpg": [
+      1347,
+      1601
+    ],
+    "https://www.theheritagetable.com/dev/wp-content/uploads/2024/06/HTPC-1.png": [
+      1080,
+      1080
+    ]
   },
   "photo_vision": {
     "/photo/8/0": {

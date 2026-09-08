@@ -5,6 +5,31 @@
   "chain_signals": [
     "their own site has a locations page"
   ],
+  "design_direction": {
+    "accent": "terracotta",
+    "contradictions": [],
+    "cta": {
+      "kind": "order",
+      "label": "Order online"
+    },
+    "defect": "",
+    "emphasis": [
+      "stats",
+      "menu"
+    ],
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "gallery",
+    "mood": "warm",
+    "rationale": "This is a beloved, high-volume Texas BBQ joint with strong ratings and abundant, appetizing photography (10 lead-worthy shots of smoked meats, the pit, and the crowded room) \u2014 that imagery sells the place faster than any words, so it should open the site. The 4.8/4.7 ratings back up the visual appeal immediately, and the menu gives visitors the practical next step, while an 'order' call-to-action matches how people actually use the site (dine-in, order online, or book catering).",
+    "read_by": "frozen",
+    "suppress": [],
+    "understood": [
+      "This is a beloved, high-volume Texas BBQ joint with strong ratings and abundant, appetizing photography (10 lead-worthy shots of smoked meats, the pit, and the crowded room) \u2014 that imagery sells the p"
+    ],
+    "unsupported": []
+  },
   "facts": [
     {
       "candidates": [],
@@ -126,6 +151,64 @@
     "https://hutchinsbbq.com/wp-content/uploads/2025/11/catering-1.jpg": "Hands assembling a sausage sandwich and serving smoked meats from a large spread of barbecue dishes including ribs, sausage, mac and cheese, and coleslaw.",
     "https://hutchinsbbq.com/wp-content/uploads/2025/11/frisco.jpg": "A restaurant building lit up at dusk with red neon trim, string lights, and light trails from passing cars in front.",
     "https://hutchinsbbq.com/wp-content/uploads/2025/11/mg_1859.jpg": "A large crowd gathered outdoors around long tables covered with trays of food, with two men in cowboy hats serving in the foreground."
+  },
+  "photo_sizes": {
+    "/photo/1/0": [
+      2400,
+      3599
+    ],
+    "/photo/1/1": [
+      2400,
+      1800
+    ],
+    "/photo/1/2": [
+      2400,
+      3599
+    ],
+    "/photo/1/3": [
+      2400,
+      1800
+    ],
+    "/photo/1/4": [
+      2400,
+      1350
+    ],
+    "/photo/1/5": [
+      2400,
+      3102
+    ],
+    "/photo/1/6": [
+      2400,
+      1800
+    ],
+    "/photo/1/7": [
+      2400,
+      1800
+    ],
+    "/photo/1/8": [
+      2400,
+      1600
+    ],
+    "/photo/1/9": [
+      2400,
+      1600
+    ],
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/13.png": [
+      1277,
+      473
+    ],
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK-1.png": [
+      400,
+      132
+    ],
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK.png": [
+      400,
+      132
+    ],
+    "https://hutchinsbbq.com/wp-content/uploads/2025/11/frisco.jpg": [
+      800,
+      533
+    ]
   },
   "photo_vision": {
     "/photo/1/0": {

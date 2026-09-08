@@ -3,6 +3,30 @@
     "ignored a yelp result for 'Moe\u2019s Handyman Services' \u2014 different business"
   ],
   "chain_signals": [],
+  "design_direction": {
+    "accent": "orange",
+    "contradictions": [],
+    "cta": {
+      "kind": "call",
+      "label": "Call us"
+    },
+    "defect": "",
+    "emphasis": [],
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "services",
+    "mood": "industrial",
+    "rationale": "A general handyman needs to show what jobs he covers and how to reach him fast \u2014 that's what earns trust, not a single small photo, so we suppress the gallery and open on services with a call CTA. Orange on an industrial, workmanlike backdrop reads as tools-and-trade rather than trying to look fancy.",
+    "read_by": "frozen",
+    "suppress": [
+      "gallery"
+    ],
+    "understood": [
+      "A general handyman needs to show what jobs he covers and how to reach him fast \u2014 that's what earns trust, not a single small photo, so we suppress the gallery and open on services with a call CTA. Ora"
+    ],
+    "unsupported": []
+  },
   "facts": [
     {
       "candidates": [],
@@ -49,30 +73,37 @@
     "What are their opening hours?"
   ],
   "photo_labels": {
-    "/photo/12/0": "people"
+    "/photo/11/0": "people"
   },
   "photo_notes": {
+    "/photo/11/0": "A smiling man in a navy polo shirt holding a power drill and rolled papers, wearing a tool belt, standing in a kitchen, with promotional text and badge graphics overlaid reading 'Best Handyman', 'Top ",
     "/photo/12/0": "A smiling man in a navy polo shirt holding a power drill and rolled papers, wearing a tool belt, standing in a kitchen with badge graphics and text reading Best Handyman overlaid on the image."
   },
+  "photo_sizes": {
+    "/photo/11/0": [
+      1024,
+      1536
+    ]
+  },
   "photo_vision": {
-    "/photo/12/0": {
-      "alt_text": "A smiling man in a navy polo shirt holding a power drill and rolled papers, wearing a tool belt, standing in a kitchen with badge graphics and text reading Best Handyman overlaid on the image.",
+    "/photo/11/0": {
+      "alt_text": "A smiling man in a navy polo shirt holding a power drill and rolled papers, wearing a tool belt, standing in a kitchen, with promotional text and badge graphics overlaid reading 'Best Handyman', 'Top ",
       "dominant_colours": [
-        "#2b2320",
-        "#3a3f4a",
-        "#c9a35a",
-        "#8a6f4a"
+        "#3a2f28",
+        "#1c1c1c",
+        "#c9a24b",
+        "#5a4634"
       ],
       "has_text_overlay": true,
-      "headline_region_luminance": "mixed",
+      "headline_region_luminance": "dark",
       "is_hero_candidate": false,
       "is_logo_or_badge": false,
       "is_screenshot_or_document": false,
       "quality": 3,
       "subject": "people",
       "subject_position": "centre",
-      "url": "/photo/12/0",
-      "why_not": "Heavily stocked marketing graphic with text overlay and badges rather than a plain photograph"
+      "url": "/photo/11/0",
+      "why_not": "Heavily stocked marketing graphic with overlaid text and badges rather than a natural photo of the actual business."
     }
   },
   "place_photos": [

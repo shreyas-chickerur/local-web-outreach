@@ -6,6 +6,30 @@
     "sources point at 2 different street addresses \u2014 each likely a separate branch",
     "their own site has a locations page"
   ],
+  "design_direction": {
+    "accent": "gold",
+    "contradictions": [],
+    "cta": {
+      "kind": "quote",
+      "label": "Get a quote"
+    },
+    "defect": "",
+    "emphasis": [
+      "reviews"
+    ],
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "gallery",
+    "mood": "refined",
+    "rationale": "This is actually a salon-suite rental business, not a walk-in salon \u2014 the real customer is a beauty professional deciding whether to lease a chair, so the polished storefront and room photos should sell the space first, backed up by tenant testimonials about how clean, professional and well-managed it is, with a quote/inquiry form as the natural next step.",
+    "read_by": "frozen",
+    "suppress": [],
+    "understood": [
+      "This is actually a salon-suite rental business, not a walk-in salon \u2014 the real customer is a beauty professional deciding whether to lease a chair, so the polished storefront and room photos should se"
+    ],
+    "unsupported": []
+  },
   "facts": [
     {
       "candidates": [
@@ -106,6 +130,56 @@
     "/photo/10/8": "A woman with long blonde-highlighted hair leaning forward under a dark salon cape, seen from above in a salon chair.",
     "/photo/10/9": "A green bottle of Nature's Bounty B-12 quick dissolve tablets sitting on a dark countertop.",
     "https://salonboutique.com/wp-content/uploads/2025/10/1x3P_JBvEA66eHfQQWOwuSxYNInin3ILY.webp": "A smiling woman with an updo hairstyle wearing a black dress and jewelry, sitting sideways on a chair against a plain white background."
+  },
+  "photo_sizes": {
+    "/photo/10/0": [
+      2048,
+      1365
+    ],
+    "/photo/10/1": [
+      720,
+      720
+    ],
+    "/photo/10/2": [
+      1059,
+      720
+    ],
+    "/photo/10/3": [
+      1059,
+      720
+    ],
+    "/photo/10/4": [
+      2400,
+      3200
+    ],
+    "/photo/10/5": [
+      2400,
+      3200
+    ],
+    "/photo/10/6": [
+      1080,
+      1920
+    ],
+    "/photo/10/7": [
+      2400,
+      3200
+    ],
+    "/photo/10/8": [
+      2400,
+      3200
+    ],
+    "/photo/10/9": [
+      2400,
+      4267
+    ],
+    "https://salonboutique.com/wp-content/uploads/2025/10/1U9jSMngcMuKLWoW5hfjYUOqmYqQ_wOr0.webp": [
+      4032,
+      3024
+    ],
+    "https://salonboutique.com/wp-content/uploads/2025/10/1x3P_JBvEA66eHfQQWOwuSxYNInin3ILY.webp": [
+      1537,
+      2305
+    ]
   },
   "photo_vision": {
     "/photo/10/0": {

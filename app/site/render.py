@@ -45,7 +45,12 @@ from app.site.plan import (
 from app.site.spec import SiteSpec, parse_spec
 from app.site.styles import css, script
 from app.site.theme import Theme, theme_for
-from app.store.photos import HERO_PREFERENCE, NEVER_LEADS, WEAK_LEADS
+from app.store.photos import (
+    HERO_PREFERENCE,
+    NEVER_LEADS,
+    WEAK_LEADS,
+    rekey_for_lead,
+)
 from app.workbench.hours import parse_week
 
 # Sections in the order they read, when nothing asks otherwise.
@@ -155,6 +160,12 @@ class Material:
             return theirs
         return str((self.photo_vision.get(url) or {}).get("alt_text") or "")
 
+    # Measurements frozen into a brief, so a corpus does not depend on the
+    # image cache. `.cache/photos` is uncommitted like the fixture database
+    # was, and without this a clean checkout scores every photograph as
+    # unmeasured and reproduces a different system.
+    photo_sizes: dict = dc_field(default_factory=dict)
+
     def size_of(self, url: str) -> tuple[int, int] | None:
         """How big one of this business's photographs is.
 
@@ -168,6 +179,9 @@ class Material:
 
         The bytes are already on disk, paid for and cached, so read them.
         """
+        frozen = self.photo_sizes.get(url)
+        if isinstance(frozen, (list, tuple)) and len(frozen) == 2:
+            return int(frozen[0]), int(frozen[1])
         if url.startswith("/photo/"):
             index = url.rsplit("/", 1)[-1].split("?")[0]
             if not index.isdigit() or int(index) >= len(self.place_photos):
@@ -222,31 +236,6 @@ class Material:
         return proxied + self.photos
 
 
-_PROXIED_KEY = re.compile(r"^/photo/\d+/(\d+)$")
-
-
-def _for_this_lead(said: dict | None, lead_id: object) -> dict:
-    """Re-key anything said about a proxied photograph onto this lead.
-
-    A proxied URL carries the lead id, so labels frozen into a fixture under
-    one id do not match the same photographs loaded under another — the
-    fixtures were carrying vision for `/photo/12/0` and being read as
-    `/photo/1/0`, silently, with every candidate then scoring identically.
-
-    Keyed by position rather than by URL would have avoided it, and is a bigger
-    change than it looks: the operator's own labels are stored by URL too.
-    """
-    if not said:
-        return {}
-    if lead_id is None:
-        return dict(said)
-    out: dict = {}
-    for key, value in said.items():
-        match = _PROXIED_KEY.match(str(key))
-        out[f"/photo/{lead_id}/{match.group(1)}" if match else key] = value
-    return out
-
-
 def material_from_brief(brief: dict) -> Material:
     """Pull the usable content out of a brief.
 
@@ -282,10 +271,12 @@ def material_from_brief(brief: dict) -> Material:
         place_photos=tuple(brief.get("place_photos") or ()),
         lead_id=brief.get("lead_id"),
         blocks=tuple(published.get("blocks") or ()),
-        photo_labels=_for_this_lead(brief.get("photo_labels"),
+        photo_labels=rekey_for_lead(brief.get("photo_labels"),
                                     brief.get("lead_id")),
-        photo_vision=_for_this_lead(brief.get("photo_vision"),
+        photo_vision=rekey_for_lead(brief.get("photo_vision"),
                                     brief.get("lead_id")),
+        photo_sizes=rekey_for_lead(brief.get("photo_sizes"),
+                                   brief.get("lead_id")),
         photo_notes=dict(brief.get("photo_notes") or {}),
         trade_kind=trade_kind(brief.get("trade")),
         latitude=brief.get("latitude"),
