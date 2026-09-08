@@ -32,11 +32,11 @@ FIXTURES = Path("tests/fixtures/briefs")
 # instrument changed is not a result.
 RULER = "575db030"
 RULE = "624e27dc"
-LABELS = "4f147671"
+LABELS = "371f24fa"
 # The held-out third, frozen verbatim. It moves only when a pair is
 # RETIRED, never when one is re-judged.
-HELD_OUT = "a8c63664"
-SAME_TRADE_MEAN = 0.70
+HELD_OUT = "10d2af4c"
+SAME_TRADE_MEAN = 0.62
 # 19 of 33, and the drop from "40/40" is a correction rather than a regression.
 # That score was taken against verdicts read off a contact sheet captured in a
 # 720-pixel window — below the breakpoint where the split hero stacks and the
@@ -49,7 +49,7 @@ SAME_TRADE_MEAN = 0.70
 # typeface and differ in colour, and the vector has no axis for the typeface
 # and weights colour through `mood` at 2.0. That is the case for type
 # treatment as axis two, and this number is what it has to move.
-AGREEMENT = (19, 33)
+AGREEMENT = (14, 22)
 
 
 def fingerprints() -> dict[str, fp.Fingerprint]:
@@ -135,10 +135,18 @@ def test_the_same_trade_mean_is_the_pinned_number():
         brief = json.loads((FIXTURES / f"{slug}.json").read_text())
         trades[slug] = trade_kind(brief.get("trade"))
 
-    slugs = sorted(prints)
+    # Excluding what cannot be judged, the same way the census does — one
+    # definition of the scored corpus, imported rather than restated. An empty
+    # page sits further from its trade-mates than any real pair, so counting it
+    # reads as variety and is an absence.
+    slugs = [s for s in sorted(prints) if s not in agreement.UNSCORED]
     same_trade = [fp.distance(prints[a], prints[b])
                   for i, a in enumerate(slugs) for b in slugs[i + 1:]
                   if trades[a] == trades[b]]
+    assert len(same_trade) == 7, (
+        f"{len(same_trade)} scored same-trade pairs, expected 7 — the corpus "
+        f"or the exclusion list moved, and the pinned mean is about a "
+        f"different set of pairs than the one being measured")
     assert same_trade, "no two fixtures share a trade — the corpus cannot test this"
     mean = sum(same_trade) / len(same_trade)
     assert mean == pytest.approx(SAME_TRADE_MEAN, abs=0.02), (
@@ -178,7 +186,7 @@ def test_the_inversions_are_the_ones_that_were_looked_at():
                  for i, a in enumerate(slugs) for b in slugs[i + 1:]}
     inversions = agreement.score(distances).inversions
     same_pairs = sorted({pair for pair, _, _, _ in inversions})
-    assert same_pairs == ["dentist/law", "hvac/roofer", "threadbare/hvac"], (
+    assert same_pairs == ["dentist/law", "hvac/roofer"], (
         f"the inversions moved: {same_pairs}. Re-judge blind before accepting "
         f"it, per .reviews/slice-b-predictions.md")
 
@@ -221,7 +229,7 @@ def test_the_held_out_third_is_scored_separately():
         "small to hold anything out, and saying so is better than reporting a "
         "number taken from nothing")
     assert (held.ordered, held.comparisons) == (5, 5)
-    assert (tuned.ordered, tuned.comparisons) == (6, 12)
+    assert (tuned.ordered, tuned.comparisons) == (3, 6)
 
 
 SHEET = Path(".reviews/sheet/index.html")
@@ -292,5 +300,5 @@ def test_the_blind_spot_is_pinned_and_reweighting_cannot_close_it():
     moved = {(a, b): prints[a].differs_from(prints[b])
              for i, a in enumerate(slugs) for b in slugs[i + 1:]}
     blind = agreement.unreachable(moved)
-    assert len(blind) == 3, [f"{n} contains {f}" for n, f, _ in blind]
-    assert {near for near, _, _ in blind} == {"hvac/roofer", "threadbare/hvac"}
+    assert len(blind) == 2, [f"{n} contains {f}" for n, f, _ in blind]
+    assert {near for near, _, _ in blind} == {"hvac/roofer"}

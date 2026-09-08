@@ -122,3 +122,57 @@ below the breakpoint where the split hero stacks and the columns collapse. The
 "35 of 36" and "40 of 40" readings were taken against pictures of a narrower
 page than the product ships. Re-judged against half-scale desktop folds, the
 vector scores 19 of 33. Nothing regressed to cause that.
+
+## The claim came back — 2026-09-08, answered
+
+`dentist`/`law` is inverted again, at 60%. Answering it against this file
+rather than around it, because that is the whole point of having written it.
+
+**Did the verdict change, or did something regress? Both, and the second one
+matters.** The verdict moved from `different` (labels 449b9ddb) to `same`
+(371f24fa). It moved because the pages moved: at `f3ce823` `dentist` opened on
+`proof` and `law` on `facts` — exactly the difference this file predicted the
+first-screen axis would create, and it did. Re-deciding the corpus under the
+corrected gate rule put **both of them on `proof`.**
+
+The corpus lost a difference it had. Why the gate allowed it:
+
+    law vs dentist differ on: accent, action, compositions, leads_with,
+                              mood, section_order
+    highly weighted:          first_screen, mood
+    satisfied via:            mood        <- and nothing else
+    collides?                 No
+
+`mood` alone cleared the "at least one weighted highly" requirement. What
+`mood` does visibly for this pair is colour — teal against burgundy — and the
+judging rule at the top of `pairs.json`, written blind and before any of this,
+says a difference in colour alone is not a different site. **The rule added to
+stop a pair passing on differences nobody sees let a pair pass on a difference
+the judge had already ruled out.**
+
+### Pre-registered, before the change is written
+
+`highly_weighted()` should contain `first_screen` and nothing else — it is the
+only axis in the vector whose difference cannot be expressed as colour. Under
+`weight_of`, that is `HIGH_WEIGHT = 2.5`.
+
+**Binding claim.** After that change and the re-decide it forces:
+
+1. `dentist` and `law` do not both open on `proof`, and the pair leaves the
+   inversion list.
+2. Agreement on the **held-out third** does not fall. This is the first rule
+   that set can honestly score — it was carved out of labels that were all
+   available when the current rule was chosen, so it says nothing about that
+   one, and everything about this one. It currently reads 5 of 5.
+3. The scored same-trade figure is reported without `threadbare`, both before
+   and after, so the exclusion cannot be what moves it.
+
+**What would falsify it.** `dentist`/`law` still inverted, or the held-out
+score falling while the tuning score rises — which is what fitting looks like
+from the outside, and is the reason the set exists.
+
+**What is expected and acceptable.** The scored same-trade figure getting
+worse. Requiring `first_screen` to move on every build is a strong constraint
+on a five-position axis with eleven fixtures, and there may not be room for it.
+If the mean gets worse and agreement gets better, that is the trade this
+project has said it wants: the number is not the target, the judgement is.

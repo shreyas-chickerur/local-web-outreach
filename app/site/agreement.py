@@ -25,6 +25,21 @@ from pathlib import Path
 
 PAIRS = Path("tests/fixtures/pairs.json")
 
+# Fixtures that are not valid subjects for a same-or-different verdict, and are
+# excluded from every score the way `unsure` is — not deleted.
+#
+# `threadbare` has no hero, no sections and 42kB of page. There is no design to
+# compare, only an absence. It was appearing in three of the ten same-trade
+# pairs and, being empty, sat further from its trade-mates than any real pair
+# in the corpus — 100%, 90% and 75% — which lifted the headline "identical"
+# figure from 38% to 30% for reasons that have nothing to do with design. It
+# was also the "same" side of four of the six agreement inversions.
+#
+# It stays in the corpus because it is the only proof that the floor refuses a
+# condemned photograph and the only page that opens on type alone. It is
+# evidence about the generator; it is not evidence about sameness.
+UNSCORED: frozenset[str] = frozenset({"threadbare"})
+
 
 @dataclass(frozen=True)
 class Agreement:

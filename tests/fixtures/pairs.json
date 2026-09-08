@@ -124,23 +124,27 @@
       "verdict": "same",
       "why": "both open on the name alone at the width of the screen, black condensed capitals on off-white, the trade word small underneath; one carries a paragraph and a button and the other carries nothing",
       "_was": "newly judged. The corpus had no two pages that opened on type alone until it was re-decided, so this pair could not be asked before.",
-      "held_out": false
+      "held_out": false,
+      "retired": "`threadbare` is excluded from the scored corpus. It has no hero, no sections and 42kB of page — there is no design to compare, only an absence, and 'same site or different studios' is not a question it can answer. Retired rather than re-judged, and the fixture stays: it is the only proof the floor refuses a condemned photograph and the only page that opens on type alone."
     },
     {
       "a": "barbecue",
       "b": "threadbare",
       "verdict": "unsure",
       "why": "one is a food photograph edge to edge; the other has no photograph and almost nothing on the screen — still unclear whether a stranger reads that as a different page or as an unfinished one",
-      "held_out": true
+      "held_out": true,
+      "retired": "`threadbare` is excluded from the scored corpus. It has no hero, no sections and 42kB of page — there is no design to compare, only an absence, and 'same site or different studios' is not a question it can answer. Retired rather than re-judged, and the fixture stays: it is the only proof the floor refuses a condemned photograph and the only page that opens on type alone."
     },
     {
       "a": "threadbare",
       "b": "restaurant-bare",
       "verdict": "unsure",
       "why": "one has no photograph and nothing under the name; the other is a photograph edge to edge — the same question as the pair above, and the same reason for not scoring it",
-      "held_out": false
+      "held_out": false,
+      "retired": "`threadbare` is excluded from the scored corpus. It has no hero, no sections and 42kB of page — there is no design to compare, only an absence, and 'same site or different studios' is not a question it can answer. Retired rather than re-judged, and the fixture stays: it is the only proof the floor refuses a condemned photograph and the only page that opens on type alone."
     }
   ],
   "_judged_against": "Rendered pages as of the corpus re-decided under the corrected gate (distance ruler 575db030, gate rule 624e27dc), read off .reviews/sheet — which two standing tests now hold to what shipped: the sheet must match the corpus, and the thumbnails must be a half-scale picture of the desktop fold rather than a 720-pixel rendering of a narrower page, which is what every earlier verdict in this file was actually read off. A verdict describes a rendering, and a rule change re-decides the corpus, so the labels are downstream of the gate and have to be re-taken whenever it moves.",
-  "_held_out": "One verdict in three, chosen by a hash of the two slugs so that nobody picks which evidence survives. A held-out verdict is never used to choose a rule or a weighting, only to score one afterwards, and it is never re-judged — when the page under it changes it is retired with a reason and the set gets smaller. It starts here, so it says nothing about the rule this commit lands: the first rule it can honestly score is the next one."
+  "_held_out": "One verdict in three, chosen by a hash of the two slugs so that nobody picks which evidence survives. A held-out verdict is never used to choose a rule or a weighting, only to score one afterwards, and it is never re-judged — when the page under it changes it is retired with a reason and the set gets smaller. It starts here, so it says nothing about the rule this commit lands: the first rule it can honestly score is the next one.",
+  "_retired": "A retired verdict is scored by nothing and re-judged by nobody. Retiring is what happens to a held-out pair when the page under it changes, and to any pair whose subject turns out not to be judgeable — the set shrinks, which is the honest cost of the number meaning anything."
 }

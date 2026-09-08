@@ -52,9 +52,17 @@ FIXTURES = Path("tests/fixtures/briefs")
 # 2026-09-08, eleven fixtures, EIGHT axes, weighted by visibility x
 # decidedness (distance ruler 575db030, gate rule 624e27dc):
 #
-#   same-trade mean   70% distance  =  30% IDENTICAL
+#   same-trade mean   62% distance  =  38% IDENTICAL   (7 scored pairs)
 #   worst pair        45% distance  —  contractor-bare vs roofer
-#   agreement         19 of 33
+#   agreement         14 of 22
+#
+# `threadbare` is excluded from every score — see `agreement.UNSCORED`. It was
+# in three of the ten same-trade pairs and, having no design at all, sat 100%,
+# 90% and 75% from its trade-mates, which is not variety. It read as 30%
+# identical with it and 38% without, and the honest headline is the second.
+# Measured both ways across the rule change so the exclusion is not doing the
+# work: 42% -> 38% identical without it, 38% -> 30% with it. The rule fix is
+# real either way and half the reported gain was the empty fixture.
 #
 # THE AGREEMENT NUMBER FELL FROM "40/40" AND NOTHING REGRESSED. That score was
 # taken against verdicts read off a contact sheet with two faults: it had been
@@ -67,7 +75,8 @@ FIXTURES = Path("tests/fixtures/briefs")
 # labels were re-judged blind against what ships, and 19/33 is what the vector
 # scores against the right pictures.
 #
-# The same-trade mean rose 62% -> 70% because the gate's rule was corrected to
+# The scored mean improved 42% -> 38% identical because the gate's rule was
+# corrected to
 # the one the brief specifies — four axes, one structural, AND ONE WEIGHTED
 # HIGHLY — and the corpus was re-decided under it. `bare-trade`/`law` at 35%,
 # the pair the last baseline called the case to fix, separated.
@@ -91,7 +100,7 @@ FIXTURES = Path("tests/fixtures/briefs")
 # the wrong shape — no fixture carried the business's own photographs, so it
 # was measuring a path the product does not have. Re-pinned rather than
 # compared: a number that moved because the corpus changed is not progress.
-BASELINE_SAME_TRADE = 0.70
+BASELINE_SAME_TRADE = 0.62
 # The closest same-trade pair, kept as a reading rather than as a target:
 # it is judged DIFFERENT, and the pairs worth fixing are the inversions.
 BASELINE_WORST = ("contractor-bare", "roofer", 0.45)
@@ -106,7 +115,12 @@ BASELINE_METRIC = "575db030"
 BASELINE_RULE = "624e27dc"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
-BASELINE_LABELS = "4f147671"
+BASELINE_LABELS = "371f24fa"
+# What it was, so a reader can see that the agreement figure crossed a
+# change of labels rather than falling. "40 of 40" was scored against
+# 449b9ddb, taken from contact-sheet thumbnails of a corpus that had
+# moved, captured below the breakpoint where the layout changes.
+BASELINE_LABELS_WAS = ("449b9ddb", "40 of 40")
 # True on the commit that re-pins, false on every commit after. Without
 # it the first run under a new ruler always prints "no better than the
 # baseline" — because the baseline IS that run's own measurement copied
@@ -295,12 +309,21 @@ def _report(rows, first_pass, again) -> None:
         if row["rationale"]:
             print(f"                   {row['rationale']}")
 
+    # Every axis, derived from `fp.AXES` rather than listed. The list here had
+    # gone stale twice over: it still named `layout_bias`, which stopped being
+    # an axis, and it omitted `first_screen`, which weighs 2.5 — the heaviest
+    # in the table and the one that had just landed. A reader could not
+    # reconcile the printed vectors with the distances below them.
+    long_axes = ("section_order", "compositions")
+    short_axes = [axis for axis in fp.AXES if axis not in long_axes]
     print("\n  fingerprints")
     for row in rows:
-        values = " ".join(f"{k}={v}" for k, v in row["fingerprint"].as_row()
-                          if k in ("mood", "accent", "layout_bias",
-                                   "leads_with", "action"))
-        print(f"    {row['slug']:16} {values}")
+        values = row["fingerprint"].values
+        print(f"    {row['slug']:16} "
+              + " ".join(f"{axis}={values.get(axis, '-')}"
+                         for axis in short_axes))
+        for axis in long_axes:
+            print(f"    {'':16} {axis}={values.get(axis, '-')}")
 
     prints = [r["fingerprint"] for r in rows]
     slugs = [r["slug"] for r in rows]
@@ -311,7 +334,27 @@ def _report(rows, first_pass, again) -> None:
     # The inversion list prints with the rate, always. "Worse" has to be
     # inspectable rather than a single number with an explanation attached —
     # see .reviews/slice-b-predictions.md.
-    print(agreement.score(distances).report())
+    read = agreement.score(distances)
+    print(read.report())
+    # The same guard the distance baseline has. "19 of 33" against a pinned
+    # "40 of 40" reads as a collapse and is not a comparison at all when the
+    # verdicts underneath have been re-judged or the scored set has changed.
+    if agreement.labels_version() != BASELINE_LABELS:
+        print(f"    NOT COMPARABLE to the pinned reading — that was scored "
+              f"against labels {BASELINE_LABELS} and these are "
+              f"{agreement.labels_version()}. A verdict describes a rendering, "
+              f"so re-deciding the corpus re-takes the labels; re-pin rather "
+              f"than reading the difference as a regression.")
+    if BASELINE_IS_FRESH:
+        was, reading = BASELINE_LABELS_WAS
+        print(f"    FRESHLY RE-PINNED. The previous reading of \"{reading}\" "
+              f"was scored against labels {was} — a different set of verdicts, "
+              f"so this is not that number having fallen. It is the first "
+              f"reading of a new one.")
+    if agreement.UNSCORED:
+        print(f"    {', '.join(sorted(agreement.UNSCORED))} excluded from "
+              f"every score — no design to compare, only an absence. See "
+              f"agreement.UNSCORED.")
     pairs = [(fp.distance(a, b), rows[i]["slug"], rows[j]["slug"])
              for i, a in enumerate(prints)
              for j, b in enumerate(prints) if i < j]
@@ -328,7 +371,9 @@ def _report(rows, first_pass, again) -> None:
     # The requirement is about two businesses in the SAME trade on the same
     # street, so that is the number to read.
     kinds = {r["slug"]: _kind(r["trade"]) for r in rows}
-    same = [p for p in pairs if kinds[p[1]] == kinds[p[2]]]
+    every = [p for p in pairs if kinds[p[1]] == kinds[p[2]]]
+    same = [p for p in every
+            if not {p[1], p[2]} & agreement.UNSCORED]
     if same:
         within = sum(p[0] for p in same) / len(same)
         moved = within - BASELINE_SAME_TRADE
@@ -348,6 +393,12 @@ def _report(rows, first_pass, again) -> None:
                             f"than the baseline")
         print(f"  SAME TRADE         mean {within:.0%} distance "
               f"= {1 - within:.0%} identical, across {len(same)} pairs")
+        if len(every) != len(same):
+            loose = sum(p[0] for p in every) / len(every)
+            print(f"                     ({1 - loose:.0%} identical across all "
+                  f"{len(every)} pairs including "
+                  f"{', '.join(sorted(agreement.UNSCORED))} — printed so the "
+                  f"exclusion is visible, not so the better number is)")
         print(f"                     baseline {BASELINE_SAME_TRADE:.0%} "
               f"({1 - BASELINE_SAME_TRADE:.0%} identical) — {verdict}")
         print("                     <-- the number Slice B has to move")

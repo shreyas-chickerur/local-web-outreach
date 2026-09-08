@@ -62,12 +62,30 @@ against the wrong pictures.
 
 **The instrument's current reading.**
 
-    agreement   19 of 33 cross-pairs, ruler 575db030, rule 624e27dc,
-                labels 4f147671
-    census      same-trade mean 70% distance = 30% identical
+    agreement   14 of 22 cross-pairs (held out 5 of 5, tuning 3 of 6)
+                ruler 575db030, rule 624e27dc, labels 371f24fa
+    census      same-trade mean 62% distance = 38% identical, 7 scored pairs
+                (30% identical across all 10, including the empty fixture)
                 closest pair contractor-bare / roofer at 45%, judged DIFFERENT
-                inversions dentist / law, hvac / roofer, threadbare / hvac
-    tests       751
+                inversions dentist / law, hvac / roofer
+    tests       754
+
+**`threadbare` is excluded from every score** — `agreement.UNSCORED`, not
+deleted. It has no hero, no sections and 42kB of page: there is no design to
+compare, only an absence. It was in three of the ten same-trade pairs and, being
+empty, sat 100%, 90% and 75% from its trade-mates, which lifted the headline
+from 38% identical to 30% for reasons that have nothing to do with design. It
+stays in the corpus because it is the only proof the floor refuses a condemned
+photograph and the only page that opens on type alone.
+
+**The gate is not sufficient yet, and the pre-registration caught it.**
+`dentist` and `law` both open on `proof` after the corpus was re-decided, and a
+stranger calls them one page in two colours. The gate allowed it because `mood`
+alone satisfied "at least one weighted highly" — and what `mood` does visibly
+there is colour, which the judging rule says cannot alone make a different site.
+The next rule change is pre-registered in `.reviews/slice-b-predictions.md`
+rather than made inline, because it re-decides the corpus and the held-out third
+is what can score it.
 
 **The pre-registered claim is still open.** `dentist`/`law` resolving binds on
 first-screen contract *and* type treatment; it resolved on the first alone and
