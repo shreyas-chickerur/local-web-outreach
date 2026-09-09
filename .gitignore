@@ -45,3 +45,9 @@ workbench.db-*
 # Generated proof: screenshots and the contact sheet. Regenerated on demand by
 # tools/contact_sheet.py, and a PNG per fixture per width is not history.
 artifacts/
+
+# The review bundle's photographs — copied from .cache/photos so the bundle
+# opens with no server, regenerated on demand by tools/build_review.py. The
+# pages and the index are small (linked, not inlined) and stay committed; a
+# few hundred photographs at full width are not.
+.reviews/review/photos/

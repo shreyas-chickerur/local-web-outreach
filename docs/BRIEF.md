@@ -166,6 +166,24 @@ not by trusting a glance at a small picture). See `.reviews/slice-b-phase-1.md`.
 trade profiles, four of nine contractor facts as a corroborated section, two
 compositions. **Not started.** Slices D, E, G, H and the rest of F.
 
+**Done — a real plan-versus-page bug, found and fixed.** `render.py` carried
+two separate implementations of the same section-reordering rule — one used
+by the plan the operator sees first, one by the actual rendered page — that
+disagreed on 17 of 19 fixtures because one counted the hero into its index
+and the other didn't. Fixed by deleting the duplicate. See
+`.reviews/plan-page-disagreement.md`. Every pinned number is unaffected
+(the fingerprint reads the plan, which was never buggy); the sixteen
+Phase 1 verdicts were re-judged against the corrected rendering and every
+conclusion held.
+
+**Done — the review bundle.** `tools/build_review.py`: all 19 fixtures
+rendered standalone with copied (never inlined) photographs,
+`.reviews/review/index.html` naming every business in plain English
+(rationale, signature justification, what's on the page — no axis names),
+`.reviews/review/READ-ME-FIRST.md` naming the weakest point and which
+numbers not to trust. The workbench confirmed running against the fixture
+corpus. See `.reviews/slice-b-phase-3.md`.
+
 ## 2. The governing requirement
 
 A generator's characteristic failure is that its output is recognisable as its
