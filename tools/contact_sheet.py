@@ -15,20 +15,25 @@ Headless Chrome rather than Playwright. Chrome is already on the machine and
 Playwright would be 150MB of browsers to do the same job; the capture is one
 command per width and nothing here needs a driver.
 
-NOTHING INLINED IS EVER COMMITTED. The pages written here embed every
-photograph as a data URI so a file:// capture can load them, which takes the
-directory to 400MB. That is a property of the capture, not of the sheet — the
-committed copy under `.reviews/sheet` references its images as files and stays
-small. `artifacts/` is gitignored; regenerate the full-size sheets on demand.
+PHOTOGRAPHS ARE LINKED, NEVER INLINED. A generated page asks our own server
+for `/photo/<lead>/<n>`, which a file:// capture cannot reach, so every page
+written here has those URLs rewritten to a relative path into
+`.cache/photos` — the same content-hashed files `app.adapters.photos` already
+cached fetching them the first time, pointed at rather than re-encoded.
+Inlining as base64 data URIs was tried first and reverted: it made a single
+page (`roofer.html`) 105MB and the whole directory 731MB, which is not a
+large file, it is several million tokens — the exact thing this project's own
+`.reviews/` conventions warn against reading only part of. `artifacts/` is
+gitignored regardless; regenerate on demand.
 """
 
 from __future__ import annotations
 
 import argparse
-import base64
 import hashlib
 import html
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -37,8 +42,6 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from app.adapters import photos as photos_api
-from app.adapters.imageinfo import media_type_of
-from app.core.config import google_places_api_key
 from app.site import fingerprint as fp
 from app.site.pipeline import STAGES, run_stage, spec_from_config
 from app.site.render import build_from_spec, material_from_brief, plan_for
@@ -76,9 +79,9 @@ CHROME = ("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
 # caption said "half scale". Same viewport as `fold`, half the pixels.
 WIDTHS = (("desktop", 1440, 1100, 1.0), ("mobile", 390, 844, 1.0),
           ("fold", 1440, 820, 1.0),
-          # Small enough to commit. The full-size sheets run to 400MB because
-          # every photograph is inlined as a data URI, so what goes in the
-          # repository beside the census is this row — still legible for the
+          # Small enough to commit regardless — this row is a PNG screenshot,
+          # not a page, so it was never affected by how the pages themselves
+          # link their photographs — still legible for the
           # only question the sheet asks.
           ("thumb", 1440, 820, 0.5),
           # THE WHOLE PAGE, which is what the ground truth is now judged from.
@@ -247,8 +250,8 @@ def main() -> int:
             page = build_from_spec(brief, spec)
 
             site_file = OUT / f"{slug}.html"
-            inlined = _inline_photographs(page, brief)
-            site_file.write_text(inlined)
+            linked = _link_photographs(page, brief)
+            site_file.write_text(linked)
             cards.append({
                 "slug": slug,
                 "name": brief.get("name") or slug,
@@ -259,7 +262,7 @@ def main() -> int:
                 # What the PNGs below are proved against: the manifest key is
                 # this hash, not the file path, so a page that changed and one
                 # that did not are told apart by content, never by name alone.
-                "_html_hash": hashlib.sha256(inlined.encode()).hexdigest(),
+                "_html_hash": hashlib.sha256(linked.encode()).hexdigest(),
             })
 
     # Pass two: every (fixture, width) screenshot, shot in parallel. Each
@@ -329,8 +332,9 @@ def main() -> int:
     return 0
 
 
-def _inline_photographs(page: str, brief: dict) -> str:
-    """Embed the proxied photographs so the page stands alone.
+def _link_photographs(page: str, brief: dict) -> str:
+    """Point the proxied photographs at the cached files, so the page stands
+    alone without a server to ask.
 
     A generated page asks our own server for `/photo/<lead>/<n>`, and a
     screenshot taken from a file:// URL has no server to ask — so every
@@ -338,27 +342,32 @@ def _inline_photographs(page: str, brief: dict) -> str:
     conclusion off exactly that: two law firms that looked identical because
     neither had loaded its hero.
 
-    The bytes are already on disk, so they go in as data URIs. Slow and large,
-    and it makes the sheet honest, which is the only thing it is for.
+    This USED to embed the bytes as base64 data URIs. That made a page like
+    `roofer.html` 105MB and the whole `artifacts/contact-sheet` directory
+    731MB — millions of tokens if anyone tried to read one, and the exact
+    thing this project's own `.reviews/` handoffs warn against reading only
+    part of. The bytes were already on disk in `.cache/photos` (content-hash
+    named, `app.adapters.photos._cache_path`) the whole time; a file:// page
+    can reach a relative path with no server just as well as it can reach a
+    data URI, for a hundred-thousandth of the size. `MAX_WIDTH` is the same
+    width `plan_for`/`build_from_spec` already fetched at, so the cache file
+    this looks for is the one already on disk from building the page above —
+    never fetched again here, only pointed at.
     """
     names = list(brief.get("place_photos") or [])
-    key = google_places_api_key() or ""
-    if not names or not key:
+    if not names:
         return page
 
-    cache: dict[str, str] = {}
+    cache: dict[int, str] = {}
 
     def replace(match: re.Match) -> str:
         index = int(match.group(1))
         if index >= len(names):
             return match.group(0)
         if index not in cache:
-            data = photos_api.fetch(key, names[index],
-                                    width=photos_api.MAX_WIDTH)
-            kind = media_type_of(data) if data else None
+            cached = photos_api._cache_path(names[index], photos_api.MAX_WIDTH)
             cache[index] = (
-                f"data:{kind};base64,{base64.b64encode(data).decode()}"
-                if data and kind else "")
+                os.path.relpath(cached, OUT) if cached.exists() else "")
         return cache[index] or match.group(0)
 
     lead_id = brief.get("lead_id")
