@@ -9,7 +9,7 @@
   ],
   "design_direction": {
     "accent": "amber",
-    "architecture": "column",
+    "architecture": "gallery",
     "contradictions": [],
     "cta": {
       "kind": "visit",
@@ -17,26 +17,26 @@
     },
     "defect": "",
     "emphasis": [
-      "features",
-      "gallery"
+      "gallery",
+      "reviews"
     ],
     "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "about",
-    "mood": "refined",
-    "rationale": "This isn't a walk-in salon \u2014 it's an upscale suite-rental business courting beauty professionals, so the site should sell the space and the support, not a menu of services; a refined, quiet first screen with the story and the room up front (not stats, since the actual tenants' individual reviews matter more than an aggregate score) and a clear 'visit/inquire' path suits a landlord-to-stylists pitch better than a typical salon site.",
+    "mood": "warm",
+    "rationale": "Salon Boutique isn't selling a haircut, it's selling a beautiful, well-kept space to independent beauty professionals \u2014 so the site should lead with the room and the story of independence, not a menu of services it doesn't itself provide. Warm tones, real photos of the interior and storefront, and quoted tenant reviews build the confidence a stylist needs before signing a suite lease.",
     "read_by": "claude",
     "signature": "corner_inset",
-    "signature_why": "A type block set into the corner of the storefront photo reads as a boutique address, not a salon menu \u2014 fitting a business that rents suites to independent stylists rather than selling haircuts itself.",
+    "signature_why": "A type block set into the corner of the storefront photo reads as a boutique address, not a salon appointment page \u2014 fitting since this business rents suites to stylists, not haircuts to walk-ins.",
     "suppress": [
       "stats"
     ],
     "type_treatment": "wide",
-    "typeface": "cormorant-jost",
+    "typeface": "",
     "understood": [
-      "This isn't a walk-in salon \u2014 it's an upscale suite-rental business courting beauty professionals, so the site should sell the space and the support, not a menu of services; a refined, quiet first scre"
+      "Salon Boutique isn't selling a haircut, it's selling a beautiful, well-kept space to independent beauty professionals \u2014 so the site should lead with the room and the story of independence, not a menu "
     ],
     "unsupported": []
   },

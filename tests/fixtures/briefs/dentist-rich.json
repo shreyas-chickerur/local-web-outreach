@@ -8,7 +8,7 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "amber",
+    "accent": "blue",
     "architecture": "stacked",
     "contradictions": [],
     "cta": {
@@ -20,23 +20,23 @@
       "reviews",
       "services"
     ],
-    "first_screen": "proof",
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "reviews",
+    "lead_with": "stats",
     "mood": "warm",
-    "rationale": "This is a dental practice, not a restaurant \u2014 people choose it on trust and competence, not on room photos, and with only 3 photos large enough to use, a photo-led opening would look thin. Leading with the 4.5-star rating and named, specific reviews, then the team and services, gives a nervous new patient exactly the reassurance they're looking for before they ever see the waiting room.",
+    "rationale": "People choosing a dentist check the rating and reviews before anything else, and this practice only has 3 photos strong enough to carry a page, so lead with the trust numbers and let a real patient quote do the emotional work instead of thin imagery.",
     "read_by": "claude",
     "signature": "quote",
-    "signature_why": "A single warm patient review at display size does more to calm a nervous first-time visitor than another stock photo of a smile.",
+    "signature_why": "A single warm patient review at display size does more to calm a nervous first-time visitor than any stock dental photo could.",
     "suppress": [
       "features"
     ],
     "type_treatment": "quiet",
-    "typeface": "ibm-plex-serif-inter",
+    "typeface": "sora-manrope",
     "understood": [
-      "This is a dental practice, not a restaurant \u2014 people choose it on trust and competence, not on room photos, and with only 3 photos large enough to use, a photo-led opening would look thin. Leading wit"
+      "People choosing a dentist check the rating and reviews before anything else, and this practice only has 3 photos strong enough to carry a page, so lead with the trust numbers and let a real patient qu"
     ],
     "unsupported": []
   },

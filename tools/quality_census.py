@@ -92,37 +92,38 @@ FIXTURES = Path("tests/fixtures/briefs")
 #
 # `threadbare` is excluded from every score — see `agreement.UNSCORED`.
 #
-# PHASE 1 (Slice B's close-out, this project's own §1a/1b/1c): the gate's
-# WINDOW widened 10->60 — fixing the real collision `restaurant-bare`/
-# `salon-rich` shipped, three axes apart and unseen because the gate only
-# compared against the last ten — and the typeface pair landed as axis
-# twelve. One `--redecide` at the end covering both, ruler and rule
-# UNCHANGED (neither touches a weight or an axis definition on its own; the
-# corpus was re-decided because the gate's own history and the typeface
-# choice feed the direction call).
+# BRIEF §4's first invariant, violated and fixed: `signature.py`'s `stamp`
+# device chose "Licensed & insured" / "Registered practice" / "Admitted to
+# the bar" from `trade_kind` alone, printed four times, with nothing
+# checking it was true of the business. Uncorroborated on six fixtures —
+# `threadbare` (no about text, no content blocks, one photograph) still
+# asserted a licence. `app.core.claims.CLAIM_RE` had no credential pattern
+# at all, so the content gate could not have caught it either. Both fixed:
+# the pattern widened (verified against the whole corpus — exactly those
+# six fixtures produced a finding, nothing else), and `stamp` now checks
+# `contractorfacts.STAMP_FACT` before `available()` offers it — a device
+# the material cannot support is dropped, not rendered with a substitute.
+# See `.reviews/slice-c-credential-claims.md`.
 #
-# Sixteen pairs judged blind against the actual rendered markup this round,
-# reaching past same-trade into cross-trade and repopulating the held-out
-# third from empty. ALL SIXTEEN CAME BACK DIFFERENT — including the closest
-# same-trade pair the corpus has ever produced, `law`/`law-rich` at 26%
-# distance (sharing eight of eleven axes, differing only in first screen and
-# what follows it), and including `bare-trade`/`dentist`, briefly misjudged
-# "same" from a shrunk thumbnail — five bands in identical order and
-# composition — and corrected once the actual markup was read: one draws a
-# hairline rule above every section and holds its text to a visibly narrower
-# column throughout, the other does neither. The same near-miss the previous
-# redecide hit on `dentist`/`dentist-rich`, caught the same way.
+# Signature is axis eleven, so this re-decided the corpus (ruler and rule
+# UNCHANGED). First attempt: a genuine unresolved collision
+# (`hvac-rich`/`roofer-rich`, matching all four required-high axes,
+# honestly recorded as `_gate_unresolved` rather than hidden) — retried
+# rather than compensated for, since `test_the_gate_is_satisfiable` already
+# confirmed the required-axis arithmetic has room. Second attempt: zero
+# collisions across all 171 pairs.
 #
-# Agreement is 0 of 0 for the same reason it was 0 of 0 before this phase: a
-# rank needs at least one "same" pair, and after sixteen pairs — five of them
-# in the repopulated held-out third — there still is not one. The single-axis
+# Eleven pairs judged blind against the rendered markup — the closest
+# pairs in the tuning set by distance. ALL ELEVEN CAME BACK DIFFERENT.
+# Held-out verdicts are retired, never re-judged, and none were
+# repopulated this round, so the held-out third is empty rather than stale.
+#
+# Agreement is 0 of 0 for the same reason it has been every prior reading: a
+# rank needs at least one "same" pair, and there is not one. The single-axis
 # degeneracy check stays retired; nothing came back to restore it against.
-BASELINE_SAME_TRADE = 0.5552
-# The closest same-trade pair, judged DIFFERENT — closer than any pair the
-# corpus has produced under any prior ruler. Kept as a reading, not a SAME:
-# two personal-injury firms, sharing eight of eleven axes, still read as two
-# different practices once the fold is taken into account.
-BASELINE_WORST = ("law", "law-rich", 0.26)
+BASELINE_SAME_TRADE = 0.5333
+# The closest same-trade pair, judged DIFFERENT.
+BASELINE_WORST = ("hvac", "hvac-rich", 0.34)
 # Which ruler the numbers above were taken with. A distance is comparable only
 # to another taken the same way, and comparing across a change of ruler has
 # already produced two false readings — a corpus that changed under a pinned
@@ -134,11 +135,12 @@ BASELINE_METRIC = "a762bcc9"
 BASELINE_RULE = "254e171b"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
-BASELINE_LABELS = "1f0df47d"
+BASELINE_LABELS = "9ed8ff8e"
 # What it was, so a reader can see that the agreement figure crossed a
-# change of labels rather than falling. "0 of 0" was scored against edc76612,
-# ten pairs taken before this phase's gate fix and typeface axis landed.
-BASELINE_LABELS_WAS = ("edc76612", "0 of 0")
+# change of labels rather than falling. "0 of 0" was scored against
+# 1f0df47d, sixteen pairs taken before this phase's stamp-device fix
+# forced a redecide and retired them.
+BASELINE_LABELS_WAS = ("1f0df47d", "0 of 0")
 # True on the commit that re-pins, false on every commit after. Without
 # it the first run under a new ruler always prints "no better than the
 # baseline" — because the baseline IS that run's own measurement copied

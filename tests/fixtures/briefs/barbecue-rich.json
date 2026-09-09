@@ -25,17 +25,17 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "This is a family-run Texas smokehouse with strong, abundant food photography (9 usable shots) and a huge, loyal review base \u2014 the room and the meat are the argument, so we lead with a big photographic first screen and a gallery-driven page, pull terracotta straight from the smoke and wood tones in their own pictures, and set the name in a heavy trade-shop stamp that reads like a pit sign rather than a boutique.",
+    "rationale": "This is a photogenic, family-run Texas BBQ joint with 9 strong, appetite-driving photos and a huge, warm review base \u2014 the pictures and the menu are the argument, not credentials or awards. Lead with the room and the food, use a trade-shop stamped wordmark and a smoky terracotta pulled straight from the pit photos, and push people to visit and eat.",
     "read_by": "claude",
-    "signature": "duotone",
-    "signature_why": "A strip of the smoker and brisket photos in warm duotone with one full-colour break reads like a pit-house, not a stock template.",
+    "signature": "corner_inset",
+    "signature_why": "A type block inset into the corner of one big smoker-and-meat photo lets the food fill the screen while the name still reads instantly, like a sign nailed to the pit house wall.",
     "suppress": [
       "features"
     ],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "This is a family-run Texas smokehouse with strong, abundant food photography (9 usable shots) and a huge, loyal review base \u2014 the room and the meat are the argument, so we lead with a big photographic"
+      "This is a photogenic, family-run Texas BBQ joint with 9 strong, appetite-driving photos and a huge, warm review base \u2014 the pictures and the menu are the argument, not credentials or awards. Lead with "
     ],
     "unsupported": []
   },

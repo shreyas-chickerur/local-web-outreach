@@ -19,7 +19,7 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "recognition"
+      "credentials"
     ],
     "first_screen": "facts",
     "hero_offset": 0,
@@ -27,17 +27,17 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "refined",
-    "rationale": "People hiring a divorce lawyer are anxious and want proof of competence before atmosphere \u2014 the 4.9-star rating, the award badge, and real client reviews do that work far better than photographs of a building. Only two photos are large enough to lead with, so the design should run on facts and testimony instead, in a calm, document-like rhythm that reads as trustworthy rather than flashy.",
+    "rationale": "This is a family law firm, not a business people browse for atmosphere \u2014 a visitor in crisis needs to see the 4.9 rating and 148 reviews before anything else, then read what past clients said in their own words. The photography is thin (only two shots big enough to lead with), so a facts-first opening with a quote as the signature mark builds trust through evidence rather than imagery, and a ledger rhythm keeps the whole page reading as a serious, documented practice.",
     "read_by": "claude",
     "signature": "quote",
-    "signature_why": "A family in crisis trusts another family's words before they trust a firm's own copy, so let one client review stand alone at full size.",
+    "signature_why": "A single client quote set large says more about trust in a family lawyer than any photo could, and this firm's reviews are its strongest asset.",
     "suppress": [
       "gallery"
     ],
     "type_treatment": "quiet",
     "typeface": "libre-caslon-work-sans",
     "understood": [
-      "People hiring a divorce lawyer are anxious and want proof of competence before atmosphere \u2014 the 4.9-star rating, the award badge, and real client reviews do that work far better than photographs of a "
+      "This is a family law firm, not a business people browse for atmosphere \u2014 a visitor in crisis needs to see the 4.9 rating and 148 reviews before anything else, then read what past clients said in their"
     ],
     "unsupported": []
   },

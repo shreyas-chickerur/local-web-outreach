@@ -12,6 +12,7 @@
     },
     "defect": "",
     "emphasis": [
+      "gallery",
       "reviews"
     ],
     "first_screen": "photo",
@@ -20,15 +21,15 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "refined",
-    "rationale": "Ichika's own photographs \u2014 the counter, the fish, the lacquerware \u2014 are the strongest evidence of the care described in every review, so the site should open on that imagery with a restrained, editorial hand rather than loud graphics; the red accent is drawn straight from their own lacquered dishware, and leading with the gallery then surfacing the kaiseki reviews mirrors exactly what a five-star, near-Michelin dining room needs to prove to a first-time visitor: this is a serious, beautiful kitc",
+    "rationale": "Ichika's own photographs are the strongest evidence they have \u2014 nine dishes plated with real precision \u2014 so the site should lead with a wide, quiet gallery rather than claims or stats. The 5.0 reviews describing a Michelin-level, deeply seasonal kaiseki experience deserve early prominence too, so a calm, refined page that lets the food and the words speak, with a booking CTA, matches how this restaurant actually operates.",
     "read_by": "claude",
     "signature": "corner_inset",
-    "signature_why": "A small type block set into the corner of the counter photograph reads as quiet confidence, letting the food and craftsmanship fill the frame the way a kaiseki dinner earns its praise before a word is said.",
+    "signature_why": "A quiet type block set into the corner of a single dish photograph reads as considered, kaiseki-level restraint rather than a banner shouting the name over the food.",
     "suppress": [],
     "type_treatment": "quiet",
-    "typeface": "",
+    "typeface": "cormorant-jost",
     "understood": [
-      "Ichika's own photographs \u2014 the counter, the fish, the lacquerware \u2014 are the strongest evidence of the care described in every review, so the site should open on that imagery with a restrained, editori"
+      "Ichika's own photographs are the strongest evidence they have \u2014 nine dishes plated with real precision \u2014 so the site should lead with a wide, quiet gallery rather than claims or stats. The 5.0 reviews"
     ],
     "unsupported": []
   },

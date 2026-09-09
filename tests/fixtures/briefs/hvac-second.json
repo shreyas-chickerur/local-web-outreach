@@ -9,7 +9,7 @@
   ],
   "design_direction": {
     "accent": "yellow",
-    "architecture": "ledger",
+    "architecture": "banded",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -17,26 +17,27 @@
     },
     "defect": "",
     "emphasis": [
+      "stats",
       "reviews",
-      "services"
+      "credentials"
     ],
-    "first_screen": "split",
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "People calling an HVAC contractor at 2am want proof of competence before anything else \u2014 the 4.9-star rating across 1,226 reviews, the uniformed techs, the fleet of branded vans \u2014 so the page should open with that proof band rather than a stats-card layout that reads like the last site. Using the ledger arrangement and a stamp signature reads as a licensed trade operation (ruled, documented, repeatable), which differs from the prior site's quiet/grid/facts approach while still pulling the sample",
+    "rationale": "This is a 24/7 emergency HVAC contractor whose 4.9-star, 1,226-review record is the strongest thing they own, so the first screen should still put that number in front of a worried homeowner before anything else. To avoid duplicating the near-identical recent site, I've kept the trade-shop mood and stats-first lead but swapped the opening frame to facts (the rating itself fills the screen rather than a proof band), moved to a banded page rhythm so each block of evidence \u2014 stats, then reviews, th",
     "read_by": "claude",
-    "signature": "stamp",
-    "signature_why": "A repeated licence/registration-style mark reinforces this is a credentialed trade outfit you can trust in an emergency, not a boutique.",
+    "signature": "none",
+    "signature_why": "A yellow-fleet HVAC outfit with 1,226 reviews earns a repeated licence/rating mark that reads as proof-of-work, the way their own vans and uniforms repeat the branding.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "People calling an HVAC contractor at 2am want proof of competence before anything else \u2014 the 4.9-star rating across 1,226 reviews, the uniformed techs, the fleet of branded vans \u2014 so the page should o"
+      "This is a 24/7 emergency HVAC contractor whose 4.9-star, 1,226-review record is the strongest thing they own, so the first screen should still put that number in front of a worried homeowner before an"
     ],
     "unsupported": []
   },

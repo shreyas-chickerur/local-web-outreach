@@ -22,6 +22,7 @@ built from this business's material is not a choice, it is an empty band.
 
 from __future__ import annotations
 
+from app.site import contractorfacts
 from app.site.render import Material, e
 
 # Ordered. The fingerprint compares positionally and the census prints them.
@@ -44,6 +45,26 @@ DEVICES: tuple[str, ...] = (
 DEFAULT = "none"
 
 
+def _stamp_corroborated(m: Material) -> bool:
+    """Does this business's own published text actually back the credential
+    `stamp` would print for its trade?
+
+    `stamp` used to be offered — and to print "Licensed & insured" /
+    "Registered practice" / "Admitted to the bar" four times — on
+    `trade_kind` alone, with nothing checking whether the business holds a
+    licence, carries insurance, is a registered practice, or is admitted to
+    the bar. Shipped uncorroborated on six fixtures, the worst being a
+    business with no about text and no content blocks asserting a licence
+    anyway. See `.reviews/slice-c-credential-claims.md`.
+    """
+    fact = contractorfacts.STAMP_FACT.get(m.trade_kind)
+    if not fact:
+        return False
+    text = " ".join(str(x) for x in (
+        m.about or "", " ".join(str(b.get("text", "")) for b in m.blocks)))
+    return fact in contractorfacts.found(text)
+
+
 def available(m: Material, sections: int) -> list[str]:
     """The devices this business's material can carry."""
     can = ["none"]
@@ -53,7 +74,7 @@ def available(m: Material, sections: int) -> list[str]:
         can.append("quote")
     if len(m.services) + len(m.products) >= 3:
         can.append("marquee")
-    if m.trade_kind in ("trade", "care", "desk"):
+    if _stamp_corroborated(m):
         can.append("stamp")
     if sections >= 4:
         can.append("index")
@@ -102,8 +123,12 @@ def render(device: str, m: Material) -> str:
         return (f'<section class="device" data-device="marquee">'
                 f'<div class="runner">{run}</div></section>')
     if device == "stamp":
-        mark = {"trade": "Licensed &amp; insured", "care": "Registered practice",
-                "desk": "Admitted to the bar"}[m.trade_kind]
+        # The label comes from the fact that corroborated it, not a second
+        # hardcoded copy of the same three strings — `available()` already
+        # would not have offered `stamp` at all if `_stamp_corroborated(m)`
+        # were false, so `STAMP_FACT` is guaranteed present here.
+        fact = contractorfacts.STAMP_FACT[m.trade_kind]
+        mark = e(contractorfacts.label_for(fact))
         marks = "".join(f"<span>{mark}</span>" for _ in range(4))
         return (f'<section class="device" data-device="stamp">'
                 f'<div class="wrap"><div class="stamps">{marks}</div>'

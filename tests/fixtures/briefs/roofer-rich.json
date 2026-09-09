@@ -14,25 +14,26 @@
     },
     "defect": "",
     "emphasis": [
-      "reviews"
+      "reviews",
+      "services"
     ],
     "first_screen": "type",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "services",
+    "lead_with": "credentials",
     "mood": "industrial",
-    "rationale": "This is a trade sale, not a dining or lifestyle one: a homeowner with a leak wants to see in ten seconds what Bert Roofing does and proof they won't get burned, not a rating counter or a photo behind the name \u2014 only 5 of 12 photos are big enough to carry a gallery lead anyway. The previous site already led with stats in a stacked grid; here the proof band up front, a ledger rhythm that reads like a document of credentials, and a repeated licence-style stamp make the trust case in the register a ",
+    "rationale": "A homeowner deciding on a roofer wants proof of competence before pictures: 37 years in Dallas, 40,000 roofs, a 12x trade award and A+ BBB rating are the actual case, so the page should open on those facts rather than a photo. The prior site already led with stats/facts in an industrial mood with no signature mark \u2014 here we lead with credentials specifically and use a repeated stamp motif plus a ledger rhythm so the awards and BBB rating feel earned and tabulated, not just another stat band, and",
     "read_by": "claude",
-    "signature": "stamp",
-    "signature_why": "A 12x Golden Hammer, A+ BBB, since-1988 roofer earns its credibility from certifications and years in business, so repeating that mark like a licence stamp says \"verified\" without a single adjective.",
+    "signature": "none",
+    "signature_why": "A 12x Golden Hammer winner and A+ BBB firm since 1988 has real marks to repeat down the page, and a repeated stamp reads as credentials rather than decoration.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "This is a trade sale, not a dining or lifestyle one: a homeowner with a leak wants to see in ten seconds what Bert Roofing does and proof they won't get burned, not a rating counter or a photo behind "
+      "A homeowner deciding on a roofer wants proof of competence before pictures: 37 years in Dallas, 40,000 roofs, a 12x trade award and A+ BBB rating are the actual case, so the page should open on those "
     ],
     "unsupported": []
   },

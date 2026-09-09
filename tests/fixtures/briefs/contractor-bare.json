@@ -15,23 +15,24 @@
     },
     "defect": "",
     "emphasis": [
-      "reviews"
+      "reviews",
+      "stats"
     ],
     "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "reviews",
     "mood": "industrial",
-    "rationale": "This is a trade that sells competence before atmosphere: only one photo is strong enough to lead with, so the first screen should lead with the 4.7-rating and review count rather than a picture, backed by reviews raised early since the record is mixed and needs the strongest quotes visible fast. The ledger rhythm and stamped trade-shop wordmark read as a working outfit, not a boutique, and navy sampled from their own photos keeps it grounded rather than decorative.",
+    "rationale": "This is a trade, not a place people eat or browse \u2014 a visitor needs proof of competence and reliability before anything else, and with only one photograph strong enough to lead with, the page should open on the rating and reviews rather than a picture. A stamped, condensed, ledger-like treatment reads as a working shop that shows up and does the job, which matches the mixed reviews about reliability by making trust the first thing addressed head-on.",
     "read_by": "claude",
     "signature": "ticker",
-    "signature_why": "A thin running line of the rating, review count, and years-in-trade reads like a service record, which is what someone checks before calling a plumber.",
+    "signature_why": "A thin running line of the rating and review count reads like a service record, which is exactly what someone calling a plumber wants to check first.",
     "suppress": [],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "This is a trade that sells competence before atmosphere: only one photo is strong enough to lead with, so the first screen should lead with the 4.7-rating and review count rather than a picture, backe"
+      "This is a trade, not a place people eat or browse \u2014 a visitor needs proof of competence and reliability before anything else, and with only one photograph strong enough to lead with, the page should o"
     ],
     "unsupported": []
   },

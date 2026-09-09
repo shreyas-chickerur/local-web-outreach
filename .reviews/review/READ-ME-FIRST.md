@@ -22,6 +22,28 @@ not a demo of one good one.
 
 ## The weakest point, named directly
 
+**A licensure claim shipped unverified, on six of nineteen pages, until this
+session found and fixed it.** `signature.py`'s `stamp` device printed
+"Licensed & insured" / "Registered practice" / "Admitted to the bar" from
+`trade_kind` alone — nothing checked it was true. The content gate
+(`render.unsupported`) couldn't have caught it either: its claim pattern
+had no entry for credential language at all. Both are fixed now (the
+pattern widened; the device only renders when the business's own text
+actually corroborates it — see `.reviews/slice-c-credential-claims.md`),
+and a standing test holds the invariant across the whole corpus going
+forward. Named here anyway, not just in its own handoff, because it is the
+most serious thing this session found: a specific, checkable, false
+professional claim on a page meant to be shown to a stranger. **The honest
+residual risk:** the corroboration is deliberately strict (an exact phrase
+match against the business's own published text, never inferred), which
+means it is proven to REMOVE a false claim and not yet proven to CARRY a
+true one — in this 19-fixture corpus, not one business's own copy happens
+to use a phrasing the patterns catch, so `stamp` currently renders on
+nobody. A business that says "TX-licensed contractor" rather than "licensed
+and insured" would lose the mark even with a real claim to make. That is
+the right failure direction (silence over a false assertion) but it is
+still a gap, not a solved problem.
+
 **Slice C (trade-specific structure) is barely started.** Four of nine
 contractor facts exist (`app/site/contractorfacts.py`) — licensed/insured,
 emergency availability, warranty, free estimate — and only three of nineteen
@@ -34,13 +56,17 @@ grid to what a real practice's site would actually need to say (insurance
 accepted, which procedures, financing) — none of that exists yet.
 
 **The instrument that judges "do these look the same" has never found a
-genuine collision in this corpus.** Zero same-trade or cross-trade pairs, of
-sixteen checked by hand this session, read as "one studio" to a blind judge
-— including the closest pair the corpus has ever produced (two personal-
-injury firms sharing eight of eleven axes). That is either the diversity
-gate working exactly as intended, or a sign the corpus is still small enough
-that collisions haven't caught up with it yet. Both are true; which one
-matters more is a question for more fixtures, not more code.
+genuine collision in this corpus.** Zero same-trade or cross-trade pairs,
+of eleven checked by hand this session (on top of sixteen checked the
+session before, all since retired against a rendering that has since
+changed twice), read as "one studio" to a blind judge. That is either the
+diversity gate working exactly as intended, or a sign the corpus is still
+small enough that collisions haven't caught up with it yet. Both are true;
+which one matters more is a question for more fixtures, not more code. One
+attempted redecide this session DID produce a genuine unresolved collision
+(two HVAC/roofing pages, honestly flagged by the gate itself rather than
+hidden) before a retry cleared it — the gate's failure mode is disclosure,
+not silent collision, which is the property that matters most.
 
 ## What's deliberately not built
 
@@ -65,17 +91,21 @@ matters more is a question for more fixtures, not more code.
 
 ## Numbers not to trust, and why
 
-- **"55.52% same-trade distance = 44% identical"** is a real, current
-  measurement, but it is the ONLY reading this ruler has ever taken — there
-  is no prior number under the current axis set to compare it against.
-  "Slice C should move this" is the standing claim; nothing has tested that
-  yet.
-- **Agreement is 0 of 0.** This is not "untested" — sixteen pairs were
-  checked by hand, including the five closest theoretical collision
-  candidates in the whole corpus — it means no "same" verdict has ever been
-  found to rank against. A rank-based score needs at least one on each side.
-  Take "the vector agrees with a human" as unproven, not as disproven and
-  not as confirmed.
+- **"53.33% same-trade distance = 47% identical"** is a real, current
+  measurement, but it is the ONLY reading this ruler has ever taken under
+  the current corpus — there is no prior number under this exact axis set
+  to compare it against. "Slice C should move this" is the standing claim;
+  nothing has tested that yet.
+- **Agreement is 0 of 0.** This is not "untested" — eleven pairs were
+  checked by hand this round (the closest pairs by distance), on top of
+  sixteen the round before — it means no "same" verdict has ever been found
+  to rank against. A rank-based score needs at least one on each side. Take
+  "the vector agrees with a human" as unproven, not as disproven and not as
+  confirmed.
+- **The held-out third is currently empty**, not stale — every held-out
+  verdict from the prior round was retired (the rendering changed under it
+  twice this session) and none has been repopulated yet. This is disclosed
+  in `tests/test_the_instrument_reproduces.py`, not hidden.
 - **Ratings, review counts and "dishes on the menu" tallies** on each page
   are read from Google's own data at the time each business was researched —
   they will have drifted since. Nothing here is refreshed automatically.
@@ -87,9 +117,12 @@ matters more is a question for more fixtures, not more code.
 
 ## If you find something that looks wrong
 
-It might be. This session found and fixed a real one this way: the
-workbench's "plan" panel and its "site preview" disagreed about section
-order for seventeen of nineteen fixtures, silently, because two different
-functions implemented the same reordering rule slightly differently. See
-`.reviews/plan-page-disagreement.md`. Trust what you see over what a panel
-claims about it, and say so if they don't match.
+It might be. Two real ones were found and fixed already: the workbench's
+"plan" panel disagreeing with the rendered page on section order for
+seventeen of nineteen fixtures, found verifying this bundle
+(`.reviews/plan-page-disagreement.md`); and a licensure claim printed with
+no corroboration on six pages, found by a reader of the corpus itself
+rather than by any test in this repository
+(`.reviews/slice-c-credential-claims.md`). Trust what you see on the page
+over what any panel, test, or number claims about it, and say so if they
+don't match.

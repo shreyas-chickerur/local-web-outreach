@@ -15,8 +15,8 @@
     },
     "defect": "",
     "emphasis": [
-      "stats",
-      "services"
+      "reviews",
+      "credentials"
     ],
     "first_screen": "proof",
     "hero_offset": 0,
@@ -24,17 +24,17 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "People calling a plumber want proof of competence and trust before anything else \u2014 the 4.9/2272 review rating, licensing, and upfront-pricing guarantee matter more than atmosphere, so the page opens with facts, not a mood shot. The red accent is pulled straight from their own trucks and uniforms, and a ledger-like, stamped trade layout reads as a serious licensed outfit rather than a lifestyle brand.",
+    "rationale": "People hire a plumber on trust before they hire on looks: nearly 2,800 combined reviews at 4.8-4.9 stars and a stated on-time, upfront-price, licensed-only guarantee are the actual sales pitch, so the page should open with those facts and proof of competence rather than a mood photo. The red work-shirt uniform is already their own visual identity, so the accent should simply be theirs, not invented.",
     "read_by": "claude",
-    "signature": "stamp",
-    "signature_why": "A repeated licence/guarantee mark reinforces that this is a licensed, insured trade outfit, which is exactly what a homeowner checks before calling a plumber.",
+    "signature": "none",
+    "signature_why": "A repeated licence/guarantee mark reinforces that these are licensed, insured professionals every time a visitor scrolls, which is exactly what someone hiring a plumber is checking for.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "People calling a plumber want proof of competence and trust before anything else \u2014 the 4.9/2272 review rating, licensing, and upfront-pricing guarantee matter more than atmosphere, so the page opens w"
+      "People hire a plumber on trust before they hire on looks: nearly 2,800 combined reviews at 4.8-4.9 stars and a stated on-time, upfront-price, licensed-only guarantee are the actual sales pitch, so the"
     ],
     "unsupported": []
   },

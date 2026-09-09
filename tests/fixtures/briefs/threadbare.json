@@ -14,8 +14,8 @@
     },
     "defect": "",
     "emphasis": [
-      "services",
-      "hours"
+      "hours",
+      "contact"
     ],
     "first_screen": "type",
     "hero_offset": 0,
@@ -23,17 +23,17 @@
     "kind": "style",
     "lead_with": "services",
     "mood": "industrial",
-    "rationale": "There's only one small photo, not enough to build a page around, so the name itself needs to carry the first screen like a trade-shop sign; a general contractor sells competence and reliability, not atmosphere, so we lead with what he does and when he's available rather than pictures we don't have.",
+    "rationale": "With only one small photo, there isn't enough imagery to lead with a picture, so the name is set big and heavy like a stencil on a van door \u2014 this reads as a trade shop, not a lifestyle brand. Lead with services and hours so a visitor sees quickly what S.Handyman does and how to reach them, with call as the single action a homeowner needs.",
     "read_by": "claude",
-    "signature": "stamp",
-    "signature_why": "A repeated licence-style stamp reads as a tradesman's mark of registration, which is exactly what a homeowner checks before calling a handyman.",
+    "signature": "none",
+    "signature_why": "A general contractor's credibility rests on the work itself, not on a decorative mark, so the page should stay plain and let the name and the proof of competence do the talking.",
     "suppress": [
       "gallery"
     ],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "There's only one small photo, not enough to build a page around, so the name itself needs to carry the first screen like a trade-shop sign; a general contractor sells competence and reliability, not a"
+      "With only one small photo, there isn't enough imagery to lead with a picture, so the name is set big and heavy like a stencil on a van door \u2014 this reads as a trade shop, not a lifestyle brand. Lead wi"
     ],
     "unsupported": []
   },

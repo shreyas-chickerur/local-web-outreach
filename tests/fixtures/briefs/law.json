@@ -10,7 +10,7 @@
   ],
   "design_direction": {
     "accent": "orange",
-    "architecture": "ledger",
+    "architecture": "stacked",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -26,18 +26,18 @@
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
-    "mood": "refined",
-    "rationale": "Someone hiring a personal injury lawyer after a wreck wants proof of competence and trust before anything else \u2014 the 4.9 rating from 254 reviews and named case types matter more than office photography, most of which is promotional graphics rather than real work anyway. A calm, document-like ledger layout with a credentials stamp says 'serious firm with results' rather than 'marketing agency,' and the orange pulls straight from their own logo and branded graphics.",
+    "mood": "bold",
+    "rationale": "Someone landing on this page is scared and shopping urgently for proof this firm wins cases, so the 4.9-star rating and 254 reviews should hit before any portrait does \u2014 facts first, not atmosphere. To differ clearly from the near-duplicate site: instead of a quiet ledger of restrained proof, this leans bold and stamped, using orange pulled straight from their own logo and graphics, with a repeated credential mark (stamp) rather than none, and a stacked rhythm instead of the tight ledger \u2014 the s",
     "read_by": "claude",
-    "signature": "stamp",
-    "signature_why": "A repeated Super Lawyer / trial-lawyer credential mark reads as verified proof, which is what someone hiring an injury attorney is scanning for.",
+    "signature": "none",
+    "signature_why": "A repeated mark like \"No fees unless we win\" or the Super Lawyer credential reinforces trust the way a licence plate on the wall does, which matters more here than any single photo.",
     "suppress": [
-      "gallery"
+      "features"
     ],
-    "type_treatment": "quiet",
-    "typeface": "ibm-plex-serif-inter",
+    "type_treatment": "stamped",
+    "typeface": "oswald-inter",
     "understood": [
-      "Someone hiring a personal injury lawyer after a wreck wants proof of competence and trust before anything else \u2014 the 4.9 rating from 254 reviews and named case types matter more than office photograph"
+      "Someone landing on this page is scared and shopping urgently for proof this firm wins cases, so the 4.9-star rating and 254 reviews should hit before any portrait does \u2014 facts first, not atmosphere. T"
     ],
     "unsupported": []
   },

@@ -15,7 +15,17 @@ import re
 CLAIM_RE = re.compile(
     r"\b(since \d{4}|est\.? ?\d{4}|\d+\+? years|award[- ]winning|voted|"
     r"best in|number one|#1|family[- ]owned|family[- ]run|trusted by|"
-    r"\d+ (?:happy )?(?:customers|clients)|five[- ]star|5[- ]star)\b",
+    r"\d+ (?:happy )?(?:customers|clients)|five[- ]star|5[- ]star|"
+    # Credential and licensure language — added after `signature.py`'s
+    # `stamp` device shipped "Licensed & insured" / "Registered practice" /
+    # "Admitted to the bar" unconditionally on trade_kind alone, on six
+    # fixtures whose own material corroborated none of it. This is a
+    # pattern over the LANGUAGE of a credential claim, not the three exact
+    # strings that device happened to print — the next device or section
+    # that asserts one has to clear the same bar.
+    r"licen[sc]ed|bonded|insured|certified|accredited|"
+    r"board[- ]certified|admitted to the bar|state bar|"
+    r"registered (?:practice|nurse|hygienist|dietitian|agent))\b",
     re.IGNORECASE)
 
 

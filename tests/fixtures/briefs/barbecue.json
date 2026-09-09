@@ -8,7 +8,7 @@
   ],
   "design_direction": {
     "accent": "amber",
-    "architecture": "banded",
+    "architecture": "gallery",
     "contradictions": [],
     "cta": {
       "kind": "order",
@@ -16,8 +16,8 @@
     },
     "defect": "",
     "emphasis": [
-      "stats",
-      "reviews"
+      "reviews",
+      "services"
     ],
     "first_screen": "photo",
     "hero_offset": 0,
@@ -25,15 +25,15 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "Hutchins has ten strong photographs of the food, the pit, and the crowd, plus a huge review base (13,880 at 4.8) \u2014 those two things sell the place before any words do. Keeping the photo-led opening but swapping the stamped trade-shop lettering, oswald-barlow, and duotone strip for a warmer serif pairing, an amber accent, and a corner-inset wordmark keeps this from reading as the same design as the other recent barbecue site while still fitting a busy, established Texas BBQ joint rather than a bo",
+    "rationale": "Ten strong, appetite-driving photographs of smoked meat and a packed, glowing dining room are the actual argument here \u2014 13,880 reviews at 4.8 stars mean people already trust the food before they arrive, so the page should open on the imagery and back it immediately with proof of that trust. To avoid duplicating the near-identical recent site, I've kept the photo-led gallery opening (the pictures genuinely earn it) but swapped the accent to amber (warmer, closer to firelight and smoke than the m",
     "read_by": "claude",
-    "signature": "corner_inset",
-    "signature_why": "A type block set into the corner of the big smoked-meat photograph lets the name sit on the food itself without covering it, which suits a place whose spread is the whole pitch.",
+    "signature": "ticker",
+    "signature_why": "A thin running line of the review counts and DFW cities they cater to tells a visitor in one glance how big and how trusted this place is, without competing with the food photos.",
     "suppress": [],
     "type_treatment": "wide",
     "typeface": "fraunces-karla",
     "understood": [
-      "Hutchins has ten strong photographs of the food, the pit, and the crowd, plus a huge review base (13,880 at 4.8) \u2014 those two things sell the place before any words do. Keeping the photo-led opening bu"
+      "Ten strong, appetite-driving photographs of smoked meat and a packed, glowing dining room are the actual argument here \u2014 13,880 reviews at 4.8 stars mean people already trust the food before they arri"
     ],
     "unsupported": []
   },

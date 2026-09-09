@@ -7,7 +7,7 @@
   "chain_signals": [],
   "design_direction": {
     "accent": "blue",
-    "architecture": "column",
+    "architecture": "ledger",
     "contradictions": [],
     "cta": {
       "kind": "quote",
@@ -15,26 +15,26 @@
     },
     "defect": "",
     "emphasis": [
-      "services",
-      "reviews"
+      "stats",
+      "services"
     ],
     "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "credentials",
     "mood": "industrial",
-    "rationale": "Someone hiring a roofer is checking credentials before they care about a photo of shingles, so the page should open on proof \u2014 the rating, the four-state reach, the W2-insured claim \u2014 not a hero image; a narrow column keeps that proof dense and serious rather than sprawling like a lifestyle brand, and swapping the heavy stamped/oswald-barlow trade-shop mark for a calmer wide-set oswald-inter with a running fact ticker keeps the same honest, no-nonsense industrial mood without duplicating the oth",
+    "rationale": "A roofing contractor sells trust and competence before atmosphere \u2014 a visitor wants to see the 5.0 rating, the 200+ reviews, W2-insured crews, and four-state coverage before they scroll to photos of shingles. Leading with proof (stats/credentials) rather than a hero photo, in an industrial mood with a stamped wordmark and ledger rhythm, reads as a serious operator rather than a generic contractor site; blue picked from their own truck fleet and yard-sign photography keeps it grounded in their ac",
     "read_by": "claude",
-    "signature": "ticker",
-    "signature_why": "A thin running line of the hard facts \u2014 5.0 rating, 218 reviews, four states, BBB A+ \u2014 gives a wary homeowner the proof-of-competence a roofer needs without borrowing the stamp-and-stencil trade-shop look already used next door.",
+    "signature": "none",
+    "signature_why": "A repeated W2-insured / BBB A+ / statewide-coverage mark reassures a homeowner comparing contractors that this crew is licensed and accountable, which is what they're actually checking for before they call.",
     "suppress": [
       "features"
     ],
-    "type_treatment": "wide",
+    "type_treatment": "stamped",
     "typeface": "oswald-inter",
     "understood": [
-      "Someone hiring a roofer is checking credentials before they care about a photo of shingles, so the page should open on proof \u2014 the rating, the four-state reach, the W2-insured claim \u2014 not a hero image"
+      "A roofing contractor sells trust and competence before atmosphere \u2014 a visitor wants to see the 5.0 rating, the 200+ reviews, W2-insured crews, and four-state coverage before they scroll to photos of s"
     ],
     "unsupported": []
   },

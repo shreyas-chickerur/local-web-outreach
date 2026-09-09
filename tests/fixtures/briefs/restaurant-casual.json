@@ -23,17 +23,17 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "This is a food-hall crepe stall people find by craving something sweet and by word of mouth \u2014 the photography of glistening crepes and the buzzing counter does the selling, so the site should open on a big photo and keep moving through the gallery, with warm orange pulled straight from the Nutella-and-chocolate palette they already photograph in. The 3.9/4.4 ratings are decent but not a headline, so let quoted reviews carry the social proof instead of a cold stats band.",
+    "rationale": "This is a food-hall crepe counter with strong, appetite-driving photography and a founder story worth telling \u2014 the picture and the food should do the convincing, not a ratings number (3.9 on Google won't help). Lead with the gallery of dishes, follow with the Paris-to-Dallas story and glowing quotes, and point people to visit the stall.",
     "read_by": "claude",
     "signature": "scroll_gallery",
-    "signature_why": "The crepes and the food-hall stall are the entire argument, so let the photos run past like a counter you're walking along rather than freezing them into a static grid.",
+    "signature_why": "The crepes themselves are the sell, so let the photographs of dishes run in a strip a visitor can scroll through rather than boxing them into a grid.",
     "suppress": [
       "stats"
     ],
     "type_treatment": "quiet",
     "typeface": "fraunces-karla",
     "understood": [
-      "This is a food-hall crepe stall people find by craving something sweet and by word of mouth \u2014 the photography of glistening crepes and the buzzing counter does the selling, so the site should open on "
+      "This is a food-hall crepe counter with strong, appetite-driving photography and a founder story worth telling \u2014 the picture and the food should do the convincing, not a ratings number (3.9 on Google w"
     ],
     "unsupported": []
   },

@@ -32,53 +32,44 @@ FIXTURES = Path("tests/fixtures/briefs")
 # instrument changed is not a result.
 RULER = "a762bcc9"
 RULE = "254e171b"
-LABELS = "1f0df47d"
+LABELS = "9ed8ff8e"
 # The held-out third, frozen verbatim. It moves only when a pair is
-# RETIRED, never when one is re-judged.
-HELD_OUT = "1c862e02"
-SAME_TRADE_MEAN = 0.5552
-# Slice B's close-out (this project's own Phase 1): the diversity gate's
-# WINDOW widened 10->60, fixing the real `restaurant-bare`/`salon-rich`
-# collision that shipped three axes apart and unseen because the gate only
-# compared against the last ten generated; the typeface pair landed as axis
-# twelve. Ruler and rule UNCHANGED — one `--redecide` re-asked every
-# direction anyway, because the gate's history and the typeface choice both
-# feed it.
+# RETIRED, never when one is re-judged. Empty this round — see below —
+# "e3b0c442" is the hash of nothing (sha256("")[:8]), not a stale value.
+HELD_OUT = "e3b0c442"
+SAME_TRADE_MEAN = 0.5333
+# BRIEF §4's first invariant, violated and fixed: `signature.py`'s `stamp`
+# device chose its mark ("Licensed & insured" / "Registered practice" /
+# "Admitted to the bar") from `trade_kind` alone and printed it four times,
+# with nothing checking whether it was true of the business. Shipped
+# uncorroborated on six fixtures — the worst, `threadbare`, has no about
+# text, no content blocks and one photograph, and still asserted a licence.
+# `app.core.claims.CLAIM_RE` had no pattern for credential language at all,
+# so the content gate (`render.unsupported`) could not have caught it
+# either. Both fixed: the pattern widened (verified against the whole
+# corpus — exactly the six named fixtures produced a finding, nothing
+# else), and `stamp` now checks `contractorfacts.STAMP_FACT` before
+# `available()` offers it at all — a device the material cannot support is
+# dropped, not rendered with a substitute. See
+# `.reviews/slice-c-credential-claims.md` and
+# `tests/test_no_unverified_credential_ships.py`, the standing version.
 #
-# Sixteen pairs judged blind against the rendered markup this round —
-# cross-trade pairs alongside same-trade, and five of the sixteen chosen by
-# distance to repopulate the held-out third from empty. ALL SIXTEEN CAME
-# BACK DIFFERENT, including the closest same-trade pair this corpus has ever
-# produced: `law`/`law-rich` at 26% distance, sharing eight of its eleven
-# axes and differing only in what opens the page and what follows it. One
-# pair, `bare-trade`/`dentist`, was briefly misjudged "same" from a shrunk
-# thumbnail — five bands in identical order and composition — and corrected
-# once the actual markup was read: one draws a hairline rule above every
-# section and holds its text to a visibly narrower column throughout, the
-# other does neither. The same near-miss the previous redecide hit on
-# `dentist`/`dentist-rich`, caught the same way.
+# Signature is axis eleven, so this re-decided the corpus (ruler and rule
+# UNCHANGED — corroboration touches no weight or axis definition). The
+# first attempt produced a genuine unresolved collision
+# (`hvac-rich`/`roofer-rich`, matching on all four required-high axes,
+# honestly recorded as `_gate_unresolved` rather than hidden) — retried
+# once rather than compensated for by widening WINDOW or a required set
+# `test_the_gate_is_satisfiable` already confirmed has room; the second
+# attempt cleared with zero collisions across all 171 pairs.
 #
-# Agreement is 0 of 0 for the same reason it was before this phase: a rank
-# needs at least one "same" pair, and after sixteen pairs — five of them in
-# the repopulated held-out third — there still is not one. The single-axis
-# degeneracy check (see `test_the_blind_spot_cleared_and_the_labels_went_
-# degenerate` in this file's history) stays retired; nothing came back to
-# restore it against.
+# Eleven pairs judged fresh against the new rendering — the closest pairs
+# by distance in the tuning set only; held-out verdicts are retired, never
+# re-judged, and none were repopulated this round, so the held-out third is
+# empty rather than stale. ALL ELEVEN CAME BACK DIFFERENT. Agreement is 0 of
+# 0 for the same reason as every prior reading: a rank needs at least one
+# "same" pair, and there is not one.
 AGREEMENT = (0, 0)
-#
-# HELD_OUT moved again the same session, not from a redecide: render.py's
-# `_order()` was a second, diverging copy of `plan.apply_order()` that left
-# "hero" in its own working list before checking an emphasis instruction's
-# ">2" position, shifting every named section one place later on the
-# rendered page than in the plan shown first (`test_the_rendered_page_
-# matches_the_plan_the_operator_reviewed`). Sixteen of nineteen fixtures'
-# rendered order moved once it was fixed. All sixteen live verdicts were
-# retired and re-judged against the corrected rendering rather than carried
-# forward unread — every verdict's actual conclusion held (still all
-# DIFFERENT, still driven by first_screen, architecture or section
-# presence, none of which this bug touched), only the `why` text changed.
-# LABELS is unchanged (it hashes verdicts, not prose) — HELD_OUT hashes the
-# reasoning too, so it moved with the wording.
 
 
 def fingerprints() -> dict[str, fp.Fingerprint]:
@@ -220,33 +211,25 @@ def test_the_held_out_third_has_nothing_to_score_either():
 
 
 def test_the_corpus_has_no_pair_a_stranger_calls_one_studio():
-    """§2's governing requirement, met on this corpus a third time and more
-    strongly than either before it.
+    """§2's governing requirement, met on this corpus a fourth time.
 
-    Sixteen pairs were checked after Slice B's close-out: the diversity
-    gate's WINDOW widened 10->60 (fixing the real `restaurant-bare`/
-    `salon-rich` collision the narrow window had missed) and the typeface
-    pair landed as an axis, and the whole corpus was re-decided under both.
-    This round reached past same-trade into cross-trade pairs and used five
-    of the sixteen, chosen by distance, to repopulate the held-out third
-    from empty. All sixteen came back DIFFERENT — including the closest
-    same-trade pair this corpus has ever produced, `law`/`law-rich` at 26%
-    distance, sharing eight of its eleven axes and differing only in what
-    opens the page and what follows it.
+    Eleven pairs were checked after `signature.py`'s `stamp` device was
+    fixed to require corroboration (BRIEF §4 — see
+    `.reviews/slice-c-credential-claims.md`), which is a signature-
+    availability change and re-decided the corpus. All eleven came back
+    DIFFERENT — the closest, `hvac`/`hvac-rich` at 34% distance, still reads
+    as two pages once past the opening: one runs a plain two-item layout
+    for what it offers, the other a dense eight-card grid with an awards
+    band the first does not carry.
 
-    One pair, `bare-trade`/`dentist`, was briefly misjudged "same" against a
-    shrunk contact-sheet thumbnail — five bands in identical order and
-    composition — and corrected once the actual rendered markup was read:
-    one holds every band to a visibly narrower column and draws a hairline
-    rule above each of them, the other does neither. The same shape of
-    near-miss the previous redecide hit on `dentist`/`dentist-rich`, caught
-    the same way — by reading the markup rather than trusting a glance at a
-    small picture.
+    Held-out verdicts are retired, never re-judged, and none were
+    repopulated this round — the held-out third is genuinely empty rather
+    than stale, a fact rather than an oversight.
 
     Agreement is 0 of 0 for the reason it was 0 of 0 before this phase: a
     rank needs at least one "same" pair, and there is not one to rank
     against. The single-axis degeneracy check has nothing to check with zero
-    "same" verdicts — any axis unique per fixture would explain all sixteen
+    "same" verdicts — any axis unique per fixture would explain all eleven
     for free — so it is retired again rather than left asserting something
     vacuous. If a "same" verdict comes back, restore it.
     """

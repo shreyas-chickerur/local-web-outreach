@@ -184,6 +184,26 @@ rendered standalone with copied (never inlined) photographs,
 numbers not to trust. The workbench confirmed running against the fixture
 corpus. See `.reviews/slice-b-phase-3.md`.
 
+**Done — an unverified licensure claim, found and fixed (BRIEF §4).**
+`signature.py`'s `stamp` device printed "Licensed & insured" / "Registered
+practice" / "Admitted to the bar" from `trade_kind` alone on six of
+nineteen fixtures — `threadbare` (no about text, no content blocks, one
+photograph) asserted a licence anyway. `app.core.claims.CLAIM_RE` had no
+pattern for credential language, so the content gate could not have caught
+it either. Both fixed: the pattern widened (verified against the whole
+corpus — exactly those six fixtures flagged, nothing else); `stamp` now
+requires `contractorfacts.STAMP_FACT` corroboration before `available()`
+offers it, dropped rather than rendered with a substitute when absent.
+Standing test: `tests/test_no_unverified_credential_ships.py`. Re-decided
+the corpus (signature is axis eleven); one attempt produced a genuine
+unresolved collision, honestly recorded by the gate itself
+(`_gate_unresolved`) rather than hidden, cleared by a retry. Eleven pairs
+re-judged, all DIFFERENT; held-out third now empty (retired, not
+repopulated this round). **Residual, disclosed risk:** the corroboration
+is strict exact-phrase matching, so `stamp` currently renders on nobody in
+this corpus — proven to remove a false claim, not yet proven to carry a
+true one. See `.reviews/slice-c-credential-claims.md`.
+
 ## 2. The governing requirement
 
 A generator's characteristic failure is that its output is recognisable as its

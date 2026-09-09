@@ -19,23 +19,23 @@
       "reviews",
       "services"
     ],
-    "first_screen": "facts",
+    "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "reviews",
     "mood": "warm",
-    "rationale": "People choosing a dentist check the rating and reviews before anything else, and this practice has strong numbers (4.7/4.6) and warm, specific testimonials to back it up \u2014 so lead with proof of trust rather than a photo of an office that looks like every other clinic. The 'menu' section has no real material here (just 'Special') so it's suppressed, while services and reviews carry the page.",
+    "rationale": "People choose a dentist on trust and comfort, not on pictures of the office, so the page should open with proof \u2014 the strong ratings and warm patient reviews \u2014 before getting into services and hours. A calm, warm palette with a quiet, readable type treatment matches a practice that leads with respect and patience rather than a flashy brand.",
     "read_by": "claude",
-    "signature": "quote",
-    "signature_why": "A dentist earns trust through what patients say about being treated gently and honestly, so putting one patient's own words at full size does more than any stock photo of a smile.",
+    "signature": "none",
+    "signature_why": "A dental office earns trust through calm, legible proof \u2014 ratings, staff, and reviews \u2014 not a decorative flourish, so no signature device is needed here.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "quiet",
-    "typeface": "",
+    "typeface": "sora-manrope",
     "understood": [
-      "People choosing a dentist check the rating and reviews before anything else, and this practice has strong numbers (4.7/4.6) and warm, specific testimonials to back it up \u2014 so lead with proof of trust "
+      "People choose a dentist on trust and comfort, not on pictures of the office, so the page should open with proof \u2014 the strong ratings and warm patient reviews \u2014 before getting into services and hours. "
     ],
     "unsupported": []
   },

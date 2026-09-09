@@ -33,13 +33,13 @@ FIXTURES = Path("tests/fixtures/briefs")
 # entry on its list.
 MATCHES = {
     "barbecue-rich": ["warm cream + serif display + terracotta"],
-    # After the corpus was re-decided for Slice B's close-out (WINDOW 10->60,
-    # typeface landed as an axis), `restaurant-rich` escaped this default —
-    # its accent moved to olive — and nothing replaced it. The count dropped
-    # from two to one rather than holding, which is a fact about this
-    # redecide rather than a new failure: fewer businesses landing on the
-    # same forbidden combination is the direction §2.4 wants movement in, it
-    # just was not the thing being tuned for.
+    "law": ["Space Grotesk as the safe face"],
+    # After the corpus was re-decided to corroborate `stamp` (§4 — the
+    # device was printing an unverified licence claim on trade_kind alone;
+    # see .reviews/slice-c-credential-claims.md), `law` picked up this
+    # default. The count moved from one to two, which is a fact about this
+    # redecide rather than something tuned for — the change here was to a
+    # signature device's availability, not to typography.
 }
 
 

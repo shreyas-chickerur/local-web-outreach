@@ -24,17 +24,17 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "The house itself \u2014 a converted home lit with string lights \u2014 is as much the identity as the food, so the first screen should hold name and building in equal split rather than let type sit over a full-bleed photo like the prior version did; wide-set type and the softer fraunces-narrow-jost keep the farmhouse warmth without repeating the last site's quiet-serif choice, and olive (sampled from the produce and porch greenery) reads as their own colour rather than a generic warm-restaurant amber.",
+    "rationale": "The food and the striking lit-up house are the strongest asset here \u2014 8 photographs are large enough to lead with \u2014 but to avoid repeating the almost-identical recent site, this one splits the first screen between the name and the building at night rather than filling the whole screen with a dish photo, and sets the name wide rather than quiet so it reads as its own address rather than a copy of the other site. The scratch-kitchen, whole-animal story and the warm customer quotes deserve early we",
     "read_by": "claude",
     "signature": "corner_inset",
-    "signature_why": "A type block inset into the corner of that lit-up nighttime house photo does the branding work of a sign without covering the building it's naming.",
+    "signature_why": "A type block inset into the corner of the house-at-night photograph gives the building itself the presence of a wordmark, which is what makes this restaurant recognisable on Main Street.",
     "suppress": [
-      "partners"
+      "recognition"
     ],
     "type_treatment": "wide",
     "typeface": "fraunces-narrow-jost",
     "understood": [
-      "The house itself \u2014 a converted home lit with string lights \u2014 is as much the identity as the food, so the first screen should hold name and building in equal split rather than let type sit over a full-"
+      "The food and the striking lit-up house are the strongest asset here \u2014 8 photographs are large enough to lead with \u2014 but to avoid repeating the almost-identical recent site, this one splits the first s"
     ],
     "unsupported": []
   },

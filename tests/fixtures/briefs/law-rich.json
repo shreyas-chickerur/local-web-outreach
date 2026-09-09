@@ -18,8 +18,9 @@
     },
     "defect": "",
     "emphasis": [
+      "stats",
       "reviews",
-      "features"
+      "credentials"
     ],
     "first_screen": "proof",
     "hero_offset": 0,
@@ -27,17 +28,17 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "refined",
-    "rationale": "Someone hiring a personal injury attorney after a catastrophic event is checking credibility and track record before anything else, so the page should open on the 4.8-rating proof and verdict results rather than a warm photograph; the firm's own imagery (conference rooms, historic house, suited attorneys) supports a restrained, document-like ledger layout that reads as a serious trial firm rather than a lifestyle brand.",
+    "rationale": "People hiring a personal injury attorney after a catastrophic event are checking credibility, not browsing a gallery \u2014 so the page should open with the rating, case results, and track record, not a photograph of the building. The ledger rhythm and stamped credential mark read as a firm that wins verdicts, not a boutique brand.",
     "read_by": "claude",
-    "signature": "stamp",
-    "signature_why": "A repeated Board Certified mark reinforces the one credential that actually persuades an injury client to call, without turning the page into a brochure.",
+    "signature": "none",
+    "signature_why": "A repeated Board Certified mark reinforces the one credential that matters most before anyone calls a personal injury lawyer.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "quiet",
     "typeface": "ibm-plex-serif-inter",
     "understood": [
-      "Someone hiring a personal injury attorney after a catastrophic event is checking credibility and track record before anything else, so the page should open on the 4.8-rating proof and verdict results "
+      "People hiring a personal injury attorney after a catastrophic event are checking credibility, not browsing a gallery \u2014 so the page should open with the rating, case results, and track record, not a ph"
     ],
     "unsupported": []
   },
