@@ -24,13 +24,16 @@ small. `artifacts/` is gitignored; regenerate the full-size sheets on demand.
 
 from __future__ import annotations
 
+import argparse
 import base64
+import hashlib
 import html
 import json
 import re
 import shutil
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from app.adapters import photos as photos_api
@@ -93,15 +96,85 @@ WIDTHS = (("desktop", 1440, 1100, 1.0), ("mobile", 390, 844, 1.0),
           ("page", 1440, 6000, 0.5))
 
 
+# How many `shoot()` calls run at once. Each is an independent headless
+# Chrome process writing to its own file — nothing shared, nothing to
+# serialise. Six is comfortably under typical laptop core counts while still
+# cutting a 95-shot run to a fraction of its serial time; raise it if the
+# machine has room, but a named constant beats a number buried in a call site.
+MAX_WORKERS = 6
+
+# Which slug+width combinations have already been shot from the exact HTML
+# they would be shot from again. Skipping a match is what makes iterating on
+# one fixture cheap instead of re-paying for all nineteen every time.
+MANIFEST = Path(".reviews/sheet/.captured.json")
+
+
 def chrome() -> str | None:
     return next((path for path in CHROME if path and Path(path).exists()), None)
 
 
 def shoot(binary: str, page: Path, out: Path, width: int, height: int,
           scale: float = 1.0) -> bool:
+    """One screenshot. Found NOT reproducible before this — the same file,
+    shot twice in a row with no concurrency at all, came back byte-different
+    roughly one time in three, and Phase 0's parallelisation was going to make
+    that far more likely to bite rather than causing it.
+
+    Two independent causes, both fixed:
+
+    1. NO PROFILE ISOLATION. Without `--user-data-dir`, `--headless=new`
+       launches against Chrome's real default profile — the one signed into
+       whatever account this machine has, with its extensions and sync. The
+       captured stderr showed real profile activity (`docs.google.com` and
+       `mail.google.com` PWA-install checks) that has nothing to do with the
+       page being screenshotted. A fresh, empty profile directory per call
+       removes that entirely, and removes the risk of two concurrent
+       invocations fighting over the same profile lock file, which
+       `--headless=new` does not obviously serialise.
+    2. NETWORK-DEPENDENT FONTS. Every generated page loads its font from
+       `fonts.googleapis.com` with `display=swap` — render immediately in a
+       fallback face, repaint once the real one downloads. Chrome's
+       `--screenshot` fires on the load event, which can land before or after
+       that repaint depending on how fast the network answers, so the exact
+       same file can be captured mid-swap or post-swap. This is a form of
+       exactly the failure this project's own fixtures were built to escape
+       (`BRIEF`: "runs with no key, no cache and no network") — it just never
+       applied to the SCREENSHOTS the fixtures were judged from, only to the
+       data. `--host-resolver-rules` sends both font hosts to nowhere, so the
+       request fails immediately and the fallback face is what renders,
+       every time, with nothing to race against.
+
+    A third cause, found chasing the second down: hero and card elements
+    reveal on a CSS transition — `[data-reveal]` fades and rises in over up
+    to a second, driven by a `reveals` class added late enough that a
+    screenshot can land mid-transition. Respecting
+    `prefers-reduced-motion` was already how the stylesheet turns that off —
+    `--force-prefers-reduced-motion` just tells Chrome the visitor asked for
+    it, which is a real, supported preference and not a hack around the page.
+
+    `--user-data-dir` pointed at a fresh directory was tried first, for the
+    same isolation reason profile activity showed up in captured stderr, and
+    dropped: on this Chrome build a non-default profile directory made
+    `--headless=new` hang on exit — the screenshot file appeared, correctly
+    written, and the process then declined to die within the 60-second
+    budget. Reproducibility does not need it: `--disable-background-networking`
+    and its neighbours below stop the same profile activity from touching the
+    render.
+
+    Four repeats of the same file, same width, are now byte-identical, which
+    is what a screenshot has to be before it can be trusted to prove anything
+    about parallel vs. serial capture.
+    """
     out.parent.mkdir(parents=True, exist_ok=True)
     result = subprocess.run(
         [binary, "--headless=new", "--disable-gpu", "--hide-scrollbars",
+         "--host-resolver-rules=MAP fonts.googleapis.com 127.0.0.1,"
+         "MAP fonts.gstatic.com 127.0.0.1",
+         "--disable-background-networking", "--disable-sync",
+         "--disable-default-apps", "--disable-component-update",
+         "--metrics-recording-only", "--no-default-browser-check",
+         "--no-service-autorun", "--disable-features=Translate,OptimizationHints",
+         "--force-prefers-reduced-motion",
          f"--window-size={width},{height}",
          f"--force-device-scale-factor={scale}",
          f"--screenshot={out}", page.resolve().as_uri()],
@@ -109,7 +182,41 @@ def shoot(binary: str, page: Path, out: Path, width: int, height: int,
     return out.exists() and result.returncode == 0
 
 
+def _load_manifest() -> dict:
+    if MANIFEST.exists():
+        try:
+            return json.loads(MANIFEST.read_text())
+        except json.JSONDecodeError:
+            return {}
+    return {}
+
+
+def _save_manifest(manifest: dict) -> None:
+    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    MANIFEST.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--widths", default=None,
+        help="comma-separated subset of " + ", ".join(w[0] for w in WIDTHS)
+             + " (default: all five). During iteration, 'page,fold' is enough "
+               "— those are the two the ground truth is judged from; shoot "
+               "all five only before a commit.")
+    parser.add_argument(
+        "--force", action="store_true",
+        help="re-shoot even where the manifest says the HTML has not changed")
+    args = parser.parse_args()
+
+    wanted_names = (set(args.widths.split(",")) if args.widths
+                    else {w[0] for w in WIDTHS})
+    unknown = wanted_names - {w[0] for w in WIDTHS}
+    if unknown:
+        print(f"unknown width name(s): {sorted(unknown)}", file=sys.stderr)
+        return 1
+    widths = [w for w in WIDTHS if w[0] in wanted_names]
+
     binary = chrome()
     if not binary:
         print("No Chrome or Chromium found. Install one, or add Playwright.",
@@ -117,6 +224,10 @@ def main() -> int:
         return 1
 
     OUT.mkdir(parents=True, exist_ok=True)
+
+    # Pass one: build every fixture's page and write its standalone HTML.
+    # Sequential and cheap — string assembly and a replayed frozen direction,
+    # not the thing Phase 0 measured as the bottleneck. Screenshots are.
     cards: list[dict] = []
     with db.session(FIXTURE_DB) as conn:
         for path in sorted(FIXTURES.glob("*.json")):
@@ -136,21 +247,60 @@ def main() -> int:
             page = build_from_spec(brief, spec)
 
             site_file = OUT / f"{slug}.html"
-            site_file.write_text(_inline_photographs(page, brief))
-            shots = {}
-            for label, width, height, scale in WIDTHS:
-                shot = OUT / f"{slug}-{label}.png"
-                if shoot(binary, site_file, shot, width, height, scale):
-                    shots[label] = shot.name
-            print(f"  {slug:16} {len(shots)} shot(s)")
+            inlined = _inline_photographs(page, brief)
+            site_file.write_text(inlined)
             cards.append({
                 "slug": slug,
                 "name": brief.get("name") or slug,
                 "trade": brief.get("trade") or "",
-                "shots": shots,
+                "shots": {},
                 "page": site_file.name,
                 "axes": fp.of(plan, spec, material_from_brief(brief)).as_row(),
+                # What the PNGs below are proved against: the manifest key is
+                # this hash, not the file path, so a page that changed and one
+                # that did not are told apart by content, never by name alone.
+                "_html_hash": hashlib.sha256(inlined.encode()).hexdigest(),
             })
+
+    # Pass two: every (fixture, width) screenshot, shot in parallel. Each
+    # `shoot()` call is one headless Chrome process writing to its own file —
+    # nothing shared between them, nothing to serialise. Skipped when the
+    # manifest already has this exact HTML hash for this width and the PNG is
+    # still on disk; `--force` bypasses that.
+    manifest = {} if args.force else _load_manifest()
+    jobs: list[tuple[dict, str, int, int, float, Path]] = []
+    skipped = 0
+    for card in cards:
+        for label, width, height, scale in widths:
+            key = f"{card['slug']}:{label}"
+            shot = OUT / f"{card['slug']}-{label}.png"
+            if (not args.force and manifest.get(key) == card["_html_hash"]
+                    and shot.exists()):
+                card["shots"][label] = shot.name
+                skipped += 1
+                continue
+            jobs.append((card, label, width, height, scale, shot))
+
+    def run_one(job):
+        card, label, width, height, scale, shot = job
+        site_file = OUT / f"{card['slug']}.html"
+        ok = shoot(binary, site_file, shot, width, height, scale)
+        return card, label, shot, ok
+
+    shot_count = 0
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+        for card, label, shot, ok in pool.map(run_one, jobs):
+            if ok:
+                card["shots"][label] = shot.name
+                manifest[f"{card['slug']}:{label}"] = card["_html_hash"]
+                shot_count += 1
+
+    for card in cards:
+        card.pop("_html_hash", None)
+        print(f"  {card['slug']:16} {len(card['shots'])} shot(s)")
+    print(f"  ({shot_count} captured, {skipped} skipped — HTML unchanged "
+          f"since the last capture)")
+    _save_manifest(manifest)
 
     cards = _closest_first(cards)
     (OUT / "index.html").write_text(_sheet(cards))

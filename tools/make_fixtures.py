@@ -17,9 +17,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
+from app.adapters import claude
 from app.cli import available_directories
 from app.web.serialize import brief_to_dict
 from app.workbench.brief import build_brief
@@ -199,6 +201,69 @@ def freeze_vision(payload: dict) -> int:
     return len(payload["photo_vision"])
 
 
+def _preflight() -> bool:
+    """One cheap call before anything expensive, so a dead key or an empty
+    credit balance is a two-second message instead of a wasted half-corpus —
+    which is exactly how the last redecide lost time: it ran eight fixtures
+    deep before an "insufficient credit" response surfaced, no earlier check
+    having asked.
+    """
+    print("preflight")
+    dirs = available_directories()
+    if not dirs:
+        print("  NO DIRECTORY API CONFIGURED — set GOOGLE_PLACES_API_KEY and/or "
+              "YELP_API_KEY. OpenSteetMap alone finds very little.",
+              file=sys.stderr)
+    else:
+        print(f"  directories: {', '.join(type(d).__name__ for d in dirs)}")
+    if not claude.available():
+        print("  NO ANTHROPIC_API_KEY — vision and identity calls will use "
+              "the keyless fallback for everything.", file=sys.stderr)
+        return True
+    try:
+        claude.structured(
+            "You are a health check.", "Reply.",
+            {"name": "ping", "description": "a connectivity check",
+             "input_schema": {"type": "object",
+                              "properties": {"ok": {"type": "boolean"}},
+                              "required": ["ok"]}},
+            max_tokens=16)
+    except claude.ClaudeError as exc:
+        print(f"  ANTHROPIC KEY DID NOT WORK: {exc}", file=sys.stderr)
+        print("  Stopping before spending anything on research or vision.",
+              file=sys.stderr)
+        return False
+    print("  Anthropic key: reachable, has credit")
+    return True
+
+
+def _refuse_if_untracked_fixtures() -> bool:
+    """`--redecide` deletes `artifacts/fixtures.db` and rewrites every frozen
+    direction from an empty history. That is safe for anything `git` already
+    has a copy of — a bad redecide is one `git checkout` away from undone.
+    It is not safe for a fixture that exists only on disk: eight of them were
+    destroyed exactly this way in the last session, mid-run, when an
+    unrelated API failure forced a restart and the untracked half of the
+    corpus had nothing to restore from while the tracked half came back
+    instantly.
+    """
+    result = subprocess.run(
+        ["git", "status", "--porcelain", "--", str(OUT)],
+        capture_output=True, text=True)
+    untracked = [line[3:] for line in result.stdout.splitlines()
+                if line.startswith("??")]
+    if untracked:
+        print("REFUSING TO REDECIDE: untracked fixtures would have no "
+              "recovery path if this run fails partway through:",
+              file=sys.stderr)
+        for path in untracked:
+            print(f"    {path}", file=sys.stderr)
+        print("  git add them first, or commit, then redecide.",
+              file=sys.stderr)
+        return True
+    return False
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--refresh", action="store_true",
@@ -219,6 +284,10 @@ def main() -> int:
         # demonstrating a gate that no longer exists. So the answers are thrown
         # away and taken again, in slug order, against an empty history — the
         # order is part of the result and has to be reproducible.
+        if _refuse_if_untracked_fixtures():
+            return 1
+        if not _preflight():
+            return 1
         db_path = Path("artifacts/fixtures.db")
         db_path.unlink(missing_ok=True)
         for target in sorted(OUT.glob("*.json")):
@@ -246,6 +315,8 @@ def main() -> int:
             print(f"  {target.stem:18} vision={seen}")
         return 0
 
+    if not _preflight():
+        return 1
     OUT.mkdir(parents=True, exist_ok=True)
     directories = available_directories()
     for slug, name, where in WANTED:
