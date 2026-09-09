@@ -10,8 +10,8 @@
     "google returns 5 locations under this name in one search"
   ],
   "design_direction": {
-    "accent": "yellow",
-    "architecture": "banded",
+    "accent": "navy",
+    "architecture": "ledger",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -19,26 +19,24 @@
     },
     "defect": "",
     "emphasis": [
-      "stats",
-      "reviews"
+      "credentials",
+      "services"
     ],
     "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "reviews",
     "mood": "industrial",
-    "rationale": "This is a plumber whose whole case is trust at scale \u2014 6,203 Google reviews at 4.9 and named technicians customers praise by name \u2014 so the first screen should put those numbers and that proof in front of a homeowner deciding whether to call, not a moody photo. To stay clearly apart from the near-duplicate site, this keeps the industrial trade mood and stamped wordmark but swaps facts-led ticker/ledger for a proof-led first screen with a repeated stamp mark and a banded rhythm, which still reads ",
+    "rationale": "This is a trade a homeowner calls in an emergency and wants reassurance fast: the named technicians in glowing reviews and the sheer volume of 5-star ratings are stronger proof than a bare stats band, so lead with reviews and back it with credentials and services rather than repeating the previous site's stats-led, banded, all-caps stamp. Navy (sampled from their own van livery) reads as trustworthy and calm against the industrial trade mood, distinct from the yellow-heavy version already built.",
     "read_by": "claude",
-    "signature": "none",
-    "signature_why": "A repeated licence-style mark reinforces that this is a vetted trade outfit every time a visitor scrolls past a section, which matters more here than a ticking data strip.",
-    "suppress": [
-      "features"
-    ],
+    "signature": "ticker",
+    "signature_why": "A thin running line of the review count, years served, and same-day availability gives a skeptical homeowner the proof-facts a plumber needs without turning the whole first screen into a stat block like the last site did.",
+    "suppress": [],
     "type_treatment": "stamped",
     "typeface": "oswald-inter",
     "understood": [
-      "This is a plumber whose whole case is trust at scale \u2014 6,203 Google reviews at 4.9 and named technicians customers praise by name \u2014 so the first screen should put those numbers and that proof in front"
+      "This is a trade a homeowner calls in an emergency and wants reassurance fast: the named technicians in glowing reviews and the sheer volume of 5-star ratings are stronger proof than a bare stats band,"
     ],
     "unsupported": []
   },

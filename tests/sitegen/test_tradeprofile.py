@@ -72,3 +72,25 @@ def test_only_trade_is_hunted_for_contractor_facts_today():
             assert tp.facts_for(kind) == (), (
                 f"{kind} is hunted for contractor facts and should not be — "
                 f"widening this is a decision, not a default")
+
+
+def test_trade_hunts_for_all_eight_shipped_facts():
+    assert set(tp.facts_for("trade")) == {
+        "licensed_insured", "emergency", "warranty", "free_estimate",
+        "service_area", "financing", "manufacturer_badge", "response_time"}
+
+
+def test_gallery_and_contact_headings_differ_for_a_trade_that_travels():
+    """"Have a look around" and "Come and see us" fit a business a visitor
+    walks into. A plumber does not have a shopfront."""
+    default_gallery = tp.gallery_heading_for("food")
+    default_contact = tp.contact_heading_for("food")
+    assert tp.gallery_heading_for("trade") != default_gallery
+    assert tp.contact_heading_for("trade") != default_contact
+    assert tp.gallery_heading_for("desk") != default_gallery
+    assert tp.contact_heading_for("desk") != default_contact
+
+
+def test_an_unrecognised_trade_gets_the_default_gallery_and_contact_heading():
+    assert tp.gallery_heading_for("nonsense") == tp.GALLERY_HEADING["default"]
+    assert tp.contact_heading_for("nonsense") == tp.CONTACT_HEADING["default"]

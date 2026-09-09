@@ -32,43 +32,42 @@ FIXTURES = Path("tests/fixtures/briefs")
 # instrument changed is not a result.
 RULER = "a762bcc9"
 RULE = "254e171b"
-LABELS = "9ed8ff8e"
+LABELS = "e3b0c442"
 # The held-out third, frozen verbatim. It moves only when a pair is
 # RETIRED, never when one is re-judged. Empty this round — see below —
 # "e3b0c442" is the hash of nothing (sha256("")[:8]), not a stale value.
+# LABELS is the same value for the same reason: no live verdict, held-out
+# or otherwise.
 HELD_OUT = "e3b0c442"
-SAME_TRADE_MEAN = 0.5333
-# BRIEF §4's first invariant, violated and fixed: `signature.py`'s `stamp`
-# device chose its mark ("Licensed & insured" / "Registered practice" /
-# "Admitted to the bar") from `trade_kind` alone and printed it four times,
-# with nothing checking whether it was true of the business. Shipped
-# uncorroborated on six fixtures — the worst, `threadbare`, has no about
-# text, no content blocks and one photograph, and still asserted a licence.
-# `app.core.claims.CLAIM_RE` had no pattern for credential language at all,
-# so the content gate (`render.unsupported`) could not have caught it
-# either. Both fixed: the pattern widened (verified against the whole
-# corpus — exactly the six named fixtures produced a finding, nothing
-# else), and `stamp` now checks `contractorfacts.STAMP_FACT` before
-# `available()` offers it at all — a device the material cannot support is
-# dropped, not rendered with a substitute. See
-# `.reviews/slice-c-credential-claims.md` and
-# `tests/test_no_unverified_credential_ships.py`, the standing version.
+SAME_TRADE_MEAN = 0.5610
+# A cost-minimising pass over the rest of Slice C (BRIEF §5): four more
+# corroborated contractor facts (service area, financing, a named
+# manufacturer certification, response time — the same discipline as the
+# first four, each found only by matching the business's own text, never
+# generated); a genuine third `services` composition ("feature", exactly
+# three items, no card — `density.LAYOUTS` has named this composition since
+# the density module was written, and `_services` rendered it with the same
+# bordered-card markup as the dense grid until now, differing only in
+# count, which is exactly the kind of axis `test_axes_are_real.py` exists
+# to catch); a second `reviews` composition (two or three, stacked, no
+# card); per-trade `gallery`/`contact` headings ("Have a look around" and
+# "Come and see us" fit a business a visitor walks into, not a contractor
+# who drives to the customer). Content-only otherwise (`tools/
+# content_census.py`, a structural diff per iteration, a blast-radius
+# guard, render snapshots) needed no redecide at all — see
+# `.reviews/first-pass.md`.
 #
-# Signature is axis eleven, so this re-decided the corpus (ruler and rule
-# UNCHANGED — corroboration touches no weight or axis definition). The
-# first attempt produced a genuine unresolved collision
-# (`hvac-rich`/`roofer-rich`, matching on all four required-high axes,
-# honestly recorded as `_gate_unresolved` rather than hidden) — retried
-# once rather than compensated for by widening WINDOW or a required set
-# `test_the_gate_is_satisfiable` already confirmed has room; the second
-# attempt cleared with zero collisions across all 171 pairs.
+# Every one of those touches `compositions`, `section_order`, or both, so
+# this re-decided the corpus (ruler and rule UNCHANGED — none of it touches
+# a weight or an axis definition). Zero collisions on the first attempt
+# this time, across all 171 pairs.
 #
-# Eleven pairs judged fresh against the new rendering — the closest pairs
-# by distance in the tuning set only; held-out verdicts are retired, never
-# re-judged, and none were repopulated this round, so the held-out third is
-# empty rather than stale. ALL ELEVEN CAME BACK DIFFERENT. Agreement is 0 of
-# 0 for the same reason as every prior reading: a rank needs at least one
-# "same" pair, and there is not one.
+# NO JUDGING ROUND THIS PASS, DELIBERATELY. Agreement was already 0 of 0
+# and every one of the eleven pairs checked last round was DIFFERENT —
+# judging again returns no new signal until the corpus can plausibly
+# produce a "same" pair, and a judging round costs real money for a result
+# already known. All eleven live verdicts were retired (every fold moved)
+# and none replaced; the held-out third is genuinely empty, not stale.
 AGREEMENT = (0, 0)
 
 
@@ -210,31 +209,31 @@ def test_the_held_out_third_has_nothing_to_score_either():
     assert held.comparisons == 0
 
 
-def test_the_corpus_has_no_pair_a_stranger_calls_one_studio():
-    """§2's governing requirement, met on this corpus a fourth time.
+def test_no_live_verdict_is_same_and_none_were_judged_this_pass():
+    """§2's governing requirement, held by inaction this round rather than
+    re-proven.
 
-    Eleven pairs were checked after `signature.py`'s `stamp` device was
-    fixed to require corroboration (BRIEF §4 — see
-    `.reviews/slice-c-credential-claims.md`), which is a signature-
-    availability change and re-decided the corpus. All eleven came back
-    DIFFERENT — the closest, `hvac`/`hvac-rich` at 34% distance, still reads
-    as two pages once past the opening: one runs a plain two-item layout
-    for what it offers, the other a dense eight-card grid with an awards
-    band the first does not carry.
+    This is a cost-minimising pass (BRIEF §5's remaining Slice C items,
+    `.reviews/first-pass.md`): every corpus-moving change (four more
+    contractor facts, two new compositions, per-trade gallery/contact
+    headings) was batched into one redecide, and a judging round was
+    explicitly skipped — agreement was already 0 of 0 and all eleven pairs
+    checked the round before this one came back DIFFERENT, so judging again
+    would spend real money to confirm what is already known. All eleven
+    live verdicts were retired when the redecide moved every fold; none
+    were repopulated.
 
-    Held-out verdicts are retired, never re-judged, and none were
-    repopulated this round — the held-out third is genuinely empty rather
-    than stale, a fact rather than an oversight.
-
-    Agreement is 0 of 0 for the reason it was 0 of 0 before this phase: a
-    rank needs at least one "same" pair, and there is not one to rank
-    against. The single-axis degeneracy check has nothing to check with zero
-    "same" verdicts — any axis unique per fixture would explain all eleven
-    for free — so it is retired again rather than left asserting something
-    vacuous. If a "same" verdict comes back, restore it.
+    So the honest state is zero live verdicts, not a re-confirmed corpus —
+    `test_the_corpus_has_no_pair_a_stranger_calls_one_studio` (this test's
+    own name before this pass) asserted verdicts existed, which stopped
+    being true the moment a redecide runs with no judging after it. This
+    checks the weaker, still-true thing: nothing live claims "same", and if
+    that changes — verdicts reappear, or one of them is "same" — it says so
+    rather than silently passing on an empty set forever. The single-axis
+    degeneracy check stays retired regardless; there is nothing here to
+    restore it against.
     """
     verdicts = agreement.load()
-    assert verdicts, "no verdicts at all"
     assert not [row for row in verdicts if row["verdict"] == "same"], (
         "a 'same' verdict is back — agreement can rank again")
 

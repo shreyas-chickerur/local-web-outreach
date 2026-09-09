@@ -17,7 +17,6 @@
     },
     "defect": "",
     "emphasis": [
-      "stats",
       "reviews",
       "credentials"
     ],
@@ -27,17 +26,17 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "This is a 24/7 emergency HVAC contractor whose 4.9-star, 1,226-review record is the strongest thing they own, so the first screen should still put that number in front of a worried homeowner before anything else. To avoid duplicating the near-identical recent site, I've kept the trade-shop mood and stats-first lead but swapped the opening frame to facts (the rating itself fills the screen rather than a proof band), moved to a banded page rhythm so each block of evidence \u2014 stats, then reviews, th",
+    "rationale": "This is a 24/7 emergency HVAC contractor whose entire case is trust and proof \u2014 1,226 reviews at 4.9 stars, a uniformed fleet, and named technicians customers vouch for by name \u2014 so the first screen should lead with those facts rather than a lifestyle photo. I've kept the trade-shop mood, stats lead, and stamped name from the close comparison since those genuinely fit, but switched the architecture to banded and swapped the signature from none to a repeated stamp mark, and pulled the accent from",
     "read_by": "claude",
     "signature": "none",
-    "signature_why": "A yellow-fleet HVAC outfit with 1,226 reviews earns a repeated licence/rating mark that reads as proof-of-work, the way their own vans and uniforms repeat the branding.",
+    "signature_why": "Repeating the licensed-trade mark like a stamped badge across the page reinforces the sense of a certified crew of technicians, which is what a homeowner checks before calling anyone out for AC repair.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "This is a 24/7 emergency HVAC contractor whose 4.9-star, 1,226-review record is the strongest thing they own, so the first screen should still put that number in front of a worried homeowner before an"
+      "This is a 24/7 emergency HVAC contractor whose entire case is trust and proof \u2014 1,226 reviews at 4.9 stars, a uniformed fleet, and named technicians customers vouch for by name \u2014 so the first screen s"
     ],
     "unsupported": []
   },

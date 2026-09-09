@@ -21,15 +21,15 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "refined",
-    "rationale": "Ichika's own photographs are the strongest evidence they have \u2014 nine dishes plated with real precision \u2014 so the site should lead with a wide, quiet gallery rather than claims or stats. The 5.0 reviews describing a Michelin-level, deeply seasonal kaiseki experience deserve early prominence too, so a calm, refined page that lets the food and the words speak, with a booking CTA, matches how this restaurant actually operates.",
+    "rationale": "Nine large, carefully plated dish photographs and unusually detailed five-star reviews are the strongest evidence Ichika has, so the site should open on the food and let the counter-kaiseki precision speak before anything else; a quiet, refined typographic touch keeps the focus on the plates rather than on branding.",
     "read_by": "claude",
     "signature": "corner_inset",
-    "signature_why": "A quiet type block set into the corner of a single dish photograph reads as considered, kaiseki-level restraint rather than a banner shouting the name over the food.",
+    "signature_why": "A quiet type block set into the corner of the sea-urchin dish photo lets the food fill the screen while still naming the restaurant, which suits a kaiseki counter where the plating is the argument.",
     "suppress": [],
     "type_treatment": "quiet",
     "typeface": "cormorant-jost",
     "understood": [
-      "Ichika's own photographs are the strongest evidence they have \u2014 nine dishes plated with real precision \u2014 so the site should lead with a wide, quiet gallery rather than claims or stats. The 5.0 reviews"
+      "Nine large, carefully plated dish photographs and unusually detailed five-star reviews are the strongest evidence Ichika has, so the site should open on the food and let the counter-kaiseki precision "
     ],
     "unsupported": []
   },

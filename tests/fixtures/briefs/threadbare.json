@@ -14,7 +14,7 @@
     },
     "defect": "",
     "emphasis": [
-      "hours",
+      "services",
       "contact"
     ],
     "first_screen": "type",
@@ -23,17 +23,17 @@
     "kind": "style",
     "lead_with": "services",
     "mood": "industrial",
-    "rationale": "With only one small photo, there isn't enough imagery to lead with a picture, so the name is set big and heavy like a stencil on a van door \u2014 this reads as a trade shop, not a lifestyle brand. Lead with services and hours so a visitor sees quickly what S.Handyman does and how to reach them, with call as the single action a homeowner needs.",
+    "rationale": "With only one small photo, there's nothing to lead with visually, so the page should open on bold type alone and get straight to what he does and how to reach him \u2014 a trade-shop wordmark over a clear services list reads as competent and no-nonsense, which is what someone hiring a handyman actually checks for.",
     "read_by": "claude",
     "signature": "none",
-    "signature_why": "A general contractor's credibility rests on the work itself, not on a decorative mark, so the page should stay plain and let the name and the proof of competence do the talking.",
+    "signature_why": "A handyman's site should read like a trade van door, not a design showpiece \u2014 there's no imagery to hang a mark on, so the name set heavy is the whole statement.",
     "suppress": [
       "gallery"
     ],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "With only one small photo, there isn't enough imagery to lead with a picture, so the name is set big and heavy like a stencil on a van door \u2014 this reads as a trade shop, not a lifestyle brand. Lead wi"
+      "With only one small photo, there's nothing to lead with visually, so the page should open on bold type alone and get straight to what he does and how to reach him \u2014 a trade-shop wordmark over a clear "
     ],
     "unsupported": []
   },

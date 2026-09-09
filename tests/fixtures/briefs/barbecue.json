@@ -17,7 +17,7 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "services"
+      "menu"
     ],
     "first_screen": "photo",
     "hero_offset": 0,
@@ -25,15 +25,15 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "Ten strong, appetite-driving photographs of smoked meat and a packed, glowing dining room are the actual argument here \u2014 13,880 reviews at 4.8 stars mean people already trust the food before they arrive, so the page should open on the imagery and back it immediately with proof of that trust. To avoid duplicating the near-identical recent site, I've kept the photo-led gallery opening (the pictures genuinely earn it) but swapped the accent to amber (warmer, closer to firelight and smoke than the m",
+    "rationale": "Hutchins BBQ sells itself on the food and the packed-house atmosphere its ten strong photos already prove, so the gallery still leads \u2014 but I've swapped the stamped trade-shop lockup for wide-tracked type and a scrolling strip of photos instead of a static grid, so it reads as a beloved local joint rather than a workshop, and pulled the accent to amber (still sampled from their own porch/sign lighting) so it doesn't sit on the same terracotta-stamped-gallery look already used elsewhere.",
     "read_by": "claude",
-    "signature": "ticker",
-    "signature_why": "A thin running line of the review counts and DFW cities they cater to tells a visitor in one glance how big and how trusted this place is, without competing with the food photos.",
+    "signature": "scroll_gallery",
+    "signature_why": "With ten strong photos of smoke, crowds and trays, letting them run off the edge in a scrolling strip says \"busy, real, and there's more\" without boxing the food into a static grid.",
     "suppress": [],
     "type_treatment": "wide",
-    "typeface": "fraunces-karla",
+    "typeface": "oswald-inter",
     "understood": [
-      "Ten strong, appetite-driving photographs of smoked meat and a packed, glowing dining room are the actual argument here \u2014 13,880 reviews at 4.8 stars mean people already trust the food before they arri"
+      "Hutchins BBQ sells itself on the food and the packed-house atmosphere its ten strong photos already prove, so the gallery still leads \u2014 but I've swapped the stamped trade-shop lockup for wide-tracked "
     ],
     "unsupported": []
   },

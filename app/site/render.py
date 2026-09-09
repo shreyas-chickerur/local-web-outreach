@@ -46,7 +46,15 @@ from app.site.plan import (
 from app.site.spec import SiteSpec, parse_spec
 from app.site.styles import css, script
 from app.site.theme import Theme, theme_for
-from app.site.tradeprofile import CTA_BY_TRADE, CTA_LABEL, emphasis_for, facts_for, heading_for
+from app.site.tradeprofile import (
+    CTA_BY_TRADE,
+    CTA_LABEL,
+    contact_heading_for,
+    emphasis_for,
+    facts_for,
+    gallery_heading_for,
+    heading_for,
+)
 from app.site.tradeprofile import cta_words as _cta_words
 from app.store.photos import (
     HERO_PREFERENCE,
@@ -835,6 +843,26 @@ def _offer_row(item: str, index: int) -> str:
             f'<h3>{e(item)}</h3></li>')
 
 
+def _offer_feature(item: str, index: int) -> str:
+    """One offering in the "balanced" layout: exactly three, set large, no
+    card.
+
+    `density.LAYOUTS` has named this composition "feature" since the density
+    module was written — the fingerprint's own `compositions` axis has been
+    reading it off every three-item services section from the start — but
+    `_services` rendered it with the same bordered `.offer` card markup as a
+    dense grid twice its size, differing only in count. Three items sharing
+    a row with six is not a different composition, it is the same one with
+    fewer cards in it. This is what "feature" was supposed to be: no card
+    edge, no background, type large enough to carry the row on its own —
+    the same visual register `_offer_row`'s sparse layout already uses for
+    one or two, one step down in emphasis for exactly three.
+    """
+    return (f'<div class="offer-feature" data-reveal data-delay="{index % 4}">'
+            f'<span class="idx">{index + 1:02d}</span><h3>{e(item)}</h3>'
+            f'<span class="rule"></span></div>')
+
+
 def _services(m: Material, t: Theme) -> str:
     """What they offer, laid out according to how much of it there is.
 
@@ -872,6 +900,15 @@ def _services(m: Material, t: Theme) -> str:
                 f'<p class="eyebrow">{e(eyebrow)}</p><h2>{e(heading)}</h2>{lede}</div>'
                 f'<div class="offers-side"><ol class="listing">{rows}</ol>{art}</div>'
                 f'</div></div></section>')
+
+    if signal["layout"] == "feature":
+        # Exactly three — `_offer_feature`, not the dense grid's cards. See
+        # its own docstring for why this used to be the same markup.
+        tiles = "".join(_offer_feature(item, i) for i, item in enumerate(items))
+        return (f'<section id="services" {attrs}><div class="wrap">'
+                f'<div class="head" data-reveal><p class="eyebrow">{e(eyebrow)}</p>'
+                f'<h2>{e(heading)}</h2>{lede}</div>'
+                f'<div class="offers-feature">{tiles}</div></div></section>')
 
     # A row of four that leaves one card stranded on its own line reads as a
     # mistake. Show a number that fills its rows.
@@ -971,9 +1008,10 @@ def _gallery(m: Material, t: Theme) -> str:
         + picture(src, m.alt_for(src),
                   sizes="(max-width:700px) 100vw, 33vw") + "</button>"
         for i, src in enumerate(shots))
+    eyebrow, heading = gallery_heading_for(m.trade_kind)
     return (f'<section id="gallery"><div class="wrap">'
-            f'<p class="eyebrow" data-reveal>Gallery</p>'
-            f'<h2 data-reveal>Have a look around</h2>'
+            f'<p class="eyebrow" data-reveal>{e(eyebrow)}</p>'
+            f'<h2 data-reveal>{e(heading)}</h2>'
             f'<div class="mosaic" style="--cols:{wide};--cols-narrow:{narrow}">'
             f'{tiles}</div></div></section>'
             f'<div class="lightbox" role="dialog" aria-label="Photo">'
@@ -984,26 +1022,61 @@ def _gallery(m: Material, t: Theme) -> str:
             f'<div class="count"></div></div>')
 
 
+# Two full reviews earn the grid; a lone third one left this at "renders a
+# grid with an orphan card" — three or fewer is the same sparse boundary
+# `density.SPARSE_MAX`/`BALANCED_AT` already draw for services.
+REVIEWS_FEATURED_MAX = 3
+
+
+def _review_card(quote: dict, index: int) -> str:
+    stars = "&#9733;" * max(1, min(5, int(quote.get("rating") or 5)))
+    text = str(quote.get("text") or "")[:340].strip()
+    return (f'<figure class="quote" data-reveal data-delay="{index % 4}">'
+            f'<div class="stars">{stars}</div>'
+            f'<p>&ldquo;{e(text)}&rdquo;</p>'
+            f'<figcaption class="who">{e(quote.get("author"))} '
+            f'&middot; Google</figcaption></figure>')
+
+
+def _review_feature(quote: dict, index: int) -> str:
+    """One review in the "featured" composition — two or three, set large,
+    stacked, no card. The grid card `_review_card` builds reads as a wall of
+    testimonials at volume; at two or three that same card just leaves a
+    thin border around not much, which is the review section's own version
+    of the gutter `_offer_row`'s sparse services layout exists to avoid."""
+    stars = "&#9733;" * max(1, min(5, int(quote.get("rating") or 5)))
+    text = str(quote.get("text") or "")[:340].strip()
+    return (f'<figure class="quote-feature" data-reveal data-delay="{index % 4}">'
+            f'<div class="stars">{stars}</div>'
+            f'<p>&ldquo;{e(text)}&rdquo;</p>'
+            f'<figcaption class="who">{e(quote.get("author"))} '
+            f'&middot; Google</figcaption></figure>')
+
+
 def _reviews(m: Material, t: Theme) -> str:
     """Their customers' words, attributed. The most credible copy on any small
-    business site is the part the business did not write."""
+    business site is the part the business did not write.
+
+    Two compositions: two or three reviews set large and stacked, no card —
+    a grid built for a wall of testimonials looks sparse with only a couple
+    in it; four or more earn the grid, which is genuinely right at volume.
+    """
     if len(m.quotes) < 2:
         return ""
-    cards = []
-    for i, quote in enumerate(m.quotes[:6]):
-        stars = "&#9733;" * max(1, min(5, int(quote.get("rating") or 5)))
-        text = str(quote.get("text") or "")[:340].strip()
-        cards.append(f'<figure class="quote" data-reveal data-delay="{i % 4}">'
-                     f'<div class="stars">{stars}</div>'
-                     f'<p>&ldquo;{e(text)}&rdquo;</p>'
-                     f'<figcaption class="who">{e(quote.get("author"))} '
-                     f'&middot; Google</figcaption></figure>')
+    shown = m.quotes[:6]
+    featured = len(shown) <= REVIEWS_FEATURED_MAX
+    if featured:
+        cards = "".join(_review_feature(q, i) for i, q in enumerate(shown))
+        wrap_class = "quotes-feature"
+    else:
+        cards = "".join(_review_card(q, i) for i, q in enumerate(shown))
+        wrap_class = "quotes"
     headline = (f"{m.rating} stars from {m.reviews} reviews"
                 if m.rating and m.reviews else "What people say")
     return (f'<section id="reviews" data-ground="raise"><div class="wrap">'
             f'<p class="eyebrow" data-reveal>Reviews</p>'
             f'<h2 data-reveal>{e(headline)}</h2>'
-            f'<div class="quotes">{"".join(cards)}</div></div></section>')
+            f'<div class="{wrap_class}">{cards}</div></div></section>')
 
 
 # "Our story" promises a history. Text about how a place cooks is not one, and
@@ -1327,8 +1400,10 @@ def _contact(m: Material, t: Theme) -> str:
                      f'<iframe loading="lazy" title="Map of {e(m.name)}" '
                      f'src="https://www.openstreetmap.org/export/embed.html'
                      f'?bbox={box}&amp;layer=mapnik&amp;marker={lat},{lon}"></iframe></div>')
+    eyebrow, heading = contact_heading_for(m.trade_kind)
     return (f'<section id="contact"><div class="wrap"><div class="split">'
-            f'<div data-reveal><p class="eyebrow">Visit</p><h2>Come and see us</h2>'
+            f'<div data-reveal><p class="eyebrow">{e(eyebrow)}</p>'
+            f'<h2>{e(heading)}</h2>'
             f'<div class="reach">{"".join(rows)}</div></div>{map_block}'
             f'</div></div></section>')
 
@@ -1493,10 +1568,23 @@ def plan_for(brief: dict, spec: SiteSpec) -> SitePlan:
         eyebrow, heading = headings.get(key, ("", ""))
         if key == "services":
             eyebrow, heading = _offer_heading(m)
+        elif key == "gallery":
+            eyebrow, heading = gallery_heading_for(m.trade_kind)
+        elif key == "contact":
+            eyebrow, heading = contact_heading_for(m.trade_kind)
         items = counts.get(key, [])
+        density = plan_density(items) if items else {}
+        if key == "reviews" and density.get("layout") == "editorial":
+            # `_reviews` only draws two compositions, not the three
+            # `density.LAYOUTS` names — two reviews and three both render as
+            # `_review_feature`, identically, so the fingerprint has to say
+            # so too. Reporting "editorial" here would be exactly the axis
+            # `test_axes_are_real.py` exists to catch: a value that changes
+            # with no visible effect on the page.
+            density = {**density, "layout": "feature"}
         plan.sections.append(PlannedSection(
             key=key, eyebrow=eyebrow, heading=heading,
-            density=plan_density(items) if items else {},
+            density=density,
             items=items, ground="raise" if key in RAISED else "base",
             images=_section_images(built[key])))
 

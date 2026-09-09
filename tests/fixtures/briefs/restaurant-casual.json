@@ -23,17 +23,17 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "This is a food-hall crepe counter with strong, appetite-driving photography and a founder story worth telling \u2014 the picture and the food should do the convincing, not a ratings number (3.9 on Google won't help). Lead with the gallery of dishes, follow with the Paris-to-Dallas story and glowing quotes, and point people to visit the stall.",
+    "rationale": "Whisk Crepes Caf\u00e9 has ten strong photographs of glossy crepes, the griddle kitchen, and the buzzing food-hall counter \u2014 that's the argument, not a review count (3.9 on Google isn't the headline). Lead with the gallery in a wide, airy layout, let the food-court energy and the founder's Paris-to-Dallas story carry the warmth, and close with the enthusiastic customer quotes to reassure a first-time visitor.",
     "read_by": "claude",
     "signature": "scroll_gallery",
-    "signature_why": "The crepes themselves are the sell, so let the photographs of dishes run in a strip a visitor can scroll through rather than boxing them into a grid.",
+    "signature_why": "A crepe counter sells itself on the food, so let the dish photos run past the edge of the screen like a market stall display.",
     "suppress": [
       "stats"
     ],
     "type_treatment": "quiet",
     "typeface": "fraunces-karla",
     "understood": [
-      "This is a food-hall crepe counter with strong, appetite-driving photography and a founder story worth telling \u2014 the picture and the food should do the convincing, not a ratings number (3.9 on Google w"
+      "Whisk Crepes Caf\u00e9 has ten strong photographs of glossy crepes, the griddle kitchen, and the buzzing food-hall counter \u2014 that's the argument, not a review count (3.9 on Google isn't the headline). Lead"
     ],
     "unsupported": []
   },

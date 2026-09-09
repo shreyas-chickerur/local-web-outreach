@@ -11,13 +11,14 @@
     "architecture": "gallery",
     "contradictions": [],
     "cta": {
-      "kind": "visit",
+      "kind": "order",
       "label": ""
     },
     "defect": "",
     "emphasis": [
       "gallery",
-      "menu"
+      "menu",
+      "reviews"
     ],
     "first_screen": "photo",
     "hero_offset": 0,
@@ -25,17 +26,17 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "This is a photogenic, family-run Texas BBQ joint with 9 strong, appetite-driving photos and a huge, warm review base \u2014 the pictures and the menu are the argument, not credentials or awards. Lead with the room and the food, use a trade-shop stamped wordmark and a smoky terracotta pulled straight from the pit photos, and push people to visit and eat.",
+    "rationale": "Hard Eight is a smokehouse people already trust in huge numbers (18,700+ reviews at 4.6) and they have nine strong, appetite-driving photographs of pit meats and the stone-walled dining room \u2014 the site should look and feel like walking into that room, so the pictures lead and a trade-shop condensed type stamps the name over them rather than competing with them.",
     "read_by": "claude",
     "signature": "corner_inset",
-    "signature_why": "A type block inset into the corner of one big smoker-and-meat photo lets the food fill the screen while the name still reads instantly, like a sign nailed to the pit house wall.",
+    "signature_why": "Setting the wordmark into the corner of a big smoker or brisket photo keeps the food as the hero while still stamping the name, like a brand burned into the wood.",
     "suppress": [
       "features"
     ],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "This is a photogenic, family-run Texas BBQ joint with 9 strong, appetite-driving photos and a huge, warm review base \u2014 the pictures and the menu are the argument, not credentials or awards. Lead with "
+      "Hard Eight is a smokehouse people already trust in huge numbers (18,700+ reviews at 4.6) and they have nine strong, appetite-driving photographs of pit meats and the stone-walled dining room \u2014 the sit"
     ],
     "unsupported": []
   },

@@ -88,6 +88,36 @@ def heading_for(trade_kind: str, has_services: bool, has_products: bool) -> tupl
     return HEADING.get(trade_kind, HEADING["default"])
 
 
+# "Have a look around" fits a restaurant or a salon showing off a room a
+# visitor will sit in. It does not fit a contractor whose photographs are
+# finished jobs at OTHER people's addresses — that gallery is a portfolio,
+# not an invitation to the premises, and calling it one is the kind of
+# mismatch that reads as a template that never looked at the trade.
+GALLERY_HEADING: dict[str, tuple[str, str]] = {
+    "trade": ("Our work", "Recent jobs"),
+    "desk": ("Our office", "Where we work"),
+    "default": ("Gallery", "Have a look around"),
+}
+
+# "Come and see us" is a mismatch for a trade that drives to the customer —
+# a plumber does not have a shopfront a visitor walks into. `desk` gets its
+# own wording for the same reason: an office a client visits by appointment
+# is not quite "come and see us" either.
+CONTACT_HEADING: dict[str, tuple[str, str]] = {
+    "trade": ("Get in touch", "Reach us"),
+    "desk": ("Get in touch", "Schedule a consultation"),
+    "default": ("Visit", "Come and see us"),
+}
+
+
+def gallery_heading_for(trade_kind: str) -> tuple[str, str]:
+    return GALLERY_HEADING.get(trade_kind, GALLERY_HEADING["default"])
+
+
+def contact_heading_for(trade_kind: str) -> tuple[str, str]:
+    return CONTACT_HEADING.get(trade_kind, CONTACT_HEADING["default"])
+
+
 # Which sections a trade leans on hardest, absent a more specific instruction.
 # `plan.apply_order` already applies `spec.lead_with` and `spec.emphasis` from
 # the identity call — those are a decision about THIS business and always
@@ -115,13 +145,20 @@ def emphasis_for(trade_kind: str) -> tuple[str, ...]:
 
 
 # Which of `app.site.contractorfacts.FACTS` are worth even looking for. Only
-# `trade` carries all four today (BRIEF §5's contractor sections); the rest
-# get none, which keeps a restaurant's "about" paragraph from being mined for
-# a warranty it was never going to mention. Widening this to another
+# `trade` carries any today (BRIEF §5's contractor sections); the rest get
+# none, which keeps a restaurant's "about" paragraph from being mined for a
+# warranty it was never going to mention. Widening this to another
 # `trade_kind` is a one-line change once that trade's own material is looked
-# at directly rather than assumed to overlap with a contractor's.
+# at directly rather than assumed to overlap with a contractor's — and the
+# evidence is not nothing: `dentist`'s own about text has a genuine
+# financing claim ("a great in-office payment plan"), which is a real
+# reason `care` could plausibly carry `financing` too. Not done here,
+# because "the five remaining CONTRACTOR facts" was the scope this session
+# was asked for, not a trade-by-trade widening — noted so it is not lost.
 FACT_HUNTS: dict[str, tuple[str, ...]] = {
-    "trade": ("licensed_insured", "emergency", "warranty", "free_estimate"),
+    "trade": ("licensed_insured", "emergency", "warranty", "free_estimate",
+              "service_area", "financing", "manufacturer_badge",
+              "response_time"),
 }
 
 

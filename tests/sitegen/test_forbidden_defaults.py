@@ -33,13 +33,16 @@ FIXTURES = Path("tests/fixtures/briefs")
 # entry on its list.
 MATCHES = {
     "barbecue-rich": ["warm cream + serif display + terracotta"],
-    "law": ["Space Grotesk as the safe face"],
-    # After the corpus was re-decided to corroborate `stamp` (§4 — the
-    # device was printing an unverified licence claim on trade_kind alone;
-    # see .reviews/slice-c-credential-claims.md), `law` picked up this
-    # default. The count moved from one to two, which is a fact about this
-    # redecide rather than something tuned for — the change here was to a
-    # signature device's availability, not to typography.
+    "restaurant-rich": ["warm cream + serif display + terracotta"],
+    # `law` matched here after the credential-claims redecide (§4) and
+    # dropped out again after the cost-minimising pass over the rest of
+    # Slice C (BRIEF §5 — four more contractor facts, two new
+    # compositions, per-trade gallery/contact headings; one redecide,
+    # `.reviews/first-pass.md`). `restaurant-rich` picked up the same
+    # "warm cream + serif display + terracotta" default in its place. Two
+    # fixtures still match, same as before this pass — which two moved is
+    # a fact about the redecide, not something tuned for; the mood/accent
+    # presets in `app/site/opening.py` decide this, not this test.
 }
 
 

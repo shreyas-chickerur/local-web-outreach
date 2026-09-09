@@ -6,7 +6,7 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "olive",
+    "accent": "terracotta",
     "architecture": "gallery",
     "contradictions": [],
     "cta": {
@@ -24,17 +24,17 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "The food and the striking lit-up house are the strongest asset here \u2014 8 photographs are large enough to lead with \u2014 but to avoid repeating the almost-identical recent site, this one splits the first screen between the name and the building at night rather than filling the whole screen with a dish photo, and sets the name wide rather than quiet so it reads as its own address rather than a copy of the other site. The scratch-kitchen, whole-animal story and the warm customer quotes deserve early we",
+    "rationale": "The Heritage Table has eight strong photographs and a genuine sense of place \u2014 a lit house-building at night, a working kitchen garden, plated dishes \u2014 so the site should still open on imagery, but a split screen with the name inset in the corner of the exterior shot reads as a distinct restaurant rather than repeating the last dish-behind-name template. The wide, spaced wordmark and warm terracotta (from the string-lit exterior and cocktail shots) carry the 'uniquely comfortable fine dining' po",
     "read_by": "claude",
     "signature": "corner_inset",
-    "signature_why": "A type block inset into the corner of the house-at-night photograph gives the building itself the presence of a wordmark, which is what makes this restaurant recognisable on Main Street.",
+    "signature_why": "The building itself \u2014 the lit-up house at night \u2014 is their most recognisable image, so setting the name into its corner rather than floating over a dish makes the place, not a plate, the first thing people recognise.",
     "suppress": [
-      "recognition"
+      "partners"
     ],
     "type_treatment": "wide",
     "typeface": "fraunces-narrow-jost",
     "understood": [
-      "The food and the striking lit-up house are the strongest asset here \u2014 8 photographs are large enough to lead with \u2014 but to avoid repeating the almost-identical recent site, this one splits the first s"
+      "The Heritage Table has eight strong photographs and a genuine sense of place \u2014 a lit house-building at night, a working kitchen garden, plated dishes \u2014 so the site should still open on imagery, but a "
     ],
     "unsupported": []
   },

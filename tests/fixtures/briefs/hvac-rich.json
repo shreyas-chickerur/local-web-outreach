@@ -16,7 +16,7 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "credentials"
+      "services"
     ],
     "first_screen": "proof",
     "hero_offset": 0,
@@ -24,17 +24,17 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "People hire a plumber on trust before they hire on looks: nearly 2,800 combined reviews at 4.8-4.9 stars and a stated on-time, upfront-price, licensed-only guarantee are the actual sales pitch, so the page should open with those facts and proof of competence rather than a mood photo. The red work-shirt uniform is already their own visual identity, so the accent should simply be theirs, not invented.",
+    "rationale": "People hire a plumber on trust and proof, not atmosphere: the 4.9/4.8 ratings and thousands of reviews are the strongest asset they have, so lead with those hard numbers and the guarantee, then back it up with real work photos and quoted reviews. A stamped, condensed trade-shop wordmark with a ledger rhythm and a red accent pulled from their own trucks and uniforms reads as a serious, established local outfit rather than a decorative small business.",
     "read_by": "claude",
     "signature": "none",
-    "signature_why": "A repeated licence/guarantee mark reinforces that these are licensed, insured professionals every time a visitor scrolls, which is exactly what someone hiring a plumber is checking for.",
+    "signature_why": "A repeated licence/guarantee mark reinforces that these are vetted, licensed pros \u2014 the exact thing a homeowner checks before calling a plumber.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "People hire a plumber on trust before they hire on looks: nearly 2,800 combined reviews at 4.8-4.9 stars and a stated on-time, upfront-price, licensed-only guarantee are the actual sales pitch, so the"
+      "People hire a plumber on trust and proof, not atmosphere: the 4.9/4.8 ratings and thousands of reviews are the strongest asset they have, so lead with those hard numbers and the guarantee, then back i"
     ],
     "unsupported": []
   },

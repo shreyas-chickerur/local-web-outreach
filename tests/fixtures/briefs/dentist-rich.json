@@ -26,17 +26,17 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "warm",
-    "rationale": "People choosing a dentist check the rating and reviews before anything else, and this practice only has 3 photos strong enough to carry a page, so lead with the trust numbers and let a real patient quote do the emotional work instead of thin imagery.",
+    "rationale": "People choose a dentist on trust signals first \u2014 rating, reviews, staff warmth \u2014 not on pictures of a waiting room, and with only 3 photos strong enough to enlarge, the page should open on the 4.5-star/114-review proof and let the friendly staff photos and quoted reviews carry the reassurance rather than lead on imagery that isn't there.",
     "read_by": "claude",
     "signature": "quote",
-    "signature_why": "A single warm patient review at display size does more to calm a nervous first-time visitor than any stock dental photo could.",
+    "signature_why": "A single warm patient review set large does more to calm a nervous new patient than any stock dental photo could.",
     "suppress": [
       "features"
     ],
     "type_treatment": "quiet",
     "typeface": "sora-manrope",
     "understood": [
-      "People choosing a dentist check the rating and reviews before anything else, and this practice only has 3 photos strong enough to carry a page, so lead with the trust numbers and let a real patient qu"
+      "People choose a dentist on trust signals first \u2014 rating, reviews, staff warmth \u2014 not on pictures of a waiting room, and with only 3 photos strong enough to enlarge, the page should open on the 4.5-sta"
     ],
     "unsupported": []
   },

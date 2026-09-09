@@ -17,7 +17,7 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "services"
+      "credentials"
     ],
     "first_screen": "proof",
     "hero_offset": 0,
@@ -25,17 +25,17 @@
     "kind": "style",
     "lead_with": "reviews",
     "mood": "warm",
-    "rationale": "People choose a dentist on trust and comfort, not on pictures of the office, so the page should open with proof \u2014 the strong ratings and warm patient reviews \u2014 before getting into services and hours. A calm, warm palette with a quiet, readable type treatment matches a practice that leads with respect and patience rather than a flashy brand.",
+    "rationale": "People choosing a dentist want proof of gentleness and competence before they want atmosphere \u2014 strong ratings, warm staff photos, and real patient quotes do that work better than a moody hero shot. A calm, warm palette (teal accent rather than clinical blue) with quiet type keeps the tone reassuring rather than corporate, and leading with reviews and the team answers the visitor's actual question: will this be okay?",
     "read_by": "claude",
-    "signature": "none",
-    "signature_why": "A dental office earns trust through calm, legible proof \u2014 ratings, staff, and reviews \u2014 not a decorative flourish, so no signature device is needed here.",
+    "signature": "quote",
+    "signature_why": "A dental practice earns trust through what patients say about the chair, not through a hero photo, so a single review set large does the convincing.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "quiet",
-    "typeface": "sora-manrope",
+    "typeface": "ibm-plex-serif-inter",
     "understood": [
-      "People choose a dentist on trust and comfort, not on pictures of the office, so the page should open with proof \u2014 the strong ratings and warm patient reviews \u2014 before getting into services and hours. "
+      "People choosing a dentist want proof of gentleness and competence before they want atmosphere \u2014 strong ratings, warm staff photos, and real patient quotes do that work better than a moody hero shot. A"
     ],
     "unsupported": []
   },

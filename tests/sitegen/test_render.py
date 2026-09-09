@@ -19,6 +19,13 @@ from app.site.spec import SiteSpec
 pytestmark = pytest.mark.unit
 
 
+def _section(page: str, key: str) -> str:
+    """The one section's own markup, so a composition assertion cannot
+    accidentally match a class name that only appears elsewhere on the page."""
+    start = page.index(f'id="{key}"')
+    return page[start:page.index("</section>", start)]
+
+
 def _brief(**kw) -> dict:
     base = {
         "name": "The Heritage Table",
@@ -222,6 +229,43 @@ def test_a_single_review_is_not_a_reviews_section():
     assert 'id="reviews"' not in page
 
 
+def test_two_or_three_reviews_get_the_featured_composition():
+    """A grid built for a wall of testimonials looks sparse with only a
+    couple of tiles in it — `_rich()` carries exactly three."""
+    page, _ = build(_rich())
+    section = _section(page, "reviews")
+    assert "quotes-feature" in section
+    assert '<div class="quotes">' not in section
+
+
+def test_four_or_more_reviews_get_the_grid():
+    many = _rich()
+    many["testimonials"] = many["testimonials"] + [
+        {"rating": 5, "author": "A Fourth", "text": "Also great."}]
+    page, _ = build(many)
+    section = _section(page, "reviews")
+    assert "quotes-feature" not in section
+    assert '<div class="quotes">' in section
+
+
+def test_two_reviews_report_the_same_composition_as_three():
+    """The fingerprint's `compositions` axis reads `plan.py`'s own density
+    labelling — two reviews and three both render `_review_feature`,
+    identically, so both must report "feature", not the generic "editorial"
+    two items would get anywhere else. An axis that claims a difference the
+    page does not actually show is exactly what `test_axes_are_real.py`
+    exists to catch, one level below the fingerprint's own axes."""
+    from app.site.render import plan_for
+    from app.site.spec import SiteSpec
+
+    two = _rich()
+    two["testimonials"] = two["testimonials"][:2]
+    plan_two = plan_for(two, SiteSpec(mood="warm"))
+    plan_three = plan_for(_rich(), SiteSpec(mood="warm"))
+    assert plan_two.section("reviews").density.get("layout") == "feature"
+    assert plan_three.section("reviews").density.get("layout") == "feature"
+
+
 def test_google_photography_is_served_through_us_not_with_the_key():
     """A Places photo URL carries the API key. Putting one in a page we hand to
     a business owner would publish the key to anyone who views source."""
@@ -406,6 +450,30 @@ def test_three_offerings_hold_three_across():
     page, _ = build(three)
     assert 'data-density="balanced"' in page
     assert "repeat(3,minmax(0,1fr))" in page
+
+
+def test_three_offerings_get_the_feature_composition_not_the_dense_grid():
+    """"balanced" used to render the identical bordered-card markup as
+    "dense", differing only in count — the fingerprint's `compositions` axis
+    called that a different composition and nothing on the page backed it
+    up. `offers-feature` is a real, distinct third composition: no card
+    edge, no background, large type, matching what `density.LAYOUTS` has
+    called this shape since the density module was written."""
+    three = _rich()
+    three["published"] = {**three["published"], "services": ["A", "B", "C"]}
+    page, _ = build(three)
+    section = _section(page, "services")
+    assert "offers-feature" in section
+    assert '<div class="offers">' not in section
+
+
+def test_four_offerings_still_get_the_dense_grid():
+    four = _rich()
+    four["published"] = {**four["published"], "services": ["A", "B", "C", "D"]}
+    page, _ = build(four)
+    section = _section(page, "services")
+    assert "offers-feature" not in section
+    assert '<div class="offers">' in section
 
 
 def test_density_never_conjures_a_section_out_of_nothing():

@@ -640,6 +640,23 @@ html.reveals .editorial-art.in img{{clip-path:inset(0 0 0 0)}}
 .offer .rule{{display:block;height:2px;width:34px;background:var(--accent);
   margin-top:18px;transition:width .45s cubic-bezier(.2,.7,.3,1)}}
 .offer:hover .rule{{width:78px}}
+
+/* Exactly three, "feature": no card edge, no background — the balanced
+   density's own composition, distinct from the dense grid's bordered
+   cards rather than the same card with fewer of them in the row. */
+.offers-feature{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(28px,4vw,56px)}}
+@media (max-width:860px){{.offers-feature{{grid-template-columns:1fr}}}}
+.offer-feature{{padding-top:clamp(20px,2.2vw,28px);
+  border-top:1px solid var(--line)}}
+.offer-feature .idx{{font-family:{t.display.stack};font-size:12px;
+  letter-spacing:.16em;color:var(--accent)}}
+.offer-feature h3{{margin:16px 0 0;line-height:1.1;
+  font-size:calc({listing_size} * var(--density-scale))}}
+.offer-feature .rule{{display:block;height:2px;width:34px;
+  background:var(--accent);margin-top:20px;
+  transition:width .45s cubic-bezier(.2,.7,.3,1)}}
+.offer-feature:hover .rule{{width:60px}}
 /* Photo-led cards: the picture is the card, the words sit on the glass. */
 
 /* ----------------------------------------------------------------- stats -- */
@@ -714,6 +731,15 @@ section[data-ground="raise"] .quote{{background:var(--bg)}}
 .quote p{{margin:0;font-size:16.5px;line-height:1.6}}
 .quote .who{{margin-top:auto;font-size:13.5px;color:var(--dim);font-weight:600}}
 .stars{{color:var(--accent);letter-spacing:3px;font-size:15px}}
+/* Two or three reviews: stacked, no card, set large — a wall-of-cards grid
+   built for volume looks sparse with only a couple of tiles in it. */
+.quotes-feature{{display:flex;flex-direction:column;gap:clamp(28px,3.4vw,44px);
+  max-width:760px}}
+.quote-feature{{padding-top:clamp(20px,2.2vw,28px);border-top:1px solid var(--line)}}
+.quote-feature p{{margin:12px 0 0;font-size:clamp(18px,1.7vw,22px);
+  line-height:1.5;font-family:{t.display.stack};font-weight:{t.display_weight}}}
+.quote-feature .who{{display:block;margin-top:14px;font-size:13.5px;
+  color:var(--dim);font-weight:600}}
 
 /* ----------------------------------------------------- recognition ------- */
 /* The award is the most persuasive line on the page, so it gets scale and

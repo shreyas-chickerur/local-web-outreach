@@ -18,27 +18,26 @@
     },
     "defect": "",
     "emphasis": [
-      "stats",
       "reviews",
-      "credentials"
+      "stats"
     ],
     "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "credentials",
     "mood": "refined",
-    "rationale": "People hiring a personal injury attorney after a catastrophic event are checking credibility, not browsing a gallery \u2014 so the page should open with the rating, case results, and track record, not a photograph of the building. The ledger rhythm and stamped credential mark read as a firm that wins verdicts, not a boutique brand.",
+    "rationale": "Someone searching for a personal injury attorney after a catastrophic event wants proof of results and trustworthiness before anything else \u2014 case verdicts, ratings, and reviews \u2014 not a mood shot of the building. The refined, document-like ledger layout with navy and a credentials stamp reads as a serious, established trial firm rather than a lifestyle brand.",
     "read_by": "claude",
     "signature": "none",
-    "signature_why": "A repeated Board Certified mark reinforces the one credential that matters most before anyone calls a personal injury lawyer.",
+    "signature_why": "A repeated Board Certified / verdict mark reinforces credibility the way a licence plate reassures a client that this firm is proven, not decorative.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "quiet",
-    "typeface": "ibm-plex-serif-inter",
+    "typeface": "libre-caslon-work-sans",
     "understood": [
-      "People hiring a personal injury attorney after a catastrophic event are checking credibility, not browsing a gallery \u2014 so the page should open with the rating, case results, and track record, not a ph"
+      "Someone searching for a personal injury attorney after a catastrophic event wants proof of results and trustworthiness before anything else \u2014 case verdicts, ratings, and reviews \u2014 not a mood shot of t"
     ],
     "unsupported": []
   },

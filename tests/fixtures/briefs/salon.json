@@ -8,8 +8,8 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "amber",
-    "architecture": "gallery",
+    "accent": "sky",
+    "architecture": "stacked",
     "contradictions": [],
     "cta": {
       "kind": "visit",
@@ -17,26 +17,26 @@
     },
     "defect": "",
     "emphasis": [
-      "gallery",
+      "services",
       "reviews"
     ],
-    "first_screen": "split",
+    "first_screen": "photo",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "about",
-    "mood": "warm",
-    "rationale": "Salon Boutique isn't selling a haircut, it's selling a beautiful, well-kept space to independent beauty professionals \u2014 so the site should lead with the room and the story of independence, not a menu of services it doesn't itself provide. Warm tones, real photos of the interior and storefront, and quoted tenant reviews build the confidence a stylist needs before signing a suite lease.",
+    "mood": "refined",
+    "rationale": "This isn't a walk-in salon selling a cut, it's a landlord renting suites to independent stylists, so the visitor needs to feel the calm, upscale, well-kept building before anything else \u2014 a wide storefront photo under the bright sky reads as the promise, and a quiet stacked layout with reviews about Sam and cleanliness pulled forward does the reassuring the tagline can't do on its own. Choosing photo/stacked/margin_note over the recent split/gallery/corner_inset job keeps the same sky accent (it",
     "read_by": "claude",
-    "signature": "corner_inset",
-    "signature_why": "A type block set into the corner of the storefront photo reads as a boutique address, not a salon appointment page \u2014 fitting since this business rents suites to stylists, not haircuts to walk-ins.",
+    "signature": "margin_note",
+    "signature_why": "A running note beside the tenant-benefits copy lets the leasing pitch sit quietly next to the proof \u2014 Sam's warmth and the clean suites \u2014 without competing with it for the headline.",
     "suppress": [
       "stats"
     ],
-    "type_treatment": "wide",
-    "typeface": "",
+    "type_treatment": "quiet",
+    "typeface": "cormorant-karla",
     "understood": [
-      "Salon Boutique isn't selling a haircut, it's selling a beautiful, well-kept space to independent beauty professionals \u2014 so the site should lead with the room and the story of independence, not a menu "
+      "This isn't a walk-in salon selling a cut, it's a landlord renting suites to independent stylists, so the visitor needs to feel the calm, upscale, well-kept building before anything else \u2014 a wide store"
     ],
     "unsupported": []
   },

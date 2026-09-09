@@ -27,17 +27,17 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "refined",
-    "rationale": "This is a family law firm, not a business people browse for atmosphere \u2014 a visitor in crisis needs to see the 4.9 rating and 148 reviews before anything else, then read what past clients said in their own words. The photography is thin (only two shots big enough to lead with), so a facts-first opening with a quote as the signature mark builds trust through evidence rather than imagery, and a ledger rhythm keeps the whole page reading as a serious, documented practice.",
+    "rationale": "People hiring a family lawyer are anxious and need proof of trust and competence before anything else \u2014 a 4.9 rating from 148 reviews and a named, credentialed attorney does that far better than photographs of the building, since only two images are even large enough to lead with. A ledger layout with a quoted review reads as a serious, document-like practice rather than a generic small-business template.",
     "read_by": "claude",
     "signature": "quote",
-    "signature_why": "A single client quote set large says more about trust in a family lawyer than any photo could, and this firm's reviews are its strongest asset.",
+    "signature_why": "A family law client's own words carry more weight than any stock photo of a courthouse, so setting one review at full size makes the trust visible immediately.",
     "suppress": [
       "gallery"
     ],
     "type_treatment": "quiet",
     "typeface": "libre-caslon-work-sans",
     "understood": [
-      "This is a family law firm, not a business people browse for atmosphere \u2014 a visitor in crisis needs to see the 4.9 rating and 148 reviews before anything else, then read what past clients said in their"
+      "People hiring a family lawyer are anxious and need proof of trust and competence before anything else \u2014 a 4.9 rating from 148 reviews and a named, credentialed attorney does that far better than photo"
     ],
     "unsupported": []
   },

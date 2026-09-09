@@ -22,15 +22,15 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "fresh",
-    "rationale": "The photos of finished hair and a bright, clean room are the strongest selling point Drybar has, so imagery still leads, but a split first screen with an inset name and a narrower column rhythm afterward gives the page its own identity instead of repeating the previous full-bleed-photo, wide-gallery-architecture site. Reviews are pulled forward alongside the gallery because members and repeat clients are clearly what keeps this location distinct from other Drybars, and gold pulled from the salon",
+    "rationale": "The photography (6 strong shots of hair, stylists, and the bright room) is genuinely the argument here, so it still leads, but this time as a split first screen with a wordmark set wide and airy \u2014 reading as a boutique blow-dry bar rather than repeating the full-bleed photo-behind-name and corner_inset treatment already used elsewhere. A scroll_gallery lets people flip through the hair detail shots like a look-book, and pairing that with reviews raised up top backs the polish with the 4.5-star w",
     "read_by": "claude",
-    "signature": "corner_inset",
-    "signature_why": "A type block inset into the corner of a styling photograph reads as a boutique blow-dry bar rather than another full-bleed photo homepage, which is what the last site already did.",
+    "signature": "scroll_gallery",
+    "signature_why": "A strip of hair and salon shots that a visitor can drag through feels like flipping a lookbook, which suits a blowout bar built on styled hair as the product.",
     "suppress": [],
     "type_treatment": "wide",
-    "typeface": "fraunces-karla",
+    "typeface": "unbounded-manrope",
     "understood": [
-      "The photos of finished hair and a bright, clean room are the strongest selling point Drybar has, so imagery still leads, but a split first screen with an inset name and a narrower column rhythm afterw"
+      "The photography (6 strong shots of hair, stylists, and the bright room) is genuinely the argument here, so it still leads, but this time as a split first screen with a wordmark set wide and airy \u2014 rea"
     ],
     "unsupported": []
   },

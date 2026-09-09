@@ -15,24 +15,23 @@
     },
     "defect": "",
     "emphasis": [
-      "reviews",
-      "stats"
+      "reviews"
     ],
     "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "reviews",
+    "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "This is a trade, not a place people eat or browse \u2014 a visitor needs proof of competence and reliability before anything else, and with only one photograph strong enough to lead with, the page should open on the rating and reviews rather than a picture. A stamped, condensed, ledger-like treatment reads as a working shop that shows up and does the job, which matches the mixed reviews about reliability by making trust the first thing addressed head-on.",
+    "rationale": "Only one photo is big enough to lead with and the rest are small work shots, mixed reviews included a serious complaint, so the safest first thing to show is the solid 4.7 rating and review count rather than gambling on imagery or a curated quote. A trade sells competence before atmosphere, and a stamped condensed wordmark with a ledger rhythm reads as a working trade outfit, not a boutique.",
     "read_by": "claude",
     "signature": "ticker",
-    "signature_why": "A thin running line of the rating and review count reads like a service record, which is exactly what someone calling a plumber wants to check first.",
+    "signature_why": "A thin line of ratings and review counts running under the fold reads like a service record, which is exactly what someone calling a plumber wants to check before dialing.",
     "suppress": [],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "This is a trade, not a place people eat or browse \u2014 a visitor needs proof of competence and reliability before anything else, and with only one photograph strong enough to lead with, the page should o"
+      "Only one photo is big enough to lead with and the rest are small work shots, mixed reviews included a serious complaint, so the safest first thing to show is the solid 4.7 rating and review count rath"
     ],
     "unsupported": []
   },

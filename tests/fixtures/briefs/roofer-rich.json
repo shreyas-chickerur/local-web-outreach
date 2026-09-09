@@ -23,17 +23,17 @@
     "kind": "style",
     "lead_with": "credentials",
     "mood": "industrial",
-    "rationale": "A homeowner deciding on a roofer wants proof of competence before pictures: 37 years in Dallas, 40,000 roofs, a 12x trade award and A+ BBB rating are the actual case, so the page should open on those facts rather than a photo. The prior site already led with stats/facts in an industrial mood with no signature mark \u2014 here we lead with credentials specifically and use a repeated stamp motif plus a ledger rhythm so the awards and BBB rating feel earned and tabulated, not just another stat band, and",
+    "rationale": "This is a 37-year-old family roofing outfit whose case rests on awards, BBB standing and a long run of specific 5-star reviews, not on styled photography \u2014 only 5 of 14 photos are even large enough to lead with. Leading with credentials in a stamped, ledger-like layout puts the licence/award/tenure proof in front of a homeowner in the first three seconds, which is what actually earns a call in this trade, and it deliberately breaks from the prior stats-led, signature-none industrial site by open",
     "read_by": "claude",
     "signature": "none",
-    "signature_why": "A 12x Golden Hammer winner and A+ BBB firm since 1988 has real marks to repeat down the page, and a repeated stamp reads as credentials rather than decoration.",
+    "signature_why": "A repeated Golden Hammer / BBB / since-1988 mark is what a homeowner actually scans for before calling a roofer, and it reads as a workshop credential rather than decoration.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "A homeowner deciding on a roofer wants proof of competence before pictures: 37 years in Dallas, 40,000 roofs, a 12x trade award and A+ BBB rating are the actual case, so the page should open on those "
+      "This is a 37-year-old family roofing outfit whose case rests on awards, BBB standing and a long run of specific 5-star reviews, not on styled photography \u2014 only 5 of 14 photos are even large enough to"
     ],
     "unsupported": []
   },

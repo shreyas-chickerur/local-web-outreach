@@ -10,7 +10,7 @@
   ],
   "design_direction": {
     "accent": "orange",
-    "architecture": "stacked",
+    "architecture": "ledger",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -21,23 +21,23 @@
       "reviews",
       "services"
     ],
-    "first_screen": "facts",
+    "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
-    "mood": "bold",
-    "rationale": "Someone landing on this page is scared and shopping urgently for proof this firm wins cases, so the 4.9-star rating and 254 reviews should hit before any portrait does \u2014 facts first, not atmosphere. To differ clearly from the near-duplicate site: instead of a quiet ledger of restrained proof, this leans bold and stamped, using orange pulled straight from their own logo and graphics, with a repeated credential mark (stamp) rather than none, and a stacked rhythm instead of the tight ledger \u2014 the s",
+    "mood": "refined",
+    "rationale": "People hiring a personal injury attorney after a wreck want proof of competence and trust before anything else \u2014 the 4.9 rating from 254 reviews, the case types, and client testimonials matter more than office photography. The orange sampled from their own logo and graphics keeps it recognisably theirs, while a calm, document-like ledger layout and quiet serif type read as a serious law firm rather than a flashy ad, with stats and reviews pulled forward and the thin gallery of stock-style promo ",
     "read_by": "claude",
     "signature": "none",
-    "signature_why": "A repeated mark like \"No fees unless we win\" or the Super Lawyer credential reinforces trust the way a licence plate on the wall does, which matters more here than any single photo.",
+    "signature_why": "A repeated mark like \"No fees unless we win\" or the Super Lawyer/Trial Lawyer credential reads like a licence stamp, reinforcing trust at a glance the way a framed bar certificate does in an office.",
     "suppress": [
-      "features"
+      "gallery"
     ],
-    "type_treatment": "stamped",
-    "typeface": "oswald-inter",
+    "type_treatment": "quiet",
+    "typeface": "ibm-plex-serif-inter",
     "understood": [
-      "Someone landing on this page is scared and shopping urgently for proof this firm wins cases, so the 4.9-star rating and 254 reviews should hit before any portrait does \u2014 facts first, not atmosphere. T"
+      "People hiring a personal injury attorney after a wreck want proof of competence and trust before anything else \u2014 the 4.9 rating from 254 reviews, the case types, and client testimonials matter more th"
     ],
     "unsupported": []
   },

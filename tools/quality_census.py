@@ -92,38 +92,30 @@ FIXTURES = Path("tests/fixtures/briefs")
 #
 # `threadbare` is excluded from every score — see `agreement.UNSCORED`.
 #
-# BRIEF §4's first invariant, violated and fixed: `signature.py`'s `stamp`
-# device chose "Licensed & insured" / "Registered practice" / "Admitted to
-# the bar" from `trade_kind` alone, printed four times, with nothing
-# checking it was true of the business. Uncorroborated on six fixtures —
-# `threadbare` (no about text, no content blocks, one photograph) still
-# asserted a licence. `app.core.claims.CLAIM_RE` had no credential pattern
-# at all, so the content gate could not have caught it either. Both fixed:
-# the pattern widened (verified against the whole corpus — exactly those
-# six fixtures produced a finding, nothing else), and `stamp` now checks
-# `contractorfacts.STAMP_FACT` before `available()` offers it — a device
-# the material cannot support is dropped, not rendered with a substitute.
-# See `.reviews/slice-c-credential-claims.md`.
+# A cost-minimising pass over the rest of Slice C (BRIEF §5, this project's
+# own "first pass" — see .reviews/first-pass.md): four more corroborated
+# contractor facts (service area, financing, a named manufacturer
+# certification, response time), a genuine third `services` composition
+# ("feature", exactly three, no card — this axis used to render the same
+# bordered-card markup as the dense grid, differing only in count, which
+# `test_axes_are_real.py`'s own standard calls a lie in the instrument), a
+# second `reviews` composition, and per-trade `gallery`/`contact` headings.
+# Content-only work (a content census, a structural diff, render snapshots)
+# needed no redecide at all.
 #
-# Signature is axis eleven, so this re-decided the corpus (ruler and rule
-# UNCHANGED). First attempt: a genuine unresolved collision
-# (`hvac-rich`/`roofer-rich`, matching all four required-high axes,
-# honestly recorded as `_gate_unresolved` rather than hidden) — retried
-# rather than compensated for, since `test_the_gate_is_satisfiable` already
-# confirmed the required-axis arithmetic has room. Second attempt: zero
-# collisions across all 171 pairs.
+# Every item above touches `compositions` or `section_order`, so this
+# re-decided the corpus (ruler and rule UNCHANGED). Zero collisions on the
+# first attempt, across all 171 pairs.
 #
-# Eleven pairs judged blind against the rendered markup — the closest
-# pairs in the tuning set by distance. ALL ELEVEN CAME BACK DIFFERENT.
-# Held-out verdicts are retired, never re-judged, and none were
-# repopulated this round, so the held-out third is empty rather than stale.
-#
-# Agreement is 0 of 0 for the same reason it has been every prior reading: a
-# rank needs at least one "same" pair, and there is not one. The single-axis
-# degeneracy check stays retired; nothing came back to restore it against.
-BASELINE_SAME_TRADE = 0.5333
-# The closest same-trade pair, judged DIFFERENT.
-BASELINE_WORST = ("hvac", "hvac-rich", 0.34)
+# NO JUDGING ROUND THIS PASS, DELIBERATELY. Agreement was already 0 of 0
+# and all eleven pairs checked the round before this one were DIFFERENT —
+# judging again spends real money to confirm what is already known. Every
+# live verdict was retired when the redecide moved every fold; none
+# repopulated. The held-out third is genuinely empty, not stale.
+BASELINE_SAME_TRADE = 0.5610
+# The closest same-trade pair, unjudged this round (no judging pass) —
+# printed as a reading, not a verdict.
+BASELINE_WORST = ("contractor-bare", "hvac-second", 0.31)
 # Which ruler the numbers above were taken with. A distance is comparable only
 # to another taken the same way, and comparing across a change of ruler has
 # already produced two false readings — a corpus that changed under a pinned
@@ -135,12 +127,13 @@ BASELINE_METRIC = "a762bcc9"
 BASELINE_RULE = "254e171b"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
-BASELINE_LABELS = "9ed8ff8e"
+BASELINE_LABELS = "e3b0c442"
 # What it was, so a reader can see that the agreement figure crossed a
 # change of labels rather than falling. "0 of 0" was scored against
-# 1f0df47d, sixteen pairs taken before this phase's stamp-device fix
-# forced a redecide and retired them.
-BASELINE_LABELS_WAS = ("1f0df47d", "0 of 0")
+# 9ed8ff8e, eleven pairs taken before this pass's redecide retired them —
+# this pass judged none, so the new value is the hash of an empty set, not
+# a re-judged one.
+BASELINE_LABELS_WAS = ("9ed8ff8e", "0 of 0")
 # True on the commit that re-pins, false on every commit after. Without
 # it the first run under a new ruler always prints "no better than the
 # baseline" — because the baseline IS that run's own measurement copied
