@@ -162,9 +162,9 @@ not by trusting a glance at a small picture). See `.reviews/slice-b-phase-1.md`.
     verdicts    16 live, all judged whole-page against the current rendering,
                 five held out
 
-**Slice C started, not finished** — see §5 and `.reviews/slice-b-phase-2.md`:
-trade profiles, four of nine contractor facts as a corroborated section, two
-compositions. **Not started.** Slices D, E, G, H and the rest of F.
+**Slice C started, not finished (superseded below)** — see §5 and
+`.reviews/slice-b-phase-2.md`: trade profiles, four of nine contractor
+facts as a corroborated section, two compositions.
 
 **Done — a real plan-versus-page bug, found and fixed.** `render.py` carried
 two separate implementations of the same section-reordering rule — one used
@@ -203,6 +203,79 @@ repopulated this round). **Residual, disclosed risk:** the corroboration
 is strict exact-phrase matching, so `stamp` currently renders on nobody in
 this corpus — proven to remove a false claim, not yet proven to carry a
 true one. See `.reviews/slice-c-credential-claims.md`.
+
+**Done — a cost-minimising first pass over the rest of Slice C, plus the
+free items from §5 that never needed a redecide (`.reviews/first-pass.md`).**
+The governing rule: all non-corpus-moving work lands first and free; every
+corpus-moving change batches into exactly one redecide at the end; no
+judging round, because agreement was already 0 of 0 and every prior
+verdict was DIFFERENT, so judging again would spend money to reconfirm
+what a redecide already implies.
+
+Free (no redecide): `tools/content_census.py` — every heading, paragraph,
+list, image and fact per fixture, against whether it reached the page and
+which rule dropped it if not (Slice D's first step). 73% of published
+material reaches the page overall; the worst single loss is block:feature
+at 36% (a 4-block cap drops two thirds of it by volume); `fact:hours` is
+0% reached corpus-wide (superseded by `published.hours` everywhere it
+would fire); `menu_media` is read by no section builder at all. The rest
+of Slice F: `pipeline.spec_diff`/`unexplained_changes` (a structural diff
+and a blast-radius guard per iteration, surfaced in the workspace as "What
+moved" / "Moved, but not asked for"); render snapshot tests over all 19
+fixtures, pinned in `tests/fixtures/render_snapshots.json`.
+
+One redecide, batching every corpus-moving item: the last four of nine
+contractor facts (service area, financing, a named manufacturer
+certification, response time — same corroborated-or-absent discipline as
+the first four); a genuine third `services` composition ("feature",
+exactly three items, no card — `density.py` had named this composition
+since it was written, but `_services` rendered it identically to the
+dense grid until now, an axis lying about a visible difference); a second
+`reviews` composition (two or three, stacked, no card, with a
+`plan_for()` override so 2-count reviews also report "feature" rather
+than letting the axis lie the other way); per-trade gallery/contact
+headings. Zero collisions across all 171 pairs on the first attempt.
+Eleven live verdicts retired (every fold moved), none re-judged — the
+deliberate no-judging choice above.
+
+Sampled, not swept: `tools/design_review.py`, a minimal Slice G — one
+restaurant, one trade contractor, one professional practice, and the
+threadbare fixture, three widths each, one model call per screenshot (12
+calls, not the 57 a full sweep over all 19 fixtures would cost). Found
+real defects a rule-based test cannot: layout collisions (`law`'s nav
+sitting on the attorney's face, body text hidden behind a stats banner;
+duplicated CTA buttons cropped at the mobile viewport edge on `hvac` and
+`restaurant-rich`), and — new class — `hvac`'s own "about" text claiming
+"over 20,000 5 star reviews" against a structured review count of 6,203
+two sections away: two real numbers from the same business's own listing
+that contradict each other, which nothing here cross-checks. Findings
+only, nothing fixed this pass; see `.reviews/first-pass.md` for the full
+list and the recommendation on whether a full sweep is worth it.
+
+**Not this pass, disclosed rather than silently dropped:** a judging
+round; Slice E (backdrops, motion, video); Slice H (the conversational
+workspace); growing the corpus past 19 fixtures; the full (not sampled)
+Slice G sweep; before-and-after, the ninth contractor fact (needs a
+paired photo nothing in this corpus's photo data carries).
+
+**The instrument's current reading.**
+
+    agreement   0 of 0 — no "same" pair is left to rank, none judged this
+                pass (deliberate — see above)
+                ruler a762bcc9, rule 254e171b, labels e3b0c442,
+                held-out e3b0c442
+    census      same-trade 56.10% distance = 43.90% identical, 30 scored
+                pairs (was 53.33%/46.67% before this redecide)
+    unreachable 0
+    gate        0 of 171 pairs collide, whole corpus
+    forbidden defaults  2 fixtures match (§2.4) — barbecue-rich and
+                restaurant-rich (was barbecue-rich and law; law dropped
+                out and restaurant-rich picked up the same default when
+                the corpus was redecided — a fact about the redecide, not
+                something tuned for)
+    tests       838
+    fixtures    19
+    verdicts    0 live (eleven retired this redecide, none re-judged)
 
 ## 2. The governing requirement
 
@@ -420,49 +493,61 @@ First point where sites should stop looking related.
 
 ### Slice C — compositions and trade structure
 
-**Started — see `.reviews/slice-b-phase-2.md`.** Trade profiles
-(`app/site/tradeprofile.py`): per-trade headings for the "what we do"
-section, replacing the two ad hoc conditions it used to be; a per-trade
-default section emphasis, used only when the identity call named none; which
-contractor facts are worth hunting for, per trade. The call-to-action label's
-trade dimension (2e) turned out to already be shipped, just moved here from
-`render.py`.
+**Mostly done — see `.reviews/slice-b-phase-2.md` and
+`.reviews/first-pass.md`.** Trade profiles (`app/site/tradeprofile.py`):
+per-trade headings for "what we do", gallery, and contact, replacing ad
+hoc conditions; a per-trade default section emphasis, used only when the
+identity call named none; which contractor facts are worth hunting for,
+per trade. The call-to-action label's trade dimension (2e) already
+shipped, moved here from `render.py`.
 
-Four of the nine contractor facts the generator lacked, shipped as a
-corroborated `credentials` section (`app/site/contractorfacts.py`): licensed
-and insured, emergency availability, warranty, free estimate — each found by
-matching the business's own published text, never generated. Two
-compositions by count (a quiet row of pills, or a card grid). **Not built,
-disclosed rather than faked:** service area, before-and-after, financing,
-manufacturer badges, response time — each needs a kind of evidence (a service
-radius, a paired photo, a named lender, a badge image, a stated callback
-window) this material does not carry yet, and approximating one without it is
-the exact "invent a licence number" failure the brief warns against.
+Eight of the nine contractor facts, shipped as a corroborated
+`credentials` section (`app/site/contractorfacts.py`): licensed and
+insured, emergency availability, warranty, free estimate, service area,
+financing, a named manufacturer certification, response time — each
+found by matching the business's own published text, never generated.
+`services` now has three compositions by count (pills, a "feature"
+composition at exactly three items with no card, or a card grid);
+`reviews` has two (a stacked "feature" composition at two or three
+reviews, or a card grid at four or more). **Not built, disclosed rather
+than faked:** before-and-after, the last fact — it needs a paired photo
+(a labelled before, a labelled after, of the same job) this material does
+not carry, and approximating one without it is the exact "invent a
+licence number" failure the brief warns against. **Also not built:**
+`gallery`, `about`, and `hours` still have exactly one composition each.
 
-Headings are deterministic per trade rather than something the identity call
-picks from a table — a disclosed scope reduction from "the model picks from",
-consistent with how the CTA table already worked before this phase touched
-it. No redecide: nothing here is a model decision, so nothing here is a new
-axis. Same-trade mean, agreement and gate collisions are all unchanged.
+Headings are deterministic per trade rather than something the identity
+call picks from a table — a disclosed scope reduction from "the model
+picks from", consistent with how the CTA table already worked before
+this phase touched it. One redecide covered every corpus-moving item
+above (`compositions`/`section_order` moved); same-trade mean rose from
+53.33% to 56.10%, agreement stayed 0 of 0 with no judging round run this
+pass (see §1).
 
-Verdict point. First fair moment to ask whether someone pays a thousand dollars.
-Still not reached — three real contractor facts and a heading table are Slice
-C started, not Slice C done. Two to four compositions per section beyond
-`services`/`credentials`, and the model choosing among headings rather than a
-trade always picking the same one, remain open.
+Verdict point. First fair moment to ask whether someone pays a thousand
+dollars. Closer, not reached — eight of nine contractor facts and three
+section compositions beyond the original two are real progress, but
+`gallery`/`about`/`hours` still have one layout each, the model still
+does not choose among headings, and a fact still only fires when a
+business's own copy happens to use a matching phrase.
 
 ### Slice D — content completeness and copy selection
 
-`tools/content_census.py` first, before changing anything: every heading,
-paragraph, list, image and fact on their site, and whether it reached the page,
-and if not which rule dropped it. Fix what it exposes. Surface it in the
-workspace.
-
-Then let the model select and order their own sentences — never author one.
-Replace `unsupported()` with a provenance check: every visible sentence is a
-verbatim or prefix-cut span of source material, a member of a whitelisted
-generic-copy library, or a value rendered from a corroborated field. Keep the
-claim expression as a second layer.
+**First step done — see `.reviews/first-pass.md`.**
+`tools/content_census.py`: every heading, paragraph, list, image and
+fact on their site, against whether it reached the page and which rule
+dropped it if not, read off the real pipeline rather than reimplemented.
+73% of published material reaches the page overall; `block:feature` at
+36% is the single biggest loss (a 4-block cap); `fact:hours` is 0%
+reached corpus-wide (superseded by `published.hours` everywhere it would
+fire — a pure fallback that never runs, not a bug, but worth knowing);
+`menu_media` is read by no section builder at all. **Not yet done:**
+fixing what the census exposes, surfacing it in the workspace, and
+letting the model select and order its own sentences — replacing
+`unsupported()` with a provenance check (every visible sentence a
+verbatim or prefix-cut span of source material, a whitelisted
+generic-copy member, or a corroborated field), keeping claim expression
+as a second layer.
 
 ### Slice E — backdrops, motion, video
 
@@ -480,11 +565,21 @@ element.
 
 ### Slice G — the design review
 
-Screenshot at three widths, send with the brief for a critique: defects only,
-closed categories — hierarchy, crop, spacing, colour, imagery, credibility, and
-"this reads as a template". Findings join the existing defects list. Auto-repair
-only the deterministic ones. A reviewer, not an author. Run it on every lead's
-opening version.
+**Sampled, not swept — see `.reviews/first-pass.md`.**
+`tools/design_review.py`: screenshot at three widths, one model call per
+screenshot, closed categories (hierarchy, crop, spacing, colour, imagery,
+credibility, "reads as a template") — matches the brief as written.
+Run on four fixtures only (one restaurant, one trade contractor, one
+professional practice, the threadbare fixture) to keep the cost of
+finding out whether this is worth it low; a full sweep over all 19
+fixtures at three widths would be 57 calls, not 12. It found real
+defects: rendering-level layout collisions no test here catches (a nav
+sitting on a face, hidden text behind a banner, cropped duplicate CTAs on
+mobile), and a genuine internal contradiction in one business's own
+published facts (a review count that disagrees with itself two sections
+apart). **Not built:** findings joining the existing defects list,
+auto-repair of the deterministic findings, and running it on every
+lead's opening version rather than four sampled fixtures.
 
 ### Slice H — the conversational workspace
 
@@ -500,9 +595,16 @@ leads and feed the opening design.
 
 ### Rest of F
 
-Structural diff surfaced per iteration; a blast-radius guard so an instruction
-that changes one facet cannot silently change others; snapshot tests over the
-fixtures.
+**Done — see `.reviews/first-pass.md`.** `pipeline.spec_diff(base, config)`:
+structural diff surfaced per iteration, persisted and shown in the
+workspace as "What moved". `pipeline.unexplained_changes(base, config)`:
+a blast-radius guard flagging any facet that moved without the
+instruction's own `understood` text naming it — a heuristic over free
+text, not a proof, surfaced as a warning ("Moved, but not asked for")
+rather than a rejection. Render snapshot tests
+(`tests/test_render_snapshots.py`, `tests/fixtures/render_snapshots.json`)
+over all 19 fixtures, catching wording changes invisible to the
+fingerprint.
 
 ## 6. How we work from here
 

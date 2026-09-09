@@ -8,23 +8,23 @@
 <script>document.documentElement.className+=' reveals'</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@300..700&family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
 <style>
 :root{
   --density-scale:1;
-  --bg:#fffdf6; --surface:#ffffff; --raise:#fdf3e0; --ink:#171310;
-  --dim:#544c44; --accent:#e27e26; --accent-soft:#ffeedf;
-  --accent-ink:#111111; --line:#f0e4d2; --r:6px;
+  --bg:#f7f5f2; --surface:#ffffff; --raise:#efece6; --ink:#17181a;
+  --dim:#585a55; --accent:#643f1f; --accent-soft:#efeae5;
+  --accent-ink:#ffffff; --line:#e3ded5; --r:3px;
   /* Two layers doing different jobs: a hairline-tight contact shadow to seat
      the card, and a wide, very faint cast to lift it. A single heavy shadow
      reads as a border with a blur on it. */
-  --shadow:0 1px 1px rgba(23,19,16,0.04),0 8px 30px rgba(23,19,16,0.055);
-  --lift:0 2px 4px rgba(23,19,16,0.04),0 22px 48px -12px rgba(23,19,16,0.16);
-  --hairline:rgba(23,19,16,0.1);
+  --shadow:0 1px 1px rgba(23,24,26,0.04),0 8px 30px rgba(23,24,26,0.055);
+  --lift:0 2px 4px rgba(23,24,26,0.04),0 22px 48px -12px rgba(23,24,26,0.16);
+  --hairline:rgba(23,24,26,0.1);
   /* Foregrounds computed against each ground, never paired by hand. */
-  --on-base:#171310;
-  --on-raise:#171310;
-  --on-accent:#171310;
+  --on-base:#17181a;
+  --on-raise:#17181a;
+  --on-accent:#f7f5f2;
   --pad:clamp(20px,5vw,44px);
 }
 *{box-sizing:border-box}
@@ -38,7 +38,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',-apple-s
   font-size:clamp(16px, 15.28px + 0.1887vw, 18px);line-height:1.65;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 
-h1,h2,h3{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;line-height:1.05;margin:0 0 .5em;
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");opacity:.05;mix-blend-mode:multiply}
+h1,h2,h3{font-family:'IBM Plex Serif',Georgia,serif;line-height:1.05;margin:0 0 .5em;
   /* Stops a headline dropping one word onto its own line at an awkward width.
      Unsupported engines ignore it and wrap as before. */
   text-wrap:balance}
@@ -52,11 +54,11 @@ p{text-wrap:pretty}
 :focus:not(:focus-visible){outline:none}
 .cta:focus-visible,.book:focus-visible{outline-offset:4px}
 
-::selection{background:rgba(226,126,38,0.24);color:var(--ink)}
-h1{font-size:calc(clamp(34.46px, 25.54px + 2.348vw, 59.35px) * var(--density-scale));letter-spacing:-0.014em;font-variation-settings:"wght" 600}
-h2{font-size:calc(clamp(26.68px, 21.95px + 1.245vw, 39.88px) * var(--density-scale));letter-spacing:-0.007em;font-variation-settings:"wght" 500}
-h3{font-size:calc(clamp(20.66px, 18.47px + 0.5782vw, 26.79px) * var(--density-scale));letter-spacing:-0em;font-variation-settings:"wght" 500}
-.lede{font-size:calc(clamp(18.18px, 16.83px + 0.3564vw, 21.96px) * var(--density-scale))}
+::selection{background:rgba(100,63,31,0.24);color:var(--ink)}
+h1{font-size:calc(clamp(32.26px, 24.56px + 2.027vw, 53.75px) * var(--density-scale));letter-spacing:-0.01em;font-variation-settings:"wght" 600}
+h2{font-size:calc(clamp(25.54px, 21.31px + 1.112vw, 37.32px) * var(--density-scale));letter-spacing:-0.005em;font-variation-settings:"wght" 500}
+h3{font-size:calc(clamp(20.21px, 18.17px + 0.5383vw, 25.92px) * var(--density-scale));letter-spacing:-0em;font-variation-settings:"wght" 500}
+.lede{font-size:calc(clamp(17.98px, 16.69px + 0.3411vw, 21.6px) * var(--density-scale))}
 body{font-variation-settings:"opsz" 18,"wght" 400}
 p{margin:0 0 1em;max-width:68ch}
 a{color:var(--accent)}
@@ -93,17 +95,17 @@ body:has(.hero.first-split) .bar{color:var(--ink)}
    legibility and wrapped the navigation onto three lines; a header band above
    a hard-edged split is the composition this position was already making. */
 body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
-  border-bottom:1px solid rgba(23,19,16,0.1)}
+  border-bottom:1px solid rgba(23,24,26,0.1)}
 .bar.stuck{background:rgba(255,255,255,0.72);color:var(--ink);
   -webkit-backdrop-filter:blur(14px) saturate(180%);
   backdrop-filter:blur(14px) saturate(180%);
-  border-bottom:1px solid rgba(23,19,16,0.1);
+  border-bottom:1px solid rgba(23,24,26,0.1);
   padding-top:10px;padding-bottom:10px}
 /* Without blur support the translucency reads as a bug, so fall back opaque. */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .bar.stuck{background:var(--surface);box-shadow:var(--shadow)}
 }
-.bar .mark{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-weight:700;font-size:19px;
+.bar .mark{font-family:'IBM Plex Serif',Georgia,serif;font-weight:700;font-size:19px;
   letter-spacing:-.02em;text-decoration:none;color:inherit}
 .bar nav{margin-left:auto;display:flex;gap:26px}
 .bar nav a{color:inherit;text-decoration:none;font-size:14.5px;font-weight:600;
@@ -125,7 +127,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   overflow:hidden;background:var(--raise);isolation:isolate}
 .hero .bgimg{position:absolute;inset:-8% 0 0;z-index:-2;background-size:cover;
   background-position:center;will-change:transform}
-.hero .veil{position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,rgba(20,14,10,0.84) 0%,rgba(20,14,10,0.54) 42%,rgba(20,14,10,0.22) 100%)}
+.hero .veil{position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,rgba(18,18,16,0.84) 0%,rgba(18,18,16,0.54) 42%,rgba(18,18,16,0.22) 100%)}
 .hero.has-photo{color:#fff}
 .hero .wrap{padding-bottom:clamp(52px,9vh,110px);padding-top:120px}
 .hero h1{margin-bottom:.22em;max-width:16ch}
@@ -190,14 +192,14 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
    applies to it too. */
 .device{padding:clamp(56px,7vw,110px) 0}
 
-.ledgerfig{width:100%;border-collapse:collapse;font-family:'Oswald',Impact,'Arial Narrow',sans-serif}
-.ledgerfig th,.ledgerfig td{padding:14px 0;border-bottom:1px solid rgba(23,19,16,0.1);
+.ledgerfig{width:100%;border-collapse:collapse;font-family:'IBM Plex Serif',Georgia,serif}
+.ledgerfig th,.ledgerfig td{padding:14px 0;border-bottom:1px solid rgba(23,24,26,0.1);
   text-align:left;font-weight:400}
 .ledgerfig th{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:.16em;
   text-transform:uppercase;opacity:.7;width:40%}
 .ledgerfig td{font-size:clamp(22px,3vw,40px);text-align:right}
 
-.bigquote{margin:0;font-family:'Oswald',Impact,'Arial Narrow',sans-serif;
+.bigquote{margin:0;font-family:'IBM Plex Serif',Georgia,serif;
   font-size:clamp(24px,4.2vw,58px);line-height:1.08;max-width:20ch;
   text-indent:-.4em}
 .bigquote::before{content:"C"} .bigquote::after{content:"D"}
@@ -205,7 +207,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
 [data-device="marquee"]{overflow:hidden;padding:clamp(28px,3vw,44px) 0;
   background:var(--accent);color:var(--on-accent)}
 .runner{display:flex;gap:clamp(28px,4vw,64px);white-space:nowrap;
-  font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:clamp(18px,2.4vw,34px);
+  font-family:'IBM Plex Serif',Georgia,serif;font-size:clamp(18px,2.4vw,34px);
   animation:runner 38s linear infinite}
 .runner span::after{content:"2";margin-left:clamp(28px,4vw,64px);
   opacity:.5}
@@ -223,8 +225,8 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   clamp(18px,2.4vw,38px);left:clamp(10px,2vw,26px);font-size:12px;
   letter-spacing:.14em;opacity:.45;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
 
-[data-device="ticker"]{padding:0;border-top:1px solid rgba(23,19,16,0.1);
-  border-bottom:1px solid rgba(23,19,16,0.1);overflow:hidden}
+[data-device="ticker"]{padding:0;border-top:1px solid rgba(23,24,26,0.1);
+  border-bottom:1px solid rgba(23,24,26,0.1);overflow:hidden}
 .tickline{display:flex;gap:clamp(20px,3vw,44px);white-space:nowrap;
   padding:14px 0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;
   animation:runner 46s linear infinite}
@@ -241,7 +243,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   margin-left:clamp(0px,6vw,120px)}
 .knock p{margin:0;font-size:clamp(17px,2vw,25px)}
 
-.runoff{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:clamp(64px,15vw,220px);
+.runoff{font-family:'IBM Plex Serif',Georgia,serif;font-size:clamp(64px,15vw,220px);
   line-height:.86;white-space:nowrap;margin-left:clamp(12px,4vw,80px);
   opacity:.12;user-select:none}
 
@@ -250,7 +252,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   justify-content:flex-start}
 .insetblock{background:var(--bg);color:var(--ink);
   padding:clamp(18px,2.4vw,34px) clamp(22px,3vw,44px);
-  font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:clamp(18px,2.4vw,32px);
+  font-family:'IBM Plex Serif',Georgia,serif;font-size:clamp(18px,2.4vw,32px);
   margin:0 0 0 clamp(0px,4vw,72px)}
 
 .scrollstrip{display:flex;gap:14px;overflow-x:auto;padding-inline:
@@ -294,7 +296,7 @@ body:has(section[data-ground]) section+section::before{opacity:1}
 [data-arch="ledger"] section[data-rule="on"]+section[data-rule="on"]::before{
   display:none}
 [data-arch="ledger"] section[data-rule="on"]>.wrap{border-top:1px solid
-  rgba(23,19,16,0.1);padding-top:clamp(28px,3.4vw,52px)}
+  rgba(23,24,26,0.1);padding-top:clamp(28px,3.4vw,52px)}
 [data-arch="ledger"] .wrap[data-measure="tight"]{
   width:min(880px,100% - var(--pad)*2)}
 [data-arch="ledger"] h2{font-size:clamp(20px,2.2vw,30px)}
@@ -361,7 +363,7 @@ body:has(section[data-ground]) section+section::before{opacity:1}
 /* line-height under 1 clipped the box shorter than the glyphs, and a serif
    4.9 at 168px then sat on top of the name. */
 .hero.first-facts .tally{margin:0 0 .22em;line-height:1;
-  font-family:'Oswald',Impact,'Arial Narrow',sans-serif;display:flex;align-items:baseline;
+  font-family:'IBM Plex Serif',Georgia,serif;display:flex;align-items:baseline;
   gap:clamp(12px,1.6vw,22px);flex-wrap:wrap}
 .hero.first-facts .tally b{font-size:clamp(64px,11vw,168px);font-weight:400;
   letter-spacing:-.03em}
@@ -428,7 +430,7 @@ body:has(section[data-ground]) section+section::before{opacity:1}
 /* Not a link, so no lift and no shadow — the same promise .offer used to make.
    Only the border moves, which reads as attention rather than as a button. */
 .card:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
-.card .num{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:13px;color:var(--accent);
+.card .num{font-family:'IBM Plex Serif',Georgia,serif;font-size:13px;color:var(--accent);
   letter-spacing:.1em;margin-bottom:12px}
 .card h3{margin:0}
 section[data-ground="raise"] .card{background:var(--bg)}
@@ -472,10 +474,10 @@ section[data-ground="raise"] .card{background:var(--bg)}
   border-bottom:1px solid var(--line);transition:padding-left .4s
   cubic-bezier(.2,.7,.3,1)}
 .listing li:hover{padding-left:10px}
-.listing .idx{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:12px;letter-spacing:.16em;
+.listing .idx{font-family:'IBM Plex Serif',Georgia,serif;font-size:12px;letter-spacing:.16em;
   color:var(--accent)}
 .listing h3{margin:0;line-height:1.08;
-  font-size:calc(clamp(23.48px, 20.18px + 0.8683vw, 32.69px) * var(--density-scale))}
+  font-size:calc(clamp(22.72px, 19.72px + 0.7909vw, 31.1px) * var(--density-scale))}
 .editorial-art{margin-top:clamp(24px,3vw,40px);border-radius:var(--r);
   overflow:hidden;aspect-ratio:5/3}
 .editorial-art img{width:100%;height:100%;object-fit:cover;
@@ -495,12 +497,29 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
   transition:border-color .4s ease,background .4s ease}
 .offer:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));
   background:var(--raise)}
-.offer .idx{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:12px;letter-spacing:.16em;
+.offer .idx{font-family:'IBM Plex Serif',Georgia,serif;font-size:12px;letter-spacing:.16em;
   color:var(--accent);margin-bottom:auto}
 .offer h3{margin:14px 0 0;line-height:1.15}
 .offer .rule{display:block;height:2px;width:34px;background:var(--accent);
   margin-top:18px;transition:width .45s cubic-bezier(.2,.7,.3,1)}
 .offer:hover .rule{width:78px}
+
+/* Exactly three, "feature": no card edge, no background — the balanced
+   density's own composition, distinct from the dense grid's bordered
+   cards rather than the same card with fewer of them in the row. */
+.offers-feature{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(28px,4vw,56px)}
+@media (max-width:860px){.offers-feature{grid-template-columns:1fr}}
+.offer-feature{padding-top:clamp(20px,2.2vw,28px);
+  border-top:1px solid var(--line)}
+.offer-feature .idx{font-family:'IBM Plex Serif',Georgia,serif;font-size:12px;
+  letter-spacing:.16em;color:var(--accent)}
+.offer-feature h3{margin:16px 0 0;line-height:1.1;
+  font-size:calc(clamp(22.72px, 19.72px + 0.7909vw, 31.1px) * var(--density-scale))}
+.offer-feature .rule{display:block;height:2px;width:34px;
+  background:var(--accent);margin-top:20px;
+  transition:width .45s cubic-bezier(.2,.7,.3,1)}
+.offer-feature:hover .rule{width:60px}
 /* Photo-led cards: the picture is the card, the words sit on the glass. */
 
 /* ----------------------------------------------------------------- stats -- */
@@ -508,7 +527,7 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
   color:var(--accent-ink)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
   gap:26px;text-align:center}
-.stat b{display:block;font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:clamp(38px,5.4vw,64px);
+.stat b{display:block;font-family:'IBM Plex Serif',Georgia,serif;font-size:clamp(38px,5.4vw,64px);
   line-height:1;font-variant-numeric:tabular-nums}
 .stat span{display:block;margin-top:10px;font-size:13.5px;letter-spacing:.1em;
   text-transform:uppercase;opacity:.86;font-weight:600}
@@ -575,6 +594,15 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 .quote p{margin:0;font-size:16.5px;line-height:1.6}
 .quote .who{margin-top:auto;font-size:13.5px;color:var(--dim);font-weight:600}
 .stars{color:var(--accent);letter-spacing:3px;font-size:15px}
+/* Two or three reviews: stacked, no card, set large — a wall-of-cards grid
+   built for volume looks sparse with only a couple of tiles in it. */
+.quotes-feature{display:flex;flex-direction:column;gap:clamp(28px,3.4vw,44px);
+  max-width:760px}
+.quote-feature{padding-top:clamp(20px,2.2vw,28px);border-top:1px solid var(--line)}
+.quote-feature p{margin:12px 0 0;font-size:clamp(18px,1.7vw,22px);
+  line-height:1.5;font-family:'IBM Plex Serif',Georgia,serif;font-weight:600}
+.quote-feature .who{display:block;margin-top:14px;font-size:13.5px;
+  color:var(--dim);font-weight:600}
 
 /* ----------------------------------------------------- recognition ------- */
 /* The award is the most persuasive line on the page, so it gets scale and
@@ -590,11 +618,11 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 @media (max-width:820px){.accolade-grid{grid-template-columns:1fr;
   align-items:start;gap:26px}}
 .accolade{max-width:15ch;margin:0 0 .3em;
-  font-size:calc(clamp(30.32px, 23.75px + 1.729vw, 48.65px) * var(--density-scale))}
+  font-size:calc(clamp(28.7px, 22.94px + 1.517vw, 44.79px) * var(--density-scale))}
 .accolade-band .eyebrow{margin-bottom:22px}
 .accolade-band .eyebrow::after{content:"";display:block;width:64px;height:3px;
   background:var(--accent);margin-top:14px;border-radius:2px}
-.accolade-note{font-size:calc(clamp(18.18px, 16.83px + 0.3564vw, 21.96px) * var(--density-scale));
+.accolade-note{font-size:calc(clamp(17.98px, 16.69px + 0.3411vw, 21.6px) * var(--density-scale));
   max-width:36ch;color:var(--dim);margin:0}
 .accolade-band .proof{margin:30px 0 0;font-size:13px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--dim)}
@@ -612,8 +640,8 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 .marquee:hover ul{animation-play-state:paused}
 .marquee li{padding:clamp(18px,2vw,30px) clamp(22px,3vw,48px);
   border-left:1px solid var(--line);min-width:max-content}
-.marquee .who{display:block;font-family:'Oswald',Impact,'Arial Narrow',sans-serif;
-  font-size:calc(clamp(20.66px, 18.47px + 0.5782vw, 26.79px) * var(--density-scale));line-height:1.15;
+.marquee .who{display:block;font-family:'IBM Plex Serif',Georgia,serif;
+  font-size:calc(clamp(20.21px, 18.17px + 0.5383vw, 25.92px) * var(--density-scale));line-height:1.15;
   letter-spacing:-0em}
 .marquee .note{display:block;color:var(--dim);font-size:14px;margin-top:8px;
   max-width:26ch}
@@ -631,8 +659,8 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 /* The opening line carries the section; the rest supports it. Without the
    distinction a feature row is a heading and a paragraph, which is the shape
    of filler. */
-.feature .standfirst{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;
-  font-size:calc(clamp(20.66px, 18.47px + 0.5782vw, 26.79px) * var(--density-scale));line-height:1.3;
+.feature .standfirst{font-family:'IBM Plex Serif',Georgia,serif;
+  font-size:calc(clamp(20.21px, 18.17px + 0.5383vw, 25.92px) * var(--density-scale));line-height:1.3;
   letter-spacing:-0em;margin:0 0 .55em;color:var(--ink);
   text-wrap:balance;max-width:24ch}
 .feature.wide .standfirst,.feature.narrow .standfirst{max-width:34ch}
@@ -667,13 +695,13 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 .story{max-width:62ch}
 /* The opening line in the display face, larger and looser: it does the work a
    pull quote does, without inventing a quote nobody said. */
-.standfirst{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;
-  font-size:calc(clamp(20.66px, 18.47px + 0.5782vw, 26.79px) * var(--density-scale));
+.standfirst{font-family:'IBM Plex Serif',Georgia,serif;
+  font-size:calc(clamp(20.21px, 18.17px + 0.5383vw, 25.92px) * var(--density-scale));
   line-height:1.28;letter-spacing:-0em;margin:0 0 .7em;
   text-wrap:balance}
-.prose{font-size:calc(clamp(18.18px, 16.83px + 0.3564vw, 21.96px) * var(--density-scale));line-height:1.72;
+.prose{font-size:calc(clamp(17.98px, 16.69px + 0.3411vw, 21.6px) * var(--density-scale));line-height:1.72;
   color:var(--dim);margin:0}
-.prose.dropcap::first-letter{float:left;font-family:'Oswald',Impact,'Arial Narrow',sans-serif;
+.prose.dropcap::first-letter{float:left;font-family:'IBM Plex Serif',Georgia,serif;
   font-size:3.1em;line-height:.82;padding:.06em .09em 0 0;color:var(--accent)}
 .story p+p{margin-top:1em}
 /* A short rule under the heading, so the left column is not just two lines
@@ -823,21 +851,21 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;
 }
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "Snellings Law PLLC", "telephone": "(214) 387-0387", "aggregateRating": {"@type": "AggregateRating", "ratingValue": 4.9, "reviewCount": 254}, "geo": {"@type": "GeoCoordinates", "latitude": 33.1409838, "longitude": -96.8361042}}</script></head>
-<body data-theme="bold" data-type="stamped" data-arch="stacked" data-signature="none" data-theme-layout="contained">
+<body data-theme="refined" data-type="quiet" data-arch="ledger" data-signature="none" data-theme-layout="editorial">
 <div class="progress"></div>
-<div class="bar"><a class="mark" href="#top">Snellings Law PLLC</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#services">What we do</a><a href="#reviews">Reviews</a><a href="#gallery">Gallery</a><a href="#about">About</a><a href="#hours">Hours</a><a href="#contact">Visit</a></nav><a class="book" href="tel:2143870387">Call us</a></div>
-<header class="hero first-facts type-stamped has-photo" id="top"><div class="bgimg" style="background-image:url(&quot;photos/b6ae6f30bf9c417100f5cad250b221ae.jpg&quot;);background-image:-webkit-image-set(url(&quot;photos/b6ae6f30bf9c417100f5cad250b221ae.jpg&quot;) 1x, url(&quot;photos/b6ae6f30bf9c417100f5cad250b221ae.jpg&quot;) 2x);background-image:image-set(url(&quot;photos/b6ae6f30bf9c417100f5cad250b221ae.jpg&quot;) 1x, url(&quot;photos/b6ae6f30bf9c417100f5cad250b221ae.jpg&quot;) 2x)"></div><div class="veil"></div><div class="wrap"><p class="tally"><b>4.9</b><span>from 254 Google reviews</span></p><h1>Snellings Law PLLC</h1><p class="sub">Got injured? Snellings Law&#x27;s personal injury lawyers deliver trusted legal guidance and real results. No fees unless we win. Contact us for free consultation.</p><div class="facts"><span>Mon-Tue-Wed-Thu-Fri 08:00-18:00</span></div><div class="actions"><a class="cta" href="tel:2143870387">Call (214) 387-0387</a></div></div><div class="scrollcue"></div></header>
-<section id="stats" class="statband"><div class="wrap"><div class="stats"><div class="stat" data-reveal data-delay="0"><b>4.9</b><span>average rating</span></div><div class="stat" data-reveal data-delay="1"><b data-count="254">254</b><span>Google reviews</span></div><div class="stat" data-reveal data-delay="2"><b data-count="8">8</b><span>services offered</span></div></div></div></section>
-<section id="services" data-density="dense" style="--density-scale:0.85"><div class="wrap"><div class="head" data-reveal><p class="eyebrow">Practice areas</p><h2>How we can help</h2><p class="lede">Got injured? Snellings Law&#x27;s personal injury lawyers deliver trusted legal guidance and real results. No fees unless we win. Contact us for free consultation.</p></div><div class="offers"><article class="offer" data-reveal data-delay="0"><span class="idx">01</span><h3>AUTO ACCIDENT</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">02</span><h3>18-WHEELER WRECK</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">03</span><h3>MOTORCYCLE WRECK</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">04</span><h3>COMMERCIAL VEHICLE ACCIDENT</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="0"><span class="idx">05</span><h3>WRONGFUL DEATH</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">06</span><h3>More Personal Injury Cases</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">07</span><h3>Recent Results</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">08</span><h3>North Texas’s Choice for 2026</h3><span class="rule"></span></article></div></div></section>
-<section id="reviews" data-ground="raise"><div class="wrap"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>4.9 stars from 254 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;My son was in a car accident and he received a letter from his insurance company that was unsettling and difficult to understand. I reached out to Scott Snellings to see if he would be willing to help and within minutes, Scott responded and began helping me, even though he was heading into a meeting. Soon after, Scott responded with sage&rdquo;</p><figcaption class="who">Doug Sharp &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="1"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;We recently wrapped up a case with Snelling Law Firm after being hit by a distracted driver running a red light. Unfortunately, their insurance company didn’t come close to offering a fair settlement or taking care of us on our totaled vehicle, which left us with no real choice but to seek help.
+<div class="bar"><a class="mark" href="#top">Snellings Law PLLC</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#services">What we do</a><a href="#reviews">Reviews</a><a href="#about">About</a><a href="#hours">Hours</a><a href="#contact">Visit</a></nav><a class="book" href="tel:2143870387">Call us</a></div>
+<header class="hero first-proof type-quiet has-photo" id="top"><div class="bgimg" style="background-image:url(&quot;photos/b6ae6f30bf9c417100f5cad250b221ae.jpg&quot;);background-image:-webkit-image-set(url(&quot;photos/b6ae6f30bf9c417100f5cad250b221ae.jpg&quot;) 1x, url(&quot;photos/b6ae6f30bf9c417100f5cad250b221ae.jpg&quot;) 2x);background-image:image-set(url(&quot;photos/b6ae6f30bf9c417100f5cad250b221ae.jpg&quot;) 1x, url(&quot;photos/b6ae6f30bf9c417100f5cad250b221ae.jpg&quot;) 2x)"></div><div class="veil"></div><div class="wrap"><h1>Snellings Law PLLC</h1><p class="sub">Got injured? Snellings Law&#x27;s personal injury lawyers deliver trusted legal guidance and real results. No fees unless we win. Contact us for free consultation.</p><ul class="proof"><li>4.9 stars from 254 reviews</li><li>Mon-Tue-Wed-Thu-Fri 08:00-18:00</li></ul><div class="actions"><a class="cta" href="tel:2143870387">Call (214) 387-0387</a></div></div><div class="scrollcue"></div></header>
+<section data-rule="on" id="stats" class="statband"><div class="wrap" data-measure="tight"><div class="stats"><div class="stat" data-reveal data-delay="0"><b>4.9</b><span>average rating</span></div><div class="stat" data-reveal data-delay="1"><b data-count="254">254</b><span>Google reviews</span></div><div class="stat" data-reveal data-delay="2"><b data-count="8">8</b><span>services offered</span></div></div></div></section>
+<section data-rule="on" id="services" data-density="dense" style="--density-scale:0.85"><div class="wrap" data-measure="tight"><div class="head" data-reveal><p class="eyebrow">Practice areas</p><h2>How we can help</h2><p class="lede">Got injured? Snellings Law&#x27;s personal injury lawyers deliver trusted legal guidance and real results. No fees unless we win. Contact us for free consultation.</p></div><div class="offers"><article class="offer" data-reveal data-delay="0"><span class="idx">01</span><h3>AUTO ACCIDENT</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">02</span><h3>18-WHEELER WRECK</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">03</span><h3>MOTORCYCLE WRECK</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">04</span><h3>COMMERCIAL VEHICLE ACCIDENT</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="0"><span class="idx">05</span><h3>WRONGFUL DEATH</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">06</span><h3>More Personal Injury Cases</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">07</span><h3>Recent Results</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">08</span><h3>North Texas’s Choice for 2026</h3><span class="rule"></span></article></div></div></section>
+<section data-rule="on" id="reviews" data-ground="raise"><div class="wrap" data-measure="tight"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>4.9 stars from 254 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;My son was in a car accident and he received a letter from his insurance company that was unsettling and difficult to understand. I reached out to Scott Snellings to see if he would be willing to help and within minutes, Scott responded and began helping me, even though he was heading into a meeting. Soon after, Scott responded with sage&rdquo;</p><figcaption class="who">Doug Sharp &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="1"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;We recently wrapped up a case with Snelling Law Firm after being hit by a distracted driver running a red light. Unfortunately, their insurance company didn’t come close to offering a fair settlement or taking care of us on our totaled vehicle, which left us with no real choice but to seek help.
 
 From day one, Snelling Law Firm was outsta&rdquo;</p><figcaption class="who">Ryan Gibson &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="2"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;This is the only office you need to consider if you’re looking for friendly, informed, communicative, and transparent representation on your case. I worked with a couple different attorneys at Snellings, and all were not only excellent at their jobs, but very personable to boot. Royeal is the attorney I worked with through the last few mo&rdquo;</p><figcaption class="who">Katey Miller &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="3"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Firm is very knowledgeable and provides excellent service. Quick and kind responses to my
 Inquiries and always makes an effort to help and explain for full understanding. I would recommend them to anyone that needs their services. Ray chow was also very nice to work with.&rdquo;</p><figcaption class="who">Julie Vilayheuang &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I reached out to Ray after an injury situation and, even though my case wasn’t ultimately the right fit for his firm, he still took the time to help me understand my options and point me in the right direction.
 He was generous with his time, thoughtful, and gave me practical advice that helped me feel much more informed and in control of&rdquo;</p><figcaption class="who">Jennifer S. &middot; Google</figcaption></figure></div></div></section>
-<section id="gallery"><div class="wrap"><p class="eyebrow" data-reveal>Gallery</p><h2 data-reveal>Have a look around</h2><div class="mosaic" style="--cols:3;--cols-narrow:2"><button aria-label="Open photo 1" data-reveal data-delay="0"><img src="photos/fc20b065327bb619ea6a2f3dc3e38e4b.jpg" alt="A single-story office building with large windows, trees, and a paved walkway in front." srcset="photos/fc20b065327bb619ea6a2f3dc3e38e4b.jpg 800w, photos/fc20b065327bb619ea6a2f3dc3e38e4b.jpg 1600w, photos/fc20b065327bb619ea6a2f3dc3e38e4b.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 2" data-reveal data-delay="1"><img src="photos/1cfb540ebb781687ad2423e82eb3de4c.jpg" alt="A smiling man in a gray suit and striped tie standing in front of a glass building exterior." srcset="photos/1cfb540ebb781687ad2423e82eb3de4c.jpg 800w, photos/1cfb540ebb781687ad2423e82eb3de4c.jpg 1600w, photos/1cfb540ebb781687ad2423e82eb3de4c.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 3" data-reveal data-delay="2"><img src="photos/13f764b3bde6d726bb3d9a7de41bd39c.jpg" alt="A smiling man in a gray suit and blue tie standing indoors near a plant." srcset="photos/13f764b3bde6d726bb3d9a7de41bd39c.jpg 800w, photos/13f764b3bde6d726bb3d9a7de41bd39c.jpg 1600w, photos/13f764b3bde6d726bb3d9a7de41bd39c.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 4" data-reveal data-delay="3"><img src="photos/0a54f0e14de5b8c1b49b60e5417ad5e6.jpg" alt="A severely damaged car with its front end torn open at a nighttime intersection with police vehicles present." srcset="photos/0a54f0e14de5b8c1b49b60e5417ad5e6.jpg 800w, photos/0a54f0e14de5b8c1b49b60e5417ad5e6.jpg 1600w, photos/0a54f0e14de5b8c1b49b60e5417ad5e6.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 5" data-reveal data-delay="0"><img src="photos/112f7e25b9f9e40f6712a0316be9e124.jpg" alt="A promotional graphic with a man&#x27;s portrait in a circle, text reading Scott Snellings Super Lawyer, and a law firm logo." srcset="photos/112f7e25b9f9e40f6712a0316be9e124.jpg 800w, photos/112f7e25b9f9e40f6712a0316be9e124.jpg 1600w, photos/112f7e25b9f9e40f6712a0316be9e124.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 6" data-reveal data-delay="1"><img src="photos/b8acebf1ad02f9b44ef4a1319103908d.jpg" alt="A promotional graphic showing a semi truck on a highway with text reading 18 Wheeler Accidents and a law firm logo." srcset="photos/b8acebf1ad02f9b44ef4a1319103908d.jpg 800w, photos/b8acebf1ad02f9b44ef4a1319103908d.jpg 1600w, photos/b8acebf1ad02f9b44ef4a1319103908d.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 7" data-reveal data-delay="2"><img src="photos/7dbd729df5dc4a074b86d01d2df53a13.jpg" alt="A promotional graphic showing two beer glasses in front of a stadium field with text reading Enjoy The Game and a law firm logo." srcset="photos/7dbd729df5dc4a074b86d01d2df53a13.jpg 800w, photos/7dbd729df5dc4a074b86d01d2df53a13.jpg 1600w, photos/7dbd729df5dc4a074b86d01d2df53a13.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 8" data-reveal data-delay="3"><img src="photos/615fd0bff14790f0eb973e491ff88df2.jpg" alt="A wooden deck with an outdoor table, chairs, and umbrella beside a green hedge, with a text panel reading Premises Liability." srcset="photos/615fd0bff14790f0eb973e491ff88df2.jpg 800w, photos/615fd0bff14790f0eb973e491ff88df2.jpg 1600w, photos/615fd0bff14790f0eb973e491ff88df2.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 9" data-reveal data-delay="0"><img src="photos/f86275857632f4480ceefbbf56d9a225.jpg" alt="A man in a dark suit and red striped tie standing in a colonnade, shown inside a circular frame with a Trial Lawyer text overlay." srcset="photos/f86275857632f4480ceefbbf56d9a225.jpg 800w, photos/f86275857632f4480ceefbbf56d9a225.jpg 1600w, photos/f86275857632f4480ceefbbf56d9a225.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 10" data-reveal data-delay="1"><img src="https://snellingsinjurylaw.com/wp-content/uploads/2025/06/Snellings-Law-PLLC.jpg" alt="Four people in business attire sitting together on steps in an indoor space with a geometric wall design behind them." loading="lazy" decoding="async"></button><button aria-label="Open photo 11" data-reveal data-delay="2"><img src="https://snellingsinjurylaw.com/wp-content/uploads/2020/05/Snellings_Horizontal_PLLC.png" alt="A logo reading Snellings Law PLLC with a stylized S icon in dark grey and orange." loading="lazy" decoding="async"></button><button aria-label="Open photo 12" data-reveal data-delay="3"><img src="https://snellingsinjurylaw.com/wp-content/uploads/2026/04/Snellings-Solo-Hero-rs.webp" alt="A smiling man in a dark blue suit sitting on a modern staircase structure against a plain white background." loading="lazy" decoding="async"></button></div></div></section><div class="lightbox" role="dialog" aria-label="Photo"><button class="close" aria-label="Close">&times;</button><button class="prev" aria-label="Previous">&lsaquo;</button><img src="" alt=""><button class="next" aria-label="Next">&rsaquo;</button><div class="count"></div></div>
-<section id="about"><div class="wrap"><div class="split"><div data-reveal><p class="eyebrow">About</p><h2>What we are about</h2><span class="flourish"></span></div><div class="story"><p class="standfirst" data-reveal>At Snellings Law, we maintain a humble confidence in everything we do.</p><p class="prose" data-reveal data-delay="1">We know our strengths and weaknesses and we are confident in our choices. We learn from our mistakes, and always put our clients first.</p></div></div></div></section>
-<section id="hours" data-ground="raise"><div class="wrap narrow"><p class="eyebrow" data-reveal>Hours</p><div class="openflag" data-week='{"mon": "0800-1800", "tue": "0800-1800", "wed": "0800-1800", "thu": "0800-1800", "fri": "0800-1800"}' data-reveal><i></i><span>Opening hours</span></div><ul class="hourlist" data-reveal data-delay="1"><li><span>Mon-Tue-Wed-Thu-Fri 08:00-18:00</span></li></ul></div></section>
-<section id="contact"><div class="wrap"><div class="split"><div data-reveal><p class="eyebrow">Visit</p><h2>Come and see us</h2><div class="reach"><a href="tel:2143870387"><span class="k">Phone</span><span class="v">(214) 387-0387</span></a><a href="https://www.facebook.com/snellingsinjurylaw" target="_blank" rel="noopener"><span class="k">Facebook</span><span class="v">Follow along</span></a><a href="https://www.instagram.com/snellingsinjurylaw/" target="_blank" rel="noopener"><span class="k">Instagram</span><span class="v">Follow along</span></a></div></div><div class="map" data-reveal data-delay="1"><iframe loading="lazy" title="Map of Snellings Law PLLC" src="https://www.openstreetmap.org/export/embed.html?bbox=-96.8401042,33.1379838,-96.83210419999999,33.1439838&amp;layer=mapnik&amp;marker=33.1409838,-96.8361042"></iframe></div></div></div></section>
+<section data-rule="on" id="about"><div class="wrap" data-measure="tight"><div class="split"><div data-reveal><p class="eyebrow">About</p><h2>What we are about</h2><span class="flourish"></span></div><div class="story"><p class="standfirst" data-reveal>At Snellings Law, we maintain a humble confidence in everything we do.</p><p class="prose" data-reveal data-delay="1">We know our strengths and weaknesses and we are confident in our choices. We learn from our mistakes, and always put our clients first.</p></div></div></div></section>
+<section data-rule="on" id="more"><div class="wrap" data-measure="tight"><article class="feature wide" data-reveal><div class="words"><h3>We Know The Fear and The Stress</h3><p class="standfirst">In the moments after an accident caused by someone else’s negligence, we all first look to make certain we and our loved ones do not have any life-threatening injuries.</p><p class="prose">If we can see that is the case, then there is usually an overwhelming sense of relief. However, that relief is often short-lived.</p></div><div class="shot"><img src="https://snellingsinjurylaw.com/wp-content/uploads/2025/07/two-drivers-having-argument-over-who-is-guilty-in-a-crash.jpg" alt="" loading="lazy" decoding="async"></div></article><article class="feature offset" data-reveal><div class="words"><h3>Our Mission is to Help You Recover</h3><p class="standfirst">If you or a loved one has been injured in an accident due to someone else’s negligence, you most likely have several questions or concerns.</p><p class="prose">You’ve come to the right place. At Snellings Law, personal injury is all we do, and we’re the car accident lawyer Frisco, TX residents can count on.</p></div><div class="shot"><img src="https://snellingsinjurylaw.com/wp-content/uploads/2026/08/Personal-Injury-Attorneys-Home-v4.webp" alt="A man and a woman in dark business suits standing together against a plain white background." loading="lazy" decoding="async"></div></article><article class="feature narrow" data-reveal><div class="words"><h3>More Personal Injury Cases</h3><p class="standfirst">We handle various personal injury related cases from different kinds of accidents to serious injuries that you might have suffered.</p><p class="prose">Check out all the cases we handle. ALL CASES WE HANDLE</p></div></article><article class="feature plain" data-reveal><div class="words"><h3>Contact Us For Free Consultation</h3><p class="standfirst">We understand what you’re going through, and we want to help.</p><p class="prose">Our mission is to guide North Texans toward recovery and a fresh start. Even if we can’t take your case, we’ll answer your questions and connect you with someone who can. 214-387-0387 info@snellingsinjurylaw.com</p></div></article></div></section>
+<section data-rule="on" id="hours" data-ground="raise"><div class="wrap narrow"><p class="eyebrow" data-reveal>Hours</p><div class="openflag" data-week='{"mon": "0800-1800", "tue": "0800-1800", "wed": "0800-1800", "thu": "0800-1800", "fri": "0800-1800"}' data-reveal><i></i><span>Opening hours</span></div><ul class="hourlist" data-reveal data-delay="1"><li><span>Mon-Tue-Wed-Thu-Fri 08:00-18:00</span></li></ul></div></section>
+<section data-rule="on" id="contact"><div class="wrap" data-measure="tight"><div class="split"><div data-reveal><p class="eyebrow">Get in touch</p><h2>Schedule a consultation</h2><div class="reach"><a href="tel:2143870387"><span class="k">Phone</span><span class="v">(214) 387-0387</span></a><a href="https://www.facebook.com/snellingsinjurylaw" target="_blank" rel="noopener"><span class="k">Facebook</span><span class="v">Follow along</span></a><a href="https://www.instagram.com/snellingsinjurylaw/" target="_blank" rel="noopener"><span class="k">Instagram</span><span class="v">Follow along</span></a></div></div><div class="map" data-reveal data-delay="1"><iframe loading="lazy" title="Map of Snellings Law PLLC" src="https://www.openstreetmap.org/export/embed.html?bbox=-96.8401042,33.1379838,-96.83210419999999,33.1439838&amp;layer=mapnik&amp;marker=33.1409838,-96.8361042"></iframe></div></div></div></section>
 <div class="callbar"><a class="cta" href="tel:2143870387">Call us</a></div>
 <footer><div class="wrap"><div class="row"><span>&copy; Snellings Law PLLC</span><a href="tel:2143870387">(214) 387-0387</a><button class="top">Back to top</button></div></div></footer>
 <script>

@@ -8,23 +8,23 @@
 <script>document.documentElement.className+=' reveals'</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..900&family=Karla:wght@300..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300..700&family=Karla:wght@300..800&display=swap" rel="stylesheet">
 <style>
 :root{
   --density-scale:1;
-  --bg:#fbf7f1; --surface:#ffffff; --raise:#f4ece1; --ink:#2a1f16;
-  --dim:#6f5c49; --accent:#c58f22; --accent-soft:#fbf1de;
-  --accent-ink:#111111; --line:#e9dcc9; --r:14px;
+  --bg:#f7f5f2; --surface:#ffffff; --raise:#efece6; --ink:#17181a;
+  --dim:#585a55; --accent:#275c7b; --accent-soft:#e5ebef;
+  --accent-ink:#ffffff; --line:#e3ded5; --r:3px;
   /* Two layers doing different jobs: a hairline-tight contact shadow to seat
      the card, and a wide, very faint cast to lift it. A single heavy shadow
      reads as a border with a blur on it. */
-  --shadow:0 1px 1px rgba(42,31,22,0.04),0 8px 30px rgba(42,31,22,0.055);
-  --lift:0 2px 4px rgba(42,31,22,0.04),0 22px 48px -12px rgba(42,31,22,0.16);
-  --hairline:rgba(42,31,22,0.1);
+  --shadow:0 1px 1px rgba(23,24,26,0.04),0 8px 30px rgba(23,24,26,0.055);
+  --lift:0 2px 4px rgba(23,24,26,0.04),0 22px 48px -12px rgba(23,24,26,0.16);
+  --hairline:rgba(23,24,26,0.1);
   /* Foregrounds computed against each ground, never paired by hand. */
-  --on-base:#2a1f16;
-  --on-raise:#2a1f16;
-  --on-accent:#2a1f16;
+  --on-base:#17181a;
+  --on-raise:#17181a;
+  --on-accent:#f7f5f2;
   --pad:clamp(20px,5vw,44px);
 }
 *{box-sizing:border-box}
@@ -40,7 +40,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Karla',-apple-s
 
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");opacity:.05;mix-blend-mode:multiply}
-h1,h2,h3{font-family:'Fraunces',Georgia,'Times New Roman',serif;line-height:1.05;margin:0 0 .5em;
+h1,h2,h3{font-family:'Cormorant Garamond',Garamond,Georgia,serif;line-height:1.05;margin:0 0 .5em;
   /* Stops a headline dropping one word onto its own line at an awkward width.
      Unsupported engines ignore it and wrap as before. */
   text-wrap:balance}
@@ -54,10 +54,10 @@ p{text-wrap:pretty}
 :focus:not(:focus-visible){outline:none}
 .cta:focus-visible,.book:focus-visible{outline-offset:4px}
 
-::selection{background:rgba(197,143,34,0.24);color:var(--ink)}
-h1{font-size:calc(clamp(41.81px, 28.41px + 3.524vw, 79.16px) * var(--density-scale));letter-spacing:-0.012em;font-variation-settings:"opsz" 144,"wght" 700}
-h2{font-size:calc(clamp(30.35px, 23.91px + 1.695vw, 48.32px) * var(--density-scale));letter-spacing:-0.006em;font-variation-settings:"opsz" 72,"wght" 600}
-h3{font-size:calc(clamp(22.04px, 19.37px + 0.7032vw, 29.49px) * var(--density-scale));letter-spacing:-0em;font-variation-settings:"opsz" 36,"wght" 600}
+::selection{background:rgba(39,92,123,0.24);color:var(--ink)}
+h1{font-size:calc(clamp(49.06px, 30.33px + 4.931vw, 101.3px) * var(--density-scale));letter-spacing:0.006em;font-variation-settings:"wght" 600}
+h2{font-size:calc(clamp(35.62px, 26.22px + 2.474vw, 61.85px) * var(--density-scale));letter-spacing:0.0036em;font-variation-settings:"wght" 500}
+h3{font-size:calc(clamp(22.04px, 19.37px + 0.7032vw, 29.49px) * var(--density-scale));letter-spacing:0em;font-variation-settings:"wght" 500}
 .lede{font-size:calc(clamp(18.78px, 17.25px + 0.4021vw, 23.04px) * var(--density-scale))}
 body{font-variation-settings:"wght" 400}
 p{margin:0 0 1em;max-width:68ch}
@@ -95,17 +95,17 @@ body:has(.hero.first-split) .bar{color:var(--ink)}
    legibility and wrapped the navigation onto three lines; a header band above
    a hard-edged split is the composition this position was already making. */
 body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
-  border-bottom:1px solid rgba(42,31,22,0.1)}
+  border-bottom:1px solid rgba(23,24,26,0.1)}
 .bar.stuck{background:rgba(255,255,255,0.72);color:var(--ink);
   -webkit-backdrop-filter:blur(14px) saturate(180%);
   backdrop-filter:blur(14px) saturate(180%);
-  border-bottom:1px solid rgba(42,31,22,0.1);
+  border-bottom:1px solid rgba(23,24,26,0.1);
   padding-top:10px;padding-bottom:10px}
 /* Without blur support the translucency reads as a bug, so fall back opaque. */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .bar.stuck{background:var(--surface);box-shadow:var(--shadow)}
 }
-.bar .mark{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-weight:700;font-size:19px;
+.bar .mark{font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-weight:700;font-size:19px;
   letter-spacing:-.02em;text-decoration:none;color:inherit}
 .bar nav{margin-left:auto;display:flex;gap:26px}
 .bar nav a{color:inherit;text-decoration:none;font-size:14.5px;font-weight:600;
@@ -127,7 +127,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   overflow:hidden;background:var(--raise);isolation:isolate}
 .hero .bgimg{position:absolute;inset:-8% 0 0;z-index:-2;background-size:cover;
   background-position:center;will-change:transform}
-.hero .veil{position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,rgba(38,24,14,0.84) 0%,rgba(38,24,14,0.54) 42%,rgba(38,24,14,0.22) 100%)}
+.hero .veil{position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,rgba(18,18,16,0.84) 0%,rgba(18,18,16,0.54) 42%,rgba(18,18,16,0.22) 100%)}
 .hero.has-photo{color:#fff}
 .hero .wrap{padding-bottom:clamp(52px,9vh,110px);padding-top:120px}
 .hero h1{margin-bottom:.22em;max-width:16ch}
@@ -192,14 +192,14 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
    applies to it too. */
 .device{padding:clamp(56px,7vw,110px) 0}
 
-.ledgerfig{width:100%;border-collapse:collapse;font-family:'Fraunces',Georgia,'Times New Roman',serif}
-.ledgerfig th,.ledgerfig td{padding:14px 0;border-bottom:1px solid rgba(42,31,22,0.1);
+.ledgerfig{width:100%;border-collapse:collapse;font-family:'Cormorant Garamond',Garamond,Georgia,serif}
+.ledgerfig th,.ledgerfig td{padding:14px 0;border-bottom:1px solid rgba(23,24,26,0.1);
   text-align:left;font-weight:400}
 .ledgerfig th{font-family:'Karla',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:.16em;
   text-transform:uppercase;opacity:.7;width:40%}
 .ledgerfig td{font-size:clamp(22px,3vw,40px);text-align:right}
 
-.bigquote{margin:0;font-family:'Fraunces',Georgia,'Times New Roman',serif;
+.bigquote{margin:0;font-family:'Cormorant Garamond',Garamond,Georgia,serif;
   font-size:clamp(24px,4.2vw,58px);line-height:1.08;max-width:20ch;
   text-indent:-.4em}
 .bigquote::before{content:"C"} .bigquote::after{content:"D"}
@@ -207,7 +207,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
 [data-device="marquee"]{overflow:hidden;padding:clamp(28px,3vw,44px) 0;
   background:var(--accent);color:var(--on-accent)}
 .runner{display:flex;gap:clamp(28px,4vw,64px);white-space:nowrap;
-  font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:clamp(18px,2.4vw,34px);
+  font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-size:clamp(18px,2.4vw,34px);
   animation:runner 38s linear infinite}
 .runner span::after{content:"2";margin-left:clamp(28px,4vw,64px);
   opacity:.5}
@@ -225,8 +225,8 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   clamp(18px,2.4vw,38px);left:clamp(10px,2vw,26px);font-size:12px;
   letter-spacing:.14em;opacity:.45;font-family:'Karla',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
 
-[data-device="ticker"]{padding:0;border-top:1px solid rgba(42,31,22,0.1);
-  border-bottom:1px solid rgba(42,31,22,0.1);overflow:hidden}
+[data-device="ticker"]{padding:0;border-top:1px solid rgba(23,24,26,0.1);
+  border-bottom:1px solid rgba(23,24,26,0.1);overflow:hidden}
 .tickline{display:flex;gap:clamp(20px,3vw,44px);white-space:nowrap;
   padding:14px 0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;
   animation:runner 46s linear infinite}
@@ -243,7 +243,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   margin-left:clamp(0px,6vw,120px)}
 .knock p{margin:0;font-size:clamp(17px,2vw,25px)}
 
-.runoff{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:clamp(64px,15vw,220px);
+.runoff{font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-size:clamp(64px,15vw,220px);
   line-height:.86;white-space:nowrap;margin-left:clamp(12px,4vw,80px);
   opacity:.12;user-select:none}
 
@@ -252,7 +252,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   justify-content:flex-start}
 .insetblock{background:var(--bg);color:var(--ink);
   padding:clamp(18px,2.4vw,34px) clamp(22px,3vw,44px);
-  font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:clamp(18px,2.4vw,32px);
+  font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-size:clamp(18px,2.4vw,32px);
   margin:0 0 0 clamp(0px,4vw,72px)}
 
 .scrollstrip{display:flex;gap:14px;overflow-x:auto;padding-inline:
@@ -296,7 +296,7 @@ body:has(section[data-ground]) section+section::before{opacity:1}
 [data-arch="ledger"] section[data-rule="on"]+section[data-rule="on"]::before{
   display:none}
 [data-arch="ledger"] section[data-rule="on"]>.wrap{border-top:1px solid
-  rgba(42,31,22,0.1);padding-top:clamp(28px,3.4vw,52px)}
+  rgba(23,24,26,0.1);padding-top:clamp(28px,3.4vw,52px)}
 [data-arch="ledger"] .wrap[data-measure="tight"]{
   width:min(880px,100% - var(--pad)*2)}
 [data-arch="ledger"] h2{font-size:clamp(20px,2.2vw,30px)}
@@ -363,7 +363,7 @@ body:has(section[data-ground]) section+section::before{opacity:1}
 /* line-height under 1 clipped the box shorter than the glyphs, and a serif
    4.9 at 168px then sat on top of the name. */
 .hero.first-facts .tally{margin:0 0 .22em;line-height:1;
-  font-family:'Fraunces',Georgia,'Times New Roman',serif;display:flex;align-items:baseline;
+  font-family:'Cormorant Garamond',Garamond,Georgia,serif;display:flex;align-items:baseline;
   gap:clamp(12px,1.6vw,22px);flex-wrap:wrap}
 .hero.first-facts .tally b{font-size:clamp(64px,11vw,168px);font-weight:400;
   letter-spacing:-.03em}
@@ -430,7 +430,7 @@ body:has(section[data-ground]) section+section::before{opacity:1}
 /* Not a link, so no lift and no shadow — the same promise .offer used to make.
    Only the border moves, which reads as attention rather than as a button. */
 .card:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
-.card .num{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:13px;color:var(--accent);
+.card .num{font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-size:13px;color:var(--accent);
   letter-spacing:.1em;margin-bottom:12px}
 .card h3{margin:0}
 section[data-ground="raise"] .card{background:var(--bg)}
@@ -474,10 +474,10 @@ section[data-ground="raise"] .card{background:var(--bg)}
   border-bottom:1px solid var(--line);transition:padding-left .4s
   cubic-bezier(.2,.7,.3,1)}
 .listing li:hover{padding-left:10px}
-.listing .idx{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:12px;letter-spacing:.16em;
+.listing .idx{font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-size:12px;letter-spacing:.16em;
   color:var(--accent)}
 .listing h3{margin:0;line-height:1.08;
-  font-size:calc(clamp(25.86px, 21.6px + 1.121vw, 37.75px) * var(--density-scale))}
+  font-size:calc(clamp(30.35px, 23.91px + 1.695vw, 48.32px) * var(--density-scale))}
 .editorial-art{margin-top:clamp(24px,3vw,40px);border-radius:var(--r);
   overflow:hidden;aspect-ratio:5/3}
 .editorial-art img{width:100%;height:100%;object-fit:cover;
@@ -497,12 +497,29 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
   transition:border-color .4s ease,background .4s ease}
 .offer:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));
   background:var(--raise)}
-.offer .idx{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:12px;letter-spacing:.16em;
+.offer .idx{font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-size:12px;letter-spacing:.16em;
   color:var(--accent);margin-bottom:auto}
 .offer h3{margin:14px 0 0;line-height:1.15}
 .offer .rule{display:block;height:2px;width:34px;background:var(--accent);
   margin-top:18px;transition:width .45s cubic-bezier(.2,.7,.3,1)}
 .offer:hover .rule{width:78px}
+
+/* Exactly three, "feature": no card edge, no background — the balanced
+   density's own composition, distinct from the dense grid's bordered
+   cards rather than the same card with fewer of them in the row. */
+.offers-feature{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(28px,4vw,56px)}
+@media (max-width:860px){.offers-feature{grid-template-columns:1fr}}
+.offer-feature{padding-top:clamp(20px,2.2vw,28px);
+  border-top:1px solid var(--line)}
+.offer-feature .idx{font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-size:12px;
+  letter-spacing:.16em;color:var(--accent)}
+.offer-feature h3{margin:16px 0 0;line-height:1.1;
+  font-size:calc(clamp(30.35px, 23.91px + 1.695vw, 48.32px) * var(--density-scale))}
+.offer-feature .rule{display:block;height:2px;width:34px;
+  background:var(--accent);margin-top:20px;
+  transition:width .45s cubic-bezier(.2,.7,.3,1)}
+.offer-feature:hover .rule{width:60px}
 /* Photo-led cards: the picture is the card, the words sit on the glass. */
 
 /* ----------------------------------------------------------------- stats -- */
@@ -510,7 +527,7 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
   color:var(--accent-ink)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
   gap:26px;text-align:center}
-.stat b{display:block;font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:clamp(38px,5.4vw,64px);
+.stat b{display:block;font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-size:clamp(38px,5.4vw,64px);
   line-height:1;font-variant-numeric:tabular-nums}
 .stat span{display:block;margin-top:10px;font-size:13.5px;letter-spacing:.1em;
   text-transform:uppercase;opacity:.86;font-weight:600}
@@ -577,6 +594,15 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 .quote p{margin:0;font-size:16.5px;line-height:1.6}
 .quote .who{margin-top:auto;font-size:13.5px;color:var(--dim);font-weight:600}
 .stars{color:var(--accent);letter-spacing:3px;font-size:15px}
+/* Two or three reviews: stacked, no card, set large — a wall-of-cards grid
+   built for volume looks sparse with only a couple of tiles in it. */
+.quotes-feature{display:flex;flex-direction:column;gap:clamp(28px,3.4vw,44px);
+  max-width:760px}
+.quote-feature{padding-top:clamp(20px,2.2vw,28px);border-top:1px solid var(--line)}
+.quote-feature p{margin:12px 0 0;font-size:clamp(18px,1.7vw,22px);
+  line-height:1.5;font-family:'Cormorant Garamond',Garamond,Georgia,serif;font-weight:600}
+.quote-feature .who{display:block;margin-top:14px;font-size:13.5px;
+  color:var(--dim);font-weight:600}
 
 /* ----------------------------------------------------- recognition ------- */
 /* The award is the most persuasive line on the page, so it gets scale and
@@ -592,7 +618,7 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 @media (max-width:820px){.accolade-grid{grid-template-columns:1fr;
   align-items:start;gap:26px}}
 .accolade{max-width:15ch;margin:0 0 .3em;
-  font-size:calc(clamp(35.62px, 26.22px + 2.474vw, 61.85px) * var(--density-scale))}
+  font-size:calc(clamp(41.81px, 28.41px + 3.524vw, 79.16px) * var(--density-scale))}
 .accolade-band .eyebrow{margin-bottom:22px}
 .accolade-band .eyebrow::after{content:"";display:block;width:64px;height:3px;
   background:var(--accent);margin-top:14px;border-radius:2px}
@@ -614,9 +640,9 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 .marquee:hover ul{animation-play-state:paused}
 .marquee li{padding:clamp(18px,2vw,30px) clamp(22px,3vw,48px);
   border-left:1px solid var(--line);min-width:max-content}
-.marquee .who{display:block;font-family:'Fraunces',Georgia,'Times New Roman',serif;
+.marquee .who{display:block;font-family:'Cormorant Garamond',Garamond,Georgia,serif;
   font-size:calc(clamp(22.04px, 19.37px + 0.7032vw, 29.49px) * var(--density-scale));line-height:1.15;
-  letter-spacing:-0em}
+  letter-spacing:0em}
 .marquee .note{display:block;color:var(--dim);font-size:14px;margin-top:8px;
   max-width:26ch}
 @keyframes drift{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -633,9 +659,9 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 /* The opening line carries the section; the rest supports it. Without the
    distinction a feature row is a heading and a paragraph, which is the shape
    of filler. */
-.feature .standfirst{font-family:'Fraunces',Georgia,'Times New Roman',serif;
+.feature .standfirst{font-family:'Cormorant Garamond',Garamond,Georgia,serif;
   font-size:calc(clamp(22.04px, 19.37px + 0.7032vw, 29.49px) * var(--density-scale));line-height:1.3;
-  letter-spacing:-0em;margin:0 0 .55em;color:var(--ink);
+  letter-spacing:0em;margin:0 0 .55em;color:var(--ink);
   text-wrap:balance;max-width:24ch}
 .feature.wide .standfirst,.feature.narrow .standfirst{max-width:34ch}
 .feature .prose{color:var(--dim);max-width:56ch;line-height:1.68}
@@ -669,13 +695,13 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 .story{max-width:62ch}
 /* The opening line in the display face, larger and looser: it does the work a
    pull quote does, without inventing a quote nobody said. */
-.standfirst{font-family:'Fraunces',Georgia,'Times New Roman',serif;
+.standfirst{font-family:'Cormorant Garamond',Garamond,Georgia,serif;
   font-size:calc(clamp(22.04px, 19.37px + 0.7032vw, 29.49px) * var(--density-scale));
-  line-height:1.28;letter-spacing:-0em;margin:0 0 .7em;
+  line-height:1.28;letter-spacing:0em;margin:0 0 .7em;
   text-wrap:balance}
 .prose{font-size:calc(clamp(18.78px, 17.25px + 0.4021vw, 23.04px) * var(--density-scale));line-height:1.72;
   color:var(--dim);margin:0}
-.prose.dropcap::first-letter{float:left;font-family:'Fraunces',Georgia,'Times New Roman',serif;
+.prose.dropcap::first-letter{float:left;font-family:'Cormorant Garamond',Garamond,Georgia,serif;
   font-size:3.1em;line-height:.82;padding:.06em .09em 0 0;color:var(--accent)}
 .story p+p{margin-top:1em}
 /* A short rule under the heading, so the left column is not just two lines
@@ -825,18 +851,18 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;
 }
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "Salon Boutique", "aggregateRating": {"@type": "AggregateRating", "ratingValue": 4.4, "reviewCount": 56}, "geo": {"@type": "GeoCoordinates", "latitude": 33.172661, "longitude": -96.8408807}}</script></head>
-<body data-theme="warm" data-type="wide" data-arch="gallery" data-signature="corner_inset" data-theme-layout="structured">
+<body data-theme="refined" data-type="quiet" data-arch="stacked" data-signature="margin_note" data-theme-layout="editorial">
 <div class="progress"></div>
-<div class="bar"><a class="mark" href="#top">Salon Boutique</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#about">About</a><a href="#services">What we do</a><a href="#gallery">Gallery</a><a href="#reviews">Reviews</a></nav></div>
-<header class="hero first-split type-wide has-photo" id="top"><div class="bgimg" style="background-image:url(&quot;photos/55203926b247b900273d0689ea009885.jpg&quot;);background-image:-webkit-image-set(url(&quot;photos/55203926b247b900273d0689ea009885.jpg&quot;) 1x, url(&quot;photos/55203926b247b900273d0689ea009885.jpg&quot;) 2x);background-image:image-set(url(&quot;photos/55203926b247b900273d0689ea009885.jpg&quot;) 1x, url(&quot;photos/55203926b247b900273d0689ea009885.jpg&quot;) 2x)"></div><div class="wrap"><h1>Salon Boutique</h1><p class="sub">Discover Salon Boutique Frisco, TX — luxury salon suites for beauty professionals seeking an upscale space to create, grow, and elevate their careers.</p><div class="facts"><span>&#9733; 4.4 &middot; 56 Google reviews</span></div><div class="actions"></div></div><div class="scrollcue"></div></header>
-<section id="about"><div class="wrap" data-measure="wide"><div class="split"><div data-reveal><p class="eyebrow">About</p><h2>What we are about</h2><span class="flourish"></span></div><div class="story"><p class="standfirst" data-reveal>We know taking the leap to go independent can feel overwhelming — but it doesn’t have to be.</p><p class="prose" data-reveal data-delay="1">We’re here to support you throughout your entire journey.</p></div></div></div></section>
-<section class="device" data-device="corner_inset"><div class="insetshot" style="background-image:url(&quot;photos/55203926b247b900273d0689ea009885.jpg&quot;)"><div class="insetblock"><b>Salon Boutique</b></div></div></section>
-<section id="services" data-density="dense" style="--density-scale:0.85"><div class="wrap" data-measure="wide"><div class="head" data-reveal><p class="eyebrow">Services</p><h2>What we offer</h2><p class="lede">Discover Salon Boutique Frisco, TX — luxury salon suites for beauty professionals seeking an upscale space to create, grow, and elevate their careers.</p></div><div class="offers"><article class="offer" data-reveal data-delay="0"><span class="idx">01</span><h3>About Frisco – Eldorado</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">02</span><h3>Salon Suite Inquiry</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">03</span><h3>Tenant Benefits</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">04</span><h3>Frisco – Eldorado Directory</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="0"><span class="idx">05</span><h3>Men’s Haircuts by Cynthia and Elsy</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">06</span><h3>Do’s N Dye by Dana</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">07</span><h3>Hair by Eyup</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">08</span><h3>989 Men’s Grooming</h3><span class="rule"></span></article></div></div></section>
-<section id="gallery"><div class="wrap" data-measure="wide"><p class="eyebrow" data-reveal>Gallery</p><h2 data-reveal>Have a look around</h2><div class="mosaic" style="--cols:3;--cols-narrow:2"><button aria-label="Open photo 1" data-reveal data-delay="0"><img src="photos/2d008cccea870b850f2a9da5356a8f46.jpg" alt="Interior hallway of a salon with a chandelier, patterned carpet, potted plants, and a person seated at the end" srcset="photos/2d008cccea870b850f2a9da5356a8f46.jpg 800w, photos/2d008cccea870b850f2a9da5356a8f46.jpg 1600w, photos/2d008cccea870b850f2a9da5356a8f46.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 2" data-reveal data-delay="1"><img src="photos/9e46d7dc40524cb8e75a7e1ff043ab57.jpg" alt="Empty room with beige tile floor, dark trim, a window with blinds, and a small sink cabinet" srcset="photos/9e46d7dc40524cb8e75a7e1ff043ab57.jpg 800w, photos/9e46d7dc40524cb8e75a7e1ff043ab57.jpg 1600w, photos/9e46d7dc40524cb8e75a7e1ff043ab57.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 3" data-reveal data-delay="2"><img src="photos/75575635341adc58644998e0f01030d2.jpg" alt="Empty corner room with beige tile floor, dark window frames, and closed blinds" srcset="photos/75575635341adc58644998e0f01030d2.jpg 800w, photos/75575635341adc58644998e0f01030d2.jpg 1600w, photos/75575635341adc58644998e0f01030d2.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 4" data-reveal data-delay="3"><img src="photos/0e9a6a68d7c696a62849a645fe7fcb16.jpg" alt="Salon styling station with a round mirror, wooden cabinet with drawers, and a black leather chair against a wood-panel wall" srcset="photos/0e9a6a68d7c696a62849a645fe7fcb16.jpg 800w, photos/0e9a6a68d7c696a62849a645fe7fcb16.jpg 1600w, photos/0e9a6a68d7c696a62849a645fe7fcb16.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 5" data-reveal data-delay="0"><img src="photos/5f4e868520c55c46b6ce3ab931c09fb0.jpg" alt="Reflection in a round mirror of a woman taking a photo of a child wearing a black salon cape" srcset="photos/5f4e868520c55c46b6ce3ab931c09fb0.jpg 800w, photos/5f4e868520c55c46b6ce3ab931c09fb0.jpg 1600w, photos/5f4e868520c55c46b6ce3ab931c09fb0.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 6" data-reveal data-delay="1"><img src="photos/0caccddfaf684036bb1235b081b3cc28.jpg" alt="Close-up of a salon storefront entrance with ornate metal door design and a potted plant, partial signage visible above" srcset="photos/0caccddfaf684036bb1235b081b3cc28.jpg 800w, photos/0caccddfaf684036bb1235b081b3cc28.jpg 1600w, photos/0caccddfaf684036bb1235b081b3cc28.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button></div></div></section><div class="lightbox" role="dialog" aria-label="Photo"><button class="close" aria-label="Close">&times;</button><button class="prev" aria-label="Previous">&lsaquo;</button><img src="" alt=""><button class="next" aria-label="Next">&rsaquo;</button><div class="count"></div></div>
-<section id="reviews" data-ground="raise"><div class="wrap" data-measure="wide"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>4.4 stars from 56 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;The location is easy to get to and very well kept. Super clean. The first pick with my head down is the color and length before. Go see Sara&#x27;s Suite 17. #lovemyhair&rdquo;</p><figcaption class="who">Vanessa “NessaGoesPlaces” Stone &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="1"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Salon boutique is THE space for your small business. Very professional, great environment, newly renovated and pleasing to the eye. Sam, the property manager is extremely kind and helpful and truly wants the best for his tenants. Highly recommend this spot if you’re looking to rent a home for your small business.&rdquo;</p><figcaption class="who">Analise Bergesen &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="2"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I absolutely love renting at this location!
+<div class="bar"><a class="mark" href="#top">Salon Boutique</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#about">About</a><a href="#services">What we do</a><a href="#reviews">Reviews</a><a href="#gallery">Gallery</a></nav></div>
+<header class="hero first-photo type-quiet has-photo" id="top"><div class="bgimg" style="background-image:url(&quot;photos/55203926b247b900273d0689ea009885.jpg&quot;);background-image:-webkit-image-set(url(&quot;photos/55203926b247b900273d0689ea009885.jpg&quot;) 1x, url(&quot;photos/55203926b247b900273d0689ea009885.jpg&quot;) 2x);background-image:image-set(url(&quot;photos/55203926b247b900273d0689ea009885.jpg&quot;) 1x, url(&quot;photos/55203926b247b900273d0689ea009885.jpg&quot;) 2x)"></div><div class="veil"></div><div class="wrap"><h1>Salon Boutique</h1><p class="sub">Discover Salon Boutique Frisco, TX — luxury salon suites for beauty professionals seeking an upscale space to create, grow, and elevate their careers.</p><div class="facts"><span>&#9733; 4.4 &middot; 56 Google reviews</span></div><div class="actions"></div></div><div class="scrollcue"></div></header>
+<section id="about"><div class="wrap"><div class="split"><div data-reveal><p class="eyebrow">About</p><h2>What we are about</h2><span class="flourish"></span></div><div class="story"><p class="standfirst" data-reveal>We know taking the leap to go independent can feel overwhelming — but it doesn’t have to be.</p><p class="prose" data-reveal data-delay="1">We’re here to support you throughout your entire journey.</p></div></div></div></section>
+<section class="device" data-device="margin_note"><div class="wrap"><aside class="marginnote"><b>Salon Boutique</b></aside><p class="notebody">We know taking the leap to go independent can feel overwhelming — but it doesn’t have to be. We’re here to support you throughout your entire journey.</p></div></section>
+<section id="services" data-density="dense" style="--density-scale:0.85"><div class="wrap"><div class="head" data-reveal><p class="eyebrow">Services</p><h2>What we offer</h2><p class="lede">Discover Salon Boutique Frisco, TX — luxury salon suites for beauty professionals seeking an upscale space to create, grow, and elevate their careers.</p></div><div class="offers"><article class="offer" data-reveal data-delay="0"><span class="idx">01</span><h3>About Frisco – Eldorado</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">02</span><h3>Salon Suite Inquiry</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">03</span><h3>Tenant Benefits</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">04</span><h3>Frisco – Eldorado Directory</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="0"><span class="idx">05</span><h3>Men’s Haircuts by Cynthia and Elsy</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">06</span><h3>Do’s N Dye by Dana</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">07</span><h3>Hair by Eyup</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">08</span><h3>989 Men’s Grooming</h3><span class="rule"></span></article></div></div></section>
+<section id="reviews" data-ground="raise"><div class="wrap"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>4.4 stars from 56 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;The location is easy to get to and very well kept. Super clean. The first pick with my head down is the color and length before. Go see Sara&#x27;s Suite 17. #lovemyhair&rdquo;</p><figcaption class="who">Vanessa “NessaGoesPlaces” Stone &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="1"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Salon boutique is THE space for your small business. Very professional, great environment, newly renovated and pleasing to the eye. Sam, the property manager is extremely kind and helpful and truly wants the best for his tenants. Highly recommend this spot if you’re looking to rent a home for your small business.&rdquo;</p><figcaption class="who">Analise Bergesen &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="2"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I absolutely love renting at this location!
 Sam is the absolute sweetest and makes sure that you feel 100% comfortable in your new salon home.
 It is so beautiful, so clean, and so welcoming!&rdquo;</p><figcaption class="who">Caitlin Casson &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="3"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Just had my hair cut by Cynthia in suite 30. What a great experience. I&#x27;m super picky about my hair and was looking for a new place to go. Cynthia made me feel very relaxed and my haircut was awesome. I&#x27;ll be back for sure. Thanks Cynthia,  I&#x27;m a customer for life! =]&rdquo;</p><figcaption class="who">Stephen Powelson &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I go to Penny New at  New Vous Aesthetics! She has ALWAYS done a wonderful job doing all my waxing! She is VERY thorough and extremely professional! Penny makes you feel very comfortable no matter what body part you need to get waxed. Give her a try, you will really like her!&rdquo;</p><figcaption class="who">Kim Schwartz &middot; Google</figcaption></figure></div></div></section>
-<section id="more"><div class="wrap" data-measure="wide"><article class="feature wide" data-reveal><div class="words"><h3>About Frisco – Eldorado</h3><p class="standfirst">Welcome to Salon Boutique in Frisco, Texas – where luxury and professional excellence converge.</p><p class="prose">Our prestigious address at 11445 Dallas Parkway Suite 250, Frisco, TX 75033, is more than just a location; it’s a destination for beauty professionals who aspire to elevate their careers.</p></div></article><article class="feature offset" data-reveal><div class="words"><h3>Salon Suite Inquiry</h3><p class="standfirst">Ready to make your next move?</p><p class="prose">Fill out the form to learn about our available suites and pricing &quot; * &quot; indicates required fields X/Twitter This field is for validation purposes and should be left unchanged. Full Name * First Your Email * Your Phone Number * What service(s) do you provide?</p></div></article><article class="feature narrow" data-reveal><div class="words"><h3>Frequently Asked Questions</h3><p class="standfirst">We know taking the leap to go independent can feel overwhelming — but it doesn’t have to be.</p><p class="prose">We’re here to support you throughout your entire journey. Be Your Own Boss Run your salon your way. Set your own hours, prices, and schedule — all in your private suite. Enjoy the freedom to grow your business and live life on your terms. Create Your Brand Build a business that&#x27;s uniquely yours.</p></div></article><article class="feature plain" data-reveal><div class="words"><h3>Tenant Benefits</h3><p class="standfirst">Running your own business is easier when the details are already taken care of.</p><p class="prose">Every suite is fully equipped with modern amenities, designed to give you and your clients a professional, stress-free experience.</p></div></article></div></section>
+<section id="gallery"><div class="wrap"><p class="eyebrow" data-reveal>Gallery</p><h2 data-reveal>Have a look around</h2><div class="mosaic" style="--cols:3;--cols-narrow:2"><button aria-label="Open photo 1" data-reveal data-delay="0"><img src="photos/2d008cccea870b850f2a9da5356a8f46.jpg" alt="Interior hallway of a salon with a chandelier, patterned carpet, potted plants, and a person seated at the end" srcset="photos/2d008cccea870b850f2a9da5356a8f46.jpg 800w, photos/2d008cccea870b850f2a9da5356a8f46.jpg 1600w, photos/2d008cccea870b850f2a9da5356a8f46.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 2" data-reveal data-delay="1"><img src="photos/9e46d7dc40524cb8e75a7e1ff043ab57.jpg" alt="Empty room with beige tile floor, dark trim, a window with blinds, and a small sink cabinet" srcset="photos/9e46d7dc40524cb8e75a7e1ff043ab57.jpg 800w, photos/9e46d7dc40524cb8e75a7e1ff043ab57.jpg 1600w, photos/9e46d7dc40524cb8e75a7e1ff043ab57.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 3" data-reveal data-delay="2"><img src="photos/75575635341adc58644998e0f01030d2.jpg" alt="Empty corner room with beige tile floor, dark window frames, and closed blinds" srcset="photos/75575635341adc58644998e0f01030d2.jpg 800w, photos/75575635341adc58644998e0f01030d2.jpg 1600w, photos/75575635341adc58644998e0f01030d2.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 4" data-reveal data-delay="3"><img src="photos/0e9a6a68d7c696a62849a645fe7fcb16.jpg" alt="Salon styling station with a round mirror, wooden cabinet with drawers, and a black leather chair against a wood-panel wall" srcset="photos/0e9a6a68d7c696a62849a645fe7fcb16.jpg 800w, photos/0e9a6a68d7c696a62849a645fe7fcb16.jpg 1600w, photos/0e9a6a68d7c696a62849a645fe7fcb16.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 5" data-reveal data-delay="0"><img src="photos/5f4e868520c55c46b6ce3ab931c09fb0.jpg" alt="Reflection in a round mirror of a woman taking a photo of a child wearing a black salon cape" srcset="photos/5f4e868520c55c46b6ce3ab931c09fb0.jpg 800w, photos/5f4e868520c55c46b6ce3ab931c09fb0.jpg 1600w, photos/5f4e868520c55c46b6ce3ab931c09fb0.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 6" data-reveal data-delay="1"><img src="photos/0caccddfaf684036bb1235b081b3cc28.jpg" alt="Close-up of a salon storefront entrance with ornate metal door design and a potted plant, partial signage visible above" srcset="photos/0caccddfaf684036bb1235b081b3cc28.jpg 800w, photos/0caccddfaf684036bb1235b081b3cc28.jpg 1600w, photos/0caccddfaf684036bb1235b081b3cc28.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button></div></div></section><div class="lightbox" role="dialog" aria-label="Photo"><button class="close" aria-label="Close">&times;</button><button class="prev" aria-label="Previous">&lsaquo;</button><img src="" alt=""><button class="next" aria-label="Next">&rsaquo;</button><div class="count"></div></div>
+<section id="more"><div class="wrap"><article class="feature wide" data-reveal><div class="words"><h3>About Frisco – Eldorado</h3><p class="standfirst">Welcome to Salon Boutique in Frisco, Texas – where luxury and professional excellence converge.</p><p class="prose">Our prestigious address at 11445 Dallas Parkway Suite 250, Frisco, TX 75033, is more than just a location; it’s a destination for beauty professionals who aspire to elevate their careers.</p></div></article><article class="feature offset" data-reveal><div class="words"><h3>Salon Suite Inquiry</h3><p class="standfirst">Ready to make your next move?</p><p class="prose">Fill out the form to learn about our available suites and pricing &quot; * &quot; indicates required fields X/Twitter This field is for validation purposes and should be left unchanged. Full Name * First Your Email * Your Phone Number * What service(s) do you provide?</p></div></article><article class="feature narrow" data-reveal><div class="words"><h3>Frequently Asked Questions</h3><p class="standfirst">We know taking the leap to go independent can feel overwhelming — but it doesn’t have to be.</p><p class="prose">We’re here to support you throughout your entire journey. Be Your Own Boss Run your salon your way. Set your own hours, prices, and schedule — all in your private suite. Enjoy the freedom to grow your business and live life on your terms. Create Your Brand Build a business that&#x27;s uniquely yours.</p></div></article><article class="feature plain" data-reveal><div class="words"><h3>Tenant Benefits</h3><p class="standfirst">Running your own business is easier when the details are already taken care of.</p><p class="prose">Every suite is fully equipped with modern amenities, designed to give you and your clients a professional, stress-free experience.</p></div></article></div></section>
 
 <footer><div class="wrap"><div class="row"><span>&copy; Salon Boutique</span><button class="top">Back to top</button></div></div></footer>
 <script>

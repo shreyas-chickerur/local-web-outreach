@@ -7,7 +7,7 @@
 <script>document.documentElement.className+=' reveals'</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..900&family=Karla:wght@300..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
 <style>
 :root{
   --density-scale:1;
@@ -33,11 +33,11 @@
    stray wide element without creating a scroller. */
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;
   overflow-x:hidden;overflow-x:clip}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:'Karla',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   font-size:clamp(16px, 15.28px + 0.1887vw, 18px);line-height:1.65;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 
-h1,h2,h3{font-family:'Fraunces',Georgia,'Times New Roman',serif;line-height:1.05;margin:0 0 .5em;
+h1,h2,h3{font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;line-height:1.05;margin:0 0 .5em;
   /* Stops a headline dropping one word onto its own line at an awkward width.
      Unsupported engines ignore it and wrap as before. */
   text-wrap:balance}
@@ -52,10 +52,10 @@ p{text-wrap:pretty}
 .cta:focus-visible,.book:focus-visible{outline-offset:4px}
 
 ::selection{background:rgba(137,105,17,0.24);color:var(--ink)}
-h1{font-size:calc(clamp(41.81px, 28.41px + 3.524vw, 79.16px) * var(--density-scale));letter-spacing:-0.012em;font-variation-settings:"opsz" 144,"wght" 700}
-h2{font-size:calc(clamp(30.35px, 23.91px + 1.695vw, 48.32px) * var(--density-scale));letter-spacing:-0.006em;font-variation-settings:"opsz" 72,"wght" 600}
-h3{font-size:calc(clamp(22.04px, 19.37px + 0.7032vw, 29.49px) * var(--density-scale));letter-spacing:-0em;font-variation-settings:"opsz" 36,"wght" 600}
-.lede{font-size:calc(clamp(18.78px, 17.25px + 0.4021vw, 23.04px) * var(--density-scale))}
+h1{font-size:calc(clamp(52.81px, 31.25px + 5.673vw, 112.9px) * var(--density-scale));letter-spacing:-0.01em;font-variation-settings:"wght" 600}
+h2{font-size:calc(clamp(37.54px, 27.04px + 2.763vw, 66.83px) * var(--density-scale));letter-spacing:-0.006em;font-variation-settings:"wght" 600}
+h3{font-size:calc(clamp(22.51px, 19.67px + 0.7466vw, 30.42px) * var(--density-scale));letter-spacing:-0em;font-variation-settings:"wght" 600}
+.lede{font-size:calc(clamp(18.98px, 17.39px + 0.4174vw, 23.4px) * var(--density-scale))}
 body{font-variation-settings:"wght" 400}
 p{margin:0 0 1em;max-width:68ch}
 a{color:var(--accent)}
@@ -73,7 +73,7 @@ section[data-ground="raise"]{background:var(--raise);color:var(--on-raise)}
 section[data-ground="accent"]{background:var(--accent);color:var(--on-accent)}
 section[data-ground="base"]{background:var(--bg);color:var(--on-base)}
 .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;
-  font-weight:700;color:var(--accent);margin:0 0 14px;font-family:'Karla',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+  font-weight:700;color:var(--accent);margin:0 0 14px;font-family:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
 
 /* ---------------------------------------------------------------- chrome -- */
 .bar{position:fixed;inset:0 0 auto;z-index:40;display:flex;align-items:center;
@@ -102,7 +102,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .bar.stuck{background:var(--surface);box-shadow:var(--shadow)}
 }
-.bar .mark{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-weight:700;font-size:19px;
+.bar .mark{font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-weight:700;font-size:19px;
   letter-spacing:-.02em;text-decoration:none;color:inherit}
 .bar nav{margin-left:auto;display:flex;gap:26px}
 .bar nav a{color:inherit;text-decoration:none;font-size:14.5px;font-weight:600;
@@ -189,14 +189,14 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
    applies to it too. */
 .device{padding:clamp(56px,7vw,110px) 0}
 
-.ledgerfig{width:100%;border-collapse:collapse;font-family:'Fraunces',Georgia,'Times New Roman',serif}
+.ledgerfig{width:100%;border-collapse:collapse;font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
 .ledgerfig th,.ledgerfig td{padding:14px 0;border-bottom:1px solid rgba(15,28,36,0.1);
   text-align:left;font-weight:400}
-.ledgerfig th{font-family:'Karla',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:.16em;
+.ledgerfig th{font-family:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:.16em;
   text-transform:uppercase;opacity:.7;width:40%}
 .ledgerfig td{font-size:clamp(22px,3vw,40px);text-align:right}
 
-.bigquote{margin:0;font-family:'Fraunces',Georgia,'Times New Roman',serif;
+.bigquote{margin:0;font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   font-size:clamp(24px,4.2vw,58px);line-height:1.08;max-width:20ch;
   text-indent:-.4em}
 .bigquote::before{content:"C"} .bigquote::after{content:"D"}
@@ -204,7 +204,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
 [data-device="marquee"]{overflow:hidden;padding:clamp(28px,3vw,44px) 0;
   background:var(--accent);color:var(--on-accent)}
 .runner{display:flex;gap:clamp(28px,4vw,64px);white-space:nowrap;
-  font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:clamp(18px,2.4vw,34px);
+  font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:clamp(18px,2.4vw,34px);
   animation:runner 38s linear infinite}
 .runner span::after{content:"2";margin-left:clamp(28px,4vw,64px);
   opacity:.5}
@@ -220,7 +220,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
 
 [data-index]::after{content:attr(data-index);position:absolute;top:
   clamp(18px,2.4vw,38px);left:clamp(10px,2vw,26px);font-size:12px;
-  letter-spacing:.14em;opacity:.45;font-family:'Karla',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+  letter-spacing:.14em;opacity:.45;font-family:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
 
 [data-device="ticker"]{padding:0;border-top:1px solid rgba(15,28,36,0.1);
   border-bottom:1px solid rgba(15,28,36,0.1);overflow:hidden}
@@ -240,7 +240,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   margin-left:clamp(0px,6vw,120px)}
 .knock p{margin:0;font-size:clamp(17px,2vw,25px)}
 
-.runoff{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:clamp(64px,15vw,220px);
+.runoff{font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:clamp(64px,15vw,220px);
   line-height:.86;white-space:nowrap;margin-left:clamp(12px,4vw,80px);
   opacity:.12;user-select:none}
 
@@ -249,7 +249,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   justify-content:flex-start}
 .insetblock{background:var(--bg);color:var(--ink);
   padding:clamp(18px,2.4vw,34px) clamp(22px,3vw,44px);
-  font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:clamp(18px,2.4vw,32px);
+  font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:clamp(18px,2.4vw,32px);
   margin:0 0 0 clamp(0px,4vw,72px)}
 
 .scrollstrip{display:flex;gap:14px;overflow-x:auto;padding-inline:
@@ -360,11 +360,11 @@ body:has(section[data-ground]) section+section::before{opacity:1}
 /* line-height under 1 clipped the box shorter than the glyphs, and a serif
    4.9 at 168px then sat on top of the name. */
 .hero.first-facts .tally{margin:0 0 .22em;line-height:1;
-  font-family:'Fraunces',Georgia,'Times New Roman',serif;display:flex;align-items:baseline;
+  font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;display:flex;align-items:baseline;
   gap:clamp(12px,1.6vw,22px);flex-wrap:wrap}
 .hero.first-facts .tally b{font-size:clamp(64px,11vw,168px);font-weight:400;
   letter-spacing:-.03em}
-.hero.first-facts .tally span{font-family:'Karla',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+.hero.first-facts .tally span{font-family:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   font-size:clamp(14px,1.5vw,18px);letter-spacing:.02em;opacity:.86;
   font-weight:600;text-transform:uppercase}
 .hero.first-facts h1{font-size:clamp(22px,2.6vw,34px);margin-bottom:.5em;
@@ -427,7 +427,7 @@ body:has(section[data-ground]) section+section::before{opacity:1}
 /* Not a link, so no lift and no shadow — the same promise .offer used to make.
    Only the border moves, which reads as attention rather than as a button. */
 .card:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
-.card .num{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:13px;color:var(--accent);
+.card .num{font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;color:var(--accent);
   letter-spacing:.1em;margin-bottom:12px}
 .card h3{margin:0}
 section[data-ground="raise"] .card{background:var(--bg)}
@@ -471,10 +471,10 @@ section[data-ground="raise"] .card{background:var(--bg)}
   border-bottom:1px solid var(--line);transition:padding-left .4s
   cubic-bezier(.2,.7,.3,1)}
 .listing li:hover{padding-left:10px}
-.listing .idx{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:12px;letter-spacing:.16em;
+.listing .idx{font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:.16em;
   color:var(--accent)}
 .listing h3{margin:0;line-height:1.08;
-  font-size:calc(clamp(25.86px, 21.6px + 1.121vw, 37.75px) * var(--density-scale))}
+  font-size:calc(clamp(31.66px, 24.57px + 1.864vw, 51.41px) * var(--density-scale))}
 .editorial-art{margin-top:clamp(24px,3vw,40px);border-radius:var(--r);
   overflow:hidden;aspect-ratio:5/3}
 .editorial-art img{width:100%;height:100%;object-fit:cover;
@@ -494,12 +494,29 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
   transition:border-color .4s ease,background .4s ease}
 .offer:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));
   background:var(--raise)}
-.offer .idx{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:12px;letter-spacing:.16em;
+.offer .idx{font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:.16em;
   color:var(--accent);margin-bottom:auto}
 .offer h3{margin:14px 0 0;line-height:1.15}
 .offer .rule{display:block;height:2px;width:34px;background:var(--accent);
   margin-top:18px;transition:width .45s cubic-bezier(.2,.7,.3,1)}
 .offer:hover .rule{width:78px}
+
+/* Exactly three, "feature": no card edge, no background — the balanced
+   density's own composition, distinct from the dense grid's bordered
+   cards rather than the same card with fewer of them in the row. */
+.offers-feature{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(28px,4vw,56px)}
+@media (max-width:860px){.offers-feature{grid-template-columns:1fr}}
+.offer-feature{padding-top:clamp(20px,2.2vw,28px);
+  border-top:1px solid var(--line)}
+.offer-feature .idx{font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;
+  letter-spacing:.16em;color:var(--accent)}
+.offer-feature h3{margin:16px 0 0;line-height:1.1;
+  font-size:calc(clamp(31.66px, 24.57px + 1.864vw, 51.41px) * var(--density-scale))}
+.offer-feature .rule{display:block;height:2px;width:34px;
+  background:var(--accent);margin-top:20px;
+  transition:width .45s cubic-bezier(.2,.7,.3,1)}
+.offer-feature:hover .rule{width:60px}
 /* Photo-led cards: the picture is the card, the words sit on the glass. */
 
 /* ----------------------------------------------------------------- stats -- */
@@ -507,7 +524,7 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
   color:var(--accent-ink)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
   gap:26px;text-align:center}
-.stat b{display:block;font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:clamp(38px,5.4vw,64px);
+.stat b{display:block;font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:clamp(38px,5.4vw,64px);
   line-height:1;font-variant-numeric:tabular-nums}
 .stat span{display:block;margin-top:10px;font-size:13.5px;letter-spacing:.1em;
   text-transform:uppercase;opacity:.86;font-weight:600}
@@ -574,6 +591,15 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 .quote p{margin:0;font-size:16.5px;line-height:1.6}
 .quote .who{margin-top:auto;font-size:13.5px;color:var(--dim);font-weight:600}
 .stars{color:var(--accent);letter-spacing:3px;font-size:15px}
+/* Two or three reviews: stacked, no card, set large — a wall-of-cards grid
+   built for volume looks sparse with only a couple of tiles in it. */
+.quotes-feature{display:flex;flex-direction:column;gap:clamp(28px,3.4vw,44px);
+  max-width:760px}
+.quote-feature{padding-top:clamp(20px,2.2vw,28px);border-top:1px solid var(--line)}
+.quote-feature p{margin:12px 0 0;font-size:clamp(18px,1.7vw,22px);
+  line-height:1.5;font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-weight:600}
+.quote-feature .who{display:block;margin-top:14px;font-size:13.5px;
+  color:var(--dim);font-weight:600}
 
 /* ----------------------------------------------------- recognition ------- */
 /* The award is the most persuasive line on the page, so it gets scale and
@@ -589,11 +615,11 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 @media (max-width:820px){.accolade-grid{grid-template-columns:1fr;
   align-items:start;gap:26px}}
 .accolade{max-width:15ch;margin:0 0 .3em;
-  font-size:calc(clamp(35.62px, 26.22px + 2.474vw, 61.85px) * var(--density-scale))}
+  font-size:calc(clamp(44.53px, 29.34px + 3.996vw, 86.88px) * var(--density-scale))}
 .accolade-band .eyebrow{margin-bottom:22px}
 .accolade-band .eyebrow::after{content:"";display:block;width:64px;height:3px;
   background:var(--accent);margin-top:14px;border-radius:2px}
-.accolade-note{font-size:calc(clamp(18.78px, 17.25px + 0.4021vw, 23.04px) * var(--density-scale));
+.accolade-note{font-size:calc(clamp(18.98px, 17.39px + 0.4174vw, 23.4px) * var(--density-scale));
   max-width:36ch;color:var(--dim);margin:0}
 .accolade-band .proof{margin:30px 0 0;font-size:13px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--dim)}
@@ -611,8 +637,8 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 .marquee:hover ul{animation-play-state:paused}
 .marquee li{padding:clamp(18px,2vw,30px) clamp(22px,3vw,48px);
   border-left:1px solid var(--line);min-width:max-content}
-.marquee .who{display:block;font-family:'Fraunces',Georgia,'Times New Roman',serif;
-  font-size:calc(clamp(22.04px, 19.37px + 0.7032vw, 29.49px) * var(--density-scale));line-height:1.15;
+.marquee .who{display:block;font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  font-size:calc(clamp(22.51px, 19.67px + 0.7466vw, 30.42px) * var(--density-scale));line-height:1.15;
   letter-spacing:-0em}
 .marquee .note{display:block;color:var(--dim);font-size:14px;margin-top:8px;
   max-width:26ch}
@@ -630,8 +656,8 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 /* The opening line carries the section; the rest supports it. Without the
    distinction a feature row is a heading and a paragraph, which is the shape
    of filler. */
-.feature .standfirst{font-family:'Fraunces',Georgia,'Times New Roman',serif;
-  font-size:calc(clamp(22.04px, 19.37px + 0.7032vw, 29.49px) * var(--density-scale));line-height:1.3;
+.feature .standfirst{font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  font-size:calc(clamp(22.51px, 19.67px + 0.7466vw, 30.42px) * var(--density-scale));line-height:1.3;
   letter-spacing:-0em;margin:0 0 .55em;color:var(--ink);
   text-wrap:balance;max-width:24ch}
 .feature.wide .standfirst,.feature.narrow .standfirst{max-width:34ch}
@@ -666,13 +692,13 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 .story{max-width:62ch}
 /* The opening line in the display face, larger and looser: it does the work a
    pull quote does, without inventing a quote nobody said. */
-.standfirst{font-family:'Fraunces',Georgia,'Times New Roman',serif;
-  font-size:calc(clamp(22.04px, 19.37px + 0.7032vw, 29.49px) * var(--density-scale));
+.standfirst{font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  font-size:calc(clamp(22.51px, 19.67px + 0.7466vw, 30.42px) * var(--density-scale));
   line-height:1.28;letter-spacing:-0em;margin:0 0 .7em;
   text-wrap:balance}
-.prose{font-size:calc(clamp(18.78px, 17.25px + 0.4021vw, 23.04px) * var(--density-scale));line-height:1.72;
+.prose{font-size:calc(clamp(18.98px, 17.39px + 0.4174vw, 23.4px) * var(--density-scale));line-height:1.72;
   color:var(--dim);margin:0}
-.prose.dropcap::first-letter{float:left;font-family:'Fraunces',Georgia,'Times New Roman',serif;
+.prose.dropcap::first-letter{float:left;font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   font-size:3.1em;line-height:.82;padding:.06em .09em 0 0;color:var(--accent)}
 .story p+p{margin-top:1em}
 /* A short rule under the heading, so the left column is not just two lines
@@ -822,12 +848,12 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;
 }
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "Drybar", "telephone": "(469) 444-1580", "aggregateRating": {"@type": "AggregateRating", "ratingValue": 4.5, "reviewCount": 355}, "geo": {"@type": "GeoCoordinates", "latitude": 33.079327299999996, "longitude": -96.8227017}}</script></head>
-<body data-theme="fresh" data-type="wide" data-arch="column" data-signature="corner_inset" data-theme-layout="airy">
+<body data-theme="fresh" data-type="wide" data-arch="column" data-signature="scroll_gallery" data-theme-layout="airy">
 <div class="progress"></div>
 <div class="bar"><a class="mark" href="#top">Drybar</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#gallery">Gallery</a><a href="#reviews">Reviews</a><a href="#contact">Visit</a></nav><a class="book" href="tel:4694441580">Book an appointment</a></div>
 <header class="hero first-split type-wide has-photo" id="top"><div class="bgimg" style="background-image:url(&quot;photos/3e3d36fb911ba8af74d2078b53b8e340.jpg&quot;);background-image:-webkit-image-set(url(&quot;photos/3e3d36fb911ba8af74d2078b53b8e340.jpg&quot;) 1x, url(&quot;photos/3e3d36fb911ba8af74d2078b53b8e340.jpg&quot;) 2x);background-image:image-set(url(&quot;photos/3e3d36fb911ba8af74d2078b53b8e340.jpg&quot;) 1x, url(&quot;photos/3e3d36fb911ba8af74d2078b53b8e340.jpg&quot;) 2x)"></div><div class="wrap"><h1>Drybar</h1><p class="sub">Hair Salon</p><div class="facts"><span>&#9733; 4.5 &middot; 355 Google reviews</span></div><div class="actions"><a class="cta" href="tel:4694441580">Book an appointment</a></div></div><div class="scrollcue"></div></header>
 <section id="gallery"><div class="wrap" data-measure="column"><p class="eyebrow" data-reveal>Gallery</p><h2 data-reveal>Have a look around</h2><div class="mosaic" style="--cols:3;--cols-narrow:2"><button aria-label="Open photo 1" data-reveal data-delay="0"><img src="photos/ac45a5845d043c7416a83f6c37b90eb1.jpg" alt="A man wearing a face mask styles the hair of a seated woman wearing a yellow face mask in a salon." srcset="photos/ac45a5845d043c7416a83f6c37b90eb1.jpg 800w, photos/ac45a5845d043c7416a83f6c37b90eb1.jpg 1600w, photos/ac45a5845d043c7416a83f6c37b90eb1.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 2" data-reveal data-delay="1"><img src="photos/a7cb6d5d23d58604d85e42f78b2aeb09.jpg" alt="A close-up of long dark curled hair viewed from behind on a person facing away from the camera." srcset="photos/a7cb6d5d23d58604d85e42f78b2aeb09.jpg 800w, photos/a7cb6d5d23d58604d85e42f78b2aeb09.jpg 1600w, photos/a7cb6d5d23d58604d85e42f78b2aeb09.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 3" data-reveal data-delay="2"><img src="photos/b1aae2c8ff8286231aeae7cb58d41e86.jpg" alt="A smiling man styles the hair of a smiling seated woman with a curling iron at a salon counter with a bouquet of yellow flowers." srcset="photos/b1aae2c8ff8286231aeae7cb58d41e86.jpg 800w, photos/b1aae2c8ff8286231aeae7cb58d41e86.jpg 1600w, photos/b1aae2c8ff8286231aeae7cb58d41e86.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 4" data-reveal data-delay="3"><img src="photos/ff1d1aefc9763bd27e77df19d44aa614.jpg" alt="A close-up of long straight brown hair viewed from behind on a person wearing a teal top." srcset="photos/ff1d1aefc9763bd27e77df19d44aa614.jpg 800w, photos/ff1d1aefc9763bd27e77df19d44aa614.jpg 1600w, photos/ff1d1aefc9763bd27e77df19d44aa614.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 5" data-reveal data-delay="0"><img src="photos/600adb656a8e76f3bbcdc6f3f811a557.jpg" alt="The storefront of a salon with a black awning reading &#x27;drybar&#x27; next to other shops in an outdoor shopping plaza." srcset="photos/600adb656a8e76f3bbcdc6f3f811a557.jpg 800w, photos/600adb656a8e76f3bbcdc6f3f811a557.jpg 1600w, photos/600adb656a8e76f3bbcdc6f3f811a557.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 6" data-reveal data-delay="1"><img src="photos/c20ceec3a64950cb780c882dfdef0945.jpg" alt="A close-up of long straight blonde-highlighted hair with layered curls at the ends, viewed from behind on a person in a navy top." srcset="photos/c20ceec3a64950cb780c882dfdef0945.jpg 800w, photos/c20ceec3a64950cb780c882dfdef0945.jpg 1600w, photos/c20ceec3a64950cb780c882dfdef0945.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button></div></div></section>
-<section class="device" data-device="corner_inset"><div class="insetshot" style="background-image:url(&quot;photos/ac45a5845d043c7416a83f6c37b90eb1.jpg&quot;)"><div class="insetblock"><b>Drybar</b></div></div></section><div class="lightbox" role="dialog" aria-label="Photo"><button class="close" aria-label="Close">&times;</button><button class="prev" aria-label="Previous">&lsaquo;</button><img src="" alt=""><button class="next" aria-label="Next">&rsaquo;</button><div class="count"></div></div>
+<section class="device" data-device="scroll_gallery"><div class="scrollstrip"><img src="photos/ac45a5845d043c7416a83f6c37b90eb1.jpg" alt="A man wearing a face mask styles the hair of a seated woman wearing a yellow face mask in a salon." loading="lazy"><img src="photos/3e3d36fb911ba8af74d2078b53b8e340.jpg" alt="An empty salon interior with black stools at a white counter, styling stations with mirrors, and shelves of hair products." loading="lazy"><img src="photos/a7cb6d5d23d58604d85e42f78b2aeb09.jpg" alt="A close-up of long dark curled hair viewed from behind on a person facing away from the camera." loading="lazy"><img src="photos/b1aae2c8ff8286231aeae7cb58d41e86.jpg" alt="A smiling man styles the hair of a smiling seated woman with a curling iron at a salon counter with a bouquet of yellow flowers." loading="lazy"><img src="photos/ff1d1aefc9763bd27e77df19d44aa614.jpg" alt="A close-up of long straight brown hair viewed from behind on a person wearing a teal top." loading="lazy"><img src="photos/600adb656a8e76f3bbcdc6f3f811a557.jpg" alt="The storefront of a salon with a black awning reading &#x27;drybar&#x27; next to other shops in an outdoor shopping plaza." loading="lazy"><img src="photos/c20ceec3a64950cb780c882dfdef0945.jpg" alt="A close-up of long straight blonde-highlighted hair with layered curls at the ends, viewed from behind on a person in a navy top." loading="lazy"><img src="photos/23ae1b5b09666c0d51aa2501fabfb682.jpg" alt="Two smiling women with curled blonde hair standing in a salon, one in the foreground and one slightly behind." loading="lazy"></div></section><div class="lightbox" role="dialog" aria-label="Photo"><button class="close" aria-label="Close">&times;</button><button class="prev" aria-label="Previous">&lsaquo;</button><img src="" alt=""><button class="next" aria-label="Next">&rsaquo;</button><div class="count"></div></div>
 <section id="stats" class="statband"><div class="wrap" data-measure="column"><div class="stats"><div class="stat" data-reveal data-delay="0"><b>4.5</b><span>average rating</span></div><div class="stat" data-reveal data-delay="1"><b data-count="355">355</b><span>Google reviews</span></div></div></div></section>
 <section id="reviews" data-ground="raise"><div class="wrap" data-measure="column"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>4.5 stars from 355 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Always an amazing experience! The shop itself is clean and organized, the staff is always energized and friendly! Meredith is my go to girl and always does an amazing job with my long and thick hair! And she always teaches me tips and tricks that I can do at home to keep my blowout looking fresh! I love how knowledgeable she is with the d&rdquo;</p><figcaption class="who">Morgan Rockwood &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="1"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I’ve been a member at Drybar Plano for a while now and I can honestly say this location is the best of the best. I’ve been to several other Drybar locations, but nothing compares to this one.
 

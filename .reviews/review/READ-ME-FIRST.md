@@ -44,16 +44,23 @@ and insured" would lose the mark even with a real claim to make. That is
 the right failure direction (silence over a false assertion) but it is
 still a gap, not a solved problem.
 
-**Slice C (trade-specific structure) is barely started.** Four of nine
-contractor facts exist (`app/site/contractorfacts.py`) — licensed/insured,
-emergency availability, warranty, free estimate — and only three of nineteen
-fixtures (`hvac-rich`, `hvac-second`, `roofer-rich`) actually surface one,
-because that's how many had the phrase in their own published text. A
-dentist's page and a law firm's page do not yet get anything trade-specific
-beyond a heading. If you want to see where this whole approach is thinnest,
-open `dentist.html` or `law.html` and compare the "How we can help" card
-grid to what a real practice's site would actually need to say (insurance
-accepted, which procedures, financing) — none of that exists yet.
+**Slice C (trade-specific structure) is now eight of nine facts, plus
+real composition variety — but still corroborated-or-nothing, and that
+discipline has a cost.** A cost-minimising pass (`.reviews/first-pass.md`)
+added service area, financing, a named manufacturer certification, and
+response time to the original four, each matched only against a
+business's own published text, never inferred. The ninth — before-and-
+after — is still not built: it needs a PAIRED photograph (a labelled
+before and a labelled after of the same job), which nothing in this
+corpus's photo data carries, and approximating one without that pairing
+is the same "invent a licence number" failure the credential fix above
+exists to prevent. `services` and `reviews` now each have a genuine
+second/third composition keyed to content shape, and gallery/contact
+headings vary by trade. Still true: whether a fact fires depends entirely
+on whether the business happened to use a matching phrase, so a real
+dentist's or law firm's page can still show nothing trade-specific beyond
+a heading if their own copy never says the words. Open `dentist.html` or
+`law.html` and check for yourself.
 
 **The instrument that judges "do these look the same" has never found a
 genuine collision in this corpus.** Zero same-trade or cross-trade pairs,
@@ -68,40 +75,71 @@ attempted redecide this session DID produce a genuine unresolved collision
 hidden) before a retry cleared it — the gate's failure mode is disclosure,
 not silent collision, which is the property that matters most.
 
+**A sampled design review (Slice G, four fixtures, not the full nineteen)
+surfaced real defects this project has no other way of catching.** Two
+kinds, and they are different problems. First, layout collisions the
+generator itself causes: on `law`, the nav links sit directly on top of
+the attorney's face in the hero photo, and body text is hidden behind a
+stats banner further down the page; on mobile, `hvac` and
+`restaurant-rich` both show a CTA button duplicated and cropped at the
+viewport edge. These are rendering bugs, not content problems, and
+nothing in this repository's test suite would have caught them — they
+only show up in a screenshot. Second, and more interesting: `hvac`'s own
+published "about" text claims "over 20,000 5 star reviews", while the
+structured review count sitting one section away says 6,203 — both are
+real numbers from the same business's own Google listing, not anything
+this project invented, and nothing here cross-checks one published fact
+against another for internal consistency. That is a materially different
+failure mode than the credential-claims defect above (that was an
+UNVERIFIED claim; this is two VERIFIED claims that contradict each
+other), and this pass found it only because a vision model was asked to
+read the whole page rather than because a rule looked for it. Neither
+class of finding has been fixed this pass — Slice G was sampled
+specifically to answer whether running it in full is worth the cost, not
+to act on what it found. See `.reviews/first-pass.md` for the full
+finding list and the recommendation.
+
 ## What's deliberately not built
 
-- **Five of nine contractor facts** (service area, before-and-after,
-  financing, manufacturer badges, response time) — each needs a kind of
-  evidence (a service radius, a paired photo, a named lender, a badge image,
-  a stated callback window) the current material doesn't carry, and
-  approximating one without it is the "invent a licence number" failure this
-  project explicitly refuses to do.
-- **Compositions beyond `services` and `credentials`** — every other section
-  (`reviews`, `gallery`, `about`, `hours`) has exactly one layout regardless
-  of content shape. BRIEF §5 asks for two to four per section; this ships
-  two, for two sections.
+- **Before-and-after, the last of nine contractor facts** — it needs a
+  paired photo (a labelled before, a labelled after, of the same job)
+  nothing in the current material carries, and approximating one without
+  that pairing is the same invented-evidence failure the credential fix
+  refuses to do.
+- **Compositions beyond `services` and `reviews`** — `gallery`, `about`,
+  and `hours` still have exactly one layout regardless of content shape.
+  BRIEF §5 asks for two to four per section; this ships two or three, for
+  two sections.
 - **The model choosing a heading from a table** — headings are deterministic
   per trade (`app/site/tradeprofile.py`), not a decision the identity call
   makes. Consistent with how the call-to-action wording already worked
   before this session touched it, but a disclosed reduction from what was
   asked.
+- **A judging round.** Agreement is still 0 of 0, deliberately skipped
+  this pass — every verdict checked so far has come back DIFFERENT, so
+  judging again would spend real money to reconfirm what is already known
+  rather than test anything new. See `tests/test_the_instrument_reproduces.py`.
 - **Content completeness, copy selection, backdrops, motion, video, the
-  conversational workspace** — Slices D, E, G, H, and the rest of F. Not
-  started at all.
+  conversational workspace, and a full (not sampled) design review** —
+  Slices D (mostly), E, G (beyond the four-fixture sample), H, and
+  growing the corpus past nineteen fixtures. Not started at all.
 
 ## Numbers not to trust, and why
 
-- **"53.33% same-trade distance = 47% identical"** is a real, current
-  measurement, but it is the ONLY reading this ruler has ever taken under
-  the current corpus — there is no prior number under this exact axis set
-  to compare it against. "Slice C should move this" is the standing claim;
-  nothing has tested that yet.
-- **Agreement is 0 of 0.** This is not "untested" — eleven pairs were
-  checked by hand this round (the closest pairs by distance), on top of
-  sixteen the round before — it means no "same" verdict has ever been found
-  to rank against. A rank-based score needs at least one on each side. Take
-  "the vector agrees with a human" as unproven, not as disproven and not as
-  confirmed.
+- **"56.10% same-trade distance"** is a real, current measurement under
+  this pass's redecide (up from 53.33% before Batch B's new facts and
+  compositions moved the corpus), but it is still the ONLY reading this
+  exact axis set has ever taken — there is no prior number under it to
+  compare against, so "Slice C moved this in the right direction" is a
+  plausible read, not a proven one.
+- **Agreement is 0 of 0, and no judging round ran this pass, on purpose.**
+  Eleven pairs were checked by hand two rounds ago (on top of sixteen the
+  round before that) and every single one came back DIFFERENT — judging
+  again would spend real money to confirm what a redecide already implies
+  rather than test anything new, so this pass's redecide retired all
+  eleven live verdicts and replaced none of them. A rank-based score needs
+  at least one "same" verdict to rank against something. Take "the vector
+  agrees with a human" as unproven, not as disproven and not as confirmed.
 - **The held-out third is currently empty**, not stale — every held-out
   verdict from the prior round was retired (the rendering changed under it
   twice this session) and none has been repopulated yet. This is disclosed
