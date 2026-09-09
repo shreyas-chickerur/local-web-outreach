@@ -971,3 +971,105 @@ shrunk contact-sheet thumbnail and corrected before being written to
 `pairs.json`, once the actual rendered markup showed a hairline rule above
 every section and a narrower text measure on one page and not the other. See
 `.reviews/slice-b-phase-1.md` for the full account.
+
+# Round 3, Phase 1 — the review-count contradiction bug
+
+`hvac` (Milestone Electric Air Plumbing) ships a page asserting both "over
+20,000 5 star reviews" (verbatim from its own published `about` text — real,
+so `render.unsupported()` correctly lets it through) and "6203" (the
+corroborated Google review count, `Material.reviews`, printed eight times).
+Confirmed directly against the built page before writing any fix: `page.count
+("6203") == 8`, `page.count("20,000") == 1`, and the surrounding text is
+exactly the "about" sentence named in the design review. `BRIEF §4`'s "no
+unverified fact ships" invariant has nothing to say about two VERIFIED facts
+disagreeing — `unsupported()` checks provenance (did they say this), never
+consistency (do their own numbers agree with each other) — so this is a real
+gap, not a mis-classified instance of an existing check.
+
+**Corpus-wide scan before deciding anything**, per instruction: every
+fixture's `about` text, block text, and services list, searched for a number
+immediately followed by "review(s)" (optionally "5-star review(s)") and
+compared against that fixture's `Material.reviews`. `hvac` is the only hit —
+20,000 claimed against 6,203 corroborated, roughly 3.2x over. A second,
+broader scan for "years"/"customers"/"clients"/"jobs completed" numeric
+claims found two more mentions (`dentist`: "10 years"; `law-rich`: "100+
+years"), but this system has no structured founding-date, customer-count, or
+jobs-count field anywhere to reconcile either against — so there is nothing
+to check them against, and nothing to fix; disclosed rather than silently
+ignored. Also noted, out of scope for this fix: `hvac`'s own block text says
+"Since November 2022... for over 13 months", which was consistent at
+scrape time but reads as stale relative to today — a staleness issue
+already disclosed in `.reviews/review/READ-ME-FIRST.md`'s "Numbers not to
+trust" section, not a same-page contradiction between two facts this system
+corroborates.
+
+## The resolution rule
+
+**Suppress the contradicting sentence, never rewrite it.** When a sentence
+in free text (`about`, or a block's `text`) states a review count differing
+from `Material.reviews` by more than `max(10, 15% of reviews)`, the whole
+sentence is dropped before it reaches any section builder — applied once, in
+`material_from_brief()`, so every section that reads `about`/`blocks` sees
+already-reconciled text rather than needing its own check. The corroborated
+number itself is never touched. Chosen over the other two options BRIEF
+offered: rewriting the sentence would mean the system authoring prose, which
+every invariant in §4 already forbids; refusing the whole block would drop a
+real, true opening sentence ("What our customers say about us are very
+important") along with the one false one, which is a worse page for a
+smaller reason.
+
+## Binding claims
+
+**Primary.** A new standing test
+(`tests/test_no_contradicted_fact_ships.py`), corpus-wide, holding the
+invariant rather than the one string: no fixture's rendered page states a
+review count that contradicts `Material.reviews` by more than the tolerance
+above. Confirmed to FAIL against the current `hvac` page before the fix
+(reproduced by calling the old, unreconciled `material_from_brief` path) and
+PASS after `app/site/contradiction.py` is wired into `material_from_brief()`.
+
+**Secondary.** No redecide required — this changes what free text a page
+prints, not a design-system decision or an axis value, so no fingerprint
+value moves and `test_no_axis_is_a_function_of_another` and the fingerprint
+tests are unaffected.
+
+## Falsification
+
+If the standing test cannot be made to fail against the unfixed code (i.e.
+the "before" run already passes), the reproduction is wrong and the claim
+that this is a live defect needs re-checking before anything is fixed. If
+fixing it requires touching more than `material_from_brief()`'s construction
+of `about`/`blocks` (e.g. if a section builder reads raw block text from
+somewhere `material_from_brief` does not control), that is a sign the single
+point of reconciliation was the wrong design and each section would need its
+own guard — report that rather than patching around it.
+
+## Outcome — 2026-09-09
+
+**Primary claim PASSED, exactly as predicted.** With the fix reverted (a
+scratch checkout of the unfixed `render.py`), both new tests fail: the
+corpus-wide sweep names `hvac` printing "20,000" against a corroborated
+6203, and the direct fixture test shows "20,000" still on the page. With
+`app/site/contradiction.py` wired into `material_from_brief()`, both pass —
+"6203" still prints unchanged, "20,000" does not. One point of
+reconciliation in `material_from_brief()` was sufficient; no section
+builder needed its own guard, confirming the design held.
+
+**One false positive caught and fixed before this was reported passing.**
+The standing test's own tag-stripped page scan first failed against `law`,
+matching "2026" (the end of an unrelated offer-card heading, "North
+Texas's Choice for 2026") glued across a real newline to "Reviews" (the
+next section's heading) — an artifact of stripping HTML tags to a single
+space while the source's own line breaks between block-level elements
+survive as literal newlines. Fixed by requiring the number and
+"review(s)" sit on one line (no-newline whitespace, in both
+`contradiction.py` and the test) rather than loosening the check. This
+confirms the corpus-wide scan done before writing the fix was still
+correct: `hvac` was the only genuine review-count contradiction; `law`'s
+"2026" was never a real hit, only a test artifact.
+
+**Secondary claim held.** No redecide needed — `make check` (840 passed)
+is green with only `hvac`'s render snapshot moving (content-only,
+regenerated and reviewed by hand: the sentence claiming 20,000 reviews is
+gone, the surrounding sentences and every other fixture's bytes are
+untouched). No fingerprint value, axis, or gate collision count changed.

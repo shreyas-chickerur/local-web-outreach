@@ -441,6 +441,16 @@ instances so far. Prefer a standing test over catching the sixth by eye.
 ## 4. Invariants
 
 * No unverified fact ships. The gate runs last, immediately before the write.
+* **Two corroborated facts must not contradict each other on one page.** A
+  business's own marketing copy does not outrank a value this system
+  independently corroborates — when a stated quantity (a review count, and
+  anything else structured data pins in the future) disagrees with the
+  corroborated one, the copy sentence making the claim is dropped, never
+  rewritten, and never left standing beside the number it contradicts.
+  Different from the invariant above: that one is about an assertion
+  nothing backs; this one is about two backed assertions that disagree with
+  each other. See `app.site.contradiction`,
+  `tests/test_no_contradicted_fact_ships.py`.
 * A rejection writes no version, leaves the previous version live, is recorded.
 * **Deterministic replay.** Persist every model answer — design system,
   compositions, copy selection, vision, signature device — and re-render from

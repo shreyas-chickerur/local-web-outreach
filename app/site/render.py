@@ -32,7 +32,7 @@ from app.adapters import photos as photos_api
 from app.adapters.imageinfo import dimensions_of, measure
 from app.core.claims import CLAIM_RE
 from app.core.config import google_places_api_key, preview_base_url
-from app.site import contractorfacts
+from app.site import contractorfacts, contradiction
 from app.site.density import calculate_density_signal, density_attrs
 from app.site.plan import (
     NO_DATA,
@@ -239,10 +239,19 @@ def material_from_brief(brief: dict) -> Material:
                and f.get("value")}
     ratings = brief.get("ratings") or []
     best = max(ratings, key=lambda r: (r.get("reviews") or 0), default=None)
+    reviews = best.get("reviews") if best else None
+    # Two corroborated facts must not contradict each other on one page
+    # (BRIEF §4). Reconciled once, here, so every section builder that reads
+    # `about`/`blocks` already sees text that agrees with the structured
+    # count — see `app.site.contradiction`.
+    blocks = tuple(
+        {**block, "text": contradiction.reconcile(block.get("text", ""), reviews)}
+        if "text" in block else block
+        for block in (published.get("blocks") or ()))
     return Material(
         name=brief.get("name") or "",
         tagline=published.get("tagline"),
-        about=published.get("about"),
+        about=contradiction.reconcile(published.get("about"), reviews),
         services=tuple(published.get("services") or ()),
         products=tuple(published.get("products") or ()),
         menu_items=tuple(published.get("menu_items") or ()),
@@ -254,13 +263,13 @@ def material_from_brief(brief: dict) -> Material:
         email=(published.get("emails") or [None])[0],
         socials=tuple(published.get("socials") or ()),
         rating=best.get("value") if best else None,
-        reviews=best.get("reviews") if best else None,
+        reviews=reviews,
         trade=brief.get("trade"),
         price_level=brief.get("price_level"),
         quotes=tuple(brief.get("testimonials") or ()),
         place_photos=tuple(brief.get("place_photos") or ()),
         lead_id=brief.get("lead_id"),
-        blocks=tuple(published.get("blocks") or ()),
+        blocks=blocks,
         photo_labels=rekey_for_lead(brief.get("photo_labels"),
                                     brief.get("lead_id")),
         photo_vision=rekey_for_lead(brief.get("photo_vision"),
