@@ -18,22 +18,24 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "stats"
+      "about"
     ],
     "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "reviews",
+    "lead_with": "stats",
     "mood": "refined",
-    "rationale": "A family law client's first question is \"can I trust this person with my divorce or custody case,\" and a 4.9 rating from 148 reviews plus direct client testimony answers that faster than any photograph \u2014 this practice has only two usable images, not enough to build a gallery-led page around. The ledger arrangement and quiet type keep the tone serious and document-like, as befits a firm handling emotionally charged family matters, with navy reading as trustworthy and legal rather than decorative.",
+    "rationale": "This is a family law practice where a visitor's first question is \"can I trust this person with my divorce or custody case,\" not \"what does the office look like\" \u2014 so we lead with the 4.9 rating and review count, back it immediately with real client testimony, and keep the imagery (mostly small headshots and building exteriors) out of the way rather than forcing a gallery it can't support.",
     "read_by": "claude",
+    "signature": "quote",
+    "signature_why": "A family law client's own words about trust and being cared for during a hard time say more than any photo could, so we set one testimonial large across the page.",
     "suppress": [
       "gallery"
     ],
     "type_treatment": "quiet",
     "understood": [
-      "A family law client's first question is \"can I trust this person with my divorce or custody case,\" and a 4.9 rating from 148 reviews plus direct client testimony answers that faster than any photograp"
+      "This is a family law practice where a visitor's first question is \"can I trust this person with my divorce or custody case,\" not \"what does the office look like\" \u2014 so we lead with the 4.9 rating and r"
     ],
     "unsupported": []
   },

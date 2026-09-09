@@ -36,6 +36,7 @@ DEFAULT_SPEC: dict = {
     "first_screen": "photo",
     "type_treatment": "quiet",
     "architecture": "stacked",
+    "signature": "none",
 }
 
 # (phrase, accent name). Colour is the thing people say first about a page, so

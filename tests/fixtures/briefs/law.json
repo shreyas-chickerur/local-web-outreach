@@ -9,7 +9,7 @@
   ],
   "design_direction": {
     "accent": "burgundy",
-    "architecture": "stacked",
+    "architecture": "column",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -20,20 +20,22 @@
       "reviews",
       "services"
     ],
-    "first_screen": "facts",
+    "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
-    "mood": "bold",
-    "rationale": "Someone hurt in a wreck wants proof this firm wins before anything else, so the 4.9-star rating and case volume lead, and a bold, confident mood with a stamped, tight-set name reads as a firm ready to fight rather than a quiet boutique. Photography is a mix of promo graphics and only a handful of real, large-enough shots, so facts still lead but the rhythm underneath is an even, generous stacked flow rather than the tense ledger the last firm used \u2014 services and reviews get pulled forward since ",
+    "mood": "refined",
+    "rationale": "Someone hiring an injury lawyer after a wreck wants proof of competence before anything else \u2014 the 4.9 rating, the case wins, the recognition \u2014 not a photo tour of the office; the photography here is mostly small promotional graphics and portraits, not a gallery-grade argument, so it should support the proof rather than lead it. Keeping the same navy-quiet-ledger-facts formula as the last firm would make two law offices look identical, so shifting to a warmer burgundy, a proof-led first screen, ",
     "read_by": "claude",
+    "signature": "stamp",
+    "signature_why": "A personal injury firm lives and dies by results and recognition, so a repeated mark like \"Super Lawyer\" or case-result stamps reinforces credibility every time a visitor scrolls past one.",
     "suppress": [
-      "features"
+      "gallery"
     ],
-    "type_treatment": "stamped",
+    "type_treatment": "quiet",
     "understood": [
-      "Someone hurt in a wreck wants proof this firm wins before anything else, so the 4.9-star rating and case volume lead, and a bold, confident mood with a stamped, tight-set name reads as a firm ready to"
+      "Someone hiring an injury lawyer after a wreck wants proof of competence before anything else \u2014 the 4.9 rating, the case wins, the recognition \u2014 not a photo tour of the office; the photography here is "
     ],
     "unsupported": []
   },

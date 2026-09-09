@@ -80,6 +80,8 @@ class SiteSpec:
     # How the sections sit against each other — rhythm, measure,
     # grounds, separators. Not which sections exist.
     architecture: str = "stacked"
+    # Exactly one mark per site, never two. BRIEF §2.3.
+    signature: str = "none"
     one_page: bool = True
     understood: list[str] = field(default_factory=list)
     ignored: list[str] = field(default_factory=list)

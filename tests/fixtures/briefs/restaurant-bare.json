@@ -19,12 +19,14 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "refined",
-    "rationale": "Ichika's own photography is the strongest evidence they have \u2014 nine large, carefully composed dish shots that show the precision and kaiseki craft reviewers rave about, so the site should open on a photograph and let a wide, airy gallery carry the case, with the perfect ratings and quoted reviews raised right after to confirm what the pictures promise. A quiet, sentence-case name over that photo reads as confident and refined rather than shouting, which matches a kaiseki counter, not a casual di",
+    "rationale": "Ichika is a quiet, precise kaiseki counter whose nine strong dish photographs are the actual argument for coming \u2014 a wide, airy gallery-led page with a single full-bleed photo opener lets the food and craft speak before anything else, while the perfect ratings and lyrical reviews confirm it once they're looking.",
     "read_by": "claude",
+    "signature": "quote",
+    "signature_why": "Setting one of the kaiseki reviews at full display size across the page captures the rare, considered praise this room earns without resorting to a star-badge clich\u00e9.",
     "suppress": [],
     "type_treatment": "quiet",
     "understood": [
-      "Ichika's own photography is the strongest evidence they have \u2014 nine large, carefully composed dish shots that show the precision and kaiseki craft reviewers rave about, so the site should open on a ph"
+      "Ichika is a quiet, precise kaiseki counter whose nine strong dish photographs are the actual argument for coming \u2014 a wide, airy gallery-led page with a single full-bleed photo opener lets the food and"
     ],
     "unsupported": []
   },

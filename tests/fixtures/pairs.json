@@ -3,35 +3,53 @@
     "Ground truth for the fingerprint: would a stranger say these two came from",
     "one tool, or from two different studios?",
     "",
-    "Judged BLIND, from the first-viewport screenshots alone, with no axis",
-    "values in view. The first version of this file was contaminated — four of",
-    "four 'different' verdicts were justified in the vector's own vocabulary",
-    "(mood, accent, layout bias, leads-with), so agreement was measuring the",
-    "instrument against a restatement of itself. Every `why` below describes",
-    "what is on the screen. If a verdict cannot be written that way it is not a",
-    "judgement about the picture.",
+    "JUDGED FROM THE WHOLE PAGE, scrolled top to bottom, not from the first",
+    "viewport. That changed on 2026-09-08 and it is a change of definition rather",
+    "than of method. Every verdict before it was read off a fold screenshot, and a",
+    "fold cannot see an axis that lives below it: page architecture rendered",
+    "`ledger` byte-identical to `stacked` above the fold, so its binding claim",
+    "could not have passed however good the axis was. Section edges and most of",
+    "the signature device are down there too. An instrument that only looks at one",
+    "screen can only ever validate first-screen axes.",
     "",
-    "The rule that resolves the near-ties: a difference in COLOUR or SUBJECT",
-    "alone is not a different site. Two pages that share a skeleton, a type",
-    "treatment and a first screen are the same site painted twice, whatever the",
-    "accent and whoever is in the photograph.",
+    "The pictures are artifacts/contact-sheet/<slug>-page.png, written by",
+    "tools/contact_sheet.py alongside pages.html. They are not committed: ten",
+    "megabytes a run on a directory rewritten every time the corpus is re-decided,",
+    "in a repository that has already had a push fail on size. The full-size",
+    "sheets have never been committed for the same reason, and the tool",
+    "regenerates all of it deterministically.",
     "",
-    "A difference in how the name is SET — its size, its case, the spacing of",
-    "its letters — is not by itself a different site either, and for the same",
-    "reason. The words differ between any two businesses, so the lettering",
-    "always differs; what a stranger recognises is the arrangement, and a",
-    "setting applied to the same arrangement is the same page in another font.",
-    "It counts only when it MOVES the type somewhere else on the screen, or",
-    "changes what shares the screen with it — that is a change of arrangement",
-    "rather than of setting.",
+    "Judged BLIND, with no axis values in view. The first version of this file was",
+    "contaminated — four of four 'different' verdicts were justified in the",
+    "vector's own vocabulary — so every `why` below describes what is on the",
+    "screen. If a verdict cannot be written that way it is not a judgement about",
+    "the picture.",
     "",
-    "Written 2026-09-08, before looking at which verdicts it moves, because the",
-    "two it was written to resolve contradict each other and whichever way it",
-    "is stated it decides one of them. The gap it fills: the rule above names",
-    "colour and subject and is silent on type setting, and two verdicts fell",
-    "into that silence in opposite directions.",
+    "THE RESOLVING RULES, re-checked against the new definition rather than",
+    "carried over on assumption:",
     "",
-    "Claude's readings on 2026-09-07, from artifacts/contact-sheet/fold.html.",
+    "COLOUR AND SUBJECT still do not make a different site on their own. Two pages",
+    "identical down their length in different accents are one tool painted twice,",
+    "and whoever is in the photograph is not a design decision. But the check",
+    "found one thing the fold hid: a ground that ALTERNATES down the page is not",
+    "colour, it is arrangement — a stack of slabs against an even field reads as a",
+    "different page even when both are the same hue. Colour is discounted where it",
+    "is paint and counted where it is structure, and the test is whether it",
+    "changes with position on the page.",
+    "",
+    "TYPE SETTING still does not make a different site on its own — size, case,",
+    "letter-spacing. The words differ between any two businesses so the lettering",
+    "always differs; what a stranger recognises is the arrangement. It counts when",
+    "it moves the type somewhere else or changes what shares the screen with it.",
+    "",
+    "AND NEWLY IN SCOPE, because the fold could not see it: the RHYTHM of the",
+    "bands down the page, the MEASURE the text is set to, and whether the bands",
+    "are separated by rules, by ground changes, or by whitespace alone. These are",
+    "arrangement and they count.",
+    "AND A SIGNATURE DEVICE counts when it changes the page's proportions, on the same test the type-setting rule uses. A full screen of display quotation does; a hairline of running facts, a row of stamps or a strip of pictures does not, on its own. Added 2026-09-08 when the device became an axis, and stated before the pairs it decides were looked at.",
+    "",
+    "",
+    "Claude's readings on 2026-09-08, from artifacts/contact-sheet/pages.html.",
     "Shreyas sells these pages and should overwrite any of them."
   ],
   "_verdicts": [
@@ -55,7 +73,8 @@
       "verdict": "different",
       "why": "one is a food photograph filling the screen with the name over it; the other rules the screen down the middle, type on cream beside the plate",
       "held_out": false,
-      "_was": "same, before page architecture was an axis and the corpus was re-decided under it."
+      "_was": "same, before page architecture was an axis and the corpus was re-decided under it.",
+      "retired": "Retired. The ground truth definition changed from the first viewport to the whole page, so this verdict is not comparable to one taken under the new definition — it is a judgement about a different thing, not a stale judgement about the same thing. Not re-judged: fresh verdicts were taken on the same corpus from whole-page pictures."
     },
     {
       "a": "barbecue",
@@ -63,21 +82,24 @@
       "verdict": "different",
       "why": "one fills the screen with a food photograph and sets the name over it; the other divides the screen down the middle",
       "held_out": false,
-      "_was": "same, before page architecture was an axis and the corpus was re-decided under it."
+      "_was": "same, before page architecture was an axis and the corpus was re-decided under it.",
+      "retired": "Retired. The ground truth definition changed from the first viewport to the whole page, so this verdict is not comparable to one taken under the new definition — it is a judgement about a different thing, not a stale judgement about the same thing. Not re-judged: fresh verdicts were taken on the same corpus from whole-page pictures."
     },
     {
       "a": "contractor-bare",
       "b": "roofer",
       "verdict": "different",
       "why": "one opens on a rating at display size over a photograph filling the screen; the other puts a band of photograph across the top with the name beneath it on a pale ground",
-      "held_out": false
+      "held_out": false,
+      "retired": "Retired. The ground truth definition changed from the first viewport to the whole page, so this verdict is not comparable to one taken under the new definition — it is a judgement about a different thing, not a stale judgement about the same thing. Not re-judged: fresh verdicts were taken on the same corpus from whole-page pictures."
     },
     {
       "a": "contractor-bare",
       "b": "hvac",
       "verdict": "different",
       "why": "one opens on a rating at display size over a photograph filling the screen; the other puts a band of photograph across the top with the name beneath it",
-      "held_out": false
+      "held_out": false,
+      "retired": "Retired. The ground truth definition changed from the first viewport to the whole page, so this verdict is not comparable to one taken under the new definition — it is a judgement about a different thing, not a stale judgement about the same thing. Not re-judged: fresh verdicts were taken on the same corpus from whole-page pictures."
     },
     {
       "a": "dentist",
@@ -93,7 +115,8 @@
       "b": "restaurant-bare",
       "verdict": "different",
       "why": "one rules the screen down the middle, type on cream beside a shopfront; the other is a food photograph filling the screen with the name over it",
-      "held_out": false
+      "held_out": false,
+      "retired": "Retired. The ground truth definition changed from the first viewport to the whole page, so this verdict is not comparable to one taken under the new definition — it is a judgement about a different thing, not a stale judgement about the same thing. Not re-judged: fresh verdicts were taken on the same corpus from whole-page pictures."
     },
     {
       "a": "bare-trade",
@@ -109,7 +132,8 @@
       "verdict": "same",
       "why": "a band of photograph across the top, then the name in heavy capitals on a pale ground, a paragraph, a ruled line of figures and one coloured button. The same page twice, in two colours",
       "held_out": false,
-      "_was": "different, before page architecture was an axis and the corpus was re-decided under it."
+      "_was": "different, before page architecture was an axis and the corpus was re-decided under it.",
+      "retired": "Retired. The ground truth definition changed from the first viewport to the whole page, so this verdict is not comparable to one taken under the new definition — it is a judgement about a different thing, not a stale judgement about the same thing. Not re-judged: fresh verdicts were taken on the same corpus from whole-page pictures."
     },
     {
       "a": "law",
@@ -124,7 +148,8 @@
       "b": "contractor-bare",
       "verdict": "different",
       "why": "one rules the screen down the middle with type on cream; the other fills the screen with a photograph and a rating set large over it",
-      "held_out": false
+      "held_out": false,
+      "retired": "Retired. The ground truth definition changed from the first viewport to the whole page, so this verdict is not comparable to one taken under the new definition — it is a judgement about a different thing, not a stale judgement about the same thing. Not re-judged: fresh verdicts were taken on the same corpus from whole-page pictures."
     },
     {
       "a": "restaurant-bare",
@@ -181,7 +206,8 @@
       "b": "restaurant-bare",
       "verdict": "same",
       "why": "a food photograph filling the screen, the name over it on the left, a line of figures, two buttons in the same place. The lettering is set differently and the plates are different colours",
-      "held_out": false
+      "held_out": false,
+      "retired": "Retired. The ground truth definition changed from the first viewport to the whole page, so this verdict is not comparable to one taken under the new definition — it is a judgement about a different thing, not a stale judgement about the same thing. Not re-judged: fresh verdicts were taken on the same corpus from whole-page pictures."
     },
     {
       "a": "dentist",
@@ -189,7 +215,8 @@
       "verdict": "different",
       "why": "one opens on a rating at display size over a photograph filling the screen; the other puts a band of photograph across the top with the name beneath it",
       "held_out": false,
-      "_was": "same, before page architecture was an axis and the corpus was re-decided under it."
+      "_was": "same, before page architecture was an axis and the corpus was re-decided under it.",
+      "retired": "Retired. The ground truth definition changed from the first viewport to the whole page, so this verdict is not comparable to one taken under the new definition — it is a judgement about a different thing, not a stale judgement about the same thing. Not re-judged: fresh verdicts were taken on the same corpus from whole-page pictures."
     },
     {
       "a": "bare-trade",
@@ -215,7 +242,8 @@
       "verdict": "same",
       "why": "both rule the screen down the middle, the name and a paragraph and a line of figures in the left half on cream, a photograph filling the right",
       "held_out": false,
-      "_was": "different, before page architecture was an axis and the corpus was re-decided under it."
+      "_was": "different, before page architecture was an axis and the corpus was re-decided under it.",
+      "retired": "Retired. The ground truth definition changed from the first viewport to the whole page, so this verdict is not comparable to one taken under the new definition — it is a judgement about a different thing, not a stale judgement about the same thing. Not re-judged: fresh verdicts were taken on the same corpus from whole-page pictures."
     },
     {
       "a": "roofer",
@@ -231,14 +259,16 @@
       "b": "contractor-bare",
       "verdict": "different",
       "why": "both fill the screen with a photograph, but one sets the name over it and the other a rating at display size — the number is the first thing read on one and absent from the top of the other",
-      "held_out": false
+      "held_out": false,
+      "retired": "Retired. The ground truth definition changed from the first viewport to the whole page, so this verdict is not comparable to one taken under the new definition — it is a judgement about a different thing, not a stale judgement about the same thing. Not re-judged: fresh verdicts were taken on the same corpus from whole-page pictures."
     },
     {
       "a": "bare-trade",
       "b": "restaurant-rich",
       "verdict": "different",
       "why": "one fills the screen with a photograph and a rating set large over it; the other rules the screen down the middle",
-      "held_out": false
+      "held_out": false,
+      "retired": "Retired. The ground truth definition changed from the first viewport to the whole page, so this verdict is not comparable to one taken under the new definition — it is a judgement about a different thing, not a stale judgement about the same thing. Not re-judged: fresh verdicts were taken on the same corpus from whole-page pictures."
     },
     {
       "a": "bare-trade",
@@ -248,9 +278,309 @@
       "held_out": true,
       "_was": "newly judged after the `facts` repair, which made two positions that had rendered the same first screen render different ones.",
       "retired": "Retired, not re-judged. Page architecture was added as an axis and the corpus was re-decided under it; every fold in the corpus moved. A held-out verdict whose page is gone is retired by rule. This is the fourth time the held-out set has been emptied by a re-decide, and it is the finding rather than the accident."
+    },
+    {
+      "a": "bare-trade",
+      "b": "contractor-bare",
+      "verdict": "same",
+      "why": "the same page down its length: a rating set large over a photograph, a coloured slab of figures, a grid of quote cards, and a thin rule drawn above every band with the text held to a narrow column",
+      "held_out": true,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "dentist",
+      "b": "law",
+      "verdict": "same",
+      "why": "the same page down its length: a rating over a photograph, a grid of quote cards, a grid of small titled cards, a full-width slab of figures in one colour and a photograph grid, each band on its own flat ground with no rules between them",
+      "held_out": true,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "bare-trade",
+      "b": "dentist",
+      "verdict": "different",
+      "why": "one runs a single pale field the whole way down with thin rules drawn above each band and the text in a narrow column; the other changes ground colour at every band and runs its pictures the full width",
+      "held_out": true,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "bare-trade",
+      "b": "law",
+      "verdict": "different",
+      "why": "one is a single pale field with ruled bands and a narrow column of text; the other is a sequence of flat coloured fields, a deep one immediately under the opening",
+      "held_out": false,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "contractor-bare",
+      "b": "dentist",
+      "verdict": "different",
+      "why": "one holds everything in a narrow column on one pale ground with thin rules between bands; the other changes ground at every band and ends in a wide grid of photographs",
+      "held_out": true,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "contractor-bare",
+      "b": "law",
+      "verdict": "different",
+      "why": "one is a narrow ruled column on a single ground; the other is a stack of flat coloured fields running the full width",
+      "held_out": true,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "hvac",
+      "b": "roofer",
+      "verdict": "different",
+      "why": "both open with a band of photograph and heavy capitals, but one alternates pale and paler grounds the whole way down with nothing drawn between them, and the other drops a deep slab under the opening and rules a line above every band after it",
+      "held_out": false,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "barbecue",
+      "b": "restaurant-bare",
+      "verdict": "same",
+      "why": "the same page: a photograph filling the opening, then a wide grid of pictures edge to edge, then quote cards four across in the same wide measure, with a lot of air around each band",
+      "held_out": false,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "restaurant-rich",
+      "b": "salon",
+      "verdict": "same",
+      "why": "both divide the opening down the middle and then run the same wide airy measure the whole way down, the bands separated by space alone",
+      "held_out": false,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "barbecue",
+      "b": "dentist",
+      "verdict": "different",
+      "why": "one opens on a photograph with the name over it and runs wide and airy; the other opens on a rating set large and steps through flat coloured fields",
+      "held_out": false,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "barbecue",
+      "b": "hvac",
+      "verdict": "different",
+      "why": "one is a photograph filling the opening then wide grids with a lot of air; the other is a shallow band of photograph then narrow alternating pale fields",
+      "held_out": false,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "restaurant-bare",
+      "b": "law",
+      "verdict": "different",
+      "why": "one opens on a photograph filling the screen and runs wide and airy; the other opens on a rating and drops straight into a deep coloured slab",
+      "held_out": true,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "dentist",
+      "b": "hvac",
+      "verdict": "different",
+      "why": "one opens on a rating over a photograph filling the screen; the other on a shallow band of photograph above the name, and their bands are spaced quite differently down the page",
+      "held_out": false,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "law",
+      "b": "roofer",
+      "verdict": "different",
+      "why": "both drop a deep coloured slab under the opening, but one opens on a rating over a photograph filling the screen and the other on a shallow band of it, and one rules a line above every band while the other does not",
+      "held_out": true,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "contractor-bare",
+      "b": "roofer",
+      "verdict": "different",
+      "why": "one holds a narrow column on a single ground; the other opens on a shallow band of photograph, drops a deep slab and runs wider bands under it",
+      "held_out": false,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "barbecue",
+      "b": "salon",
+      "verdict": "different",
+      "why": "one fills the opening with a photograph; the other divides it down the middle, and below that one is dense with pictures and the other is mostly quiet text",
+      "held_out": false,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "dentist",
+      "b": "restaurant-rich",
+      "verdict": "different",
+      "why": "one opens on a rating over a photograph and steps through flat coloured fields; the other divides the opening down the middle and runs a wide airy measure",
+      "held_out": true,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "hvac",
+      "b": "salon",
+      "verdict": "different",
+      "why": "one opens on a shallow band of photograph and alternates pale fields the whole way down; the other divides the opening down the middle and leaves large quiet stretches between its bands",
+      "held_out": false,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "restaurant-rich",
+      "b": "roofer",
+      "verdict": "different",
+      "why": "one divides the opening down the middle and runs wide and airy; the other opens on a shallow band of photograph, drops a deep slab and rules a line above every band",
+      "held_out": false,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "bare-trade",
+      "b": "restaurant-bare",
+      "verdict": "different",
+      "why": "one is a narrow ruled column on a single pale ground; the other fills the opening with a photograph and runs wide grids with a lot of air",
+      "held_out": false,
+      "retired": "Retired. The corpus was re-decided when the signature device became an axis, and every page moved. Not re-judged: fresh verdicts taken on the new rendering."
+    },
+    {
+      "a": "barbecue",
+      "b": "restaurant-bare",
+      "verdict": "different",
+      "why": "the same opening and the same wide airy grids, but one gives a whole screen to a single quotation set at display size and the other a strip of pictures in two tones with one left in colour",
+      "held_out": false
+    },
+    {
+      "a": "bare-trade",
+      "b": "contractor-bare",
+      "verdict": "different",
+      "why": "the same opening and the same ruled narrow bands, but one gives a whole screen to one quotation at display size and the other runs a hairline of figures across the page",
+      "held_out": true
+    },
+    {
+      "a": "hvac",
+      "b": "roofer",
+      "verdict": "different",
+      "why": "both open on a band of photograph above heavy capitals and both carry a row of stamped marks, but one alternates pale grounds the whole way down with nothing drawn between the bands and the other rules a line above every one",
+      "held_out": false
+    },
+    {
+      "a": "law",
+      "b": "roofer",
+      "verdict": "different",
+      "why": "both open on a band of photograph and drop a deep coloured slab under it, but one holds everything in a narrow column against a wide empty margin and the other runs wider bands with a rule above each",
+      "held_out": true
+    },
+    {
+      "a": "contractor-bare",
+      "b": "roofer",
+      "verdict": "different",
+      "why": "one opens on a rating at display size over a photograph filling the screen and runs a hairline of figures; the other on a band of photograph above the name, with a row of stamped marks",
+      "held_out": false
+    },
+    {
+      "a": "bare-trade",
+      "b": "dentist",
+      "verdict": "different",
+      "why": "both give a screen to one quotation, but one is ruled narrow bands on a single pale ground and the other steps through flat coloured fields",
+      "held_out": true
+    },
+    {
+      "a": "dentist",
+      "b": "law",
+      "verdict": "different",
+      "why": "one opens on a rating over a photograph filling the screen and steps through coloured fields; the other on a band of photograph, a deep slab and a narrow column against a wide margin",
+      "held_out": true
+    },
+    {
+      "a": "barbecue",
+      "b": "salon",
+      "verdict": "different",
+      "why": "both open on a photograph filling the screen, but one runs wide picture grids and a two-tone strip and the other sets a note in the margin against quiet body text",
+      "held_out": false
+    },
+    {
+      "a": "restaurant-bare",
+      "b": "salon",
+      "verdict": "different",
+      "why": "both open on a photograph filling the screen; one gives a screen to a quotation and runs wide grids, the other sets a margin note and keeps a narrower even rhythm",
+      "held_out": false
+    },
+    {
+      "a": "barbecue",
+      "b": "restaurant-rich",
+      "verdict": "different",
+      "why": "one fills the opening with a photograph and runs a two-tone strip; the other divides the opening down the middle and insets a block of type into the corner of a photograph",
+      "held_out": false
+    },
+    {
+      "a": "restaurant-rich",
+      "b": "salon",
+      "verdict": "different",
+      "why": "one divides the opening down the middle and insets type into a photograph's corner; the other fills the opening and sets a note in the margin",
+      "held_out": false
+    },
+    {
+      "a": "contractor-bare",
+      "b": "hvac",
+      "verdict": "different",
+      "why": "one opens on a rating over a photograph and holds a narrow ruled column; the other on a band of photograph and alternates pale grounds down the page",
+      "held_out": false
+    },
+    {
+      "a": "bare-trade",
+      "b": "law",
+      "verdict": "different",
+      "why": "one is a ruled narrow column giving a screen to a quotation; the other a deep slab, a row of stamps and a column against a wide margin",
+      "held_out": false
+    },
+    {
+      "a": "barbecue",
+      "b": "dentist",
+      "verdict": "different",
+      "why": "one fills the opening with a photograph and runs wide grids; the other opens on a rating and gives a screen to a quotation between coloured fields",
+      "held_out": false
+    },
+    {
+      "a": "barbecue",
+      "b": "hvac",
+      "verdict": "different",
+      "why": "one fills the opening with a photograph and runs wide airy grids; the other opens on a band of photograph and alternates pale grounds",
+      "held_out": false
+    },
+    {
+      "a": "restaurant-bare",
+      "b": "law",
+      "verdict": "different",
+      "why": "one fills the opening with a photograph; the other opens on a band of it above a deep slab and a row of stamped marks",
+      "held_out": true
+    },
+    {
+      "a": "dentist",
+      "b": "hvac",
+      "verdict": "different",
+      "why": "one opens on a rating over a photograph filling the screen; the other on a band of photograph, and their grounds change on a different beat",
+      "held_out": false
+    },
+    {
+      "a": "dentist",
+      "b": "restaurant-rich",
+      "verdict": "different",
+      "why": "one opens on a rating and steps through coloured fields; the other divides the opening down the middle and runs wide and airy",
+      "held_out": true
+    },
+    {
+      "a": "hvac",
+      "b": "salon",
+      "verdict": "different",
+      "why": "one opens on a band of photograph and alternates grounds; the other fills the opening and sets a note in the margin",
+      "held_out": false
+    },
+    {
+      "a": "restaurant-rich",
+      "b": "roofer",
+      "verdict": "different",
+      "why": "one divides the opening down the middle and runs wide; the other opens on a band of photograph, a deep slab and ruled bands",
+      "held_out": false
     }
   ],
-  "_judged_against": "The rendering as of page architecture landing — distance ruler aece36b7, gate rule 95f4d93e — read off .reviews/sheet, half-scale pictures of the desktop FIRST VIEWPORT, which is the method and which is the problem this round found: an axis that lives below the fold cannot be judged from a picture of the fold.",
+  "_judged_against": "Whole-page renderings of the corpus as of the signature device landing — distance ruler d2f37ed7, gate rule 95f4d93e — from artifacts/contact-sheet/pages.html.",
   "_held_out": "One verdict in three, chosen by a hash of the two slugs so that nobody picks which evidence survives. A held-out verdict is never used to choose a rule or a weighting, only to score one afterwards, and it is never re-judged — when the page under it changes it is retired with a reason and the set gets smaller. It starts here, so it says nothing about the rule this commit lands: the first rule it can honestly score is the next one.",
   "_retired": "A retired verdict is scored by nothing and re-judged by nobody. Retiring is what happens to a held-out pair when the page under it changes, and to any pair whose subject turns out not to be judgeable — the set shrinks, which is the honest cost of the number meaning anything."
 }

@@ -23,14 +23,16 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "A roofing contractor sells trust and competence before atmosphere \u2014 a visitor deciding on a roof replacement needs to see the 5.0 rating, review count, and multi-state W2-insured operation before anything else, not a mood shot. The stamped, ledger-style trade look with navy accent reads as a serious, professional operation across four states rather than a boutique, and leading with proof (stats, services, reviews) followed by real jobsite photography backs up the claims with evidence.",
+    "rationale": "People hiring a roofer want proof of competence and legitimacy before they want atmosphere \u2014 the 5.0 rating, 218 reviews, W2-insured crews, and BBB A+ status are the actual sales argument, so we lead with facts and figures rather than photography, then back it with services and named-review testimonials like the Kevin Cardenas ones that build trust in a specific person on the crew.",
     "read_by": "claude",
+    "signature": "stamp",
+    "signature_why": "A repeated licence/insurance-style mark reinforces the W2-insured, BBB A+, multi-state credibility that a homeowner checks before calling a roofer.",
     "suppress": [
       "features"
     ],
     "type_treatment": "stamped",
     "understood": [
-      "A roofing contractor sells trust and competence before atmosphere \u2014 a visitor deciding on a roof replacement needs to see the 5.0 rating, review count, and multi-state W2-insured operation before anyt"
+      "People hiring a roofer want proof of competence and legitimacy before they want atmosphere \u2014 the 5.0 rating, 218 reviews, W2-insured crews, and BBB A+ status are the actual sales argument, so we lead "
     ],
     "unsupported": []
   },

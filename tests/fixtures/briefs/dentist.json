@@ -24,14 +24,16 @@
     "kind": "style",
     "lead_with": "reviews",
     "mood": "warm",
-    "rationale": "A dental practice sells trust and comfort before anything else, and this one already has the proof: strong ratings and warm, specific patient reviews about being treated gently and fairly. Leading with the stats/facts and then the reviews gets a nervous patient to the reassurance they need faster than a photo of the office ever could, while a calm teal keeps the clinical mood approachable rather than cold; the \"menu\" section is meaningless here (only \"Special\" exists) so it's suppressed.",
+    "rationale": "People choosing a dentist want proof of gentleness and trust before anything else, and this practice has strong ratings and warm, specific reviews to offer \u2014 so lead with the numbers and the words patients actually said, not the office photos, and send them straight to booking.",
     "read_by": "claude",
+    "signature": "quote",
+    "signature_why": "A single patient review set large does more to calm a nervous new patient than any photo of the office could.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "quiet",
     "understood": [
-      "A dental practice sells trust and comfort before anything else, and this one already has the proof: strong ratings and warm, specific patient reviews about being treated gently and fairly. Leading wit"
+      "People choosing a dentist want proof of gentleness and trust before anything else, and this practice has strong ratings and warm, specific reviews to offer \u2014 so lead with the numbers and the words pat"
     ],
     "unsupported": []
   },

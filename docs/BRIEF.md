@@ -62,115 +62,50 @@ against the wrong pictures.
 
 **The instrument's current reading.**
 
-    agreement   19 of 27 cross-pairs (tuning 19 of 27, held out 0 of 0)
-                ruler aece36b7, rule 95f4d93e, labels dafe510d,
-                held-out e3b0c442
-    census      same-trade mean 51% distance = 49% identical, 7 scored pairs
-                closest pair hvac / roofer at 37%, judged SAME
+    agreement   0 of 0 — no "same" pair is left to rank
+                ruler d2f37ed7, rule 95f4d93e, labels a9beee08,
+                held-out 7fbd905e
+    census      same-trade 55% distance = 45% identical, 7 scored pairs
+                closest pair contractor-bare / roofer at 45%, judged DIFFERENT
     unreachable 0
     gate        0 of 55 pairs collide under its own rule
-    tests       760
+    tests       769
+    verdicts    20, all judged whole-page
 
-**Done — Slice B, axis three: page architecture.** `app/site/architecture.py` —
-five arrangements (stacked, banded, ledger, column, gallery) covering rhythm,
-measure, ground and separator, applied to the sections and never to the hero.
-Offered only where the section count can carry it. Proven with the stripped-class
-test phase 1's defect made necessary: all ten value pairs render differently once
-`class="..."` is taken out of the comparison, and a standing test holds that the
-arrangement never reaches into the first screen.
+**Done — the ground truth moved off the fold.** Every verdict before
+2026-09-08 was read from a first-viewport screenshot, and axis three proved what
+that costs: page architecture renders `ledger` byte-identical to `stacked` above
+the fold, so its claim could not have passed however well the axis was built.
+The contact sheet now captures whole pages beside the fold crop, every old
+verdict was RETIRED as a judgement of a different thing, and twenty fresh ones
+were taken. The count decided by one axis alone fell from 12 of 12 to 15 of 20,
+and page architecture's claim passed on re-check at 15 of 20.
 
-**Its binding claim FAILED, and the reason is the instrument.** The claim was
-that the count of verdicts determined by `first_screen` alone would fall below
-the total. It went 16 of 16 to 12 of 12. **The ground truth is read from the
-first viewport and this axis lives below it** — measured, `ledger` is
-byte-identical to `stacked` in a fold capture, and `banded` and `gallery` differ
-only in the sliver of the next section reaching the bottom edge, which reads as
-colour and is discounted by name.
+**Done — Slice B, axis three (page architecture)** and **the signature device**
+(§2.3, twelve devices, exactly one per site, availability by material, never
+reaching the first screen). The device's claim passed: both pairs sharing an
+opening and an arrangement are judged different — though both turn on `quote`,
+the one device that takes a whole screen, so the evidence is about that device
+more than about devices in general.
 
-**So the instrument can only validate first-screen axes.** That corrects what
-was recorded here after axis two: the generator does not have one arrangement
-dimension, the measurement only looks at one screen. Section edges and most of
-the signature device are below the fold as well, so building them now would
-produce axes whose claims cannot be tested. **Whether the ground truth moves off
-the fold is the open question, and it is a change to the instrument's
-definition rather than a tuning.**
+**Done — the forbidden defaults (§2.4), encoded and checked.** All nine, run
+over the corpus. Two fixtures match, both the entry §2.4 names first. Not wired
+as a build gate: gating would reject them, and escaping the mood presets is its
+own work.
 
-**Done — the type-setting rule, and the blind spot closed.** `pairs.json` named
-colour and subject and was silent on how the name is set; two verdicts fell into
-that silence in opposite directions and produced both unreachable comparisons.
-The rule was written before the verdicts were looked at and moved exactly one.
-`unreachable()` is zero, and **axis two's justification is gone with it** — type
-treatment was built to close a blind spot that was never evidence about axes.
-The axis stays; it renders, it varies the corpus, the gate needs it. See
-`.reviews/slice-b-type-rule.md`.
+**Done — the keyless path varies by business (§2.6).** The trade chooses the
+mood; a stable hash of the name chooses everything else from what the business
+can carry. Two roofers no longer collide.
 
-**Done — a defect in axis one, found by judging and repaired.** `first_screen`
-declared five positions and two of them rendered the same first screen: `photo`
-and `facts` differed above the fold by the class attribute and nothing else.
-That is `layout_bias` again — see §3 — in the axis weighted heaviest at 2.5, so
-every distance across such a pair was overstated by a quarter, and
-`test_a_first_screen_axis_changes_the_first_screen` passed it because a class
-name is markup. `facts` now opens on the rating at display size with the name
-second, which is what §2.1 says the position is for. A strengthened test strips
-the class attribute before comparing and holds all ten position pairs.
+**THE INSTRUMENT IS EXHAUSTED AT ELEVEN FIXTURES.** Judged whole-page, none of
+the twenty pairs is one a stranger calls one studio — §2's requirement met on
+this corpus, and agreement is 0 of 0 because a rank needs something to rank.
+**No further axis can be validated here.** That needs more businesses, not more
+axes, and it is the reason §2.2 (palette from their own photographs) is not
+built: it would change every site with no way to say whether it helped.
 
-**The instrument cannot validate anything yet, and this is the reason.** All
-sixteen live verdicts are exactly "do they share `first_screen`". With colour,
-subject and type setting discounted by the judging rules, the generator has
-**one arrangement dimension**. Judging more pairs adds verdicts already
-determined by the vector, which is self-consistency rather than validity. Page
-architecture is next — not by §2.1's ordering, but because it is the second
-arrangement dimension and nothing can be measured until there is one.
-
-**Done — Slice B, axis two.** Type treatment in `app/site/typetreatment.py` —
-size, case, alignment, tracking; five treatments; availability constrained by
-the length of the NAME rather than by the photographs. It visibly separates
-three restaurants that all open on the same position. `HIGH_WEIGHT = 2.5` ships
-with it: type treatment weighs 2.5, so the gate's required set is
-`{first_screen, type_treatment}` — twenty-five combinations against a window of
-ten, where `first_screen` alone was five and unmeetable.
-
-**And its pre-registered claim failed.** `agreement.unreachable()` reports two,
-not zero. The pairs a person calls one studio share their GEOMETRY and differ in
-type treatment, colour and subject — and the judge discounts all three, so the
-vector now carries a 2.5-weight term exactly where a person sees no difference.
-That is the failure mode `accent` and `hero_subject` already had.
-
-**The fork is decided: the gate's required set is split from the distance's
-weighting.** `fingerprint.REQUIRED_HIGH` is what `collisions()` reads;
-`HIGH_WEIGHT` and `highly_weighted()` are gone. The two were one number and are
-not one question — the gate asks whether a site's decision set repeats a recent
-one, the distance asks whether a stranger would say two pages came from one
-tool, and `type_treatment` is where they came apart: the gate needs it or it
-becomes unmeetable, and four blind verdicts describe a type difference and
-dismiss it. An axis can be mandatory for variety and cheap in the metric, and
-while they were coupled that sentence had nowhere to live.
-
-Both hashes are unchanged by the split, which is the point: it is a structural
-change that provably alters no output. **No weight was changed.** The freedom is
-now available and deliberately not taken — lowering `type_treatment` moves
-agreement 21/36 to 30/36 and the held-out set 0/2 to 2/2, which is a change
-arriving pre-validated by the score it improves. See
-`.reviews/slice-b-weight-split.md`.
-
-**The blind spot is a label contradiction, not a missing axis.** Both remaining
-unreachable comparisons trace to two verdicts of mine that cannot both be right:
-`restaurant-bare`/`restaurant-rich` differs on a strict subset of what
-`barbecue`/`restaurant-bare` differs on, both `why` texts rest on how the name
-is set, and one is called the same site while the other is called two studios.
-No axis can clear that. `pairs.json`'s judging rule covers colour and subject
-and says nothing about type setting, which is the gap they fell into — stating
-that rule and re-judging against it comes before axis three, and is
-pre-registered in `.reviews/slice-b-predictions.md`.
-
-**The held-out third cannot survive this work.** Emptied twice now, by both
-changes since it was created: every axis re-decides the corpus, every re-decide
-moves the folds, and a held-out verdict whose page is gone is retired by rule. A
-held-out set of PAIR VERDICTS can score a change to the ruler and never a change
-to the gate.
-
-**Not started.** The rest of Slice B, and Slices C, D, E, G, H and the rest of
-F.
+**Not started.** §2.2 palette derivation, and Slices C, D, E, G, H and the rest
+of F.
 
 ## 2. The governing requirement
 

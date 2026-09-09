@@ -16,7 +16,7 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "services"
+      "menu"
     ],
     "first_screen": "photo",
     "hero_offset": 0,
@@ -24,12 +24,16 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "Hutchins BBQ has huge review volume (13,880 on Google at 4.8) and ten strong, appetite-driven photographs of smoked meat, the room, and the crowd \u2014 this is a place whose pictures and reputation sell it before any words do. A photo-led first screen with a stamped, trade-shop wordmark reads as a real Texas smokehouse, and surfacing reviews and catering/services early answers what a hungry local or a corporate-catering customer needs to know, while the gallery-forward layout gives the food-and-fire",
+    "rationale": "Hutchins has abundant strong food and room photography (10 lead-worthy shots) and a huge, glowing review base (4.8 from nearly 14,000 people), so the site should open on the smoked meat and the busy, warm room rather than text, then quickly back that up with what people say and what's on the menu. A stamped, trade-shop name treatment and a terracotta accent read as an established smokehouse, not a boutique cafe, and ordering/catering is the one action worth asking a visitor to take.",
     "read_by": "claude",
-    "suppress": [],
+    "signature": "duotone",
+    "signature_why": "A strip of smoked-meat photography rendered in two tones with one full-colour break lets the brisket itself be the one moment of color, which is exactly what a barbecue joint wants a stranger to remember.",
+    "suppress": [
+      "features"
+    ],
     "type_treatment": "stamped",
     "understood": [
-      "Hutchins BBQ has huge review volume (13,880 on Google at 4.8) and ten strong, appetite-driven photographs of smoked meat, the room, and the crowd \u2014 this is a place whose pictures and reputation sell i"
+      "Hutchins has abundant strong food and room photography (10 lead-worthy shots) and a huge, glowing review base (4.8 from nearly 14,000 people), so the site should open on the smoked meat and the busy, "
     ],
     "unsupported": []
   },

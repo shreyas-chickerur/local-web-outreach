@@ -561,3 +561,156 @@ dimension; **the instrument only looks at one screen**, so it can only validate
 first-screen axes. Section edges and most of the signature device are below the
 fold too, so phases 3 through 8 would build axes whose claims cannot be tested.
 The run stops here.
+
+# Phase A — the ground truth moves off the fold
+
+Registered before the capture code is written.
+
+## What is changing, and why it is not a tuning
+
+Every blind verdict this project has taken was read from a first-viewport
+screenshot. Axis three proved what that costs: page architecture is real —
+ten value pairs render differently with the class attribute stripped, the hero
+provably untouched, 0 of 55 pairs colliding under the gate — and its binding
+claim could not have passed, because `ledger` is byte-identical to `stacked`
+above the fold. Section edges and most of the signature device sit below the
+fold too. The instrument can only validate first-screen axes.
+
+So the definition of the ground truth changes: **what a stranger sees scrolling
+the whole page**, not what the owner sees with the laptop turned around.
+
+That invalidates every existing verdict — not because they were judged badly but
+because the thing being judged is different. All of them are RETIRED with that
+reason and fresh verdicts are taken. None is re-judged: a verdict taken under
+one definition cannot be carried into another, which is the same rule that
+retires a verdict whose page has moved.
+
+## Binding claim
+
+**The count of verdicts determined by a single axis alone falls below the
+total.** Under fold judging it was 12 of 12, all `first_screen`. Report the
+actual number, and report it for any single axis rather than only
+`first_screen` — a ground truth that merely swaps which one axis decides
+everything has bought nothing.
+
+## Falsification
+
+Still determined by one axis alone. That would mean the whole page carries no
+more distinguishing information than the fold did, which would be a finding
+about the generator rather than about the instrument, and the run stops on it.
+
+## Also to report, either direction
+
+* `agreement.unreachable()` recomputed cold — not assumed to match the fold
+  reading.
+* Whether the judging rules carry over. Colour discounted above the fold is not
+  obviously discounted across a whole page: one accent in a hero is paint, and
+  two-tone bands down a page are structure. Checked rather than assumed.
+* Held-out at four to five scorable comparisons after the hash split. It has
+  been emptied four times on too few judged pairs and that shortfall is not
+  carried into the new definition.
+
+### Phase A outcome — PASSED, and it carries Phase B
+
+    fold judging        12 of 12 verdicts decided by first_screen alone
+    whole-page judging  15 of 20, and no axis decides all twenty
+
+Reported for every axis: `architecture` 18/20, `first_screen` 15/20,
+`type_treatment` 8/20. No single axis decides everything, which is the check
+that the change bought something rather than swapping which one term the labels
+restate.
+
+**Phase B settles with it.** Page architecture's binding claim — the count
+decided by `first_screen` alone falls below the total — passes at 15 of 20. The
+axis was already built and correct; the instrument was blind to it.
+
+`unreachable()` recomputed cold against the new verdicts: zero.
+
+One rule moved on re-check: a ground that ALTERNATES down the page is
+arrangement, not colour. Colour is discounted where it is paint and counted
+where it is structure.
+
+# Phase C — the evidence names the signature device, not colour structure
+
+`agreement.unreachable()` is zero, so no comparison is out of reach and no axis
+is forced by a superset relation. The evidence is in the four "same" verdicts,
+and it is unanimous:
+
+    bare-trade / contractor-bare   shares: action, architecture, first_screen
+    dentist / law                  shares: architecture, first_screen,
+                                           hero_subject
+    barbecue / restaurant-bare     shares: architecture, first_screen,
+                                           hero_subject, leads_with
+    restaurant-rich / salon        shares: architecture, first_screen
+
+**Every pair a stranger calls one studio shares exactly `first_screen` and
+`architecture`.** What they differ on — accent, mood, type treatment, action,
+section order, compositions — is either discounted by the judging rules or is
+what the business happens to publish.
+
+So the judge's model is: same opening, same arrangement, same site. The vector
+already holds both of those terms.
+
+## Which rules out the next two items in §2.1's order
+
+**Colour structure is contraindicated, and the whole-page re-check strengthens
+that rather than weakening it.** Every one of the four pairs differs on `accent`
+AND on `mood` and the judge called them one studio anyway. The one thing the
+re-check did move — that an alternating ground is arrangement rather than paint
+— is already carried by `architecture`'s `banded` value. A colour-structure axis
+would add a term the judge discounts, which is exactly how type treatment's
+claim failed.
+
+**Section edges is contraindicated for a different reason: `architecture`
+already decides it.** `ledger` separates bands with rules, `banded` with a change
+of ground, `gallery` with whitespace alone. A separate axis for the separator
+would be a second decision on one thing, which is how `layout_bias` came to be a
+function of `mood`.
+
+## What the evidence does name
+
+Four pages that share an opening and an arrangement and have **nothing else
+designed on them**. Every other difference is paint, lettering, or what the
+business published. The signature device — §2.3, exactly one per site, justified
+against the business — is the only remaining lever that is designed, is not
+colour, is not lettering, and is not the arrangement.
+
+## Binding claim
+
+**After the device lands, at least one pair that shares `first_screen` AND
+`architecture` is judged DIFFERENT.**
+
+That is the rule the whole-page verdicts currently follow without exception, and
+the device exists to break it. Reported as the count: how many of the pairs
+sharing both terms are judged different, out of how many such pairs.
+
+## Falsification
+
+Every pair sharing those two terms still judged the same site. That would mean a
+single designed mark does not change what a stranger reads, which is a real
+finding about §2.3's premise and the run stops on it.
+
+## Also to report, either direction
+
+`weight_of()`'s `min()` was annotated with the prediction that this is the axis
+where visibility and decidedness disagree in the OTHER direction — a strong,
+decided choice that often sits below the fold. Whole-page judging is what makes
+that testable for the first time. Report whether it held.
+
+### Phase D outcome — PASSED, and narrower than it looks
+
+Two pairs shared `first_screen` and `architecture` after the re-decide and both
+are judged different: `barbecue`/`restaurant-bare` and
+`bare-trade`/`contractor-bare`. **Both turn on `quote`**, the one device that
+takes a whole screen. The others are bands of ordinary height. So the claim
+passes on the strength of one device rather than of devices in general, and the
+rule written into `pairs.json` says so.
+
+The `min()` prediction held. `signature` is `VISIBILITY` 1.0 against
+`DECIDEDNESS` 3.0 — the first entry to extend that scale past `first_screen` —
+and `min()` suppresses it to 1.0, which is the disagreement the comment
+predicted, in the direction it predicted.
+
+**And the corpus ran out.** Zero "same" verdicts across twenty pairs; agreement
+is 0 of 0. §2's requirement is met on these eleven fixtures and the instrument
+cannot validate a further axis on them. Phase E is not built for that reason.

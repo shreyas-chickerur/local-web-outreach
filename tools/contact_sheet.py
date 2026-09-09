@@ -77,7 +77,20 @@ WIDTHS = (("desktop", 1440, 1100, 1.0), ("mobile", 390, 844, 1.0),
           # every photograph is inlined as a data URI, so what goes in the
           # repository beside the census is this row — still legible for the
           # only question the sheet asks.
-          ("thumb", 1440, 820, 0.5))
+          ("thumb", 1440, 820, 0.5),
+          # THE WHOLE PAGE, which is what the ground truth is now judged from.
+          # A fold picture cannot see an axis that lives below the fold: page
+          # architecture rendered `ledger` byte-identical to `stacked` above it,
+          # and its binding claim could not have passed however good the axis
+          # was. Section edges and most of the signature device are down here
+          # too. The fold row stays — first-screen axes still benefit from it —
+          # and this is what a verdict describes.
+          #
+          # A tall window rather than a full-page flag, which headless Chrome
+          # does not have. 6000 clears every fixture in the corpus; a page
+          # longer than that would be cut, and `pages.html` shows the footer on
+          # each one so that is visible rather than silent.
+          ("page", 1440, 6000, 0.5))
 
 
 def chrome() -> str | None:
@@ -142,6 +155,7 @@ def main() -> int:
     cards = _closest_first(cards)
     (OUT / "index.html").write_text(_sheet(cards))
     (OUT / "fold.html").write_text(_sheet(cards, fold=True))
+    (OUT / "pages.html").write_text(_sheet(cards, fold=True, shot="page"))
     print(f"\n  {OUT / 'index.html'}")
     print(f"  {OUT / 'fold.html'}   <- the first viewport, the one that decides")
 
@@ -154,7 +168,14 @@ def main() -> int:
         if thumb:
             shutil.copy(OUT / thumb, keep / thumb)
     (keep / "index.html").write_text(_sheet(cards, fold=True, shot="thumb"))
+    # The whole-page row is NOT committed. It is what a verdict is judged from
+    # now, and it is ten megabytes a run — on a directory that is rewritten
+    # every time the corpus is re-decided, which is every axis. This repository
+    # has already had a push fail on size once. The full-size sheets have never
+    # been committed for the same reason; `pages.html` sits beside them in the
+    # gitignored directory and the tool regenerates all of it deterministically.
     print(f"  {keep / 'index.html'}   <- committed beside the census")
+    print(f"  {OUT / 'pages.html'}   <- the whole page, what a verdict judges")
     return 0
 
 

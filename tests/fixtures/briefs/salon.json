@@ -7,8 +7,8 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "gold",
-    "architecture": "gallery",
+    "accent": "plum",
+    "architecture": "stacked",
     "contradictions": [],
     "cta": {
       "kind": "visit",
@@ -16,23 +16,25 @@
     },
     "defect": "",
     "emphasis": [
-      "features",
+      "reviews",
       "gallery"
     ],
-    "first_screen": "split",
+    "first_screen": "photo",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "about",
+    "lead_with": "services",
     "mood": "refined",
-    "rationale": "This isn't a business selling a haircut to walk-in customers \u2014 it's a suite-rental business selling independence and a beautiful, professional space to beauty professionals, so the page needs to lead with the story and the room (about, features) rather than a service menu or a thin review count. The wide, boutique-style type and gold accent match the \"luxury salon suites\" positioning, and the split first screen lets the storefront and interior photos carry real weight without pretending the revi",
+    "rationale": "Salon Boutique isn't selling a single treatment experience to walk-in clients \u2014 it's leasing suites to independent beauty professionals, so the page needs to read as a confident, professional business address first (photo of the storefront and interior), then quickly prove itself through the suites/services on offer and the voices of the stylists already renting there. The gallery has real but modest material (7 usable images, several empty rooms), so a full gallery-led architecture would overre",
     "read_by": "claude",
+    "signature": "margin_note",
+    "signature_why": "A short line of tenant testimony set against the suite listings reassures a prospective renter the way a sticky note from a current tenant would.",
     "suppress": [
       "stats"
     ],
-    "type_treatment": "wide",
+    "type_treatment": "quiet",
     "understood": [
-      "This isn't a business selling a haircut to walk-in customers \u2014 it's a suite-rental business selling independence and a beautiful, professional space to beauty professionals, so the page needs to lead "
+      "Salon Boutique isn't selling a single treatment experience to walk-in clients \u2014 it's leasing suites to independent beauty professionals, so the page needs to read as a confident, professional business"
     ],
     "unsupported": []
   },

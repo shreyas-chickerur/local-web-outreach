@@ -9,7 +9,7 @@
     "google returns 5 locations under this name in one search"
   ],
   "design_direction": {
-    "accent": "amber",
+    "accent": "blue",
     "architecture": "banded",
     "contradictions": [],
     "cta": {
@@ -19,22 +19,22 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "services"
+      "stats"
     ],
     "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "reviews",
     "mood": "industrial",
-    "rationale": "This is a trade business where trust and speed of response sell the job, not atmosphere \u2014 the 4.9 rating across 6,203 reviews and named technicians are the real evidence, so the first screen should present that proof band (rating, review count, response promise) rather than a photo. To differ from the prior near-identical site, I've kept the stats lead but moved to a banded page rhythm instead of the tight ledger, which lets the strong review quotes and service list breathe as distinct slabs rat",
+    "rationale": "This is a home-services trade where a visitor's first question is 'can I trust the person who shows up at my house' \u2014 the near-6,000 five-star reviews and named technicians answer that better than any photograph, so proof leads and the quoted reviews come right after the stats band. To avoid duplicating the recent site (which already used ledger/facts/stats-first/stamped), this one leads with reviews rather than the stats section itself and uses a banded rhythm instead of a ledger rule, so the p",
     "read_by": "claude",
-    "suppress": [
-      "features"
-    ],
+    "signature": "stamp",
+    "signature_why": "A repeated licence/registration-style mark reinforces the trustworthy, vetted-technician feel that their reviews keep praising, without repeating the ledger-of-figures look already used on a competitor's site.",
+    "suppress": [],
     "type_treatment": "stamped",
     "understood": [
-      "This is a trade business where trust and speed of response sell the job, not atmosphere \u2014 the 4.9 rating across 6,203 reviews and named technicians are the real evidence, so the first screen should pr"
+      "This is a home-services trade where a visitor's first question is 'can I trust the person who shows up at my house' \u2014 the near-6,000 five-star reviews and named technicians answer that better than any"
     ],
     "unsupported": []
   },

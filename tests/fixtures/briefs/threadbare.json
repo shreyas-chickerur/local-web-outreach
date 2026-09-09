@@ -4,7 +4,7 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "orange",
+    "accent": "navy",
     "architecture": "stacked",
     "contradictions": [],
     "cta": {
@@ -19,12 +19,14 @@
     "kind": "style",
     "lead_with": null,
     "mood": "industrial",
-    "rationale": "A general contractor with only one small, unusable photo shouldn't lean on imagery \u2014 the name set hard and heavy like a trade stamp signals competence and reliability at a glance, which is what someone hiring a handyman actually checks for before ringing.",
+    "rationale": "With only one small photo of the handyman himself, the page shouldn't pretend to be a gallery-led site; setting the name heavy and tight like a workshop stamp signals a working contractor, and leading with a call to action gets visitors to the phone fast, which is what people want from a general contractor.",
     "read_by": "claude",
+    "signature": "stamp",
+    "signature_why": "A repeated licence-style mark reads as a tradesman standing behind his work, not a boutique flourish.",
     "suppress": [],
     "type_treatment": "stamped",
     "understood": [
-      "A general contractor with only one small, unusable photo shouldn't lean on imagery \u2014 the name set hard and heavy like a trade stamp signals competence and reliability at a glance, which is what someon"
+      "With only one small photo of the handyman himself, the page shouldn't pretend to be a gallery-led site; setting the name heavy and tight like a workshop stamp signals a working contractor, and leading"
     ],
     "unsupported": []
   },

@@ -126,10 +126,26 @@ def test_the_labels_record_which_rendering_they_judged():
         "the labels do not name the ruler they were taken under")
 
 
-def test_a_re_judged_pair_says_what_it_used_to_be_and_why():
-    """A verdict that changed has to be traceable, or the ground truth becomes
-    something that quietly moves whenever a number is inconvenient."""
-    changed = [p for p in agreement.load() if p.get("_was")]
-    assert changed, "no re-judgement recorded"
-    for pair in changed:
-        assert len(pair["_was"]) > 40, pair
+def test_no_verdict_leaves_the_set_without_saying_why():
+    """A verdict never disappears quietly.
+
+    There are two ways one can stop counting and both have to be on the record:
+    RE-JUDGED, which carries `_was` saying what it used to be, and RETIRED,
+    which carries `retired` saying why it stopped applying — its page moved, or
+    the definition of the ground truth changed under it. Without this the
+    ground truth is something that shifts whenever a number is inconvenient.
+
+    Widened from "some pair was re-judged" when the ground truth moved off the
+    fold: that pass re-judged nothing and retired everything, which the old
+    version read as no history at all.
+    """
+    import json
+    from pathlib import Path as _Path
+
+    everything = json.loads(
+        _Path("tests/fixtures/pairs.json").read_text())["pairs"]
+    recorded = [p for p in everything if p.get("_was") or p.get("retired")]
+    assert recorded, "no verdict history recorded at all"
+    for pair in recorded:
+        reason = pair.get("_was") or pair.get("retired")
+        assert len(reason) > 40, pair

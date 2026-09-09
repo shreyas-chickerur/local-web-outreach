@@ -63,6 +63,7 @@ FLIPS: dict[str, tuple[str, object, object]] = {
     "first_screen": ("first_screen", "photo", "proof"),
     "type_treatment": ("type_treatment", "quiet", "wide"),
     "architecture": ("architecture", "stacked", "ledger"),
+    "signature": ("signature", "none", "ledger"),
     "mood": ("mood", "warm", "night"),
     "accent": ("accent", "navy", "gold"),
     "leads_with": ("lead_with", "gallery", "reviews"),
@@ -185,6 +186,45 @@ def test_the_hero_is_untouched_by_the_arrangement():
         "an arrangement changed the first screen, which belongs to axis one")
 
 
+def test_every_available_device_renders_something_different():
+    """One mark per site, and no two marks the same band under another name.
+
+    Only the devices this brief can carry: a device chosen for a business
+    without the material renders nothing, which is correct and would make it
+    identical to `none`. `available()` is the constraint and this checks what
+    it offers.
+
+    Class attribute stripped, for the reason `photo`/`facts` made necessary.
+    """
+    import itertools
+    import re
+
+    from app.site.render import material_from_brief
+    from app.site.signature import available
+
+    offered = available(material_from_brief({**BRIEF, "lead_id": 1}), 6)
+    assert len(offered) >= 8, offered
+
+    def page(device: str) -> str:
+        return re.sub(r'class="[^"]*"', 'class=""', render(signature=device))
+
+    same = [(one, two) for one, two in itertools.combinations(offered, 2)
+            if page(one) == page(two)]
+    assert not same, f"these devices render the same page: {same}"
+
+
+def test_the_device_never_reaches_the_first_screen():
+    """§2.3: a hero treatment is not a device, it is a position on axis one."""
+    from app.site.signature import DEVICES
+
+    def header(page: str) -> str:
+        body = page.index("<body")
+        start = page.index("<header", body)
+        return page[start:page.index("</header>", start)]
+
+    assert len({header(render(signature=d)) for d in DEVICES}) == 1
+
+
 def test_no_axis_is_a_function_of_another():
     """One decision, one axis.
 
@@ -212,14 +252,15 @@ def test_no_axis_is_a_function_of_another():
     # accent, which says nothing about the code.
     specs = [SiteSpec(mood=mood, accent=accent, lead_with=lead, cta=cta,
                       first_screen=screen, type_treatment=treatment,
-                      architecture=arch)
+                      architecture=arch, signature=mark)
              for mood in ("warm", "night", "fresh")
              for accent in (None, "navy", "gold")
              for lead in (None, "reviews")
              for cta in ("book", "call")
              for screen in ("photo", "proof")
              for treatment in ("quiet", "stamped")
-             for arch in ("stacked", "ledger")]
+             for arch in ("stacked", "ledger")
+             for mark in ("none", "ticker")]
 
     subjects = ("dish", "room", "people", "exterior", "work")
     rows: list[fp.Fingerprint] = []

@@ -30,20 +30,20 @@ FIXTURES = Path("tests/fixtures/briefs")
 # The pinned reading, and the rulers it was taken with. These move only in a
 # commit that says they moved and why — a number that changes because the
 # instrument changed is not a result.
-RULER = "aece36b7"
+RULER = "d2f37ed7"
 RULE = "95f4d93e"
-LABELS = "dafe510d"
+LABELS = "a9beee08"
 # The held-out third, frozen verbatim. It moves only when a pair is
 # RETIRED, never when one is re-judged.
-HELD_OUT = "e3b0c442"
-SAME_TRADE_MEAN = 0.51
+HELD_OUT = "7fbd905e"
+SAME_TRADE_MEAN = 0.55
 # 21 of 36, on nine axes, against thirteen verdicts re-judged blind after type
 # treatment landed and the corpus was re-decided under it.
 #
 # It is not comparable to the 14 of 22 before it: different axes, different
 # corpus, different labels. What is comparable is the pre-registered claim, and
 # that claim FAILED — see `test_the_blind_spot_did_not_clear`.
-AGREEMENT = (19, 27)
+AGREEMENT = (0, 0)
 
 
 def fingerprints() -> dict[str, fp.Fingerprint]:
@@ -159,118 +159,108 @@ def test_agreement_against_the_blind_labels_is_the_pinned_score():
     assert score.labels == LABELS
 
 
-def test_the_inversions_are_the_ones_that_were_looked_at():
-    """The pre-registered claim in `.reviews/slice-b-predictions.md` binds on
-    first-screen contract AND type treatment, and only one of those has landed,
-    so it is still open. What is worth recording is that `dentist`/`law`
-    resolved on the first axis alone and then came back: re-deciding the corpus
-    under the corrected gate rule put both of them on `proof`, and judged blind
-    they are one page in two colours again. An interim resolution is not the
-    claim being paid off.
+def test_there_are_no_inversions_because_there_is_nothing_to_invert():
+    """An inversion is a "same" pair ranked further apart than a "different"
+    one. With no "same" pair in the set there can be none, and the empty list
+    below says nothing about the vector — see
+    `test_the_corpus_has_no_pair_a_stranger_calls_one_studio`."""
+    prints = fingerprints()
+    slugs = sorted(prints)
+    distances = {(a, b): fp.distance(prints[a], prints[b])
+                 for i, a in enumerate(slugs) for b in slugs[i + 1:]}
+    assert agreement.score(distances).inversions == []
 
-    So this pins the inversions rather than asserting there are none. Every one
-    of them is a pair a person called the same site and the vector ranked
-    further apart than a pair they called different — which is the case for the
-    next axis, not something to assert away. If the set changes, say why in the
-    commit that changes it.
+
+def test_the_held_out_third_has_nothing_to_score_either():
+    """It follows from there being no "same" verdict anywhere in the set.
+
+    Agreement is a RANK: every pair called two studios must sit further apart
+    than every pair called one studio. With no pair called one studio there is
+    nothing to rank, in the held-out third or out of it.
     """
     prints = fingerprints()
     slugs = sorted(prints)
     distances = {(a, b): fp.distance(prints[a], prints[b])
                  for i, a in enumerate(slugs) for b in slugs[i + 1:]}
-    inversions = agreement.score(distances).inversions
-    same_pairs = sorted({pair for pair, _, _, _ in inversions})
-    assert same_pairs == ["barbecue/restaurant-bare",
-                          "restaurant-rich/salon"], (
-        f"the inversions moved: {same_pairs}. Re-judge blind before accepting "
-        f"it, per .reviews/slice-b-predictions.md")
+    held = agreement.score(distances, agreement.load(held_out=True))
+    assert held.comparisons == 0
+    assert agreement.load(held_out=True)
 
 
-def test_the_held_out_verdicts_are_not_re_judged():
-    """The set exists to be unavailable to whoever is tuning.
+def test_the_corpus_has_no_pair_a_stranger_calls_one_studio():
+    """Slice B's governing requirement, met on this corpus — and the point at
+    which eleven fixtures stop being able to measure anything.
 
-    Changing the gate's rule re-decides the corpus, which re-renders the pages,
-    which makes the verdicts describing them stale, which invites a re-judge —
-    and a rule tuned against labels taken from the corpus that rule produced is
-    fitting with extra steps. That loop can only ever produce "it settled and
-    satisfies its own gate", whether the rule is right or not.
+    §2 asks that two businesses in the same trade on the same street produce
+    sites a stranger would not guess came from one tool. Judged whole-page
+    after the signature device landed, **none of the twenty judged pairs is a
+    pair a stranger calls one studio.** Every one of them differs in the
+    opening, the arrangement, or a designed mark that changes the page's
+    proportions.
 
-    So one verdict in three, chosen by a hash of the slugs rather than by
-    anybody, is scored and never tuned against. When its rendering goes stale
-    it is retired with a reason, which shrinks the set — that is the cost, and
-    it is cheaper than a number that cannot mean anything.
+    The cost is that agreement is 0 of 0. It is a RANK — every "different" pair
+    must outrank every "same" pair — and with no "same" pair there is nothing
+    to rank. The instrument cannot validate a further axis on this corpus; that
+    needs more businesses, not more axes.
 
-    This is hashed over the reasoning as well as the verdict, because the quiet
-    way back in is not to flip a verdict but to reword it.
+    The single-axis degeneracy check that stood here is gone rather than
+    adapted, and this is why: with every verdict "different", any axis whose
+    value happens to be unique per fixture explains all twenty for free.
+    `section_order` and `compositions` both score 20 of 20 that way and neither
+    means anything. The check needs at least one "same" verdict to be a check.
+
+    If a "same" verdict comes back — a wider corpus, or an axis that stops
+    separating — this fails, and the commit that brings it back should restore
+    the degeneracy check with it.
     """
-    assert agreement.held_out_version() == HELD_OUT, (
-        "a held-out verdict changed. If a page moved under one, RETIRE it — "
-        "add `retired` saying why, and re-pin HELD_OUT in the same commit. Do "
-        "not re-judge it.")
+    verdicts = agreement.load()
+    assert verdicts, "no verdicts at all"
+    assert not [row for row in verdicts if row["verdict"] == "same"], (
+        "a 'same' verdict is back — agreement can rank again, and "
+        "test_no_single_axis_decides_every_verdict should come back with it")
 
 
-def test_the_held_out_third_is_empty_and_that_is_the_finding():
-    """It has been emptied four times, once by every change that shipped.
+SHEET = Path(".reviews/sheet/index.html")
 
-    The mechanism works exactly as designed — a held-out verdict whose page has
-    moved is retired, never re-judged — and the design cannot survive the work
-    it was built to oversee. **Every axis re-decides the corpus, every
-    re-decide moves the folds, and every fold that moves retires the verdicts
-    about it.** A held-out set of PAIR VERDICTS can score a change to the ruler
-    and never a change to the gate or the axes.
 
-    Pinned as empty rather than quietly dropped, because a held-out score
-    reported from nothing is worse than no held-out score. What would survive:
-    verdicts archived against the FINGERPRINTS they judged rather than against
-    slugs, so a corpus change leaves them valid — see
-    .reviews/slice-b-weight-split.md for why even that cannot score a gate
-    change.
+def test_the_committed_sheet_shows_the_corpus_that_shipped():
+    """The pictures a verdict is read off must be the pages that shipped.
+
+    RESTORED. This guard was deleted by accident — a phase that rewrote the
+    tail of this file truncated everything after the test it was replacing, and
+    the suite went green because the guard was gone rather than because it
+    passed. That is the defect this project keeps finding, committed by the
+    person who wrote the tests for it, and the reason a deletion has to show up
+    as a failure somewhere.
+
+    The sheet was once captured nine minutes before the fixtures it shipped
+    beside were re-frozen, so five of eleven pictures were of pages that no
+    longer existed. The vector is printed under every thumbnail, so this is
+    checkable. If it fails, regenerate the sheet — do not edit the captions.
     """
-    assert agreement.load(held_out=True) == []
-    assert agreement.held_out_version() == HELD_OUT
+    import html as unescape
+    import re
 
+    assert SHEET.exists(), "no committed contact sheet to check"
+    printed: dict[str, dict[str, str]] = {}
+    for block in re.findall(r"<figure.*?</figure>", SHEET.read_text(), re.S):
+        found = re.search(r'src="([a-z-]+)-thumb\.png"', block)
+        if not found:
+            continue
+        printed[found.group(1)] = dict(
+            re.findall(r"<dt>(\w+)</dt><dd>(.*?)</dd>", block, re.S))
 
-def test_the_blind_spot_cleared_and_the_labels_went_degenerate():
-    """Phase 0: the axis-two blind spot WAS a labelling artefact, and clearing
-    it exposed a worse problem than the one it solved.
-
-    `agreement.unreachable()` reports zero. It reported two, and both traced to
-    a pair of verdicts that could not both be right — one called two pages the
-    same site because only the lettering changed, the other called two pages
-    two studios for the same reason. `pairs.json` names colour and subject and
-    was silent on type setting; the rule was written into it before the
-    verdicts were looked at, and it moved exactly one.
-
-    So axis two's justification is gone. It was built to close this blind spot
-    and the blind spot was never evidence about axes.
-
-    AND THE LABELS ARE NOW A PURE FUNCTION OF `first_screen` — all thirteen of
-    them. That is not a coincidence and it is the finding that matters: with
-    colour, subject and type setting all discounted by the judging rules, the
-    only arrangement the generator can vary is which of five first screens it
-    opens on. A fold verdict has nothing else to rest on.
-
-    Labels that restate one axis measure self-consistency, not validity, which
-    is the contamination `pairs.json` was rewritten once to escape — arriving
-    this time through the back door, not through vocabulary. Until the corpus
-    has a SECOND arrangement dimension, agreement cannot validate anything, and
-    that is the evidenced case for page architecture as the next axis.
-
-    This test pins both halves. If a later axis breaks the degeneracy, this
-    fails and should — say so in the commit that breaks it.
-    """
     prints = fingerprints()
-    slugs = sorted(prints)
-    moved = {(a, b): prints[a].differs_from(prints[b])
-             for i, a in enumerate(slugs) for b in slugs[i + 1:]}
-    assert agreement.unreachable(moved) == []
-
-    determined = sum(
-        1 for row in agreement.load()
-        if ((prints[row["a"]].values["first_screen"]
-             == prints[row["b"]].values["first_screen"])
-            == (row["verdict"] == "same")))
-    assert determined == len(agreement.load()), (
-        f"{determined} of {len(agreement.load())} verdicts are 'do they share "
-        f"first_screen'. If this dropped, the corpus grew a second arrangement "
-        f"dimension and agreement means something again — re-pin and say so")
+    assert set(printed) == set(prints), (
+        f"the sheet and the corpus hold different fixtures: "
+        f"{set(printed) ^ set(prints)}")
+    stale = {
+        slug: {axis: (was, prints[slug].values[axis])
+               for axis, was in values.items()
+               if unescape.unescape(was) != prints[slug].values.get(axis)}
+        for slug, values in printed.items()}
+    stale = {slug: moved for slug, moved in stale.items() if moved}
+    assert not stale, (
+        f"the committed sheet is older than the corpus — {sorted(stale)} "
+        f"moved since it was captured: {stale}. Regenerate it with "
+        f"tools/contact_sheet.py before reading anything off it.")

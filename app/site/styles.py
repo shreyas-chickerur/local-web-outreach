@@ -318,6 +318,95 @@ body:has(.hero.first-split) .bar:not(.stuck){{background:var(--bg);
   .hero.first-split .wrap{{padding-right:0;padding-bottom:48%}}
 }}
 
+/* --------------------------------------------- the signature device (§2.3) --
+   Exactly one per site, never two. Each renders different markup rather than
+   the same band under a different name, which
+   `test_every_available_device_renders_something_different` holds — the
+   project has shipped a value whose only difference from another was the class
+   attribute once already.
+
+   Everything here is a band among the other bands, so the arrangement axis
+   applies to it too. */
+.device{{padding:clamp(56px,7vw,110px) 0}}
+
+.ledgerfig{{width:100%;border-collapse:collapse;font-family:{t.display.stack}}}
+.ledgerfig th,.ledgerfig td{{padding:14px 0;border-bottom:1px solid {hairline};
+  text-align:left;font-weight:400}}
+.ledgerfig th{{font-family:{t.body.stack};font-size:12px;letter-spacing:.16em;
+  text-transform:uppercase;opacity:.7;width:40%}}
+.ledgerfig td{{font-size:clamp(22px,3vw,40px);text-align:right}}
+
+.bigquote{{margin:0;font-family:{t.display.stack};
+  font-size:clamp(24px,4.2vw,58px);line-height:1.08;max-width:20ch;
+  text-indent:-.4em}}
+.bigquote::before{{content:"\201C"}} .bigquote::after{{content:"\201D"}}
+
+[data-device="marquee"]{{overflow:hidden;padding:clamp(28px,3vw,44px) 0;
+  background:var(--accent);color:var(--on-accent)}}
+.runner{{display:flex;gap:clamp(28px,4vw,64px);white-space:nowrap;
+  font-family:{t.display.stack};font-size:clamp(18px,2.4vw,34px);
+  animation:runner 38s linear infinite}}
+.runner span::after{{content:"\2022";margin-left:clamp(28px,4vw,64px);
+  opacity:.5}}
+@keyframes runner{{from{{transform:translateX(0)}}
+  to{{transform:translateX(-50%)}}}}
+@media (prefers-reduced-motion:reduce){{.runner{{animation:none}}}}
+
+.stamps{{display:flex;flex-wrap:wrap;gap:clamp(14px,2vw,28px)}}
+.stamps span{{border:2px solid currentColor;border-radius:999px;
+  padding:10px 22px;font-size:12px;letter-spacing:.18em;
+  text-transform:uppercase;font-weight:700;opacity:.8;transform:rotate(-2deg)}}
+.stamps span:nth-child(even){{transform:rotate(1.5deg)}}
+
+[data-index]::after{{content:attr(data-index);position:absolute;top:
+  clamp(18px,2.4vw,38px);left:clamp(10px,2vw,26px);font-size:12px;
+  letter-spacing:.14em;opacity:.45;font-family:{t.body.stack}}}
+
+[data-device="ticker"]{{padding:0;border-top:1px solid {hairline};
+  border-bottom:1px solid {hairline};overflow:hidden}}
+.tickline{{display:flex;gap:clamp(20px,3vw,44px);white-space:nowrap;
+  padding:14px 0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  animation:runner 46s linear infinite}}
+
+[data-device="margin_note"] .wrap{{display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,2.2fr);
+  gap:clamp(20px,4vw,64px)}}
+.marginnote{{font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  border-top:2px solid var(--accent);padding-top:12px;align-self:start}}
+.notebody{{margin:0;font-size:clamp(17px,1.9vw,23px);max-width:52ch}}
+
+.knock{{background:var(--accent);color:var(--on-accent);
+  padding:clamp(28px,4vw,56px);max-width:34ch;transform:rotate(-1.4deg);
+  margin-left:clamp(0px,6vw,120px)}}
+.knock p{{margin:0;font-size:clamp(17px,2vw,25px)}}
+
+.runoff{{font-family:{t.display.stack};font-size:clamp(64px,15vw,220px);
+  line-height:.86;white-space:nowrap;margin-left:clamp(12px,4vw,80px);
+  opacity:.12;user-select:none}}
+
+.insetshot{{background-size:cover;background-position:center;
+  min-height:min(62vh,560px);display:flex;align-items:flex-end;
+  justify-content:flex-start}}
+.insetblock{{background:var(--bg);color:var(--ink);
+  padding:clamp(18px,2.4vw,34px) clamp(22px,3vw,44px);
+  font-family:{t.display.stack};font-size:clamp(18px,2.4vw,32px);
+  margin:0 0 0 clamp(0px,4vw,72px)}}
+
+.scrollstrip{{display:flex;gap:14px;overflow-x:auto;padding-inline:
+  clamp(12px,4vw,80px);scroll-snap-type:x mandatory}}
+.scrollstrip img{{flex:0 0 auto;width:min(62vw,420px);height:min(46vh,320px);
+  object-fit:cover;scroll-snap-align:start}}
+
+.tonestrip{{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  padding-inline:clamp(12px,4vw,80px)}}
+.tonestrip img{{width:100%;height:min(34vh,260px);object-fit:cover;
+  filter:grayscale(1) sepia(.5) hue-rotate(160deg) saturate(2.2)}}
+.tonestrip img[data-tone="on"]{{filter:none}}
+@media (max-width:820px){{
+  .tonestrip{{grid-template-columns:repeat(2,1fr)}}
+  [data-device="margin_note"] .wrap{{grid-template-columns:1fr}}
+}}
+
 /* ------------------------------------------------ page architecture (axis 3) --
    How the bands sit against each other: rhythm, measure, ground, separator.
    Not which bands exist — that is mostly what the business publishes, which is

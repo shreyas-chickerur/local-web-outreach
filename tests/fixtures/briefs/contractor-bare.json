@@ -22,14 +22,14 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "A plumber sells competence before atmosphere, and with only one photo strong enough to lead with, the rating and review count are the more convincing first thing a stranger sees. The mixed reviews (including a complaint about responsiveness) mean we should surface the solid 4.7 rating prominently but keep it honest with real quotes rather than hide behind a slideshow of mismatched work photos.",
+    "rationale": "A visitor calling a plumber wants proof of competence before anything else \u2014 the 4.7 rating and review count reassure faster than any photo could, and only one photo is even strong enough to lead with. Mixed reviews mean the reviews section should be visible but not oversold, so stats lead and reviews get modest emphasis rather than top billing, with a ledger-style rhythm and a working-log ticker that suit a trade rather than a boutique.",
     "read_by": "claude",
-    "suppress": [
-      "gallery"
-    ],
+    "signature": "ticker",
+    "signature_why": "A thin running line of the rating, review count, and years-in-trade reads like a service log a plumber would actually keep, not a marketing flourish.",
+    "suppress": [],
     "type_treatment": "stamped",
     "understood": [
-      "A plumber sells competence before atmosphere, and with only one photo strong enough to lead with, the rating and review count are the more convincing first thing a stranger sees. The mixed reviews (in"
+      "A visitor calling a plumber wants proof of competence before anything else \u2014 the 4.7 rating and review count reassure faster than any photo could, and only one photo is even strong enough to lead with"
     ],
     "unsupported": []
   },

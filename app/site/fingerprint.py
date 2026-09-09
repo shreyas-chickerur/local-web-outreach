@@ -39,6 +39,7 @@ AXES: tuple[str, ...] = (
     "first_screen",
     "type_treatment",
     "architecture",
+    "signature",
     "mood",
     "accent",
     "leads_with",
@@ -89,6 +90,8 @@ VISIBILITY: dict[str, float] = {
     # governs every band on the page and none of the first screen, which
     # `test_the_hero_is_untouched_by_the_arrangement` holds.
     "architecture": 1.0,
+    # One mark, below the fold, seen once while scrolling.
+    "signature": 1.0,
     "mood": 2.0,             # the whole feel, and the first thing on screen
     "accent": 1.0,           # immediate, but only paint
     "hero_subject": 1.5,     # the largest thing above the fold
@@ -108,6 +111,11 @@ DECIDEDNESS: dict[str, float] = {
     # Chosen outright; the number of sections narrows what is offerable, the
     # way the name's length narrows the type treatment.
     "architecture": 2.5,
+    # The most decided thing on the page and the only one that has to be
+    # justified against the business in a sentence. It extends this scale past
+    # `first_screen`'s 2.5 on purpose: nothing about the material forces it
+    # beyond whether it can be built at all.
+    "signature": 3.0,
     "mood": 2.0,             # chosen outright
     "accent": 2.0,           # chosen outright
     "hero_subject": 1.5,     # chosen, from what they happen to have
@@ -162,6 +170,10 @@ REQUIRED_AXES = 4
 # that would justify it is the same score the change would improve, which is
 # the fitted threshold this project has thrown out twice. See
 # .reviews/slice-b-weight-split.md for what it would take to settle it.
+# `signature` is deliberately NOT here yet. Adding it would presume the answer
+# to the claim it was built to test — whether one designed mark makes two
+# same-arrangement pages read as two studios. If that claim passes, the
+# evidence to add it exists; until then the gate does not get to assume it.
 REQUIRED_HIGH: frozenset[str] = frozenset({"first_screen", "type_treatment",
                                            "architecture"})
 
@@ -256,6 +268,7 @@ def of(plan, spec, material=None) -> Fingerprint:
         "first_screen": str(spec.first_screen or "photo"),
         "type_treatment": str(spec.type_treatment or "quiet"),
         "architecture": str(spec.architecture or "stacked"),
+        "signature": str(spec.signature or "none"),
         "mood": str(spec.mood),
         "accent": str(spec.accent or "theme default"),
         "leads_with": str(spec.lead_with or (sections[0] if sections else "-")),

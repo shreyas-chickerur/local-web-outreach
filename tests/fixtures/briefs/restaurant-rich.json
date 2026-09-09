@@ -23,12 +23,14 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "This is a farm-to-table neighborhood restaurant with a strong house-and-porch identity and 8 lead-worthy photos of dish, room and building, so the picture still needs to carry the first impression \u2014 but rather than repeat the recent site's full-photo hero, splitting the screen between the name and a single strong image (the lit-up house at night, not another dish shot) gives it a distinct, calmer arrival while still trading on its best asset. The wide gallery rhythm and quiet name-set let the fo",
+    "rationale": "This is a scratch-kitchen neighborhood restaurant with genuinely strong photography (8 lead-worthy images across dish, exterior, and ingredients) and a farm-to-table story worth telling, so the gallery should still open the page \u2014 but splitting the first screen between the striking string-lit house exterior and the name, rather than a full-bleed dish photo, sets it apart from the near-duplicate site and lets the building's own character (their strongest, most unique asset) introduce them instead",
     "read_by": "claude",
+    "signature": "corner_inset",
+    "signature_why": "A type block inset into the corner of the house-at-night photo lets the building's own presence carry the name, rather than another dish shot over a headline like the last site.",
     "suppress": [],
-    "type_treatment": "quiet",
+    "type_treatment": "wide",
     "understood": [
-      "This is a farm-to-table neighborhood restaurant with a strong house-and-porch identity and 8 lead-worthy photos of dish, room and building, so the picture still needs to carry the first impression \u2014 b"
+      "This is a scratch-kitchen neighborhood restaurant with genuinely strong photography (8 lead-worthy images across dish, exterior, and ingredients) and a farm-to-table story worth telling, so the galler"
     ],
     "unsupported": []
   },

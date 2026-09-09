@@ -1524,9 +1524,20 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
             bands += "\n" + sections[key]
     # The arrangement applies to the sections, never to the hero: what occupies
     # the first screen is axis one's decision and this must not reach into it.
+    from app.site import signature as sig
     from app.site.architecture import arrange
 
-    body += arrange(bands, spec.architecture or "stacked")
+    # The device goes in before the arrangement, so it is arranged with
+    # everything else rather than sitting outside the rhythm — one band among
+    # the others, which is what makes it a mark on the page and not a widget
+    # bolted to the bottom.
+    mark = sig.render(spec.signature or "none", m)
+    if mark:
+        cut = bands.find("</section>")
+        bands = (bands[:cut + 10] + "\n" + mark + bands[cut + 10:]
+                 if cut > 0 else bands + "\n" + mark)
+    body += sig.decorate(arrange(bands, spec.architecture or "stacked"),
+                         spec.signature or "none", list(order))
 
     description = m.tagline or m.about or ""
     # The share image is the hero — the same object, not a second call that
@@ -1560,6 +1571,7 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
         + f'<body data-theme="{e(spec.mood)}" '
         + f'data-type="{e(spec.type_treatment or "quiet")}" '
         + f'data-arch="{e(spec.architecture or "stacked")}" '
+        + f'data-signature="{e(spec.signature or "none")}" '
         + f'data-theme-layout="{e(theme.layout_bias)}">\n'
         + _nav(m, order, spec) + "\n" + body + "\n"
         + _callbar(m, spec) + "\n" + _footer(m)

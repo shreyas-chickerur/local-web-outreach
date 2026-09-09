@@ -129,6 +129,7 @@ def spec_from_config(config: dict) -> SiteSpec:
         first_screen=str(config.get("first_screen") or "photo"),
         type_treatment=str(config.get("type_treatment") or "quiet"),
         architecture=str(config.get("architecture") or "stacked"),
+        signature=str(config.get("signature") or "none"),
         hero_offset=int(config.get("hero_offset") or 0),
         understood=list(config.get("understood") or []),
         ignored=list(config.get("ignored_tokens") or []),

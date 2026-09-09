@@ -75,7 +75,7 @@ FIXTURES = Path("tests/fixtures/briefs")
 # is the next fork, and it is not something to fit against thirteen verdicts.
 #
 # `threadbare` is excluded from every score — see `agreement.UNSCORED`.
-BASELINE_SAME_TRADE = 0.51
+BASELINE_SAME_TRADE = 0.55
 # The closest same-trade pair, kept as a reading rather than as a target:
 # it is judged DIFFERENT, and the pairs worth fixing are the inversions.
 BASELINE_WORST = ("contractor-bare", "roofer", 0.44)
@@ -83,19 +83,19 @@ BASELINE_WORST = ("contractor-bare", "roofer", 0.44)
 # to another taken the same way, and comparing across a change of ruler has
 # already produced two false readings — a corpus that changed under a pinned
 # baseline, and a distance that became weighted while the baseline stayed flat.
-BASELINE_METRIC = "aece36b7"
+BASELINE_METRIC = "d2f37ed7"
 # And which gate rule the corpus was decided under. Every frozen
 # direction is an answer this rule accepted, so a baseline taken under
 # one rule is not comparable to a corpus decided under another.
 BASELINE_RULE = "95f4d93e"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
-BASELINE_LABELS = "dafe510d"
+BASELINE_LABELS = "a9beee08"
 # What it was, so a reader can see that the agreement figure crossed a
 # change of labels rather than falling. "40 of 40" was scored against
 # 449b9ddb, taken from contact-sheet thumbnails of a corpus that had
 # moved, captured below the breakpoint where the layout changes.
-BASELINE_LABELS_WAS = ("69061e09", "39 of 55")
+BASELINE_LABELS_WAS = ("d69c25ec", "41 of 64")
 # True on the commit that re-pins, false on every commit after. Without
 # it the first run under a new ruler always prints "no better than the
 # baseline" — because the baseline IS that run's own measurement copied
