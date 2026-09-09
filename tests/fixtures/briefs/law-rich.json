@@ -19,24 +19,25 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "services"
+      "features"
     ],
-    "first_screen": "type",
+    "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "refined",
-    "rationale": "Someone hiring a personal injury attorney after a serious accident needs proof of competence and results before anything else \u2014 the rating, the verdicts, the practice areas \u2014 not a warm photo tour of the office; the ledger architecture and a table-of-figures signature let the firm's actual track record do the persuading in a way a repeated licence stamp cannot.",
+    "rationale": "Someone hiring a personal injury attorney after a catastrophic event is checking credibility and track record before anything else, so the page should open on the 4.8-rating proof and verdict results rather than a warm photograph; the firm's own imagery (conference rooms, historic house, suited attorneys) supports a restrained, document-like ledger layout that reads as a serious trial firm rather than a lifestyle brand.",
     "read_by": "claude",
-    "signature": "ledger",
-    "signature_why": "A firm that wins verdicts and settlements should show its record as a ruled table of figures, not a repeated stamp, so the case results read like a document you'd trust rather than a badge.",
+    "signature": "stamp",
+    "signature_why": "A repeated Board Certified mark reinforces the one credential that actually persuades an injury client to call, without turning the page into a brochure.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "quiet",
+    "typeface": "ibm-plex-serif-inter",
     "understood": [
-      "Someone hiring a personal injury attorney after a serious accident needs proof of competence and results before anything else \u2014 the rating, the verdicts, the practice areas \u2014 not a warm photo tour of "
+      "Someone hiring a personal injury attorney after a catastrophic event is checking credibility and track record before anything else, so the page should open on the 4.8-rating proof and verdict results "
     ],
     "unsupported": []
   },

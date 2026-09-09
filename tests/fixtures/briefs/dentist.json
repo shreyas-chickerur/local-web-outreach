@@ -19,22 +19,23 @@
       "reviews",
       "services"
     ],
-    "first_screen": "split",
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "reviews",
+    "lead_with": "stats",
     "mood": "warm",
-    "rationale": "People choosing a dentist want to see a calm, competent, well-reviewed practice before anything else, and the strong Google/Yelp ratings paired with warm, specific patient comments do that better than a stats band alone. A split first screen lets the friendly reception and treatment-room photos sit beside the practice's own words of reassurance, which reads as personal rather than clinical, while keeping the same trustworthy warmth without repeating the facts-led, quote-signature approach alread",
+    "rationale": "People choosing a dentist check the rating and reviews before anything else, and this practice has strong numbers (4.7/4.6) and warm, specific testimonials to back it up \u2014 so lead with proof of trust rather than a photo of an office that looks like every other clinic. The 'menu' section has no real material here (just 'Special') so it's suppressed, while services and reviews carry the page.",
     "read_by": "claude",
-    "signature": "margin_note",
-    "signature_why": "A single line pulled alongside the review text \u2014 like Julie Ann Cash's comment about the hygienist explaining her care \u2014 makes the trust feel specific rather than generic, which suits a dentist better than a moving quote banner.",
+    "signature": "quote",
+    "signature_why": "A dentist earns trust through what patients say about being treated gently and honestly, so putting one patient's own words at full size does more than any stock photo of a smile.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "quiet",
+    "typeface": "",
     "understood": [
-      "People choosing a dentist want to see a calm, competent, well-reviewed practice before anything else, and the strong Google/Yelp ratings paired with warm, specific patient comments do that better than"
+      "People choosing a dentist check the rating and reviews before anything else, and this practice has strong numbers (4.7/4.6) and warm, specific testimonials to back it up \u2014 so lead with proof of trust "
     ],
     "unsupported": []
   },

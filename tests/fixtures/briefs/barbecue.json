@@ -19,20 +19,21 @@
       "stats",
       "reviews"
     ],
-    "first_screen": "split",
+    "first_screen": "photo",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "The photography is strong enough to lead with (10 usable images of food, crowd, and exterior) but a split first screen \u2014 name and a single confident photo sharing the screen evenly \u2014 lets the huge review numbers and wide catering footprint register immediately instead of being just another full-bleed hero shot; amber (rather than the terracotta already used next door) picks up the firewood, smoke, and neon-sign glow visible in their own photos and reads less like a repeat of the recent site whil",
+    "rationale": "Hutchins has ten strong photographs of the food, the pit, and the crowd, plus a huge review base (13,880 at 4.8) \u2014 those two things sell the place before any words do. Keeping the photo-led opening but swapping the stamped trade-shop lettering, oswald-barlow, and duotone strip for a warmer serif pairing, an amber accent, and a corner-inset wordmark keeps this from reading as the same design as the other recent barbecue site while still fitting a busy, established Texas BBQ joint rather than a bo",
     "read_by": "claude",
-    "signature": "ticker",
-    "signature_why": "A thin running line of the rating counts and catering minimums (4.8 stars, 13,880 reviews, 20-person minimum) gives a queue-out-the-door business a way to show proof of popularity without another photo.",
+    "signature": "corner_inset",
+    "signature_why": "A type block set into the corner of the big smoked-meat photograph lets the name sit on the food itself without covering it, which suits a place whose spread is the whole pitch.",
     "suppress": [],
     "type_treatment": "wide",
+    "typeface": "fraunces-karla",
     "understood": [
-      "The photography is strong enough to lead with (10 usable images of food, crowd, and exterior) but a split first screen \u2014 name and a single confident photo sharing the screen evenly \u2014 lets the huge rev"
+      "Hutchins has ten strong photographs of the food, the pit, and the crowd, plus a huge review base (13,880 at 4.8) \u2014 those two things sell the place before any words do. Keeping the photo-led opening bu"
     ],
     "unsupported": []
   },

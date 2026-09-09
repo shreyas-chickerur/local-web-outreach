@@ -9,8 +9,8 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "navy",
-    "architecture": "column",
+    "accent": "orange",
+    "architecture": "ledger",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -27,16 +27,17 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "refined",
-    "rationale": "Someone hurt in a wreck lands on this page anxious and needs to see quickly that this firm wins cases and is trusted locally \u2014 the 4.9 rating and 254 reviews do that job better than a photo of the building ever could. The photography is mostly promotional graphics and headshots rather than a body of real work, so it belongs further down as support, not as the opening argument, and a calm navy in a narrow, quiet column reads as competent and unhurried rather than as another stamped, ledger-styled",
+    "rationale": "Someone hiring a personal injury lawyer after a wreck wants proof of competence and trust before anything else \u2014 the 4.9 rating from 254 reviews and named case types matter more than office photography, most of which is promotional graphics rather than real work anyway. A calm, document-like ledger layout with a credentials stamp says 'serious firm with results' rather than 'marketing agency,' and the orange pulls straight from their own logo and branded graphics.",
     "read_by": "claude",
-    "signature": "margin_note",
-    "signature_why": "A pulled line from a real client's account of being hit by a distracted driver sits beside the body copy, giving proof of outcomes without turning the page into a courtroom stunt.",
+    "signature": "stamp",
+    "signature_why": "A repeated Super Lawyer / trial-lawyer credential mark reads as verified proof, which is what someone hiring an injury attorney is scanning for.",
     "suppress": [
       "gallery"
     ],
     "type_treatment": "quiet",
+    "typeface": "ibm-plex-serif-inter",
     "understood": [
-      "Someone hurt in a wreck lands on this page anxious and needs to see quickly that this firm wins cases and is trusted locally \u2014 the 4.9 rating and 254 reviews do that job better than a photo of the bui"
+      "Someone hiring a personal injury lawyer after a wreck wants proof of competence and trust before anything else \u2014 the 4.9 rating from 254 reviews and named case types matter more than office photograph"
     ],
     "unsupported": []
   },

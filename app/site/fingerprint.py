@@ -21,6 +21,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from app.site import theme
+
 # The axes a site's identity is a point in. Ordered, because the vector is
 # compared positionally and printed under a screenshot in that order.
 #
@@ -40,6 +42,7 @@ AXES: tuple[str, ...] = (
     "type_treatment",
     "architecture",
     "signature",
+    "typeface",
     "mood",
     "accent",
     "leads_with",
@@ -92,6 +95,10 @@ VISIBILITY: dict[str, float] = {
     "architecture": 1.0,
     # One mark, below the fold, seen once while scrolling.
     "signature": 1.0,
+    # The display face carries the name ON the first screen, and repeated
+    # blind verdicts named it directly — "the same serif", "one set in a
+    # serif and one in heavy capitals" — before this was ever an axis at all.
+    "typeface": 3.0,
     "mood": 2.0,             # the whole feel, and the first thing on screen
     "accent": 1.0,           # immediate, but only paint
     "hero_subject": 1.5,     # the largest thing above the fold
@@ -116,6 +123,10 @@ DECIDEDNESS: dict[str, float] = {
     # `first_screen`'s 2.5 on purpose: nothing about the material forces it
     # beyond whether it can be built at all.
     "signature": 3.0,
+    # Chosen outright from a curated table with no material constraint at
+    # all — unlike every other DECIDEDNESS=3.0 entry, nothing about the
+    # business narrows which pair is offerable.
+    "typeface": 3.0,
     "mood": 2.0,             # chosen outright
     "accent": 2.0,           # chosen outright
     "hero_subject": 1.5,     # chosen, from what they happen to have
@@ -174,8 +185,19 @@ REQUIRED_AXES = 4
 # to the claim it was built to test — whether one designed mark makes two
 # same-arrangement pages read as two studios. If that claim passes, the
 # evidence to add it exists; until then the gate does not get to assume it.
+#
+# `typeface` IS here, on the opposite footing — the evidence already exists
+# rather than being awaited. Blind verdicts taken before this was an axis at
+# all repeatedly named it directly as the thing making two pages read as one:
+# "one set in a serif and one in heavy capitals", "the only thing that
+# changes is whether the name is a serif or blocky capitals", "the same
+# serif, the same pair of buttons". It is FORM, not palette — it changes
+# letterforms, measure and rhythm, not colour — so it fits the stated
+# principle rather than being an exception to it. Its cardinality (twenty
+# named pairs) also helps rather than hurts satisfiability: see
+# `test_the_gate_is_satisfiable`.
 REQUIRED_HIGH: frozenset[str] = frozenset({"first_screen", "type_treatment",
-                                           "architecture"})
+                                           "architecture", "typeface"})
 
 
 def required_high() -> frozenset[str]:
@@ -269,6 +291,14 @@ def of(plan, spec, material=None) -> Fingerprint:
         "type_treatment": str(spec.type_treatment or "quiet"),
         "architecture": str(spec.architecture or "stacked"),
         "signature": str(spec.signature or "none"),
+        # An empty `typeface` defers to the mood's own default pairing rather
+        # than choosing nothing — resolved here so the fingerprint records
+        # what is ACTUALLY rendered. Recording the empty string directly
+        # would make every fixture that never got an explicit choice read as
+        # "the same typeface" regardless of mood, which is exactly the kind
+        # of axis that looks like it varies and does not.
+        "typeface": str(spec.typeface
+                       or theme.DEFAULT_TYPEFACE.get(spec.mood, "")),
         "mood": str(spec.mood),
         "accent": str(spec.accent or "theme default"),
         "leads_with": str(spec.lead_with or (sections[0] if sections else "-")),

@@ -82,6 +82,10 @@ class SiteSpec:
     architecture: str = "stacked"
     # Exactly one mark per site, never two. BRIEF §2.3.
     signature: str = "none"
+    # A display/body pair BY NAME from `theme.TYPEFACE_PAIRS`, never two
+    # independent face picks. "" defers to the mood's own default pairing —
+    # `theme_for` treats it exactly like `None`. BRIEF §5.
+    typeface: str = ""
     one_page: bool = True
     understood: list[str] = field(default_factory=list)
     ignored: list[str] = field(default_factory=list)

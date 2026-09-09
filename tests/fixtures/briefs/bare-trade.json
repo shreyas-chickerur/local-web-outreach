@@ -19,24 +19,25 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "stats"
+      "recognition"
     ],
     "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "reviews",
+    "lead_with": "stats",
     "mood": "refined",
-    "rationale": "Someone hiring a divorce or custody attorney needs proof of trust and competence before anything else \u2014 a 4.9 rating from 148 reviews and the words of past clients do that far better than photos of the building, and the firm only has two images strong enough to lead with anyway. A quiet, document-like layout with a navy accent reads as steady and professional, which is exactly the tone someone wants from a family lawyer during a stressful time.",
+    "rationale": "People hiring a divorce lawyer are anxious and want proof of competence before atmosphere \u2014 the 4.9-star rating, the award badge, and real client reviews do that work far better than photographs of a building. Only two photos are large enough to lead with, so the design should run on facts and testimony instead, in a calm, document-like rhythm that reads as trustworthy rather than flashy.",
     "read_by": "claude",
     "signature": "quote",
-    "signature_why": "A family law client's own words carry more weight than any tagline this firm could write about itself.",
+    "signature_why": "A family in crisis trusts another family's words before they trust a firm's own copy, so let one client review stand alone at full size.",
     "suppress": [
       "gallery"
     ],
     "type_treatment": "quiet",
+    "typeface": "libre-caslon-work-sans",
     "understood": [
-      "Someone hiring a divorce or custody attorney needs proof of trust and competence before anything else \u2014 a 4.9 rating from 148 reviews and the words of past clients do that far better than photos of th"
+      "People hiring a divorce lawyer are anxious and want proof of competence before atmosphere \u2014 the 4.9-star rating, the award badge, and real client reviews do that work far better than photographs of a "
     ],
     "unsupported": []
   },

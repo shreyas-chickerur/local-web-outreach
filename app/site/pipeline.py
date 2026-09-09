@@ -130,6 +130,7 @@ def spec_from_config(config: dict) -> SiteSpec:
         type_treatment=str(config.get("type_treatment") or "quiet"),
         architecture=str(config.get("architecture") or "stacked"),
         signature=str(config.get("signature") or "none"),
+        typeface=str(config.get("typeface") or ""),
         hero_offset=int(config.get("hero_offset") or 0),
         understood=list(config.get("understood") or []),
         ignored=list(config.get("ignored_tokens") or []),
@@ -437,7 +438,7 @@ def _build_opening(conn: sqlite3.Connection, lead_id: int, brief: dict,
     spec = spec_from_config(config)
     resolved = plan_for(brief, spec)
     html = build_from_spec(brief, spec)
-    report = audit(html, theme_for(spec.mood, spec.accent))
+    report = audit(html, theme_for(spec.mood, spec.accent, spec.typeface))
     defects = [str(f) for f in report.failures]
     repairs = report.as_dict()["repairs"]
 
@@ -455,7 +456,13 @@ def _build_opening(conn: sqlite3.Connection, lead_id: int, brief: dict,
              "unmet": spec.unmet, "ignored": [], "contradictions": [],
              "defects": defects, "repairs": repairs,
              "plan": resolved.as_dict(), "lead_with": spec.lead_with,
-             "rationale": rationale}
+             "rationale": rationale,
+             # §2.3: one sentence justifying the mark against THIS business,
+             # recorded with the rest of the plan (deterministic replay — a
+             # rebuild reads this back rather than re-asking) and surfaced in
+             # the workspace, never on the page.
+             "signature": spec.signature,
+             "signature_why": str(config.get("signature_why") or "")}
     version = sites.save(conn, lead_id, html, instruction, notes=notes,
                          actor=actor, spec_json=config,
                          parent_version=parent_version)
@@ -513,7 +520,7 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
             page = sites.html_for(conn, lead_id, live)
             if page:
                 spec_now = spec_from_config(base)
-                report = audit(page, theme_for(spec_now.mood, spec_now.accent))
+                report = audit(page, theme_for(spec_now.mood, spec_now.accent, spec_now.typeface))
                 found = [str(f) for f in report.failures]
         return IterationResult(
             lead_id=lead_id, spec={**config},
@@ -529,7 +536,7 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
     # The design audit: defects the operator should never have to catch. It
     # runs before the honesty gate because a page that fails on contrast is
     # worth knowing about even when it also fails on content.
-    report = audit(html, theme_for(spec.mood, spec.accent))
+    report = audit(html, theme_for(spec.mood, spec.accent, spec.typeface))
     defects = [str(f) for f in report.failures]
     repairs = report.as_dict()["repairs"]
 

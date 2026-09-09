@@ -91,30 +91,54 @@ FIXTURES = Path("tests/fixtures/briefs")
 # terracotta for the right reason.
 #
 # `threadbare` is excluded from every score — see `agreement.UNSCORED`.
-BASELINE_SAME_TRADE = 0.5494
-# The closest same-trade pair, judged DIFFERENT. Kept as a reading, not a
-# SAME now — two dentists' offices, judged one studio, sitting closer than
-# any pair in the corpus has ever sat. That is the corpus doing what §2 says
-# real variety should eventually produce: two genuinely similar-market
-# businesses that this instrument, working as intended, calls indistinct.
-BASELINE_WORST = ("barbecue", "restaurant-casual", 0.28)
+#
+# PHASE 1 (Slice B's close-out, this project's own §1a/1b/1c): the gate's
+# WINDOW widened 10->60 — fixing the real collision `restaurant-bare`/
+# `salon-rich` shipped, three axes apart and unseen because the gate only
+# compared against the last ten — and the typeface pair landed as axis
+# twelve. One `--redecide` at the end covering both, ruler and rule
+# UNCHANGED (neither touches a weight or an axis definition on its own; the
+# corpus was re-decided because the gate's own history and the typeface
+# choice feed the direction call).
+#
+# Sixteen pairs judged blind against the actual rendered markup this round,
+# reaching past same-trade into cross-trade and repopulating the held-out
+# third from empty. ALL SIXTEEN CAME BACK DIFFERENT — including the closest
+# same-trade pair the corpus has ever produced, `law`/`law-rich` at 26%
+# distance (sharing eight of eleven axes, differing only in first screen and
+# what follows it), and including `bare-trade`/`dentist`, briefly misjudged
+# "same" from a shrunk thumbnail — five bands in identical order and
+# composition — and corrected once the actual markup was read: one draws a
+# hairline rule above every section and holds its text to a visibly narrower
+# column throughout, the other does neither. The same near-miss the previous
+# redecide hit on `dentist`/`dentist-rich`, caught the same way.
+#
+# Agreement is 0 of 0 for the same reason it was 0 of 0 before this phase: a
+# rank needs at least one "same" pair, and after sixteen pairs — five of them
+# in the repopulated held-out third — there still is not one. The single-axis
+# degeneracy check stays retired; nothing came back to restore it against.
+BASELINE_SAME_TRADE = 0.5552
+# The closest same-trade pair, judged DIFFERENT — closer than any pair the
+# corpus has produced under any prior ruler. Kept as a reading, not a SAME:
+# two personal-injury firms, sharing eight of eleven axes, still read as two
+# different practices once the fold is taken into account.
+BASELINE_WORST = ("law", "law-rich", 0.26)
 # Which ruler the numbers above were taken with. A distance is comparable only
 # to another taken the same way, and comparing across a change of ruler has
 # already produced two false readings — a corpus that changed under a pinned
 # baseline, and a distance that became weighted while the baseline stayed flat.
-BASELINE_METRIC = "d2f37ed7"
+BASELINE_METRIC = "a762bcc9"
 # And which gate rule the corpus was decided under. Every frozen
 # direction is an answer this rule accepted, so a baseline taken under
 # one rule is not comparable to a corpus decided under another.
-BASELINE_RULE = "95f4d93e"
+BASELINE_RULE = "254e171b"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
-BASELINE_LABELS = "edc76612"
+BASELINE_LABELS = "1f0df47d"
 # What it was, so a reader can see that the agreement figure crossed a
-# change of labels rather than falling. "40 of 40" was scored against
-# 449b9ddb, taken from contact-sheet thumbnails of a corpus that had
-# moved, captured below the breakpoint where the layout changes.
-BASELINE_LABELS_WAS = ("719276b9", "3 of 9")
+# change of labels rather than falling. "0 of 0" was scored against edc76612,
+# ten pairs taken before this phase's gate fix and typeface axis landed.
+BASELINE_LABELS_WAS = ("edc76612", "0 of 0")
 # True on the commit that re-pins, false on every commit after. Without
 # it the first run under a new ruler always prints "no better than the
 # baseline" — because the baseline IS that run's own measurement copied
@@ -203,7 +227,7 @@ def measure(conn, slug: str, lead_id: int) -> dict:
     spec = spec_from_config(config)
     plan = plan_for(brief, spec)
     page = build_from_spec(brief, spec)
-    theme = theme_for(spec.mood, spec.accent)
+    theme = theme_for(spec.mood, spec.accent, spec.typeface)
 
     published = brief.get("published") or {}
     source_blocks = list(published.get("blocks") or [])

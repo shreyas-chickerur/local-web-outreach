@@ -6,7 +6,7 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "terracotta",
+    "accent": "olive",
     "architecture": "gallery",
     "contradictions": [],
     "cta": {
@@ -24,14 +24,17 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "The Heritage Table has 8 strong photos across dish, exterior, and ingredients that carry the atmosphere better than words, so the gallery still leads, but pairing the name against a single striking exterior photo (split) rather than dropping it behind a dish shot gives the historic house building its due as the first thing people recognise walking past. The about and reviews sections get raised because the whole-animal sourcing story and the warmth of the reviewer quotes are what turn a browsing",
+    "rationale": "The house itself \u2014 a converted home lit with string lights \u2014 is as much the identity as the food, so the first screen should hold name and building in equal split rather than let type sit over a full-bleed photo like the prior version did; wide-set type and the softer fraunces-narrow-jost keep the farmhouse warmth without repeating the last site's quiet-serif choice, and olive (sampled from the produce and porch greenery) reads as their own colour rather than a generic warm-restaurant amber.",
     "read_by": "claude",
-    "signature": "duotone",
-    "signature_why": "A warm brown-to-full-colour duotone strip through the gallery echoes the string-lit house at night giving way to the food itself, which feels like this particular building rather than a generic photo grid.",
-    "suppress": [],
-    "type_treatment": "quiet",
+    "signature": "corner_inset",
+    "signature_why": "A type block inset into the corner of that lit-up nighttime house photo does the branding work of a sign without covering the building it's naming.",
+    "suppress": [
+      "partners"
+    ],
+    "type_treatment": "wide",
+    "typeface": "fraunces-narrow-jost",
     "understood": [
-      "The Heritage Table has 8 strong photos across dish, exterior, and ingredients that carry the atmosphere better than words, so the gallery still leads, but pairing the name against a single striking ex"
+      "The house itself \u2014 a converted home lit with string lights \u2014 is as much the identity as the food, so the first screen should hold name and building in equal split rather than let type sit over a full-"
     ],
     "unsupported": []
   },

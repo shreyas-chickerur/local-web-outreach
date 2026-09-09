@@ -32,15 +32,14 @@ FIXTURES = Path("tests/fixtures/briefs")
 # several of these", and `warm` + a serif display + `terracotta` is the first
 # entry on its list.
 MATCHES = {
-    "restaurant-rich": ["warm cream + serif display + terracotta"],
     "barbecue-rich": ["warm cream + serif display + terracotta"],
-    # After the corpus was re-decided under §2.2's palette sampling, `barbecue`
-    # itself escaped this default (a sampled amber rather than terracotta) and
-    # `restaurant-rich` matched it instead. Both for the same honest reason
-    # either way: their own photographs are genuinely brown/rust-toned, and a
-    # palette faithful to real material can land on terracotta for the right
-    # reason. The count held at two; which two moved with the redecide, which
-    # is expected and not itself a new failure.
+    # After the corpus was re-decided for Slice B's close-out (WINDOW 10->60,
+    # typeface landed as an axis), `restaurant-rich` escaped this default —
+    # its accent moved to olive — and nothing replaced it. The count dropped
+    # from two to one rather than holding, which is a fact about this
+    # redecide rather than a new failure: fewer businesses landing on the
+    # same forbidden combination is the direction §2.4 wants movement in, it
+    # just was not the thing being tuned for.
 }
 
 

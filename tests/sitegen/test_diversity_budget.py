@@ -191,6 +191,42 @@ def test_the_gates_static_collisions_are_named_and_understood():
     assert colliding == set(), colliding
 
 
+def test_no_collision_survives_anywhere_in_the_corpus():
+    """The same-trade check above is blind to a collision across trades, and
+    one shipped: `restaurant-bare` and `salon-rich` differ on only mood,
+    accent and hero_subject — three axes, none structural, none
+    required-high — an unambiguous collision under the gate's own rule, and
+    a restaurant and a salon rendered as the same page in two colours. It
+    happened because `WINDOW` was 10 against a corpus of nineteen: the two
+    were never compared live at build time, so the gate that exists to catch
+    this never even looked.
+
+    This checks every pair regardless of trade, because the defect that
+    found `restaurant-bare`/`salon-rich` was specifically that a same-trade-
+    only check cannot see a cross-trade collision, and §2's requirement does
+    not actually stop at the trade boundary either — a stranger who has
+    never been in either shop still should not mistake one for the other.
+
+    `WINDOW` widened from 10 to 60 (see `app/store/fingerprints.py`) is the
+    fix; this fails until the corpus is re-decided under it, which is
+    deliberate — a passing assertion here before the redecide would be
+    asserting something the live gate had not yet been asked to enforce.
+    """
+    from app.site.pipeline import spec_from_config
+    from app.site.render import material_from_brief, plan_for
+
+    prints = {}
+    for path in sorted(FIXTURES.glob("*.json")):
+        brief = {**json.loads(path.read_text()), "lead_id": 1}
+        spec = spec_from_config(brief["design_direction"])
+        prints[path.stem] = fp.of(plan_for(brief, spec), spec,
+                                  material_from_brief(brief))
+    slugs = sorted(prints)
+    colliding = {(a, b) for i, a in enumerate(slugs) for b in slugs[i + 1:]
+                if fp.collisions(prints[a], [prints[b]], axes=fp.REQUIRED_AXES)}
+    assert colliding == set(), colliding
+
+
 def test_every_path_that_records_history_went_through_the_gate():
     """Structural, not by example.
 
@@ -285,6 +321,7 @@ def test_the_gate_is_satisfiable():
         "first_screen": len(firstscreen.POSITIONS),
         "type_treatment": len(typetreatment.TREATMENTS),
         "architecture": len(architecture.ARRANGEMENTS),
+        "typeface": len(theme.TYPEFACE_NAMES),
         "mood": len(MOODS),
         "accent": len(theme.ACCENT_NAMES),
     }

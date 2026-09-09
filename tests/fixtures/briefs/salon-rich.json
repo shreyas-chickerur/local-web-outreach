@@ -1,12 +1,12 @@
 {
-  "_gate_unresolved": true,
+  "_gate_unresolved": false,
   "assumptions": [
     "website found via google: https://www.drybarshops.com/service/locator/detail/?slug=plano&utm_source=Google&utm_medium=SoCi"
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "olive",
-    "architecture": "gallery",
+    "accent": "gold",
+    "architecture": "column",
     "contradictions": [],
     "cta": {
       "kind": "book",
@@ -17,20 +17,21 @@
       "gallery",
       "reviews"
     ],
-    "first_screen": "photo",
+    "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "gallery",
     "mood": "fresh",
-    "rationale": "Drybar sells the finished blowout, and with six strong photographs of hair and styling in progress, a full-bleed photo opening lets the work speak before any words do; gold pulls straight from their own room and warm lighting rather than a stock salon blue. Quiet, flush-left type keeps the name out of the way of the photograph instead of competing with it as 'wide' did last time, and reviews get raised alongside the gallery because 4.5 stars and named stylists are exactly what a walk-in customer",
+    "rationale": "Drybar sells the look and feel of the finished style, and with six photographs strong enough to lead on, the gallery still deserves top billing \u2014 but this time the first screen splits type and photo evenly rather than burying the name under one big image, and a ticker of their strong ratings replaces the corner-inset device so the page reads differently while still opening on the room and the hair.",
     "read_by": "claude",
-    "signature": "corner_inset",
-    "signature_why": "A small type block set into the corner of a full-bleed hair photo mirrors the close-up hair shots that already carry this business, without repeating the split-screen look the last site used.",
+    "signature": "ticker",
+    "signature_why": "A thin line of the two ratings and review counts running under the fold gives a walking-past visitor instant proof this is a trusted, busy salon without borrowing the same corner-inset photo trick the last site used.",
     "suppress": [],
-    "type_treatment": "quiet",
+    "type_treatment": "wide",
+    "typeface": "",
     "understood": [
-      "Drybar sells the finished blowout, and with six strong photographs of hair and styling in progress, a full-bleed photo opening lets the work speak before any words do; gold pulls straight from their o"
+      "Drybar sells the look and feel of the finished style, and with six photographs strong enough to lead on, the gallery still deserves top billing \u2014 but this time the first screen splits type and photo e"
     ],
     "unsupported": []
   },

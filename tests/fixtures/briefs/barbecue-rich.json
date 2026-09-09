@@ -16,8 +16,8 @@
     },
     "defect": "",
     "emphasis": [
-      "menu",
-      "reviews"
+      "gallery",
+      "menu"
     ],
     "first_screen": "photo",
     "hero_offset": 0,
@@ -25,14 +25,17 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "This is a family-run Texas BBQ joint with thousands of enthusiastic reviews and nine large, appetizing photographs of smoked meats and the dining room \u2014 the food and the room are the argument, so let big photography and a stamped, workshop-style name lead, back it with the menu and glowing reviews, and close with a simple visit call to action.",
+    "rationale": "This is a family-run Texas smokehouse with strong, abundant food photography (9 usable shots) and a huge, loyal review base \u2014 the room and the meat are the argument, so we lead with a big photographic first screen and a gallery-driven page, pull terracotta straight from the smoke and wood tones in their own pictures, and set the name in a heavy trade-shop stamp that reads like a pit sign rather than a boutique.",
     "read_by": "claude",
-    "signature": "scroll_gallery",
-    "signature_why": "The pit, the smoked trays, and the dining room are the strongest sales pitch this place has, so let the photos run wide off the side rather than boxing them into a grid.",
-    "suppress": [],
+    "signature": "duotone",
+    "signature_why": "A strip of the smoker and brisket photos in warm duotone with one full-colour break reads like a pit-house, not a stock template.",
+    "suppress": [
+      "features"
+    ],
     "type_treatment": "stamped",
+    "typeface": "oswald-barlow",
     "understood": [
-      "This is a family-run Texas BBQ joint with thousands of enthusiastic reviews and nine large, appetizing photographs of smoked meats and the dining room \u2014 the food and the room are the argument, so let "
+      "This is a family-run Texas smokehouse with strong, abundant food photography (9 usable shots) and a huge, loyal review base \u2014 the room and the meat are the argument, so we lead with a big photographic"
     ],
     "unsupported": []
   },

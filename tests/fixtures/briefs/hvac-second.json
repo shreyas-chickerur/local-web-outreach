@@ -17,25 +17,26 @@
     },
     "defect": "",
     "emphasis": [
-      "services",
-      "reviews"
+      "reviews",
+      "services"
     ],
-    "first_screen": "proof",
+    "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "This is a 24/7 emergency HVAC contractor with a 4.9 rating across 1,226 reviews \u2014 what a homeowner needs before calling is proof of competence and trust, not atmosphere, so the page should open on the numbers and reviews with a trade-shop, stamped-and-ruled feel, using the yellow sampled from their vans and branding as the one accent.",
+    "rationale": "People calling an HVAC contractor at 2am want proof of competence before anything else \u2014 the 4.9-star rating across 1,226 reviews, the uniformed techs, the fleet of branded vans \u2014 so the page should open with that proof band rather than a stats-card layout that reads like the last site. Using the ledger arrangement and a stamp signature reads as a licensed trade operation (ruled, documented, repeatable), which differs from the prior site's quiet/grid/facts approach while still pulling the sample",
     "read_by": "claude",
     "signature": "stamp",
-    "signature_why": "A repeated licence/badge mark reads as a trade credential, reinforcing that this is a vetted, established HVAC outfit rather than a lifestyle brand.",
+    "signature_why": "A repeated licence/registration-style mark reinforces this is a credentialed trade outfit you can trust in an emergency, not a boutique.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "stamped",
+    "typeface": "oswald-barlow",
     "understood": [
-      "This is a 24/7 emergency HVAC contractor with a 4.9 rating across 1,226 reviews \u2014 what a homeowner needs before calling is proof of competence and trust, not atmosphere, so the page should open on the"
+      "People calling an HVAC contractor at 2am want proof of competence before anything else \u2014 the 4.9-star rating across 1,226 reviews, the uniformed techs, the fleet of branded vans \u2014 so the page should o"
     ],
     "unsupported": []
   },

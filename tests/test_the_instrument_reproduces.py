@@ -30,29 +30,40 @@ FIXTURES = Path("tests/fixtures/briefs")
 # The pinned reading, and the rulers it was taken with. These move only in a
 # commit that says they moved and why — a number that changes because the
 # instrument changed is not a result.
-RULER = "d2f37ed7"
-RULE = "95f4d93e"
-LABELS = "edc76612"
+RULER = "a762bcc9"
+RULE = "254e171b"
+LABELS = "1f0df47d"
 # The held-out third, frozen verbatim. It moves only when a pair is
 # RETIRED, never when one is re-judged.
-HELD_OUT = "e3b0c442"
-SAME_TRADE_MEAN = 0.5494
-# Palette sampling — §2.2 — was offered to the identity call and the whole
-# corpus re-decided under it (ruler and rule UNCHANGED: palette only widens
-# the prompt, it does not touch an axis or a weight). All nineteen fixtures
-# resolved through the model with no fallback and no claims-gate rejection.
+HELD_OUT = "de28526d"
+SAME_TRADE_MEAN = 0.5552
+# Slice B's close-out (this project's own Phase 1): the diversity gate's
+# WINDOW widened 10->60, fixing the real `restaurant-bare`/`salon-rich`
+# collision that shipped three axes apart and unseen because the gate only
+# compared against the last ten generated; the typeface pair landed as axis
+# twelve. Ruler and rule UNCHANGED — one `--redecide` re-asked every
+# direction anyway, because the gate's history and the typeface choice both
+# feed it.
 #
-# Checked carefully against the rendered output rather than against
-# screenshots read at a glance — an earlier pass at this same check briefly
-# misjudged `dentist`/`dentist-rich` as one studio from memory of an
-# EARLIER rendering, corrected once the actual current markup was read.
-# Every one of the ten pairs judged this round, including the three that
-# were the strongest "same" verdicts before this redecide
-# (`barbecue`/`barbecue-rich`, `roofer`/`roofer-rich`, and the trade trio
-# built on `hvac-rich`), came back DIFFERENT. Zero same-trade pairs a
-# stranger calls one studio, among the ten checked — stronger than the
-# state before the corpus was widened, and agreement is 0 of 0 again for
-# the same reason it was then: a rank needs at least one "same" pair.
+# Sixteen pairs judged blind against the rendered markup this round —
+# cross-trade pairs alongside same-trade, and five of the sixteen chosen by
+# distance to repopulate the held-out third from empty. ALL SIXTEEN CAME
+# BACK DIFFERENT, including the closest same-trade pair this corpus has ever
+# produced: `law`/`law-rich` at 26% distance, sharing eight of its eleven
+# axes and differing only in what opens the page and what follows it. One
+# pair, `bare-trade`/`dentist`, was briefly misjudged "same" from a shrunk
+# thumbnail — five bands in identical order and composition — and corrected
+# once the actual markup was read: one draws a hairline rule above every
+# section and holds its text to a visibly narrower column throughout, the
+# other does neither. The same near-miss the previous redecide hit on
+# `dentist`/`dentist-rich`, caught the same way.
+#
+# Agreement is 0 of 0 for the same reason it was before this phase: a rank
+# needs at least one "same" pair, and after sixteen pairs — five of them in
+# the repopulated held-out third — there still is not one. The single-axis
+# degeneracy check (see `test_the_blind_spot_cleared_and_the_labels_went_
+# degenerate` in this file's history) stays retired; nothing came back to
+# restore it against.
 AGREEMENT = (0, 0)
 
 
@@ -195,32 +206,35 @@ def test_the_held_out_third_has_nothing_to_score_either():
 
 
 def test_the_corpus_has_no_pair_a_stranger_calls_one_studio():
-    """§2's governing requirement, met on this corpus a second time and more
-    strongly than the first.
+    """§2's governing requirement, met on this corpus a third time and more
+    strongly than either before it.
 
-    Ten pairs were checked after palette sampling (§2.2) was offered to the
-    identity call and the whole corpus re-decided under it — including the
-    three pairs that were this project's strongest "same" verdicts before
-    the redecide: `barbecue`/`barbecue-rich` (identical on every axis),
-    `roofer`/`roofer-rich`, and the trade trio that shared an opening, a
-    treatment and a device across three colours. All three broke apart.
-    Zero same-trade pairs read as one studio among the ten checked.
+    Sixteen pairs were checked after Slice B's close-out: the diversity
+    gate's WINDOW widened 10->60 (fixing the real `restaurant-bare`/
+    `salon-rich` collision the narrow window had missed) and the typeface
+    pair landed as an axis, and the whole corpus was re-decided under both.
+    This round reached past same-trade into cross-trade pairs and used five
+    of the sixteen, chosen by distance, to repopulate the held-out third
+    from empty. All sixteen came back DIFFERENT — including the closest
+    same-trade pair this corpus has ever produced, `law`/`law-rich` at 26%
+    distance, sharing eight of its eleven axes and differing only in what
+    opens the page and what follows it.
 
-    The same-trade mean moved with it — 49% identical before this redecide,
-    45% after — which is the primary claim this phase pre-registered, and it
-    is not credited to palette sampling in isolation: the whole identity
-    call was re-asked, and the diversity gate's retry-then-perturb sequence
-    ran fresh for every fixture regardless of what the prompt added. What
-    can be said is that offering a grounded colour candidate did not cost
-    anything, and the corpus that resulted is more varied than the one
-    before it.
+    One pair, `bare-trade`/`dentist`, was briefly misjudged "same" against a
+    shrunk contact-sheet thumbnail — five bands in identical order and
+    composition — and corrected once the actual rendered markup was read:
+    one holds every band to a visibly narrower column and draws a hairline
+    rule above each of them, the other does neither. The same shape of
+    near-miss the previous redecide hit on `dentist`/`dentist-rich`, caught
+    the same way — by reading the markup rather than trusting a glance at a
+    small picture.
 
-    Agreement is 0 of 0 for the reason it was 0 of 0 before Phase 1 widened
-    the corpus: a rank needs at least one "same" pair, and there is not one
-    to rank against. The single-axis degeneracy check has nothing to check
-    with zero "same" verdicts — any axis unique per fixture would explain
-    all ten for free — so it is retired again rather than left asserting
-    something vacuous. If a "same" verdict comes back, restore it.
+    Agreement is 0 of 0 for the reason it was 0 of 0 before this phase: a
+    rank needs at least one "same" pair, and there is not one to rank
+    against. The single-axis degeneracy check has nothing to check with zero
+    "same" verdicts — any axis unique per fixture would explain all sixteen
+    for free — so it is retired again rather than left asserting something
+    vacuous. If a "same" verdict comes back, restore it.
     """
     verdicts = agreement.load()
     assert verdicts, "no verdicts at all"

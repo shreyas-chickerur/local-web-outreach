@@ -1404,7 +1404,7 @@ def plan_for(brief: dict, spec: SiteSpec) -> SitePlan:
     of "does this business publish hours?" would drift apart within a week.
     """
     m = material_from_brief(brief)
-    theme = theme_for(spec.mood, spec.accent)
+    theme = theme_for(spec.mood, spec.accent, spec.typeface)
     hero = pick_hero(m.images, spec.hero_offset, m.photo_labels,
                      m.trade_kind, m.size_of, m.photo_vision)
     if hero:
@@ -1502,7 +1502,7 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
     everything carried over from earlier instructions.
     """
     m = material_from_brief(brief)
-    theme = theme_for(spec.mood, spec.accent)
+    theme = theme_for(spec.mood, spec.accent, spec.typeface)
 
     # Before the sections, not after. They spend photographs from a shared
     # pool, so a hero chosen afterwards has already been handed out — and

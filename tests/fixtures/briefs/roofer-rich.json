@@ -5,8 +5,8 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "blue",
-    "architecture": "column",
+    "accent": "olive",
+    "architecture": "ledger",
     "contradictions": [],
     "cta": {
       "kind": "quote",
@@ -14,23 +14,25 @@
     },
     "defect": "",
     "emphasis": [
-      "reviews",
-      "services"
+      "reviews"
     ],
-    "first_screen": "proof",
+    "first_screen": "type",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "services",
     "mood": "industrial",
-    "rationale": "A roofing contractor sells trust and a track record before anything else, so the page should open on the figures \u2014 rating, years in business, roofs completed \u2014 with a calm, document-like column that a homeowner comparing three quotes can scan quickly, and a quote request as the single action. I've kept the proof-first opening and stats lead since that's correct for a trade, but swapped the stamped/ledger/gallery treatment for a quieter type treatment, a column architecture, and a ticker signatur",
+    "rationale": "This is a trade sale, not a dining or lifestyle one: a homeowner with a leak wants to see in ten seconds what Bert Roofing does and proof they won't get burned, not a rating counter or a photo behind the name \u2014 only 5 of 12 photos are big enough to carry a gallery lead anyway. The previous site already led with stats in a stacked grid; here the proof band up front, a ledger rhythm that reads like a document of credentials, and a repeated licence-style stamp make the trust case in the register a ",
     "read_by": "claude",
-    "signature": "ticker",
-    "signature_why": "A thin running line of the hard numbers \u2014 4.8 rating, since 1988, 40,000 roofs, Golden Hammer wins \u2014 gives a nervous homeowner the proof-of-competence a roofer needs without theatrics.",
-    "suppress": [],
-    "type_treatment": "quiet",
+    "signature": "stamp",
+    "signature_why": "A 12x Golden Hammer, A+ BBB, since-1988 roofer earns its credibility from certifications and years in business, so repeating that mark like a licence stamp says \"verified\" without a single adjective.",
+    "suppress": [
+      "menu"
+    ],
+    "type_treatment": "stamped",
+    "typeface": "oswald-barlow",
     "understood": [
-      "A roofing contractor sells trust and a track record before anything else, so the page should open on the figures \u2014 rating, years in business, roofs completed \u2014 with a calm, document-like column that a"
+      "This is a trade sale, not a dining or lifestyle one: a homeowner with a leak wants to see in ten seconds what Bert Roofing does and proof they won't get burned, not a rating counter or a photo behind "
     ],
     "unsupported": []
   },

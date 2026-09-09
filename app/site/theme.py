@@ -258,6 +258,30 @@ class Theme:
                   key=lambda candidate: contrast(candidate, shifted))
         return replace(self, accent=shifted, accent_soft=soft, accent_ink=ink)
 
+    def with_typeface(self, name: str | None) -> Theme:
+        """This theme with its typeface swapped for a named pair from
+        `TYPEFACE_PAIRS`. `BRIEF` §5: the pair is chosen BY NAME from a
+        curated table, never assembled from two independent face picks —
+        `modular_ratio`, `display_steps`, `tracking` and the two weights move
+        WITH the faces because they were tuned for that specific pair, the
+        same reason `recoloured` only ever touches the accent and never the
+        faces or the structural numbers.
+
+        An unrecognised or absent name returns the theme unchanged, so a
+        replayed direction from before this axis existed, or an invalid
+        value that somehow reached here, keeps the mood's own default pair
+        rather than falling over.
+        """
+        pair = TYPEFACE_PAIRS.get(name or "")
+        if pair is None:
+            return self
+        return replace(self, display=pair.display, body=pair.body,
+                       modular_ratio=pair.modular_ratio,
+                       display_steps=pair.display_steps,
+                       tracking=pair.tracking,
+                       display_weight=pair.display_weight,
+                       heading_weight=pair.heading_weight)
+
     def readable_on(self, ground: str) -> tuple[str, float]:
         colour = self.on(ground)
         return colour, contrast(colour, ground)
@@ -365,6 +389,146 @@ OSWALD = Face(stack="'Oswald',Impact,'Arial Narrow',sans-serif",
 CORMORANT = Face(stack="'Cormorant Garamond',Garamond,Georgia,serif",
                  google="Cormorant+Garamond:wght@300..700", wght=(300, 700))
 
+# Extending toward `BRIEF` §5's roughly twenty families, for
+# `TYPEFACE_PAIRS` below. Each is a family this project did not already have
+# a reason to reach for — a genuinely different voice, not a second name for
+# one already covered.
+LIBRE_CASLON = Face(stack="'Libre Caslon Display',Georgia,serif",
+                    google="Libre+Caslon+Display")   # static: a book serif,
+                                                      # quiet even at display size
+DM_SERIF = Face(stack="'DM Serif Display',Georgia,serif",
+                google="DM+Serif+Display")           # static: high-contrast,
+                                                      # narrower than Playfair
+BODONI = Face(stack="'Fraunces',Georgia,serif",       # Bodoni Moda if ever
+              google="Fraunces:opsz,wght@9..144,400..900",
+              wght=(400, 900), opsz=(9, 144))         # added to the stack;
+                                                       # Fraunces stands in for
+                                                       # the same register today
+IBM_PLEX_SERIF = Face(stack="'IBM Plex Serif',Georgia,serif",
+                      google="IBM+Plex+Serif:wght@300..700", wght=(300, 700))
+LORA = Face(stack="'Lora',Georgia,serif",
+           google="Lora:wght@400..700", wght=(400, 700))
+WORK_SANS = Face(stack=f"'Work Sans',{_SYSTEM}",
+                 google="Work+Sans:wght@100..900", wght=(100, 900))
+DM_SANS = Face(stack=f"'DM Sans',{_SYSTEM}",
+              google="DM+Sans:opsz,wght@9..40,100..1000",
+              wght=(100, 1000), opsz=(9, 40))
+LEAGUE_SPARTAN = Face(stack=f"'League Spartan',{_SYSTEM}",
+                      google="League+Spartan:wght@300..900", wght=(300, 900))
+BEBAS_NEUE = Face(stack="'Bebas Neue',Impact,sans-serif",
+                  google="Bebas+Neue")                # static: one weight,
+                                                       # tall and narrow
+ANTON = Face(stack="'Anton',Impact,'Arial Black',sans-serif",
+            google="Anton")                          # static: heavier than
+                                                       # Archivo Black, no taper
+UNBOUNDED = Face(stack=f"'Unbounded',{_SYSTEM}",
+                 google="Unbounded:wght@200..900", wght=(200, 900))
+FRAUNCES_NARROW = Face(
+    stack="'Fraunces',Georgia,'Times New Roman',serif",
+    google="Fraunces:opsz,wght,SOFT,WONK@9..144,400..900,0,1",
+    wght=(400, 900), opsz=(9, 144))                   # the same family, the
+                                                       # wonky/soft axes give a
+                                                       # second, warmer voice
+
+
+@dataclass(frozen=True)
+class TypefacePair:
+    """A display/body pair, and the structural type-system values they were
+    tuned together for. §5 asks for a pair BY NAME from a curated table, not
+    two independent face choices — a display face and a body face have to
+    agree on measure, tracking and weight or the page reads as two different
+    systems glued together, which is exactly what choosing them separately
+    would risk.
+    """
+
+    display: Face
+    body: Face
+    modular_ratio: float
+    display_steps: int
+    tracking: float
+    display_weight: int
+    heading_weight: int
+    voice: str          # one clause, what this pair reads as
+
+
+# Roughly twenty families, paired. The six each mood already defaulted to are
+# named here too (`fraunces-karla`, `sora-manrope`, `archivo-space-grotesk`,
+# `playfair-jost`, `oswald-barlow`, `cormorant-karla`) so nothing regresses —
+# a business that got one of them before still can, now by an explicit name
+# rather than by mood alone, and a business whose mood and preferred voice
+# used to be locked together can now ask for either independently.
+TYPEFACE_PAIRS: dict[str, TypefacePair] = {
+    "fraunces-karla": TypefacePair(
+        FRAUNCES, KARLA, 1.28, 6, -0.012, 700, 600,
+        "rustic, a warm serif over a plain grotesque"),
+    "sora-manrope": TypefacePair(
+        SORA, MANROPE, 1.2, 8, -0.022, 700, 600,
+        "modern and calm, flat and quiet"),
+    "archivo-space-grotesk": TypefacePair(
+        ARCHIVO_BLACK, SPACE_GROTESK, 1.333, 6, -0.028, 400, 400,
+        "loud, one heavy grotesque over a technical one"),
+    "playfair-jost": TypefacePair(
+        PLAYFAIR, JOST, 1.333, 6, 0.0, 600, 500,
+        "high-contrast editorial serif over a geometric sans"),
+    "oswald-barlow": TypefacePair(
+        OSWALD, BARLOW, 1.25, 7, -0.02, 600, 500,
+        "condensed and structural, a trade-shop wordmark"),
+    "cormorant-karla": TypefacePair(
+        CORMORANT, KARLA, 1.28, 7, 0.006, 600, 500,
+        "quiet and airy serif, set slightly open"),
+    "libre-caslon-work-sans": TypefacePair(
+        LIBRE_CASLON, WORK_SANS, 1.25, 6, -0.006, 400, 500,
+        "a book serif over a wide-range humanist sans — a firm rather than a "
+        "brand"),
+    "dm-serif-dm-sans": TypefacePair(
+        DM_SERIF, DM_SANS, 1.28, 6, -0.01, 400, 500,
+        "narrow high-contrast serif over its own sans sibling — one family, "
+        "two registers"),
+    "bodoni-inter": TypefacePair(
+        BODONI, INTER, 1.333, 7, -0.008, 600, 600,
+        "fashion-plate display serif over the most neutral sans available"),
+    "ibm-plex-serif-inter": TypefacePair(
+        IBM_PLEX_SERIF, INTER, 1.2, 6, -0.01, 600, 500,
+        "an engineering firm's serif — designed, not decorative"),
+    "lora-work-sans": TypefacePair(
+        LORA, WORK_SANS, 1.22, 6, -0.008, 600, 500,
+        "a calligraphic, readable serif over a wide humanist sans"),
+    "league-spartan-dm-sans": TypefacePair(
+        LEAGUE_SPARTAN, DM_SANS, 1.3, 7, -0.018, 700, 600,
+        "geometric and confident, a studio rather than a shop"),
+    "bebas-inter": TypefacePair(
+        BEBAS_NEUE, INTER, 1.35, 6, 0.01, 400, 600,
+        "tall condensed display over a quiet sans — a stadium marquee"),
+    "anton-work-sans": TypefacePair(
+        ANTON, WORK_SANS, 1.35, 6, -0.01, 400, 600,
+        "the heaviest, most compressed display available — impossible to "
+        "miss scrolling past"),
+    "unbounded-manrope": TypefacePair(
+        UNBOUNDED, MANROPE, 1.3, 7, -0.01, 600, 600,
+        "rounded, geometric, a little playful without losing seriousness"),
+    "fraunces-narrow-jost": TypefacePair(
+        FRAUNCES_NARROW, JOST, 1.28, 6, -0.005, 500, 500,
+        "the wonky, softer cut of a warm serif over a geometric sans"),
+    "playfair-inter": TypefacePair(
+        PLAYFAIR, INTER, 1.3, 6, -0.004, 700, 600,
+        "editorial serif over the safest possible body face — chosen when "
+        "the room is refined but the operator wants nothing to draw a "
+        "complaint"),
+    "oswald-inter": TypefacePair(
+        OSWALD, INTER, 1.22, 6, -0.014, 600, 500,
+        "condensed display kept quieter than the trade-shop pairing, for a "
+        "trade that still wants to read as calm"),
+    "sora-work-sans": TypefacePair(
+        SORA, WORK_SANS, 1.18, 8, -0.018, 600, 500,
+        "flat and quiet, a slightly warmer body face than the default"),
+    "cormorant-jost": TypefacePair(
+        CORMORANT, JOST, 1.3, 7, 0.002, 500, 500,
+        "quiet serif over a geometric sans rather than a humanist one — "
+        "cooler, more architectural"),
+}
+
+TYPEFACE_NAMES = tuple(sorted(TYPEFACE_PAIRS))
+
 
 THEMES: dict[str, Theme] = {
     # Rustic: hairline rules and a warm ground. Fraunces has a real optical
@@ -438,5 +602,29 @@ THEMES: dict[str, Theme] = {
 }
 
 
-def theme_for(mood: str, accent: str | None = None) -> Theme:
-    return THEMES.get(mood, THEMES["fresh"]).recoloured(accent)
+# Which typeface pair a mood defaults to when nothing more specific was
+# chosen — a replayed direction from before this axis existed, or the
+# keyless fallback, which does not make a typeface call at all yet. Matches
+# what `THEMES` already carries per mood, so applying it is a no-op for
+# anything that was never asked to differ.
+DEFAULT_TYPEFACE: dict[str, str] = {
+    "warm": "fraunces-karla",
+    "fresh": "sora-manrope",
+    "bold": "archivo-space-grotesk",
+    "refined": "playfair-jost",
+    "industrial": "oswald-barlow",
+    "night": "cormorant-karla",
+}
+
+
+def theme_for(mood: str, accent: str | None = None,
+             typeface: str | None = None) -> Theme:
+    """The theme for one mood, optionally recoloured and re-set in a named
+    typeface pair. `typeface=None` keeps the mood's own default pairing —
+    every existing call site that does not know about this axis yet keeps
+    rendering exactly as it did before it existed.
+    """
+    base = THEMES.get(mood, THEMES["fresh"]).recoloured(accent)
+    if typeface:
+        return base.with_typeface(typeface)
+    return base

@@ -20,22 +20,23 @@
       "reviews",
       "services"
     ],
-    "first_screen": "facts",
+    "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "reviews",
     "mood": "warm",
-    "rationale": "People choosing a dentist check the rating and reviews before anything else, and this practice only has 3 photographs strong enough to build a page around, so leading with the 4.5-star, 114-review facts and letting patient quotes and staff/services carry the rest is more convincing than a photo-led design would be.",
+    "rationale": "This is a dental practice, not a restaurant \u2014 people choose it on trust and competence, not on room photos, and with only 3 photos large enough to use, a photo-led opening would look thin. Leading with the 4.5-star rating and named, specific reviews, then the team and services, gives a nervous new patient exactly the reassurance they're looking for before they ever see the waiting room.",
     "read_by": "claude",
     "signature": "quote",
-    "signature_why": "A dental practice earns trust through what patients say about the staff, so setting one review at full size does more than another photo of a hallway ever could.",
+    "signature_why": "A single warm patient review at display size does more to calm a nervous first-time visitor than another stock photo of a smile.",
     "suppress": [
       "features"
     ],
     "type_treatment": "quiet",
+    "typeface": "ibm-plex-serif-inter",
     "understood": [
-      "People choosing a dentist check the rating and reviews before anything else, and this practice only has 3 photographs strong enough to build a page around, so leading with the 4.5-star, 114-review fac"
+      "This is a dental practice, not a restaurant \u2014 people choose it on trust and competence, not on room photos, and with only 3 photos large enough to use, a photo-led opening would look thin. Leading wit"
     ],
     "unsupported": []
   },

@@ -22,20 +22,21 @@
       "reviews",
       "services"
     ],
-    "first_screen": "proof",
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "This is a trade with 6,000+ five-star reviews and a fleet of branded vans \u2014 a visitor with a plumbing emergency needs proof of competence and a phone number fast, not a mood board, so the numbers still lead but the ledger/stamp/facts combination is swapped for a looser banded rhythm and a ticker so the page doesn't read as a copy of the same template already built for another contractor.",
+    "rationale": "With 6,203 Google reviews at 4.9 stars, the number itself is the strongest sales tool this plumber has, so the page should open on that fact rather than a photo of a person; the yellow sampled from their own vans and clamp meter reads as trade equipment, not a generic brand colour. To differ from the recent near-duplicate site, this uses a banded rhythm and a running ticker of stats instead of a ledger table and a stamp, so proof stays visible as you scroll rather than sitting in one fixed block",
     "read_by": "claude",
     "signature": "ticker",
-    "signature_why": "A thin running line of the review count, years served, and same-day promise reads like a dispatch board, which is exactly the reassurance someone with a leaking pipe wants before they dial.",
+    "signature_why": "A thin running line of the review count and years served keeps proof visible at every scroll depth, which matters more for a trade than a single big stamp.",
     "suppress": [],
     "type_treatment": "stamped",
+    "typeface": "oswald-inter",
     "understood": [
-      "This is a trade with 6,000+ five-star reviews and a fleet of branded vans \u2014 a visitor with a plumbing emergency needs proof of competence and a phone number fast, not a mood board, so the numbers stil"
+      "With 6,203 Google reviews at 4.9 stars, the number itself is the strongest sales tool this plumber has, so the page should open on that fact rather than a photo of a person; the yellow sampled from th"
     ],
     "unsupported": []
   },

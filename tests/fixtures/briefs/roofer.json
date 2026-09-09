@@ -6,7 +6,7 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "gold",
+    "accent": "blue",
     "architecture": "column",
     "contradictions": [],
     "cta": {
@@ -18,22 +18,23 @@
       "services",
       "reviews"
     ],
-    "first_screen": "facts",
+    "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "A homeowner deciding whether to call a roofer wants the rating, the review count, and the four-state W2 coverage before anything else \u2014 that's proof of competence, not atmosphere, so facts lead and a quiet ruled ledger of the numbers (rating, states, offices, insured crews) carries more weight than a stamped badge. Keeping it industrial in mood but moving from ledger/stamped/proof to a column layout with wide quiet-confidence type and a ledger signature still reads as a serious trade operation w",
+    "rationale": "Someone hiring a roofer is checking credentials before they care about a photo of shingles, so the page should open on proof \u2014 the rating, the four-state reach, the W2-insured claim \u2014 not a hero image; a narrow column keeps that proof dense and serious rather than sprawling like a lifestyle brand, and swapping the heavy stamped/oswald-barlow trade-shop mark for a calmer wide-set oswald-inter with a running fact ticker keeps the same honest, no-nonsense industrial mood without duplicating the oth",
     "read_by": "claude",
-    "signature": "ledger",
-    "signature_why": "A roofing outfit that insures every crew and works across four states earns a plain ruled table of that fact, not a stamped badge.",
+    "signature": "ticker",
+    "signature_why": "A thin running line of the hard facts \u2014 5.0 rating, 218 reviews, four states, BBB A+ \u2014 gives a wary homeowner the proof-of-competence a roofer needs without borrowing the stamp-and-stencil trade-shop look already used next door.",
     "suppress": [
       "features"
     ],
     "type_treatment": "wide",
+    "typeface": "oswald-inter",
     "understood": [
-      "A homeowner deciding whether to call a roofer wants the rating, the review count, and the four-state W2 coverage before anything else \u2014 that's proof of competence, not atmosphere, so facts lead and a "
+      "Someone hiring a roofer is checking credentials before they care about a photo of shingles, so the page should open on proof \u2014 the rating, the four-state reach, the W2-insured claim \u2014 not a hero image"
     ],
     "unsupported": []
   },

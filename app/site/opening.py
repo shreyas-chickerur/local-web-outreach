@@ -38,7 +38,7 @@ from app.site.iterate import DEFAULT_SPEC, MOODS
 from app.site.render import plan_for
 from app.site.signature import DEVICES
 from app.site.spec import SiteSpec
-from app.site.theme import ACCENT_NAMES
+from app.site.theme import ACCENT_NAMES, TYPEFACE_NAMES, TYPEFACE_PAIRS
 from app.site.typetreatment import TREATMENTS
 from app.site.understand import (
     CTA_KINDS,
@@ -193,6 +193,19 @@ def _tool() -> dict:
                         "One sentence the operator could repeat to the owner "
                         "saying why that mark suits this business. It reaches "
                         "the workspace and never the page."},
+                "typeface": {
+                    "type": "string", "enum": list(TYPEFACE_NAMES),
+                    "description":
+                        "The display/body pair BY NAME, from a curated table "
+                        "— never two independent face picks, because a "
+                        "display and body face that were not designed "
+                        "together read as two systems glued together. Each "
+                        "name is one voice: " + "; ".join(
+                            f"`{name}` is {pair.voice}"
+                            for name, pair in sorted(TYPEFACE_PAIRS.items())
+                        ) + ". Leave unset to keep the mood's own default "
+                        "pairing, which is a legitimate choice and not a "
+                        "missing one."},
                 "rationale": {"type": "string"},
             },
             "required": ["mood", "accent", "cta", "first_screen",
@@ -449,6 +462,7 @@ def fallback_opening(brief: dict) -> dict:
         "type_treatment": treatments[(seed >> 8) % len(treatments)],
         "architecture": arrangements[(seed >> 12) % len(arrangements)],
         "signature": devices[(seed >> 16) % len(devices)],
+        "typeface": TYPEFACE_NAMES[(seed >> 20) % len(TYPEFACE_NAMES)],
     }
 
 
@@ -503,6 +517,11 @@ def opening_spec(brief: dict, *, client: httpx.Client | None = None,
     said = answer.get("signature_why")
     config["signature_why"] = (said.strip()[:240]
                                if isinstance(said, str) else "")
+    # "" defers to the mood's own default pairing — a legitimate answer, not
+    # a missing one, so an unset or invalid name is not an error, it is
+    # DEFAULT_TYPEFACE doing its job.
+    face = answer.get("typeface")
+    config["typeface"] = face if face in TYPEFACE_NAMES else ""
     config["rationale"] = rationale
     config["read_by"] = "claude"
     return config

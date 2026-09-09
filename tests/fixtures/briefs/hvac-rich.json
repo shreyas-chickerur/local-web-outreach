@@ -7,7 +7,7 @@
   "chain_signals": [],
   "design_direction": {
     "accent": "red",
-    "architecture": "stacked",
+    "architecture": "ledger",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -15,26 +15,26 @@
     },
     "defect": "",
     "emphasis": [
-      "services",
-      "reviews"
+      "stats",
+      "services"
     ],
-    "first_screen": "facts",
+    "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "People hire a plumber on trust and proof, not atmosphere, so the page should open with the 2,272 Google reviews and 4.9 rating before anything else, then move straight into services and photos of real work being done. Red pulls from their own truck wrap and uniforms, giving them a distinct, trade-appropriate identity rather than a generic blue.",
+    "rationale": "People calling a plumber want proof of competence and trust before anything else \u2014 the 4.9/2272 review rating, licensing, and upfront-pricing guarantee matter more than atmosphere, so the page opens with facts, not a mood shot. The red accent is pulled straight from their own trucks and uniforms, and a ledger-like, stamped trade layout reads as a serious licensed outfit rather than a lifestyle brand.",
     "read_by": "claude",
     "signature": "stamp",
-    "signature_why": "A licence-mark stamp repeated near the guarantee text reinforces that these are licensed, vetted professionals, which is exactly what a homeowner checks before calling a plumber.",
+    "signature_why": "A repeated licence/guarantee mark reinforces that this is a licensed, insured trade outfit, which is exactly what a homeowner checks before calling a plumber.",
     "suppress": [
-      "recognition",
       "menu"
     ],
     "type_treatment": "stamped",
+    "typeface": "oswald-barlow",
     "understood": [
-      "People hire a plumber on trust and proof, not atmosphere, so the page should open with the 2,272 Google reviews and 4.9 rating before anything else, then move straight into services and photos of real"
+      "People calling a plumber want proof of competence and trust before anything else \u2014 the 4.9/2272 review rating, licensing, and upfront-pricing guarantee matter more than atmosphere, so the page opens w"
     ],
     "unsupported": []
   },

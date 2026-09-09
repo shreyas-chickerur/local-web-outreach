@@ -196,9 +196,19 @@ def workspace(lead_id: int) -> dict:
                 trouble.append(f"Could not draw the plan: "
                                f"{type(exc).__name__}: {exc}")
         rationale = ""
+        signature_why = ""
+        signature_device = ""
         if history:
             first = history[-1]
-            rationale = str((first.get("notes") or {}).get("rationale") or "")
+            opening_notes = first.get("notes") or {}
+            rationale = str(opening_notes.get("rationale") or "")
+            # §2.3: one sentence justifying the signature device against
+            # this specific business. Recorded at opening time, read back
+            # here rather than re-asked — the same replay guarantee as
+            # `rationale`. Model prose, and it stops here: never reaches
+            # `render`, which cannot see `notes` at all.
+            signature_why = str(opening_notes.get("signature_why") or "")
+            signature_device = str(opening_notes.get("signature") or "")
         return {
             "lead_id": lead_id,
             "versions": history,
@@ -206,6 +216,8 @@ def workspace(lead_id: int) -> dict:
             "outline": outline,
             "plan": plan,
             "rationale": rationale,
+            "signature_device": signature_device,
+            "signature_why": signature_why,
             # What one visit would unlock. A business with no website arrives
             # here with little corroborated material, so its opening version is
             # thin — and the honest response is to say which questions would

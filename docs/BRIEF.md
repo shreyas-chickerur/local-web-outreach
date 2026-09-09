@@ -111,6 +111,57 @@ further axis can be validated on this corpus without either growing it again
 or changing what "validate" means (whole-page judging is itself a choice with
 a cost, not a solved problem — see the open question this leaves).
 
+**Done — Slice B's close-out (this project's own Phase 1).** The gate bug:
+`restaurant-bare`/`salon-rich` collided on exactly three axes (mood, accent,
+hero_subject — no structural axis, no required-high axis), unnoticed because
+the diversity gate compared only against the last ten fixtures generated and
+the two missed each other's window. Fixed by widening `WINDOW` 10 → 60 in
+`app/store/fingerprints.py` (`recent()` now takes `limit: int | None`) — three
+times the current corpus rather than unbounded. Unbounded was tried first and
+reverted: `test_the_gate_is_satisfiable` fails immediately, because an
+unbounded window guarantees eventual permanent gate failure by pigeonhole once
+total-sites-ever-built exceeds the required-high cardinality, so bounded-but-
+wide is the real fix, not a compromise on the way to one. A standing test,
+`test_no_collision_survives_anywhere_in_the_corpus`, now checks every pair in
+the whole corpus rather than same-trade only.
+
+Typeface landed as axis twelve — ~20 named `TypefacePair`s in
+`app/site/theme.py`, chosen by the identity call from a closed set by name,
+never as independent face picks. Added to REQUIRED_HIGH, justified by the same
+evidence every other member of that set was: fold-visible axes are what a
+blind verdict actually rests on.
+
+The signature device's justification (§2.3) now reaches the workspace: one
+sentence, persisted with the rest of the plan, replayed rather than re-asked
+on rebuild, never reaching the rendered page (`app/site/opening.py`,
+`app/web/server.py`, `app/web/index.html`).
+
+One `--redecide` covered all three changes. Sixteen pairs judged blind against
+the rendered markup afterward — cross-trade this time, not just same-trade,
+and five chosen by distance to repopulate the held-out third from empty.
+**All sixteen came back DIFFERENT**, including the closest same-trade pair
+this corpus has ever produced (`law`/`law-rich`, 26% distance, sharing eight
+of its eleven axes) and one pair briefly misjudged "same" against a shrunk
+thumbnail and corrected once the actual rendered markup was read
+(`bare-trade`/`dentist` — the same shape of near-miss as `dentist`/
+`dentist-rich` the round before, caught the same way: by reading the markup,
+not by trusting a glance at a small picture). See `.reviews/slice-b-phase-1.md`.
+
+**The instrument's current reading.**
+
+    agreement   0 of 0 — no "same" pair is left to rank, sixteen checked
+                ruler a762bcc9, rule 254e171b, labels 1f0df47d,
+                held-out de28526d
+    census      same-trade 56% distance = 44% identical, 30 scored pairs
+                closest pair law / law-rich at 26%, DIFFERENT
+    unreachable 0
+    gate        0 of 171 pairs collide, whole corpus (was 0 of 30 same-trade)
+    forbidden defaults  1 fixture matches (§2.4, down from 2)
+    tests       783
+    fixtures    19
+    verdicts    16 live, all judged whole-page against the current rendering,
+                five held out
+
 **Not started.** Slices C, D, E, G, H and the rest of F.
 
 ## 2. The governing requirement

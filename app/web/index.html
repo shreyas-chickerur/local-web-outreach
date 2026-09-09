@@ -939,7 +939,9 @@ async function openWorkspace(leadId, name) {
         versions: data.versions || [], events: data.events || [],
         active: (data.versions || [])[0]?.version ?? null,
         diagnostics: null, device: "phone", outline: data.outline || "",
-        rationale: data.rationale || "", unlocks: data.unlocks || [],
+        rationale: data.rationale || "",
+        signatureDevice: data.signature_device || "",
+        signatureWhy: data.signature_why || "", unlocks: data.unlocks || [],
         pending: data.pending_labels || [], canBuild: !!data.can_build,
         build: data.build || null, trouble: data.trouble || [],
         thread: data.thread || [],
@@ -1064,6 +1066,13 @@ function drawWorkspace() {
   const why = WS.rationale
     ? `<p class="diag-label">Why it opens this way</p>
        <p class="hint">${esc(WS.rationale)}</p>` : "";
+  // §2.3: the signature device is exactly one mark and the justification is
+  // for the operator, not the visitor — it never reaches the generated page,
+  // only this panel, the same boundary `rationale` already keeps.
+  const signature = (WS.signatureDevice && WS.signatureDevice !== "none"
+                     && WS.signatureWhy)
+    ? `<p class="diag-label">The signature device — ${esc(WS.signatureDevice)}</p>
+       <p class="hint">${esc(WS.signatureWhy)}</p>` : "";
   const outline = WS.outline
     ? `<p class="diag-label">The plan</p><pre class="planout">${esc(WS.outline)}</pre>`
     : "";
@@ -1201,7 +1210,7 @@ function drawWorkspace() {
       <div class="ws-head">Versions</div>
       <div class="ws-body">
         <div class="diag">${chips}</div>
-        ${trouble}${why}${unlocks}${outline}${diag}${labeller}
+        ${trouble}${why}${signature}${unlocks}${outline}${diag}${labeller}
       </div>
     </section>
   </div>`;

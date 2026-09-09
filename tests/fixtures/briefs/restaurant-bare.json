@@ -12,7 +12,6 @@
     },
     "defect": "",
     "emphasis": [
-      "gallery",
       "reviews"
     ],
     "first_screen": "photo",
@@ -21,14 +20,15 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "refined",
-    "rationale": "Nine large, carefully composed dish photographs and a perfect 5.0 rating from discerning diners are the whole case for Ichika, so the site should open on the food itself with quiet, restrained type \u2014 the plating already does the persuading, and reviews describing a Michelin-level, deeply seasonal kaiseki experience confirm it before a visitor ever calls to book.",
+    "rationale": "Ichika's own photographs \u2014 the counter, the fish, the lacquerware \u2014 are the strongest evidence of the care described in every review, so the site should open on that imagery with a restrained, editorial hand rather than loud graphics; the red accent is drawn straight from their own lacquered dishware, and leading with the gallery then surfacing the kaiseki reviews mirrors exactly what a five-star, near-Michelin dining room needs to prove to a first-time visitor: this is a serious, beautiful kitc",
     "read_by": "claude",
     "signature": "corner_inset",
-    "signature_why": "A small type block tucked into the corner of a dish photograph lets the food fill the screen while still naming the restaurant, which suits a kaiseki counter where the plating is the argument.",
+    "signature_why": "A small type block set into the corner of the counter photograph reads as quiet confidence, letting the food and craftsmanship fill the frame the way a kaiseki dinner earns its praise before a word is said.",
     "suppress": [],
     "type_treatment": "quiet",
+    "typeface": "",
     "understood": [
-      "Nine large, carefully composed dish photographs and a perfect 5.0 rating from discerning diners are the whole case for Ichika, so the site should open on the food itself with quiet, restrained type \u2014 "
+      "Ichika's own photographs \u2014 the counter, the fish, the lacquerware \u2014 are the strongest evidence of the care described in every review, so the site should open on that imagery with a restrained, editori"
     ],
     "unsupported": []
   },

@@ -8,34 +8,35 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "sky",
-    "architecture": "stacked",
+    "accent": "amber",
+    "architecture": "column",
     "contradictions": [],
     "cta": {
-      "kind": "quote",
+      "kind": "visit",
       "label": ""
     },
     "defect": "",
     "emphasis": [
-      "about",
-      "reviews"
+      "features",
+      "gallery"
     ],
-    "first_screen": "photo",
+    "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "about",
     "mood": "refined",
-    "rationale": "This isn't a business selling a single service to walk-in customers \u2014 it's a landlord renting suites to independent beauty professionals, so the visitor needs to be sold on the space, the support, and the community before anything else, which is why the story leads and a genuine tenant quote sits beside it rather than a moving strip of services. The sky-blue storefront under an actual bright sky is the strongest sampled colour and reads as clean and upscale rather than trendy, and a full photo o",
+    "rationale": "This isn't a walk-in salon \u2014 it's an upscale suite-rental business courting beauty professionals, so the site should sell the space and the support, not a menu of services; a refined, quiet first screen with the story and the room up front (not stats, since the actual tenants' individual reviews matter more than an aggregate score) and a clear 'visit/inquire' path suits a landlord-to-stylists pitch better than a typical salon site.",
     "read_by": "claude",
-    "signature": "margin_note",
-    "signature_why": "A short line pulled from a tenant's own review sitting beside the story reads as genuine word-of-mouth, which is what actually convinces a stylist to rent a suite here.",
+    "signature": "corner_inset",
+    "signature_why": "A type block set into the corner of the storefront photo reads as a boutique address, not a salon menu \u2014 fitting a business that rents suites to independent stylists rather than selling haircuts itself.",
     "suppress": [
-      "menu"
+      "stats"
     ],
-    "type_treatment": "quiet",
+    "type_treatment": "wide",
+    "typeface": "cormorant-jost",
     "understood": [
-      "This isn't a business selling a single service to walk-in customers \u2014 it's a landlord renting suites to independent beauty professionals, so the visitor needs to be sold on the space, the support, and"
+      "This isn't a walk-in salon \u2014 it's an upscale suite-rental business courting beauty professionals, so the site should sell the space and the support, not a menu of services; a refined, quiet first scre"
     ],
     "unsupported": []
   },

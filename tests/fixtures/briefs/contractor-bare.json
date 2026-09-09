@@ -15,7 +15,6 @@
     },
     "defect": "",
     "emphasis": [
-      "stats",
       "reviews"
     ],
     "first_screen": "facts",
@@ -24,14 +23,15 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "This is a plumber judged on trust and competence, not atmosphere \u2014 only one photo is large enough to lead with and the reviews are mixed on reliability, so the page should open with the rating and review count as hard proof, backed by a ledger-style rhythm and a stamp mark that says 'licensed, on record' rather than a big lifestyle photo. Navy from their own work shirts keeps it feeling like a working trade, not a boutique.",
+    "rationale": "This is a trade that sells competence before atmosphere: only one photo is strong enough to lead with, so the first screen should lead with the 4.7-rating and review count rather than a picture, backed by reviews raised early since the record is mixed and needs the strongest quotes visible fast. The ledger rhythm and stamped trade-shop wordmark read as a working outfit, not a boutique, and navy sampled from their own photos keeps it grounded rather than decorative.",
     "read_by": "claude",
-    "signature": "stamp",
-    "signature_why": "A repeated licence/registration mark reads as proof of a legitimate trade business, which is what a worried homeowner is checking for before they call.",
+    "signature": "ticker",
+    "signature_why": "A thin running line of the rating, review count, and years-in-trade reads like a service record, which is what someone checks before calling a plumber.",
     "suppress": [],
     "type_treatment": "stamped",
+    "typeface": "oswald-barlow",
     "understood": [
-      "This is a plumber judged on trust and competence, not atmosphere \u2014 only one photo is large enough to lead with and the reviews are mixed on reliability, so the page should open with the rating and rev"
+      "This is a trade that sells competence before atmosphere: only one photo is strong enough to lead with, so the first screen should lead with the 4.7-rating and review count rather than a picture, backe"
     ],
     "unsupported": []
   },

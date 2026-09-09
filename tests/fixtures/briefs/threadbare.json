@@ -13,21 +13,27 @@
       "label": ""
     },
     "defect": "",
-    "emphasis": [],
+    "emphasis": [
+      "services",
+      "hours"
+    ],
     "first_screen": "type",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": null,
+    "lead_with": "services",
     "mood": "industrial",
-    "rationale": "There isn't enough photography to build a page around imagery, so the name should be set heavy and plain like a trade sign, with the accent pulled from the one photo they do have. A visitor to a general contractor's site wants to trust the outfit and pick up the phone, not browse a gallery.",
+    "rationale": "There's only one small photo, not enough to build a page around, so the name itself needs to carry the first screen like a trade-shop sign; a general contractor sells competence and reliability, not atmosphere, so we lead with what he does and when he's available rather than pictures we don't have.",
     "read_by": "claude",
     "signature": "stamp",
-    "signature_why": "A repeated licence-style mark reads as a tradesman's credential, which is what a stranger checks before calling a handyman.",
-    "suppress": [],
+    "signature_why": "A repeated licence-style stamp reads as a tradesman's mark of registration, which is exactly what a homeowner checks before calling a handyman.",
+    "suppress": [
+      "gallery"
+    ],
     "type_treatment": "stamped",
+    "typeface": "oswald-barlow",
     "understood": [
-      "There isn't enough photography to build a page around imagery, so the name should be set heavy and plain like a trade sign, with the accent pulled from the one photo they do have. A visitor to a gener"
+      "There's only one small photo, not enough to build a page around, so the name itself needs to carry the first screen like a trade-shop sign; a general contractor sells competence and reliability, not a"
     ],
     "unsupported": []
   },

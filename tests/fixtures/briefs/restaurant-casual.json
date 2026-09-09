@@ -5,7 +5,7 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "amber",
+    "accent": "orange",
     "architecture": "gallery",
     "contradictions": [],
     "cta": {
@@ -15,24 +15,25 @@
     "defect": "",
     "emphasis": [
       "gallery",
-      "features"
+      "reviews"
     ],
-    "first_screen": "split",
+    "first_screen": "photo",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "The food is the argument here \u2014 ten strong photographs of glossy crepes and the griddle kitchen \u2014 so the gallery still leads, but splitting the first screen between the founder's Paris-to-Dallas story and a photograph, set in wide boutique-style type, keeps this from reading like the same photo-behind-a-name page as the last build. Reviews are warm but thin (11 on Yelp, a 3.9 on Google) so stats stay quiet while the photographs and Julien's own story do the selling.",
+    "rationale": "This is a food-hall crepe stall people find by craving something sweet and by word of mouth \u2014 the photography of glistening crepes and the buzzing counter does the selling, so the site should open on a big photo and keep moving through the gallery, with warm orange pulled straight from the Nutella-and-chocolate palette they already photograph in. The 3.9/4.4 ratings are decent but not a headline, so let quoted reviews carry the social proof instead of a cold stats band.",
     "read_by": "claude",
-    "signature": "corner_inset",
-    "signature_why": "A type block inset into the corner of the crepe photograph gives the caf\u00e9 a Parisian-signage feel rather than the plain photo-behind-name look every other food site uses.",
+    "signature": "scroll_gallery",
+    "signature_why": "The crepes and the food-hall stall are the entire argument, so let the photos run past like a counter you're walking along rather than freezing them into a static grid.",
     "suppress": [
       "stats"
     ],
-    "type_treatment": "wide",
+    "type_treatment": "quiet",
+    "typeface": "fraunces-karla",
     "understood": [
-      "The food is the argument here \u2014 ten strong photographs of glossy crepes and the griddle kitchen \u2014 so the gallery still leads, but splitting the first screen between the founder's Paris-to-Dallas story"
+      "This is a food-hall crepe stall people find by craving something sweet and by word of mouth \u2014 the photography of glistening crepes and the buzzing counter does the selling, so the site should open on "
     ],
     "unsupported": []
   },

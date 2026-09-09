@@ -64,6 +64,7 @@ FLIPS: dict[str, tuple[str, object, object]] = {
     "type_treatment": ("type_treatment", "quiet", "wide"),
     "architecture": ("architecture", "stacked", "ledger"),
     "signature": ("signature", "none", "ledger"),
+    "typeface": ("typeface", "fraunces-karla", "oswald-inter"),
     "mood": ("mood", "warm", "night"),
     "accent": ("accent", "navy", "gold"),
     "leads_with": ("lead_with", "gallery", "reviews"),
@@ -76,7 +77,7 @@ FLIPS: dict[str, tuple[str, object, object]] = {
 # Axes whose difference is claimed to show in the first screen. An axis here
 # that only changes the page on scroll is scored as if the owner sees it and
 # does not.
-FIRST_SCREEN = {"first_screen", "type_treatment", "mood", "accent",
+FIRST_SCREEN = {"first_screen", "type_treatment", "typeface", "mood", "accent",
                 "hero_subject", "action"}
 
 
@@ -252,7 +253,7 @@ def test_no_axis_is_a_function_of_another():
     # accent, which says nothing about the code.
     specs = [SiteSpec(mood=mood, accent=accent, lead_with=lead, cta=cta,
                       first_screen=screen, type_treatment=treatment,
-                      architecture=arch, signature=mark)
+                      architecture=arch, signature=mark, typeface=face)
              for mood in ("warm", "night", "fresh")
              for accent in (None, "navy", "gold")
              for lead in (None, "reviews")
@@ -260,7 +261,14 @@ def test_no_axis_is_a_function_of_another():
              for screen in ("photo", "proof")
              for treatment in ("quiet", "stamped")
              for arch in ("stacked", "ledger")
-             for mark in ("none", "ticker")]
+             for mark in ("none", "ticker")
+             # Explicit, independent of mood — without this every row's
+             # typeface resolves to the mood's own default (see
+             # `fingerprint.of`), which made typeface LOOK like a function of
+             # mood across the sweep even though the real system lets either
+             # move independently. Caught by the exact test this axis is
+             # supposed to satisfy.
+             for face in ("", "oswald-inter")]
 
     subjects = ("dish", "room", "people", "exterior", "work")
     rows: list[fp.Fingerprint] = []
