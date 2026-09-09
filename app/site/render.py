@@ -1036,10 +1036,27 @@ def _gallery(m: Material, t: Theme) -> str:
 # `density.SPARSE_MAX`/`BALANCED_AT` already draw for services.
 REVIEWS_FEATURED_MAX = 3
 
+QUOTE_LIMIT = 340
+
+
+def _truncate_quote(text: str, limit: int = QUOTE_LIMIT) -> str:
+    """A long review, cut at a word boundary with a mark that it was cut.
+
+    `text[:340]` alone can land mid-word — "Snelling Law Firm was
+    outstanding" became "...was outta", which a design review read as a
+    layout defect (text visibly cut off) rather than what it actually was:
+    a slice with no word boundary and nothing to say it was shortened.
+    """
+    text = text.strip()
+    if len(text) <= limit:
+        return text
+    cut = text[:limit].rsplit(" ", 1)[0].rstrip(".,;:!?—–-")
+    return cut + "…"
+
 
 def _review_card(quote: dict, index: int) -> str:
     stars = "&#9733;" * max(1, min(5, int(quote.get("rating") or 5)))
-    text = str(quote.get("text") or "")[:340].strip()
+    text = _truncate_quote(str(quote.get("text") or ""))
     return (f'<figure class="quote" data-reveal data-delay="{index % 4}">'
             f'<div class="stars">{stars}</div>'
             f'<p>&ldquo;{e(text)}&rdquo;</p>'
@@ -1054,7 +1071,7 @@ def _review_feature(quote: dict, index: int) -> str:
     thin border around not much, which is the review section's own version
     of the gutter `_offer_row`'s sparse services layout exists to avoid."""
     stars = "&#9733;" * max(1, min(5, int(quote.get("rating") or 5)))
-    text = str(quote.get("text") or "")[:340].strip()
+    text = _truncate_quote(str(quote.get("text") or ""))
     return (f'<figure class="quote-feature" data-reveal data-delay="{index % 4}">'
             f'<div class="stars">{stars}</div>'
             f'<p>&ldquo;{e(text)}&rdquo;</p>'

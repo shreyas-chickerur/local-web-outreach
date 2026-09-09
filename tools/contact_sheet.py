@@ -30,14 +30,21 @@ gitignored regardless; regenerate on demand.
 from __future__ import annotations
 
 import argparse
+import base64
+import contextlib
 import hashlib
 import html
 import json
 import os
 import re
 import shutil
+import socket
+import struct
 import subprocess
 import sys
+import tempfile
+import time
+import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -116,6 +123,216 @@ def chrome() -> str | None:
     return next((path for path in CHROME if path and Path(path).exists()), None)
 
 
+# Chrome's headless `--screenshot` CLI mode silently clamps any requested
+# `--window-size` width below this to exactly 500 CSS pixels — confirmed by
+# measuring `window.innerWidth` from inside the page: 390, 450 and 500 all
+# measured 500; 550 measured 550. Nothing in the CLI flags changes it
+# (`--force-device-scale-factor` only affects the output image's pixel
+# density, not the CSS layout width). This means the "mobile" width in
+# `WIDTHS` below has NEVER actually rendered at 390px through `shoot()` —
+# every "mobile" screenshot this project has taken, including the ones the
+# sampled Slice G design review judged, was laid out for a viewport 110px
+# wider than labelled, then cropped to 390px on output, which is exactly
+# how a button that fits at a real 390px viewport reads as cropped in the
+# capture (found chasing down a "duplicated CTA cropped at the mobile
+# edge" finding that would not reproduce through any other means of
+# checking the same page at the same width — see `.reviews/<phase>.md`).
+CDP_MIN_WIDTH = 500
+
+
+@contextlib.contextmanager
+def _cdp_session(binary: str, page: Path, width: int, height: int, scale: float,
+                  timeout: float = 20.0):
+    """A Chrome instance, one page open in it at the given viewport, and a
+    `call(method, params)` function to drive it over the DevTools protocol —
+    shared by `_cdp_screenshot` (below `CDP_MIN_WIDTH`) and `evaluate_in_page`
+    (measuring layout at any width, screenshot or not).
+
+    `Emulation.setDeviceMetricsOverride` sets the CSS viewport directly and
+    is not subject to the CLI `--window-size` flag's floor (see
+    `CDP_MIN_WIDTH`) — the same mechanism Playwright/Puppeteer use for
+    mobile emulation, reached here over a raw WebSocket rather than a new
+    dependency, since the only thing needed is one request-response round
+    trip per command.
+
+    A long-lived Chrome instance rather than one-shot `--screenshot`: this
+    project already found that a fresh `--user-data-dir` makes
+    `--headless=new` hang on exit under `--screenshot` specifically (see
+    `shoot`'s docstring). Managing the process ourselves and terminating it
+    explicitly on the way out sidesteps that — nothing here waits for
+    Chrome to exit on its own.
+    """
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.bind(("127.0.0.1", 0))
+    port = sock.getsockname()[1]
+    sock.close()
+
+    with tempfile.TemporaryDirectory(prefix="cdp-shot-") as profile:
+        proc = subprocess.Popen(
+            [binary, "--headless=new", "--disable-gpu", "--hide-scrollbars",
+             f"--remote-debugging-port={port}", f"--user-data-dir={profile}",
+             "--host-resolver-rules=MAP fonts.googleapis.com 127.0.0.1,"
+             "MAP fonts.gstatic.com 127.0.0.1",
+             "--disable-background-networking", "--disable-sync",
+             "--disable-default-apps", "--disable-component-update",
+             "--metrics-recording-only", "--no-default-browser-check",
+             "--no-service-autorun", "--disable-features=Translate,OptimizationHints",
+             "--force-prefers-reduced-motion", "about:blank"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        try:
+            deadline = time.monotonic() + timeout
+            while time.monotonic() < deadline:
+                try:
+                    with urllib.request.urlopen(
+                            f"http://127.0.0.1:{port}/json/version", timeout=0.5):
+                        break
+                except OSError:
+                    time.sleep(0.1)
+            else:
+                raise TimeoutError("devtools endpoint never came up")
+
+            target_req = urllib.request.Request(
+                f"http://127.0.0.1:{port}/json/new?{page.resolve().as_uri()}",
+                method="PUT")
+            with urllib.request.urlopen(target_req, timeout=5) as r:
+                target = json.loads(r.read())
+            ws_url = target["webSocketDebuggerUrl"]
+            host_port, _, path = ws_url[len("ws://"):].partition("/")
+            host, ws_port = host_port.split(":")
+
+            with socket.create_connection((host, int(ws_port)), timeout=timeout) as ws:
+                ws.settimeout(timeout)
+                _ws_handshake(ws, host, int(ws_port), "/" + path)
+
+                msg_id = 0
+
+                def call(method: str, params: dict | None = None) -> dict:
+                    nonlocal msg_id
+                    msg_id += 1
+                    _ws_send(ws, {"id": msg_id, "method": method,
+                                  "params": params or {}})
+                    while True:
+                        response = _ws_recv(ws)
+                        if response.get("id") == msg_id:
+                            return response
+                        # An unsolicited event (e.g. Page.frameNavigated) —
+                        # not the answer to this call, keep waiting for it.
+
+                call("Page.enable")
+                call("Emulation.setDeviceMetricsOverride", {
+                    "width": width, "height": height,
+                    "deviceScaleFactor": scale, "mobile": True})
+                # The page was requested via `/json/new`'s own URL
+                # parameter, which can already be complete by the time the
+                # WebSocket connects — poll readiness rather than waiting on
+                # a load event that may already have fired.
+                ready_deadline = time.monotonic() + timeout
+                while time.monotonic() < ready_deadline:
+                    state = call("Runtime.evaluate", {
+                        "expression": "document.readyState",
+                        "returnByValue": True})
+                    if (state.get("result", {}).get("result", {}).get("value")
+                            == "complete"):
+                        break
+                    time.sleep(0.05)
+                yield call
+        finally:
+            proc.terminate()
+            try:
+                proc.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.wait(timeout=5)
+
+
+def _cdp_screenshot(binary: str, page: Path, out: Path, width: int, height: int,
+                     scale: float = 1.0, timeout: float = 20.0) -> bool:
+    """A screenshot below `CDP_MIN_WIDTH`, driven through the DevTools
+    protocol rather than the `--screenshot` CLI flag — see `_cdp_session`."""
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with _cdp_session(binary, page, width, height, scale, timeout) as call:
+        shot = call("Page.captureScreenshot", {"format": "png"})
+        data = shot.get("result", {}).get("data")
+        if not data:
+            return False
+        out.write_bytes(base64.b64decode(data))
+    return out.exists()
+
+
+def evaluate_in_page(binary: str, page: Path, width: int, height: int,
+                      expression: str, scale: float = 1.0,
+                      timeout: float = 20.0):
+    """Run `expression` in the page at the given viewport and return its
+    value — for measuring layout (bounding rects, `elementFromPoint`)
+    directly rather than reading it back off a screenshot. Works at any
+    width, including below `CDP_MIN_WIDTH`, since it always goes through
+    `_cdp_session` rather than the CLI `--screenshot` flag."""
+    with _cdp_session(binary, page, width, height, scale, timeout) as call:
+        result = call("Runtime.evaluate", {
+            "expression": expression, "returnByValue": True})
+        exception = result.get("result", {}).get("exceptionDetails")
+        if exception:
+            raise RuntimeError(f"evaluate failed: {exception}")
+        return result.get("result", {}).get("result", {}).get("value")
+
+
+def _ws_handshake(sock: socket.socket, host: str, port: int, path: str) -> None:
+    key = base64.b64encode(os.urandom(16)).decode()
+    request = (f"GET {path} HTTP/1.1\r\nHost: {host}:{port}\r\n"
+               f"Upgrade: websocket\r\nConnection: Upgrade\r\n"
+               f"Sec-WebSocket-Key: {key}\r\nSec-WebSocket-Version: 13\r\n\r\n")
+    sock.sendall(request.encode())
+    response = b""
+    while b"\r\n\r\n" not in response:
+        response += sock.recv(4096)
+
+
+def _ws_send(sock: socket.socket, data: dict) -> None:
+    payload = json.dumps(data).encode()
+    header = bytearray([0x81])
+    mask = os.urandom(4)
+    length = len(payload)
+    if length < 126:
+        header.append(0x80 | length)
+    elif length < 65536:
+        header.append(0x80 | 126)
+        header += struct.pack(">H", length)
+    else:
+        header.append(0x80 | 127)
+        header += struct.pack(">Q", length)
+    header += mask
+    masked = bytes(b ^ mask[i % 4] for i, b in enumerate(payload))
+    sock.sendall(bytes(header) + masked)
+
+
+def _ws_recv(sock: socket.socket) -> dict:
+    while True:
+        head = b""
+        while len(head) < 2:
+            head += sock.recv(2 - len(head))
+        length = head[1] & 0x7F
+        if length == 126:
+            ext = b""
+            while len(ext) < 2:
+                ext += sock.recv(2 - len(ext))
+            length = struct.unpack(">H", ext)[0]
+        elif length == 127:
+            ext = b""
+            while len(ext) < 8:
+                ext += sock.recv(8 - len(ext))
+            length = struct.unpack(">Q", ext)[0]
+        payload = b""
+        while len(payload) < length:
+            chunk = sock.recv(length - len(payload))
+            if not chunk:
+                break
+            payload += chunk
+        opcode = head[0] & 0x0F
+        if opcode == 1:
+            return json.loads(payload.decode())
+        # A ping or other control frame — not a JSON-RPC reply, keep waiting.
+
+
 def shoot(binary: str, page: Path, out: Path, width: int, height: int,
           scale: float = 1.0) -> bool:
     """One screenshot. Found NOT reproducible before this — the same file,
@@ -167,7 +384,13 @@ def shoot(binary: str, page: Path, out: Path, width: int, height: int,
     Four repeats of the same file, same width, are now byte-identical, which
     is what a screenshot has to be before it can be trusted to prove anything
     about parallel vs. serial capture.
+
+    Below `CDP_MIN_WIDTH` this dispatches to `_cdp_screenshot` instead — the
+    CLI flag below cannot reach a genuine sub-500px viewport at all; see
+    `CDP_MIN_WIDTH`'s comment.
     """
+    if width < CDP_MIN_WIDTH:
+        return _cdp_screenshot(binary, page, out, width, height, scale)
     out.parent.mkdir(parents=True, exist_ok=True)
     result = subprocess.run(
         [binary, "--headless=new", "--disable-gpu", "--hide-scrollbars",

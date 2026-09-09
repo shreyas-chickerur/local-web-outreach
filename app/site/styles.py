@@ -224,7 +224,8 @@ section[data-ground="base"]{{background:var(--bg);color:var(--on-base)}}
    the edge so no shadow is needed, and the saturate() stops content going grey
    as it passes underneath. */
 body:has(.hero.first-type) .bar,
-body:has(.hero.first-split) .bar{{color:var(--ink)}}
+body:has(.hero.first-split) .bar,
+body:has(.hero.first-proof) .bar{{color:var(--ink)}}
 /* The split's chrome gets its own ground. Left translucent it ran dark ink
    across the photograph — legible left of the midpoint and not right of it,
    which is a contrast failure the audit cannot see because there is no
@@ -232,6 +233,17 @@ body:has(.hero.first-split) .bar{{color:var(--ink)}}
    legibility and wrapped the navigation onto three lines; a header band above
    a hard-edged split is the composition this position was already making. */
 body:has(.hero.first-split) .bar:not(.stuck){{background:var(--bg);
+  border-bottom:1px solid {hairline}}}
+/* `first-proof` puts its photograph in a narrow band across the very top —
+   exactly where the fixed nav sits — and turns its veil off because the type
+   never sits over the photograph at all (see `.hero.first-proof .veil`
+   above). Nobody told the nav: left translucent and white, as every other
+   position starts, it read as navigation links floating across a stranger's
+   face with no scrim to guarantee legibility, a collision a design review
+   caught that no test here did. Solid from the first frame, matching the
+   ground the claims below it already sit on, so the nav is never over the
+   photograph at all rather than merely hoping it stays legible on top of it. */
+body:has(.hero.first-proof) .bar:not(.stuck){{background:var(--bg);
   border-bottom:1px solid {hairline}}}
 .bar.stuck{{background:{nav_tint};color:var(--ink);
   -webkit-backdrop-filter:blur(14px) saturate(180%);
@@ -266,7 +278,17 @@ body:has(.hero.first-split) .bar:not(.stuck){{background:var(--bg);
   background-position:center;will-change:transform}}
 .hero .veil{{position:absolute;inset:0;z-index:-1;background:{t.hero_overlay}}}
 .hero.has-photo{{color:#fff}}
-.hero .wrap{{padding-bottom:clamp(52px,9vh,110px);padding-top:120px}}
+/* `min-width:0` overrides the grid item default of `min-width:auto`, which
+   otherwise sizes this implicit column to its content's min-content width
+   rather than the hero's own. `.hero.first-proof .proof` sets three columns
+   at `minmax(190px,1fr)` — a real minimum of 570px at three items — and with
+   nothing here capping it, the hero (and everything in its `.wrap`,
+   including the hero actions) grew to 570px on a 390px viewport instead of
+   wrapping the proof row, clipping the second action button by the width
+   that grid track went over. A collision a design review caught ("Get
+   directions" cropped) that no test here did until the corpus-wide
+   collision check below was built to catch this shape of bug generally. */
+.hero .wrap{{padding-bottom:clamp(52px,9vh,110px);padding-top:120px;min-width:0}}
 .hero h1{{margin-bottom:.22em;max-width:16ch}}
 .hero .sub{{font-size:clamp(17px,2vw,25px);max-width:40ch;opacity:.94;
   margin-bottom:30px;line-height:1.4}}

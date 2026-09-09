@@ -1073,3 +1073,157 @@ is green with only `hvac`'s render snapshot moving (content-only,
 regenerated and reviewed by hand: the sentence claiming 20,000 reviews is
 gone, the surrounding sentences and every other fixture's bytes are
 untouched). No fingerprint value, axis, or gate collision count changed.
+
+# Round 3, Phase 2 — the rendering defects Slice G found, and whether they were real
+
+Three findings from the sampled design review, named in the round's own
+instructions: `law`'s nav overlapping the attorney's photograph, a
+paragraph overlapping/hidden behind a stats banner, and a duplicated CTA
+button cropped at the mobile viewport edge on `hvac`/`restaurant-rich`.
+The instructions were explicit to confirm each before changing anything —
+this record is unusually exploratory because two of the three did not
+hold up as stated, and one review artifact was a defect in the review's
+own tooling, not the site.
+
+## What was actually true, checked one at a time
+
+**Nav-over-photo: real, confirmed directly.** `law`'s desktop screenshot
+shows "What we do / Reviews / About / Hours / Visit" printed across the
+attorney's face with no scrim — legible in places, illegible in others.
+Root cause: `.hero.first-proof` deliberately turns its `.veil` scrim off
+(`app/site/styles.py`, "the type never sits over the photograph at all")
+because its own type sits below a narrow photo band, on the theme's own
+ground — a real, sound design choice for the TYPE. Nobody carried the same
+reasoning to the NAV BAR, which is `position:fixed` and floats over
+whatever is at the top of the page regardless of what the hero does below
+it — for `first-proof`, that is exactly the photo band. Every other
+first-screen position either has no photo up top (`first-type`) or darkens
+the whole photo it sits on (`first-facts`, the default `.veil`) or gives
+the bar its own ground explicitly (`first-split`). `first-proof` alone had
+neither.
+
+**"Hidden behind a stats banner": did not reproduce at the stated
+location, but a real bug was one screen-height away.** Grepped the exact
+quoted sentence ("If you or a loved one has been...") — it belongs to
+`law`'s "Our Mission" feature block, nowhere near the stats band or
+"Practice Areas". No CSS collision exists there; screenshotted and
+inspected directly, twice, at different scales. But `_review_card`/
+`_review_feature` both truncate a quote with `text[:340]` — no word
+boundary, no ellipsis — and `law`'s second testimonial is 1074 characters,
+cut mid-word: "Snelling Law Firm was outta[nding]" becomes "...was outta".
+That is very likely what a vision model described as "cut off" text,
+mis-located relative to which section it was reading. Verified: the
+character count analysis confirms the exact cut point; the fix (a
+word-boundary truncation with an ellipsis) is applied regardless of
+whether it was the literal thing described, because it is a real,
+separately-confirmed defect either way.
+
+**"Duplicated CTA cropped at the mobile edge": the SPECIFIC finding was a
+tooling artifact, not a site defect — but chasing it down surfaced a
+different, genuine CSS bug in the same family.** Reproduced the crop with
+`tools.contact_sheet.shoot()` at width 390 exactly as the design review
+would have captured it. Then reproduced the SAME markup at a genuinely
+emulated 390px viewport (Chrome DevTools Protocol,
+`Emulation.setDeviceMetricsOverride`) and the crop was GONE — "Book a
+table" wrapped cleanly, "Get directions" sat fully on screen. Instrumented
+the page to print `window.innerWidth` from inside the actual headless
+capture: it read **500**, not 390, regardless of `--window-size=390,844`.
+Binary-searched the boundary (390, 450, 500 all clamp to 500; 550 measures
+550 correctly) — Chrome's headless `--screenshot` CLI mode has an
+undocumented floor of 500 CSS pixels that nothing in the available flags
+changes. Every "mobile" screenshot this project has ever taken — the
+contact sheet, and by extension every Slice G design review, since
+`design_review.py` reuses `shoot()` — was laid out for a viewport 110px
+wider than labelled, then the output image was cropped to 390px,
+producing exactly the visual signature of a cropped button whether or not
+one existed.
+
+Having built a genuine sub-500px capture path (`_cdp_session`,
+`evaluate_in_page`, `CDP_MIN_WIDTH` in `tools/contact_sheet.py`) to check
+this properly, ran a DOM-level collision probe across the whole corpus at
+the three review widths rather than trusting a second round of screenshots
+read by eye. It found a real instance of the SAME defect CLASS the design
+review named, just not on the fixtures or in the shape originally
+reported: `law-rich`'s hero actions row (`Call ... / Get directions`)
+generated the identical "second button clipped" signature at a REAL
+390px viewport, for a reason unrelated to any screenshot tool.
+`.hero.first-proof .proof` sets `grid-template-columns:repeat(auto-fit,
+minmax(190px,1fr))` — a genuine 570px minimum at three items — and
+nothing constrained the hero's own grid track to less than its content's
+minimum, so the whole hero (and everything in its `.wrap`, including the
+actions row) grew to 570px on a 390px viewport instead of wrapping the
+proof row. Fixed with one declaration, `.hero .wrap{min-width:0}` —
+overriding the grid-item default that let a child's minimum content width
+dictate the parent's own size.
+
+## Binding claims
+
+**Primary.** A new standing test
+(`tests/test_no_element_collides_with_another.py`), corpus-wide at the
+three review widths, using the CDP path so "mobile" is a genuine 390px
+rather than the CLI flag's silent 500px: no interactive control is
+clipped by the viewport edge, and no text-bearing element is painted over
+by another (excluding `position:fixed` chrome, which legitimately floats
+above scrolled content by design). Confirmed to catch the `law-rich`
+defect before the `min-width:0` fix and pass after, across all 19
+fixtures at all 3 widths.
+
+**Secondary.** No redecide required for either fix — both are CSS-only;
+no `compositions`/`section_order`/any axis value changes as a result.
+
+## Falsification
+
+If the "hidden behind stats banner" claim could not be located anywhere
+on the page after a direct text search, and no other genuine defect
+turned up nearby, that would mean the design review hallucinated a defect
+with no basis at all — worth flagging as evidence the sampled review's
+signal-to-noise is worse than the earlier pass estimated. That did not
+happen: the truncation bug is real, confirmed independently of the
+vision model's read, and plausibly what was actually seen.
+
+If the "duplicated CTA cropped" finding turned out to be real at a
+genuinely emulated mobile width, the tooling-artifact explanation would
+be wrong and the right fix would have been a CSS change on `hvac`/
+`restaurant-rich` directly, not a capture-tool fix. It did not reproduce
+at a true 390px viewport on either named fixture — the crop was fully
+explained by the 500px floor, confirmed by measuring `window.innerWidth`
+directly inside the same headless process.
+
+## Outcome — 2026-09-09
+
+All three claims resolved as described above before any speculative fix
+was applied. Two genuine CSS defects fixed (`first-proof`'s missing nav
+scrim; the quote-truncation mid-word cut); one genuine tooling defect
+fixed (`shoot()`'s silent 500px floor, now routed through a real DevTools
+Protocol path below `CDP_MIN_WIDTH`); one reported finding did not
+reproduce as stated but led to finding a second, real instance of the
+same underlying defect class on a different fixture. `make check` green
+after the fix (841 passed) — see `.reviews/<phase>.md` for the literal
+tail.
+
+**2c, re-run against the fixed tooling: confirmed.** Re-ran
+`tools/design_review.py` on the same four sampled fixtures (12 model
+calls). `law`'s nav-over-face finding is gone from both the desktop and
+mobile read this time — nothing in either mentions the navigation
+overlapping the photograph. The quote-truncation artifact ("outta") does
+not appear anywhere in the new pass. `restaurant-rich`'s mobile read
+still names the duplicated `Book a table`/`Get directions` buttons but
+now purely as a hierarchy/spacing observation about the sticky bar
+existing at all — no mention of either button being cropped or
+partially visible, which is the tooling-artifact explanation confirmed
+independently a second way. Two NEW mentions appeared this round —
+`hvac` and `law` mobile both note the sticky "Call us" bar overlapping
+the stats band's numbers near the bottom of the initial viewport.
+Checked directly: this is the same, expected property of any
+`position:fixed` bottom bar covering whatever document content happens
+to be scrolled into its footprint at a given moment — present on
+essentially every site with a persistent mobile CTA bar, not a layout
+defect, and excluded from the standing collision test on that basis (see
+`test_no_element_collides_with_another.py`'s own filter for `.callbar`).
+Noted here rather than silently dropped, since it is a real thing the
+review saw, just not one this pass treats as a defect.
+
+One unrelated finding surfaced in passing and flagged separately rather
+than fixed here (out of scope for this phase): `law-rich`'s stats band
+prints "Dishes on the menu" as its third stat label — a restaurant-trade
+label applied to a law firm.
