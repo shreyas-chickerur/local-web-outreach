@@ -780,115 +780,243 @@
       "b": "law-rich",
       "verdict": "different",
       "held_out": false,
-      "why": "one opens as a full-bleed photograph washed dark with the rating shouted at display size and every line of text laid straight over the picture; the other opens as a plain band of photograph with nothing written on it, and the firm's name and figures wait below it on a quiet page instead \u2014 the first thing on screen could not be arranged more differently, even though the stats band, credential pills and review grid that follow are close to identical"
+      "why": "one opens as a full-bleed photograph washed dark with the rating shouted at display size and every line of text laid straight over the picture; the other opens as a plain band of photograph with nothing written on it, and the firm's name and figures wait below it on a quiet page instead \u2014 the first thing on screen could not be arranged more differently, even though the stats band, credential pills and review grid that follow are close to identical",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "hvac-rich",
       "b": "hvac-second",
       "verdict": "different",
       "held_out": false,
-      "why": "one opens as a photograph with the name and a short line of proof set beneath it on a plain ground; the other splits the screen in two, text on one side and a service van's photograph on the other. Further down, one runs its review cards almost immediately after the credential pills and the other saves them for near the very end of the page"
+      "why": "one opens as a photograph with the name and a short line of proof set beneath it on a plain ground; the other splits the screen in two, text on one side and a service van's photograph on the other. Further down, one runs its review cards almost immediately after the credential pills and the other saves them for near the very end of the page",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "hvac-second",
       "b": "roofer-rich",
       "verdict": "different",
       "held_out": false,
-      "why": "one opens split, a van's photograph beside the text; the other is pure lettering \u2014 the company's name set at enormous size fills the screen with no photograph anywhere in the opening at all"
+      "why": "one opens split, a van's photograph beside the text; the other is pure lettering \u2014 the company's name set at enormous size fills the screen with no photograph anywhere in the opening at all",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "contractor-bare",
       "b": "hvac-rich",
       "verdict": "different",
       "held_out": false,
-      "why": "one is a thin page: a rating over a photograph, then a hairline of repeating figures, four review cards and a small gallery, nothing else. The other carries the same opening rating and photograph but keeps going \u2014 a full grid of titled service cards, an awards strip, a longer gallery and two more paragraphs of text the first page simply doesn't have"
+      "why": "one is a thin page: a rating over a photograph, then a hairline of repeating figures, four review cards and a small gallery, nothing else. The other carries the same opening rating and photograph but keeps going \u2014 a full grid of titled service cards, an awards strip, a longer gallery and two more paragraphs of text the first page simply doesn't have",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "contractor-bare",
       "b": "hvac-second",
       "verdict": "different",
       "held_out": false,
-      "why": "the same bare page \u2014 rating over a photograph, a hairline of repeating figures, a short reviews grid, then nothing \u2014 set against a page that keeps building past its reviews into a full card grid, a gallery and a closing paragraph"
+      "why": "the same bare page \u2014 rating over a photograph, a hairline of repeating figures, a short reviews grid, then nothing \u2014 set against a page that keeps building past its reviews into a full card grid, a gallery and a closing paragraph",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "barbecue",
       "b": "restaurant-casual",
       "verdict": "different",
       "held_out": false,
-      "why": "both open on a full-bleed photograph and run a wide photo grid straight after, but one then drops into a shopfront photograph with the name lettered into its corner and a coloured slab of figures beneath it, while the other moves straight from its grid into a run of review cards and never carries a figures band or a shopfront photograph at all"
+      "why": "both open on a full-bleed photograph and run a wide photo grid straight after, but one then drops into a shopfront photograph with the name lettered into its corner and a coloured slab of figures beneath it, while the other moves straight from its grid into a run of review cards and never carries a figures band or a shopfront photograph at all",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "bare-trade",
       "b": "law",
       "verdict": "different",
       "held_out": false,
-      "why": "one gives an entire screen further down to a single line of quotation set at display size; the other never does \u2014 it moves from its figures band straight into a row of small stamped credential badges instead"
+      "why": "one gives an entire screen further down to a single line of quotation set at display size; the other never does \u2014 it moves from its figures band straight into a row of small stamped credential badges instead",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "dentist-rich",
       "b": "law-rich",
       "verdict": "different",
       "held_out": true,
-      "why": "one opens with a rating over a photograph and runs straight into its stats band before anything else; the other opens with a photograph band and a quiet paragraph below it, and only reaches a stats band after review cards and a run of question-and-answer text \u2014 the number that a visitor sees first on one page is one of the last things on the other"
+      "why": "one opens with a rating over a photograph and runs straight into its stats band before anything else; the other opens with a photograph band and a quiet paragraph below it, and only reaches a stats band after review cards and a run of question-and-answer text \u2014 the number that a visitor sees first on one page is one of the last things on the other",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "hvac-rich",
       "b": "roofer-rich",
       "verdict": "different",
       "held_out": false,
-      "why": "one opens on a photograph with the name and a short proof line beneath it; the other opens on the company's name alone, set at enormous size, with no photograph in the opening at all"
+      "why": "one opens on a photograph with the name and a short proof line beneath it; the other opens on the company's name alone, set at enormous size, with no photograph in the opening at all",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "barbecue-rich",
       "b": "restaurant-casual",
       "verdict": "different",
       "held_out": false,
-      "why": "one fills the opening entirely with a photograph and stamps the name over it; the other splits the opening in two, plain ground beside the picture. Further down, one runs into a priced menu list and a wide coloured figures band that the other never carries at all"
+      "why": "one fills the opening entirely with a photograph and stamps the name over it; the other splits the opening in two, plain ground beside the picture. Further down, one runs into a priced menu list and a wide coloured figures band that the other never carries at all",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "dentist",
       "b": "dentist-rich",
       "verdict": "different",
       "held_out": false,
-      "why": "one opens as a full-bleed photograph washed dark with the rating and the practice's name set directly over it, moves into a stats band immediately, and only reaches its reviews after a full-screen quotation; the other opens as a plain band of unmarked photograph with the name waiting below it, runs its reviews before the quotation, and saves its stats band for near the very end of the page \u2014 the same pieces appear on both in close to reverse order"
+      "why": "one opens as a full-bleed photograph washed dark with the rating and the practice's name set directly over it, moves into a stats band immediately, and only reaches its reviews after a full-screen quotation; the other opens as a plain band of unmarked photograph with the name waiting below it, runs its reviews before the quotation, and saves its stats band for near the very end of the page \u2014 the same pieces appear on both in close to reverse order",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "hvac-rich",
       "b": "law-rich",
       "verdict": "different",
       "held_out": true,
-      "why": "both open on a photograph with the name and a short line of proof beneath it, and both run the same row of stamped credential pills soon after \u2014 but one runs its review cards right after that row while the other saves reviews for much later, after a photograph and a run of question-and-answer text; the two pages agree on how they open and disagree sharply on what comes right after"
+      "why": "both open on a photograph with the name and a short line of proof beneath it, and both run the same row of stamped credential pills soon after \u2014 but one runs its review cards right after that row while the other saves reviews for much later, after a photograph and a run of question-and-answer text; the two pages agree on how they open and disagree sharply on what comes right after",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "dentist",
       "b": "law",
       "verdict": "different",
       "held_out": false,
-      "why": "both open with the rating shouted large over a darkened photograph and both give a full screen further down to a single line of quotation \u2014 but one drops that quotation immediately after its stats band while the other holds it back until after a row of stamped credential pills and a grid of review cards, and only one of the two ends its page with a photo gallery"
+      "why": "both open with the rating shouted large over a darkened photograph and both give a full screen further down to a single line of quotation \u2014 but one drops that quotation immediately after its stats band while the other holds it back until after a row of stamped credential pills and a grid of review cards, and only one of the two ends its page with a photo gallery",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "bare-trade",
       "b": "dentist",
       "verdict": "different",
       "held_out": true,
-      "why": "both open the same way \u2014 a rating shouted over a darkened photograph, then a coloured slab of figures, a full screen given to one line of quotation, a grid of review cards, a grid of small titled cards \u2014 but one holds every one of those bands to a visibly narrower column and draws a thin rule above each of them, the way a printed ledger is ruled; the other runs the same bands at the page's full width with nothing drawn between them. Missed on a first pass at the shrunk thumbnail and caught on a closer look \u2014 the rule and the narrow column are there on every band, not just the ones that first stood out"
+      "why": "both open the same way \u2014 a rating shouted over a darkened photograph, then a coloured slab of figures, a full screen given to one line of quotation, a grid of review cards, a grid of small titled cards \u2014 but one holds every one of those bands to a visibly narrower column and draws a thin rule above each of them, the way a printed ledger is ruled; the other runs the same bands at the page's full width with nothing drawn between them. Missed on a first pass at the shrunk thumbnail and caught on a closer look \u2014 the rule and the narrow column are there on every band, not just the ones that first stood out",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "bare-trade",
       "b": "contractor-bare",
       "verdict": "different",
       "held_out": true,
-      "why": "one opens the same way \u2014 a rating over a darkened photograph \u2014 but never gives a screen to a quotation at all, running instead a thin strip of repeating figures straight through the middle of the page, and stops after a short gallery with no grid of titled cards and no closing text anywhere on it; the other runs a full-screen quotation, a grid of eight titled cards and a paragraph of closing text that the first page simply does not carry"
+      "why": "one opens the same way \u2014 a rating over a darkened photograph \u2014 but never gives a screen to a quotation at all, running instead a thin strip of repeating figures straight through the middle of the page, and stops after a short gallery with no grid of titled cards and no closing text anywhere on it; the other runs a full-screen quotation, a grid of eight titled cards and a paragraph of closing text that the first page simply does not carry",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
     },
     {
       "a": "barbecue-rich",
       "b": "restaurant-rich",
       "verdict": "different",
       "held_out": true,
-      "why": "one fills its opening entirely with a photograph and stamps the name over it in heavy capitals; the other splits its opening in two, a quiet serif name on a plain ground beside the picture. Further down one runs a priced menu list and a wide coloured figures band that the other never carries, and the other runs a philosophy passage and an inset-labelled photograph that the first does not"
+      "why": "one fills its opening entirely with a photograph and stamps the name over it in heavy capitals; the other splits its opening in two, a quiet serif name on a plain ground beside the picture. Further down one runs a priced menu list and a wide coloured figures band that the other never carries, and the other runs a philosophy passage and an inset-labelled photograph that the first does not",
+      "retired": "Retired. app/site/render.py's _order() was a second, diverging copy of plan.apply_order() that left \"hero\" in its own working list before checking an emphasis instruction's >2 position \u2014 every section an instruction named shifted one place later on the rendered page than in the plan. Fixed by deleting the duplicate and calling apply_order() directly (see test_the_rendered_page_matches_the_plan_the_operator_reviewed). Sixteen of nineteen fixtures' section order moved on the page as a result, verdicts taken from the stale rendering below. Re-verified against the corrected rendering rather than blindly carried forward: every verdict's actual conclusion held (all sixteen were, and remain, DIFFERENT), driven by first_screen, architecture or section presence/absence \u2014 none of which this bug touched. Re-judged with corrected `why` text below."
+    },
+    {
+      "a": "law",
+      "b": "law-rich",
+      "verdict": "different",
+      "held_out": false,
+      "why": "one opens as a full-bleed photograph washed dark with the rating shouted at display size and every line of text laid directly over the picture; the other opens as a plain, undarkened band of photograph with nothing written on it, the firm's name and text waiting below it on a quiet page instead. Everything downstream is close to identical \u2014 the same stats band, the same row of stamped credential pills, the same review grid and card grid in the same order \u2014 but the first thing a visitor sees could not be arranged more differently"
+    },
+    {
+      "a": "hvac-rich",
+      "b": "hvac-second",
+      "verdict": "different",
+      "held_out": false,
+      "why": "one opens as a photograph with the name and a short line of proof set beneath it on a plain ground; the other splits the screen in two, a service van's photograph beside the text. One carries an awards band the other does not, and their review cards sit at opposite ends of the page \u2014 right after the credentials on one, saved for near the very end on the other"
+    },
+    {
+      "a": "hvac-second",
+      "b": "roofer-rich",
+      "verdict": "different",
+      "held_out": false,
+      "why": "one opens split, a service van's photograph beside the text; the other is pure lettering \u2014 the roofer's name set at enormous size fills the opening with no photograph in it at all"
+    },
+    {
+      "a": "contractor-bare",
+      "b": "hvac-rich",
+      "verdict": "different",
+      "held_out": false,
+      "why": "one is a thin page: a rating over a photograph, a thin running line of repeating figures, a gallery, five review cards, and nothing else. The other carries a different opening entirely \u2014 a photograph with the name and a proof line beneath it \u2014 and keeps building past its reviews into an awards band, a full grid of titled service cards, a credentials row and two more sections the first page simply does not have"
+    },
+    {
+      "a": "contractor-bare",
+      "b": "hvac-second",
+      "verdict": "different",
+      "held_out": false,
+      "why": "the same bare page \u2014 rating over a photograph, a running line of figures, a short gallery, then nothing \u2014 set against a page that opens split (a van's photograph beside the text) and keeps building past its reviews into a card grid, a credentials row, and a closing paragraph"
+    },
+    {
+      "a": "barbecue",
+      "b": "restaurant-casual",
+      "verdict": "different",
+      "held_out": false,
+      "why": "both open on a full-bleed photograph and run a wide photo grid straight after, but one keeps going for five more bands \u2014 a shopfront photograph with the name lettered into its corner, a coloured slab of figures, a menu list, review cards and an about section \u2014 while the other stops after its services text and one page of reviews, carrying barely a third as much page"
+    },
+    {
+      "a": "bare-trade",
+      "b": "law",
+      "verdict": "different",
+      "held_out": false,
+      "why": "both open the same way \u2014 a rating shouted over a darkened photograph \u2014 and run stats, services and reviews in the same order after it, but one gives an entire further screen to a single line of quotation set at display size and the other never does, running a row of small stamped credential pills at that point instead"
+    },
+    {
+      "a": "dentist-rich",
+      "b": "law-rich",
+      "verdict": "different",
+      "held_out": true,
+      "why": "both open the same way \u2014 a photograph band with nothing written on it, the name and a quiet line of text waiting below \u2014 but one runs straight into its reviews before anything else, while the other reaches its stats band first and holds reviews for third; and one gives a full screen further down to a single line of quotation that the other, running a row of stamped pills instead, never does"
+    },
+    {
+      "a": "hvac-rich",
+      "b": "roofer-rich",
+      "verdict": "different",
+      "held_out": false,
+      "why": "one opens on a photograph with the name and a short proof line beneath it; the other opens on the roofer's own name alone, set at enormous size, with no photograph in the opening at all"
+    },
+    {
+      "a": "barbecue-rich",
+      "b": "restaurant-casual",
+      "verdict": "different",
+      "held_out": false,
+      "why": "both open on a full-bleed photograph, but one carries a priced menu list, a coloured figures band and an about section that the other \u2014 four sections long against the first page's eight \u2014 never carries at all"
+    },
+    {
+      "a": "dentist",
+      "b": "dentist-rich",
+      "verdict": "different",
+      "held_out": false,
+      "why": "one opens as a full-bleed photograph washed dark with the rating and the practice's name set directly over it, and moves into its stats band immediately; the other opens as a plain, undarkened band of photograph with the name waiting below it, and runs straight into its reviews before it ever reaches a stats band at all"
+    },
+    {
+      "a": "hvac-rich",
+      "b": "law-rich",
+      "verdict": "different",
+      "held_out": true,
+      "why": "both open the same way \u2014 a photograph with the name and a short proof line beneath it \u2014 but one carries an awards band and a credentials row that the other does not, and their reviews sit far apart: third on the page for one, second-to-last for the other"
+    },
+    {
+      "a": "dentist",
+      "b": "law",
+      "verdict": "different",
+      "held_out": false,
+      "why": "both open the same way \u2014 a rating shouted over a darkened photograph \u2014 and run stats, services and reviews in the same order after it, but one gives an entire further screen to a single line of quotation set at display size and the other runs a row of small stamped pills at that point instead, and only one of the two carries a photo gallery"
+    },
+    {
+      "a": "bare-trade",
+      "b": "dentist",
+      "verdict": "different",
+      "held_out": true,
+      "why": "both open the same way \u2014 a rating shouted over a darkened photograph, then a coloured slab of figures, a full screen given to one line of quotation, a grid of review cards, a grid of small titled cards \u2014 but one holds every one of those bands to a visibly narrower column and draws a thin rule above each of them, the way a printed ledger is ruled; the other runs the same bands at the page's full width with nothing drawn between them. Missed on a first pass at a shrunk thumbnail and caught on a closer look \u2014 the rule and the narrow column are there on every band, not just the ones that first stood out"
+    },
+    {
+      "a": "bare-trade",
+      "b": "contractor-bare",
+      "verdict": "different",
+      "held_out": true,
+      "why": "one opens the same way \u2014 a rating over a darkened photograph \u2014 but never gives a screen to a quotation at all, running instead a thin strip of repeating figures, and stops after a gallery and its reviews with no grid of titled cards and no closing text anywhere on it; the other runs a full-screen quotation, a grid of titled cards and a closing paragraph that the first page simply does not carry"
+    },
+    {
+      "a": "barbecue-rich",
+      "b": "restaurant-rich",
+      "verdict": "different",
+      "held_out": true,
+      "why": "one fills its opening entirely with a photograph and stamps the name over it in heavy capitals; the other splits its opening in two, a quiet serif name on a plain ground beside the picture. Further down one runs a priced menu list that the other never carries, and the other runs an awards band that the first does not"
     }
   ],
-  "_judged_against": "Whole-page renderings of the corpus as of Slice B's close-out redecide (WINDOW 10->60, typeface pair landed) \u2014 distance ruler a762bcc9, gate rule 254e171b \u2014 from artifacts/contact-sheet/pages.html. Claude's readings on 2026-09-08.",
+  "_judged_against": "Whole-page renderings of the corpus after fixing render.py's duplicate, diverging section-order implementation (_order() now calls plan.apply_order() directly instead of its own drifted copy \u2014 sixteen of nineteen fixtures' rendered section order moved as a result). Ruler a762bcc9, gate rule 254e171b \u2014 unchanged, this fix touches rendering only, never a decision or a weight. From artifacts/contact-sheet/pages.html. Claude's readings on 2026-09-09.",
   "_held_out": "One verdict in three, chosen by a hash of the two slugs so that nobody picks which evidence survives. A held-out verdict is never used to choose a rule or a weighting, only to score one afterwards, and it is never re-judged \u2014 when the page under it changes it is retired with a reason and the set gets smaller. It starts here, so it says nothing about the rule this commit lands: the first rule it can honestly score is the next one.",
   "_retired": "A retired verdict is scored by nothing and re-judged by nobody. Retiring is what happens to a held-out pair when the page under it changes, and to any pair whose subject turns out not to be judgeable \u2014 the set shrinks, which is the honest cost of the number meaning anything."
 }

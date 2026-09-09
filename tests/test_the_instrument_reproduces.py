@@ -35,7 +35,7 @@ RULE = "254e171b"
 LABELS = "1f0df47d"
 # The held-out third, frozen verbatim. It moves only when a pair is
 # RETIRED, never when one is re-judged.
-HELD_OUT = "de28526d"
+HELD_OUT = "1c862e02"
 SAME_TRADE_MEAN = 0.5552
 # Slice B's close-out (this project's own Phase 1): the diversity gate's
 # WINDOW widened 10->60, fixing the real `restaurant-bare`/`salon-rich`
@@ -65,6 +65,20 @@ SAME_TRADE_MEAN = 0.5552
 # degenerate` in this file's history) stays retired; nothing came back to
 # restore it against.
 AGREEMENT = (0, 0)
+#
+# HELD_OUT moved again the same session, not from a redecide: render.py's
+# `_order()` was a second, diverging copy of `plan.apply_order()` that left
+# "hero" in its own working list before checking an emphasis instruction's
+# ">2" position, shifting every named section one place later on the
+# rendered page than in the plan shown first (`test_the_rendered_page_
+# matches_the_plan_the_operator_reviewed`). Sixteen of nineteen fixtures'
+# rendered order moved once it was fixed. All sixteen live verdicts were
+# retired and re-judged against the corrected rendering rather than carried
+# forward unread — every verdict's actual conclusion held (still all
+# DIFFERENT, still driven by first_screen, architecture or section
+# presence, none of which this bug touched), only the `why` text changed.
+# LABELS is unchanged (it hashes verdicts, not prose) — HELD_OUT hashes the
+# reasoning too, so it moved with the wording.
 
 
 def fingerprints() -> dict[str, fp.Fingerprint]:

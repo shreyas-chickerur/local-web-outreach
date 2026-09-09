@@ -90,6 +90,44 @@ def test_asking_to_lead_with_a_section_moves_it_up():
     assert page.index('id="gallery"') < page.index('id="services"')
 
 
+def test_the_rendered_page_matches_the_plan_the_operator_reviewed():
+    """`plan_for` and `build_from_spec` used to run two separate copies of the
+    same reordering rule — one excluded "hero" from its own working list
+    before checking `emphasis`'s ">2" position, the other left it in. That
+    shifted every index by one, so an instruction naming sections to
+    emphasise could land them in a different order on the rendered page than
+    in the plan shown first — checked against the real corpus, seventeen of
+    nineteen fixtures disagreed.
+
+    `parse_spec` only ever captures one emphasised section from a sentence
+    ("emphasise reviews and services" parses to `emphasis=["services"]"),
+    which happened not to cross the off-by-one boundary for this brief — so
+    the spec is built directly here with two, matching what the identity
+    call itself actually sends (`config["emphasis"]` is a list, most fixtures
+    in the real corpus carry two), rather than relying on the sentence
+    parser to reproduce the exact shape that exposed the bug.
+    """
+    from app.site.render import build_from_spec, plan_for
+    from app.site.spec import SiteSpec
+
+    brief = _rich()
+    spec = SiteSpec(mood="warm", emphasis=["reviews", "services"])
+    page = build_from_spec(brief, spec)
+    plan = plan_for(brief, spec)
+
+    positions = {key: page.find(f'id="{key}"') for key in plan.order}
+    # `features` renders with the literal id "more" — a real, unrelated
+    # naming choice in `_features()`, not a second bug; only look there when
+    # the section's own key comes up empty.
+    for key, pos in positions.items():
+        if pos < 0 and key == "features":
+            positions[key] = page.find('id="more"')
+    rendered_order = sorted((k for k, p in positions.items() if p >= 0),
+                            key=lambda k: positions[k])
+    assert rendered_order == plan.order, (
+        f"plan says {plan.order}, page rendered {rendered_order}")
+
+
 def test_an_instruction_that_cannot_be_honoured_is_reported():
     """Silently dropping it leaves you thinking it was applied."""
     no_menu = _brief(published={**_brief()["published"], "menu_items": []})

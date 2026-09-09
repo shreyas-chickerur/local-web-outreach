@@ -1405,19 +1405,27 @@ _NO_DATA = {
 
 
 def _order(spec: SiteSpec, available: set[str]) -> list[str]:
-    available = available - set(spec.suppress or ())
-    order = [s for s in ORDER if s in available]
+    """The rendered order — `plan_for`'s `apply_order` call, verbatim.
+
+    THIS USED TO BE A SECOND IMPLEMENTATION, inlined here with "hero" left in
+    its own working list. `apply_order`'s ">2" position check only makes
+    sense counting from the first section AFTER the hero, so a list that
+    still had "hero" sitting at index 0 shifted everything one place late —
+    every section an instruction named to emphasise landed one position
+    later on the rendered page than in the plan the operator reviewed first.
+    Checked against the actual corpus: seventeen of nineteen fixtures'
+    rendered order disagreed with their own plan, `credentials` included but
+    not the cause — `barbecue-rich`, `salon`, `restaurant-rich` and most of
+    the rest carry no `credentials` section at all and mismatched anyway.
+    This is the "plan-versus-page disagreement" bug BRIEF's own history
+    already named as closed once, reappearing in the one code path that kept
+    a second copy of the rule instead of calling the first.
+    """
     for asked in ([spec.lead_with] if spec.lead_with else []) + spec.emphasis:
         if asked and asked not in available:
             spec.unmet.append(f"no {asked} section: {_NO_DATA.get(asked, 'no data')}")
-    if spec.lead_with in order:
-        order.remove(spec.lead_with)
-        order.insert(1 if "hero" in order else 0, spec.lead_with)
-    for section in reversed(spec.emphasis):
-        if section in order and order.index(section) > 2:
-            order.remove(section)
-            order.insert(min(2, len(order)), section)
-    return order
+    keys = [s for s in ORDER if s != "hero" and s in available]
+    return apply_order(keys, spec)
 
 
 def build(brief: dict, spec_text: str = "") -> tuple[str, SiteSpec]:
