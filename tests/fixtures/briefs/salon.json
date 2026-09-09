@@ -1,4 +1,5 @@
 {
+  "_gate_unresolved": false,
   "assumptions": [
     "website found via google: https://www.salonboutique.com/location/frisco-eldorado"
   ],
@@ -7,34 +8,34 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "plum",
+    "accent": "sky",
     "architecture": "stacked",
     "contradictions": [],
     "cta": {
-      "kind": "visit",
+      "kind": "quote",
       "label": ""
     },
     "defect": "",
     "emphasis": [
-      "reviews",
-      "gallery"
+      "about",
+      "reviews"
     ],
     "first_screen": "photo",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "services",
+    "lead_with": "about",
     "mood": "refined",
-    "rationale": "Salon Boutique isn't selling a single treatment experience to walk-in clients \u2014 it's leasing suites to independent beauty professionals, so the page needs to read as a confident, professional business address first (photo of the storefront and interior), then quickly prove itself through the suites/services on offer and the voices of the stylists already renting there. The gallery has real but modest material (7 usable images, several empty rooms), so a full gallery-led architecture would overre",
+    "rationale": "This isn't a business selling a single service to walk-in customers \u2014 it's a landlord renting suites to independent beauty professionals, so the visitor needs to be sold on the space, the support, and the community before anything else, which is why the story leads and a genuine tenant quote sits beside it rather than a moving strip of services. The sky-blue storefront under an actual bright sky is the strongest sampled colour and reads as clean and upscale rather than trendy, and a full photo o",
     "read_by": "claude",
     "signature": "margin_note",
-    "signature_why": "A short line of tenant testimony set against the suite listings reassures a prospective renter the way a sticky note from a current tenant would.",
+    "signature_why": "A short line pulled from a tenant's own review sitting beside the story reads as genuine word-of-mouth, which is what actually convinces a stylist to rent a suite here.",
     "suppress": [
-      "stats"
+      "menu"
     ],
     "type_treatment": "quiet",
     "understood": [
-      "Salon Boutique isn't selling a single treatment experience to walk-in clients \u2014 it's leasing suites to independent beauty professionals, so the page needs to read as a confident, professional business"
+      "This isn't a business selling a single service to walk-in customers \u2014 it's a landlord renting suites to independent beauty professionals, so the visitor needs to be sold on the space, the support, and"
     ],
     "unsupported": []
   },
@@ -113,70 +114,70 @@
     "What are their opening hours?"
   ],
   "photo_labels": {
-    "/photo/10/0": "exterior",
-    "/photo/10/1": "room",
-    "/photo/10/2": "room",
-    "/photo/10/3": "room",
-    "/photo/10/4": "detail",
-    "/photo/10/5": "people",
-    "/photo/10/6": "exterior",
-    "/photo/10/7": "people",
-    "/photo/10/8": "people",
-    "/photo/10/9": "product",
+    "/photo/18/0": "exterior",
+    "/photo/18/1": "room",
+    "/photo/18/2": "room",
+    "/photo/18/3": "room",
+    "/photo/18/4": "detail",
+    "/photo/18/5": "people",
+    "/photo/18/6": "exterior",
+    "/photo/18/7": "people",
+    "/photo/18/8": "people",
+    "/photo/18/9": "product",
     "https://salonboutique.com/wp-content/uploads/2025/10/1U9jSMngcMuKLWoW5hfjYUOqmYqQ_wOr0.webp": "unclear",
     "https://salonboutique.com/wp-content/uploads/2025/10/1x3P_JBvEA66eHfQQWOwuSxYNInin3ILY.webp": "people"
   },
   "photo_notes": {
-    "/photo/10/0": "Storefront of a salon with Salon Boutique signage reading Hair, Nails, Skin, Body under a bright blue sky",
-    "/photo/10/1": "Interior hallway of a salon with a chandelier, patterned carpet, potted plants, and a person seated at the end",
-    "/photo/10/2": "Empty room with beige tile floor, dark trim, a window with blinds, and a small sink cabinet",
-    "/photo/10/3": "Empty corner room with beige tile floor, dark window frames, and closed blinds",
-    "/photo/10/4": "Salon styling station with a round mirror, wooden cabinet with drawers, and a black leather chair against a wood-panel wall",
-    "/photo/10/5": "Reflection in a round mirror of a woman taking a photo of a child wearing a black salon cape",
-    "/photo/10/6": "Close-up of a salon storefront entrance with ornate metal door design and a potted plant, partial signage visible above",
-    "/photo/10/7": "Close-up selfie of a smiling woman with long blonde hair and glasses, indoors near a doorway",
-    "/photo/10/8": "A woman with long blonde-highlighted hair leaning forward under a dark salon cape, seen from above in a salon chair.",
-    "/photo/10/9": "A green bottle of Nature's Bounty B-12 quick dissolve tablets sitting on a dark countertop.",
+    "/photo/18/0": "Storefront of a salon with Salon Boutique signage reading Hair, Nails, Skin, Body under a bright blue sky",
+    "/photo/18/1": "Interior hallway of a salon with a chandelier, patterned carpet, potted plants, and a person seated at the end",
+    "/photo/18/2": "Empty room with beige tile floor, dark trim, a window with blinds, and a small sink cabinet",
+    "/photo/18/3": "Empty corner room with beige tile floor, dark window frames, and closed blinds",
+    "/photo/18/4": "Salon styling station with a round mirror, wooden cabinet with drawers, and a black leather chair against a wood-panel wall",
+    "/photo/18/5": "Reflection in a round mirror of a woman taking a photo of a child wearing a black salon cape",
+    "/photo/18/6": "Close-up of a salon storefront entrance with ornate metal door design and a potted plant, partial signage visible above",
+    "/photo/18/7": "Close-up selfie of a smiling woman with long blonde hair and glasses, indoors near a doorway",
+    "/photo/18/8": "A woman with long blonde-highlighted hair leaning forward under a dark salon cape, seen from above in a salon chair.",
+    "/photo/18/9": "A green bottle of Nature's Bounty B-12 quick dissolve tablets sitting on a dark countertop.",
     "https://salonboutique.com/wp-content/uploads/2025/10/1x3P_JBvEA66eHfQQWOwuSxYNInin3ILY.webp": "A smiling woman with an updo hairstyle wearing a black dress and jewelry, sitting sideways on a chair against a plain white background."
   },
   "photo_sizes": {
-    "/photo/10/0": [
+    "/photo/18/0": [
       2048,
       1365
     ],
-    "/photo/10/1": [
+    "/photo/18/1": [
       720,
       720
     ],
-    "/photo/10/2": [
+    "/photo/18/2": [
       1059,
       720
     ],
-    "/photo/10/3": [
+    "/photo/18/3": [
       1059,
       720
     ],
-    "/photo/10/4": [
+    "/photo/18/4": [
       2400,
       3200
     ],
-    "/photo/10/5": [
+    "/photo/18/5": [
       2400,
       3200
     ],
-    "/photo/10/6": [
+    "/photo/18/6": [
       1080,
       1920
     ],
-    "/photo/10/7": [
+    "/photo/18/7": [
       2400,
       3200
     ],
-    "/photo/10/8": [
+    "/photo/18/8": [
       2400,
       3200
     ],
-    "/photo/10/9": [
+    "/photo/18/9": [
       2400,
       4267
     ],
@@ -190,7 +191,7 @@
     ]
   },
   "photo_vision": {
-    "/photo/10/0": {
+    "/photo/18/0": {
       "alt_text": "Storefront of a salon with Salon Boutique signage reading Hair, Nails, Skin, Body under a bright blue sky",
       "dominant_colours": [
         "#7bbbe0",
@@ -209,7 +210,7 @@
       "url": "/photo/10/0",
       "why_not": ""
     },
-    "/photo/10/1": {
+    "/photo/18/1": {
       "alt_text": "Interior hallway of a salon with a chandelier, patterned carpet, potted plants, and a person seated at the end",
       "dominant_colours": [
         "#2b2b2b",
@@ -228,7 +229,7 @@
       "url": "/photo/10/1",
       "why_not": ""
     },
-    "/photo/10/2": {
+    "/photo/18/2": {
       "alt_text": "Empty room with beige tile floor, dark trim, a window with blinds, and a small sink cabinet",
       "dominant_colours": [
         "#e8e0cf",
@@ -247,7 +248,7 @@
       "url": "/photo/10/2",
       "why_not": "empty utilitarian space, low visual interest"
     },
-    "/photo/10/3": {
+    "/photo/18/3": {
       "alt_text": "Empty corner room with beige tile floor, dark window frames, and closed blinds",
       "dominant_colours": [
         "#e8e0cf",
@@ -266,7 +267,7 @@
       "url": "/photo/10/3",
       "why_not": "empty space, no distinguishing feature"
     },
-    "/photo/10/4": {
+    "/photo/18/4": {
       "alt_text": "Salon styling station with a round mirror, wooden cabinet with drawers, and a black leather chair against a wood-panel wall",
       "dominant_colours": [
         "#5a4a3a",
@@ -285,7 +286,7 @@
       "url": "/photo/10/4",
       "why_not": ""
     },
-    "/photo/10/5": {
+    "/photo/18/5": {
       "alt_text": "Reflection in a round mirror of a woman taking a photo of a child wearing a black salon cape",
       "dominant_colours": [
         "#2b2b2b",
@@ -304,7 +305,7 @@
       "url": "/photo/10/5",
       "why_not": "candid mirror selfie, not a polished shot"
     },
-    "/photo/10/6": {
+    "/photo/18/6": {
       "alt_text": "Close-up of a salon storefront entrance with ornate metal door design and a potted plant, partial signage visible above",
       "dominant_colours": [
         "#c9a06a",
@@ -323,7 +324,7 @@
       "url": "/photo/10/6",
       "why_not": "car mirror visible in frame, partial cropped signage"
     },
-    "/photo/10/7": {
+    "/photo/18/7": {
       "alt_text": "Close-up selfie of a smiling woman with long blonde hair and glasses, indoors near a doorway",
       "dominant_colours": [
         "#e8c9a0",
@@ -342,7 +343,7 @@
       "url": "/photo/10/7",
       "why_not": "personal selfie, not representative of business space or services"
     },
-    "/photo/10/8": {
+    "/photo/18/8": {
       "alt_text": "A woman with long blonde-highlighted hair leaning forward under a dark salon cape, seen from above in a salon chair.",
       "dominant_colours": [
         "#3a3a4a",
@@ -361,7 +362,7 @@
       "url": "/photo/10/8",
       "why_not": ""
     },
-    "/photo/10/9": {
+    "/photo/18/9": {
       "alt_text": "A green bottle of Nature's Bounty B-12 quick dissolve tablets sitting on a dark countertop.",
       "dominant_colours": [
         "#1e3d1e",

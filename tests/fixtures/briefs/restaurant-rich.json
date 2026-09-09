@@ -1,4 +1,5 @@
 {
+  "_gate_unresolved": false,
   "assumptions": [
     "website found via google: http://www.theheritagetable.com/",
     "ignored 1 social link(s) belonging to other businesses their site credits"
@@ -23,14 +24,14 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "This is a scratch-kitchen neighborhood restaurant with genuinely strong photography (8 lead-worthy images across dish, exterior, and ingredients) and a farm-to-table story worth telling, so the gallery should still open the page \u2014 but splitting the first screen between the striking string-lit house exterior and the name, rather than a full-bleed dish photo, sets it apart from the near-duplicate site and lets the building's own character (their strongest, most unique asset) introduce them instead",
+    "rationale": "The Heritage Table has 8 strong photos across dish, exterior, and ingredients that carry the atmosphere better than words, so the gallery still leads, but pairing the name against a single striking exterior photo (split) rather than dropping it behind a dish shot gives the historic house building its due as the first thing people recognise walking past. The about and reviews sections get raised because the whole-animal sourcing story and the warmth of the reviewer quotes are what turn a browsing",
     "read_by": "claude",
-    "signature": "corner_inset",
-    "signature_why": "A type block inset into the corner of the house-at-night photo lets the building's own presence carry the name, rather than another dish shot over a headline like the last site.",
+    "signature": "duotone",
+    "signature_why": "A warm brown-to-full-colour duotone strip through the gallery echoes the string-lit house at night giving way to the food itself, which feels like this particular building rather than a generic photo grid.",
     "suppress": [],
-    "type_treatment": "wide",
+    "type_treatment": "quiet",
     "understood": [
-      "This is a scratch-kitchen neighborhood restaurant with genuinely strong photography (8 lead-worthy images across dish, exterior, and ingredients) and a farm-to-table story worth telling, so the galler"
+      "The Heritage Table has 8 strong photos across dish, exterior, and ingredients that carry the atmosphere better than words, so the gallery still leads, but pairing the name against a single striking ex"
     ],
     "unsupported": []
   },
@@ -120,16 +121,16 @@
   "notes": null,
   "open_questions": [],
   "photo_labels": {
-    "/photo/8/0": "room",
-    "/photo/8/1": "dish",
-    "/photo/8/2": "exterior",
-    "/photo/8/3": "exterior",
-    "/photo/8/4": "exterior",
-    "/photo/8/5": "dish",
-    "/photo/8/6": "dish",
-    "/photo/8/7": "drink",
-    "/photo/8/8": "exterior",
-    "/photo/8/9": "dish",
+    "/photo/14/0": "room",
+    "/photo/14/1": "dish",
+    "/photo/14/2": "exterior",
+    "/photo/14/3": "exterior",
+    "/photo/14/4": "exterior",
+    "/photo/14/5": "dish",
+    "/photo/14/6": "dish",
+    "/photo/14/7": "drink",
+    "/photo/14/8": "exterior",
+    "/photo/14/9": "dish",
     "https://www.theheritagetable.com/dev/wp-content/uploads/2019/09/mg_2795.jpeg": "unclear",
     "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/garden-tomatoes.jpg": "ingredients",
     "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/housemade-bread.jpg": "ingredients",
@@ -140,16 +141,16 @@
     "https://www.theheritagetable.com/dev/wp-content/uploads/2024/06/HTPC-1.png": "product"
   },
   "photo_notes": {
-    "/photo/8/0": "An empty restaurant dining room with wooden tables, wicker-back chairs, dark wood floors, and framed pictures on light green wainscoted walls",
-    "/photo/8/1": "An overhead view of a bowl of creamy grits topped with shredded meat, saut\u00e9ed greens, radish slices, and a drizzle of sauce",
-    "/photo/8/2": "A two-story house-style building lit up with string lights along its roofline at night, with a sign reading Heritage Table in front",
-    "/photo/8/3": "A daytime view of a green house-style building with white trim, a wraparound porch, pumpkins on the steps, and a sign reading Heritage Table",
-    "/photo/8/4": "A nighttime view of a large house-style building outlined with string lights, viewed from an angle beneath a large tree",
-    "/photo/8/5": "An overhead view of a table set with a steak and vegetable dish, a bowl of salad, bread rolls, a rice dish, and two glasses of red wine",
-    "/photo/8/6": "A plated piece of cooked salmon over greens with a sauce, set on a wooden table alongside other dishes and glasses",
-    "/photo/8/7": "A close-up of an orange cocktail in a coupe glass with a folded paper garnish printed with a monogram, on a wooden table",
-    "/photo/8/8": "An illuminated sign reading Heritage Table stands beside a porch at night with a street visible in the background.",
-    "/photo/8/9": "A slice of chocolate cream pie topped with whipped cream on a polka-dot plate atop a wooden table.",
+    "/photo/14/0": "An empty restaurant dining room with wooden tables, wicker-back chairs, dark wood floors, and framed pictures on light green wainscoted walls",
+    "/photo/14/1": "An overhead view of a bowl of creamy grits topped with shredded meat, saut\u00e9ed greens, radish slices, and a drizzle of sauce",
+    "/photo/14/2": "A two-story house-style building lit up with string lights along its roofline at night, with a sign reading Heritage Table in front",
+    "/photo/14/3": "A daytime view of a green house-style building with white trim, a wraparound porch, pumpkins on the steps, and a sign reading Heritage Table",
+    "/photo/14/4": "A nighttime view of a large house-style building outlined with string lights, viewed from an angle beneath a large tree",
+    "/photo/14/5": "An overhead view of a table set with a steak and vegetable dish, a bowl of salad, bread rolls, a rice dish, and two glasses of red wine",
+    "/photo/14/6": "A plated piece of cooked salmon over greens with a sauce, set on a wooden table alongside other dishes and glasses",
+    "/photo/14/7": "A close-up of an orange cocktail in a coupe glass with a folded paper garnish printed with a monogram, on a wooden table",
+    "/photo/14/8": "An illuminated sign reading Heritage Table stands beside a porch at night with a street visible in the background.",
+    "/photo/14/9": "A slice of chocolate cream pie topped with whipped cream on a polka-dot plate atop a wooden table.",
     "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/garden-tomatoes.jpg": "A metal bowl filled with freshly picked cherry tomatoes sitting on dark soil beneath tomato plants.",
     "https://www.theheritagetable.com/dev/wp-content/uploads/2021/09/housemade-bread.jpg": "Rows of shaped dough pieces on a baking tray next to a ball of dough being cut with a pastry wheel on a floured, dark work surface.",
     "https://www.theheritagetable.com/dev/wp-content/uploads/2023/01/Fig-and-Goat-Cheese.jpg": "A salad with mixed greens, figs, citrus segments, beets, and crumbled cheese on a white plate beside a card reading The Heritage Table Fall 2022.",
@@ -159,43 +160,43 @@
     "https://www.theheritagetable.com/dev/wp-content/uploads/2024/06/HTPC-1.png": "An overhead view of packaged food products including eggs, jam, granola, and bacon labeled with Heritage Table branding, overlaid with Provisions Club text."
   },
   "photo_sizes": {
-    "/photo/8/0": [
+    "/photo/14/0": [
       2400,
       1800
     ],
-    "/photo/8/1": [
+    "/photo/14/1": [
       1224,
       1469
     ],
-    "/photo/8/2": [
+    "/photo/14/2": [
       2400,
       1800
     ],
-    "/photo/8/3": [
+    "/photo/14/3": [
       1320,
       880
     ],
-    "/photo/8/4": [
+    "/photo/14/4": [
       2400,
       1800
     ],
-    "/photo/8/5": [
+    "/photo/14/5": [
       2400,
       2932
     ],
-    "/photo/8/6": [
+    "/photo/14/6": [
       2048,
       1536
     ],
-    "/photo/8/7": [
+    "/photo/14/7": [
       2400,
       3200
     ],
-    "/photo/8/8": [
+    "/photo/14/8": [
       2400,
       1800
     ],
-    "/photo/8/9": [
+    "/photo/14/9": [
       2400,
       1800
     ],
@@ -229,7 +230,7 @@
     ]
   },
   "photo_vision": {
-    "/photo/8/0": {
+    "/photo/14/0": {
       "alt_text": "An empty restaurant dining room with wooden tables, wicker-back chairs, dark wood floors, and framed pictures on light green wainscoted walls",
       "dominant_colours": [
         "#e8e4d8",
@@ -248,7 +249,7 @@
       "url": "/photo/8/0",
       "why_not": ""
     },
-    "/photo/8/1": {
+    "/photo/14/1": {
       "alt_text": "An overhead view of a bowl of creamy grits topped with shredded meat, saut\u00e9ed greens, radish slices, and a drizzle of sauce",
       "dominant_colours": [
         "#e8ddc8",
@@ -267,7 +268,7 @@
       "url": "/photo/8/1",
       "why_not": ""
     },
-    "/photo/8/2": {
+    "/photo/14/2": {
       "alt_text": "A two-story house-style building lit up with string lights along its roofline at night, with a sign reading Heritage Table in front",
       "dominant_colours": [
         "#0a0a14",
@@ -286,7 +287,7 @@
       "url": "/photo/8/2",
       "why_not": ""
     },
-    "/photo/8/3": {
+    "/photo/14/3": {
       "alt_text": "A daytime view of a green house-style building with white trim, a wraparound porch, pumpkins on the steps, and a sign reading Heritage Table",
       "dominant_colours": [
         "#7a8a5a",
@@ -305,7 +306,7 @@
       "url": "/photo/8/3",
       "why_not": ""
     },
-    "/photo/8/4": {
+    "/photo/14/4": {
       "alt_text": "A nighttime view of a large house-style building outlined with string lights, viewed from an angle beneath a large tree",
       "dominant_colours": [
         "#0a0a14",
@@ -324,7 +325,7 @@
       "url": "/photo/8/4",
       "why_not": ""
     },
-    "/photo/8/5": {
+    "/photo/14/5": {
       "alt_text": "An overhead view of a table set with a steak and vegetable dish, a bowl of salad, bread rolls, a rice dish, and two glasses of red wine",
       "dominant_colours": [
         "#5a3a26",
@@ -343,7 +344,7 @@
       "url": "/photo/8/5",
       "why_not": ""
     },
-    "/photo/8/6": {
+    "/photo/14/6": {
       "alt_text": "A plated piece of cooked salmon over greens with a sauce, set on a wooden table alongside other dishes and glasses",
       "dominant_colours": [
         "#e8e4d8",
@@ -362,7 +363,7 @@
       "url": "/photo/8/6",
       "why_not": ""
     },
-    "/photo/8/7": {
+    "/photo/14/7": {
       "alt_text": "A close-up of an orange cocktail in a coupe glass with a folded paper garnish printed with a monogram, on a wooden table",
       "dominant_colours": [
         "#c9863f",
@@ -381,7 +382,7 @@
       "url": "/photo/8/7",
       "why_not": ""
     },
-    "/photo/8/8": {
+    "/photo/14/8": {
       "alt_text": "An illuminated sign reading Heritage Table stands beside a porch at night with a street visible in the background.",
       "dominant_colours": [
         "#1a1a2e",
@@ -400,7 +401,7 @@
       "url": "/photo/8/8",
       "why_not": ""
     },
-    "/photo/8/9": {
+    "/photo/14/9": {
       "alt_text": "A slice of chocolate cream pie topped with whipped cream on a polka-dot plate atop a wooden table.",
       "dominant_colours": [
         "#3d2b1f",

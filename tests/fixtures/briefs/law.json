@@ -1,4 +1,5 @@
 {
+  "_gate_unresolved": false,
   "assumptions": [
     "website found via google: https://snellingsinjurylaw.com/",
     "ignored a yelp result for 'Weinberg Law Firm' \u2014 different business",
@@ -8,7 +9,7 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "burgundy",
+    "accent": "navy",
     "architecture": "column",
     "contradictions": [],
     "cta": {
@@ -20,22 +21,22 @@
       "reviews",
       "services"
     ],
-    "first_screen": "proof",
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "refined",
-    "rationale": "Someone hiring an injury lawyer after a wreck wants proof of competence before anything else \u2014 the 4.9 rating, the case wins, the recognition \u2014 not a photo tour of the office; the photography here is mostly small promotional graphics and portraits, not a gallery-grade argument, so it should support the proof rather than lead it. Keeping the same navy-quiet-ledger-facts formula as the last firm would make two law offices look identical, so shifting to a warmer burgundy, a proof-led first screen, ",
+    "rationale": "Someone hurt in a wreck lands on this page anxious and needs to see quickly that this firm wins cases and is trusted locally \u2014 the 4.9 rating and 254 reviews do that job better than a photo of the building ever could. The photography is mostly promotional graphics and headshots rather than a body of real work, so it belongs further down as support, not as the opening argument, and a calm navy in a narrow, quiet column reads as competent and unhurried rather than as another stamped, ledger-styled",
     "read_by": "claude",
-    "signature": "stamp",
-    "signature_why": "A personal injury firm lives and dies by results and recognition, so a repeated mark like \"Super Lawyer\" or case-result stamps reinforces credibility every time a visitor scrolls past one.",
+    "signature": "margin_note",
+    "signature_why": "A pulled line from a real client's account of being hit by a distracted driver sits beside the body copy, giving proof of outcomes without turning the page into a courtroom stunt.",
     "suppress": [
       "gallery"
     ],
     "type_treatment": "quiet",
     "understood": [
-      "Someone hiring an injury lawyer after a wreck wants proof of competence before anything else \u2014 the 4.9 rating, the case wins, the recognition \u2014 not a photo tour of the office; the photography here is "
+      "Someone hurt in a wreck lands on this page anxious and needs to see quickly that this firm wins cases and is trusted locally \u2014 the 4.9 rating and 254 reviews do that job better than a photo of the bui"
     ],
     "unsupported": []
   },
@@ -117,16 +118,16 @@
     "What is their street address?"
   ],
   "photo_labels": {
-    "/photo/6/0": "exterior",
-    "/photo/6/1": "people",
-    "/photo/6/2": "people",
-    "/photo/6/3": "people",
-    "/photo/6/4": "other",
-    "/photo/6/5": "people",
-    "/photo/6/6": "other",
-    "/photo/6/7": "other",
-    "/photo/6/8": "other",
-    "/photo/6/9": "people",
+    "/photo/11/0": "exterior",
+    "/photo/11/1": "people",
+    "/photo/11/2": "people",
+    "/photo/11/3": "people",
+    "/photo/11/4": "other",
+    "/photo/11/5": "people",
+    "/photo/11/6": "other",
+    "/photo/11/7": "other",
+    "/photo/11/8": "other",
+    "/photo/11/9": "people",
     "https://snellingsinjurylaw.com/wp-content/uploads/2020/05/Snellings_Horizontal_PLLC.png": "logo",
     "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/Snellings-Law-PLLC.jpg": "team",
     "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/BSL_TopVerdict.png": "award",
@@ -137,16 +138,16 @@
     "https://snellingsinjurylaw.com/wp-content/uploads/2026/08/Personal-Injury-Attorneys-Home-v4.webp": "people"
   },
   "photo_notes": {
-    "/photo/6/0": "A single-story office building with large windows, trees, and a paved walkway in front.",
-    "/photo/6/1": "A smiling man in a gray suit and striped tie standing in front of a glass building exterior.",
-    "/photo/6/2": "A smiling man in a gray suit standing between two bookshelves in front of a wall with a company logo.",
-    "/photo/6/3": "A smiling man in a gray suit and blue tie standing indoors near a plant.",
-    "/photo/6/4": "A severely damaged car with its front end torn open at a nighttime intersection with police vehicles present.",
-    "/photo/6/5": "A promotional graphic with a man's portrait in a circle, text reading Scott Snellings Super Lawyer, and a law firm logo.",
-    "/photo/6/6": "A promotional graphic showing a semi truck on a highway with text reading 18 Wheeler Accidents and a law firm logo.",
-    "/photo/6/7": "A promotional graphic showing two beer glasses in front of a stadium field with text reading Enjoy The Game and a law firm logo.",
-    "/photo/6/8": "A wooden deck with an outdoor table, chairs, and umbrella beside a green hedge, with a text panel reading Premises Liability.",
-    "/photo/6/9": "A man in a dark suit and red striped tie standing in a colonnade, shown inside a circular frame with a Trial Lawyer text overlay.",
+    "/photo/11/0": "A single-story office building with large windows, trees, and a paved walkway in front.",
+    "/photo/11/1": "A smiling man in a gray suit and striped tie standing in front of a glass building exterior.",
+    "/photo/11/2": "A smiling man in a gray suit standing between two bookshelves in front of a wall with a company logo.",
+    "/photo/11/3": "A smiling man in a gray suit and blue tie standing indoors near a plant.",
+    "/photo/11/4": "A severely damaged car with its front end torn open at a nighttime intersection with police vehicles present.",
+    "/photo/11/5": "A promotional graphic with a man's portrait in a circle, text reading Scott Snellings Super Lawyer, and a law firm logo.",
+    "/photo/11/6": "A promotional graphic showing a semi truck on a highway with text reading 18 Wheeler Accidents and a law firm logo.",
+    "/photo/11/7": "A promotional graphic showing two beer glasses in front of a stadium field with text reading Enjoy The Game and a law firm logo.",
+    "/photo/11/8": "A wooden deck with an outdoor table, chairs, and umbrella beside a green hedge, with a text panel reading Premises Liability.",
+    "/photo/11/9": "A man in a dark suit and red striped tie standing in a colonnade, shown inside a circular frame with a Trial Lawyer text overlay.",
     "https://snellingsinjurylaw.com/wp-content/uploads/2020/05/Snellings_Horizontal_PLLC.png": "A logo reading Snellings Law PLLC with a stylized S icon in dark grey and orange.",
     "https://snellingsinjurylaw.com/wp-content/uploads/2025/06/Snellings-Law-PLLC.jpg": "Four people in business attire sitting together on steps in an indoor space with a geometric wall design behind them.",
     "https://snellingsinjurylaw.com/wp-content/uploads/2025/07/BSL_TopVerdict.png": "A badge reading 'The Texas Lawyer's Top Verdicts & Settlements, #7 in Motor Vehicle, 2015'",
@@ -156,43 +157,43 @@
     "https://snellingsinjurylaw.com/wp-content/uploads/2026/08/Personal-Injury-Attorneys-Home-v4.webp": "A man and a woman in dark business suits standing together against a plain white background."
   },
   "photo_sizes": {
-    "/photo/6/0": [
+    "/photo/11/0": [
       1650,
       876
     ],
-    "/photo/6/1": [
+    "/photo/11/1": [
       1080,
       1080
     ],
-    "/photo/6/2": [
+    "/photo/11/2": [
       2400,
       1600
     ],
-    "/photo/6/3": [
+    "/photo/11/3": [
       2400,
       3600
     ],
-    "/photo/6/4": [
+    "/photo/11/4": [
       2400,
       3200
     ],
-    "/photo/6/5": [
+    "/photo/11/5": [
       1200,
       1200
     ],
-    "/photo/6/6": [
+    "/photo/11/6": [
       1200,
       1200
     ],
-    "/photo/6/7": [
+    "/photo/11/7": [
       1200,
       1200
     ],
-    "/photo/6/8": [
+    "/photo/11/8": [
       1200,
       1200
     ],
-    "/photo/6/9": [
+    "/photo/11/9": [
       1200,
       1200
     ],
@@ -222,7 +223,7 @@
     ]
   },
   "photo_vision": {
-    "/photo/6/0": {
+    "/photo/11/0": {
       "alt_text": "A single-story office building with large windows, trees, and a paved walkway in front.",
       "dominant_colours": [
         "#8a9a7a",
@@ -241,7 +242,7 @@
       "url": "/photo/6/0",
       "why_not": ""
     },
-    "/photo/6/1": {
+    "/photo/11/1": {
       "alt_text": "A smiling man in a gray suit and striped tie standing in front of a glass building exterior.",
       "dominant_colours": [
         "#8a9a9a",
@@ -260,7 +261,7 @@
       "url": "/photo/6/1",
       "why_not": ""
     },
-    "/photo/6/2": {
+    "/photo/11/2": {
       "alt_text": "A smiling man in a gray suit standing between two bookshelves in front of a wall with a company logo.",
       "dominant_colours": [
         "#d8d0c0",
@@ -279,7 +280,7 @@
       "url": "/photo/6/2",
       "why_not": ""
     },
-    "/photo/6/3": {
+    "/photo/11/3": {
       "alt_text": "A smiling man in a gray suit and blue tie standing indoors near a plant.",
       "dominant_colours": [
         "#3a3a3a",
@@ -298,7 +299,7 @@
       "url": "/photo/6/3",
       "why_not": ""
     },
-    "/photo/6/4": {
+    "/photo/11/4": {
       "alt_text": "A severely damaged car with its front end torn open at a nighttime intersection with police vehicles present.",
       "dominant_colours": [
         "#0a0a0a",
@@ -317,7 +318,7 @@
       "url": "/photo/6/4",
       "why_not": "Depicts a severe vehicle accident scene at night, not suitable as a hero image"
     },
-    "/photo/6/5": {
+    "/photo/11/5": {
       "alt_text": "A promotional graphic with a man's portrait in a circle, text reading Scott Snellings Super Lawyer, and a law firm logo.",
       "dominant_colours": [
         "#ffffff",
@@ -336,7 +337,7 @@
       "url": "/photo/6/5",
       "why_not": "Contains promotional text overlay and graphic design elements, not a plain photograph"
     },
-    "/photo/6/6": {
+    "/photo/11/6": {
       "alt_text": "A promotional graphic showing a semi truck on a highway with text reading 18 Wheeler Accidents and a law firm logo.",
       "dominant_colours": [
         "#1a2a3a",
@@ -355,7 +356,7 @@
       "url": "/photo/6/6",
       "why_not": "Stock-style promotional graphic with text overlay, not a real photograph of the business"
     },
-    "/photo/6/7": {
+    "/photo/11/7": {
       "alt_text": "A promotional graphic showing two beer glasses in front of a stadium field with text reading Enjoy The Game and a law firm logo.",
       "dominant_colours": [
         "#e8632a",
@@ -374,7 +375,7 @@
       "url": "/photo/6/7",
       "why_not": "Stock-style promotional graphic with text overlay advertising an unrelated theme, not a real photograph of the business"
     },
-    "/photo/6/8": {
+    "/photo/11/8": {
       "alt_text": "A wooden deck with an outdoor table, chairs, and umbrella beside a green hedge, with a text panel reading Premises Liability.",
       "dominant_colours": [
         "#7bb0d6",
@@ -393,7 +394,7 @@
       "url": "/photo/6/8",
       "why_not": "Marketing graphic with text overlay and design elements, not a plain photograph"
     },
-    "/photo/6/9": {
+    "/photo/11/9": {
       "alt_text": "A man in a dark suit and red striped tie standing in a colonnade, shown inside a circular frame with a Trial Lawyer text overlay.",
       "dominant_colours": [
         "#e8622f",

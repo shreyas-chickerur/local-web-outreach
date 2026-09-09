@@ -126,9 +126,45 @@ def test_without_a_key_the_gate_perturbs_rather_than_asking(conn, other,
     assert asked["n"] == 1, "the gate asked again with no key to ask with"
 
 
-def test_the_corpus_no_longer_has_a_pair_the_gate_would_reject():
-    """What the gate was built to fix, measured rather than asserted. The
-    reviewer's number before it ran: one same-trade pair in ten collided."""
+def test_the_gates_static_collisions_are_named_and_understood():
+    """What the gate was built to fix, measured rather than asserted — and the
+    limit of what an all-pairs static check can actually claim about it, found
+    by widening the corpus.
+
+    The reviewer's number before the gate ran: one same-trade pair in ten
+    collided. At eleven fixtures this test asserted zero collisions across
+    EVERY same-trade pair. That was never a guarantee the gate itself makes —
+    `identity.decide()` compares a new site against the last `WINDOW` (10)
+    fingerprints in the shared history table, not against every fixture ever
+    built, which is what keeps the gate cheap enough to run on every build. At
+    eleven fixtures the two questions ("did the gate ever compare these two"
+    and "do these two collide") were close to the same question by
+    coincidence of corpus size; past `WINDOW` they are not, and asserting zero
+    collisions everywhere stopped being a claim about the gate and became a
+    claim about how small the corpus happened to be.
+
+    Six same-trade pairs collided statically the first time this was measured
+    (widening the corpus to nineteen fixtures, before palette sampling). What
+    could not be said then, and still cannot in general: whether a colliding
+    pair was ever compared live and the gate's retry-then-perturb sequence
+    gave up on it (recorded as `unresolved` in `identity.Decision`, which
+    `_stage_direction` returns and — until this project caught it —
+    `make_fixtures.py` silently discarded), or whether the two were simply
+    never in the same rolling window. That distinction was lost for those six
+    specifically, because the tool did not capture it at the time they were
+    frozen; it captures it now (`payload["_gate_unresolved"]`, printed as
+    `UNRESOLVED COLLISION` when true), so it will not be lost again.
+
+    All six broke apart when the corpus was re-decided under §2.2's palette
+    sampling — not credited to palette alone, since the whole identity call
+    was re-asked. The static set is empty now. Pinned as empty rather than
+    left unassserted, because a pair reappearing here without anyone noticing
+    would be exactly the kind of silent regression this test exists to catch,
+    and is not assumed to be `--redecide`-fixable in general: redeciding does
+    not touch which fixtures were ever in the same window — only rebuilding
+    under a wider `WINDOW`, or fixing what `identity.py` has to say about
+    pairs like these, would.
+    """
     from app.site.pipeline import spec_from_config
     from app.site.render import material_from_brief, plan_for, trade_kind
 
@@ -139,14 +175,20 @@ def test_the_corpus_no_longer_has_a_pair_the_gate_would_reject():
         prints[path.stem] = fp.of(plan_for(brief, spec), spec,
                                   material_from_brief(brief))
         trades[path.stem] = trade_kind(brief.get("trade"))
-
     slugs = sorted(prints)
-    colliding = [
+    colliding = {
         (a, b) for i, a in enumerate(slugs) for b in slugs[i + 1:]
         if trades[a] == trades[b]
-        and fp.collisions(prints[a], [prints[b]],
-                          axes=fp.REQUIRED_AXES)]
-    assert not colliding, f"the gate let these through: {colliding}"
+        and fp.collisions(prints[a], [prints[b]], axes=fp.REQUIRED_AXES)}
+    # Empty since the corpus was re-decided under §2.2's palette sampling.
+    # Every one of the six pairs named above broke apart in the same
+    # redecide, including the three that were this project's strongest
+    # "same" verdicts. Not credited to palette in isolation — the whole
+    # identity call was re-asked — but the result is real: named here
+    # because an empty set silently going stale (the corpus moving again
+    # without anyone noticing collisions had returned) is exactly the kind
+    # of thing this test exists to catch.
+    assert colliding == set(), colliding
 
 
 def test_every_path_that_records_history_went_through_the_gate():

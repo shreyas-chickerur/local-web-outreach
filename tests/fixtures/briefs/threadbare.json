@@ -1,10 +1,11 @@
 {
+  "_gate_unresolved": false,
   "assumptions": [
     "ignored a yelp result for 'Moe\u2019s Handyman Services' \u2014 different business"
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "navy",
+    "accent": "brown",
     "architecture": "stacked",
     "contradictions": [],
     "cta": {
@@ -19,14 +20,14 @@
     "kind": "style",
     "lead_with": null,
     "mood": "industrial",
-    "rationale": "With only one small photo of the handyman himself, the page shouldn't pretend to be a gallery-led site; setting the name heavy and tight like a workshop stamp signals a working contractor, and leading with a call to action gets visitors to the phone fast, which is what people want from a general contractor.",
+    "rationale": "There isn't enough photography to build a page around imagery, so the name should be set heavy and plain like a trade sign, with the accent pulled from the one photo they do have. A visitor to a general contractor's site wants to trust the outfit and pick up the phone, not browse a gallery.",
     "read_by": "claude",
     "signature": "stamp",
-    "signature_why": "A repeated licence-style mark reads as a tradesman standing behind his work, not a boutique flourish.",
+    "signature_why": "A repeated licence-style mark reads as a tradesman's credential, which is what a stranger checks before calling a handyman.",
     "suppress": [],
     "type_treatment": "stamped",
     "understood": [
-      "With only one small photo of the handyman himself, the page shouldn't pretend to be a gallery-led site; setting the name heavy and tight like a workshop stamp signals a working contractor, and leading"
+      "There isn't enough photography to build a page around imagery, so the name should be set heavy and plain like a trade sign, with the accent pulled from the one photo they do have. A visitor to a gener"
     ],
     "unsupported": []
   },
@@ -76,19 +77,19 @@
     "What are their opening hours?"
   ],
   "photo_labels": {
-    "/photo/11/0": "people"
+    "/photo/19/0": "people"
   },
   "photo_notes": {
-    "/photo/11/0": "A smiling man in a navy polo shirt holding a power drill and rolled papers, wearing a tool belt, standing in a kitchen, with promotional text and badge graphics overlaid reading 'Best Handyman', 'Top "
+    "/photo/19/0": "A smiling man in a navy polo shirt holding a power drill and rolled papers, wearing a tool belt, standing in a kitchen, with promotional text and badge graphics overlaid reading 'Best Handyman', 'Top "
   },
   "photo_sizes": {
-    "/photo/11/0": [
+    "/photo/19/0": [
       1024,
       1536
     ]
   },
   "photo_vision": {
-    "/photo/11/0": {
+    "/photo/19/0": {
       "alt_text": "A smiling man in a navy polo shirt holding a power drill and rolled papers, wearing a tool belt, standing in a kitchen, with promotional text and badge graphics overlaid reading 'Best Handyman', 'Top ",
       "dominant_colours": [
         "#3a2f28",

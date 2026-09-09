@@ -1,12 +1,13 @@
 {
+  "_gate_unresolved": false,
   "assumptions": [
     "website found via google: http://www.statusroofingllc.com/",
     "ignored a yelp result for 'Dwell Roofing & Exteriors' \u2014 different business"
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "navy",
-    "architecture": "ledger",
+    "accent": "gold",
+    "architecture": "column",
     "contradictions": [],
     "cta": {
       "kind": "quote",
@@ -17,22 +18,22 @@
       "services",
       "reviews"
     ],
-    "first_screen": "proof",
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "People hiring a roofer want proof of competence and legitimacy before they want atmosphere \u2014 the 5.0 rating, 218 reviews, W2-insured crews, and BBB A+ status are the actual sales argument, so we lead with facts and figures rather than photography, then back it with services and named-review testimonials like the Kevin Cardenas ones that build trust in a specific person on the crew.",
+    "rationale": "A homeowner deciding whether to call a roofer wants the rating, the review count, and the four-state W2 coverage before anything else \u2014 that's proof of competence, not atmosphere, so facts lead and a quiet ruled ledger of the numbers (rating, states, offices, insured crews) carries more weight than a stamped badge. Keeping it industrial in mood but moving from ledger/stamped/proof to a column layout with wide quiet-confidence type and a ledger signature still reads as a serious trade operation w",
     "read_by": "claude",
-    "signature": "stamp",
-    "signature_why": "A repeated licence/insurance-style mark reinforces the W2-insured, BBB A+, multi-state credibility that a homeowner checks before calling a roofer.",
+    "signature": "ledger",
+    "signature_why": "A roofing outfit that insures every crew and works across four states earns a plain ruled table of that fact, not a stamped badge.",
     "suppress": [
       "features"
     ],
-    "type_treatment": "stamped",
+    "type_treatment": "wide",
     "understood": [
-      "People hiring a roofer want proof of competence and legitimacy before they want atmosphere \u2014 the 5.0 rating, 218 reviews, W2-insured crews, and BBB A+ status are the actual sales argument, so we lead "
+      "A homeowner deciding whether to call a roofer wants the rating, the review count, and the four-state W2 coverage before anything else \u2014 that's proof of competence, not atmosphere, so facts lead and a "
     ],
     "unsupported": []
   },
@@ -100,16 +101,16 @@
     "Their opening hours: only google lists it \u2014 confirm Mon-Sun 8am-5pm?"
   ],
   "photo_labels": {
-    "/photo/9/0": "work",
-    "/photo/9/1": "exterior",
-    "/photo/9/2": "work",
-    "/photo/9/3": "exterior",
-    "/photo/9/4": "other",
-    "/photo/9/5": "exterior",
-    "/photo/9/6": "exterior",
-    "/photo/9/7": "team",
-    "/photo/9/8": "exterior",
-    "/photo/9/9": "exterior",
+    "/photo/16/0": "work",
+    "/photo/16/1": "exterior",
+    "/photo/16/2": "work",
+    "/photo/16/3": "exterior",
+    "/photo/16/4": "other",
+    "/photo/16/5": "exterior",
+    "/photo/16/6": "exterior",
+    "/photo/16/7": "team",
+    "/photo/16/8": "exterior",
+    "/photo/16/9": "exterior",
     "https://www.statusroofingllc.com/assets/four-states-clean.png": "logo",
     "https://www.statusroofingllc.com/assets/img/arial-job.jpg": "work",
     "https://www.statusroofingllc.com/assets/img/commercial-header.jpeg": "unclear",
@@ -120,16 +121,16 @@
     "https://www.statusroofingllc.com/assets/img/roof-replacement-header.png": "work"
   },
   "photo_notes": {
-    "/photo/9/0": "Aerial view of a house roof mid-installation with workers and exposed underlayment paper among grey shingles.",
-    "/photo/9/1": "Side view of a brick house with a new dark roof and chimney under a clear blue sky.",
-    "/photo/9/2": "Two workers installing grey shingles on a steep roof with exposed underlayment and a red tree in the background.",
-    "/photo/9/3": "Aerial view of a brick house with a grey roof surrounded by dense green trees and neighboring rooftops.",
-    "/photo/9/4": "A company yard sign with logo and phone number placed on grass in front of a house with hedges and trees.",
-    "/photo/9/5": "Side view of a white brick house with a dark shingle roof, a patio table, and trees overhead under a partly cloudy sky.",
-    "/photo/9/6": "Front view of a brick single-story house with a chimney and a new dark roof under a clear blue sky.",
-    "/photo/9/7": "A group of people standing in front of a building, flanked by five white company trucks parked in a row.",
-    "/photo/9/8": "A tall feather flag advertising a roofing company stands on a lawn in front of a house with a ladder against the roof and a work trailer in the driveway.",
-    "/photo/9/9": "An aerial view of a house with a gray shingle roof surrounded by trees, with a work vehicle parked in the driveway.",
+    "/photo/16/0": "Aerial view of a house roof mid-installation with workers and exposed underlayment paper among grey shingles.",
+    "/photo/16/1": "Side view of a brick house with a new dark roof and chimney under a clear blue sky.",
+    "/photo/16/2": "Two workers installing grey shingles on a steep roof with exposed underlayment and a red tree in the background.",
+    "/photo/16/3": "Aerial view of a brick house with a grey roof surrounded by dense green trees and neighboring rooftops.",
+    "/photo/16/4": "A company yard sign with logo and phone number placed on grass in front of a house with hedges and trees.",
+    "/photo/16/5": "Side view of a white brick house with a dark shingle roof, a patio table, and trees overhead under a partly cloudy sky.",
+    "/photo/16/6": "Front view of a brick single-story house with a chimney and a new dark roof under a clear blue sky.",
+    "/photo/16/7": "A group of people standing in front of a building, flanked by five white company trucks parked in a row.",
+    "/photo/16/8": "A tall feather flag advertising a roofing company stands on a lawn in front of a house with a ladder against the roof and a work trailer in the driveway.",
+    "/photo/16/9": "An aerial view of a house with a gray shingle roof surrounded by trees, with a work vehicle parked in the driveway.",
     "https://www.statusroofingllc.com/assets/four-states-clean.png": "A graphic showing four gold-colored raised relief maps of Texas, Oklahoma, Kansas, and Missouri on a white background.",
     "https://www.statusroofingllc.com/assets/img/arial-job.jpg": "An aerial view looking straight down at a large house roof with new gray shingles, workers, tools, and underlayment printed with the Status Roofing logo, surrounded by a yard and trees.",
     "https://www.statusroofingllc.com/assets/img/commercial-roofing.jpeg": "An aerial view of a large flat commercial building with a white roof covered in vents, surrounded by parking lots and other buildings.",
@@ -139,43 +140,43 @@
     "https://www.statusroofingllc.com/assets/img/roof-replacement-header.png": "An aerial view of several roofers working on a large peaked roof covered partly with underlayment printed with the Status Roofing logo, next to trees with autumn foliage."
   },
   "photo_sizes": {
-    "/photo/9/0": [
+    "/photo/16/0": [
       1360,
       765
     ],
-    "/photo/9/1": [
+    "/photo/16/1": [
       2400,
       1800
     ],
-    "/photo/9/2": [
+    "/photo/16/2": [
       1360,
       906
     ],
-    "/photo/9/3": [
+    "/photo/16/3": [
       1440,
       1080
     ],
-    "/photo/9/4": [
+    "/photo/16/4": [
       2400,
       3200
     ],
-    "/photo/9/5": [
+    "/photo/16/5": [
       2400,
       3200
     ],
-    "/photo/9/6": [
+    "/photo/16/6": [
       2400,
       1800
     ],
-    "/photo/9/7": [
+    "/photo/16/7": [
       2400,
       1600
     ],
-    "/photo/9/8": [
+    "/photo/16/8": [
       2400,
       3200
     ],
-    "/photo/9/9": [
+    "/photo/16/9": [
       1440,
       1080
     ],
@@ -213,7 +214,7 @@
     ]
   },
   "photo_vision": {
-    "/photo/9/0": {
+    "/photo/16/0": {
       "alt_text": "Aerial view of a house roof mid-installation with workers and exposed underlayment paper among grey shingles.",
       "dominant_colours": [
         "#8a8f94",
@@ -232,7 +233,7 @@
       "url": "/photo/9/0",
       "why_not": ""
     },
-    "/photo/9/1": {
+    "/photo/16/1": {
       "alt_text": "Side view of a brick house with a new dark roof and chimney under a clear blue sky.",
       "dominant_colours": [
         "#3a75c4",
@@ -251,7 +252,7 @@
       "url": "/photo/9/1",
       "why_not": ""
     },
-    "/photo/9/2": {
+    "/photo/16/2": {
       "alt_text": "Two workers installing grey shingles on a steep roof with exposed underlayment and a red tree in the background.",
       "dominant_colours": [
         "#6b6f70",
@@ -270,7 +271,7 @@
       "url": "/photo/9/2",
       "why_not": ""
     },
-    "/photo/9/3": {
+    "/photo/16/3": {
       "alt_text": "Aerial view of a brick house with a grey roof surrounded by dense green trees and neighboring rooftops.",
       "dominant_colours": [
         "#3d5c2a",
@@ -289,7 +290,7 @@
       "url": "/photo/9/3",
       "why_not": ""
     },
-    "/photo/9/4": {
+    "/photo/16/4": {
       "alt_text": "A company yard sign with logo and phone number placed on grass in front of a house with hedges and trees.",
       "dominant_colours": [
         "#1a1a1a",
@@ -308,7 +309,7 @@
       "url": "/photo/9/4",
       "why_not": "sign and yard, not a hero shot of finished work"
     },
-    "/photo/9/5": {
+    "/photo/16/5": {
       "alt_text": "Side view of a white brick house with a dark shingle roof, a patio table, and trees overhead under a partly cloudy sky.",
       "dominant_colours": [
         "#c9c9c1",
@@ -327,7 +328,7 @@
       "url": "/photo/9/5",
       "why_not": "cluttered composition with furniture and shadows"
     },
-    "/photo/9/6": {
+    "/photo/16/6": {
       "alt_text": "Front view of a brick single-story house with a chimney and a new dark roof under a clear blue sky.",
       "dominant_colours": [
         "#3a75c4",
@@ -346,7 +347,7 @@
       "url": "/photo/9/6",
       "why_not": ""
     },
-    "/photo/9/7": {
+    "/photo/16/7": {
       "alt_text": "A group of people standing in front of a building, flanked by five white company trucks parked in a row.",
       "dominant_colours": [
         "#ffffff",
@@ -365,7 +366,7 @@
       "url": "/photo/9/7",
       "why_not": ""
     },
-    "/photo/9/8": {
+    "/photo/16/8": {
       "alt_text": "A tall feather flag advertising a roofing company stands on a lawn in front of a house with a ladder against the roof and a work trailer in the driveway.",
       "dominant_colours": [
         "#5b6b3a",
@@ -384,7 +385,7 @@
       "url": "/photo/9/8",
       "why_not": ""
     },
-    "/photo/9/9": {
+    "/photo/16/9": {
       "alt_text": "An aerial view of a house with a gray shingle roof surrounded by trees, with a work vehicle parked in the driveway.",
       "dominant_colours": [
         "#6b6b6b",

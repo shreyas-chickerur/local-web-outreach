@@ -1,0 +1,698 @@
+{
+  "_gate_unresolved": false,
+  "assumptions": [
+    "website found via google: https://legacyplumbing.net/frisco-tx-plumber/",
+    "ignored 1 social link(s) belonging to other businesses their site credits"
+  ],
+  "chain_signals": [],
+  "design_direction": {
+    "accent": "red",
+    "architecture": "stacked",
+    "contradictions": [],
+    "cta": {
+      "kind": "call",
+      "label": ""
+    },
+    "defect": "",
+    "emphasis": [
+      "services",
+      "reviews"
+    ],
+    "first_screen": "facts",
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "stats",
+    "mood": "industrial",
+    "rationale": "People hire a plumber on trust and proof, not atmosphere, so the page should open with the 2,272 Google reviews and 4.9 rating before anything else, then move straight into services and photos of real work being done. Red pulls from their own truck wrap and uniforms, giving them a distinct, trade-appropriate identity rather than a generic blue.",
+    "read_by": "claude",
+    "signature": "stamp",
+    "signature_why": "A licence-mark stamp repeated near the guarantee text reinforces that these are licensed, vetted professionals, which is exactly what a homeowner checks before calling a plumber.",
+    "suppress": [
+      "recognition",
+      "menu"
+    ],
+    "type_treatment": "stamped",
+    "understood": [
+      "People hire a plumber on trust and proof, not atmosphere, so the page should open with the 2,272 Google reviews and 4.9 rating before anything else, then move straight into services and photos of real"
+    ],
+    "unsupported": []
+  },
+  "facts": [
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "address",
+      "label": "Address",
+      "score": 90,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=18294925490352505876&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/legacy-plumbing-frisco-2?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        }
+      ],
+      "value": "8765 Stockard Dr Ste 104, Frisco, TX 75034, USA"
+    },
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=18294925490352505876&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "(972) 707-2184"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/legacy-plumbing-frisco-2?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+          "value": "(469) 598-1240"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://legacyplumbing.net/frisco-tx-plumber/",
+          "value": "469-389-4020"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 3,
+      "dissent": [],
+      "field": "phone",
+      "label": "Phone",
+      "score": 30,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=18294925490352505876&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/legacy-plumbing-frisco-2?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://legacyplumbing.net/frisco-tx-plumber/"
+        }
+      ],
+      "value": "(469) 598-1240 | (972) 707-2184 | 469-389-4020"
+    },
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=18294925490352505876&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "mon:0700-2000 tue:0700-2000 wed:0700-2000 thu:0700-2000 fri:0700-2000 sat:0700-1730 sun:0700-1730"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://legacyplumbing.net/frisco-tx-plumber/",
+          "value": "mon:0700-1730 tue:0700-1730 wed:0700-1730 thu:0700-1730 fri:0700-1730 sun:closed"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "hours",
+      "label": "Hours",
+      "score": 30,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=18294925490352505876&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://legacyplumbing.net/frisco-tx-plumber/"
+        }
+      ],
+      "value": "Mon-Fri 7am-8pm \u00b7 Sat-Sun 7am-5:30pm"
+    }
+  ],
+  "latitude": 33.115617799999995,
+  "location": "8765 Stockard Dr Ste 104, Frisco, TX 75034, USA",
+  "longitude": -96.80729,
+  "name": "Legacy Plumbing",
+  "notes": null,
+  "open_questions": [
+    "What number do customers actually call?"
+  ],
+  "photo_labels": {
+    "/photo/7/0": "exterior",
+    "/photo/7/1": "exterior",
+    "/photo/7/2": "work",
+    "/photo/7/3": "people",
+    "/photo/7/4": "work",
+    "/photo/7/5": "people",
+    "/photo/7/6": "people",
+    "/photo/7/7": "work",
+    "/photo/7/8": "work",
+    "/photo/7/9": "work",
+    "https://legacyplumbing.net/wp-content/uploads/2020/09/Legacy-Plumbing-office-gate-8.jpg": "unclear",
+    "https://legacyplumbing.net/wp-content/uploads/2020/10/Frisco-TX-Dark.jpg": "unclear",
+    "https://legacyplumbing.net/wp-content/uploads/2020/12/Community_Image_Responsive.jpg": "unclear",
+    "https://legacyplumbing.net/wp-content/uploads/2020/12/subpage-banner-compressed-e1621272310560.jpg": "unclear",
+    "https://legacyplumbing.net/wp-content/uploads/2021/01/unnamed-3-3-e1617117175223.jpg": "unclear",
+    "https://legacyplumbing.net/wp-content/uploads/2022/03/Additional-Photo-1.jpg": "unclear",
+    "https://legacyplumbing.net/wp-content/uploads/2022/03/Additional-Photo-3.jpg": "unclear"
+  },
+  "photo_notes": {
+    "/photo/7/0": "A white plumbing service truck with a large yellow and maroon advertisement wrap parked on a residential street in front of houses.",
+    "/photo/7/1": "A white plumbing service truck with a yellow and maroon advertisement wrap parked on a driveway in front of a brick house under a clear blue sky.",
+    "/photo/7/2": "Two men in red shirts working on installing large gray water heaters in a garage.",
+    "/photo/7/3": "A bald man in a red polo shirt and orange gloves crouching near bushes with a plumbing tool.",
+    "/photo/7/4": "A man in a red shirt standing on a ladder working on a ceiling light fixture in a kitchen with white cabinets.",
+    "/photo/7/5": "A man in a red shirt and cap kneeling in a bathroom working near a sink and toilet, smiling at the camera.",
+    "/photo/7/6": "A bald man in a red shirt using a wrench on an outdoor gas or water valve beside a house.",
+    "/photo/7/7": "A man in a red shirt working on the open internal components of a tankless water heater mounted on a wall.",
+    "/photo/7/8": "A man in a red polo shirt works on an exterior brick wall with tools, near a decorative metal ornament, in a backyard setting.",
+    "/photo/7/9": "A man in a red polo shirt crouches to work on a toilet in a small bathroom nook beneath white cabinets."
+  },
+  "photo_sizes": {
+    "/photo/7/0": [
+      1428,
+      1071
+    ],
+    "/photo/7/1": [
+      1920,
+      1440
+    ],
+    "/photo/7/2": [
+      640,
+      481
+    ],
+    "/photo/7/3": [
+      2400,
+      1600
+    ],
+    "/photo/7/4": [
+      2400,
+      3200
+    ],
+    "/photo/7/5": [
+      2400,
+      1600
+    ],
+    "/photo/7/6": [
+      2400,
+      1600
+    ],
+    "/photo/7/7": [
+      2400,
+      1600
+    ],
+    "/photo/7/8": [
+      640,
+      480
+    ],
+    "/photo/7/9": [
+      640,
+      480
+    ]
+  },
+  "photo_vision": {
+    "/photo/7/0": {
+      "alt_text": "A white plumbing service truck with a large yellow and maroon advertisement wrap parked on a residential street in front of houses.",
+      "dominant_colours": [
+        "#f2b02b",
+        "#8a1c2b",
+        "#e8e8e8",
+        "#2a2a2a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/21/0",
+      "why_not": ""
+    },
+    "/photo/7/1": {
+      "alt_text": "A white plumbing service truck with a yellow and maroon advertisement wrap parked on a driveway in front of a brick house under a clear blue sky.",
+      "dominant_colours": [
+        "#f2b02b",
+        "#8a1c2b",
+        "#3a7bd5",
+        "#e8e8e8"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/21/1",
+      "why_not": ""
+    },
+    "/photo/7/2": {
+      "alt_text": "Two men in red shirts working on installing large gray water heaters in a garage.",
+      "dominant_colours": [
+        "#b0a99f",
+        "#c23b3b",
+        "#8c8c8c",
+        "#e5e5e5"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "work",
+      "subject_position": "full",
+      "url": "/photo/21/2",
+      "why_not": ""
+    },
+    "/photo/7/3": {
+      "alt_text": "A bald man in a red polo shirt and orange gloves crouching near bushes with a plumbing tool.",
+      "dominant_colours": [
+        "#2f4a2f",
+        "#8c1c1c",
+        "#c9a227",
+        "#1a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/21/3",
+      "why_not": ""
+    },
+    "/photo/7/4": {
+      "alt_text": "A man in a red shirt standing on a ladder working on a ceiling light fixture in a kitchen with white cabinets.",
+      "dominant_colours": [
+        "#e8e4da",
+        "#c9a227",
+        "#8c8c8c",
+        "#d97b2a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "work",
+      "subject_position": "centre",
+      "url": "/photo/21/4",
+      "why_not": "subject partially obscured by ladder and cloths, cluttered foreground"
+    },
+    "/photo/7/5": {
+      "alt_text": "A man in a red shirt and cap kneeling in a bathroom working near a sink and toilet, smiling at the camera.",
+      "dominant_colours": [
+        "#e5e5e5",
+        "#c23b3b",
+        "#2a2a2a",
+        "#8c8c8c"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "right",
+      "url": "/photo/21/5",
+      "why_not": ""
+    },
+    "/photo/7/6": {
+      "alt_text": "A bald man in a red shirt using a wrench on an outdoor gas or water valve beside a house.",
+      "dominant_colours": [
+        "#7a8c5a",
+        "#8c1c1c",
+        "#c9a227",
+        "#8c8c8c"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/21/6",
+      "why_not": ""
+    },
+    "/photo/7/7": {
+      "alt_text": "A man in a red shirt working on the open internal components of a tankless water heater mounted on a wall.",
+      "dominant_colours": [
+        "#e5e5e5",
+        "#8c1c1c",
+        "#c9a227",
+        "#2a2a2a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "work",
+      "subject_position": "centre",
+      "url": "/photo/21/7",
+      "why_not": ""
+    },
+    "/photo/7/8": {
+      "alt_text": "A man in a red polo shirt works on an exterior brick wall with tools, near a decorative metal ornament, in a backyard setting.",
+      "dominant_colours": [
+        "#8B4A3B",
+        "#7A9B4E",
+        "#C9411F",
+        "#B22222"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "work",
+      "subject_position": "left",
+      "url": "/photo/21/8",
+      "why_not": ""
+    },
+    "/photo/7/9": {
+      "alt_text": "A man in a red polo shirt crouches to work on a toilet in a small bathroom nook beneath white cabinets.",
+      "dominant_colours": [
+        "#E8E4DC",
+        "#B0342A",
+        "#C9A876",
+        "#4A4A4A"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "work",
+      "subject_position": "centre",
+      "url": "/photo/21/9",
+      "why_not": ""
+    },
+    "https://legacyplumbing.net/wp-content/uploads/2020/09/Legacy-Plumbing-office-gate-8.jpg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://legacyplumbing.net/wp-content/uploads/2020/10/Frisco-TX-Dark.jpg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://legacyplumbing.net/wp-content/uploads/2020/12/Community_Image_Responsive.jpg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://legacyplumbing.net/wp-content/uploads/2020/12/subpage-banner-compressed-e1621272310560.jpg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://legacyplumbing.net/wp-content/uploads/2021/01/unnamed-3-3-e1617117175223.jpg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://legacyplumbing.net/wp-content/uploads/2022/03/Additional-Photo-1.jpg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://legacyplumbing.net/wp-content/uploads/2022/03/Additional-Photo-3.jpg": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    }
+  },
+  "place_photos": [
+    "places/ChIJTWd_HzU7TIYRFESzhM2h5P0/photos/AVoNoXSuvP2ADcW-1UuxYQ2PoG7rVkaTzw2wSoIlITbBN4Asf28-1R3tU3qdtRbaNpoeZFyV-cmwHHp5YMuB_5CQmaE_Ij0qIpgwqYD_bRTjSp6J0TxMJlB-jXkkKXUGSmB2dzc1YS36SPw4Pw-0gpeygzcxpJwNOVBqwng5q_k2URdLbJGqtv6RkpZQtrcXAFAieH117nohjvz3e-mc4wmfBIAfmXZptnhDfqWguEey398K6bXINcm8LQAFVAGoB2ehujd2geQRLl3jbrVbjVFlkNjeRco-WfQu5EEPDWw7SfXLy-BwveDI2iw3DsLgrXs49UoVSiWz2MtCpVixLr5FuiwOz1iQCt3uiDGj906HjmvowHJuPBrVpAnCjzJ5ft8_4f7QCZ8qr9of7dJ7EE4WqKM5v7bvaJ8Luuvn-deHAdNkG8tonbbZGWYLQTjDUg",
+    "places/ChIJTWd_HzU7TIYRFESzhM2h5P0/photos/AVoNoXSyy0SyMoFvmKKoWFpKgbO5cn6npkCzuB67-3L_6x4_sKpWdU9cyIlE0dwDzbObSjRabO5cHqxDgj97xI56oHV58xH2qHqeoKupBolSPQ9aqFLR-rSCS9dRN95T3ORIYrfSaAMRcuLQkeQTG4Cdb97ZRU7TaquZSQAm8tHXy5oazM6JSp-hgqKLDKl87uwjTHCUlm3ABp4OiqO6dFRmcj3jv-A4AYTHIJNkR-VbWYb1DiLcvqqEERY2D5O4owg6q2AC_BIV492oUqK4euOI5OJJNHWysc4c50SqZY6VKG1mWA5gnnEr1k87CxvAqaLrEZs_LiRgqapzWApMO_PZd-XHXdUsRcv6dxNACE0V7zDfP_o3R8u_wSA5KcBThc1lTQYrCB_VWuEJLlXkl6wY09d3bP4_z33IaF_q6qnSnbeogJaN47BtGsiBY3e6F1tg",
+    "places/ChIJTWd_HzU7TIYRFESzhM2h5P0/photos/AVoNoXSFpPYSBQHXRrORhZuoP99bEGC_SjshDK1aieLXUBraGT5FzVFZnxxFl7HKur1NJTw91GM64oxdOr9PRKAMXqdgoax10RJnIqzuSXHeRoTnBh12QcoZQ5xKhuZf069WSF06KfDBnY3NS1VIzIerqyQv03KEEqqr_vkA0ktEcFJ42VqKqmSKjfB5_SCbmde6SmhDa4NkpaOP5y3Njz7zAyNeqt0mwf4z7sbDcvPkrHRa494wJbJ8GAWflwEvWKi-VQRR88cZ35cmmJWKyKSRYQnmMJcYZjOxoAewv2dKiy4adYcg-VOizpEJKAm28tnmiyp8HJBKR-gZqzYd4rqhK5l7AJnltyyaMvGZHGNXfa6i_uKp-qBPsIvE7kocqs_b_bcnoZz5JQKWin8_c7qkZ2DLEVTJcaXF1m_EbTa9mRTY0boCO9TYWC7_AT7Zjfpg",
+    "places/ChIJTWd_HzU7TIYRFESzhM2h5P0/photos/AVoNoXRur-B6BGm3dBEHQJio0XZUjTCGEjSmytZtt0tZUMzUzSn899VScZoLgW4Hj9NpGZJqkfFS6QzFFrQqOJoblBzkaeHUZFXMSobL8LsNIZdoQE3zzBeItgpgsy0shWE-PYQ2fGDdD6HwAteCTRr1BY15ipwKCdNXC94U5XHdzaXHSiZHQz2jhxQwnqPKHUpTQ5aQ3I7-BMYWEC_BWzE8le9gsxo1_5bwNMHWQPgaKEI36GivJ96p2it4WaXmpdmtsQW3pPzHab7gFq7LbNG1OlIWeVVtloFG8zz7h8Ughd5V5qu9Vn5rj7tzWiGC4FY-zZWBRs2RtzdN-rGxHZdoYGFwns42FOSiWWH9Mn96AynQEDaq8WCopf3_AD4PkXN2pv3gIRQYhCkmuxq6Ln8O6D4HoJ22GyCmpRPdVu_zGzpyKbtdQC04xyuwp_ROxSJC",
+    "places/ChIJTWd_HzU7TIYRFESzhM2h5P0/photos/AVoNoXRNwjcP-l8m3G7uyPDuQNktPW1c3o4qEGBBfefuRL08aZ740s7plVjdA06f9etlv0utHR9CwxQq0Lw3c5Br2eGgMXNEkH6akEyKvTYTf3hFtLPbXExzgLltpC8Uj2MtMdqAgfLFEL3-5KSHMT0CRJtx7pG5J1yhKLFTVi2WFM6d-UQ0dsbXla7GkzUADEje-QWe6zt05FDKPABrDsN8pnGfax7V_-ES441UA9wbVLmRIzUltGgio7zp8yEJYJ4hZb3m59oriLvgeIv6A2r6amHL4hpgRO2adBpOVs5LTe8JC-jOHTlRjzFWXuHrfLznq8VQvHJM0uygRGaoVCtVLuGVRA-UqHxIzJTDa_iUol2oDXOQEFVOj5kxYCupIIZ3sQwC0Kzkmh3aJpL5IrLXBV7yjgsKnRtFlf1-ANeyZxL2aebktYKc7kLXS1aY2Q",
+    "places/ChIJTWd_HzU7TIYRFESzhM2h5P0/photos/AVoNoXRsAI_xw_aWmgg4zzrH4L5koJlmJImNuvh8XEZTWCCKJfKjztpPn5ASFj1E9iBhjKxn014XLWUAZmJVGufDhAPIWVvDuPYjHJ_XaDJ0GPeJ5wAJbaGxgG1WL1zuEcTVNgHtA_6rpysqvIah2nRd_ueH_SgrjIabEMZPXbEqBSthgPLStEtwVbKKowu17Ihb_voeHa-uZCsBU3VFOusCe1rXyxU3Ky918KH8vSUNIWjM4-xEPJFe8JSiaTXR6n-lNLN8lukAff2vz5MJ36-octryQC3lbmn0DLHyXT1hofc2UiKUJZ7LHcQmyGEeUh9N9KrM1UZe6mC072eZtD5NUIAWR_1voQYmZvHTxPYcOoOlQ-pedkQ08zXxfIboZHh0qCcMxau-LOvRcO68tGBQo5uOyqR3Y5NeN6OIw8r_X7AaoPr3G8Rh3LHmbSW76g",
+    "places/ChIJTWd_HzU7TIYRFESzhM2h5P0/photos/AVoNoXRx5BzMC8WXUm-6hE5HDZk7Wlp5OAe7CCNn1tFyRrWf_7a8UFHPSOHDJhuTr0AlMSkGGTsw31G7BHxQaeaxZHGz-20X3ez0K__mmZayx3JjnJzAyHz-b0fs1MJlfyj97RKTFDP3Km2zeZudOBFnl7T4WTN3Y0yEKb_2gGQt1f69dYOWlNupEHd7YT1xIDS0_47UESd8zHxW7k9izjtnxclbhQsulN_gn5iY37bWkZkR2gdQaEnWxeolv1c06qO6d0UHzHf5Qj1WuDyEibZcEXSHsrEdcfQ3kh6NUEZJ5NIACMa2DPNPx9U9_vgei-1sCEW7IZLxrSOJuqmTxlvOqO9sRvMBAbNKyFFL4JwumQrUIUgrtQfQ2F0KibmF0fVrD2A2LpAxFTgJZKBvYbo44ik1SAxms5AuButwDanhCkBSiK1INmcWkCFgiLf4lw",
+    "places/ChIJTWd_HzU7TIYRFESzhM2h5P0/photos/AVoNoXT1Y1aX8M9-eqrwvBlx6XDkczo-QtoI2rxV5ZTCBU0tYDL6lw3M6k0wNapSKuiy3dAc8tJjtBfC9018lkRnKa8Y2bSy5g6HJUqRSm8Ywg559Sf8vRIlNohvfCs5QlDwL0HsZQ2ebGG4auC6N5B-UKWIaIApudZuMpFv7q6wvhzMD7eoV92qSInT7edWqjLMSVRBkw8zmSjwdtonK5g-0JY4DYucW2ZD386-n30i49GZC6MA1wlnmaIVO1H3RgTFxtv9E-YYPuQ4kfRnxArYxuIhfY1hjtEPSznc_kPdQbgv3Iy4eWSDsiS-iGgmU7kdCj3tTrZx7bGH6mfftLuVdcplV7VjJQVGeLXe8R_WhiIbHQw6Cito802qS6gI4DLdH4bYeEXebNBrnA5dAgSFnj24Dor3e8mpGcmPeHlSWvI0OYXXcNXcwGJynPFct4ku",
+    "places/ChIJTWd_HzU7TIYRFESzhM2h5P0/photos/AVoNoXS-MPIDgKk8VqyKju9vaKwYFkgRG_11xynWPzXLavuc1bDpBZiGgejgJ76yhoJrvMdllExcF6mpITKiGVXbCRDOOCaVCjma1m8mEppV3zrBbU8b8WiwI2cOPpQ2_mn8mcO-2g-mEf5RWOfR_TINizx0kxh3DZYwESWA0yMHpwNfkxRm6NWezy9azNgvRZ4_t6yi_EO9O1urXvJU0rdZk-TrHBa7J4WeLOdCgOtxZ2ShTUu71hegBwoRIWSJXB68rAmJ4E_JyTW2EEeb0DcLQyyyZ08pSuJ_eN7WlSA9-l45Ksem8FgDxGVPC4rXRyLnigv2jtdbuXYmfPsr2AfroUgDmKzK_oMOCvUFYiuM1gH22VHwYOPcGwdWjiLBxVetoBMyOwKm5H4SEChZQunPcP9sqmoWWWdf290bN7XERsc0cge8yHmwU3WYFPKXMhlZ",
+    "places/ChIJTWd_HzU7TIYRFESzhM2h5P0/photos/AVoNoXSz3HU3ByE3xho4d-lfq0-G8NPa-th6--qFUfek-g17er9WpzOX5-DfQ2zuCcRvlXHTfm07QMgfS1uQfBVbY4jO9-XLBn2MtItkYCjDNa31Jwkw6BF3kYrpdTNUopdyPSf5WnrVuBAZDREQnQX4o26xkeCA3SYuKDivcDf6XKQWlmtoB2Vh7bsXf12bI1ZoFtQDd4Lwt8FRPRbG8yfFN_BJswCLEEGGJkbaMEBiFZkETQDWKM5CJKz6o26-_wtalnSAYT6eTOAAyDY-3Yx1yjR-N30JA7964km90XodFMQEGlVEW9Ua09yDQRtDO1cDamRICV9_fe-omVyTSoO2uk4MO87j0UxeQE92ksbiVWtwZ56hxxgsFUw3FGHqRXpy85TqscOV9R3eLabZq0vPJiHvRTMXb3KDkPSaWYVPrMe0ngBZr-CS0wzje0xxRmlz"
+  ],
+  "published": {
+    "about": "Spreading good by doing good At Legacy Plumbing, we give our time, money and energy to make a lasting change for those who need it. We have an obligation to better the community that we are a part of and make our world a better place. Legacy Plumbing strives to establish deep roots in the communities we service, and we give back through charitable work, championing water conservation, and assisting others who cannot help themselves.",
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "Frisco's Best Customer Service Guarantee",
+        "images": [
+          "https://cdn-ildnkoo.nitrocdn.com/BITDTvbQEUfLrleNkvomAtyiqFxWSrnc/assets/images/optimized/rev-02f9660/legacyplumbing.net/wp-content/uploads/2023/12/van-hero.png"
+        ],
+        "kind": "feature",
+        "text": "We only hire skilled, licensed professionals. You will always know the price before we start. We will show up on time. We will leave the area cleaner than we found it. SCHEDULE SERVICE"
+      },
+      {
+        "entries": [],
+        "heading": "Local Plumbing Experts in Frisco, TX",
+        "images": [],
+        "kind": "feature",
+        "text": "Every day, homeowners in Frisco depend on their plumbing for so many essential activities. When your plumbing has a problem, things like cooking, cleaning, laundry, and more could all be at risk. That\u2019s why residents of Sports City, USA, demand a reputable, skilled plumbing services provider to make sure their plumbing working when it\u2019s needed most. Legacy Plumbing is Frisco\u2019s leading provider of dependable, expert plumbing services. We offer trusted solution-oriented plumbing services, and our plumbers have comprehensive training and extensive experience handling plumbing challenges of all kinds. To get more information about our plumbing services in Frisco, contact the Legacy Plumbing professionals today."
+      },
+      {
+        "entries": [],
+        "heading": "Sewer & Drain Services",
+        "images": [
+          "https://cdn-ildnkoo.nitrocdn.com/BITDTvbQEUfLrleNkvomAtyiqFxWSrnc/assets/images/optimized/rev-02f9660/legacyplumbing.net/wp-content/uploads/2020/09/tub-drain-cleaning-resized.jpg"
+        ],
+        "kind": "feature",
+        "text": "Your home\u2019s sewers and drains are the unsung heroes of your plumbing system. When they perform at their best, there should be very little to notice. However, when there\u2019s a problem, the results can be stressful, disruptive, and damaging. That\u2019s why our team offers professional sewer and drain services you can count on, including: Sewer and drain cleaning Sewer line repair and replacement Drain and sewer line camera inspection"
+      },
+      {
+        "entries": [],
+        "heading": "Kitchen & Bath Plumbing in Frisco",
+        "images": [],
+        "kind": "feature",
+        "text": "Whether you\u2019re dealing with a leaky faucet or need to install a new garbage disposal, the plumbing experts at Legacy Plumbing handle it all. Count on our superior workmanship for kitchen and bath plumbing installations and repairs for: Faucets Fixtures Toilets Garbage disposals And more Schedule Plumbing Services Today"
+      },
+      {
+        "entries": [],
+        "heading": "Leak Detection & Repair in Frisco",
+        "images": [],
+        "kind": "feature",
+        "text": "When there\u2019s a leak in your home, and you can\u2019t find it, water can be a costly problem. That\u2019s why at Legacy Plumbing we take our leak detection and repair services seriously. Especially if your home has a slab foundation, leaks can cause significant damage to your property that\u2019s quite expensive to correct. Our services are specifically designed to minimize any disruption to your home and correct problems quickly and efficiently."
+      },
+      {
+        "entries": [],
+        "heading": "Water Heater Installation & Repair",
+        "images": [
+          "https://cdn-ildnkoo.nitrocdn.com/BITDTvbQEUfLrleNkvomAtyiqFxWSrnc/assets/images/optimized/rev-02f9660/legacyplumbing.net/wp-content/uploads/2020/09/water-heater-after-1.jpg"
+        ],
+        "kind": "feature",
+        "text": "You depend on your water heater to do its job every day, 24 hours a day. When it\u2019s time for water heater services, the plumbers at Legacy Plumbing have the knowledge and experience to get the job done right the first time. Trust us for outstanding water heater services , including installation and repair for both tank and tankless models ."
+      },
+      {
+        "entries": [],
+        "heading": "Gas Line Plumbing & Gas Leak Repair",
+        "images": [],
+        "kind": "feature",
+        "text": "Potential gas line problems are nothing to ignore. If you suspect a gas leak, leave the property immediately and contact a professional gas line services provider. If not properly handled, there are serious health risks and fire hazards. Legacy Plumbing offers reliable, safe, and effective gas line plumbing and leak repair services designed to quickly resolve gas-related problems."
+      },
+      {
+        "entries": [],
+        "heading": "Why Choose Legacy Plumbing?",
+        "images": [
+          "https://cdn-ildnkoo.nitrocdn.com/BITDTvbQEUfLrleNkvomAtyiqFxWSrnc/assets/images/optimized/rev-02f9660/legacyplumbing.net/wp-content/uploads/2024/11/Legacy-Truck.jpg"
+        ],
+        "kind": "feature",
+        "text": "Legacy Plumbing helps Frisco homes and businesses run at their best. We operate with clear communication, a focus on quality, and integrity with everyone we serve. We\u2019ll handle your plumbing services quickly, safely, and with unmatched expertise to ensure everything is working well. We also offer specials and promotions and financing options to ensure you can get the great service you deserve without worrying about the cost. Get in touch with the professionals at Legacy Plumbing to schedule plumbing services in Frisco."
+      },
+      {
+        "entries": [],
+        "heading": "Our Work is Our Word.",
+        "images": [
+          "https://cdn-ildnkoo.nitrocdn.com/BITDTvbQEUfLrleNkvomAtyiqFxWSrnc/assets/images/optimized/rev-02f9660/legacyplumbing.net/wp-content/uploads/2020/12/left-quote-gold.png",
+          "https://cdn-ildnkoo.nitrocdn.com/BITDTvbQEUfLrleNkvomAtyiqFxWSrnc/assets/images/optimized/rev-02f9660/legacyplumbing.net/wp-content/uploads/2020/12/right-quote-gold.png",
+          "https://cdn-ildnkoo.nitrocdn.com/BITDTvbQEUfLrleNkvomAtyiqFxWSrnc/assets/images/optimized/rev-02f9660/legacyplumbing.net/wp-content/uploads/2024/02/privacyoptions123x59-1.png",
+          "https://cdn-ildnkoo.nitrocdn.com/BITDTvbQEUfLrleNkvomAtyiqFxWSrnc/assets/images/optimized/rev-02f9660/legacyplumbing.net/wp-content/uploads/2025/11/neighborhood-fave-2025.webp"
+        ],
+        "kind": "feature",
+        "text": "General Plumbing The work was well done. Both, Jose Cuellar Jr. and his assistant were knowledgeable and friendly. I would recommend Legacy Plumbing for all your plumbing needs. Ben Velsher General Plumbing Sam and Shelby installed new half bathroom toilet for us. They were extremely professional, informative of all repairs/installation being completed, and did it all in a timely manner. I was very pleased with both Sam and Shelby and will definitely continue to call on Legacy Plumbing when any plumbing issue arises. Lisa Walden General Plumbing Alex was the most patient, friendly, and polite repairman that has ever come to our home. He took the time to throughly explain everything that he was doing. We were very pleased with his work . We wish him the very best. Thank you , Alex. Mike & Teresa Nelson Teresa Nelson See More Reviews Search \u00a9 2026 Legacy Plumbing is a registered trademark "
+      },
+      {
+        "entries": [],
+        "heading": "Comprehensive Plumbing Repair & Install",
+        "images": [],
+        "kind": "feature",
+        "text": "Legacy Plumbing is a full-service plumbing company that always guarantees service with integrity. We are active in residential and light commercial plumbing. We always provide our customers with superior plumbing service. Legacy Plumbing understands your plumbing problem needs to be fixed quickly. Our courteous, licensed plumbers have years of experience and will promptly handle your plumbing problem \u2013 no matter how big or small . Call 972-801-9798 Schedule Service"
+      },
+      {
+        "entries": [],
+        "heading": "Service Awards",
+        "images": [
+          "https://cdn-ildnkoo.nitrocdn.com/BITDTvbQEUfLrleNkvomAtyiqFxWSrnc/assets/images/optimized/rev-02f9660/legacyplumbing.net/wp-content/uploads/2020/12/Asset-4.svg"
+        ],
+        "kind": "award",
+        "text": "Angie\u2019s List.com Super Service Award Winner from 2009 to 2020"
+      },
+      {
+        "entries": [],
+        "heading": "Award for Ethics",
+        "images": [],
+        "kind": "award",
+        "text": "Better Business Bureau Torch Awards for Ethics 2018 recipient View All of Our Awards"
+      },
+      {
+        "entries": [],
+        "heading": "We Guarantee",
+        "images": [
+          "https://cdn-ildnkoo.nitrocdn.com/BITDTvbQEUfLrleNkvomAtyiqFxWSrnc/assets/images/optimized/rev-02f9660/legacyplumbing.net/wp-content/uploads/2021/01/michelle-and-theron-young-legacy-plumbing-owners.png"
+        ],
+        "kind": "feature",
+        "text": "We only hire skilled, licensed professionals. We will show up on time. You will always know the price before we start. We will leave the area cleaner than we found it. Water leaks, repairs and other plumbing emergencies can lead to major damage to your property, so it is important that you contact a plumber that is prompt, reliable and experienced \u2013 call Legacy Plumbing today. Call us today"
+      },
+      {
+        "entries": [],
+        "heading": "Serving All Your Plumbing Needs",
+        "images": [],
+        "kind": "feature",
+        "text": "From new installations to standard maintenance and the most comprehensive repairs, our Frisco plumbing repair specialists can resolve any issue, large or small. So, whether you are experiencing a slow drip or an overwhelming flood, our experienced technicians can resolve the issue efficiently and professionally. We keep our service trucks fully stocked with the most commonly used replacement parts and tools that allow us to complete any plumbing repair as quickly and accurately as possible. And when it comes to a plumbing repair, Denton, Collin, and Dallas County residents can be completely confident that our plumbers are trained to diagnose any problem. To schedule an appointment or receive a free estimate over the phone for an expert plumbing repair or plumbing installation, call Legacy Plumbing today 972-430-6656 ."
+      }
+    ],
+    "emails": [],
+    "has_locations_page": false,
+    "hours": [
+      "Monday \u2013 Friday 7:00 AM to 5:30 PM",
+      "Monday \u2013 Friday 7:30am \u2013 5:30pm",
+      "Sunday Closed"
+    ],
+    "menu_items": [
+      {
+        "description": "Off)",
+        "name": "10% Off Any Plumbing Service (Up to",
+        "price": "$109"
+      },
+      {
+        "description": "",
+        "name": "10% Off Your First Electrical Service (Maximum Discount Up To",
+        "price": "$115"
+      }
+    ],
+    "menu_media": [],
+    "photos": [
+      "https://legacyplumbing.net/wp-content/uploads/2020/10/Frisco-TX-Dark.jpg",
+      "https://legacyplumbing.net/wp-content/uploads/2022/03/Additional-Photo-3.jpg",
+      "https://legacyplumbing.net/wp-content/uploads/2020/12/subpage-banner-compressed-e1621272310560.jpg",
+      "https://legacyplumbing.net/wp-content/uploads/2020/09/Legacy-Plumbing-office-gate-8.jpg",
+      "https://legacyplumbing.net/wp-content/uploads/2020/12/Community_Image_Responsive.jpg",
+      "https://legacyplumbing.net/wp-content/uploads/2022/03/Additional-Photo-1.jpg",
+      "https://legacyplumbing.net/wp-content/uploads/2021/01/unnamed-3-3-e1617117175223.jpg"
+    ],
+    "products": [],
+    "services": [
+      "Legacy Plumbing",
+      "Frisco's Best Customer Service Guarantee",
+      "Sewer & Drain Services",
+      "Kitchen & Bath Plumbing in Frisco",
+      "Leak Detection & Repair in Frisco",
+      "Water Heater Installation & Repair",
+      "Gas Line Plumbing & Gas Leak Repair",
+      "Commercial Plumbers Serving Frisco Businesses"
+    ],
+    "socials": [
+      {
+        "name": "LinkedIn",
+        "url": "https://www.linkedin.com/company/legacy-plumbing-inc-/"
+      },
+      {
+        "name": "Facebook",
+        "url": "https://www.facebook.com/legacyplumbing"
+      },
+      {
+        "name": "Instagram",
+        "url": "https://www.instagram.com/legacyplumbingtx/"
+      },
+      {
+        "name": "Yelp",
+        "url": "https://www.yelp.com/biz/legacy-plumbing-frisco-2"
+      }
+    ],
+    "tagline": "Need a plumber in Frisco, TX? Legacy Plumbing offers expert repairs, water heaters, drains, and slab leak service with upfront pricing. Call today!"
+  },
+  "ratings": [
+    {
+      "reviews": 2272,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=18294925490352505876&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.9
+    },
+    {
+      "reviews": 540,
+      "source": "yelp",
+      "source_url": "https://www.yelp.com/biz/legacy-plumbing-frisco-2?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+      "value": 4.8
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "yelp",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Brian Smith",
+      "rating": 5,
+      "text": "Thank you to the Legacy Plumbing Team!!  Everyone I communicated with did a great job.  Canon helped me with the initial details and then Daniel and team did a fantastic job completing the project.  It was a great experience and I highly recommend their services.  Our new 75 gallon water heater is great!!"
+    },
+    {
+      "author": "Randall Jones",
+      "rating": 5,
+      "text": "Honest hardworking contractors are nearly impossible to find these days.  Brandon at Legacy went above and beyond to prove there\u2019s still some good guys left.  No upselling, no bs, just a thorough and expedited diagnosis and repair at a very reasonable rate.\n\nLegacy has all my business going forward.\n\nGreatly appreciated!"
+    },
+    {
+      "author": "Eric Way",
+      "rating": 5,
+      "text": "These guys are SO GOOD AT WHAT THEY DO!\n\nBig shout out to our plumber, Sheldon! He has taken care of the pipes in 2 of our homes and has delivered quality work every time. \u263a\ufe0f\n\nThank you guys for making this process smooth and easy for us. We booked our appointment online, received a confirmation call, and the administrative team was able to move up our appointment to accommodate our timeline.\n\nMy family and I truly appreciate you guys! I highly recommend that if you have a plumbing issue, give them an opportunity to fix it for you."
+    },
+    {
+      "author": "Jennifer Haefner",
+      "rating": 5,
+      "text": "Brandon and his coworker did an excellent job on our plumbing repair. They were professional, courteous, and took the time to explain everything clearly. They worked efficiently, left the area clean, and made sure everything was working perfectly before they left. I really appreciated their friendly attitude and attention to detail. I would definitely recommend this company and would be happy to use them again. Thank you, Brandon and your teammate, for a job well done!"
+    },
+    {
+      "author": "Kerri Parker",
+      "rating": 5,
+      "text": "Great service and great techian. Nancy and Nick made my service experience extremely easy. Nick explained the services I would need and Nancy patiently took care of the financing. This is my third service with Legacy. Always helpful and professional."
+    }
+  ],
+  "trade": "Plumber",
+  "url_check": null,
+  "website_url": "https://legacyplumbing.net/frisco-tx-plumber/"
+}

@@ -1,0 +1,754 @@
+{
+  "_gate_unresolved": false,
+  "assumptions": [
+    "google matched a listing in a different town: 1608 Whitlock Ln Unit J, Carrollton, TX 75006, USA",
+    "website found via google: https://www.onehourairdallas.com/?utm_source=organic&utm_medium=gbp"
+  ],
+  "chain_signals": [
+    "google returns 5 locations under this name in one search"
+  ],
+  "design_direction": {
+    "accent": "yellow",
+    "architecture": "ledger",
+    "contradictions": [],
+    "cta": {
+      "kind": "call",
+      "label": ""
+    },
+    "defect": "",
+    "emphasis": [
+      "services",
+      "reviews"
+    ],
+    "first_screen": "proof",
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "stats",
+    "mood": "industrial",
+    "rationale": "This is a 24/7 emergency HVAC contractor with a 4.9 rating across 1,226 reviews \u2014 what a homeowner needs before calling is proof of competence and trust, not atmosphere, so the page should open on the numbers and reviews with a trade-shop, stamped-and-ruled feel, using the yellow sampled from their vans and branding as the one accent.",
+    "read_by": "claude",
+    "signature": "stamp",
+    "signature_why": "A repeated licence/badge mark reads as a trade credential, reinforcing that this is a vetted, established HVAC outfit rather than a lifestyle brand.",
+    "suppress": [
+      "menu"
+    ],
+    "type_treatment": "stamped",
+    "understood": [
+      "This is a 24/7 emergency HVAC contractor with a 4.9 rating across 1,226 reviews \u2014 what a homeowner needs before calling is proof of competence and trust, not atmosphere, so the page should open on the"
+    ],
+    "unsupported": []
+  },
+  "facts": [
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/one-hour-air-conditioning-and-heating-plano?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+          "value": "1309 Summit Ave, Plano, TX 75074"
+        }
+      ],
+      "field": "address",
+      "label": "Address",
+      "score": 80,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=7027041364484155072&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.onehourairdallas.com/?utm_source=organic&utm_medium=gbp"
+        }
+      ],
+      "value": "1608 Whitlock Ln Unit J, Carrollton, TX 75006, USA"
+    },
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=7027041364484155072&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "(682) 327-0948"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/one-hour-air-conditioning-and-heating-plano?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+          "value": "(972) 599-1900"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.onehourairdallas.com/?utm_source=organic&utm_medium=gbp",
+          "value": "+1-682-267-9694"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 3,
+      "dissent": [],
+      "field": "phone",
+      "label": "Phone",
+      "score": 30,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=7027041364484155072&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/one-hour-air-conditioning-and-heating-plano?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.onehourairdallas.com/?utm_source=organic&utm_medium=gbp"
+        }
+      ],
+      "value": "(682) 327-0948 | (972) 599-1900 | +1-682-267-9694"
+    },
+    {
+      "candidates": [],
+      "confidence": "unverified",
+      "corroborations": 1,
+      "dissent": [],
+      "field": "hours",
+      "label": "Hours",
+      "score": 50,
+      "sources": [
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.onehourairdallas.com/?utm_source=organic&utm_medium=gbp"
+        }
+      ],
+      "value": "Mon-Sun 9am-5pm"
+    }
+  ],
+  "latitude": 32.9688094,
+  "location": "1608 Whitlock Ln Unit J, Carrollton, TX 75006, USA",
+  "longitude": -96.9176221,
+  "name": "One Hour Air Conditioning & Heating",
+  "notes": null,
+  "open_questions": [
+    "What number do customers actually call?"
+  ],
+  "photo_labels": {
+    "/photo/8/0": "people",
+    "/photo/8/1": "people",
+    "/photo/8/2": "exterior",
+    "/photo/8/3": "work",
+    "/photo/8/4": "team",
+    "/photo/8/5": "detail",
+    "/photo/8/6": "exterior",
+    "/photo/8/7": "people",
+    "/photo/8/8": "people",
+    "/photo/8/9": "people",
+    "https://www.onehourairdallas.com/wp-content/uploads/2021/01/air-conditioning-repair-richardson-tx-clock-image.png": "logo",
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/6293828e30fb025780ee2960-e1722010014122.png": "unclear",
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/Image-from-Asana-e1722009820245.png": "unclear",
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/air-conditioner-repair-dallas-addison-tx-coupon-home-top.png": "unclear",
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/one-hour-dallas-header-update-flatbkg.png.webp": "people",
+    "https://www.onehourairdallas.com/wp-content/uploads/2025/05/GBP-2.webp": "logo",
+    "https://www.onehourairdallas.com/wp-content/uploads/2025/08/OH-Dallas.png": "other",
+    "https://www.onehourairdallas.com/wp-content/uploads/2025/08/OH-Fort-Dallas-2.png": "other"
+  },
+  "photo_notes": {
+    "/photo/8/0": "A smiling man in a white collared shirt with a company logo, posed in front of a yellow-toned desert landscape backdrop, with text reading 'Dustin Hufsey, President' beside him",
+    "/photo/8/1": "A smiling man in a black polo shirt with a company logo, standing against a solid yellow background",
+    "/photo/8/2": "A man in a white uniform shirt standing beside a yellow branded work van parked on gravel with bare trees in the background",
+    "/photo/8/3": "A man in a white uniform shirt reaching into the open back of a work van organized with equipment and supplies",
+    "/photo/8/4": "A large group of people in white uniforms standing among many yellow branded work vans and trucks parked in a lot",
+    "/photo/8/5": "A yellow sign displaying a company mission statement, with a blurred outdoor event scene in the background",
+    "/photo/8/6": "A yellow branded work van parked on a driveway behind a white picket fence, in front of a house with a red roof and bare trees",
+    "/photo/8/7": "A group of people standing outdoors near American and Texas flags, with large industrial storage tanks in the background",
+    "/photo/8/8": "Two men standing on a garden path outdoors, one in a red shirt gesturing with his hands and one in a white shirt and black pants, with a white picket fence and bare trees in the background.",
+    "/photo/8/9": "Two men sitting on a wooden bench indoors looking at an open binder, one wearing a red shirt and the other a white uniform shirt with an American flag patch.",
+    "https://www.onehourairdallas.com/wp-content/uploads/2021/01/air-conditioning-repair-richardson-tx-clock-image.png": "A simple gray line-drawing icon of a clock or gauge with a red needle pointing to the upper left, partially outlined in yellow.",
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/one-hour-dallas-header-update-flatbkg.png.webp": "A smiling man with short brown hair and a beard wearing a white collared shirt with a company logo on the chest, against a plain white background.",
+    "https://www.onehourairdallas.com/wp-content/uploads/2025/05/GBP-2.webp": "A dark green storefront icon with a scalloped awning and a white letter G, representing a Google Business Profile symbol.",
+    "https://www.onehourairdallas.com/wp-content/uploads/2025/08/OH-Dallas.png": "A black promotional graphic with yellow text reading $25 off any service and a red banner reading click for details.",
+    "https://www.onehourairdallas.com/wp-content/uploads/2025/08/OH-Fort-Dallas-2.png": "A black promotional graphic with yellow text reading $125 off any duct cleaning and a red banner reading click for details."
+  },
+  "photo_sizes": {
+    "/photo/8/0": [
+      1030,
+      653
+    ],
+    "/photo/8/1": [
+      2400,
+      2400
+    ],
+    "/photo/8/2": [
+      2400,
+      1597
+    ],
+    "/photo/8/3": [
+      2400,
+      1597
+    ],
+    "/photo/8/4": [
+      2400,
+      1597
+    ],
+    "/photo/8/5": [
+      2400,
+      1597
+    ],
+    "/photo/8/6": [
+      2400,
+      1597
+    ],
+    "/photo/8/7": [
+      2400,
+      1597
+    ],
+    "/photo/8/8": [
+      2400,
+      1597
+    ],
+    "/photo/8/9": [
+      2400,
+      1597
+    ],
+    "https://www.onehourairdallas.com/wp-content/uploads/2021/01/air-conditioning-repair-richardson-tx-clock-image.png": [
+      133,
+      140
+    ],
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/air-conditioner-repair-dallas-addison-tx-coupon-home-top.png": [
+      694,
+      447
+    ],
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/one-hour-dallas-header-update-flatbkg.png.webp": [
+      570,
+      574
+    ],
+    "https://www.onehourairdallas.com/wp-content/uploads/2025/05/GBP-2.webp": [
+      500,
+      500
+    ],
+    "https://www.onehourairdallas.com/wp-content/uploads/2025/08/OH-Dallas.png": [
+      972,
+      972
+    ],
+    "https://www.onehourairdallas.com/wp-content/uploads/2025/08/OH-Fort-Dallas-2.png": [
+      972,
+      972
+    ]
+  },
+  "photo_vision": {
+    "/photo/8/0": {
+      "alt_text": "A smiling man in a white collared shirt with a company logo, posed in front of a yellow-toned desert landscape backdrop, with text reading 'Dustin Hufsey, President' beside him",
+      "dominant_colours": [
+        "#e8c93a",
+        "#c9a52a",
+        "#f2e6b0",
+        "#2b2b2b"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "right",
+      "url": "/photo/20/0",
+      "why_not": ""
+    },
+    "/photo/8/1": {
+      "alt_text": "A smiling man in a black polo shirt with a company logo, standing against a solid yellow background",
+      "dominant_colours": [
+        "#f2d21e",
+        "#1a1a1a",
+        "#e0e0e0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/20/1",
+      "why_not": ""
+    },
+    "/photo/8/2": {
+      "alt_text": "A man in a white uniform shirt standing beside a yellow branded work van parked on gravel with bare trees in the background",
+      "dominant_colours": [
+        "#e8c520",
+        "#1a1a1a",
+        "#c9c9c9",
+        "#8a8a5a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/20/2",
+      "why_not": ""
+    },
+    "/photo/8/3": {
+      "alt_text": "A man in a white uniform shirt reaching into the open back of a work van organized with equipment and supplies",
+      "dominant_colours": [
+        "#c9c9c9",
+        "#3a3a3a",
+        "#e0a0a0",
+        "#d95f1e"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "work",
+      "subject_position": "centre",
+      "url": "/photo/20/3",
+      "why_not": ""
+    },
+    "/photo/8/4": {
+      "alt_text": "A large group of people in white uniforms standing among many yellow branded work vans and trucks parked in a lot",
+      "dominant_colours": [
+        "#e0c020",
+        "#c9c9c9",
+        "#7a7a7a",
+        "#3a3a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "team",
+      "subject_position": "full",
+      "url": "/photo/20/4",
+      "why_not": ""
+    },
+    "/photo/8/5": {
+      "alt_text": "A yellow sign displaying a company mission statement, with a blurred outdoor event scene in the background",
+      "dominant_colours": [
+        "#e8c520",
+        "#1a1a1a",
+        "#c9c9c9",
+        "#1e3a7a"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": true,
+      "quality": 3,
+      "subject": "detail",
+      "subject_position": "left",
+      "url": "/photo/20/5",
+      "why_not": "Sign is a document/graphic, not a scene photo"
+    },
+    "/photo/8/6": {
+      "alt_text": "A yellow branded work van parked on a driveway behind a white picket fence, in front of a house with a red roof and bare trees",
+      "dominant_colours": [
+        "#e0c020",
+        "#8a1e1e",
+        "#c9c9c9",
+        "#3a3a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "centre",
+      "url": "/photo/20/6",
+      "why_not": ""
+    },
+    "/photo/8/7": {
+      "alt_text": "A group of people standing outdoors near American and Texas flags, with large industrial storage tanks in the background",
+      "dominant_colours": [
+        "#c9c9c9",
+        "#8a8a8a",
+        "#1e3a7a",
+        "#e0e0e0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "full",
+      "url": "/photo/20/7",
+      "why_not": "Distant subjects, industrial background not central to business"
+    },
+    "/photo/8/8": {
+      "alt_text": "Two men standing on a garden path outdoors, one in a red shirt gesturing with his hands and one in a white shirt and black pants, with a white picket fence and bare trees in the background.",
+      "dominant_colours": [
+        "#8a8a7a",
+        "#c0392b",
+        "#ffffff",
+        "#5a5a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/20/8",
+      "why_not": ""
+    },
+    "/photo/8/9": {
+      "alt_text": "Two men sitting on a wooden bench indoors looking at an open binder, one wearing a red shirt and the other a white uniform shirt with an American flag patch.",
+      "dominant_colours": [
+        "#8b1a1a",
+        "#e5e0d5",
+        "#3a2a1a",
+        "#ffffff"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/20/9",
+      "why_not": ""
+    },
+    "https://www.onehourairdallas.com/wp-content/uploads/2021/01/air-conditioning-repair-richardson-tx-clock-image.png": {
+      "alt_text": "A simple gray line-drawing icon of a clock or gauge with a red needle pointing to the upper left, partially outlined in yellow.",
+      "dominant_colours": [
+        "#a9a9a9",
+        "#e0e0e0",
+        "#c0392b",
+        "#f1c40f"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "logo",
+      "subject_position": "centre",
+      "url": "https://www.onehourairdallas.com/wp-content/uploads/2021/01/air-conditioning-repair-richardson-tx-clock-image.png",
+      "why_not": "Graphic icon, not a photograph of the business"
+    },
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/6293828e30fb025780ee2960-e1722010014122.png": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/Image-from-Asana-e1722009820245.png": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/air-conditioner-repair-dallas-addison-tx-coupon-home-top.png": {
+      "alt_text": "",
+      "is_hero_candidate": false,
+      "quality": 1,
+      "subject": "unclear",
+      "why_not": "could not be fetched to look at"
+    },
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/one-hour-dallas-header-update-flatbkg.png.webp": {
+      "alt_text": "A smiling man with short brown hair and a beard wearing a white collared shirt with a company logo on the chest, against a plain white background.",
+      "dominant_colours": [
+        "#ffffff",
+        "#e0c9a6",
+        "#3a2a1a",
+        "#c0392b"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://www.onehourairdallas.com/wp-content/uploads/2024/11/one-hour-dallas-header-update-flatbkg.png.webp",
+      "why_not": ""
+    },
+    "https://www.onehourairdallas.com/wp-content/uploads/2025/05/GBP-2.webp": {
+      "alt_text": "A dark green storefront icon with a scalloped awning and a white letter G, representing a Google Business Profile symbol.",
+      "dominant_colours": [
+        "#8a8a8a",
+        "#1a2e1a",
+        "#ffffff"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "logo",
+      "subject_position": "centre",
+      "url": "https://www.onehourairdallas.com/wp-content/uploads/2025/05/GBP-2.webp",
+      "why_not": "Generic icon, not a photograph of the business"
+    },
+    "https://www.onehourairdallas.com/wp-content/uploads/2025/08/OH-Dallas.png": {
+      "alt_text": "A black promotional graphic with yellow text reading $25 off any service and a red banner reading click for details.",
+      "dominant_colours": [
+        "#000000",
+        "#f2c115",
+        "#d92c3f",
+        "#ffffff"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": true,
+      "quality": 4,
+      "subject": "other",
+      "subject_position": "full",
+      "url": "https://www.onehourairdallas.com/wp-content/uploads/2025/08/OH-Dallas.png",
+      "why_not": "Text-based promotional graphic, not a photograph"
+    },
+    "https://www.onehourairdallas.com/wp-content/uploads/2025/08/OH-Fort-Dallas-2.png": {
+      "alt_text": "A black promotional graphic with yellow text reading $125 off any duct cleaning and a red banner reading click for details.",
+      "dominant_colours": [
+        "#000000",
+        "#f2c115",
+        "#d92c3f",
+        "#ffffff"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": true,
+      "quality": 4,
+      "subject": "other",
+      "subject_position": "full",
+      "url": "https://www.onehourairdallas.com/wp-content/uploads/2025/08/OH-Fort-Dallas-2.png",
+      "why_not": "Text-based promotional graphic, not a photograph"
+    }
+  },
+  "place_photos": [
+    "places/ChIJJczYSqInTIYRwOYN4OMQhWE/photos/AVoNoXSGYovaDm--_pNocG-goYufPCbbMa4klMZ5eTY5OrJMQ-a338oQeMLbbv3yoE9RlcNcquBCE_bOBqKTe6mwt4MXWtohLFNL1zCm-VpC6Zx_PUOtGqlqUgZKMWT33usRM2vi4s6fWTRR7phAQQF5_oPee63i2CmXD6UKnf1ZxxdJhkqjP1pMC1mJoNsi3sytSWkCEz595kyb_SVJmdrvDxdwSAiqjGojoCM9URl3ZXN_PMc8gBr-kfB8hUSLXaGBwZo7TNosN30b6K_usqh58VwuEKYlUENxdvqhB2bClN7qefLcv5oWOE0yUQNn9SQFokSVvqJmJMrPmWaPuzRg7SIfbZDrHZ0b8QukUMFUPYjheZkmCCOdYmhYGafCXM2bFClb8hqIYl3X84CgJkBbxriQxHuxxRkhPOswPM7JtKfDZw",
+    "places/ChIJJczYSqInTIYRwOYN4OMQhWE/photos/AVoNoXQUF59Xh_EUMvkzyfMEEg8hcgUMLMwDd9MpRN8Qc4RCPAjsNhFQ7M6zsTP7UZ3DRKkM04kBdELxgx8tdWKKTlyj8Orou4I0k4NY879kvvLvc7R3ikFjGcD7ROVOPNNQLlbUQd9n4D2V0D85zMh-RkcAzXnNnbBswbNH2DZR5aQFi-frPOsPTqPiH9hrFfOGZU5OPU6WjGvCyYiUIpvUSgluAcwQqVZQdYo1_sIQyOpu9WBp2QgXNBX9OP6E2mX8GELdYcVD2iES3soDnljlZ_53ky_XFOqlyDjZ58l654WsKZVAYpGaBZtW9jC1tWJRbbZ3qs-OXy8bM41W92zXoVA1J5dH3NHDG-di5HpS1GH35qrM36yfWbopu1gq_akb2TiWwH_osxSnGj_ovZIaGpGu6Eo2kEHYAh1pv_9Fi77s5w",
+    "places/ChIJJczYSqInTIYRwOYN4OMQhWE/photos/AVoNoXSmhFr3RUxKwIlBHEyEBMuofkIoM0f6DVDoqRguwDIYoaIrWIWVb-1Cq1PUqTaF9eoF6pQ9eWGoDsoFb73KrwWVxE0YqP_WyM66FVr-rgBO45hWMyZsLUJwm6ic_tRwgiEDQ83uCNORDjRc4V3Lr5JUlsD4veYE3Y6Zl2tkksy2nnd6UKQipb9Bvm7K3-OBvgrmp30gvOcEFigizm-PoZ_kXD6rhoj0zPYTML2RWAJrC5n8gi8bfh9rUO5lO13bQhSjKVaRKWttl-9joiuCnUDv18SOJx0RvnGnFEPcMeOZn5_GG4jnYGMFfmFasYahylfIQrYNTQ5U3o6TW5Kc-XAzheFKIc97G8IYqfPC5msm53i1IwOW1pXnRG8YOuI4xN8Xivrs8l9IpsmTuvR1HNVLr7hkO5kudllMrFiv79BVgQ",
+    "places/ChIJJczYSqInTIYRwOYN4OMQhWE/photos/AVoNoXQG4ts90dYFCE_p0Q2WtBqCV_AhxRfuU3r1QllEymat6iCK92gj3IaSnJXThplMkmixTw5c_P5gnP6KSF7qrqYj5B_zuEH18_VTTaMqYqWeoqrg6CtY_7MQ3WpuFTnsD39mGhyZOzZ6zobaZB0IRNWs0F7PjQfPQXd2-xA4kuYqd8uEKtrkRk5lFbNOzbZnwQGOfYFXaBf0iNGZMYnpmQgDZFw0m6D4rhhF-6ln-63Zbn2C0ea8Xv6bRqBNVPp6uy6Z5eT9kd54fuxvP3BleUAReIB4yeY-8mdOYQNjblnmZq_B13QN6cAe5KuFEnQWHE2Digkdt4HHISTuqpXdOrLU6cKUdTCAiDfILKSxBxTriB3hbTW2HHzB4anx6Kb-dtR-E3cjZhQ_ykBk3kIWD7VAFFPAFD6q9Wgt3IInsVF9M1GA",
+    "places/ChIJJczYSqInTIYRwOYN4OMQhWE/photos/AVoNoXTznk73s3N4-rdA3qOeuadB9cMYZ4pHW4I8BDRMh14vL6Tik9EclokZbi2AVew0HNjQQzgemJPcm706ioGiUfE15jRa_0vl1IZnlJ6VFEJBPBH6fRDub2Wx7rxAj6kBwQQ7rWHNUoKa_Al4v9UOEUZ6ml2x7p89a92mHS4fbq1AfWHcB4QqzUjcj0gCUgaYs64koRsRr07W1uOa5qfq7NsH038iDS9WGvlZlM6XzH4cHBf7Cpj56alPT-i_wNhKntFJlCwd8w-4DxlVE3o0udmaHqOVB8hyPVlIUkq5D6C_SRa0bEyVdHiHQi0FN8dVs5bpFm26Jku6xOubGs-q-kPuzi_roeQ0XaGy8eAhbg334mzbDEJ6C00EBRDySqheZJpOiQusafoZdEXt5X-Z697AeZejtkFZcmcGxY4ibEbGFm50",
+    "places/ChIJJczYSqInTIYRwOYN4OMQhWE/photos/AVoNoXTwlEVRNOM9SlMTpp26_Dxe7oKLXYVXPbaSFk5XpF_dM6c0ftV0ztmwF-sGPBIkdJ3Hr9u2DY3S3Rnm2IA0qC-e04fHMQg4bosn461LGANhMsTgajzrHiyXynsPb2YmSWYslg6KjqS9y6pASDrzoftsDXECv7q8teaf1SffjE5ZJp1TPHDGJm1lcotzkO4Bv4kq4LiH-2FTcVUZWlWSat1aLkCXSQWxOZFqaQluxS2e17X2oYRpZZAk7QgmA5hleCFbIQa6JyLFm54UcSXmyGZwVxMYzHIutLAz3xcTcEvLE3F0LeEcHZvrIOalledsddspPDyuvkfN119wnnV9gqItiOVD6CCEltHL43_mIYnX1ndTTZonAxdola8ggwWcQmfaiZG-wQsyjKcE2R1s7bi4GHThP3cSmSxPcI5zW-JCzg",
+    "places/ChIJJczYSqInTIYRwOYN4OMQhWE/photos/AVoNoXRgVghhvocLdXf7lCUqGN5SFxrZRA8B7H2xouo4KPD9bDtY4OFZUVMusOQhOyvYv5Zm6aikMX3FQ6crJ58zIDEBh1f95Xa_14Xn5lkrTyXlU6T090tbVYFgmnbUzopm1yw-mKQWiM6BmuftM-sq_vz41vbi35yk7eRwLxM168LPnAIqlx_5U0NvOhHdr0VS9mQro_9utF4WKf_JkLHn6EPaOBsAlexJKO6KvTsxfpvDxXEwV_3gYosJloQpC99JHwhGpb0tBZWB39ZuHBUihpeMd_I_stAPqiJCTeRuWwwRZNixiR1Qlm1NXVQwyd1Smy5qXBw6mgjycUlkP2h-32SnATY4WS5218SpuIEF2N9F36UqhRl4zAk0B0J8rrInt4YerTP6phO3QoCjAsUCjzycJVhEaBAN55flfW9fHCejsaM",
+    "places/ChIJJczYSqInTIYRwOYN4OMQhWE/photos/AVoNoXRWMWOcSPaoC46ykkerGUjJT9D6ot_ecfwHf3YKKexh0yJwN0XLx-UZh-idOp7W9JeWx2HttEUi8-O3KjBqTuiSfmnIwyPDX_Mr9-YExZ9DmWmHkxV-st0AxuhV1aM4Pz82Tilolv0J2tjW2CTOhsxll0EURizTPncAxEc9iihX-IOAF1vXvuiglkGdoMmHAJ_UsJEXJ2UuyK29Q6lK4ua7R-gj95xe5grI-q_OaSnS53J4g83ZAYyDz5szc_NAsawpWiYIoV8Z5o7arVOgFJQZZMiQA9L9nZwQRv6-U-PFmzu-zC0XfJxAd3R0Q_w0i_aiNjrJAUHZKRUJBn1Mg2kTVBeYkXl7aGiMzaa62b2Q1VvLAOfkERLlZyJleVvPEdJuwnONLdn3b-qAjR6fdqGp7W4sopuJjUuX7f8cOSk3YIs",
+    "places/ChIJJczYSqInTIYRwOYN4OMQhWE/photos/AVoNoXQuEb399nvJp6RowPZsl3DvOnddONRmqQM4fMdvVhPu6JUwA2knV0r3pR_8axFszOvhE8GhyRLyRiRDQowwmJSjuc-HekzybsheLfkik8cq0poMitLtHq-aEDhQvwDjuZ_F6l0cWjcb-ZI5Oh0K87jgyUD_A2TzN0DhlrSnKKfLlGEVAuRVgO-LmPx-iZDajNsoTByU6EAWefvEnX_kMmtTxJG57HY_bcXynT6RNm3teizzyhEJnGg7eMGiGlOUlRYV2_IT2O620Rv62FDHcRnr0QQdz0SvKk2_TdComWF_sm6RQ0NUdrrhHnK51ahbUMxPnPAjfQ4yNfxBRBaSWsDlniAl1E6TUtj8k5zRGLFiWFJhg_Jgm1KBN7U4DxLjadZMdK3aBU7dZr4568u9aj2gyAH3tLznUeullwUfkOzYyuLD",
+    "places/ChIJJczYSqInTIYRwOYN4OMQhWE/photos/AVoNoXSiUWdKpVvEdE5TpP0L-Y2PFSEDfleeockPIzSw_ik5qn5iFIonTvCluHAH46SFcamlMZkPVBxL1yc2KnBEiVXCDbP7LaMiga1MXkjfilHras2HikEWzzj7ovWtS8ktbO1_vZob31PvrOH-Dy_MMDS6MNXez-7oRRyMK66N-wLVLeKX4JnLYcfck99t3T-xDrn8dA1wrFg3uvswYDL7ezpsxCQuQlEnPoASN4ANhvYugn9D8Sn0kz9EcV3rDDc18QLOHFiylWYc9x2May0sXwYYqvkEyNUV2jHUwIb7nDIf_BgtSFFNS2EeswOo0OUiCt-y53GlJJeayyv-N7D6_kYS321pwvUFwIXImaRaOHjklQ2YtCrSOzVhTqPmZF-9tN1X5k0YMV43lCZ0njRbNXs6I4bIJHod7k7SROBncZGpiNk"
+  ],
+  "published": {
+    "about": "We are proud of our staff, products, and work. By providing ongoing training, we can keep our HVAC technicians updated on the latest technology in the field. This edge allows us to stay on the bleeding edge of advances in home heating and cooling solutions.",
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "Reviews",
+        "images": [
+          "https://www.onehourairdallas.com/wp-content/uploads/2021/01/ac-repair-company-addison-tx-testimonial-offset-image.png",
+          "https://www.onehourairdallas.com/wp-content/uploads/2023/03/heating-and-cooling-service-dallas-company.jpeg"
+        ],
+        "kind": "feature",
+        "text": "Today James came out to service my air condition. I am so thankful it was him. Not only did he thoroughly service my system, but he took the time to make sure my concerns were addressed and all my questions answered. Thank you James for being so considerate and patient with this 76yr old woman. You truly made me proud that I chose One Hour for my system. You were amazing and I am very grateful. Thanks again to James and to One Hour. We had family coming over for a holiday gathering. The late afternoon before the holiday, our AC stopped working. I called One Hour and Michael Bell came out that same evening. Mr. Bell accessed our problem and explained why we needed an entirely new HVAC system. He was very knowledgeable and helped us through the whole process. He scheduled service for us to have a new HVAC system installed the very next morning! Agustin Delgado came out at 8am sharp the nex"
+      },
+      {
+        "entries": [],
+        "heading": "Importance of Heating & AC Repair In Dallas & Surrounding Areas",
+        "images": [],
+        "kind": "feature",
+        "text": "Heating & AC Repair in Dallas is crucial for several reasons. First, repairs will provide a comfortable indoor environment. Extreme weather conditions, such as high temperatures and low temperatures, can make it difficult to stay indoors without proper heating and cooling systems. HVAC systems help to regulate indoor temperatures, making it comfortable for people to stay indoors. Second, Heating & AC Repair help to improve indoor air quality. HVAC systems are designed to remove contaminants and pollutants from the air. They filter the air, removing dust, pollen, and other allergens that can affect the health of people. This helps to create a healthy indoor environment. Third, Heating & AC Repair services help to reduce energy costs. HVAC systems consume a lot of energy, and inefficient systems can lead to high energy bills. Regular maintenance and repairs of HVAC systems can help to impr"
+      },
+      {
+        "entries": [],
+        "heading": "Services offered by Heating & AC Repair Companies",
+        "images": [],
+        "kind": "feature",
+        "text": "Heating & AC Repair companies offer a wide range of services to their clients. The services include installation, repair, and maintenance of HVAC systems. Let\u2019s discuss each of these services in detail."
+      },
+      {
+        "entries": [],
+        "heading": "HVAC Installation Services",
+        "images": [],
+        "kind": "feature",
+        "text": "When you need to get a new heating or air conditioning system for your home, you can count on us at One Hour Air Conditioning & Heating to take care of everything. We\u2019ll help you choose the perfect system for your house and make sure it\u2019s set up just right. First, we\u2019ll figure out which heating or AC system will work best for your home. Then, we\u2019ll plan out how all the ducts (those are the tubes that carry the heated or cooled air around your house) will be set up. Once we have a plan ready, we\u2019ll start the installation process. It might take a little while\u2014sometimes just a few days, but other times a couple of weeks, especially if your system is extra fancy. Throughout the installation, we\u2019ll be making sure everything is put in place correctly and doing its job like it\u2019s supposed to. We run tests to check that the system works well and meets all the rules our state has for safety and qu"
+      },
+      {
+        "entries": [],
+        "heading": "Heating & AC Repair Services",
+        "images": [],
+        "kind": "feature",
+        "text": "Did you know that One Hour Air Conditioning and Heating doesn\u2019t just install new systems? We\u2019re also here to help when your HVAC system starts acting up! Over time, these systems can run into all sorts of problems, like a thermostat that won\u2019t cooperate, fans that decide to take a break, or ducts that start leaking air where they shouldn\u2019t. When these problems pop up, it can be a real hassle\u2014and really uncomfortable if your house starts feeling like an oven or a freezer! But guess what? One Hour Air Conditioning and Heating comes to the rescue! We\u2019re super quick to respond, swooping in to fix the issue and get your system back to working smoothly again. First things first, we\u2019ll figure out what\u2019s gone wrong. Then, we\u2019ll give you an estimate\u2014a guess at how much it\u2019ll cost to fix. Once you give us the green light, we\u2019ll get to work pronto, giving your HVAC system the TLC it needs to keep y"
+      },
+      {
+        "entries": [],
+        "heading": "HVAC Maintenance Services",
+        "images": [],
+        "kind": "feature",
+        "text": "At One Hour Air Conditioning and Heating, we\u2019re committed to not only fixing problems but also keeping your HVAC system in excellent shape with our heating and AC maintenance services. So, what does maintenance involve? Simply put, it\u2019s like giving your HVAC system a thorough check-up. Our expert technicians carefully clean out any dirt and grime, swap out old filters for new ones, and carefully inspect every part to catch any potential issues early on. Now, you might wonder why bother with maintenance? Here\u2019s the deal: regular maintenance helps your HVAC system last longer, work better, and can even save you money on your energy bills. Plus, by catching problems early, we can prevent them from becoming bigger headaches down the road. And if you want to stay on top of maintenance, our membership program makes it easy. We\u2019ll remind you when it\u2019s time for your next service, so you never ha"
+      },
+      {
+        "entries": [],
+        "heading": "Hours",
+        "images": [
+          "https://www.onehourairdallas.com/wp-content/uploads/2026/07/Combustion-Vent-Cleaning-for-Steady-Safe-Draft.jpg"
+        ],
+        "kind": "feature",
+        "text": "24/7 Service | Office Hours: Monday \u2013 Friday, 7 a.m. \u2013 7 p.m. Saturday, 8 a.m. \u2013 7 p.m. License Number: Taclb008874c"
+      },
+      {
+        "entries": [],
+        "heading": "Your Comfort, Our Priority \u2013 AC Repair",
+        "images": [
+          "https://www.onehourairdallas.com/wp-content/uploads/2023/06/Our-Comprehensive-AC-Repair-and-HVAC-Services.jpg"
+        ],
+        "kind": "feature",
+        "text": "At One Hour Air Conditioning & Heating, we understand that your home is more than just a place to live \u2013 it\u2019s where you create memories, spend time with loved ones, and find comfort after a long day. That\u2019s why we\u2019re dedicated to ensuring your home\u2019s environment is always comfortable and safe. Our team of experienced technicians is not only skilled in AC repair , air conditioner installation , and air conditioning service , but also in understanding our customers\u2019 unique needs. We know that every home is different, and we tailor our services to meet these specific requirements. Whether you\u2019re a busy professional needing quick service, a homeowner concerned about improving your home\u2019s energy efficiency, or a family with specific indoor air quality needs, we\u2019ve got you covered. We offer flexible scheduling to accommodate your busy lifestyle, energy-efficient solutions to help reduce your u"
+      },
+      {
+        "entries": [],
+        "heading": "Our Comprehensive AC Repair and HVAC Services",
+        "images": [],
+        "kind": "feature",
+        "text": "At One Hour Air Conditioning & Heating, we offer a wide array of HVAC services to cater to your specific needs. Our services range from heating and AC repair to new installations, emergency services , service agreements, Energy Star Home Performance Evaluations, and commercial HVAC services."
+      },
+      {
+        "entries": [],
+        "heading": "1. Heating and AC Service for New Installations",
+        "images": [],
+        "kind": "feature",
+        "text": "Whether you\u2019re building a new home or looking to replace your existing HVAC system, we\u2019re here to assist. Our team is proficient in installing and replacing a variety of systems, including mini-split, hybrid, central air, heat pump, and furnace. We understand the importance of indoor air quality and work diligently to ensure your HVAC units are functioning optimally. Our air conditioning service is designed to prevent dust and debris that can trigger allergies and other respiratory issues. We also offer air conditioner installation for those looking to upgrade their system. Our goal is to provide you with a system that enhances your comfort and contributes to a healthier indoor environment."
+      },
+      {
+        "entries": [],
+        "heading": "2. Emergency Heating and AC Repair",
+        "images": [],
+        "kind": "feature",
+        "text": "HVAC emergencies can occur at the most inconvenient times. That\u2019s why we offer reliable emergency heating and AC repair service. Our certified, licensed HVAC technicians are ready to diagnose your system\u2019s problem and provide an upfront quote on different repair options. We pride ourselves on our fast response times, thanks to our well-prepared and highly trained team. Whether you need emergency heating and AC repair service in the middle of the night or on a holiday, we\u2019re just a call away."
+      },
+      {
+        "entries": [],
+        "heading": "3. Service Agreements",
+        "images": [],
+        "kind": "feature",
+        "text": "To save you money on future repairs and replacements, we offer service agreements. These agreements ensure your heating and cooling system is always in peak condition, helping to reduce your monthly bills. Our service agreements are designed to provide you with peace of mind, knowing that your HVAC system is well-maintained and less likely to experience unexpected breakdowns. T his is part of our commitment to providing comprehensive air conditioning service that goes beyond just AC repair."
+      },
+      {
+        "entries": [],
+        "heading": "4. Energy Star Home Performance Evaluations",
+        "images": [],
+        "kind": "feature",
+        "text": "We conduct Energy Star Home Performance Evaluations, a national program sponsored by the Department of Energy in partnership with the Environmental Protection Agency. These inspections take a holistic approach to energy efficiency in your home, particularly when it comes to your heating and cooling systems. Our trained technicians can evaluate your system and let you know where you can best spend your money to improve efficiency and cut back your monthly utility bills. This service is part of our commitment to helping you achieve a more energy-efficient home."
+      },
+      {
+        "entries": [],
+        "heading": "5. Commercial HVAC Services",
+        "images": [
+          "https://www.onehourairdallas.com/wp-content/uploads/2023/06/Ready-to-Experience-the-Difference.jpg"
+        ],
+        "kind": "feature",
+        "text": "For business owners in Dallas, TX, we offer proactive maintenance packages and repairs to keep your customers and employees comfortable. We can also help you install energy-efficient systems with innovative features that can save energy costs and improve your company\u2019s sustainability profile. Whether you need regular air conditioning service or an emergency heating and AC repair service, we\u2019ve got you covered. We understand the importance of a comfortable work environment and are committed to providing reliable, efficient HVAC solutions. Photo By OH"
+      }
+    ],
+    "emails": [],
+    "has_locations_page": false,
+    "hours": [
+      "Mo,Tu,We,Th,Fr,Sa,Su 09:00-17:00"
+    ],
+    "menu_items": [
+      {
+        "description": "INTEREST | $0 PAYMENTS | $0 DOWN",
+        "name": "24 MONTHS",
+        "price": "$0"
+      }
+    ],
+    "menu_media": [],
+    "photos": [
+      "https://www.onehourairdallas.com/wp-content/uploads/2025/05/GBP-2.webp",
+      "https://www.onehourairdallas.com/wp-content/uploads/2024/11/air-conditioner-repair-dallas-addison-tx-coupon-home-top.png",
+      "https://www.onehourairdallas.com/wp-content/uploads/2024/11/one-hour-dallas-header-update-flatbkg.png.webp",
+      "https://www.onehourairdallas.com/wp-content/uploads/2024/11/6293828e30fb025780ee2960-e1722010014122.png",
+      "https://www.onehourairdallas.com/wp-content/uploads/2024/11/Image-from-Asana-e1722009820245.png",
+      "https://www.onehourairdallas.com/wp-content/uploads/2021/01/air-conditioning-repair-richardson-tx-clock-image.png",
+      "https://www.onehourairdallas.com/wp-content/uploads/2025/08/OH-Dallas.png",
+      "https://www.onehourairdallas.com/wp-content/uploads/2025/08/OH-Fort-Dallas-2.png"
+    ],
+    "products": [],
+    "services": [
+      "Dustin H. \u2013 President Lifetime DFW Resident",
+      "Services offered by Heating & AC Repair Companies",
+      "HVAC Installation Services",
+      "Heating & AC Repair Services",
+      "HVAC Maintenance Services",
+      "Heating And Air Conditioning Services",
+      "Cooling",
+      "Heating"
+    ],
+    "socials": [],
+    "tagline": "Focusing on Heating & AC repair in Dallas, Plano, Frisco, and surrounding areas. 24/7 emergency service, making sure you stay comfortable."
+  },
+  "ratings": [
+    {
+      "reviews": 1226,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=7027041364484155072&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.9
+    },
+    {
+      "reviews": 0,
+      "source": "yelp",
+      "source_url": "https://www.yelp.com/biz/one-hour-air-conditioning-and-heating-plano?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+      "value": 0.0
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "yelp",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Preston L Ferrell",
+      "rating": 5,
+      "text": "We had family coming over for a holiday gathering.  The late afternoon before the holiday, our AC stopped working.  I called One Hour and Michael Bell came out that same evening. Mr. Bell accessed our problem and explained why we needed an entirely new HVAC system.  He was very knowledgeable and helped us through the whole process.  He scheduled service for us to have a new HVAC system installed the very next morning!  Agustin Delgado came out at 8am sharp the next morning... on a holiday!  Delgado and his assistant removed our old system, installed a new one, and packing up the old one to haul it off just before our relatives arrived.  They were life-savers!  You can't go wrong with this company!"
+    },
+    {
+      "author": "Clay Conn",
+      "rating": 5,
+      "text": "Awesome fast service and Joe (technician) was awesome.  Would definitely recommend. Only knock is that I would have expected the service trip cost to be deducted from the repairs. It wasn\u2019t so the cost was too high give the relative ease of the repair (a simple capacitor)."
+    },
+    {
+      "author": "Janelle Ashmore",
+      "rating": 5,
+      "text": "I\u2019ve had several great experiences with One Hour Rockwall. Each tech has been awesome. My recent visit, Rocky was superb. He explained everything to me to where I could understand. He gave several options to choose from and fixed everything quickly. Highly recommend this company and this tech."
+    },
+    {
+      "author": "Glenda Anderson",
+      "rating": 5,
+      "text": "Today James came out to service my air condition. I am so thankful it was him. Not only did he thoroughly service my system, but he took the time to make sure my concerns were addressed and all my questions answered. Thank you James for being so considerate and patient with this 76yr old woman. You truly made me proud that I chose One Hour for my system. You were amazing and I am very grateful. Thanks again to James and to One Hour."
+    },
+    {
+      "author": "Thomas Ridgeway",
+      "rating": 5,
+      "text": "Mike Bell has been our dedicated maintenance tech for quite some time, and he always provides exceptional care. His attention to detail keeps us informed of the needs of our system, yet there is no pressure or upselling.\nAlso, 1Hour provides a wonderful service contract. They never fail to remind me of scheduled services, and work within my crazy requirements to schedule Mike!"
+    }
+  ],
+  "trade": "General Contractor",
+  "url_check": null,
+  "website_url": "https://www.onehourairdallas.com/?utm_source=organic&utm_medium=gbp"
+}

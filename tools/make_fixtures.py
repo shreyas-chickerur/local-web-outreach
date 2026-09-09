@@ -47,6 +47,44 @@ WANTED: tuple[tuple[str, str, str], ...] = (
     # If nothing in the corpus scores badly on vision, the type-led hero ships
     # untested — and that is the path tying Slice A to Slice B.
     ("threadbare", "S.Handyman", "Frisco, TX"),
+
+    # Widening the corpus, 2026-09-08. The instrument ran out of businesses to
+    # disagree about — judged whole-page after the signature device landed,
+    # all twenty verdicts came back "different" and agreement went to 0 of 0.
+    # Sameness is a same-TRADE problem (§2), so what is missing is not new
+    # trades, it is a second and third business in the trades already here —
+    # weighted toward the buckets that were already crowded, on purpose.
+
+    # Second BBQ joint. Directly tests the pair the census has watched since
+    # the diversity budget landed: barbecue vs. barbecue, not barbecue vs. a
+    # restaurant that happens to serve food. If two smokehouses come out
+    # looking alike, that is the real defect the mean is supposed to catch.
+    ("barbecue-rich", "Hard Eight BBQ", "Coppell, TX"),
+    # Fourth restaurant, a different register again: not fine dining, not a
+    # smokehouse, not omakase — casual all-day counter service. Widens what
+    # "restaurant" can mean in the corpus rather than deepening one shape of
+    # it a fourth time.
+    ("restaurant-casual", "Whisk Crepes Cafe", "Plano, TX"),
+    # Second roofer, same city as the first. The pair Status Roofing has never
+    # had to sit next to.
+    ("roofer-rich", "Bert Roofing", "Dallas, TX"),
+    # Second HVAC/plumbing outfit — a big regional chain rather than a small
+    # shop, so the corpus has one of each register in a trade that currently
+    # only has small operators.
+    ("hvac-rich", "Legacy Plumbing", "Frisco, TX"),
+    # Third in the same bucket, a different regional chain again. `trade_kind`
+    # buckets Plumber/Roofing/General Contractor together, so this is the
+    # fourth business landing in what was already the most crowded trade.
+    ("hvac-second", "One Hour Air Conditioning & Heating", "Plano, TX"),
+    # Second salon. `groom` had exactly one fixture, so every "same trade"
+    # comparison in that bucket was structurally impossible until now.
+    ("salon-rich", "Drybar", "Plano, TX"),
+    # Second dentist, same reason: `care` had exactly one fixture.
+    ("dentist-rich", "Plano Dental Loft", "Plano, TX"),
+    # Third law firm. `desk` already had two (an attorney with a rich site and
+    # one with none at all); this adds a third register to the same bucket
+    # rather than leaving it at a pair.
+    ("law-rich", "The Ammons Law Firm", "Frisco, TX"),
 )
 
 
@@ -97,13 +135,46 @@ def freeze_vision(payload: dict) -> int:
         # sites this workbench has generated, and that history is written when
         # a page is BUILT — so stopping at `direction` meant the gate never had
         # anything to compare against and never fired while freezing.
+        direction_result: dict = {}
+        page_result: dict = {}
         for stage in ("direction", "page"):
             try:
-                run_stage(conn, stored, stage)
+                result = run_stage(conn, stored, stage)
             except BuildFailed:
                 break
+            if stage == "direction":
+                direction_result = result
+            else:
+                page_result = result
+        # A REJECTION is not an exception — `_stage_page` returns
+        # `{"rejected": True, ...}` rather than raising, because a rejection is
+        # a result, not a crash. That silence is exactly what let this freeze:
+        # the loop above finished normally, `direction` stayed persisted (it is
+        # a separate stage from `page`), and nothing here checked whether the
+        # PAGE built from that direction ever cleared the claims gate before
+        # writing it into the fixture as if it had. Two real businesses whose
+        # own site copy carries an unverifiable tenure claim ("Since 1945",
+        # "45 years") got frozen with a `design_direction` the pipeline itself
+        # never approved — and every fingerprint/census/agreement computation
+        # in this project reads `design_direction` directly, none of them
+        # re-checks the claims gate, so a rejected design measured as an
+        # accepted one everywhere downstream.
+        #
+        # BRIEF §4: "No unverified fact ships... A rejection writes no
+        # version, leaves the previous version live, is recorded." A fixture
+        # is not a running site with a previous version to fall back to, so
+        # there is nothing to leave live — the honest move is to refuse to
+        # freeze it at all, the same as a `BuildFailed`.
+        if page_result.get("rejected"):
+            raise RuntimeError(
+                f"page stage rejected — unsupported: "
+                f"{page_result.get('findings')}. This business's own site "
+                f"copy carries a claim the corroboration pipeline could not "
+                f"verify. Pick a different business rather than freezing an "
+                f"ungated direction.")
         direction = sites.recall_stage(conn, stored, "direction") or {}
         payload["design_direction"] = dict(direction.get("config") or {})
+        payload["_gate_unresolved"] = bool(direction_result.get("unresolved"))
         # And the measurements, the last input that lived outside the corpus:
         # sizes come from `.cache/photos`, which is as uncommitted as the
         # fixture database was.
@@ -153,7 +224,11 @@ def main() -> int:
         for target in sorted(OUT.glob("*.json")):
             payload = json.loads(target.read_text())
             payload.pop("design_direction", None)
-            seen = freeze_vision(payload)
+            try:
+                seen = freeze_vision(payload)
+            except RuntimeError as exc:
+                print(f"  {target.stem:18} FAILED: {exc}", file=sys.stderr)
+                continue
             target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
             spec = payload.get("design_direction") or {}
             print(f"  {target.stem:18} vision={seen:2} "
@@ -195,13 +270,19 @@ def main() -> int:
         # otherwise point at somebody else's pictures.
         payload.pop("lead_id", None)
         _strip_fetched_html(payload)
-        seen = freeze_vision(payload)
+        try:
+            seen = freeze_vision(payload)
+        except RuntimeError as exc:
+            print(f"  {slug:18} FAILED: {exc}", file=sys.stderr)
+            continue
         target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
         published = payload.get("published") or {}
+        flag = "  <-- UNRESOLVED COLLISION, see design_direction" \
+            if payload.get("_gate_unresolved") else ""
         print(f"  {slug:18} {payload.get('trade')!r:34} vision={seen:2} "
               f"site={'yes' if payload.get('website_url') else 'no ':3} "
               f"photos={len(payload.get('place_photos') or [])+len(published.get('photos') or [])} "
-              f"blocks={len(published.get('blocks') or [])}")
+              f"blocks={len(published.get('blocks') or [])}{flag}")
     return 0
 
 

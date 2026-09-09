@@ -1,0 +1,455 @@
+{
+  "_gate_unresolved": true,
+  "assumptions": [
+    "website found via google: https://www.drybarshops.com/service/locator/detail/?slug=plano&utm_source=Google&utm_medium=SoCi"
+  ],
+  "chain_signals": [],
+  "design_direction": {
+    "accent": "olive",
+    "architecture": "gallery",
+    "contradictions": [],
+    "cta": {
+      "kind": "book",
+      "label": ""
+    },
+    "defect": "",
+    "emphasis": [
+      "gallery",
+      "reviews"
+    ],
+    "first_screen": "photo",
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "gallery",
+    "mood": "fresh",
+    "rationale": "Drybar sells the finished blowout, and with six strong photographs of hair and styling in progress, a full-bleed photo opening lets the work speak before any words do; gold pulls straight from their own room and warm lighting rather than a stock salon blue. Quiet, flush-left type keeps the name out of the way of the photograph instead of competing with it as 'wide' did last time, and reviews get raised alongside the gallery because 4.5 stars and named stylists are exactly what a walk-in customer",
+    "read_by": "claude",
+    "signature": "corner_inset",
+    "signature_why": "A small type block set into the corner of a full-bleed hair photo mirrors the close-up hair shots that already carry this business, without repeating the split-screen look the last site used.",
+    "suppress": [],
+    "type_treatment": "quiet",
+    "understood": [
+      "Drybar sells the finished blowout, and with six strong photographs of hair and styling in progress, a full-bleed photo opening lets the work speak before any words do; gold pulls straight from their o"
+    ],
+    "unsupported": []
+  },
+  "facts": [
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=18359997088900917342&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "7300 Lone Star Dr C126, Plano, TX 75024, USA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/drybar-plano-plano-3?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+          "value": "7300 Lone Star Dr, Ste C-126, Plano, TX 75024"
+        },
+        {
+          "source_type": "openstreetmap",
+          "source_url": "https://www.openstreetmap.org/node/13435829597",
+          "value": "7300 Lone Star Drive, Plano, Texas, 75024"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 3,
+      "dissent": [],
+      "field": "address",
+      "label": "Address",
+      "score": 30,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=18359997088900917342&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/drybar-plano-plano-3?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        },
+        {
+          "source_type": "openstreetmap",
+          "source_url": "https://www.openstreetmap.org/node/13435829597"
+        }
+      ],
+      "value": "7300 Lone Star Dr C126, Plano, TX 75024, USA | 7300 Lone Star Dr, Ste C-126, Plano, TX 75024 | 7300 Lone Star Drive, Plano, Texas, 75024"
+    },
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 3,
+      "dissent": [
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.drybarshops.com/service/locator/detail/?slug=plano&utm_source=Google&utm_medium=SoCi",
+          "value": "5599232348"
+        }
+      ],
+      "field": "phone",
+      "label": "Phone",
+      "score": 88,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=18359997088900917342&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/drybar-plano-plano-3?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        },
+        {
+          "source_type": "openstreetmap",
+          "source_url": "https://www.openstreetmap.org/node/13435829597"
+        }
+      ],
+      "value": "(469) 444-1580"
+    },
+    {
+      "candidates": [],
+      "confidence": "unverified",
+      "corroborations": 1,
+      "dissent": [],
+      "field": "hours",
+      "label": "Hours",
+      "score": 50,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=18359997088900917342&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        }
+      ],
+      "value": "Mon-Fri 7am-8pm \u00b7 Sat 8am-8pm \u00b7 Sun 10am-6pm"
+    }
+  ],
+  "latitude": 33.079327299999996,
+  "location": "Plano, TX",
+  "longitude": -96.8227017,
+  "name": "Drybar",
+  "notes": null,
+  "open_questions": [
+    "What is their street address?",
+    "Their opening hours: only google lists it \u2014 confirm Mon-Fri 7am-8pm \u00b7 Sat 8am-8pm \u00b7 Sun 10am-6pm?"
+  ],
+  "photo_labels": {
+    "/photo/17/0": "people",
+    "/photo/17/1": "room",
+    "/photo/17/2": "detail",
+    "/photo/17/3": "people",
+    "/photo/17/4": "detail",
+    "/photo/17/5": "exterior",
+    "/photo/17/6": "detail",
+    "/photo/17/7": "people",
+    "/photo/17/8": "people",
+    "/photo/17/9": "people"
+  },
+  "photo_notes": {
+    "/photo/17/0": "A man wearing a face mask styles the hair of a seated woman wearing a yellow face mask in a salon.",
+    "/photo/17/1": "An empty salon interior with black stools at a white counter, styling stations with mirrors, and shelves of hair products.",
+    "/photo/17/2": "A close-up of long dark curled hair viewed from behind on a person facing away from the camera.",
+    "/photo/17/3": "A smiling man styles the hair of a smiling seated woman with a curling iron at a salon counter with a bouquet of yellow flowers.",
+    "/photo/17/4": "A close-up of long straight brown hair viewed from behind on a person wearing a teal top.",
+    "/photo/17/5": "The storefront of a salon with a black awning reading 'drybar' next to other shops in an outdoor shopping plaza.",
+    "/photo/17/6": "A close-up of long straight blonde-highlighted hair with layered curls at the ends, viewed from behind on a person in a navy top.",
+    "/photo/17/7": "Two smiling women with curled blonde hair standing in a salon, one in the foreground and one slightly behind.",
+    "/photo/17/8": "Side profile view of a person's long wavy dark brown hair with subtle highlights, cascading over the shoulder.",
+    "/photo/17/9": "A person with long straight dark brown hair wearing a pink blouse stands indoors in front of a blurred salon interior, their face obscured by an emoji."
+  },
+  "photo_sizes": {
+    "/photo/17/0": [
+      1920,
+      1080
+    ],
+    "/photo/17/1": [
+      2400,
+      1349
+    ],
+    "/photo/17/2": [
+      768,
+      1024
+    ],
+    "/photo/17/3": [
+      2400,
+      1600
+    ],
+    "/photo/17/4": [
+      2400,
+      3200
+    ],
+    "/photo/17/5": [
+      2400,
+      3200
+    ],
+    "/photo/17/6": [
+      1200,
+      1600
+    ],
+    "/photo/17/7": [
+      768,
+      1024
+    ],
+    "/photo/17/8": [
+      2000,
+      2947
+    ],
+    "/photo/17/9": [
+      1170,
+      2080
+    ]
+  },
+  "photo_vision": {
+    "/photo/17/0": {
+      "alt_text": "A man wearing a face mask styles the hair of a seated woman wearing a yellow face mask in a salon.",
+      "dominant_colours": [
+        "#e8e4dc",
+        "#c9a44a",
+        "#3a3a3a",
+        "#f2d84b"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/17/0",
+      "why_not": ""
+    },
+    "/photo/17/1": {
+      "alt_text": "An empty salon interior with black stools at a white counter, styling stations with mirrors, and shelves of hair products.",
+      "dominant_colours": [
+        "#f5f2ec",
+        "#d9d3c8",
+        "#1a1a1a",
+        "#c9a44a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/17/1",
+      "why_not": ""
+    },
+    "/photo/17/2": {
+      "alt_text": "A close-up of long dark curled hair viewed from behind on a person facing away from the camera.",
+      "dominant_colours": [
+        "#2b241f",
+        "#4a3c30",
+        "#c9bba8"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "detail",
+      "subject_position": "centre",
+      "url": "/photo/17/2",
+      "why_not": ""
+    },
+    "/photo/17/3": {
+      "alt_text": "A smiling man styles the hair of a smiling seated woman with a curling iron at a salon counter with a bouquet of yellow flowers.",
+      "dominant_colours": [
+        "#f2e9dc",
+        "#3a2c1e",
+        "#f2d84b",
+        "#1a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/17/3",
+      "why_not": ""
+    },
+    "/photo/17/4": {
+      "alt_text": "A close-up of long straight brown hair viewed from behind on a person wearing a teal top.",
+      "dominant_colours": [
+        "#5c4a3a",
+        "#3a8c7c",
+        "#e8e0d5"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "detail",
+      "subject_position": "centre",
+      "url": "/photo/17/4",
+      "why_not": ""
+    },
+    "/photo/17/5": {
+      "alt_text": "The storefront of a salon with a black awning reading 'drybar' next to other shops in an outdoor shopping plaza.",
+      "dominant_colours": [
+        "#c9a06a",
+        "#3a3a3a",
+        "#d9d3c8",
+        "#8a6a4a"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "centre",
+      "url": "/photo/17/5",
+      "why_not": ""
+    },
+    "/photo/17/6": {
+      "alt_text": "A close-up of long straight blonde-highlighted hair with layered curls at the ends, viewed from behind on a person in a navy top.",
+      "dominant_colours": [
+        "#a68a5c",
+        "#c9b088",
+        "#e8e0d5",
+        "#1a2a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "detail",
+      "subject_position": "centre",
+      "url": "/photo/17/6",
+      "why_not": ""
+    },
+    "/photo/17/7": {
+      "alt_text": "Two smiling women with curled blonde hair standing in a salon, one in the foreground and one slightly behind.",
+      "dominant_colours": [
+        "#c9a06a",
+        "#a67c52",
+        "#d9a0a0",
+        "#f5f2ec"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "left",
+      "url": "/photo/17/7",
+      "why_not": ""
+    },
+    "/photo/17/8": {
+      "alt_text": "Side profile view of a person's long wavy dark brown hair with subtle highlights, cascading over the shoulder.",
+      "dominant_colours": [
+        "#2b211d",
+        "#5c4636",
+        "#c9a98a",
+        "#e8e2dc"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/17/8",
+      "why_not": "Close crop on hair with no clear composition space for headline text"
+    },
+    "/photo/17/9": {
+      "alt_text": "A person with long straight dark brown hair wearing a pink blouse stands indoors in front of a blurred salon interior, their face obscured by an emoji.",
+      "dominant_colours": [
+        "#3a2c22",
+        "#e8c9b8",
+        "#f0c9a0",
+        "#d9d2c8"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/17/9",
+      "why_not": ""
+    }
+  },
+  "place_photos": [
+    "places/ChIJYSUfuLE8TIYRXiglsRPQy_4/photos/AVoNoXTCEPHXqARDNQL1iwi3DZDE24GpmAh4kUGC19OgsxUMtNBNa-z5lAnNE0RgxKH45kY2iyVld6woafrotCHUxYbAimQhAmdn7iWx4X1Y3p6u7hhTJuz4yUzXF_TWbunNiuAXb9RhHt7MDFITJJloFMwwk2tXz9jlNFe8ly3CslKdpTzOLadHhkbJPvQwQl3_heUJPrvvEbhYYl8fEqbC6SYvZHQuLaJhWWyv4vS71-YdMWEjWxpbjfdUoVGRGRGPSXkI0riuChTVBXj9IIhmTLSOPrisUanA8vs03SqSN9DHTV6aDsw_oOd8Oq_fGn9vd7PDe8cftfFOb5lxgXY0Cx5J0xwSk4VRJ4iiFiVZkfzzmrijbRz5i3S4H6xcVIy6pqMCSOHltezvf_xdxhikZUttt8JfWzLoAXWgzM-ARtRAZg",
+    "places/ChIJYSUfuLE8TIYRXiglsRPQy_4/photos/AVoNoXQLrOFmbIHqLezx8MGpeo9o6L5NAHfqPV-zCVb-ZwDqhWkQC6KkP5bRhHm4OxtZHOzQADIN61GoD1jIJfGer57pKNE3YxeBv7XQ0b1dD74uSzOQURWLNQm4Ph-1C05usH39Kyrx2Rop93mCXPJ0hJXMOeRV-nU6ndJkGAPFy46Lzba8Br86K6axJJjuN-gmxEDnx3rWgu4fPHqIcWDpOSOLibyRzhbjTLqunIJxsajkoFyhWDJEKiU08YmE8pj8Smdokcoe2O72py_ymXNZP1Mjov3dbL7bmIohhzPgKsPH7pHX7YkfwlZdKELR-VmfQufY_YevzGBtGbeGhQjm7YKLj0eav5n3nNnfVw5DejhEhF9LbPuzgkxbDqGsuSTz6n5NT9qC8yVxkVtUbXXO2RcNAUii87IHH-XXCKwB836qGA",
+    "places/ChIJYSUfuLE8TIYRXiglsRPQy_4/photos/AVoNoXQGQmzONLLIczm14lUDRp0hETBzHUE8I7aO5qWmRZnww-6NpuFNAvb02PDu9o5XQ4L4ff03jw9vNgLBEsnMHPrTsHESinN5YDByrvUWNKgKmz5TBcAkDtfmPZeWQX9iHLiy36rZNjLTk6k--Of8F7wbPO5ewlDE12VrNGgwNCeK60G8HQ25iZAPbG1sOxOWMha4EnI8qQsf_HCq_Z7iQXRLv0C1FCQeqwNAs7c2x0sGpS0Hs-yWYO1vkpxjxxajD_yrzlYSx8I3y9N-TgzP9Ip1yT6lphIUkULLngtNtHma60VBATHju8tpPHLysA0pguubNechvJq4aJ8qFdtt6Z0jBo9kDvfwNFQhChx5vtDZJUCi6ubxu1NA3R0J3R-iGLHLnxXInHwQPPS_ib-0CVZC9EpHHzVCyIzAFgKPnpA",
+    "places/ChIJYSUfuLE8TIYRXiglsRPQy_4/photos/AVoNoXQ0cNBTQYVEn0THGTtYf_UG2gO6TyEXDDDPY1MC7XHxTeQXHoUV8UXD8EAF8WWOFpiACDCKkvkDiuule2FFCbESQJDbCHkdlLjzVufZ0En5SFrONc6a5Vp2Xr_y2wq0DlIcBlZT2FsmifpYf2-q_tTE_jsFHqZnDpw1FaqyJNc-bAJUJ7Ncxw-EQQNsB3I9-apM7NNA0vVbUBoNb5bQp81kZjeqSA_rMSS5Z5KxqZEKoqjaezj2erhiPuN2Eq_814JRD9ccuSS_v6J2V0pcY-vdf6RwD9ub2dvVWSxYHvg7F8hKHuyS2GdkbfbO0vsk-azmu89tj2mgkKpegr5MGIjBTNB5IPCAhrlsbGhb2tFp2VbQKLBK_o8YRGoWFqpBgW8W8lUQ2ozTjSsTbRrjDzGq_uEYGMZorC6MHSj3xfWzR20h",
+    "places/ChIJYSUfuLE8TIYRXiglsRPQy_4/photos/AVoNoXQrTQTa1N0m82UX2KZYc9D2uFmzXG1HmWPnuFP9a58dxSUw32_kfJwnXFMJOKS7HJWVVVC1j6vxifLvK5klxRlryvgTP1MYnt2vcVpVSQ3cniTFtKFG0M13glIll3Is3vKBtSHu1H-BneeSx0HNxLkEZZu-fjUmcszra7UiABomTXDt0bfd1q4-B_247Bsdfb5ExlzncJqX5hsaqmE4hpZnVE2pOSHZa6GRMXj64JckrU1zygQO3Lx8TNlYuhSd07gxIy8WEeeHBS7tfJJugRr5vowlXLg321inJjIPHvlg6qoHksl38PhhMRfane11WuKvzovhM6bheXl6VcfHz4F_Gwwx41ZDCcEvXuWdEWpnkhzUcnN7YWiNRz4-2ar8OORLTSaFoZElB6Xr3j_15eANSTYKUhCt3gumMGC0MiU",
+    "places/ChIJYSUfuLE8TIYRXiglsRPQy_4/photos/AVoNoXTFa4JVWXJDfKIdQeI7LHH4jBWRVJ1RN4GbpvJPspBxNXodctAb0Z-blviUy5pJ6SsJ2YBlqKLxz01ZyXq-hieGWtkUlbtCSS49UVrJIETi-hnQMIcW5S59ol929W4y3Frew9fU94gW9u_i49EkJkNsziMaJCUiDKDZhhTmZzL5FpPJowq4zwoRJPjPUMiwcR7qivNlcVit4yp2Ym7WeicMOu_3rKElt-TMg57uqMPedoxxnh-BB4fbGpFrH0gztIapzJO-oD435185tmJ7RYsT5M61m7AzZYCmGaHVRm_vukV8itTHTjEHSMSfI_TtsWAL9GSwrxMal97uVf5IgNzsB0tKsMZ97duFClWSezZWpswrD1AS3yqQOSzT_yni8smVU-Jn3J9lfM_DvbEiP2PPwZvg2yScSY-6W28pnbBq7QiY",
+    "places/ChIJYSUfuLE8TIYRXiglsRPQy_4/photos/AVoNoXQyXRlylXQV41LsUyx3ofMNQrZ-ofFD5fI_yxoLgplg9cxRmK_RVNgBg--id3Dm9oQkfnqglr36YmqC0R1R8gxJ1Xw3x0-wYa276JN5GcGjIE6x98hoNVjjkmPU_jqjEk3GXw-6-qTKtD_XXI_H1WPpAHuullJJ-Wah3RbtNG0RRvKNcugsZ3QOEKwcoihq1SfiZnnAkGAhtcUXBuCdR_2_s8qFrschLxJKJbfHTHQ9JJWx6tOmes8hsgL1C7B-bekiy8GlBHLSi4VFWkGze1ktK5tUWng1YCqwSFPQPjZgWA1FWQgzZV_M4sCzY4pQHQxqviJ7ZAq0V5sowp5rqcIPF4WZFrwaGYafjvK-HR8RsRUpeEw-rsUOjWyDU9plJEgThbc7_P51ExK6WUv3OXebZdev372BjnwkCJuioIPbn8Y",
+    "places/ChIJYSUfuLE8TIYRXiglsRPQy_4/photos/AVoNoXTSz0i_M07d3ygx-0ztOWHFXay_GRlZZfCJiEyHbHQz4GJ03U3NuETnPgArgUUJmqMOOaGnYv0q3QbNMuzWgedIj5HtEIuxdwly5WXsmOJi9rkAOwq05kJCRWsU57Ze5s6eM6rlppbODXEv5EkP7gi1oRrt73N6dvSdoBTX0XJoK3FQhbSq_zCT_awr4ZjXWQ24xErL-ZCkIzZojdTOyonNe38gCcT5dk-pGqhMoEr5WE3qPrNqUzVOJHeg-tjxT2WNoGA97ULUp1UB16HZoHkclcjhzujY1hcVooNZ57tfDCAWW6L1eI-v54keUJg8EVHCnVxP7Lhh9h3OIRUuQQqsxrd1iVj2Y6_92xLFofwVjnCEfDajdiXK1TmCLbVD5XXR3_SlXKgQJY-KNonilenM9lEKsw_8sNyh74g",
+    "places/ChIJYSUfuLE8TIYRXiglsRPQy_4/photos/AVoNoXTbA22WYxSUTMRWOd0g0r6X7nbi_6eaQpniyd8UPPq_RK0JFzqYAdQLDTLzHvK_WBooYZkcETJpUamQFzjO7wCu5nmYTbuNRCjPhxIPR1-xZ4zqnTeER3XkmcbFcXKxvHPB7vBjz-gXp-gMcOwVn1qekryDL1MBcGSH5YDFcu8M3cgOjoEuDdFLHlZDumPMUccoPduM07zHVYjU7qBzeUQ3g4VhjF2D3BsNoutU2vkI_xREhOPJ_Hinn6ai_9uBOGh9PZapwxx1VxywgaaOLG1eaqe1A1fceh98p6LSgn3fJgCutItsJQubpg_c0jwogZCnbum9Pk3hejZ_AC2qAPajBF4OlZSNl_NcsYzFWO-TUlW2upCtX_K4jIAGuV4Mnw6Pxqga-H9kIPwVI8jEDqRShhPeuBPryXuReYeua5NBeZY",
+    "places/ChIJYSUfuLE8TIYRXiglsRPQy_4/photos/AVoNoXS824xM2-zxEPLNSZGXTBBJo3frGsbQP_y8sGkl24ysNg3D4v3I3O-ZscQalhAHxvO5kKzM91A4KX1ZZhdHIYwWd2ciILH7zk8UJQZ-zNnC1zNVBQ8gCid0rg4bO0TFpWvWNZoETGkVyif_q4ZCGcnjsjAxdstfgYc9Mysvm7upL3wmpmPFvLNsqse3on4v_5VhfiDMI0u53XeBKDGm4bERywyKGoVRZhrKyeobABfGJ7QXYMCsRXjn34hBjEDxn0TelMz9QQNydZ0oasNJphh57XAVRD-1nO1sGEYivpvOVyb6Ksyzn-uQa0bsexfvYjj42WRQc4yRD9sBvQlnziQgxeewtI3m9I8tnR-u_nEI_B3I0MXq27FR2Bbv8d411QJnUiAgkC5aTgulNVBLGsOqdptSq0qzGdd1obuTXesVqQ"
+  ],
+  "published": null,
+  "ratings": [
+    {
+      "reviews": 355,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=18359997088900917342&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.5
+    },
+    {
+      "reviews": 225,
+      "source": "yelp",
+      "source_url": "https://www.yelp.com/biz/drybar-plano-plano-3?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+      "value": 3.5
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "yelp",
+    "openstreetmap",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Morgan Rockwood",
+      "rating": 5,
+      "text": "Always an amazing experience! The shop itself is clean and organized, the staff is always energized and friendly! Meredith is my go to girl and always does an amazing job with my long and thick hair! And she always teaches me tips and tricks that I can do at home to keep my blowout looking fresh! I love how knowledgeable she is with the different products and personalizes what\u2019s being used based on the current condition of my hair each visit. Highly recommend visiting this location and Meredith for your next blowout!"
+    },
+    {
+      "author": "Bren Garrett",
+      "rating": 5,
+      "text": "I\u2019ve been a member at Drybar Plano for a while now and I can honestly say this location is the best of the best. I\u2019ve been to several other Drybar locations, but nothing compares to this one.\n\nEvery single stylist I\u2019ve had here has been amazing. They really take their time, listen to what you want, and consistently deliver the kind of blowout you walk out feeling so good about. The atmosphere is always welcoming, clean, and just a really great experience from start to finish.\n\nHaving a membership here has been one of my favorite little self-care treats, and I actually look forward to my appointments. The team truly goes above and beyond, and it shows every single time.\n\nHighly, highly recommend this location if you\u2019re looking for a place you can trust to get it right every time!"
+    },
+    {
+      "author": "Abby Fenner",
+      "rating": 5,
+      "text": "Ryleigh was so great! Super friendly and my hair looked AMAZING!! Will definitely be back soon! Catch me with my hair done always from now on \ud83d\udc81\ud83c\udffc\u200d\u2640\ufe0f\u2728\ud83d\udc85\ud83c\udffb\ud83d\udc83\ud83c\udffc Lasted me all week!!!!! \ud83e\udd29 Go see her y\u2019all! \ud83d\udc4f\ud83c\udffc\ud83d\udc4f\ud83c\udffc"
+    },
+    {
+      "author": "Brittany Delisle",
+      "rating": 5,
+      "text": "I love this dry bar \u2014 my favorite splurge!!! Ezrie is the absolute best and always makes my hair perfect and exactly what I want. I\u2019ve been coming to her for a couple years and she never fails!! I highly recommend to everyone!!!"
+    },
+    {
+      "author": "Vanda Davis",
+      "rating": 5,
+      "text": "I love this place as the stylists are all great and today Ezri did my hair and I left feeling like a new woman.  It's a fun place too with a great friendly environment!!\n\nI go twice a week because I never want to do my own hair again! Lol!"
+    }
+  ],
+  "trade": "Hair Salon",
+  "url_check": null,
+  "website_url": "https://www.drybarshops.com/service/locator/detail/?slug=plano&utm_source=Google&utm_medium=SoCi"
+}

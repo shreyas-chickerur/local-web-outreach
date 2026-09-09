@@ -1,4 +1,5 @@
 {
+  "_gate_unresolved": false,
   "assumptions": [
     "website found via google: https://www.friscodentalcare.com/",
     "ignored 1 social link(s) belonging to other businesses their site credits",
@@ -18,22 +19,22 @@
       "reviews",
       "services"
     ],
-    "first_screen": "facts",
+    "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "reviews",
     "mood": "warm",
-    "rationale": "People choosing a dentist want proof of gentleness and trust before anything else, and this practice has strong ratings and warm, specific reviews to offer \u2014 so lead with the numbers and the words patients actually said, not the office photos, and send them straight to booking.",
+    "rationale": "People choosing a dentist want to see a calm, competent, well-reviewed practice before anything else, and the strong Google/Yelp ratings paired with warm, specific patient comments do that better than a stats band alone. A split first screen lets the friendly reception and treatment-room photos sit beside the practice's own words of reassurance, which reads as personal rather than clinical, while keeping the same trustworthy warmth without repeating the facts-led, quote-signature approach alread",
     "read_by": "claude",
-    "signature": "quote",
-    "signature_why": "A single patient review set large does more to calm a nervous new patient than any photo of the office could.",
+    "signature": "margin_note",
+    "signature_why": "A single line pulled alongside the review text \u2014 like Julie Ann Cash's comment about the hygienist explaining her care \u2014 makes the trust feel specific rather than generic, which suits a dentist better than a moving quote banner.",
     "suppress": [
       "menu"
     ],
     "type_treatment": "quiet",
     "understood": [
-      "People choosing a dentist want proof of gentleness and trust before anything else, and this practice has strong ratings and warm, specific reviews to offer \u2014 so lead with the numbers and the words pat"
+      "People choosing a dentist want to see a calm, competent, well-reviewed practice before anything else, and the strong Google/Yelp ratings paired with warm, specific patient comments do that better than"
     ],
     "unsupported": []
   },
@@ -134,16 +135,16 @@
     "What is their street address?"
   ],
   "photo_labels": {
-    "/photo/4/0": "exterior",
-    "/photo/4/1": "room",
-    "/photo/4/2": "people",
-    "/photo/4/3": "people",
-    "/photo/4/4": "people",
-    "/photo/4/5": "room",
-    "/photo/4/6": "people",
-    "/photo/4/7": "people",
-    "/photo/4/8": "unclear",
-    "/photo/4/9": "unclear",
+    "/photo/6/0": "exterior",
+    "/photo/6/1": "room",
+    "/photo/6/2": "people",
+    "/photo/6/3": "people",
+    "/photo/6/4": "people",
+    "/photo/6/5": "room",
+    "/photo/6/6": "people",
+    "/photo/6/7": "people",
+    "/photo/6/8": "unclear",
+    "/photo/6/9": "unclear",
     "https://www.friscodentalcare.com/assets/images/index-banner.jpg": "unclear",
     "https://www.friscodentalcare.com/assets/images/index-financial.png": "unclear",
     "https://www.friscodentalcare.com/assets/images/index-join.jpg": "unclear",
@@ -154,55 +155,55 @@
     "https://www.friscodentalcare.com/assets/images/reviews-tracie.png": "people"
   },
   "photo_notes": {
-    "/photo/4/0": "Storefront of a dental care office with a blue illuminated sign, stone facade, and landscaped bushes and flowers out front",
-    "/photo/4/1": "An empty dental treatment chair with overhead light and monitor arm in a clinic room decorated with a train photograph",
-    "/photo/4/2": "A dental professional in a mask and gloves working on a patient reclined in a treatment chair",
-    "/photo/4/3": "A smiling man in a plaid shirt sitting in an office chair at a desk with a computer monitor and clock",
-    "/photo/4/4": "A smiling woman at a reception desk holding papers next to a computer monitor and printer",
-    "/photo/4/5": "An empty dental treatment chair with overhead light and a monitor showing a purple flower image",
-    "/photo/4/6": "A man in a white coat shaking hands with a woman at a reception counter while another woman looks on smiling",
-    "/photo/4/7": "A smiling woman at a front desk speaking with a man in a striped shirt across the counter",
+    "/photo/6/0": "Storefront of a dental care office with a blue illuminated sign, stone facade, and landscaped bushes and flowers out front",
+    "/photo/6/1": "An empty dental treatment chair with overhead light and monitor arm in a clinic room decorated with a train photograph",
+    "/photo/6/2": "A dental professional in a mask and gloves working on a patient reclined in a treatment chair",
+    "/photo/6/3": "A smiling man in a plaid shirt sitting in an office chair at a desk with a computer monitor and clock",
+    "/photo/6/4": "A smiling woman at a reception desk holding papers next to a computer monitor and printer",
+    "/photo/6/5": "An empty dental treatment chair with overhead light and a monitor showing a purple flower image",
+    "/photo/6/6": "A man in a white coat shaking hands with a woman at a reception counter while another woman looks on smiling",
+    "/photo/6/7": "A smiling woman at a front desk speaking with a man in a striped shirt across the counter",
     "https://www.friscodentalcare.com/assets/images/reviews-joyelle.png": "Circular profile photo of a smiling woman with dark hair standing outdoors",
     "https://www.friscodentalcare.com/assets/images/reviews-tracie.png": "Circular profile photo of a smiling woman with light brown hair"
   },
   "photo_sizes": {
-    "/photo/4/0": [
+    "/photo/6/0": [
       2400,
       1600
     ],
-    "/photo/4/1": [
+    "/photo/6/1": [
       2400,
       3200
     ],
-    "/photo/4/2": [
+    "/photo/6/2": [
       810,
       1080
     ],
-    "/photo/4/3": [
+    "/photo/6/3": [
       810,
       1080
     ],
-    "/photo/4/4": [
+    "/photo/6/4": [
       810,
       1080
     ],
-    "/photo/4/5": [
+    "/photo/6/5": [
       1000,
       1000
     ],
-    "/photo/4/6": [
+    "/photo/6/6": [
       2400,
       1600
     ],
-    "/photo/4/7": [
+    "/photo/6/7": [
       2400,
       1600
     ],
-    "/photo/4/8": [
+    "/photo/6/8": [
       2338,
       2000
     ],
-    "/photo/4/9": [
+    "/photo/6/9": [
       500,
       500
     ],
@@ -240,7 +241,7 @@
     ]
   },
   "photo_vision": {
-    "/photo/4/0": {
+    "/photo/6/0": {
       "alt_text": "Storefront of a dental care office with a blue illuminated sign, stone facade, and landscaped bushes and flowers out front",
       "dominant_colours": [
         "#a89a7f",
@@ -259,7 +260,7 @@
       "url": "/photo/4/0",
       "why_not": ""
     },
-    "/photo/4/1": {
+    "/photo/6/1": {
       "alt_text": "An empty dental treatment chair with overhead light and monitor arm in a clinic room decorated with a train photograph",
       "dominant_colours": [
         "#d9d3c5",
@@ -278,7 +279,7 @@
       "url": "/photo/4/1",
       "why_not": ""
     },
-    "/photo/4/2": {
+    "/photo/6/2": {
       "alt_text": "A dental professional in a mask and gloves working on a patient reclined in a treatment chair",
       "dominant_colours": [
         "#8c7355",
@@ -297,7 +298,7 @@
       "url": "/photo/4/2",
       "why_not": ""
     },
-    "/photo/4/3": {
+    "/photo/6/3": {
       "alt_text": "A smiling man in a plaid shirt sitting in an office chair at a desk with a computer monitor and clock",
       "dominant_colours": [
         "#c2a878",
@@ -316,7 +317,7 @@
       "url": "/photo/4/3",
       "why_not": ""
     },
-    "/photo/4/4": {
+    "/photo/6/4": {
       "alt_text": "A smiling woman at a reception desk holding papers next to a computer monitor and printer",
       "dominant_colours": [
         "#c2a878",
@@ -335,7 +336,7 @@
       "url": "/photo/4/4",
       "why_not": ""
     },
-    "/photo/4/5": {
+    "/photo/6/5": {
       "alt_text": "An empty dental treatment chair with overhead light and a monitor showing a purple flower image",
       "dominant_colours": [
         "#d9d3c5",
@@ -354,7 +355,7 @@
       "url": "/photo/4/5",
       "why_not": "low resolution and dated appearance with visible border artifact"
     },
-    "/photo/4/6": {
+    "/photo/6/6": {
       "alt_text": "A man in a white coat shaking hands with a woman at a reception counter while another woman looks on smiling",
       "dominant_colours": [
         "#e8e4d8",
@@ -373,7 +374,7 @@
       "url": "/photo/4/6",
       "why_not": ""
     },
-    "/photo/4/7": {
+    "/photo/6/7": {
       "alt_text": "A smiling woman at a front desk speaking with a man in a striped shirt across the counter",
       "dominant_colours": [
         "#e8e4d8",
@@ -392,14 +393,14 @@
       "url": "/photo/4/7",
       "why_not": ""
     },
-    "/photo/4/8": {
+    "/photo/6/8": {
       "alt_text": "",
       "is_hero_candidate": false,
       "quality": 1,
       "subject": "unclear",
       "why_not": "could not be fetched to look at"
     },
-    "/photo/4/9": {
+    "/photo/6/9": {
       "alt_text": "",
       "is_hero_candidate": false,
       "quality": 1,

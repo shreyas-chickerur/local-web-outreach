@@ -1,4 +1,5 @@
 {
+  "_gate_unresolved": false,
   "assumptions": [
     "website found via google: https://hutchinsbbq.com/"
   ],
@@ -6,8 +7,8 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "terracotta",
-    "architecture": "gallery",
+    "accent": "amber",
+    "architecture": "banded",
     "contradictions": [],
     "cta": {
       "kind": "order",
@@ -15,25 +16,23 @@
     },
     "defect": "",
     "emphasis": [
-      "reviews",
-      "menu"
+      "stats",
+      "reviews"
     ],
-    "first_screen": "photo",
+    "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "Hutchins has abundant strong food and room photography (10 lead-worthy shots) and a huge, glowing review base (4.8 from nearly 14,000 people), so the site should open on the smoked meat and the busy, warm room rather than text, then quickly back that up with what people say and what's on the menu. A stamped, trade-shop name treatment and a terracotta accent read as an established smokehouse, not a boutique cafe, and ordering/catering is the one action worth asking a visitor to take.",
+    "rationale": "The photography is strong enough to lead with (10 usable images of food, crowd, and exterior) but a split first screen \u2014 name and a single confident photo sharing the screen evenly \u2014 lets the huge review numbers and wide catering footprint register immediately instead of being just another full-bleed hero shot; amber (rather than the terracotta already used next door) picks up the firewood, smoke, and neon-sign glow visible in their own photos and reads less like a repeat of the recent site whil",
     "read_by": "claude",
-    "signature": "duotone",
-    "signature_why": "A strip of smoked-meat photography rendered in two tones with one full-colour break lets the brisket itself be the one moment of color, which is exactly what a barbecue joint wants a stranger to remember.",
-    "suppress": [
-      "features"
-    ],
-    "type_treatment": "stamped",
+    "signature": "ticker",
+    "signature_why": "A thin running line of the rating counts and catering minimums (4.8 stars, 13,880 reviews, 20-person minimum) gives a queue-out-the-door business a way to show proof of popularity without another photo.",
+    "suppress": [],
+    "type_treatment": "wide",
     "understood": [
-      "Hutchins has abundant strong food and room photography (10 lead-worthy shots) and a huge, glowing review base (4.8 from nearly 14,000 people), so the site should open on the smoked meat and the busy, "
+      "The photography is strong enough to lead with (10 usable images of food, crowd, and exterior) but a split first screen \u2014 name and a single confident photo sharing the screen evenly \u2014 lets the huge rev"
     ],
     "unsupported": []
   },
@@ -122,16 +121,16 @@
   "notes": null,
   "open_questions": [],
   "photo_labels": {
-    "/photo/1/0": "exterior",
-    "/photo/1/1": "exterior",
-    "/photo/1/2": "dish",
-    "/photo/1/3": "dish",
-    "/photo/1/4": "people",
-    "/photo/1/5": "exterior",
-    "/photo/1/6": "dish",
-    "/photo/1/7": "other",
-    "/photo/1/8": "exterior",
-    "/photo/1/9": "dish",
+    "/photo/2/0": "exterior",
+    "/photo/2/1": "exterior",
+    "/photo/2/2": "dish",
+    "/photo/2/3": "dish",
+    "/photo/2/4": "people",
+    "/photo/2/5": "exterior",
+    "/photo/2/6": "dish",
+    "/photo/2/7": "other",
+    "/photo/2/8": "exterior",
+    "/photo/2/9": "dish",
     "https://hutchinsbbq.com/wp-content/uploads/2025/11/13.png": "dish",
     "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK-1.png": "logo",
     "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK.png": "logo",
@@ -142,16 +141,16 @@
     "https://hutchinsbbq.com/wp-content/uploads/2025/11/ubereasts.avif": "unclear"
   },
   "photo_notes": {
-    "/photo/1/0": "Exterior of a brick barbecue restaurant with a large sign and stacks of split firewood along the covered porch",
-    "/photo/1/1": "Front view of a barbecue restaurant building with a parking lot, patio umbrellas, and smokers outside under a blue sky",
-    "/photo/1/2": "Overhead view of a large spread of smoked meats including ribs, sausage, brisket, and mac and cheese on butcher paper",
-    "/photo/1/3": "A metal tray with sliced ribs, brisket, pulled pork, and a glazed meatball on parchment paper next to receipts",
-    "/photo/1/4": "Crowd of customers standing and seated inside a busy barbecue restaurant near a service counter with neon signs",
-    "/photo/1/5": "Evening view of a barbecue restaurant entrance with illuminated signage, string lights, and people standing outside near cars",
-    "/photo/1/6": "A tray of barbecue with sliced brisket, sausage, coleslaw, potato salad, and fries on a wooden table",
-    "/photo/1/7": "A chalkboard menu listing smoked meats, specialties, and side dishes with prices",
-    "/photo/1/8": "A restaurant entrance with neon signs reading Sausage and House Made above a wood-plank facade decorated with framed pictures.",
-    "/photo/1/9": "A metal tray of smoked ribs and sausages alongside green beans and a chopped green salad.",
+    "/photo/2/0": "Exterior of a brick barbecue restaurant with a large sign and stacks of split firewood along the covered porch",
+    "/photo/2/1": "Front view of a barbecue restaurant building with a parking lot, patio umbrellas, and smokers outside under a blue sky",
+    "/photo/2/2": "Overhead view of a large spread of smoked meats including ribs, sausage, brisket, and mac and cheese on butcher paper",
+    "/photo/2/3": "A metal tray with sliced ribs, brisket, pulled pork, and a glazed meatball on parchment paper next to receipts",
+    "/photo/2/4": "Crowd of customers standing and seated inside a busy barbecue restaurant near a service counter with neon signs",
+    "/photo/2/5": "Evening view of a barbecue restaurant entrance with illuminated signage, string lights, and people standing outside near cars",
+    "/photo/2/6": "A tray of barbecue with sliced brisket, sausage, coleslaw, potato salad, and fries on a wooden table",
+    "/photo/2/7": "A chalkboard menu listing smoked meats, specialties, and side dishes with prices",
+    "/photo/2/8": "A restaurant entrance with neon signs reading Sausage and House Made above a wood-plank facade decorated with framed pictures.",
+    "/photo/2/9": "A metal tray of smoked ribs and sausages alongside green beans and a chopped green salad.",
     "https://hutchinsbbq.com/wp-content/uploads/2025/11/13.png": "An overhead view of a spread of smoked meats including ribs, brisket, and sausage links with sliced bread, pickles, onions, and jalapenos.",
     "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK-1.png": "A white logo outline of the state of Texas above decorative lines on a black background.",
     "https://hutchinsbbq.com/wp-content/uploads/2025/11/Hutchins_Final2024_S_forBLACK.png": "A white logo outline of the state of Texas above decorative lines on a black background.",
@@ -160,43 +159,43 @@
     "https://hutchinsbbq.com/wp-content/uploads/2025/11/mg_1859.jpg": "A large crowd gathered outdoors around long tables covered with trays of food, with two men in cowboy hats serving in the foreground."
   },
   "photo_sizes": {
-    "/photo/1/0": [
+    "/photo/2/0": [
       2400,
       3599
     ],
-    "/photo/1/1": [
+    "/photo/2/1": [
       2400,
       1800
     ],
-    "/photo/1/2": [
+    "/photo/2/2": [
       2400,
       3599
     ],
-    "/photo/1/3": [
+    "/photo/2/3": [
       2400,
       1800
     ],
-    "/photo/1/4": [
+    "/photo/2/4": [
       2400,
       1350
     ],
-    "/photo/1/5": [
+    "/photo/2/5": [
       2400,
       3102
     ],
-    "/photo/1/6": [
+    "/photo/2/6": [
       2400,
       1800
     ],
-    "/photo/1/7": [
+    "/photo/2/7": [
       2400,
       1800
     ],
-    "/photo/1/8": [
+    "/photo/2/8": [
       2400,
       1600
     ],
-    "/photo/1/9": [
+    "/photo/2/9": [
       2400,
       1600
     ],
@@ -218,7 +217,7 @@
     ]
   },
   "photo_vision": {
-    "/photo/1/0": {
+    "/photo/2/0": {
       "alt_text": "Exterior of a brick barbecue restaurant with a large sign and stacks of split firewood along the covered porch",
       "dominant_colours": [
         "#7a4a2b",
@@ -237,7 +236,7 @@
       "url": "/photo/1/0",
       "why_not": ""
     },
-    "/photo/1/1": {
+    "/photo/2/1": {
       "alt_text": "Front view of a barbecue restaurant building with a parking lot, patio umbrellas, and smokers outside under a blue sky",
       "dominant_colours": [
         "#8a6a4a",
@@ -256,7 +255,7 @@
       "url": "/photo/1/1",
       "why_not": ""
     },
-    "/photo/1/2": {
+    "/photo/2/2": {
       "alt_text": "Overhead view of a large spread of smoked meats including ribs, sausage, brisket, and mac and cheese on butcher paper",
       "dominant_colours": [
         "#6b3d24",
@@ -275,7 +274,7 @@
       "url": "/photo/1/2",
       "why_not": ""
     },
-    "/photo/1/3": {
+    "/photo/2/3": {
       "alt_text": "A metal tray with sliced ribs, brisket, pulled pork, and a glazed meatball on parchment paper next to receipts",
       "dominant_colours": [
         "#7a3b2b",
@@ -294,7 +293,7 @@
       "url": "/photo/1/3",
       "why_not": ""
     },
-    "/photo/1/4": {
+    "/photo/2/4": {
       "alt_text": "Crowd of customers standing and seated inside a busy barbecue restaurant near a service counter with neon signs",
       "dominant_colours": [
         "#3a2a1a",
@@ -313,7 +312,7 @@
       "url": "/photo/1/4",
       "why_not": "busy, crowded scene without a clear single subject"
     },
-    "/photo/1/5": {
+    "/photo/2/5": {
       "alt_text": "Evening view of a barbecue restaurant entrance with illuminated signage, string lights, and people standing outside near cars",
       "dominant_colours": [
         "#2a2a2a",
@@ -332,7 +331,7 @@
       "url": "/photo/1/5",
       "why_not": ""
     },
-    "/photo/1/6": {
+    "/photo/2/6": {
       "alt_text": "A tray of barbecue with sliced brisket, sausage, coleslaw, potato salad, and fries on a wooden table",
       "dominant_colours": [
         "#7a4a2b",
@@ -351,7 +350,7 @@
       "url": "/photo/1/6",
       "why_not": ""
     },
-    "/photo/1/7": {
+    "/photo/2/7": {
       "alt_text": "A chalkboard menu listing smoked meats, specialties, and side dishes with prices",
       "dominant_colours": [
         "#1a1a1a",
@@ -370,7 +369,7 @@
       "url": "/photo/1/7",
       "why_not": "menu board text, not a photographic hero image"
     },
-    "/photo/1/8": {
+    "/photo/2/8": {
       "alt_text": "A restaurant entrance with neon signs reading Sausage and House Made above a wood-plank facade decorated with framed pictures.",
       "dominant_colours": [
         "#8b3a1a",
@@ -389,7 +388,7 @@
       "url": "/photo/1/8",
       "why_not": ""
     },
-    "/photo/1/9": {
+    "/photo/2/9": {
       "alt_text": "A metal tray of smoked ribs and sausages alongside green beans and a chopped green salad.",
       "dominant_colours": [
         "#4a2015",

@@ -1,8 +1,9 @@
 {
+  "_gate_unresolved": false,
   "assumptions": [],
   "chain_signals": [],
   "design_direction": {
-    "accent": "crimson",
+    "accent": "red",
     "architecture": "gallery",
     "contradictions": [],
     "cta": {
@@ -11,6 +12,7 @@
     },
     "defect": "",
     "emphasis": [
+      "gallery",
       "reviews"
     ],
     "first_screen": "photo",
@@ -19,14 +21,14 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "refined",
-    "rationale": "Ichika is a quiet, precise kaiseki counter whose nine strong dish photographs are the actual argument for coming \u2014 a wide, airy gallery-led page with a single full-bleed photo opener lets the food and craft speak before anything else, while the perfect ratings and lyrical reviews confirm it once they're looking.",
+    "rationale": "Nine large, carefully composed dish photographs and a perfect 5.0 rating from discerning diners are the whole case for Ichika, so the site should open on the food itself with quiet, restrained type \u2014 the plating already does the persuading, and reviews describing a Michelin-level, deeply seasonal kaiseki experience confirm it before a visitor ever calls to book.",
     "read_by": "claude",
-    "signature": "quote",
-    "signature_why": "Setting one of the kaiseki reviews at full display size across the page captures the rare, considered praise this room earns without resorting to a star-badge clich\u00e9.",
+    "signature": "corner_inset",
+    "signature_why": "A small type block tucked into the corner of a dish photograph lets the food fill the screen while still naming the restaurant, which suits a kaiseki counter where the plating is the argument.",
     "suppress": [],
     "type_treatment": "quiet",
     "understood": [
-      "Ichika is a quiet, precise kaiseki counter whose nine strong dish photographs are the actual argument for coming \u2014 a wide, airy gallery-led page with a single full-bleed photo opener lets the food and"
+      "Nine large, carefully composed dish photographs and a perfect 5.0 rating from discerning diners are the whole case for Ichika, so the site should open on the food itself with quiet, restrained type \u2014 "
     ],
     "unsupported": []
   },
@@ -85,73 +87,73 @@
     "Their opening hours: only google lists it \u2014 confirm Mon closed \u00b7 Tue-Sat 6:30am-11pm \u00b7 Sun closed?"
   ],
   "photo_labels": {
-    "/photo/7/0": "room",
-    "/photo/7/1": "dish",
-    "/photo/7/2": "dish",
-    "/photo/7/3": "dish",
-    "/photo/7/4": "dish",
-    "/photo/7/5": "dish",
-    "/photo/7/6": "dish",
-    "/photo/7/7": "ingredients",
-    "/photo/7/8": "dish",
-    "/photo/7/9": "dish"
+    "/photo/12/0": "room",
+    "/photo/12/1": "dish",
+    "/photo/12/2": "dish",
+    "/photo/12/3": "dish",
+    "/photo/12/4": "dish",
+    "/photo/12/5": "dish",
+    "/photo/12/6": "dish",
+    "/photo/12/7": "ingredients",
+    "/photo/12/8": "dish",
+    "/photo/12/9": "dish"
   },
   "photo_notes": {
-    "/photo/7/0": "Diners sit at a wooden counter watching two chefs work behind an open kitchen counter under a wood-slatted ceiling feature.",
-    "/photo/7/1": "A small glass bowl with a polka-dot pattern holds green noodles topped with a piece of sea urchin, served with chopsticks on a patterned rest.",
-    "/photo/7/2": "A white bowl of clear broth with a piece of fish and a leaf garnish, placed on a black tray with a red lacquered spoon beside it.",
-    "/photo/7/3": "A wooden tray holding five small dishes of assorted Japanese food including oysters, vegetables, and a piece of fish.",
-    "/photo/7/4": "A red lacquered bowl of rice topped with a piece of grilled fish and dark garnish, next to a matching lid.",
-    "/photo/7/5": "Two pieces of raw meat with wasabi, grated radish, and pickled ginger arranged on an ornate red and blue porcelain plate.",
-    "/photo/7/6": "An assortment of sliced sashimi arranged on a fan-shaped porcelain plate with a dab of wasabi.",
-    "/photo/7/7": "A piece of raw red fish sits on a paper towel on a wooden board in front of a stainless steel stove.",
-    "/photo/7/8": "A single piece of sushi with white and pink fish on a clear cut-glass plate.",
-    "/photo/7/9": "Two pieces of tempura on a plate in the foreground with a chef working in a kitchen behind."
+    "/photo/12/0": "Diners sit at a wooden counter watching two chefs work behind an open kitchen counter under a wood-slatted ceiling feature.",
+    "/photo/12/1": "A small glass bowl with a polka-dot pattern holds green noodles topped with a piece of sea urchin, served with chopsticks on a patterned rest.",
+    "/photo/12/2": "A white bowl of clear broth with a piece of fish and a leaf garnish, placed on a black tray with a red lacquered spoon beside it.",
+    "/photo/12/3": "A wooden tray holding five small dishes of assorted Japanese food including oysters, vegetables, and a piece of fish.",
+    "/photo/12/4": "A red lacquered bowl of rice topped with a piece of grilled fish and dark garnish, next to a matching lid.",
+    "/photo/12/5": "Two pieces of raw meat with wasabi, grated radish, and pickled ginger arranged on an ornate red and blue porcelain plate.",
+    "/photo/12/6": "An assortment of sliced sashimi arranged on a fan-shaped porcelain plate with a dab of wasabi.",
+    "/photo/12/7": "A piece of raw red fish sits on a paper towel on a wooden board in front of a stainless steel stove.",
+    "/photo/12/8": "A single piece of sushi with white and pink fish on a clear cut-glass plate.",
+    "/photo/12/9": "Two pieces of tempura on a plate in the foreground with a chef working in a kitchen behind."
   },
   "photo_sizes": {
-    "/photo/7/0": [
+    "/photo/12/0": [
       1226,
       843
     ],
-    "/photo/7/1": [
+    "/photo/12/1": [
       2400,
       1679
     ],
-    "/photo/7/2": [
+    "/photo/12/2": [
       2400,
       1800
     ],
-    "/photo/7/3": [
+    "/photo/12/3": [
       2400,
       1800
     ],
-    "/photo/7/4": [
+    "/photo/12/4": [
       2400,
       1800
     ],
-    "/photo/7/5": [
+    "/photo/12/5": [
       2400,
       1800
     ],
-    "/photo/7/6": [
+    "/photo/12/6": [
       2400,
       1800
     ],
-    "/photo/7/7": [
+    "/photo/12/7": [
       2400,
       1800
     ],
-    "/photo/7/8": [
+    "/photo/12/8": [
       2400,
       1351
     ],
-    "/photo/7/9": [
+    "/photo/12/9": [
       2400,
       2086
     ]
   },
   "photo_vision": {
-    "/photo/7/0": {
+    "/photo/12/0": {
       "alt_text": "Diners sit at a wooden counter watching two chefs work behind an open kitchen counter under a wood-slatted ceiling feature.",
       "dominant_colours": [
         "#6b4a30",
@@ -170,7 +172,7 @@
       "url": "/photo/7/0",
       "why_not": ""
     },
-    "/photo/7/1": {
+    "/photo/12/1": {
       "alt_text": "A small glass bowl with a polka-dot pattern holds green noodles topped with a piece of sea urchin, served with chopsticks on a patterned rest.",
       "dominant_colours": [
         "#d4c07a",
@@ -189,7 +191,7 @@
       "url": "/photo/7/1",
       "why_not": ""
     },
-    "/photo/7/2": {
+    "/photo/12/2": {
       "alt_text": "A white bowl of clear broth with a piece of fish and a leaf garnish, placed on a black tray with a red lacquered spoon beside it.",
       "dominant_colours": [
         "#d8d2c0",
@@ -208,7 +210,7 @@
       "url": "/photo/7/2",
       "why_not": ""
     },
-    "/photo/7/3": {
+    "/photo/12/3": {
       "alt_text": "A wooden tray holding five small dishes of assorted Japanese food including oysters, vegetables, and a piece of fish.",
       "dominant_colours": [
         "#5a3a26",
@@ -227,7 +229,7 @@
       "url": "/photo/7/3",
       "why_not": ""
     },
-    "/photo/7/4": {
+    "/photo/12/4": {
       "alt_text": "A red lacquered bowl of rice topped with a piece of grilled fish and dark garnish, next to a matching lid.",
       "dominant_colours": [
         "#7a1c1c",
@@ -246,7 +248,7 @@
       "url": "/photo/7/4",
       "why_not": ""
     },
-    "/photo/7/5": {
+    "/photo/12/5": {
       "alt_text": "Two pieces of raw meat with wasabi, grated radish, and pickled ginger arranged on an ornate red and blue porcelain plate.",
       "dominant_colours": [
         "#a83232",
@@ -265,7 +267,7 @@
       "url": "/photo/7/5",
       "why_not": ""
     },
-    "/photo/7/6": {
+    "/photo/12/6": {
       "alt_text": "An assortment of sliced sashimi arranged on a fan-shaped porcelain plate with a dab of wasabi.",
       "dominant_colours": [
         "#a83232",
@@ -284,7 +286,7 @@
       "url": "/photo/7/6",
       "why_not": ""
     },
-    "/photo/7/7": {
+    "/photo/12/7": {
       "alt_text": "A piece of raw red fish sits on a paper towel on a wooden board in front of a stainless steel stove.",
       "dominant_colours": [
         "#c9302c",
@@ -303,7 +305,7 @@
       "url": "/photo/7/7",
       "why_not": "Kitchen background and paper towel make it feel like a prep shot rather than a finished presentation"
     },
-    "/photo/7/8": {
+    "/photo/12/8": {
       "alt_text": "A single piece of sushi with white and pink fish on a clear cut-glass plate.",
       "dominant_colours": [
         "#e8ddd0",
@@ -322,7 +324,7 @@
       "url": "/photo/7/8",
       "why_not": ""
     },
-    "/photo/7/9": {
+    "/photo/12/9": {
       "alt_text": "Two pieces of tempura on a plate in the foreground with a chef working in a kitchen behind.",
       "dominant_colours": [
         "#d9c9a3",

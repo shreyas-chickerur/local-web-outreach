@@ -1,0 +1,671 @@
+{
+  "_gate_unresolved": false,
+  "assumptions": [
+    "website found via google: https://primedds.com/dentist/plano/plano-dental-loft/",
+    "ignored a yelp result for 'Prime Dental' \u2014 different business"
+  ],
+  "chain_signals": [
+    "their own site has a locations page"
+  ],
+  "design_direction": {
+    "accent": "amber",
+    "architecture": "stacked",
+    "contradictions": [],
+    "cta": {
+      "kind": "book",
+      "label": ""
+    },
+    "defect": "",
+    "emphasis": [
+      "reviews",
+      "services"
+    ],
+    "first_screen": "facts",
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "stats",
+    "mood": "warm",
+    "rationale": "People choosing a dentist check the rating and reviews before anything else, and this practice only has 3 photographs strong enough to build a page around, so leading with the 4.5-star, 114-review facts and letting patient quotes and staff/services carry the rest is more convincing than a photo-led design would be.",
+    "read_by": "claude",
+    "signature": "quote",
+    "signature_why": "A dental practice earns trust through what patients say about the staff, so setting one review at full size does more than another photo of a hallway ever could.",
+    "suppress": [
+      "features"
+    ],
+    "type_treatment": "quiet",
+    "understood": [
+      "People choosing a dentist check the rating and reviews before anything else, and this practice only has 3 photographs strong enough to build a page around, so leading with the 4.5-star, 114-review fac"
+    ],
+    "unsupported": []
+  },
+  "facts": [
+    {
+      "candidates": [],
+      "confidence": "unverified",
+      "corroborations": 1,
+      "dissent": [],
+      "field": "address",
+      "label": "Address",
+      "score": 50,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14833396815455484627&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        }
+      ],
+      "value": "3920 McDermott Rd Ste b, Plano, TX 75025, USA"
+    },
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14833396815455484627&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "(214) 544-9409"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://primedds.com/dentist/plano/plano-dental-loft/",
+          "value": "(469) 824-9110"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "phone",
+      "label": "Phone",
+      "score": 30,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14833396815455484627&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://primedds.com/dentist/plano/plano-dental-loft/"
+        }
+      ],
+      "value": "(214) 544-9409 | (469) 824-9110"
+    },
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14833396815455484627&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "mon:closed tue:closed wed:closed thu:closed fri:0800-1500 sat:0900-1500 sun:closed"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://primedds.com/dentist/plano/plano-dental-loft/",
+          "value": "mon:0800-1800 tue:0800-1800 wed:0900-1600 thu:0800-1800 fri:0900-1600 sat:0900-1400 sun:closed"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "hours",
+      "label": "Hours",
+      "score": 30,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14833396815455484627&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://primedds.com/dentist/plano/plano-dental-loft/"
+        }
+      ],
+      "value": "Mon-Thu closed \u00b7 Fri 8am-3pm \u00b7 Sat 9am-3pm \u00b7 Sun closed"
+    }
+  ],
+  "latitude": 33.100568599999995,
+  "location": "3920 McDermott Rd Ste b, Plano, TX 75025, USA",
+  "longitude": -96.7704967,
+  "name": "Plano Dental Loft",
+  "notes": null,
+  "open_questions": [
+    "Their street address: only google lists it \u2014 confirm 3920 McDermott Rd Ste b, Plano, TX 75025, USA?",
+    "What number do customers actually call?"
+  ],
+  "photo_labels": {
+    "/photo/5/0": "room",
+    "/photo/5/1": "room",
+    "/photo/5/2": "room",
+    "/photo/5/3": "room",
+    "/photo/5/4": "detail",
+    "https://primedds.com/wp-content/uploads/2022/03/need-appointment1.jpg": "people",
+    "https://primedds.com/wp-content/uploads/2022/04/dr-an-q-li2-1.jpg": "people",
+    "https://primedds.com/wp-content/uploads/2022/04/no-insurance-img.jpg": "people",
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-1.jpg": "people",
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-2.jpg": "people",
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-3.jpg": "people",
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-4.jpg": "people",
+    "https://primedds.com/wp-content/uploads/2022/04/why-choose-loc-image.jpg": "people"
+  },
+  "photo_notes": {
+    "/photo/5/0": "A waiting area with brown chairs, a round patterned rug, a wall-mounted TV, and a reception desk in a dental office lobby.",
+    "/photo/5/1": "A long carpeted hallway lined with wooden doors and lantern-style wall sconces in an office interior.",
+    "/photo/5/2": "A small office space with a round table, a leather chair, two guest chairs, a computer monitor and wall cabinets.",
+    "/photo/5/3": "Three computer monitors on a wooden desk with colorful stools in front of a yellow wall decorated with polka dots.",
+    "/photo/5/4": "A display case with board games, a stuffed bear, a Smurf figurine, and a chessboard under a striped awning.",
+    "https://primedds.com/wp-content/uploads/2022/03/need-appointment1.jpg": "A smiling woman with long blonde hair wearing a dark jacket stands outdoors among trees, looking over her shoulder.",
+    "https://primedds.com/wp-content/uploads/2022/04/dr-an-q-li2-1.jpg": "A man with slicked-back hair and a goatee wearing a dark suit and patterned tie, smiling against a dark blue background.",
+    "https://primedds.com/wp-content/uploads/2022/04/no-insurance-img.jpg": "A woman with long brown hair wearing a white top smiling and looking to the side in front of a brick wall.",
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-1.jpg": "A smiling man with short dark hair and stubble wears a pale yellow shirt indoors with a blurred bright background.",
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-2.jpg": "A smiling man and woman look upward together outdoors with green foliage blurred behind them, the woman embracing him from behind.",
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-3.jpg": "A smiling woman with reddish-brown hair in a white top sits at an outdoor table with flowers and greenery behind her.",
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-4.jpg": "A smiling man and woman stand close together outdoors in sunlight, with green trees blurred in the background.",
+    "https://primedds.com/wp-content/uploads/2022/04/why-choose-loc-image.jpg": "A woman wearing a straw hat and a floral dress smiling and looking upward near a brick wall and iron gate."
+  },
+  "photo_sizes": {
+    "/photo/5/0": [
+      2048,
+      1365
+    ],
+    "/photo/5/1": [
+      1365,
+      2048
+    ],
+    "/photo/5/2": [
+      2048,
+      1365
+    ],
+    "/photo/5/3": [
+      2048,
+      1536
+    ],
+    "/photo/5/4": [
+      1365,
+      2048
+    ],
+    "https://primedds.com/wp-content/uploads/2022/03/need-appointment1.jpg": [
+      785,
+      576
+    ],
+    "https://primedds.com/wp-content/uploads/2022/04/dr-an-q-li2-1.jpg": [
+      952,
+      600
+    ],
+    "https://primedds.com/wp-content/uploads/2022/04/no-insurance-img.jpg": [
+      777,
+      582
+    ],
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-1.jpg": [
+      400,
+      250
+    ],
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-2.jpg": [
+      400,
+      250
+    ],
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-3.jpg": [
+      400,
+      250
+    ],
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-4.jpg": [
+      400,
+      250
+    ],
+    "https://primedds.com/wp-content/uploads/2022/04/why-choose-loc-image.jpg": [
+      777,
+      582
+    ]
+  },
+  "photo_vision": {
+    "/photo/5/0": {
+      "alt_text": "A waiting area with brown chairs, a round patterned rug, a wall-mounted TV, and a reception desk in a dental office lobby.",
+      "dominant_colours": [
+        "#d8cba3",
+        "#5a3a2a",
+        "#3b3b3b",
+        "#8c7b5a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/18/0",
+      "why_not": ""
+    },
+    "/photo/5/1": {
+      "alt_text": "A long carpeted hallway lined with wooden doors and lantern-style wall sconces in an office interior.",
+      "dominant_colours": [
+        "#d9c9a3",
+        "#5a3a2a",
+        "#2f2f2f",
+        "#8c7b5a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/18/1",
+      "why_not": ""
+    },
+    "/photo/5/2": {
+      "alt_text": "A small office space with a round table, a leather chair, two guest chairs, a computer monitor and wall cabinets.",
+      "dominant_colours": [
+        "#c9b98a",
+        "#3a2a1a",
+        "#1e1e1e",
+        "#8c7b5a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "room",
+      "subject_position": "centre",
+      "url": "/photo/18/2",
+      "why_not": "Cluttered desk scene, not a strong wide hero shot"
+    },
+    "/photo/5/3": {
+      "alt_text": "Three computer monitors on a wooden desk with colorful stools in front of a yellow wall decorated with polka dots.",
+      "dominant_colours": [
+        "#e8d97a",
+        "#1e1e1e",
+        "#5a8fc0",
+        "#7bbf6a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/18/3",
+      "why_not": "Narrow utilitarian shot, not a striking hero image"
+    },
+    "/photo/5/4": {
+      "alt_text": "A display case with board games, a stuffed bear, a Smurf figurine, and a chessboard under a striped awning.",
+      "dominant_colours": [
+        "#6a8bbf",
+        "#8a7a5a",
+        "#c9302c",
+        "#e8d97a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "detail",
+      "subject_position": "full",
+      "url": "/photo/18/4",
+      "why_not": "Cluttered display case, not a clean hero composition"
+    },
+    "https://primedds.com/wp-content/uploads/2022/03/need-appointment1.jpg": {
+      "alt_text": "A smiling woman with long blonde hair wearing a dark jacket stands outdoors among trees, looking over her shoulder.",
+      "dominant_colours": [
+        "#8a9a6b",
+        "#2b2f38",
+        "#d8c9a3",
+        "#f5f2ea"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://primedds.com/wp-content/uploads/2022/03/need-appointment1.jpg",
+      "why_not": ""
+    },
+    "https://primedds.com/wp-content/uploads/2022/04/dr-an-q-li2-1.jpg": {
+      "alt_text": "A man with slicked-back hair and a goatee wearing a dark suit and patterned tie, smiling against a dark blue background.",
+      "dominant_colours": [
+        "#1e2a38",
+        "#2a2a2a",
+        "#f0e8dc",
+        "#3a4a5a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://primedds.com/wp-content/uploads/2022/04/dr-an-q-li2-1.jpg",
+      "why_not": ""
+    },
+    "https://primedds.com/wp-content/uploads/2022/04/no-insurance-img.jpg": {
+      "alt_text": "A woman with long brown hair wearing a white top smiling and looking to the side in front of a brick wall.",
+      "dominant_colours": [
+        "#c9a06a",
+        "#f0e8dc",
+        "#8a6a4a",
+        "#3a3a2a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://primedds.com/wp-content/uploads/2022/04/no-insurance-img.jpg",
+      "why_not": ""
+    },
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-1.jpg": {
+      "alt_text": "A smiling man with short dark hair and stubble wears a pale yellow shirt indoors with a blurred bright background.",
+      "dominant_colours": [
+        "#e8e0a0",
+        "#a3c9d1",
+        "#4a4a4a",
+        "#ffffff"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://primedds.com/wp-content/uploads/2022/04/service-box-img-1.jpg",
+      "why_not": ""
+    },
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-2.jpg": {
+      "alt_text": "A smiling man and woman look upward together outdoors with green foliage blurred behind them, the woman embracing him from behind.",
+      "dominant_colours": [
+        "#3f5b32",
+        "#7a8f5c",
+        "#e8dfc5",
+        "#2a2a2a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "right",
+      "url": "https://primedds.com/wp-content/uploads/2022/04/service-box-img-2.jpg",
+      "why_not": ""
+    },
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-3.jpg": {
+      "alt_text": "A smiling woman with reddish-brown hair in a white top sits at an outdoor table with flowers and greenery behind her.",
+      "dominant_colours": [
+        "#f2ede5",
+        "#7a3f2e",
+        "#5c7a3f",
+        "#d1a7c9"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://primedds.com/wp-content/uploads/2022/04/service-box-img-3.jpg",
+      "why_not": ""
+    },
+    "https://primedds.com/wp-content/uploads/2022/04/service-box-img-4.jpg": {
+      "alt_text": "A smiling man and woman stand close together outdoors in sunlight, with green trees blurred in the background.",
+      "dominant_colours": [
+        "#4a5c33",
+        "#e8dfc5",
+        "#2b2b2b",
+        "#f5efe0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://primedds.com/wp-content/uploads/2022/04/service-box-img-4.jpg",
+      "why_not": ""
+    },
+    "https://primedds.com/wp-content/uploads/2022/04/why-choose-loc-image.jpg": {
+      "alt_text": "A woman wearing a straw hat and a floral dress smiling and looking upward near a brick wall and iron gate.",
+      "dominant_colours": [
+        "#c9a06a",
+        "#8a6a4a",
+        "#3a3a2a",
+        "#f0e8dc"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://primedds.com/wp-content/uploads/2022/04/why-choose-loc-image.jpg",
+      "why_not": ""
+    }
+  },
+  "place_photos": [
+    "places/ChIJrS6CKWs9TIYR03qiHdDP2s0/photos/AVoNoXQLSjxqT5PLx6B2AIzXuLgEraEajVs3mqQoZpgXI_Raciqsy2nmbvzfLv2r1kjwVt5wTkKvNfUdMGp73hsppFs3Gde008soOmg1QxxnKwmZ2fEfvxr7UPvalj7DITYgA79jEqeA0zkyBExLf2fcsgZI9d_480hOp_Qw2KXPLkHyT_L-1Kg7yNJrojYhvI1UDouUsz_QEW_B6I70FJcfSgxiGe3CR47-_ZhAzzaIn0wrqpDYJAPVI2vckl74VgsgfWarYPfKayc2d4PQqAVCGatE_n4DLePYDTqkK4m7pIdLhuPE-QAZzNZS832fIE5m4O0axxIsZRmj-9iMwgbJLYT0UqE-fiWmO1X10CskqJzRufUKG_M2giSN_mCZabXruKXztMGRNOj1lyTnKukKiuGl_QPZZO2ORomyzYoybUJ9kQ",
+    "places/ChIJrS6CKWs9TIYR03qiHdDP2s0/photos/AVoNoXQsAwbRtbXsJmhgYKD0o0nacLMbGHYY7vsH8BJDo_m73ztfgNdvKMt2A-2jtkdBJ2pj6scAL2ns6ZotpaJbvqKT7GNZn5mWxsL1jsrhfRRlxdXlDLuCz5uNUQPdsGImw9lB8hN5CAv8JdK7KfylVVy7CbbuLbr7vwnqbFS2MUY4lNEWmJ9aZWOuicPFEwwTi-IejsYq7Jv9e8icbrLV2fwscuGQDNvzgXQo2YPYGzvDc-l3I8RkSnygO5t9x4UQpzSNia-yIYSS7nK952uARwQLpsV6VNtqCsEsxJcipVp0qL0ktAiXtUGjSt_rm2vjpALo018s8UIYakFOKgOHfcPk78DU3ila2RRjlYMWK8bZFTkhdkb3VmwuOCFjmbuvOVzEoOpFAsVYrkFtbT3mR6h2z1i6B3vmF4Im68nvP8gI6FA",
+    "places/ChIJrS6CKWs9TIYR03qiHdDP2s0/photos/AVoNoXTJM5zUYOjeGNS3YbwwvJiurarZVRDG5SvpDu103Or3ODj-Vckq7ItRhXMOCZ2Rtt5uxEnBl3APxQNXL7t_BEHfx7m4lYX32a1f8fFvnlyyqIXeiLbvKFxAo0WVpzprIz2C7dzesrNahxzZLNnbam6yB9LoAj4AyFk5fCBsXIV3tFKd_sXlZbIEMLhhOAaP1xuYVDLUWSRZ3L84GoHng-zUG8glx9xquzxuDnU2qHGxyf8IOGFDBGICPAoi2YGXsxnjcNz9rVt5yJGjv-vBfL6rBOydYo3dl4iAx0C9T2zt12bhOFhiT4HfDN3_y9vYjsGn04XnX0LxyRWRkcRf8wwoqN-P2NODX5FGc75s6a5DTEAoQAyKewi0W9cAapcZYAuozKLwyfxwVnHKiDoI7BfmlbOpcNexMLkpBop6kLDPpK5e",
+    "places/ChIJrS6CKWs9TIYR03qiHdDP2s0/photos/AVoNoXRQz0PopYFWn4LRmwEUG5ArgCJQgC-YSiIcRFtXxh9iF_3NPCPZ1GzQrY1Jr7NtlCaw0eUuKX-Kf9pd8oSaax2C1lUYBWuk1aFXiDlZglPWEZxWNgz5WpFTVHKRowRauss_dnIrYwGiMCDulGi6jz4Kp9hqJP_GpFHNxeThhmXVm_lXXfm1rQOHVmzduEYGYAcKGJeW3iyRx85ALJgM7XsILUhtzA5T0O718ybxSfpfaqXTJlnXlu4yP6pJl1rswZgBdmhnMVICTfX-zqGfJjuKdt2vOJFKdYOgNHLbKfttR-ZqK8KTRUhOvybnHp1FARbCINp9YxkvmD1jY76SNDQEoCaMeEJ6lNp7j_E8RpxOPVWlXarcJgA2zO1E9Fv59tBEqxZMTral3uyi7kouGd6YlHFBe5tPZ0q3dXBZ3TAQ4g",
+    "places/ChIJrS6CKWs9TIYR03qiHdDP2s0/photos/AVoNoXT9lEeVt2p5vIDOwIbRQSXU3NiBCvd2ruiEg0-Wi9Dl_HNzySloBWJeDZgVCmntTeen75HJRUbF8aGZw7d4WciQcZJ2bp6MDI5EM1Qs1McccllbBx2PyfTLGTj4Qf1bRqwydSxB-6enZoSSJd8GFLxBS6gdAhx77Nl8xWAmESaBCKCz_MyGomVwG50Sp5ASZsAVqNekBlaSFeonDL7wSIxti8fD2QJYJ3Hc8o7dXRcVSVoBssN_NJ_i9ut6tY2vnMIRBWtpV-Hf0m9wv45mT3gkasuV7VywqUbwKlpsGgpZOM8PBZutTPXr5imji9dUh4mhwScLs41SCIFbFTKsWiEuPudj0-KHwejog7RlLQhQU48k3nwk7xtUXa3CNpQ_MIG53uux_KuVCn76F9ZNsZsdiFvz2WkwDjJO9obUxJfmbAQ"
+  ],
+  "published": {
+    "about": "We value integrity, teamwork, clinical excellence, and we work hard on a daily basis to deliver that to our beloved patients. We are a group of dental providers who truly care about our patients\u2019 experiences. This means quality care is given and our standards never fall. To put it simply \u2013 we simply care about what we do.",
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "WELCOME TO PLANO DENTAL LOFT",
+        "images": [
+          "https://primedds.com/wp-content/uploads/2022/04/why-choose-loc-image.jpg"
+        ],
+        "kind": "feature",
+        "text": "As a Plano Dental Loft Doctor, Dr. Le can create custom, long-lasting dental implant solutions that let you eat, smile, and feel confident about your teeth once and for all. Each and every day it is our mission to not only bring back our patients\u2019 smile but also to fully restore their dental function. BOOK YOUR APPOINTMENT"
+      },
+      {
+        "entries": [],
+        "heading": "Dental Crown",
+        "images": [
+          "https://primedds.com/wp-content/uploads/2022/04/service-loc-11.svg"
+        ],
+        "kind": "feature",
+        "text": "At Plano Dental Loft, we offer the services of customized dental crowns to repair damaged, cracked, or decayed teeth. Contact us today to schedule an appointment for dental crowns. Accutane over the counter"
+      },
+      {
+        "entries": [],
+        "heading": "Dentures",
+        "images": [],
+        "kind": "feature",
+        "text": "Restore your oral functionality with our contemporary cosmetic dentistry. Replace your missing teeth with comfortable and easy-to-wear dentures made with the highest quality. https://ufmfamilymedicine.com/clomid-over-the-counter/"
+      },
+      {
+        "entries": [],
+        "heading": "Teeth Cleaning",
+        "images": [],
+        "kind": "feature",
+        "text": "Tend to your oral health with professional teeth cleaning at Plano Dental Loft. Professional dental cleaning by a certified hygienist can protect your teeth from cavities & gum disease. Properly clean where your brush can\u2019t reach. Contact us today to schedule your appointment."
+      },
+      {
+        "entries": [],
+        "heading": "Implants",
+        "images": [],
+        "kind": "feature",
+        "text": "Are you looking for a permanent solution to missing teeth? Then dental implants are for you. At Plano Dental Loft, we offer state-of-the-art and customized dental implants that are securely attached in place. Enjoy the stability and strength of our restorative implant treatment. Book your appointment today. Book Your Appointment Now"
+      },
+      {
+        "entries": [],
+        "heading": "See why our patients love it here",
+        "images": [],
+        "kind": "feature",
+        "text": "I am honestly so happy that I chose Dr. Lee for my dental implant. He is very knowledgeable and makes you feel welcome and comfortable. The process literally was so fast. I highly recommend Dr.Lee for any of your dental needs."
+      },
+      {
+        "entries": [],
+        "heading": "Melody H.",
+        "images": [
+          "https://primedds.com/wp-content/uploads/2022/03/google-1review.svg"
+        ],
+        "kind": "feature",
+        "text": "I had a great visit! Very impressed with the whole office! Impressed I was able to get an appointment today with being a new patient andcalling the same day! Every office staff was nice and professional! She took her time with my cleaning which is awesome and was informative about what I should do about flossing Other offices Ive been to rushed through it! The Dr is very informative and listens to the patients needs and concerns! Everyone keep up the great work!"
+      },
+      {
+        "entries": [],
+        "heading": "Jerell B.",
+        "images": [
+          "https://primedds.com/wp-content/uploads/2022/03/google-1review.svg"
+        ],
+        "kind": "feature",
+        "text": "My experience was awesome! Kenya, the office manager is extremely considerate, and is able to work miracles with insurance And make sure prices are fair. Dr. Dawood provides excellent care. He is kind, considerate, and very gentle. Alexis is knowledgeable and explained what is needed in a kind, precise way. Thanks for the great care!"
+      },
+      {
+        "entries": [],
+        "heading": "Debi C.",
+        "images": [
+          "https://primedds.com/wp-content/uploads/2022/03/google-1review.svg"
+        ],
+        "kind": "feature",
+        "text": "Joann was so helpful and nice, even though I was having my own scheduling issues. She was very understanding and made me feel heard. I am very excited to start this new journey!!!"
+      },
+      {
+        "entries": [],
+        "heading": "No Insurance? No problem.",
+        "images": [],
+        "kind": "feature",
+        "text": "Utilize our in-house discount plan and save up to 40%. You can call us to learn more about our in-house plan. BECOME A MEMBER CALL NOW : (469) 824-9110"
+      },
+      {
+        "entries": [],
+        "heading": "Family Dental Care",
+        "images": [
+          "https://primedds.com/wp-content/uploads/2022/04/service-box-img-2.jpg"
+        ],
+        "kind": "feature",
+        "text": "Are you looking for a dental facility to treat your whole family? Schedule your appointment today for lifetime of health an wellness. Your trusted dental professionals offer customized solutions for your family. Our long-term oral health plan caters to all your needs, from cleaning to fillings. Teeth Cleaning Hygiene Checkup Fillings and Sealants Oral Screening Periodontal Treatment Aligners & Braces"
+      },
+      {
+        "entries": [],
+        "heading": "Oral Cancer Screening",
+        "images": [
+          "https://primedds.com/wp-content/uploads/2022/04/service-box-img-4.jpg"
+        ],
+        "kind": "feature",
+        "text": "Preventive oral care can prevent you from developing complex dental problems. A regular visit to our facility for oral cancer screening can help you keep track of your oral health and prevent diseases from spreading. Detect precancerous or early signs of cancer. Schedule your appointment today with our esteemed dentists."
+      },
+      {
+        "entries": [],
+        "heading": "Fillings & Sealants",
+        "images": [
+          "https://primedds.com/wp-content/uploads/2022/04/service-box-img-5.jpg"
+        ],
+        "kind": "feature",
+        "text": "Keep cavities and decay at bay with our fillings and sealants. Dental sealants and fillings act as a protective barrier over your teeth, helping you keep a bright and healthy smile. To prevent your teeth from plaque and decay, book your appointment today for our Dental Sealant services."
+      },
+      {
+        "entries": [],
+        "heading": "Periodontal treatment",
+        "images": [
+          "https://primedds.com/wp-content/uploads/2022/04/service-box-img-6.jpg"
+        ],
+        "kind": "feature",
+        "text": "Our highly trained dentists specialize in preventing, diagnosing, and treating periodontal disease. Affordable and pain-free treatment is available at Prime Dental in our relaxing offices. If you are already suffering from periodontal gum disease, schedule your appointment with our professionals. Get the treatment you need today!"
+      }
+    ],
+    "emails": [],
+    "has_locations_page": true,
+    "hours": [
+      "Wed: 9:00am to 4:00pm",
+      "Fri: 9:00am to 4:00pm",
+      "Sat: 9:00am to 2:00pm",
+      "Mon - Fri: 8:00am to 6:00pm",
+      "Sat: 8:00am to 1:00pm",
+      "Sun: Closed"
+    ],
+    "menu_items": [],
+    "menu_media": [],
+    "photos": [
+      "https://primedds.com/wp-content/uploads/2022/04/dr-an-q-li2-1.jpg",
+      "https://primedds.com/wp-content/uploads/2022/04/why-choose-loc-image.jpg",
+      "https://primedds.com/wp-content/uploads/2022/04/no-insurance-img.jpg",
+      "https://primedds.com/wp-content/uploads/2022/03/need-appointment1.jpg",
+      "https://primedds.com/wp-content/uploads/2022/04/service-box-img-1.jpg",
+      "https://primedds.com/wp-content/uploads/2022/04/service-box-img-2.jpg",
+      "https://primedds.com/wp-content/uploads/2022/04/service-box-img-3.jpg",
+      "https://primedds.com/wp-content/uploads/2022/04/service-box-img-4.jpg"
+    ],
+    "products": [],
+    "services": [
+      "MEET Dr. An Q. Le, DDS",
+      "With Decades Of Experience.",
+      "SPECIALITIES AVAILABLE AT PRIME DENTAL",
+      "Melody H.",
+      "Jerell B.",
+      "Debi C.",
+      "Erica P.",
+      "No Insurance? No problem."
+    ],
+    "socials": [],
+    "tagline": "Plano Dental Loft is the #1 dental implant & denture repair center in Plano, Tx. Get teeth cleaning, dental crown & other services right here. Call (469) 649-1990."
+  },
+  "ratings": [
+    {
+      "reviews": 114,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=14833396815455484627&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.5
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Nicole Grimes",
+      "rating": 5,
+      "text": "The entire Staff From the doctor to the dental assistants to the front desk was extremely helpful and knowledgeable.  They made us feel welcomed.  The doctor took care of my daughter I was so grateful since her first dental exam ever ended up in a root canal.\n\nEveryone did a wonderful job and they even allowed me to start a payment plan on the procedure.  So grateful to them all. I even scheduled my husband to be seen next.\n\nThank you all."
+    },
+    {
+      "author": "Lori Boling",
+      "rating": 5,
+      "text": "I simply cannot say enough about Dr. George and his staff ~ they are AWESOME! I was pretty nervous when I went in for the first time, but Dr. George and his staff were very friendly and quick to make me feel comfortable and at ease. Dr. George was very thorough, explained everything and regularly made sure that I was comfortable while he worked on my teeth. My husband and I are SO HAPPY we found Dr. George. As an added bonus, they play great music in his office AND they are open some evenings and for a few hours on Saturdays. :)"
+    },
+    {
+      "author": "C",
+      "rating": 5,
+      "text": "I went to Plano Dental Loft, based on a recommendation from a family member. Dr. George spend the time to hear my dental issues, did a complete exam and provided me with all the different options and pricing. He was upfront, honest and never rushed me to make a decision.\nI found Dr. George to be amiable, attentive to my needs and willing to work with me through my personal situation. The staff was also pleasant and helpful. I am very impressed with the work that he did for me (cavity fillings, cleaning, broken tooth filling) and would definitely visit him again."
+    },
+    {
+      "author": "Rama S",
+      "rating": 5,
+      "text": "Excellent services!!\nDr. George and his staff are very friendly and caring. Everyone always goes the extra mile to make you feel comfortable and it feels good to know that you are  going to a team who really cares.\nI was at the office last week to have a root canal done and Dr. George explained the process to me and made sure that the whole process was painless.  He personally called to check up on me the following day.\nI trust that any work done by Dr. George  and his staff will be top notch. I recommend their office to anyone who wants the best.\nThank you, your team is the best !!"
+    },
+    {
+      "author": "Jerell Bryant",
+      "rating": 5,
+      "text": "I had a great visit! Very impressed with the whole office! Impressed I was able to get an appointment today with being a new patient andcalling the same day! Every office staff was nice and professional! She took her time with my cleaning which is awesome and was informative about what I should do about flossing Other offices Ive been to rushed through it! The Dr is very informative and listens to the patients needs and concerns! Everyone keep up the great work!"
+    }
+  ],
+  "trade": "Dentist",
+  "url_check": null,
+  "website_url": "https://primedds.com/dentist/plano/plano-dental-loft/"
+}

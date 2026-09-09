@@ -1,0 +1,831 @@
+{
+  "_gate_unresolved": false,
+  "assumptions": [
+    "google matched a listing in a different town: 3700 Montrose Blvd, Houston, TX 77006, USA",
+    "website found via google: https://ammonslaw.com/",
+    "ignored a yelp result for 'Shawn Storey' \u2014 different business"
+  ],
+  "chain_signals": [
+    "their own site has a locations page"
+  ],
+  "design_direction": {
+    "accent": "navy",
+    "architecture": "ledger",
+    "contradictions": [],
+    "cta": {
+      "kind": "call",
+      "label": ""
+    },
+    "defect": "",
+    "emphasis": [
+      "reviews",
+      "services"
+    ],
+    "first_screen": "type",
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "stats",
+    "mood": "refined",
+    "rationale": "Someone hiring a personal injury attorney after a serious accident needs proof of competence and results before anything else \u2014 the rating, the verdicts, the practice areas \u2014 not a warm photo tour of the office; the ledger architecture and a table-of-figures signature let the firm's actual track record do the persuading in a way a repeated licence stamp cannot.",
+    "read_by": "claude",
+    "signature": "ledger",
+    "signature_why": "A firm that wins verdicts and settlements should show its record as a ruled table of figures, not a repeated stamp, so the case results read like a document you'd trust rather than a badge.",
+    "suppress": [
+      "menu"
+    ],
+    "type_treatment": "quiet",
+    "understood": [
+      "Someone hiring a personal injury attorney after a serious accident needs proof of competence and results before anything else \u2014 the rating, the verdicts, the practice areas \u2014 not a warm photo tour of "
+    ],
+    "unsupported": []
+  },
+  "facts": [
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "address",
+      "label": "Address",
+      "score": 90,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14033095772883447039&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://ammonslaw.com/"
+        }
+      ],
+      "value": "3700 Montrose Blvd, Houston, TX 77006, USA"
+    },
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "phone",
+      "label": "Phone",
+      "score": 90,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14033095772883447039&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://ammonslaw.com/"
+        }
+      ],
+      "value": "(281) 801-5617"
+    },
+    {
+      "candidates": [],
+      "confidence": "unverified",
+      "corroborations": 1,
+      "dissent": [],
+      "field": "hours",
+      "label": "Hours",
+      "score": 50,
+      "sources": [
+        {
+          "source_type": "their_site",
+          "source_url": "https://ammonslaw.com/"
+        }
+      ],
+      "value": "Mon-Sun 12am-11:59pm"
+    }
+  ],
+  "latitude": 29.739362999999994,
+  "location": "3700 Montrose Blvd, Houston, TX 77006, USA",
+  "longitude": -95.39151299999999,
+  "name": "The Ammons Law Firm",
+  "notes": null,
+  "open_questions": [],
+  "photo_labels": {
+    "/photo/10/0": "team",
+    "/photo/10/1": "room",
+    "/photo/10/2": "exterior",
+    "/photo/10/3": "exterior",
+    "/photo/10/4": "room",
+    "/photo/10/5": "people",
+    "/photo/10/6": "people",
+    "/photo/10/7": "people",
+    "/photo/10/8": "team",
+    "/photo/10/9": "people",
+    "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/case-results/case-results-v5-bg.jpg": "logo",
+    "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/mainstages/Mainstage-CTA-txt-bg.jpg": "room",
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/lawfirm_background-2.jpg": "exterior",
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_autodefect-min.png": "detail",
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_plantexplosion-min.png": "other",
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_truckaccidents-min.png": "other",
+    "https://www.ammonslaw.com/wp-content/uploads/2025/04/Personal-Injury-Attorneys-and-Lawyers.png": "logo",
+    "https://www.ammonslaw.com/wp-content/uploads/2026/05/personal-injury-lawyer-rob-ammons.png": "people"
+  },
+  "photo_notes": {
+    "/photo/10/0": "Three people in business suits standing and smiling in front of a wall with a law firm's name and star logo.",
+    "/photo/10/1": "A long conference room with a dark wood table, cream chairs, bookshelves, and a fireplace with framed art.",
+    "/photo/10/2": "Aerial view of a large house with a green tiled roof next to a street lined with trees.",
+    "/photo/10/3": "A two-story building with arched windows, a brick walkway, and a sign reading 'The Ammons Law Firm, LLP' at dusk.",
+    "/photo/10/4": "A living room-style seating area with a beige sofa, two chairs, a round table, and framed artwork above a fireplace.",
+    "/photo/10/5": "A black-and-white photo of a man in a suit sitting at a desk writing, with framed certificates on the wall behind him.",
+    "/photo/10/6": "Two men in suits walking and talking outdoors under trees on a sidewalk.",
+    "/photo/10/7": "Two men in black polo shirts sitting at a counter talking, with a green illuminated sign in the background.",
+    "/photo/10/8": "A group of nine professionals in dark business suits standing together on a brick walkway in front of a large house with white columns and windows.",
+    "/photo/10/9": "A woman with long wavy hair in a white blouse sits at an office desk typing on a keyboard, smiling toward the camera.",
+    "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/case-results/case-results-v5-bg.jpg": "A pale beige five-pointed star inside a circle on a white background, positioned at the left edge of the image.",
+    "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/mainstages/Mainstage-CTA-txt-bg.jpg": "A dim blue-toned image of a row of office chairs and bookshelves in a conference or law library room.",
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/lawfirm_background-2.jpg": "A faded photo of a stone sign reading 'The Ammons Law Firm, LLP, 3700 Montrose Boulevard' in front of a two-story building, with tree branches overlaid in the upper left corner.",
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_autodefect-min.png": "A close-up of a heavily damaged car's front end and headlight after a collision.",
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_plantexplosion-min.png": "A large fire and smoke erupting from industrial piping and a tank at what appears to be a plant or refinery.",
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_truckaccidents-min.png": "An overturned white semi-truck cab with severe crash damage lying on a road under a clear blue sky.",
+    "https://www.ammonslaw.com/wp-content/uploads/2025/04/Personal-Injury-Attorneys-and-Lawyers.png": "A gold circular badge logo with a star shape containing an outline of the state of Texas.",
+    "https://www.ammonslaw.com/wp-content/uploads/2026/05/personal-injury-lawyer-rob-ammons.png": "A composite image of a man in a dark blue suit standing with hands on a reflective surface in front of large classical stone columns, with a blue-toned overlay."
+  },
+  "photo_sizes": {
+    "/photo/10/0": [
+      1521,
+      1155
+    ],
+    "/photo/10/1": [
+      2400,
+      1600
+    ],
+    "/photo/10/2": [
+      1913,
+      1009
+    ],
+    "/photo/10/3": [
+      700,
+      525
+    ],
+    "/photo/10/4": [
+      2400,
+      1800
+    ],
+    "/photo/10/5": [
+      1230,
+      825
+    ],
+    "/photo/10/6": [
+      2400,
+      1350
+    ],
+    "/photo/10/7": [
+      2400,
+      1600
+    ],
+    "/photo/10/8": [
+      2400,
+      1601
+    ],
+    "/photo/10/9": [
+      2400,
+      1600
+    ],
+    "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/case-results/case-results-v5-bg.jpg": [
+      1920,
+      939
+    ],
+    "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/mainstages/Mainstage-CTA-txt-bg.jpg": [
+      734,
+      404
+    ],
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/lawfirm_background-2.jpg": [
+      1920,
+      1700
+    ],
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_autodefect-min.png": [
+      381,
+      410
+    ],
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_plantexplosion-min.png": [
+      381,
+      410
+    ],
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_truckaccidents-min.png": [
+      381,
+      410
+    ],
+    "https://www.ammonslaw.com/wp-content/uploads/2025/04/Personal-Injury-Attorneys-and-Lawyers.png": [
+      200,
+      200
+    ],
+    "https://www.ammonslaw.com/wp-content/uploads/2026/05/personal-injury-lawyer-rob-ammons.png": [
+      1920,
+      1302
+    ]
+  },
+  "photo_vision": {
+    "/photo/10/0": {
+      "alt_text": "Three people in business suits standing and smiling in front of a wall with a law firm's name and star logo.",
+      "dominant_colours": [
+        "#8a8a8a",
+        "#2b2b2b",
+        "#c9a15a",
+        "#d9d9d9"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "team",
+      "subject_position": "full",
+      "url": "/photo/3/0",
+      "why_not": ""
+    },
+    "/photo/10/1": {
+      "alt_text": "A long conference room with a dark wood table, cream chairs, bookshelves, and a fireplace with framed art.",
+      "dominant_colours": [
+        "#3b2f2f",
+        "#c9c2b3",
+        "#8a8a8a",
+        "#e6e2d8"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/3/1",
+      "why_not": ""
+    },
+    "/photo/10/2": {
+      "alt_text": "Aerial view of a large house with a green tiled roof next to a street lined with trees.",
+      "dominant_colours": [
+        "#5a6e4a",
+        "#8a8a6a",
+        "#3b3b3b",
+        "#c9c9c9"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/3/2",
+      "why_not": ""
+    },
+    "/photo/10/3": {
+      "alt_text": "A two-story building with arched windows, a brick walkway, and a sign reading 'The Ammons Law Firm, LLP' at dusk.",
+      "dominant_colours": [
+        "#8a8a8a",
+        "#c9a15a",
+        "#3b3b3b",
+        "#e6e2d8"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/3/3",
+      "why_not": ""
+    },
+    "/photo/10/4": {
+      "alt_text": "A living room-style seating area with a beige sofa, two chairs, a round table, and framed artwork above a fireplace.",
+      "dominant_colours": [
+        "#d9d3c3",
+        "#3b2f2f",
+        "#8a8a8a",
+        "#e6e2d8"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/3/4",
+      "why_not": ""
+    },
+    "/photo/10/5": {
+      "alt_text": "A black-and-white photo of a man in a suit sitting at a desk writing, with framed certificates on the wall behind him.",
+      "dominant_colours": [
+        "#1a1a1a",
+        "#4d4d4d",
+        "#b3b3b3",
+        "#e6e6e6"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "right",
+      "url": "/photo/3/5",
+      "why_not": ""
+    },
+    "/photo/10/6": {
+      "alt_text": "Two men in suits walking and talking outdoors under trees on a sidewalk.",
+      "dominant_colours": [
+        "#4a4a3b",
+        "#2b2b2b",
+        "#8a8a6a",
+        "#c9c9c9"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "full",
+      "url": "/photo/3/6",
+      "why_not": ""
+    },
+    "/photo/10/7": {
+      "alt_text": "Two men in black polo shirts sitting at a counter talking, with a green illuminated sign in the background.",
+      "dominant_colours": [
+        "#0d0d0d",
+        "#1a3d1a",
+        "#4d4d4d",
+        "#c9c9c9"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "full",
+      "url": "/photo/3/7",
+      "why_not": "Unclear relevance to business, background text partially unreadable"
+    },
+    "/photo/10/8": {
+      "alt_text": "A group of nine professionals in dark business suits standing together on a brick walkway in front of a large house with white columns and windows.",
+      "dominant_colours": [
+        "#1a2540",
+        "#d9d3c8",
+        "#8b3a2f",
+        "#3a3a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "team",
+      "subject_position": "full",
+      "url": "/photo/3/8",
+      "why_not": ""
+    },
+    "/photo/10/9": {
+      "alt_text": "A woman with long wavy hair in a white blouse sits at an office desk typing on a keyboard, smiling toward the camera.",
+      "dominant_colours": [
+        "#f2e8d8",
+        "#4a3a2a",
+        "#1a1a1a",
+        "#c9a876"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/3/9",
+      "why_not": ""
+    },
+    "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/case-results/case-results-v5-bg.jpg": {
+      "alt_text": "A pale beige five-pointed star inside a circle on a white background, positioned at the left edge of the image.",
+      "dominant_colours": [
+        "#ffffff",
+        "#f2ead9",
+        "#e6d8b8"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "logo",
+      "subject_position": "left",
+      "url": "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/case-results/case-results-v5-bg.jpg",
+      "why_not": "Decorative background graphic, not a photograph of the business"
+    },
+    "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/mainstages/Mainstage-CTA-txt-bg.jpg": {
+      "alt_text": "A dim blue-toned image of a row of office chairs and bookshelves in a conference or law library room.",
+      "dominant_colours": [
+        "#1a3a5c",
+        "#0d1f33",
+        "#2a4a6c"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 2,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/mainstages/Mainstage-CTA-txt-bg.jpg",
+      "why_not": "heavy blue overlay obscures detail, low clarity"
+    },
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/lawfirm_background-2.jpg": {
+      "alt_text": "A faded photo of a stone sign reading 'The Ammons Law Firm, LLP, 3700 Montrose Boulevard' in front of a two-story building, with tree branches overlaid in the upper left corner.",
+      "dominant_colours": [
+        "#f5f5f3",
+        "#c9c9c7",
+        "#8a8a88",
+        "#a9b7c0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "exterior",
+      "subject_position": "centre",
+      "url": "https://www.ammonslaw.com/wp-content/uploads/2023/01/lawfirm_background-2.jpg",
+      "why_not": ""
+    },
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_autodefect-min.png": {
+      "alt_text": "A close-up of a heavily damaged car's front end and headlight after a collision.",
+      "dominant_colours": [
+        "#3a3a3a",
+        "#8a8a8a",
+        "#c9a03c",
+        "#1a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "detail",
+      "subject_position": "full",
+      "url": "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_autodefect-min.png",
+      "why_not": "small thumbnail image, close crop not suited as hero"
+    },
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_plantexplosion-min.png": {
+      "alt_text": "A large fire and smoke erupting from industrial piping and a tank at what appears to be a plant or refinery.",
+      "dominant_colours": [
+        "#e07a1a",
+        "#2a2a2a",
+        "#8a8a8a",
+        "#1a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "other",
+      "subject_position": "full",
+      "url": "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_plantexplosion-min.png",
+      "why_not": "small thumbnail size, likely used as icon not hero"
+    },
+    "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_truckaccidents-min.png": {
+      "alt_text": "An overturned white semi-truck cab with severe crash damage lying on a road under a clear blue sky.",
+      "dominant_colours": [
+        "#a8b8c8",
+        "#3a4a5a",
+        "#87ceeb",
+        "#1a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "other",
+      "subject_position": "full",
+      "url": "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_truckaccidents-min.png",
+      "why_not": "small thumbnail image, not composed as hero"
+    },
+    "https://www.ammonslaw.com/wp-content/uploads/2025/04/Personal-Injury-Attorneys-and-Lawyers.png": {
+      "alt_text": "A gold circular badge logo with a star shape containing an outline of the state of Texas.",
+      "dominant_colours": [
+        "#c9a03c",
+        "#ffffff",
+        "#000000"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "logo",
+      "subject_position": "centre",
+      "url": "https://www.ammonslaw.com/wp-content/uploads/2025/04/Personal-Injury-Attorneys-and-Lawyers.png",
+      "why_not": "logo/badge graphic, not a photograph"
+    },
+    "https://www.ammonslaw.com/wp-content/uploads/2026/05/personal-injury-lawyer-rob-ammons.png": {
+      "alt_text": "A composite image of a man in a dark blue suit standing with hands on a reflective surface in front of large classical stone columns, with a blue-toned overlay.",
+      "dominant_colours": [
+        "#0d2038",
+        "#1a3a5c",
+        "#c9c2b0",
+        "#0a0a0a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://www.ammonslaw.com/wp-content/uploads/2026/05/personal-injury-lawyer-rob-ammons.png",
+      "why_not": ""
+    }
+  },
+  "place_photos": [
+    "places/ChIJG4yk5GK_QIYR_-zAQUGSv8I/photos/AVoNoXSfxXuYcf6NstNT50J_Ho7NQ3bd7PGMiiAvfzfS0kMScdAEk9_a8HAewTABTuO0maDzSp0hKOHbSLbeCcZxnZa0_u95Qk_RReaoMWAOkiwGihtdsHICLV7gwLojQp6Svm1Kko5bm0YAnTMLyZQGHfoiqJtRrKFnHdpmpde9ZPkzc7gV-GKUw4U84RnioCviDyEfRVy8DsAkx-LHR36iGBAtmgXC2vaaOT_Izbq0j8W0gcbRxQUjNRKdUIkkwUY5Chr_NDQ5nIFr1Pe4M_XA0TijMb-7XsNy8r1w7pFKtR9u2W1xcZpiZnkSQYmlefLOznxyuvfuQqNlh9tJyXhjReSVu_hAXla9uWdn7azI96piIyyCmV_RPLfOHaF32yVzqGrLqjklm09iKDX3wMbxZqSgoWbYmpjKtjiWltjz96Wnx0SibyV4r1RbC-Y8cWI2",
+    "places/ChIJG4yk5GK_QIYR_-zAQUGSv8I/photos/AVoNoXTAZtGw7i9wABhROzLSU6ETo-C4X3IDhxJsCl_EXjOPRCmMGki8bAt5TZ5gWznCt13AFLgaIokrsLm6n9G2vFfNVKR7x7gSsXJWqK9tqwuyaIyN5Nu-AgSF4MkYfs868tYlCslZ3KOyjNtXI2B0jHfz2V8z3kli-7VATd63OAtPHm-H68yQGKPQv2RFFaYgwib2gwlDhbyzK9COKVyXKlh5dnGtXrllB6a9_zHJTIAhedyfL2WXJAYk97ITUxcWbdO89K_0J95eSQnG5tRBbmdyYUPtbopUz1oOlBUHp6OzYFEKvP1MP5RladeTVOJFGcpw4c_AEkK1sPJFgvMjZZTKAFTaq-KmLrWduaQA-61ixo-MtQfvb2sSiPyBHyWiHR580IeZn-7zs9g8RWq1XGi4nN_bjn_4lq7OBYKxlP8LBXJmT04ha1yGmqXOsImq",
+    "places/ChIJG4yk5GK_QIYR_-zAQUGSv8I/photos/AVoNoXTurmdqshNh79lV4BBqbrGToOchNJdQAFVPy2DqUqsWdt1AGkNOt7tjekaBoXMS6YFeoWkxuwH3e2IzY9loUj3kwyXJyUdXxYUC8GZHqkoUJ8FMuwh9VP6PGYODM9XJfTIko4LlMJ6KeOIGyRmqxEWcAWYaE4Bf6GicR3txbrOIK4pdbwSREEiR5zkTiPBUQoOnDp_KhU5TTgPXkcEW8MyjOy9zOGe1cnUPxb6kI3HLL9BCfZuZ5DhMFdsGUHDywsoC-QiyF694G1F30NvPoeD2n_qcv4nogqvGTToSXBgDNl0rwTk5CQUNTeKVoJHNa4Yw1ac3kDjWZS46cs16QjWcNfAa1_gBJaohpNOyy6n5__kjgfJko6fCYGqdVNM0cQ5i3KzNFGgGLdDn9bWpZe-9HCW22kT9kegNZzLJtmmGOb6UUTnQx8_kiZD8wkSx",
+    "places/ChIJG4yk5GK_QIYR_-zAQUGSv8I/photos/AVoNoXScmZoSRHYIgm0WweIp4XObbfKcGUKAnzk_4h81Eu3IWOjNEiW9P3UYxvOaSP_4vLV4GnLjUWk3s2AW11gQysXKbjQzGAblc1phSmlSDcoIC5QxWpXiTF8damALjaUhl_fhOAKNQmGF_1VKCYtGbXoNDtQiz0DOaPzuaE1M99y0XZrBiLWka_U8kKCtm4zHhADx_b5Odvy69xp0xhyizsmSLSUcSOillSKpXX-Ovvd53oWUBA1wS8eVFnV0BrLSEZ2gJBYRiVQvbBBUATodx39QWjQRJE7d-XbIcWS2aQaqjIANXuSkEYfW2DVdFzjHQvEK8Y8RLerkq48RMwgDte7jQU8vG3RLXQBOXB3zhzXk8htKI9oykQ33SYKgrCjqbTT3pHlA-yoWAoeDFuRmlTDEXBqXvtcVzFgoCXx1l-u-ejcJqdgL1OR3QDwVvbyb",
+    "places/ChIJG4yk5GK_QIYR_-zAQUGSv8I/photos/AVoNoXSYAtQfVrz-TlZ6VTOokM8cDqBgxiFIiIUE6D4KmCfgC-50phqJqA0WJ4f_gVNtZvVykgzSllJ4e36WOw2gE9_CeGBpE9CjxpLPp_Cgk0N1jJD-kCfJboad4WIQhkBAkfrRgh6TpyeCcwq5Z5rrVCcfNs4WpXsqm0H-TfFg--mxAjXG78XXcQOckSK73WSmVMFdwmAsgvvRPI18SfGVeyJ4v681h5NEGz59yUeJdXgDFMSm3vG7-P9Hw_F2ZPz2g1R8eaDPJK3by-4ek5b9ziasMYteDHZjsPLmATOskLGvZbuXcktyF6BYMfWZlnWgtMgxYhDcDUiCefDTqgTNLf2BmLOEBs06xBXyLkESgJYrJ4pCKS6__Vo8ekDxm_X1Lt5ITaBej8eF9Lu9KXiokEvzXIeoA69ZHHyz8ftwxNQ6B4LF__F0gNC5xal_cVWx",
+    "places/ChIJG4yk5GK_QIYR_-zAQUGSv8I/photos/AVoNoXRXIL1-JAVAWovueHhvqrwLQN602c8KM3nTASUoAehMdRSMqnrRHBPVOsK1ZjS671FjgELZheB4w5CP73JEynDb8YFDOZhsCSCuU1X-Nv26lqRYC_UNkkys8hK-bfuvfRnwGG5AfRbCxPzj_Li5-4PhqegaKFCe0VhC08jDS_ND1aCiQkbdeEtEfycvV_eZS3dkQE8N5ap6-ptK0OIzEAZW-u5ZKM0c53IA-n4tsqUz1zD75qcA6GEib9XAs1PkGCO7SFtWR1Mbsfly_x5yexwb-0ZXu9IT_aVW21O1u5aetBnRAAqdrZkNQrx3sxmu8L6CYccNKDDgNAG4uepjo5sFrSHbBBGPnYrskNT0AgGVkeoLLDAlN203H9R1diFLhJ5XWmaVCTouu2783waOnYWyOg59-45ECZ-O-4qdCqf3THJGz86RkxB923IpOovj",
+    "places/ChIJG4yk5GK_QIYR_-zAQUGSv8I/photos/AVoNoXSCGp5f2mdw2V8MfUpRsDv89jN_KkaG29vXBeM0ZEhl1o3I8tOLgmsCYyFf0j5t4BwuuWmxzRTH0aNRoi2p5sDa3oZDfGQmeaU4cqX8m6jmL628iM0FVbWjN43uKhZvqkTe9yzJjnePtq3cNj64pd35-OxPBs3LBqa71ADmqVb1HR5EdyWEc3J8KplDFjExUOKPM1xXkOFYjJuC7c9InjP-ZoUhaji3EPlO0sqaegomnSHo_jXPcNgGyRBdwLfiAeXDD3KoI60p8KanXEJBy9Uz7vEAq-2PW7Ct-Qj0KeeAEm2pLTz6ro50V58WIq4muTVJn5Q6C4kZQPrvh_9u5ARf9o937yebTHM9Rcjp7mnV2hra1lvi34o_qbJm8mog61xcWEGgZrzopuXlGL9Ya7D1jq20tGJmU-9b7eDhcs5ek8J5DEF0Fuipjr0FlA",
+    "places/ChIJG4yk5GK_QIYR_-zAQUGSv8I/photos/AVoNoXTMCVWTrRJEYFJ8uPyYdI4syZ5bJEZj9OdU0bv_3r5mmf22thzLOaIpj6WJCX-4E-3e5LFFm7VgpHgsH7BrHHiYOac9lX3u7h1xtc1PWq85gyfohelhT5nlg9jlC8-Eyp4Lm_f2dq8P4ra-p-5CvaXwOriR5YR51DbEWz-PhGCrZBTS9IryyYmHLoYY0SaimCIQGixXQtLmCikXo9gozbDtqs8BOc9Jvvm323Jnd67fkBjw5EGtUEadNWq3glA8ODTu0qTWj-d9B6XUzPGomcLLi42aSTMLq1X9r3PHWdOzUvpXSpRITQGOlkvjPDfKhO8b0VEsk8sTwhXcyDrMsrmTzRzQQ_EIUfrTzthtclxPFfSNuIdezRU2Jn9QGGPQyJuBTWoPaEB_UqvTrwYHtSpqLLjAgUGLLVoxWrAgJLw7wyO383is2REgoYfJmuLL",
+    "places/ChIJG4yk5GK_QIYR_-zAQUGSv8I/photos/AVoNoXTKwuAWOut7iEgUaCwM2DTIZw7VOLR83QKSxlDbUOPRkooUVSACbb5YQKIiQsfGaFoUWHEmzOfhge9G6OH9KhSf6tXPDSTm0lWlfK__o8MLJ4ubYd9ppCxzpgwQKm2U9at8Q4Q9m4HWs6T1O_zCSYiyfQN6Pt1MysEYFzFFWfoZSX5yaQOG6qU2iuVd0bRIrOxjjPI5vISvkqI0hXXxfuApzWd04fj9VxcvocVHEk63pct_i0ZRBAOYd0stGoQyxFNXdYMIu-D8z8ZgTXj_Ychm-UYOE0jeqdUFSQxmVf1tSM6j7Tyfz83nAoCqUAyyWixAFldiBi4qYAiAcC6GP3s2LNVTEEWiD94poZ-n3T8tdicxi2DojDTMpWQiGDBAwNoiK7hIbF7xufXsIoxnkcLRrEhJmNrwCRtuEZLqBx4pZNX62mmhXum0Uba907xQ",
+    "places/ChIJG4yk5GK_QIYR_-zAQUGSv8I/photos/AVoNoXQKGog9EV0ZccPgAlqu3SczGIrIWaksDWftA9dTCveUJtvUlU52wv26Da1O3-X-y5Fx3OX68zzUj6N2_YYuNIE15--53ebSAXc0WDJFRlhADx6GoqTabHHLfOr7jovVJcZwLYKsieuUtBo00YkAfTWIb35Sp9JBjlMQCGlBiIszYbiQS4GFuwFsTnEpxH-TrnYTcbQI3WGn7C0v-V10gMSy2gOkzYGXzEh1SJ_rWS54nfG8f9wuO3Dj_b2mdYJtbQpX2DH3yZCPUhjni4U64Twdzua1f9506-w-vIw_PPzfyuOpLDowTsXwMPP3Q-AXvCD9rP6cwlONMgV8OjL6BTbB2OxzKGC8GTWr6hczTWn_xoc8g1Kw_U2VUc4jvRVs8xvMLNSvm9mN6nhGVq-ui-aqy0GU_d38B27DWHXIJtjMk1wMftbGDDDV_AR6Prtc"
+  ],
+  "published": {
+    "about": "Our successful results for our clients are a direct reflection of the skill and experience we have as trial lawyers. Our clients can attest to the compassion, commitment, and professionalism of our representation. We zealously pursue justice and compensation for the injuries sustained by others\u2019 negligence.",
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "OUR PERSONAL INJURY PRACTICE AREAS",
+        "images": [
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/Untitled-design-2022-12-07T155739.585.png",
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/auto-defects.jpg",
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/Defective-products.jpg",
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/Serious-Injury.jpg",
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/Tire-defects.jpg",
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/truck-accidents.jpg",
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/work-accidents.jpg",
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/wrongful-death.jpg"
+        ],
+        "kind": "feature",
+        "text": "Personal Injury Auto Defects Product Defects Catastrophic Injuries Tire Defects Truck Accidents Workplace Accidents Wrongful Death Offshore Accidents Airplane Accidents Train Accidents Rollover Accident Making A Difference How Tire Defect Litigation Helps Expose Dangerous Products Rob Ammons believes that being a trial lawyer is about making a difference. \u201cWhether it is about meeting the lifetime needs of a catastrophically injured client, forcing the recall of a deadly consumer product or requiring a trucking company to enact stronger safety policies, it is making a difference that counts.\u201d Ammons\u2019 work and the courageous clients he has represented have exposed defects leading to the recall of nearly 100 million automobiles and tires. Learn More About Tire Defects -->"
+      },
+      {
+        "entries": [],
+        "heading": "What does a Houston personal injury attorney do?",
+        "images": [],
+        "kind": "feature",
+        "text": "At its core, a Houston personal injury attorney exists to protect the legal rights of someone who has been injured, or the rights of a family that has lost a loved one, through no fault of their own. Under the law, the person or company responsible for causing that injury or death is required to pay for the harm and losses that result from it. That includes medical expenses already incurred and medical care that will be needed in the future, lost income and the loss of future earning capacity, and the pain, suffering, grief, and emotional toll the injury or loss has caused. In a wrongful death case, that also includes the profound loss a family experiences when a loved one is taken from them. These are just some of the many categories of damages the law allows an injured person, or a surviving family, to recover. Some of these categories are straightforward to calculate. If your car was "
+      },
+      {
+        "entries": [],
+        "heading": "How do you choose a Houston Personal Injury Attorney?",
+        "images": [],
+        "kind": "feature",
+        "text": "Choosing the right Houston personal injury or wrongful death attorney is one of the most important decisions you will make after a serious injury or the loss of a loved one, and it deserves real research before you sign anything. Do not be afraid to ask direct questions. Ask about their trial results. Ask about the cases they have actually handled and how those cases were resolved. Ask how many seven and eight figure settlements or verdicts they have secured, both in the last year and over the last five years. A track record of real numbers tells you far more than a website ever will. Just as important is asking how the firm actually works day to day. Will you be speaking with your attorney directly, or will most of your communication go through a case manager or a paralegal you have never met? Do you have your attorney\u2019s direct phone number? And perhaps most importantly, how many other "
+      },
+      {
+        "entries": [],
+        "heading": "How can a Houston Personal Injury Attorney help me?",
+        "images": [],
+        "kind": "feature",
+        "text": "A personal injury attorney in Houston can help you navigate the legal process after a serious injury and determine whether you have a viable claim. These cases often involve identifying who may be legally responsible for the harm you\u2019ve suffered and understanding what types of damages and compensation may be available under the law. Attorneys assist with gathering evidence, preserving records, communicating with insurance companies, and advising you on how to move forward after an accident. If your case qualifies, your attorney may also represent you in pre-litigation negotiations or formal court proceedings. Working with a personal injury attorney can help protect your rights and ensure that the legal process accounts for the full extent of your injuries."
+      },
+      {
+        "entries": [],
+        "heading": "What does it cost to hire a Houston Personal Injury Attorney?",
+        "images": [],
+        "kind": "feature",
+        "text": "Many personal injury attorneys, including those at our firm, work on a contingency fee basis. This means you do not pay any upfront attorney fees. Instead, the attorney receives a percentage of the final recovery if the case is resolved successfully through settlement or judgment. The specific terms of this arrangement are discussed during the initial consultation. Clients are typically not responsible for attorney fees unless compensation is recovered. To learn more about what to expect when hiring a personal injury attorney , visit our detailed guide."
+      },
+      {
+        "entries": [],
+        "heading": "What types of cases do personal injury attorneys handle?",
+        "images": [],
+        "kind": "feature",
+        "text": "Personal injury attorneys handle a wide range of legal matters involving injuries caused by the negligent or wrongful actions of others. These cases often include incidents such as car accidents, truck crashes , workplace injuries, product liability claims, premises liability, dog-related injuries, and slip-and-fall accidents. In each case, the attorney\u2019s role is to determine whether a legal duty was breached and whether the injured person may be entitled to pursue compensation under the law."
+      },
+      {
+        "entries": [],
+        "heading": "What happens if the insurance company denies my injury claim?",
+        "images": [],
+        "kind": "feature",
+        "text": "If your injury claim is denied, that does not necessarily mean you are out of legal options. Insurance claim denials can occur for a variety of reasons, including disputes about how the injury occurred, the extent of medical treatment, or who may be legally responsible. In some cases, an attorney may be able to review your documentation and gather additional evidence to challenge the denial. This could include medical records, police reports, witness statements, or expert input. If appropriate, your attorney may advise you to file a lawsuit and pursue recovery through the court system. Navigating a denied claim can be complex, especially when the facts are disputed. Speaking with a personal injury attorney may help clarify your next steps and protect your ability to seek compensation if it is available under the law."
+      },
+      {
+        "entries": [],
+        "heading": "How long does a typical personal injury case take to resolve?",
+        "images": [],
+        "kind": "feature",
+        "text": "The timeline for a personal injury case varies depending on several factors, including the complexity of the facts, the severity of the injuries, and whether the parties involved are willing to negotiate. Some cases may settle within a few months, while others can take a year or longer, especially if a lawsuit is filed or the case proceeds to trial. For example, a case involving a minor injury with clear liability may resolve once medical treatment is complete and damages are documented. In contrast, cases involving long-term injuries or disputed liability often take more time due to extended negotiations or litigation. It is also important to wait until you reach what is called maximum medical improvement (MMI), which means your condition has stabilized. This allows your legal team to more accurately evaluate the full impact of the injury. Settling too early can risk excluding future me"
+      },
+      {
+        "entries": [],
+        "heading": "What is the difference between a personal injury claim and a lawsuit?",
+        "images": [],
+        "kind": "feature",
+        "text": "A personal injury claim is the initial process of seeking compensation, typically through an insurance company, without filing a court case. It involves negotiating a resolution based on liability, medical records, and documented damages. A lawsuit, by contrast, is a formal legal action filed in civil court when the parties cannot reach an agreement through the claims process. Lawsuits involve legal pleadings, discovery, and may ultimately be decided by a judge or jury. Understanding this distinction is important because most personal injury cases begin as claims, but some require litigation to pursue recovery when negotiations are unsuccessful."
+      },
+      {
+        "entries": [],
+        "heading": "Do I need a personal injury attorney if I already have insurance?",
+        "images": [],
+        "kind": "feature",
+        "text": "Having insurance can help cover certain expenses after an accident, but it may not reflect the full impact of your injuries. Policies often focus on immediate costs, like initial medical bills or property damage, and may not account for long-term medical care, future income loss, or non-economic harm such as pain and suffering. A personal injury attorney can evaluate your situation, explain your legal rights, and determine whether any additional claims may be appropriate. Legal guidance can also help protect you from signing away important rights too early in the process, especially if you\u2019re facing pressure to settle quickly."
+      },
+      {
+        "entries": [],
+        "heading": "Can I switch lawyers during a personal injury case?",
+        "images": [],
+        "kind": "feature",
+        "text": "Yes, clients generally have the right to change attorneys during a personal injury case. If you are concerned about communication, case strategy, or overall representation, you may choose to seek a second opinion or move your case to another law firm. Common reasons for switching lawyers include difficulty reaching your attorney, uncertainty about legal advice, or discomfort with how the case is progressing. A new attorney can review the current status of your case and explain any options moving forward. In many cases, the new attorney will coordinate the transfer of your file and work with your previous counsel to address any outstanding fees. Fee arrangements are usually handled through the final recovery and do not require clients to pay twice. If you have concerns about your case, speaking with a different attorney can help clarify your rights and determine whether a change is approp"
+      },
+      {
+        "entries": [],
+        "heading": "What is considered a serious injury in a personal injury case?",
+        "images": [],
+        "kind": "feature",
+        "text": "A serious injury typically involves long-term medical treatment, permanent disability, or significant disruption to daily life. Common examples include spinal cord injuries, traumatic brain injuries, amputations, and severe burns. In legal terms, these cases often involve more complex claims due to their lasting consequences."
+      },
+      {
+        "entries": [],
+        "heading": "The Bottom Line",
+        "images": [],
+        "kind": "feature",
+        "text": "No fees unless/until you win Thousands of cases handled Available 24/7 Free consultations Over $1 billion recovered 100+ years of combined experience Board Certified in Personal Injury Trial Law by the Texas Board of Legal Specialization Our successful results for our clients are a direct reflection of the skill and experience we have as trial lawyers. Our clients can attest to the compassion, commitment, and professionalism of our representation. We zealously pursue justice and compensation for the injuries sustained by others\u2019 negligence."
+      },
+      {
+        "entries": [],
+        "heading": "COntact Us",
+        "images": [
+          "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/content/content-v9-bg.jpg",
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/Ground-Breaking-Results-photo.png",
+          "https://www.ammonslaw.com/wp-content/uploads/2025/03/Chambers-Spotlight-2025-e1741210076524.jpg",
+          "https://www.ammonslaw.com/wp-content/uploads/2025/12/National-44553-spec-ccUS-ed16-Year-Original.png",
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/Super-Lawyers.png",
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/multi-million.png",
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/avvo.png",
+          "https://www.ammonslaw.com/wp-content/uploads/2023/01/Top-100-Trial-Lawyers2.png"
+        ],
+        "kind": "feature",
+        "text": "To get started with your free initial consultation , call us at (281) 801-5617 or fill out the form below.\u200b\u200b\u200b Are You a New Client? Yes, I am a potential new client No, I'm a current existing client I'm neither. SEND INFORMATION A Record of Ground-Breaking Results The Ammons Law Firm has represented people across the nation against large corporations and businesses, recovering millions for our clients in the process. We have a long, well-established track record of success, including Rob Ammons\u2019 $82.5 MILLION-DOLLAR VERDICT in the Texas Verdict Hall of Fame. Our focus is on giving clients top-notch legal representation while promoting the highest ethical standards and achieving the best possible result. See Results /"
+      }
+    ],
+    "emails": [],
+    "has_locations_page": true,
+    "hours": [
+      "Mon-Tue-Wed-Thu-Fri-Sat-Sun 00:00-23:59",
+      "Mo,Tu,We,Th,Fr,Sa,Su 00:00-23:59"
+    ],
+    "menu_items": [
+      {
+        "description": "MILLION",
+        "name": "Plant Explosion",
+        "price": "$812"
+      },
+      {
+        "description": "MILLION",
+        "name": "Truck Accident & Catastrophic Injury",
+        "price": "$55"
+      },
+      {
+        "description": "MILLION",
+        "name": "Mass Shooting & Wrongful Death",
+        "price": "$50.65"
+      },
+      {
+        "description": "0 MILLION",
+        "name": "Wrongful Death Verdict",
+        "price": "$49"
+      },
+      {
+        "description": "million jury verdict on behalf of a family whose husband and father was killed by a grossly negligent OPG Logistics 18-wheeler",
+        "name": "The Ammons Law Firm secured a",
+        "price": "$49"
+      },
+      {
+        "description": "2 MILLION",
+        "name": "Workplace Injury & Wrongful Death",
+        "price": "$48"
+      },
+      {
+        "description": "5 MILLION",
+        "name": "Consumer Product Burn Injury",
+        "price": "$47"
+      },
+      {
+        "description": "5 million for a victim of serious burns caused by a defective consumer product",
+        "name": "The Ammons Law Firm recovered",
+        "price": "$47"
+      },
+      {
+        "description": "5 MILLION",
+        "name": "Product Defect",
+        "price": "$37"
+      },
+      {
+        "description": "MILLION",
+        "name": "Tire Defect & Wrongful Death",
+        "price": "$33"
+      },
+      {
+        "description": "9 MILLION",
+        "name": "Explosion & Wrongful Death",
+        "price": "$32"
+      },
+      {
+        "description": "5 MILLION",
+        "name": "Traumatic Brain Injury",
+        "price": "$27"
+      }
+    ],
+    "menu_media": [],
+    "photos": [
+      "https://www.ammonslaw.com/wp-content/uploads/2025/04/Personal-Injury-Attorneys-and-Lawyers.png",
+      "https://www.ammonslaw.com/wp-content/uploads/2026/05/personal-injury-lawyer-rob-ammons.png",
+      "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/mainstages/Mainstage-CTA-txt-bg.jpg",
+      "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_plantexplosion-min.png",
+      "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_truckaccidents-min.png",
+      "https://www.ammonslaw.com/wp-content/uploads/2023/01/thumb_autodefect-min.png",
+      "https://www.ammonslaw.com/wp-content/uploads/2023/01/lawfirm_background-2.jpg",
+      "https://www.ammonslaw.com/wp-content/themes/Ammonslaw-child/ammonslaw/assets/case-results/case-results-v5-bg.jpg"
+    ],
+    "products": [],
+    "services": [
+      "Featured Posts",
+      "Boad Certified",
+      "Baylor Athletics",
+      "Legal Video Library",
+      "Attorneys Rob Ammons",
+      "John Gsanger",
+      "April Strahan",
+      "Adam Milasincic"
+    ],
+    "socials": [],
+    "tagline": "Houston personal injury lawyers at The Ammons Law Firm serve clients in complex personal injury cases, helping them maximize compensation and recovery. Call our injury attorneys at 281-801-5617 for a free consultation."
+  },
+  "ratings": [
+    {
+      "reviews": 122,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=14033095772883447039&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.8
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Roxana Valdez",
+      "rating": 5,
+      "text": "I would like to express my sincere gratitude to this law firm for the outstanding job they did handling my accident case. From day one, they provided professional and compassionate service, always taking the time to answer my questions and keep me informed throughout the entire process.\n\nTheir dedication, experience, and commitment gave me peace of mind knowing that my case was in good hands. I highly recommend this law firm to anyone in need of legal representation after an accident. Thank you for all your hard work and support!\nThank you,\nMr Luke Maddox, Elvia Palacios and all the Ammons Law Firm."
+    },
+    {
+      "author": "Joaquin Trevizo",
+      "rating": 5,
+      "text": "I cannot say enough good things about Ammons Law Firm and the way they handled my case. From the very beginning, they treated me with respect, compassion, and genuine care. After my accident, I was dealing with a lot of stress, pain, and uncertainty, but their team was there every step of the way to guide me through the process. What stood out the most was that they never made me feel like just another case number. They took the time to listen to my concerns, answer my questions, and make sure I understood what was happening. I always felt like my well-being mattered to them, not just the outcome of the case. Their professionalism, communication, and dedication gave me confidence during one of the most difficult times in my life. If you\u2019re looking for a law firm that truly cares about its clients and fights for them like family, I highly recommend Ammons Law Firm. Thank you to everyone at Ammons Law Firm for your hard work, support, and for making me feel valued throughout the entire process.\n\nJoaquin Trevizo"
+    },
+    {
+      "author": "shaneris Stephens",
+      "rating": 5,
+      "text": "Ammons Law Firm provided outstanding representation and client care throughout my three-year car accident case involving Uber where I was T- boned during my ride. This was an amazing team to watch as they all worked together. Their attention to detail was exceptional \u2014 Kimberly was on point with coordinating flights, hotels, and meals during extended trial days, and ensuring everything was handled seamlessly.\n\nThey were also incredibly accommodating and thoughtful, particularly as I was a breastfeeding mother, going above and beyond to ensure my comfort and needs were met. Their professionalism, preparation, and commitment ultimately led to a successful outcome in my case. I highly recommend Ammons Law Firm to anyone seeking experienced, compassionate, and results-driven legal representation. If you want top notch care and the best chance at winning Ammons law firm has the top notch team to get you there.  Rob was definitely my David to Goliath(Uber). Don\u2019t think you\u2019re not important enough they surely won\u2019t."
+    },
+    {
+      "author": "Landra Fries",
+      "rating": 5,
+      "text": "I cannot put into words how wonderful my experience with this Law Firm was! Specifically, the Lawyer handling my case was Luke Maddox and he\u2019s one of the smartest people. I think I\u2019ve ever met to date! He Definitely knows what he\u2019s doing. Luke Maddox is one of those lawyers that doesn\u2019t have to advertise because he\u2019s just that good! He had great communication and he was relatable which I thought was very important but most important! He\u2019s the best lawyer out there and if you can get him to take your case, you\u2019re gonna win!!!!!!"
+    },
+    {
+      "author": "Denard and Faren",
+      "rating": 5,
+      "text": "I can\u2019t say enough good things about this law firm. From the very beginning, Ammons Law Firm entire team gave me their full, undivided attention and made me feel truly seen and valued. They were incredibly thorough, patient, and compassionate, taking the time to explain everything and answer my questions without ever making me feel rushed. The hospitality was amazing, and for the first time in a stressful situation, I didn\u2019t feel like a burden, a charity case, or like they were doing me a favor by helping me. I felt respected, supported, and genuinely cared for every step of the way. I am beyond grateful and would highly recommend this firm to anyone who wants to be treated as person and not just a case."
+    }
+  ],
+  "trade": "Attorney",
+  "url_check": null,
+  "website_url": "https://ammonslaw.com/"
+}

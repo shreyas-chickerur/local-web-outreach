@@ -1,0 +1,761 @@
+{
+  "_gate_unresolved": false,
+  "assumptions": [
+    "website found via google: https://www.hardeightbbq.com/"
+  ],
+  "chain_signals": [
+    "their own site has a locations page"
+  ],
+  "design_direction": {
+    "accent": "terracotta",
+    "architecture": "gallery",
+    "contradictions": [],
+    "cta": {
+      "kind": "visit",
+      "label": ""
+    },
+    "defect": "",
+    "emphasis": [
+      "menu",
+      "reviews"
+    ],
+    "first_screen": "photo",
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "gallery",
+    "mood": "warm",
+    "rationale": "This is a family-run Texas BBQ joint with thousands of enthusiastic reviews and nine large, appetizing photographs of smoked meats and the dining room \u2014 the food and the room are the argument, so let big photography and a stamped, workshop-style name lead, back it with the menu and glowing reviews, and close with a simple visit call to action.",
+    "read_by": "claude",
+    "signature": "scroll_gallery",
+    "signature_why": "The pit, the smoked trays, and the dining room are the strongest sales pitch this place has, so let the photos run wide off the side rather than boxing them into a grid.",
+    "suppress": [],
+    "type_treatment": "stamped",
+    "understood": [
+      "This is a family-run Texas BBQ joint with thousands of enthusiastic reviews and nine large, appetizing photographs of smoked meats and the dining room \u2014 the food and the room are the argument, so let "
+    ],
+    "unsupported": []
+  },
+  "facts": [
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 3,
+      "dissent": [
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.hardeightbbq.com/",
+          "value": "220 N Burleson Blvd., Burleson, TX 76028"
+        }
+      ],
+      "field": "address",
+      "label": "Address",
+      "score": 88,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14462968966984313786&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/hard-eight-bbq-coppell?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        },
+        {
+          "source_type": "openstreetmap",
+          "source_url": "https://www.openstreetmap.org/node/5750506883"
+        }
+      ],
+      "value": "688 Freeport Pkwy, Coppell, TX 75019, USA"
+    },
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 3,
+      "dissent": [
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.hardeightbbq.com/",
+          "value": "+1 817-367-9824"
+        }
+      ],
+      "field": "phone",
+      "label": "Phone",
+      "score": 88,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14462968966984313786&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/hard-eight-bbq-coppell?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        },
+        {
+          "source_type": "openstreetmap",
+          "source_url": "https://www.openstreetmap.org/node/5750506883"
+        }
+      ],
+      "value": "(972) 471-5462"
+    },
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14462968966984313786&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "mon:1030-2100 tue:1030-2100 wed:1030-2100 thu:1030-2100 fri:1030-2200 sat:1030-2200 sun:1030-2100"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.hardeightbbq.com/",
+          "value": "mon:1100-2100 tue:1100-2100 wed:1100-2100 thu:1100-2100 fri:1100-2200 sat:1100-2200 sun:1100-2100"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "hours",
+      "label": "Hours",
+      "score": 30,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14462968966984313786&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://www.hardeightbbq.com/"
+        }
+      ],
+      "value": "Mon-Thu 11am-9pm \u00b7 Fri-Sat 11am-10pm \u00b7 Sun 11am-9pm"
+    }
+  ],
+  "latitude": 32.9544259,
+  "location": "688 Freeport Pkwy, Coppell, TX 75019, USA",
+  "longitude": -97.01006160000001,
+  "name": "Hard Eight BBQ",
+  "notes": null,
+  "open_questions": [],
+  "photo_labels": {
+    "/photo/1/0": "room",
+    "/photo/1/1": "dish",
+    "/photo/1/2": "dish",
+    "/photo/1/3": "detail",
+    "/photo/1/4": "room",
+    "/photo/1/5": "other",
+    "/photo/1/6": "dish",
+    "/photo/1/7": "room",
+    "/photo/1/8": "dish",
+    "/photo/1/9": "dish",
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/4cbd9f05-e178-4101-9df7-34ebca3f085d.jpg": "dish",
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/7b82232b-0c35-4bcc-b84b-fc6e5ef7f991.jpg": "dish",
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/9522edb4-fbd5-432e-88de-2fcfbfd60015.jpg": "dish",
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/f737535a-e9ae-4952-b868-59913c97e876.png": "people",
+    "https://popmenucloud.com/cdn-cgi/image/width=300,height=300,format=auto,fit=pad,background=transparent/fiqawkvs/1360fb84-ccb9-4c9e-ad67-873a59bb4f7c.png": "logo"
+  },
+  "photo_notes": {
+    "/photo/1/0": "A long stone-walled restaurant dining area with wooden tables, patrons seated, and large windows along one side.",
+    "/photo/1/1": "A rack of smoked ribs and sliced sausage on a wooden board with sauce being drizzled on top.",
+    "/photo/1/2": "A tray of barbecue meats and sides including corn, potato salad, salad, sausage, pickles, and bread on a paper-lined table.",
+    "/photo/1/3": "An open smoker grill loaded with sausages, meats, and metal trays of food, set into a stone counter.",
+    "/photo/1/4": "A wooden drink station with soda and tea dispensers inside a rustic restaurant, with a person standing nearby.",
+    "/photo/1/5": "A hand-painted menu board listing meats and prices, with a worker standing near a smoker below it.",
+    "/photo/1/6": "An overhead view of a tray with sliced smoked meats, a bacon-wrapped skewer, and bowls of potato salad and corn.",
+    "/photo/1/7": "An empty dimly lit bar area with a wooden 'Saloon' sign above the counter and rows of empty tables nearby.",
+    "/photo/1/8": "A tray of sliced barbecued brisket, sausage, and ribs with corn on the cob, a cup of sauce, and a container of pickled onions.",
+    "/photo/1/9": "An overhead view of a barbecue platter with sliced meats, ribs, corn on the cob, pickles, sauces, and sides in small cups.",
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/4cbd9f05-e178-4101-9df7-34ebca3f085d.jpg": "An overhead view of a wooden table set with small tostadas topped with shredded meat and slaw, a plate of appetizers, lime wedges, and fruit skewers.",
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/7b82232b-0c35-4bcc-b84b-fc6e5ef7f991.jpg": "A chopped brisket sandwich on a bun next to a bag of kettle-cooked potato chips and a drink cup on a counter.",
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/9522edb4-fbd5-432e-88de-2fcfbfd60015.jpg": "A hand uses tongs to grill steaks on a metal grate next to small plates of grilled onions and a jalape\u00f1o pepper.",
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/f737535a-e9ae-4952-b868-59913c97e876.png": "A man in a black shirt and apron shovels glowing coals into a large outdoor barbecue pit with meat cooking on the grate.",
+    "https://popmenucloud.com/cdn-cgi/image/width=300,height=300,format=auto,fit=pad,background=transparent/fiqawkvs/1360fb84-ccb9-4c9e-ad67-873a59bb4f7c.png": "A red and white logo reading Hard Eight Pit BBQ with a stylized H icon and antler graphic in the background."
+  },
+  "photo_sizes": {
+    "/photo/1/0": [
+      2400,
+      1800
+    ],
+    "/photo/1/1": [
+      1332,
+      1026
+    ],
+    "/photo/1/2": [
+      2400,
+      1802
+    ],
+    "/photo/1/3": [
+      2400,
+      1800
+    ],
+    "/photo/1/4": [
+      2400,
+      1800
+    ],
+    "/photo/1/5": [
+      2400,
+      3200
+    ],
+    "/photo/1/6": [
+      2400,
+      1800
+    ],
+    "/photo/1/7": [
+      2400,
+      1800
+    ],
+    "/photo/1/8": [
+      2400,
+      1800
+    ],
+    "/photo/1/9": [
+      2400,
+      1431
+    ],
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/4cbd9f05-e178-4101-9df7-34ebca3f085d.jpg": [
+      1200,
+      630
+    ],
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/7b82232b-0c35-4bcc-b84b-fc6e5ef7f991.jpg": [
+      1200,
+      630
+    ],
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/9522edb4-fbd5-432e-88de-2fcfbfd60015.jpg": [
+      1200,
+      630
+    ],
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/f737535a-e9ae-4952-b868-59913c97e876.png": [
+      1200,
+      630
+    ],
+    "https://popmenucloud.com/cdn-cgi/image/width=300,height=300,format=auto,fit=pad,background=transparent/fiqawkvs/1360fb84-ccb9-4c9e-ad67-873a59bb4f7c.png": [
+      300,
+      300
+    ]
+  },
+  "photo_vision": {
+    "/photo/1/0": {
+      "alt_text": "A long stone-walled restaurant dining area with wooden tables, patrons seated, and large windows along one side.",
+      "dominant_colours": [
+        "#5a4a3a",
+        "#2b2b2b",
+        "#8a7a5a",
+        "#c9c2b0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/12/0",
+      "why_not": ""
+    },
+    "/photo/1/1": {
+      "alt_text": "A rack of smoked ribs and sliced sausage on a wooden board with sauce being drizzled on top.",
+      "dominant_colours": [
+        "#5a2f1f",
+        "#8c4a2a",
+        "#2b2b2b",
+        "#c98a4a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "dish",
+      "subject_position": "centre",
+      "url": "/photo/12/1",
+      "why_not": ""
+    },
+    "/photo/1/2": {
+      "alt_text": "A tray of barbecue meats and sides including corn, potato salad, salad, sausage, pickles, and bread on a paper-lined table.",
+      "dominant_colours": [
+        "#c9a24a",
+        "#8a6a3a",
+        "#e8dcc0",
+        "#5a3a2a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/12/2",
+      "why_not": ""
+    },
+    "/photo/1/3": {
+      "alt_text": "An open smoker grill loaded with sausages, meats, and metal trays of food, set into a stone counter.",
+      "dominant_colours": [
+        "#2b2b2b",
+        "#8c4a2a",
+        "#5a4a3a",
+        "#c9a24a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "detail",
+      "subject_position": "full",
+      "url": "/photo/12/3",
+      "why_not": ""
+    },
+    "/photo/1/4": {
+      "alt_text": "A wooden drink station with soda and tea dispensers inside a rustic restaurant, with a person standing nearby.",
+      "dominant_colours": [
+        "#3a2a1a",
+        "#8a5a2a",
+        "#c9c2b0",
+        "#2b2b2b"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/12/4",
+      "why_not": "Person facing away, cluttered background, not a strong scene-setter"
+    },
+    "/photo/1/5": {
+      "alt_text": "A hand-painted menu board listing meats and prices, with a worker standing near a smoker below it.",
+      "dominant_colours": [
+        "#2b2b2b",
+        "#8a6a3a",
+        "#c9a24a",
+        "#5a4a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": true,
+      "quality": 3,
+      "subject": "other",
+      "subject_position": "full",
+      "url": "/photo/12/5",
+      "why_not": "Menu board text unreadable as hero, functions as informational signage"
+    },
+    "/photo/1/6": {
+      "alt_text": "An overhead view of a tray with sliced smoked meats, a bacon-wrapped skewer, and bowls of potato salad and corn.",
+      "dominant_colours": [
+        "#8a5a2a",
+        "#c9a24a",
+        "#5a3a2a",
+        "#e8dcc0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/12/6",
+      "why_not": ""
+    },
+    "/photo/1/7": {
+      "alt_text": "An empty dimly lit bar area with a wooden 'Saloon' sign above the counter and rows of empty tables nearby.",
+      "dominant_colours": [
+        "#1a1a1a",
+        "#5a3a2a",
+        "#8a6a3a",
+        "#c9a24a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "room",
+      "subject_position": "full",
+      "url": "/photo/12/7",
+      "why_not": ""
+    },
+    "/photo/1/8": {
+      "alt_text": "A tray of sliced barbecued brisket, sausage, and ribs with corn on the cob, a cup of sauce, and a container of pickled onions.",
+      "dominant_colours": [
+        "#6b4226",
+        "#a9744f",
+        "#e8c15a",
+        "#3a4a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/12/8",
+      "why_not": ""
+    },
+    "/photo/1/9": {
+      "alt_text": "An overhead view of a barbecue platter with sliced meats, ribs, corn on the cob, pickles, sauces, and sides in small cups.",
+      "dominant_colours": [
+        "#7a4b2e",
+        "#d8b45a",
+        "#c9c4b0",
+        "#4a3a2a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/12/9",
+      "why_not": ""
+    },
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/4cbd9f05-e178-4101-9df7-34ebca3f085d.jpg": {
+      "alt_text": "An overhead view of a wooden table set with small tostadas topped with shredded meat and slaw, a plate of appetizers, lime wedges, and fruit skewers.",
+      "dominant_colours": [
+        "#8a6a3a",
+        "#c9a25a",
+        "#e8d8b0",
+        "#4a3a2a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/4cbd9f05-e178-4101-9df7-34ebca3f085d.jpg",
+      "why_not": ""
+    },
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/7b82232b-0c35-4bcc-b84b-fc6e5ef7f991.jpg": {
+      "alt_text": "A chopped brisket sandwich on a bun next to a bag of kettle-cooked potato chips and a drink cup on a counter.",
+      "dominant_colours": [
+        "#8a5a2a",
+        "#e0c48a",
+        "#c02020",
+        "#f5f0e0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "left",
+      "url": "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/7b82232b-0c35-4bcc-b84b-fc6e5ef7f991.jpg",
+      "why_not": ""
+    },
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/9522edb4-fbd5-432e-88de-2fcfbfd60015.jpg": {
+      "alt_text": "A hand uses tongs to grill steaks on a metal grate next to small plates of grilled onions and a jalape\u00f1o pepper.",
+      "dominant_colours": [
+        "#3a2a1a",
+        "#8a5a3a",
+        "#c9c4b0",
+        "#1a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/9522edb4-fbd5-432e-88de-2fcfbfd60015.jpg",
+      "why_not": ""
+    },
+    "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/f737535a-e9ae-4952-b868-59913c97e876.png": {
+      "alt_text": "A man in a black shirt and apron shovels glowing coals into a large outdoor barbecue pit with meat cooking on the grate.",
+      "dominant_colours": [
+        "#1a1a1a",
+        "#a03020",
+        "#8a7050",
+        "#3a3a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/f737535a-e9ae-4952-b868-59913c97e876.png",
+      "why_not": ""
+    },
+    "https://popmenucloud.com/cdn-cgi/image/width=300,height=300,format=auto,fit=pad,background=transparent/fiqawkvs/1360fb84-ccb9-4c9e-ad67-873a59bb4f7c.png": {
+      "alt_text": "A red and white logo reading Hard Eight Pit BBQ with a stylized H icon and antler graphic in the background.",
+      "dominant_colours": [
+        "#c02020",
+        "#ffffff",
+        "#e0e0e0"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "logo",
+      "subject_position": "centre",
+      "url": "https://popmenucloud.com/cdn-cgi/image/width=300,height=300,format=auto,fit=pad,background=transparent/fiqawkvs/1360fb84-ccb9-4c9e-ad67-873a59bb4f7c.png",
+      "why_not": "logo graphic, not a photograph of the business"
+    }
+  },
+  "place_photos": [
+    "places/ChIJVUGFbuErTIYRuiuZuqXJtsg/photos/AVoNoXQmX2boPYy_ZcWPYCwFMnhuNva5U9ZAqMlAiHL7Nfa0_QyJbCdJJq0lHJUS2mFwoe_NTkyl2sdHkJo_BgehqXFJGSLr9o_LBuMU73h0LH3YBDnE0eGIYZBktcy2jPAzkrooCvgaHUIuC57volRfd9ft4HHwJVip3uT1fIJ0VW9bKEt1Q3C42aKYsKth5uSbzHJLD5pzHObBajxH0cSlNVKuV09iXNLsN_Z8iBY_JaIEIDVsUPjw7GrNY_G6UxoG5CWHjcIhJwsymI89W_D8QPMsmV93QUIzy6rWFXiIKbiWkOQAXBBNKogJJWMz6YqHNA27LP9MiwrTFm8EHVVH-PFlVD0VPpoLj2yiSQEt8tU30FFASJ-91gfYDpazC0c27Lfgzt8CXGPBelAx0rh0dMzjPH1Fbc52Jm_ci56vlUzgMGsTdv3cC8ffEht6N4sT",
+    "places/ChIJVUGFbuErTIYRuiuZuqXJtsg/photos/AVoNoXRL-QISXiad6cSTc5EpACAJVRqxXOv9RG0Mrsastu-vTyIkOn-s01Gv12uU0_4CBPnCr1WIo2FK8MY32v8allS5H6MtnH0f3Pn_sPb11pqAZTwFOF_tmBWjDCRz_1L6oLUwlP2fN4GW7yCyieEOJCrj51tbdYd1i8n4gZ5HCS0Qb4jvp78mp4eqW19bPnQpeZi-j3cWf49ZuiM-h2H6fuwXJzxJxkIuQJoeFlXvc8i_pFUu9V24kkoWn2CzntN03jFnvEYRWpAhn84KEbXBURf7VZZ1AxmHvv0aTFQexFDZJ1gkOI243iD490Mkocghgq0veQUAYtmO22xl13ur8_0wb8qKSrLgWvLAhYGfcfe685MRZyy_8qKD34D00BPgWy1YthFQDI2sDJE69Ui_YeenmZOIHSB6WGfDrxw2_NxbAA",
+    "places/ChIJVUGFbuErTIYRuiuZuqXJtsg/photos/AVoNoXRhFaCt9bR4rJrRvUKlVwsCH_5gm2Eq1q65N59mq_IrTqSY8qsjeEPKcHzIbRGS7Rs96g7U2evzrL2V6jnx2NojYnF93I5590cJWVWDsnadg3xTBJMdbf3v1OzlnlqLJkFjqWNIJIfvEQkMclh62-PugV3fIJAiHlrS558vp5xFQKGIj-wvgaqBdcie87_HOKBWK5xldsEzXc1C8yugL25UYBeW4dac8iOqfLpvFPLkutKVp2FnpAm5Yt8pM38ITMsBldyd6529mW5Y6KNXQdLut4l6Pk8L_dhZGvldplMdAJCRh_PlogLrDQvYcUJWmVoBeqOK_3yVVW_cbiPstlcNZkMFcbuHGVO7sCJuhIrvYY-348CfUcPumVgKzJ3V-GNrzg3oiDuLZ1UQug8H40j3R-Bs92maL9jc6K0lHALSsfh17rvThyMkO-QQJEUY",
+    "places/ChIJVUGFbuErTIYRuiuZuqXJtsg/photos/AVoNoXThIsXpfjFeYunxL1Md2o-51E0JEgqJrLr1oRL6MvuqKSJ8BKHTW4pUd12UVKBA84DZ6ct3yEKd1EmzKvta_oy_BfVVgnRH9V52At-PeC2huFDZqGHTg__DmUyzT_6fsVvXSYCt3tNp1-e-cWdVfR2QimG5X78L1xZH4PemDXEKZXBTfoJBATVeBnQLVxLj5U0sUgCKKFnAWw3oKwwcsslWg0KtAY6Kn78UBBvE0tE-hksOQ_quFpyyjQbJd0lsyeASaLUQ0sXbP9djiyFeMwlE06BuhsPu0dAGPUUtCWQvyxK9dSqqqs9ccopVKKKCN2wd8eVOZi1NXM72mZ6IwZha5gfRo2Z1MlWk_3KHVEg7A4ABg11Jehn--vkbpjA4h0wAWDrb8wl3ZTc_d47SG6E7RA_4sAipSStLBXpEJ7YeEOouBpu1-mIvyiq9ZvI6",
+    "places/ChIJVUGFbuErTIYRuiuZuqXJtsg/photos/AVoNoXT1B-MkoGlezh8xVvnw6W18aTFemrmEEhcKD9c7qxOEGThHlJEHxcuO3LjuVKUNvS4yyNK1hUlJc9GzNGDvlximpLvjdl2tZ5WfuVoIHWVJZORvDxcrAM2fwEZ0g99etZJbXdID6BqrBlJQ2PjdqMK2ZXh8YXgw7yEzLtznCtKeVCjxwVx8bB9fdAKvFWYT8a50JmCXX6SohaH1jjzsC1NH3gHYjpZ1wggOND_1AKDcrummg5cXr2rmDxwGO9cIPZApTwzZtHQzUj30x3-8Xc_PIrB-DMD8qs4dXDt1oGNLhrCr81kDvDBYzMUrlPPlEpW9T5WKy7gV8IEWGD-iJzVhlbtbBq3zJMz6Azcq5Us8uSC53L5JHiky8Tfzobil3tQZ2Zsv4QL6IAvXBXzM0FLpNSjLxU50qYG953SP65wMT5B4tYl6LMjiFA8BrswU",
+    "places/ChIJVUGFbuErTIYRuiuZuqXJtsg/photos/AVoNoXSFsFp3jI1-iHf9COHIv4JBm2lbuGc8xbsCD5GxowSJCf8e9dNVPMNqBULC99ZNQxwq0SqA3xjOborSUWQy13DkDBfBiEi_PRKeGnoCgSE63flZklpHF-dvkNCIDens3Aifud7Ey3cabswnigvEFUlU4ipC1gkPagcuGnIn6SPcYj9A9zTXCWpmYTIaLU5eEWUKNfBKmSIO5p3IUkrrWjdQ5mnbjqQ52Of0O8YTIUbHGi8NNkvHs9PgNGQVyi8brDwNxxCZ3odQ8Moh8x7BR7sWrGMHJyApSsWPHjZFrL57F8JEe8FYFIsp9TnGbYgiXKFz5np_3OEQezSDDXQu5pJLPUmxEOaSY2pDShC9CHbaynKlfzw7TwdTn_5OLHYGtTHX0jRQ8LvbrvIY4p-cbBNEjiWQUmr3gkyvfL3K6Z_aKftDroP1EI60p99KApAe",
+    "places/ChIJVUGFbuErTIYRuiuZuqXJtsg/photos/AVoNoXTdJ67gBjPIBwmCA8VQlrct57xe2LgMixASGVQe7ECXzHXuqUmEKYpnWP0cYx1ufYHykblu1epAeTbMdyo0M1XpaO_R0z6t-uWUpFtQdyWKM-zMN4xAXL-6Xzg3D34udI4LZQL9hN4va4VtkaNcNniXPQ03diyK7tdKH6D62PttDaMwXFL_YWy16H3Nt33pzYv2h-9QXXABS8P8od8n_vmNJ4t1uDwKabJnXqf3YF6aOpY_CBSg0wMY6KTtcFf-PTlWEGBspMyN_ZE2jkqa0iq3FE7Pzo6XUw3toj3f9lJL0g8MP3Qp5m6Kf9S7TmAvuTlY0Ofpbq03WgGYfs3iikZUwHJBkNB79G31mGLCQ5iqcnrdr8oOd_eIQBIa_tpuAwBoWv7Z_G6H_j3ftI36sm-bR5aguYF98Qgvbk5Nw1lgkfJ2kF2Nc4MRkbomZKIV",
+    "places/ChIJVUGFbuErTIYRuiuZuqXJtsg/photos/AVoNoXThDFBgEkCmEn_GYhtDE4zixI2KIqLPX9VTKH2SG91puokCXZ1b9E0JBaYrcRfISrgZTnXxNLMRMEjmpr4u-WlEwDLLay089h9tzLEGkVnMNtvNvb5x8kxh0CdycLVzIcI8YFVhCEpCfhJcZSUFMI954gJwMmrEeOH0jECC3JQ_vax1snB5xz9DooMFvRyzEFh-lwgIzMwzSk_fn0VS03CfkzVKsLMY_bQ-pSzw0FSAWqdNisHwlkpPDrPkTUldqAwjvS1cD48ws6Z0eXSHxogUCwOLctMlTZZGXYnE-FK49xCuGD5C3PU30vmF2ERQ5FlCQk5VOPvdNP8x262rLGMNrruLkWPSrfsXD2hmJvXXjhiPMH6rJoLJM3XSOUBzfDPnnltyf--ww_lfMHGZPl7aKatPRiqrRxfvB88BRZLwQc9CRnOyRJowcOFaQgs6",
+    "places/ChIJVUGFbuErTIYRuiuZuqXJtsg/photos/AVoNoXQTUI37Lyxhc-wK1P-DwlqT5AhLtzcnAhFiiQVFo3Jl9Gn5-lAVwDukncaE9RU0RIWG037mndDlaZEINEFNb21hZlEKUZ6VTZ8gKYL3GHdvUK40Abx15jbtV5Rgu0cv4R2s4-b0QMdc1ID9N2oGAtV-OJ72TPpaGvKRQaUF67wfhWGoQF6M2M_Akm2CAtCPYj00ctqKxm4dE8cJnyfd7KPRczlgpMNjN9gYOyNwchV6jDhfj8MblfjIQL8JwtnuYd_ELUtu4alz_XR5Hi7bSSYX8btP0u8Zj0qCpIzYccY7VFC1hQofb3HUSH2XkY5MSXJFz67pr1wu7e0VFjsuSkAOx7_Lxs4cPZI1eSRrs_v_DwnUmw-BeZJF18nHinBf30Vt9_C6ZKutEkNQXfHpzdbLdB_h6Gn4S85eB_AFU74ot30zWbhC8yYzCpnjl_RF",
+    "places/ChIJVUGFbuErTIYRuiuZuqXJtsg/photos/AVoNoXQnBXsYB9-Z3N2EaMR6Ic4kVKRDjNiCnYDNqMRBb9h6SRNTbk-xR62ik82OP1L-ziutWVSRH8w1qiB50_BCwHwvP-96F5mq4hRrbEN3N4ymLqFm4jg3_5cbdOePRQg1_TVlyOAokmL6ao127qLa9KuagIUTrTcPnVmRUGMdwZF-u_Upu58dYdXmFrrGPHbit8k8m9O-q8w9dt8NOQ9jVEW641m7HoDCPXseZF0rXZ9vB8zZTQ-7_u_fqd_opemG7DAh1RstSjf1G1SN7EczEXGMWPFfpaVb6ps1XuWAqOVYz2MaKBERBhvheEK5eVJBNAPXN4IEYsEZWJqfA4VVv3tPpy6XqGQ-K2Cit2QIhRJD_iiKmFi732f7dkviFJaMWjWsD5Z_3rBoD_eI4dBey4NqLyJTVlei4rJgWX1OhRIST7HKVZ1v3u1an6bUPBzg"
+  ],
+  "published": {
+    "about": "Shop Gift Cards Our Story About From Our Family To Yours Hard Eight BBQ is a family-owned and operated business that was started by the late Phillip Nivens and his wife Vicki, along with his son-in-law Chad Decker and wife Carie.",
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "Order",
+        "images": [
+          "https://popmenucloud.com/cdn-cgi/image/width%3D1200%2Cheight%3D1200%2Cfit%3Dscale-down%2Cformat%3Dauto%2Cquality%3D60/fiqawkvs/7b82232b-0c35-4bcc-b84b-fc6e5ef7f991.jpg"
+        ],
+        "kind": "feature",
+        "text": "The coals are always burning at Hard Eight as our meats are cooked daily on fresh mesquite wood for a smoky Texas flavor."
+      },
+      {
+        "entries": [],
+        "heading": "Catering",
+        "images": [
+          "https://popmenucloud.com/cdn-cgi/image/width%3D1200%2Cheight%3D1200%2Cfit%3Dscale-down%2Cformat%3Dauto%2Cquality%3D60/fiqawkvs/4e55bcf0-faf2-453a-91ba-7061ee16b93c.jpg"
+        ],
+        "kind": "events",
+        "text": "The Hard Eight Catering Team offers customizable menus that range from our family's BBQ favorites to upscale dining."
+      },
+      {
+        "entries": [],
+        "heading": "From Our Family To Yours",
+        "images": [],
+        "kind": "feature",
+        "text": "Hard Eight BBQ is a family-owned and operated business that was started by the late Phillip Nivens and his wife Vicki, along with his son-in-law Chad Decker and wife Carie."
+      },
+      {
+        "entries": [],
+        "heading": "Turkey Sandwich review by Sabrina",
+        "images": [],
+        "kind": "feature",
+        "text": "I stopped by Hard Eight BBQ for an impromptu family dinner when I decided I didn't want to cook. I'm not usually a big fan of barbecue, but my family loves it, so I was a bit hesitant since BBQ is not my first choice. The sliced turkey sandwich won me over. The turkey was smoked to perfection, still juicy, and sliced to my liking. I skipped the roll to avoid the extra carbs. But used the tangy barbecue sauce to add flavor without becoming heavy, which let me enjoy the protein without loading up on carbs. The side of corn on the cob was sweet, buttery, and had a gentle char that gave it an authentic grill taste. It paired perfectly with the turkey and kept the meal feeling balanced. Overall, Hard Eight BBQ turned a quick \"let's not cook tonight\" decision into a surprisingly satisfying meal. Even as a reluctant barbecue fan, I even tried a few pieces of the brisket from my hubby's plate an"
+      },
+      {
+        "entries": [],
+        "heading": "Potato Salad review by Rob",
+        "images": [],
+        "kind": "feature",
+        "text": "The potato salad is very good! Loved the flavor and the texture. Rob last week"
+      },
+      {
+        "entries": [],
+        "heading": "Brisket review by Rob",
+        "images": [],
+        "kind": "feature",
+        "text": "We only ordered 1/4 lb of the brisket. I wish we had ordered more because it didn't last long with our crowd! It was very tasty. Rob last week"
+      },
+      {
+        "entries": [],
+        "heading": "Pinto Beans review by Rob",
+        "images": [],
+        "kind": "feature",
+        "text": "The pinto beans at Hard Eight are prepared well. When you eat inside the restaurant, the beans have meat in them and in our to-go order, there was no meat. But still quite delicious! Rob last week"
+      },
+      {
+        "entries": [],
+        "heading": "Corn on the Cob review by Rob",
+        "images": [],
+        "kind": "feature",
+        "text": "The corn in the cob was very good! It's a large serving and we were able to cut one cob into several servings bro serve the kids in our crowd! Very good. Rob last week"
+      },
+      {
+        "entries": [],
+        "heading": "Whiskey Buttermilk Pie review by Rob",
+        "images": [],
+        "kind": "feature",
+        "text": "We ordered the Whiskey Buttermilk Pie but received Pecan Pie. The person who ate the pecan pie was not disappointed! They said it was some of the best pecan pie they'd ever had. Buttermilk pie is a favorite and we still wish we had received the correct pie. Rob last week"
+      },
+      {
+        "entries": [],
+        "heading": "Regular Sausage review by Rob",
+        "images": [],
+        "kind": "feature",
+        "text": "The sausage was delicious! Cooked perfectly. The meat was very hot and the skin still had that crisp that we love! Rob last week"
+      },
+      {
+        "entries": [],
+        "heading": "Mac and Cheese review by Rob",
+        "images": [],
+        "kind": "feature",
+        "text": "Everyone loved the Mac and cheese! Big hit with the kids! I can see why everyone raves about the Hard Eight Mac and cheese! Rob last week"
+      },
+      {
+        "entries": [],
+        "heading": "$125 Minimum",
+        "images": [
+          "https://popmenucloud.com/cdn-cgi/image/width%3D1200%2Cheight%3D1200%2Cfit%3Dscale-down%2Cformat%3Dauto%2Cquality%3D60/fiqawkvs/3a35661f-287e-4ee1-bcfe-6297249679b9.jpg"
+        ],
+        "kicker": "Delivery Service",
+        "kind": "feature",
+        "text": "Delivery service includes delivery to a specified location with no setup or buffet preparation. Delivery & To Go Packages"
+      },
+      {
+        "entries": [],
+        "heading": "No Minimum",
+        "images": [
+          "https://popmenucloud.com/cdn-cgi/image/width%3D1200%2Cheight%3D1200%2Cfit%3Dscale-down%2Cformat%3Dauto%2Cquality%3D60/fiqawkvs/a4f03b94-a455-41ef-be63-5e74271d32dc.jpg"
+        ],
+        "kind": "feature",
+        "text": "No frills here. Just give us a call to place your order to-go or use our online ordering feature. We are happy to bring your order out curbside at any Hard Eight BBQ location, if requested! Place an Order To-go"
+      },
+      {
+        "entries": [],
+        "heading": "Sides to go Along with \"The Good Stuff\"",
+        "images": [
+          "https://popmenucloud.com/cdn-cgi/image/width%3D1200%2Cheight%3D1200%2Cfit%3Dscale-down%2Cformat%3Dauto%2Cquality%3D60/fiqawkvs/eefec57c-0245-4dbf-b230-2410110d311a.jpg"
+        ],
+        "kicker": "The Fixin's",
+        "kind": "feature",
+        "text": "Feeding the whole crew? We've got desserts and sides for you. The Fixin's Menu"
+      }
+    ],
+    "emails": [],
+    "has_locations_page": true,
+    "hours": [
+      "Fri-Sat 11:00-22:00",
+      "Sun-Mon-Tue-Wed-Thu 11:00-21:00",
+      "Sun-Mon-Tue-Wed-Thu 10:30-21:00",
+      "Fri-Sat 10:30-22:00"
+    ],
+    "menu_items": [
+      {
+        "description": "! Enter by writing a dish review to help others. Drawing 10/1",
+        "name": "Win",
+        "price": "$500"
+      },
+      {
+        "description": "Minimum",
+        "name": "Delivery Service",
+        "price": "$125"
+      }
+    ],
+    "menu_media": [
+      {
+        "kind": "pdf",
+        "label": "The Fixin's Menu",
+        "url": "https://www.hardeightbbq.com/files/large-side-items-familyfixins-1-pdf.pdf"
+      },
+      {
+        "kind": "pdf",
+        "label": "Menu",
+        "url": "https://www.hardeightbbq.com/files/boxed-lunches-pdf.pdf"
+      },
+      {
+        "kind": "pdf",
+        "label": "Menu",
+        "url": "https://www.hardeightbbq.com/files/custom-catering-menu-2026-pdf.pdf"
+      },
+      {
+        "kind": "pdf",
+        "label": "Menu",
+        "url": "https://www.hardeightbbq.com/files/fajita-fiesta-menu-pdf-pdf.pdf"
+      }
+    ],
+    "photos": [
+      "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/f737535a-e9ae-4952-b868-59913c97e876.png",
+      "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/7b82232b-0c35-4bcc-b84b-fc6e5ef7f991.jpg",
+      "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/9522edb4-fbd5-432e-88de-2fcfbfd60015.jpg",
+      "https://popmenucloud.com/cdn-cgi/image/width=300,height=300,format=auto,fit=pad,background=transparent/fiqawkvs/1360fb84-ccb9-4c9e-ad67-873a59bb4f7c.png",
+      "https://popmenucloud.com/cdn-cgi/image/width=1200,height=630,format=auto,fit=cover/fiqawkvs/4cbd9f05-e178-4101-9df7-34ebca3f085d.jpg"
+    ],
+    "products": [],
+    "services": [
+      "Load More Content",
+      "Meats From the Pit",
+      "Turkey Sandwich review by Sabrina",
+      "Potato Salad review by Rob",
+      "Jalape\u00f1o Cheddar Sausage review by Rob",
+      "Brisket review by Rob",
+      "Pinto Beans review by Rob",
+      "Corn on the Cob review by Rob"
+    ],
+    "socials": [],
+    "tagline": "Hard Eight BBQ shares what they love\u2014authentic Texas-style barbecue, pit-smoked brisket, ribeyes, scratch-made sides, and good ol' Southern hospitality."
+  },
+  "ratings": [
+    {
+      "reviews": 18702,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=14462968966984313786&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.6
+    },
+    {
+      "reviews": 4491,
+      "source": "yelp",
+      "source_url": "https://www.yelp.com/biz/hard-eight-bbq-coppell?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+      "value": 4.2
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "yelp",
+    "openstreetmap",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Jackie Below",
+      "rating": 4,
+      "text": "We dined here (two of us) for $50. We ordered the side baked potato and Mac n cheese. Other things ordered were two small fountain drinks, brisket and cheddar/jalape\u00f1o sausage. The place was busy and people were seated both inside and out. I might return, I enjoyed my food and the service was good. I would recommend to someone looking for decent BBQ and a quick bite."
+    },
+    {
+      "author": "Jaime Fontanella Lauzardo",
+      "rating": 5,
+      "text": "Hard Eight BBQ turned an unexpected overnight stay in Dallas into a memorable meal. Our flight was delayed and we needed somewhere close to the airport, and this place was exactly what we were hoping for.\nWe sampled several items from the pit, including the brisket, ribs, turkey, jalape\u00f1o cheese sausage, and the bacon-wrapped shrimp and chicken. The brisket was my favorite\u2014tender, flavorful, and everything you expect from authentic Texas BBQ. The jalape\u00f1o cheese sausage was a pleasant surprise, packed with flavor without being overly spicy. The ribs and turkey were both excellent, and the bacon-wrapped shrimp and chicken were another highlight of the meal.\nFor sides, we tried the sweet corn and onion rings. Both were good, but the sweet corn was definitely our favorite and paired perfectly with the smoked meats.\nThe atmosphere has a very authentic Texas vibe, and you can tell this is the real deal. Watching the pit and choosing your meats cafeteria-style adds to the experience.\nIf you find yourself spending an unexpected night near DFW Airport because of a delayed flight\u2014as happened to us\u2014this is the place to go. Great food, great atmosphere, and a true taste of Texas. Highly recommended!"
+    },
+    {
+      "author": "F R",
+      "rating": 5,
+      "text": "Really awesome experience Hard8 on a weekend with some friends! First time coming to Hard8 despite being in dfw for over 8 years, and was treated really kindly and the manager even brought me a to-go bag when I didn\u2019t even ask for it when he saw I had some to-go boxes on my table. Really attentive to our needs and the place was really well kept and cleaned at all times.\n\nThey even have some Mexican style charro beans in a massive pot with floating jalape\u00f1os! That was peak BBQ restaurant chef\u2019s kiss! Will continue coming back because of how welcoming the atmosphere feels and their 4 foot charro beans pot!"
+    },
+    {
+      "author": "Netia",
+      "rating": 5,
+      "text": "Truly a 5 star experience. Austin first greeted us and asked if we had any questions. The meat is ordered by weight/ however much you want. They have 2 cutters on two lines that take your order of what you want, then you go inside and grab other sides. The banana pudding and corn are a must, truly the best banana pudding I\u2019ve ever had. The chicken was delicious too. The brisket is so soft and juicy. Truly falls apart. I could not recommend this place enough. There is indoor and outdoor seating with so much helpful staff that grab your dirty trays and clean as they go. The bathroom was clean."
+    },
+    {
+      "author": "Shawn McGrath",
+      "rating": 5,
+      "text": "If you\u2019re looking for a sign to eat your body weight in smoked meats, this is it.\n\nI walked into Hard Eight BBQ and was immediately greeted by the \"pit master greeting party,\" which is basically the best red-carpet experience a human can have. Choosing what to eat while standing over those pits is a high-stakes decision-making process that requires serious mental fortitude.\n\nHere is the breakdown of the heavy hitters:\nThe Brisket: I\u2019m convinced they use magic because it\u2019s tender enough to be a pillow but way too delicious to sleep on. It has that perfect bark that makes you want to write a thank-you note to the cow.\n\nThe Spicy Cheese Sausage: This should come with a warning label. It\u2019s got a kick that wakes you up and enough cheese to make a Wisconsinite weep with joy. It\u2019s a snap-in-your-mouth masterpiece.\n\nThe Ribs: These are \"meat candy.\" They don\u2019t even require teeth\u2014you basically just look at them intensely and the meat falls right off the bone.\n\nThe atmosphere is pure Texas, the service is fast, and the free beans are the ultimate \"little treat\" to round out the meal. Just a heads-up: wear your \"ambitious\" pants (the ones with the stretchy waistband). You\u2019re going to need them.\n\n5/5 stars. I\u2019ll be back as soon as I can physically move again."
+    }
+  ],
+  "trade": "Barbecue Restaurant",
+  "url_check": null,
+  "website_url": "https://www.hardeightbbq.com/"
+}

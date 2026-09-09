@@ -714,3 +714,172 @@ predicted, in the direction it predicted.
 **And the corpus ran out.** Zero "same" verdicts across twenty pairs; agreement
 is 0 of 0. §2's requirement is met on these eleven fixtures and the instrument
 cannot validate a further axis on them. Phase E is not built for that reason.
+
+# Phase 1 — widening the corpus, and the binding claim before any judging
+
+Registered 2026-09-08, before any new-fixture screenshot has been looked at.
+
+Eight real businesses added via `tools/make_fixtures.py` (no `--redecide`):
+`barbecue-rich` (Hard Eight BBQ), `restaurant-casual` (Whisk Crepes Cafe),
+`roofer-rich` (Bert Roofing), `hvac-rich` (Baker Brothers Plumbing, Air
+Conditioning & Electric), `hvac-second` (One Hour Air Conditioning & Heating),
+`salon-rich` (Drybar), `dentist-rich` (Plano Dental Loft), `law-rich` (Kraft &
+Associates). All resolved through the live Google Places / Yelp / OSM
+directories with real ratings, review counts and photographs — no invented
+material. Weighted toward the buckets that were already crowded: `trade` +3,
+`food` +2, `desk` +1, `groom` +1, `care` +1.
+
+Confirmed before anything else: the existing eleven fixtures' fingerprints are
+byte-identical to their pre-widening values (checked field by field against
+what was printed and pinned before this round). No `--redecide` ran; the
+frozen `design_direction` replayed for all eleven.
+
+## Binding claim
+
+**At least one pair in the widened nineteen-fixture corpus is judged "same"
+from a whole-page screenshot, so `agreement.score()` has a nonzero
+denominator again.** Judged blind, applying the rules already stated in
+`pairs.json`'s `_why` — colour and subject discounted unless structural
+(an alternating ground), type setting discounted unless it moves the type or
+changes what shares the screen with it, a signature device discounted unless
+it changes the page's proportions.
+
+## Falsification
+
+Every pair — new against new, and new against the original eleven — still
+judged "different". That would mean §2's requirement holds more robustly than
+expected on a corpus of nineteen real small businesses across five trades, and
+§2.2 still could not be validated. If that happens: report the actual count
+(zero), restore nothing, re-pin nothing that depends on judging, and stop
+before Phase 2.
+
+## Also to report, either direction
+
+Whether `test_the_corpus_no_longer_has_a_pair_the_gate_would_reject` — a
+pinned all-pairs static check — still holds now that the corpus (19) exceeds
+the gate's rolling comparison window (`WINDOW = 10`). Investigated before
+judging, separately from the binding claim above: five same-trade pairs
+collide statically. Every one has fewer than four axes moved, or moves four
+without a structural axis or a required-high axis among them — the rule
+working correctly on pairs it was never asked to compare live, because they
+are more than ten builds apart and the gate only ever compares a new site
+against the last ten. This is a limit of the window, not a bug in the
+collision rule, and not something a threshold change fixes. Reported and the
+test's assertion corrected to state what the gate actually guarantees, rather
+than either loosened to hide the finding or left red as an unexplained
+failure.
+
+### Phase 1 outcome — PASSED
+
+Five same-trade pairs judged "same" out of thirty-two live verdicts:
+`barbecue`/`barbecue-rich`, `dentist`/`dentist-rich`, `hvac-rich`/`roofer`,
+`hvac-rich`/`roofer-rich`, `roofer`/`roofer-rich`. Agreement is computable
+again at 133/135 (tuning 84/84, held out 6/6), `unreachable()` is 0. Ruler and
+rule unchanged (`d2f37ed7` / `95f4d93e`) — no `--redecide` ran, and the
+eleven original fixtures' fingerprints were confirmed byte-identical before
+and after. See `.reviews/slice-b-phase-1-widen.md` for the full record,
+including a real claims-gate-observability bug found and fixed along the
+way (two initial business picks had unverifiable tenure claims in their own
+site copy; the gate correctly rejected them and `make_fixtures.py` was
+silently freezing the ungated direction anyway — fixed at the source, and
+the two businesses replaced with different real ones).
+
+The single-axis degeneracy check is restored
+(`test_no_single_axis_decides_every_verdict`): no axis decides all
+thirty-two verdicts.
+
+Proceeding to Phase 2 (§2.2, palette from the business's own photographs).
+
+# Phase 2 — palette from the business's own photographs (§2.2)
+
+Registered before `app/site/palette.py` is written.
+
+## What "sampled from their own photographs" actually means here
+
+`§2.2` asks to sample dominant colours from the hero and gallery photographs.
+That data already exists and is already corroborated: the vision pass records
+`dominant_colours` — up to four real hex values per photograph, strongest
+first, validated (`_is_hex`) — on every photo of every fixture, right now.
+Building a second colour-extraction pipeline (a pixel sampler over cached
+JPEG bytes) would duplicate work the vision call already paid for and
+verified, and would need a new image-decoding dependency this project has
+deliberately kept at two runtime deps for its whole life. Reading the field
+that is already there is the smaller, more honest change, and it is `#2.2`'s
+own instruction read literally — "sample dominant colours" is a description
+of the vision schema's own docstring, not a hint to reimplement it.
+
+"Prefer a declared brand colour over a sampled one": there is no declared
+brand-colour field anywhere in this system's data model. The nearest
+corroborated equivalent is a photograph the vision pass flagged
+`is_logo_or_badge` — a business's own logo or signage, which is the one
+photograph in the set that IS the brand rather than a picture of the
+premises. When one exists, its `dominant_colours` are treated as the
+strongest candidates; otherwise the hero and the best two or three gallery
+shots are used, exactly as `§2.2` says.
+
+Each sampled hex is mapped to the nearest named entry in
+`theme.ACCENT_TUNING` by hue distance, with a saturation floor to skip
+near-neutral colours (shadow and highlight greys that a photograph's
+`dominant_colours` list is often padded with, which are not an accent
+anybody would call a decision). This keeps `accent` a closed enum exactly as
+it is today — every value still runs through `Theme.recoloured()`, which
+already derives saturation/lightness from the theme and chooses a
+contrast-safe ink by trying every candidate and keeping the one that passes.
+No new contrast machinery; the existing repair is total.
+
+## Binding claim
+
+**The same-trade mean distance improves** — same-trade pairs currently
+share an accent because the mood table maps their trade to one colour by
+default, not because their photographs actually look alike. A palette drawn
+from what each business's own photographs actually show should pull
+same-trade businesses apart on this axis for a reason grounded in their
+material rather than in a shared fallback.
+
+## Falsification
+
+The mean gets worse, or is unchanged within measurement noise. Either is a
+real result to report, not a bar to clear before shipping — `BRIEF` §3
+already says an axis earns no credit for raising the mean, and the reverse
+holds too: worse is not disqualifying on its own if agreement holds, but it
+would mean this specific mechanism did not do what it was built to do, and
+that has to be said plainly rather than routed around.
+
+## Also to report, either direction
+
+The count of fixtures matching a forbidden default from `§2.4`. Two currently
+match `warm cream + serif display + terracotta` (`barbecue`, `barbecue-rich`).
+Not the primary claim, because barbecue's own photographs are genuinely
+brown/rust-toned (firewood, smoked meat) — a palette faithful to the real
+photographs could sample terracotta again for exactly the right reason, and
+treating that as a failure would be asking the feature to override real
+material rather than represent it.
+
+## What this costs
+
+A re-decide. Offering a new signal in the prompt changes what the model can
+answer even where the frozen answer would otherwise replay unchanged for a
+business whose sampled accent matches what it already chose — the whole
+corpus has to be re-decided to find out which, so every fold moves,
+verdicts about moved pages are RETIRED (not re-judged), and the held-out set
+is retired-not-re-judged the same way. Restated because it bears repeating
+before it happens: this is exactly the cost stated as the reason this phase
+was not built before the corpus was widened.
+
+### Phase 2 outcome — PASSED, harder than asked
+
+Same-trade mean improved 49% identical to 45%. The count of same-trade pairs
+a stranger calls one studio went from five to ZERO among the ten checked —
+every prior "same" verdict broke apart, including the trade trio that used to
+render one page in three colours. Not credited to palette sampling alone: the
+whole identity call was re-asked and the diversity gate ran fresh regardless
+of the prompt; no control redecide was run to isolate the two.
+
+Secondary metric, forbidden-defaults count: held at two, membership moved
+(`barbecue` escaped, `restaurant-rich` matched) — both for the same honest
+reason, real material.
+
+Agreement is 0 of 0 again, for the same reason as before Phase 1. Full record
+in `.reviews/slice-b-palette.md`, including a real API-credit exhaustion hit
+mid-redecide, its recovery, and a second `make_fixtures.py` claims-gate bug
+found and fixed along the way.

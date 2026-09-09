@@ -63,49 +63,55 @@ against the wrong pictures.
 **The instrument's current reading.**
 
     agreement   0 of 0 — no "same" pair is left to rank
-                ruler d2f37ed7, rule 95f4d93e, labels a9beee08,
-                held-out 7fbd905e
-    census      same-trade 55% distance = 45% identical, 7 scored pairs
-                closest pair contractor-bare / roofer at 45%, judged DIFFERENT
+                ruler d2f37ed7, rule 95f4d93e, labels edc76612,
+                held-out e3b0c442
+    census      same-trade 55% distance = 45% identical, 30 scored pairs
+                closest pair barbecue / restaurant-casual at 28%, DIFFERENT
     unreachable 0
-    gate        0 of 55 pairs collide under its own rule
-    tests       769
-    verdicts    20, all judged whole-page
+    gate        0 of 30 same-trade pairs collide (down from 6)
+    forbidden defaults  2 fixtures match (§2.4)
+    tests       775
+    fixtures    19 (11 original + 8 added widening the corpus)
+    verdicts    10 live, all judged whole-page against the current rendering
 
-**Done — the ground truth moved off the fold.** Every verdict before
-2026-09-08 was read from a first-viewport screenshot, and axis three proved what
-that costs: page architecture renders `ledger` byte-identical to `stacked` above
-the fold, so its claim could not have passed however well the axis was built.
-The contact sheet now captures whole pages beside the fold crop, every old
-verdict was RETIRED as a judgement of a different thing, and twenty fresh ones
-were taken. The count decided by one axis alone fell from 12 of 12 to 15 of 20,
-and page architecture's claim passed on re-check at 15 of 20.
+**Done — the ground truth moved off the fold, axis three (page architecture),
+the signature device (§2.3), the forbidden defaults (§2.4), and the keyless
+path varying by business (§2.6).** Unchanged from the prior reading of this
+section; see the handoffs in `.reviews/`: `slice-b-whole-page.md`,
+`slice-b-axis-3.md`, and `slice-b-signature-device.md` (which also covers
+the forbidden defaults and the keyless path).
 
-**Done — Slice B, axis three (page architecture)** and **the signature device**
-(§2.3, twelve devices, exactly one per site, availability by material, never
-reaching the first screen). The device's claim passed: both pairs sharing an
-opening and an arrangement are judged different — though both turn on `quote`,
-the one device that takes a whole screen, so the evidence is about that device
-more than about devices in general.
+**Done — the corpus widened from 11 to 19 real fixtures.** The instrument had
+run out of businesses to disagree about (zero of twenty whole-page verdicts
+judged "same"). Eight real businesses added via `tools/make_fixtures.py`,
+weighted toward the trades already crowded — sameness is a same-trade
+question. Two real bugs surfaced and fixed along the way: `freeze_vision`
+silently froze a `design_direction` from a page the claims gate had rejected
+(now raises); `identity.Decision.unresolved` was returned by the pipeline and
+read by nothing (now captured and printed). Five same-trade pairs came back
+"same," the strongest a trade trio rendering one page in three colours — see
+`.reviews/slice-b-phase-1-widen.md`.
 
-**Done — the forbidden defaults (§2.4), encoded and checked.** All nine, run
-over the corpus. Two fixtures match, both the entry §2.4 names first. Not wired
-as a build gate: gating would reject them, and escaping the mood presets is its
-own work.
+**Done — §2.2, palette from the business's own photographs.** Reads the
+vision pass's own `dominant_colours` (already validated, already paid for)
+rather than re-sampling pixels, mapped onto the existing closed `ACCENT_NAMES`
+enum by hue distance — no new runtime dependency, no bypass of the existing
+contrast repair. Offered as a candidate in the identity prompt, never a
+constraint. The whole corpus was re-decided under it (a real API-credit
+exhaustion hit mid-attempt and was recovered — see the handoff). Same-trade
+mean improved 49% identical to 45%, and every one of the five same-trade
+"same" pairs from the widening — including the trade trio — broke apart, none
+of it credited to palette in isolation since the whole identity call was
+re-asked. See `.reviews/slice-b-palette.md`.
 
-**Done — the keyless path varies by business (§2.6).** The trade chooses the
-mood; a stable hash of the name chooses everything else from what the business
-can carry. Two roofers no longer collide.
+**THE INSTRUMENT IS EXHAUSTED AGAIN, MORE STRONGLY.** Zero of the ten
+carefully-checked whole-page verdicts is "same" — §2's requirement met, and
+agreement is 0 of 0 for the same reason as before the corpus was widened. No
+further axis can be validated on this corpus without either growing it again
+or changing what "validate" means (whole-page judging is itself a choice with
+a cost, not a solved problem — see the open question this leaves).
 
-**THE INSTRUMENT IS EXHAUSTED AT ELEVEN FIXTURES.** Judged whole-page, none of
-the twenty pairs is one a stranger calls one studio — §2's requirement met on
-this corpus, and agreement is 0 of 0 because a rank needs something to rank.
-**No further axis can be validated here.** That needs more businesses, not more
-axes, and it is the reason §2.2 (palette from their own photographs) is not
-built: it would change every site with no way to say whether it helped.
-
-**Not started.** §2.2 palette derivation, and Slices C, D, E, G, H and the rest
-of F.
+**Not started.** Slices C, D, E, G, H and the rest of F.
 
 ## 2. The governing requirement
 

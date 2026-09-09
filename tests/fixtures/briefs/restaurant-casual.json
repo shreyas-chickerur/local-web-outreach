@@ -1,0 +1,508 @@
+{
+  "_gate_unresolved": false,
+  "assumptions": [
+    "website found via google: http://whiskdallas.com/"
+  ],
+  "chain_signals": [],
+  "design_direction": {
+    "accent": "amber",
+    "architecture": "gallery",
+    "contradictions": [],
+    "cta": {
+      "kind": "visit",
+      "label": ""
+    },
+    "defect": "",
+    "emphasis": [
+      "gallery",
+      "features"
+    ],
+    "first_screen": "split",
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "gallery",
+    "mood": "warm",
+    "rationale": "The food is the argument here \u2014 ten strong photographs of glossy crepes and the griddle kitchen \u2014 so the gallery still leads, but splitting the first screen between the founder's Paris-to-Dallas story and a photograph, set in wide boutique-style type, keeps this from reading like the same photo-behind-a-name page as the last build. Reviews are warm but thin (11 on Yelp, a 3.9 on Google) so stats stay quiet while the photographs and Julien's own story do the selling.",
+    "read_by": "claude",
+    "signature": "corner_inset",
+    "signature_why": "A type block inset into the corner of the crepe photograph gives the caf\u00e9 a Parisian-signage feel rather than the plain photo-behind-name look every other food site uses.",
+    "suppress": [
+      "stats"
+    ],
+    "type_treatment": "wide",
+    "understood": [
+      "The food is the argument here \u2014 ten strong photographs of glossy crepes and the griddle kitchen \u2014 so the gallery still leads, but splitting the first screen between the founder's Paris-to-Dallas story"
+    ],
+    "unsupported": []
+  },
+  "facts": [
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=11610603434915699716&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "7800 Windrose Ave., Plano, TX 75024, USA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/whisk-crepes-cafe-plano?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+          "value": "7800 Windrose Ave, 1st Fl, Legacy Hall, Plano, TX 75024"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "address",
+      "label": "Address",
+      "score": 30,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=11610603434915699716&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/whisk-crepes-cafe-plano?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        }
+      ],
+      "value": "7800 Windrose Ave, 1st Fl, Legacy Hall, Plano, TX 75024 | 7800 Windrose Ave., Plano, TX 75024, USA"
+    },
+    {
+      "candidates": [],
+      "confidence": "unverified",
+      "corroborations": 1,
+      "dissent": [],
+      "field": "hours",
+      "label": "Hours",
+      "score": 50,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=11610603434915699716&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        }
+      ],
+      "value": "Mon-Thu 10am-10pm \u00b7 Fri-Sat 10am-12am \u00b7 Sun 10am-10pm"
+    },
+    {
+      "candidates": [
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/whisk-crepes-cafe-plano?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+          "value": "(469) 353-9718"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "http://whiskdallas.com/",
+          "value": "1560863524"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "phone",
+      "label": "Phone",
+      "score": 30,
+      "sources": [
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/whisk-crepes-cafe-plano?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "http://whiskdallas.com/"
+        }
+      ],
+      "value": "(469) 353-9718 | 1560863524"
+    }
+  ],
+  "latitude": 33.0833778,
+  "location": "Plano, TX",
+  "longitude": -96.8258726,
+  "name": "Whisk Crepes Cafe",
+  "notes": null,
+  "open_questions": [
+    "What is their street address?",
+    "What number do customers actually call?",
+    "Their opening hours: only google lists it \u2014 confirm Mon-Thu 10am-10pm \u00b7 Fri-Sat 10am-12am \u00b7 Sun 10am-10pm?"
+  ],
+  "photo_labels": {
+    "/photo/13/0": "exterior",
+    "/photo/13/1": "dish",
+    "/photo/13/2": "dish",
+    "/photo/13/3": "dish",
+    "/photo/13/4": "exterior",
+    "/photo/13/5": "other",
+    "/photo/13/6": "work",
+    "/photo/13/7": "dish",
+    "/photo/13/8": "people",
+    "/photo/13/9": "exterior",
+    "http://static1.squarespace.com/static/5d08d26b2a109b000173bf46/t/5d12f30c545fba0001220c64/1561522961975/WCCsocial2.jpg?format=1500w": "dish"
+  },
+  "photo_notes": {
+    "/photo/13/0": "A storefront counter in a food hall with a lit sign reading Whisk & Eggs and customers lined up ordering",
+    "/photo/13/1": "A rolled crepe topped with sliced strawberries, chocolate drizzle, whipped cream and powdered sugar on a metal tray",
+    "/photo/13/2": "Two dessert crepes on metal trays topped with ice cream and chocolate drizzle next to two iced drinks on a wooden table",
+    "/photo/13/3": "A folded crepe topped with a scoop of ice cream, chocolate drizzle and toasted coconut flakes in a takeout box",
+    "/photo/13/4": "A food stall counter with signage reading Crepes, Whisk and Eggs, Coffee, with a menu board and a worker inside preparing food",
+    "/photo/13/5": "A hanging menu board listing sweet crepes and add-on toppings with prices",
+    "/photo/13/6": "A commercial kitchen with two round crepe griddles and shelves stocked with large tubs of Nutella above a worker",
+    "/photo/13/7": "A folded triangular crepe drizzled with green sauce on a metal tray with a chair in the background",
+    "/photo/13/8": "A rock band performing on a small stage with pyrotechnic sparks and a large illuminated logo behind them, viewed over the heads of a seated crowd.",
+    "/photo/13/9": "A food court corridor with a Whisk and Eggs crepe stall storefront with red and white diamond tile counter, and people walking past.",
+    "http://static1.squarespace.com/static/5d08d26b2a109b000173bf46/t/5d12f30c545fba0001220c64/1561522961975/WCCsocial2.jpg?format=1500w": "An overhead view of a table with buckwheat crepes topped with prosciutto and vegetables, glasses of ros\u00e9 wine, and a bottle pouring wine, with a Whisk Crepes Cafe logo overlay in the centre."
+  },
+  "photo_sizes": {
+    "/photo/13/0": [
+      2400,
+      1800
+    ],
+    "/photo/13/1": [
+      2400,
+      1297
+    ],
+    "/photo/13/2": [
+      2400,
+      3200
+    ],
+    "/photo/13/3": [
+      2400,
+      3200
+    ],
+    "/photo/13/4": [
+      2400,
+      1354
+    ],
+    "/photo/13/5": [
+      2400,
+      1354
+    ],
+    "/photo/13/6": [
+      2400,
+      3200
+    ],
+    "/photo/13/7": [
+      2400,
+      3200
+    ],
+    "/photo/13/8": [
+      2400,
+      1350
+    ],
+    "/photo/13/9": [
+      2400,
+      1800
+    ],
+    "http://static1.squarespace.com/static/5d08d26b2a109b000173bf46/t/5d12f30c545fba0001220c64/1561522961975/WCCsocial2.jpg?format=1500w": [
+      1200,
+      628
+    ]
+  },
+  "photo_vision": {
+    "/photo/13/0": {
+      "alt_text": "A storefront counter in a food hall with a lit sign reading Whisk & Eggs and customers lined up ordering",
+      "dominant_colours": [
+        "#1a1a1a",
+        "#e8b98a",
+        "#ffffff",
+        "#2b3a4a"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/13/0",
+      "why_not": ""
+    },
+    "/photo/13/1": {
+      "alt_text": "A rolled crepe topped with sliced strawberries, chocolate drizzle, whipped cream and powdered sugar on a metal tray",
+      "dominant_colours": [
+        "#7a3b1d",
+        "#f2e9d8",
+        "#8b1e1e",
+        "#e8dcc4"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/13/1",
+      "why_not": ""
+    },
+    "/photo/13/2": {
+      "alt_text": "Two dessert crepes on metal trays topped with ice cream and chocolate drizzle next to two iced drinks on a wooden table",
+      "dominant_colours": [
+        "#8a6a3c",
+        "#3a2a1a",
+        "#e8dcc4",
+        "#f2a35a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/13/2",
+      "why_not": ""
+    },
+    "/photo/13/3": {
+      "alt_text": "A folded crepe topped with a scoop of ice cream, chocolate drizzle and toasted coconut flakes in a takeout box",
+      "dominant_colours": [
+        "#2b3a4a",
+        "#e8dcc4",
+        "#7a3b1d",
+        "#ffffff"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "/photo/13/3",
+      "why_not": ""
+    },
+    "/photo/13/4": {
+      "alt_text": "A food stall counter with signage reading Crepes, Whisk and Eggs, Coffee, with a menu board and a worker inside preparing food",
+      "dominant_colours": [
+        "#1a1a1a",
+        "#e8dcc4",
+        "#3a2a1a",
+        "#ffffff"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/13/4",
+      "why_not": ""
+    },
+    "/photo/13/5": {
+      "alt_text": "A hanging menu board listing sweet crepes and add-on toppings with prices",
+      "dominant_colours": [
+        "#e8dcc4",
+        "#3a2a1a",
+        "#ffffff"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": true,
+      "quality": 3,
+      "subject": "other",
+      "subject_position": "full",
+      "url": "/photo/13/5",
+      "why_not": "menu document, not a scene photo"
+    },
+    "/photo/13/6": {
+      "alt_text": "A commercial kitchen with two round crepe griddles and shelves stocked with large tubs of Nutella above a worker",
+      "dominant_colours": [
+        "#4a4a4a",
+        "#e8dcc4",
+        "#1a1a1a",
+        "#ffffff"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "work",
+      "subject_position": "full",
+      "url": "/photo/13/6",
+      "why_not": "back of house workspace shot, not a polished hero image"
+    },
+    "/photo/13/7": {
+      "alt_text": "A folded triangular crepe drizzled with green sauce on a metal tray with a chair in the background",
+      "dominant_colours": [
+        "#7a5a2a",
+        "#5a6a2a",
+        "#3a2a1a",
+        "#e8dcc4"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "dish",
+      "subject_position": "centre",
+      "url": "/photo/13/7",
+      "why_not": "slightly cluttered background with chair visible"
+    },
+    "/photo/13/8": {
+      "alt_text": "A rock band performing on a small stage with pyrotechnic sparks and a large illuminated logo behind them, viewed over the heads of a seated crowd.",
+      "dominant_colours": [
+        "#1a1a1a",
+        "#e8d9a0",
+        "#3a3a3a",
+        "#c9432a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "dark",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "/photo/13/8",
+      "why_not": "Unrelated to a food business and crowd obstructs view"
+    },
+    "/photo/13/9": {
+      "alt_text": "A food court corridor with a Whisk and Eggs crepe stall storefront with red and white diamond tile counter, and people walking past.",
+      "dominant_colours": [
+        "#c9c2b0",
+        "#8a1f1f",
+        "#2a2a2a",
+        "#5a7a99"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "exterior",
+      "subject_position": "left",
+      "url": "/photo/13/9",
+      "why_not": ""
+    },
+    "http://static1.squarespace.com/static/5d08d26b2a109b000173bf46/t/5d12f30c545fba0001220c64/1561522961975/WCCsocial2.jpg?format=1500w": {
+      "alt_text": "An overhead view of a table with buckwheat crepes topped with prosciutto and vegetables, glasses of ros\u00e9 wine, and a bottle pouring wine, with a Whisk Crepes Cafe logo overlay in the centre.",
+      "dominant_colours": [
+        "#e8ddc9",
+        "#8a4a2a",
+        "#c96a3a",
+        "#3a5a6a"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "dish",
+      "subject_position": "full",
+      "url": "http://static1.squarespace.com/static/5d08d26b2a109b000173bf46/t/5d12f30c545fba0001220c64/1561522961975/WCCsocial2.jpg?format=1500w",
+      "why_not": ""
+    }
+  },
+  "place_photos": [
+    "places/ChIJhygnZ6U8TIYRBJwU9k4mIaE/photos/AVoNoXScUH-Uo4cciDKaVgpjORSHfTB3p33aQEGqmwSdFvZs1uCg2zJlRfjNoX6QdDcGQ9y_KiHR-ozEVrDGrGMTpzGqwXYYqk_ak2Qdi9VPEGPzzM4bbJmMaWLy42F79pYQA0950Bkrkptt-r_ESdMbqYsqD6NqxLzke2lb93wt8FaRvCOosGxAfHBQHENmHTkneo-MYbuCW9zRthMdxytkz9PetkTATj79Kg8NsVUOXn8Nmd88mLj2W4A0BfAdCOlL6_qv2jje4XsOhTsbS80YvoO-uLxqmMoJA8-ZpqlVEV0IcDk24efSzih1anTZy8hb9ut9T1RMlf9BPUlu-orpBv4V7gX2Vgrb53P7l6lLHxjONN7hPqPJ0w0pDVjM40QyOQ8ZXzmqlNcWw9HHuI_8rpylrsQn_T8girddxHzKpa-eEA",
+    "places/ChIJhygnZ6U8TIYRBJwU9k4mIaE/photos/AVoNoXSL6J_LUcaxLLN1_CnGm5kJhrthRPdGY5tixmFHy98inv4CYuw2RO9jT13_H8BZTOHrekb6zqzaXL9a6nSBjiKF1A9r71AAcOZp0BLo7vs9LWdOaG1wfBIsS8PHnSDow5YGOBjFu38Es3alpLPYu2fqqL05Gdk0fNLjioL2q2UrcwCJxoHHWLnclkVfuBFh75m3g9_pW-dhrCpDGQdNGJDUmHQtYHqCCzvhWbsB70g5GftFL7qeSvrs6nkHrFJjLxZ5wmPpwr0wDHxOBV8_59JbTG31rSX2KgW2R7b3W_h3YbYyrVSh92wR8-qsPmHQOYOIkt9WO0BaEL-Q2964huX7fkMikASGQWbD6Sm0iTudHDEUrlo6xsh6CxF5p4kQXukwvqDJp2S6Nul--wgNF5SvnhGc1pXJox4mlSXBraR-gLC8",
+    "places/ChIJhygnZ6U8TIYRBJwU9k4mIaE/photos/AVoNoXR5hjBbOkPMyupiGSTCREnwnYcTletK7CBfoveLNUG_6sKlCYHW6tHnPseu5LK2TII7jwKCrgpctwJut4eNdfhyRYzFJTNnjhsavNo449dGzgfWLhgHT3EWGWUiC1yu5wLGHmN0rF2vFPV-aw-4ZFrmVFYlBoXiqhHBuUio4sD7aLC-32KikhuMD5rpH52tIxVJE91jOUCt8SX_d8YcRkc6YkrQJOiE9zaJOnztavVDvFiB-ueq-_JNG_gYXtPWUpuvX4zljg08otdlN1miK5aKaJAXBrMl3bEKSZOYF6IiIC15PRHdntCLGxMoxy1MhaGUS4zcR44wt5vGA7sUtHPFTbKoL65GAWqd0YhVcdrOvjSFE9lLRSd8EXdXGRDcRbtHLzxb5Z8N6p_tOBcxjFMGROLiIx6s6T_gi_oH_wMCI-Stl5KRYzfSoa8zES8d",
+    "places/ChIJhygnZ6U8TIYRBJwU9k4mIaE/photos/AVoNoXSND8DoFpsdYeE9pO84yxKtcHPLZM1cwY9BCvWNP4KFNkL2CQegCV0RQ_hXxK9CVql9xTzLtyI6YwCmHZZJ3fiFDvwGh0CyHh1TgEA9zpnEv23nUML5dxktNJZz-MgKZrudrrMYERUTJQ5Ry4nGM_7Tkauvf60cy60dH32K2TrsP6EafBq3t8wkmb0B9S_7PtkK_Bk3u1Wz_MH8vgLNr2T5PeqhKHDxEKhQavw8eSDh1Lt4RgxMxZKcxGVsu9d9xpssGFIhZF1_c0AMmKN6iA9rMM1QnlszQGaASvJ9_zF5GjpKwvf2hagKYOqPKGD9P480HnaoGmGY9V2qPI8wgwiDatPS17bjPKWoR7YDkT78amvFREBZbhDjDJR9EY_fFVtT4QLgmsm0dT-6_WN5zszA5FRrGAzIW4XYzRIh-Ld8dOrVakw6I4HJgH1N8YEV",
+    "places/ChIJhygnZ6U8TIYRBJwU9k4mIaE/photos/AVoNoXSPzzzJSuGXP6wzalKzfX0dLk1i8Le4_7IrnXY7qS7gzu3Pt88IFJTULopu9zpcXAy9aoqD9He0sbOB8HAwc-KyDdx4D0FV2c6Na2TJL7ohA6OUvCDriTJ9i3ay9uqdyq2UcXDMM935n2BNnfK-EAXPNikpGOIIFx9AkuewQlGZLE8RZ6ytZIpcorvb8XL8nRSqrJYjj1pZvir5SLIJEj5GGm6mIzXXGIaAaEissxPd7Tax9C0yG9TG8kYRKsGJ9gycMROTp1eUugowxwnC6hcjj39K2ISEFCaIunkiiOSJvF9VqVe1cER2gZpxfq5c_vYHjc43UJuwi56d-SO948svzIMJ6qyP9VYp8hBNq8wRDFhRpX521hMRgTL8X9Eh3iJN0WaySpXezI8OkRZrI81MdTw7wWL-Qu0nioVsWob0UeCJVcbdvNWV8AAL-XpD",
+    "places/ChIJhygnZ6U8TIYRBJwU9k4mIaE/photos/AVoNoXSu3dqsSV6TmtmTpu_kjwrcbYp8GdRT8UOZykQOUBqWdBv7W61fL_Y0nmDZwsbPLC-fkI5x-ta6QT0nz14Mg6VQ2TEKKteUAooNy1ohvUYfPxIDoKOyBgTqtRNWamFM9cGa7F5scmAzUu7duSvCoywRW-lKmOBfldMYOnnJBnxQ7jtwjPGJ_GuKC18dg6tdDGcaCsmGwZ8r8_u6OQSoRB3t2mje4opWQWC5i5b92IVJjWzUMR1q5rB7r7jicz8hLZWCD1pL6Gjfq_KfoNl1wgEimQBFJD33SbuN8CTac-CurRwV3XUanHWtoEc7Bx-IStUsKWFGUFgWU3HUZIhBG07bsGAgNni6-__k4z80zsBMRPMVd1SHo9qQFTxQ017eMev_Y-eJjlqNJmgdU1W6lGyTZt0uj3QMv381kXUa3OqJcBGsxG37x8xl9oCWmn27",
+    "places/ChIJhygnZ6U8TIYRBJwU9k4mIaE/photos/AVoNoXQilSaVybkH9ocVLlIO3Ft78-mpFPo95Rc-1yl0FX_njxvFHCdQKfqmOLThA0adLYZRSJixTpl86gz9qxLzIVXN-UgLOHnUTgX0SB_8OlTagUs8dnNDOvsxNwwXOUdUuW7j3FEokmG6FucGvMFXdpaaNIKufMlYwla7nDH9GKGbcIKkzN2xpOA0yQyRBCne7K_MNNSFdTFpFE9y0csi-hzEv7OEbiNvlVK0TFmh9bXb3dTJnwbNowhkl8NZvVLaNEl4fxDAdbbwYH6luE4Z1X3Cf9aEGRHGmBeaxDGNpIFevYAz9lVuBm5N4wrt-yeCmH_zc5BeeAP5aEmpv_Jf4sqKIF1h-SjYfj2FlBc9tZO3uxSMJBAft0aabCLW7YlyirK4jMG-lz2PoHPDaGTc_Sth-X2sTCW79ecYpA4t9H4452CT_FsQpjuqMhtn4g",
+    "places/ChIJhygnZ6U8TIYRBJwU9k4mIaE/photos/AVoNoXTgasW5K5rkW3juWeZc3CSoxmqmMGoY3dx7fqFRMLh04KFXOqZFZLTGHimbpvEDi7CSOLV66Qg7MWgPg2wBlKWbqewh2VETTEswnrq309m3Yx36wi-9HIXFUcm4S4aH7XsOZ16Xp4B7E_hFn9yKfbpknMQBYEu4U11CaBA1Y-1fqdqF8Dvuj6vupvLMTm3OZOhZ-WtU6R0pKZFLj_S01nAFfE7luNi6xFUZkKMoFekdP0MuLO3gEkA73pi6dmgeSvHuwxjcGfFNKDpYjROUvlKSui4Jbg53Qxkxto7ElwM9oE0GPN67cvQqwp50dv7Jql5xLh5nKVYugHCar1cN5LBIg6iLybMyFHWyS4ubgD4dYZS8bKhW3_ivxnZQ0X_j3--y00vAHR48oklnvjdEsPrIh0KD-UGU92iDscc92Anpjg",
+    "places/ChIJhygnZ6U8TIYRBJwU9k4mIaE/photos/AVoNoXRXpf152yFC4e4dx6SKEmCiSLRcSgHFEC-ht2_xDOJ3kGAPlV5v_sPJEX_HODkbRfgsK-V3q9XaveLqwxPm_LeuVHgMj7ITWy3kS-6WMkctcCtjgyw2OhcYNM97WCY2mIwMbjKGU8W9iOcdRDduNuG9Xmr-Nu2bzCj-zELfsP4BdWivaueRwXB5F9jV1SIf2jZDBSOvJKsyc7PJmDhNFAfSyXq9zN_qS5aWossia4HOR7_wB-yVgsatvJixWDvFbL0lknup_qstT_LV3VraswJSUeCV8KSRWF9AZL1xJ3O9DGHl9Qm_yt6jpu4SQGTJwGZ0_lrcfoI1-YY_Egle4wUas1x6ltcXyacyb7zV9GfiKXAA9h4C7PRxiPsJs2gQ5PcmjskTeqbjfgQfJSyOW87p80cIEUpk1xf8uQ-sBnneEOg",
+    "places/ChIJhygnZ6U8TIYRBJwU9k4mIaE/photos/AVoNoXRFN7lgXA1tUCNzlmMSruAZPWN5RvqVtTUrgsXo0UxYbWwvn1HQNRlgXeRoPYwY8pQWA0bUlkCC9bnf8_i_g2Vn33UvCUY9vQASoV6b8eemQhfiP6C8srU069jUjW8TX-w0F4JNlDjDN8ERllQj36tRsxPvn3Uw5lF6XBEWT87zkH8D_smiZZ1h8xj7YwSC3K6WUmQV2n_ABNyfNSk1huAjTFGUXxWdFIQgBvzse3wHSsYJN8zs3rkLenhvY0IimrFpCNkX7mq5tNF9jk-EUSbJxZF2GakISuvbMDx6isSWAh_6tmeJvQo7HmeduLZbF8G80cUe8G06HNl9ymbfW6z4DkD_BysOHyj0LnFzK2bT6ZDWnMjOcYu7v23p-x0Edo1Wt17YnBPjpgsF79H7EnigFIW9DpJr5Xclbl8Mp3xd92V4"
+  ],
+  "published": {
+    "about": null,
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "ALL THE WAY FROM PARIS TO DALLAS \u2014",
+        "images": [
+          "https://images.squarespace-cdn.com/content/v1/5d08d26b2a109b000173bf46/1561172447583-4LDZDZFPURP3NI0XVZS6/julieneelsen.jpg"
+        ],
+        "kind": "feature",
+        "text": "Dallas is home for Parisian-born and -raised Julien Eelsen who founded Whisk Cr\u00eapes Caf\u00e9. His early career with Air France in business management took him to Nigeria, Peru and other parts of the world, but he found the comforts of Dallas synonymous to the comfort and early childhood memories of homemade cr\u00eapes with grandma. His love for cooking started at an early age. He remembers sweet memories of picking gooseberries, strawberries and rhubarb with his grandma and aunt to make the jams for the cr\u00eapes. While living in Paris, Julien hosted underground dinners for 10 to 50 guests and hosted parties for his friends and family. Julien's work led him to Dallas where he found a fondness for it. A French guy in Dallas, he wanted to open a bistro with French roots but with the Oak Cliff / Dallas culture reflected in it. A laid-back and approachable place for sweet and savory cr\u00eapes -- Whisk Cr\u00ea"
+      }
+    ],
+    "emails": [],
+    "has_locations_page": false,
+    "hours": [],
+    "menu_items": [],
+    "menu_media": [],
+    "photos": [
+      "http://static1.squarespace.com/static/5d08d26b2a109b000173bf46/t/5d12f30c545fba0001220c64/1561522961975/WCCsocial2.jpg?format=1500w"
+    ],
+    "products": [],
+    "services": [
+      "ALL THE WAY FROM PARIS TO DALLAS \u2014"
+    ],
+    "socials": [],
+    "tagline": "Whisk Cr\u00eapes Caf\u00e9 and Whisk & Eggs are the creation of Parisian-born and raised Julien Eelsen in Dallas, Texas."
+  },
+  "ratings": [
+    {
+      "reviews": 121,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=11610603434915699716&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 3.9
+    },
+    {
+      "reviews": 11,
+      "source": "yelp",
+      "source_url": "https://www.yelp.com/biz/whisk-crepes-cafe-plano?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+      "value": 4.4
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "yelp",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Nani",
+      "rating": 4,
+      "text": "I\u2019ve been craving a delicious crepe for months. I was about to order a waffle from Press before I noticed Whisk Crepes Cafe. A staff member recommended the $12 la formule lunch special. I wanted a sweet crepe and decided to make my own. I ordered nutella, bananas, raspberries, strawberries, caramel, and vanilla ice cream. I received powdered sugar but no whipped cream on my crepe. While reviewing photos of the menu I noticed whipped cream should\u2019ve been added. I understand if I declined it, but it\u2019s included in the price. What could\u2019ve been a 5-star review is now 4. Most add-ons are .75. Due to the total amount, I would\u2019ve liked to receive every item. This is the only mishap, and the sweet crepe was the best I\u2019ve ever had! The food-prep area was clean, and the staff were friendly and helpful."
+    },
+    {
+      "author": "Schow",
+      "rating": 5,
+      "text": "We didn't get crepes but had their nutella latte and hot green tea. I was blown away by the taste! The Nutella latte was out of this world good! I would recommend everyone to try it once! Their drinks were a great compliment on a cold, chilly evening.  Will definitely go back."
+    },
+    {
+      "author": "Ram G",
+      "rating": 5,
+      "text": "Ok ladies and gents! If you are at Legacy West Food Hall and are craving something sweet you have got to try Whisk Crepes Cafe!!! The Crepes here smack frfr! They have a variety of drinks and deserts and so far everything I have tried is banging!!!! Let\u2019s gooooooooo!!!"
+    },
+    {
+      "author": "Elan Suret",
+      "rating": 1,
+      "text": "The worker served me almond milk when I ordered oat. I asked again is this oat milk and he explicitly answered yes, but  it wasn't oat. I watched him put away almond milk, but I knew that by the taste and the immediate allergic reaction I had as I am ALLERGIC TO NUTS! Smdh. We are living in a horrible era post pandemic. The workers available for these jobs are bottom tier and low vibration. It angers me because I choose to spend 5.00 on 1 ounce of coffee and 1 ounce of milk which is asinine, but I like what I like. It's a treat! Be grateful I'm not vindictive because a mistake like this could cost the company it's life. Please TRAIN your staff!."
+    },
+    {
+      "author": "Abdur Rahman Bashir (Imam ARB)",
+      "rating": 5,
+      "text": "Came to Legacy Hall to have waffles from \u201cPress Waffles\u201d when I walked by this place.\nI decided to try them out by going to savory route. Oh did I go savory! Tried their G.O.A.T crepe that had dried figs and goat cheese topped with a drizzle of balsamic and pecans with a side of greens.\n\nYou have to like goat cheese first in order to appreciate the crepe.  It might not be up your alley but it sure was up mine.\n\nService was great and the vibe at Legacy Hall was awesome too."
+    }
+  ],
+  "trade": "Breakfast Restaurant",
+  "url_check": {
+    "blocked": false,
+    "fault": "http-link",
+    "note": "the link on their listing is the old http one; the site itself serves https at https://www.whiskdallas.com/",
+    "published": "http://whiskdallas.com/",
+    "working": "https://www.whiskdallas.com/"
+  },
+  "website_url": "http://whiskdallas.com/"
+}

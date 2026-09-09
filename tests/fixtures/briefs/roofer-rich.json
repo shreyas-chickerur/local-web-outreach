@@ -1,0 +1,804 @@
+{
+  "_gate_unresolved": false,
+  "assumptions": [
+    "website found via google: https://bertroofing.com/?utm_campaign=gmb"
+  ],
+  "chain_signals": [],
+  "design_direction": {
+    "accent": "blue",
+    "architecture": "column",
+    "contradictions": [],
+    "cta": {
+      "kind": "quote",
+      "label": ""
+    },
+    "defect": "",
+    "emphasis": [
+      "reviews",
+      "services"
+    ],
+    "first_screen": "proof",
+    "hero_offset": 0,
+    "ignored_tokens": [],
+    "kind": "style",
+    "lead_with": "stats",
+    "mood": "industrial",
+    "rationale": "A roofing contractor sells trust and a track record before anything else, so the page should open on the figures \u2014 rating, years in business, roofs completed \u2014 with a calm, document-like column that a homeowner comparing three quotes can scan quickly, and a quote request as the single action. I've kept the proof-first opening and stats lead since that's correct for a trade, but swapped the stamped/ledger/gallery treatment for a quieter type treatment, a column architecture, and a ticker signatur",
+    "read_by": "claude",
+    "signature": "ticker",
+    "signature_why": "A thin running line of the hard numbers \u2014 4.8 rating, since 1988, 40,000 roofs, Golden Hammer wins \u2014 gives a nervous homeowner the proof-of-competence a roofer needs without theatrics.",
+    "suppress": [],
+    "type_treatment": "quiet",
+    "understood": [
+      "A roofing contractor sells trust and a track record before anything else, so the page should open on the figures \u2014 rating, years in business, roofs completed \u2014 with a calm, document-like column that a"
+    ],
+    "unsupported": []
+  },
+  "facts": [
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "address",
+      "label": "Address",
+      "score": 90,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14068571519679869881&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/bert-roofing-dallas?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        }
+      ],
+      "value": "10021 Cayuga Dr, Dallas, TX 75228, USA"
+    },
+    {
+      "candidates": [],
+      "confidence": "verified",
+      "corroborations": 2,
+      "dissent": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14068571519679869881&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "(469) 382-9436"
+        }
+      ],
+      "field": "phone",
+      "label": "Phone",
+      "score": 80,
+      "sources": [
+        {
+          "source_type": "yelp",
+          "source_url": "https://www.yelp.com/biz/bert-roofing-dallas?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://bertroofing.com/?utm_campaign=gmb"
+        }
+      ],
+      "value": "(214) 321-9341"
+    },
+    {
+      "candidates": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14068571519679869881&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "value": "mon:0730-1700 tue:0730-1700 wed:0730-1700 thu:0730-1700 fri:0730-1700 sat:closed sun:closed"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://bertroofing.com/?utm_campaign=gmb",
+          "value": "fri:0730-1700 sat:closed sun:closed"
+        }
+      ],
+      "confidence": "conflict",
+      "corroborations": 2,
+      "dissent": [],
+      "field": "hours",
+      "label": "Hours",
+      "score": 30,
+      "sources": [
+        {
+          "source_type": "google",
+          "source_url": "https://maps.google.com/?cid=14068571519679869881&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        {
+          "source_type": "their_site",
+          "source_url": "https://bertroofing.com/?utm_campaign=gmb"
+        }
+      ],
+      "value": "Mon-Fri 7:30am-5pm \u00b7 Sat-Sun closed"
+    }
+  ],
+  "latitude": 32.8330779,
+  "location": "10021 Cayuga Dr, Dallas, TX 75228, USA",
+  "longitude": -96.6893407,
+  "name": "Bert Roofing",
+  "notes": null,
+  "open_questions": [],
+  "photo_labels": {
+    "/photo/15/0": "detail",
+    "/photo/15/1": "exterior",
+    "/photo/15/2": "exterior",
+    "/photo/15/3": "work",
+    "/photo/15/4": "detail",
+    "/photo/15/5": "exterior",
+    "/photo/15/6": "product",
+    "/photo/15/7": "exterior",
+    "/photo/15/8": "exterior",
+    "/photo/15/9": "exterior",
+    "https://bertroofing.com/assets/avatar-1.webp": "people",
+    "https://bertroofing.com/assets/avatar-2.webp": "other",
+    "https://bertroofing.com/assets/avatar-3.webp": "other",
+    "https://bertroofing.com/assets/avatar-4.webp": "people",
+    "https://bertroofing.com/assets/bert-roofing-east-dallas-contractor-1920.jpg": "people",
+    "https://bertroofing.com/assets/how-1-1280.webp": "people",
+    "https://bertroofing.com/assets/how-2-1280.webp": "people",
+    "https://bertroofing.com/assets/how-3-1280.webp": "work"
+  },
+  "photo_notes": {
+    "/photo/15/0": "A before-and-after comparison image of a roof section with a pipe vent, showing new shingles installed on the after side",
+    "/photo/15/1": "A two-story green house with a covered front porch, brick accents, and a landscaped front yard",
+    "/photo/15/2": "A before-and-after comparison of a roof gable on a brick house, showing old and new shingles",
+    "/photo/15/3": "Workers installing a new roof with underlayment paper visible on a brick house under a clear blue sky",
+    "/photo/15/4": "A close-up view of a shingled roof with several black turbine vents and pipe stacks, with houses and trees in the background",
+    "/photo/15/5": "A brick house partially obscured by trees and shrubs viewed from the street with sunlight streaming through",
+    "/photo/15/6": "Stacks of roofing shingle bundles and equipment on a driveway with trucks parked on the street",
+    "/photo/15/7": "An aerial view of a large house with grey shingle roofing and a metal standing-seam roof section, surrounded by trees and a street",
+    "/photo/15/8": "A white pickup truck with roofing company branding parked on a residential street in front of a brick house with a large tree.",
+    "/photo/15/9": "The open dark entrance of a metal warehouse building with a Will Call Pick Up sign above the door.",
+    "https://bertroofing.com/assets/avatar-1.webp": "A small circular profile photo of a smiling woman wearing a cap.",
+    "https://bertroofing.com/assets/avatar-2.webp": "A plain green circular icon with the letter C in the center.",
+    "https://bertroofing.com/assets/avatar-3.webp": "A plain blue circular icon with the letter R in the center.",
+    "https://bertroofing.com/assets/avatar-4.webp": "A small circular profile photo of a smiling woman with long dark hair.",
+    "https://bertroofing.com/assets/bert-roofing-east-dallas-contractor-1920.jpg": "A man in a blue polo shirt stands on a rooftop holding tools, with another worker nearby and a lake and city skyline in the background.",
+    "https://bertroofing.com/assets/how-1-1280.webp": "A woman wearing a hard hat and tool belt kneels on a rooftop working with tools and a tablet, with another worker and a residential neighborhood with a lake visible in the background.",
+    "https://bertroofing.com/assets/how-2-1280.webp": "A man in a blue polo shirt with a tool belt smiles while holding a tablet and stylus, standing beside a table of roof shingle samples on a residential street.",
+    "https://bertroofing.com/assets/how-3-1280.webp": "A worker wearing a safety harness installs shingles on a steep roof while another worker carries materials up nearby, with a pickup truck and houses visible below."
+  },
+  "photo_sizes": {
+    "/photo/15/0": [
+      720,
+      720
+    ],
+    "/photo/15/1": [
+      1280,
+      720
+    ],
+    "/photo/15/2": [
+      1440,
+      1440
+    ],
+    "/photo/15/3": [
+      2400,
+      1800
+    ],
+    "/photo/15/4": [
+      1440,
+      1920
+    ],
+    "/photo/15/5": [
+      2400,
+      1800
+    ],
+    "/photo/15/6": [
+      1440,
+      811
+    ],
+    "/photo/15/7": [
+      2400,
+      1350
+    ],
+    "/photo/15/8": [
+      1542,
+      1157
+    ],
+    "/photo/15/9": [
+      2400,
+      3200
+    ],
+    "https://bertroofing.com/assets/avatar-1.webp": [
+      88,
+      88
+    ],
+    "https://bertroofing.com/assets/avatar-2.webp": [
+      88,
+      88
+    ],
+    "https://bertroofing.com/assets/avatar-3.webp": [
+      88,
+      88
+    ],
+    "https://bertroofing.com/assets/avatar-4.webp": [
+      88,
+      88
+    ],
+    "https://bertroofing.com/assets/bert-roofing-east-dallas-contractor-1920.jpg": [
+      1920,
+      1072
+    ],
+    "https://bertroofing.com/assets/how-1-1280.webp": [
+      1280,
+      714
+    ],
+    "https://bertroofing.com/assets/how-2-1280.webp": [
+      1280,
+      714
+    ],
+    "https://bertroofing.com/assets/how-3-1280.webp": [
+      1280,
+      698
+    ]
+  },
+  "photo_vision": {
+    "/photo/15/0": {
+      "alt_text": "A before-and-after comparison image of a roof section with a pipe vent, showing new shingles installed on the after side",
+      "dominant_colours": [
+        "#7a5c4a",
+        "#3a3a3a",
+        "#a3c6e8",
+        "#5c4033"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "detail",
+      "subject_position": "full",
+      "url": "/photo/14/0",
+      "why_not": "Before/after split-image with text overlay, not a clean single photo"
+    },
+    "/photo/15/1": {
+      "alt_text": "A two-story green house with a covered front porch, brick accents, and a landscaped front yard",
+      "dominant_colours": [
+        "#4a5a4a",
+        "#8b6f47",
+        "#c9c2b0",
+        "#3a3a3a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "exterior",
+      "subject_position": "centre",
+      "url": "/photo/14/1",
+      "why_not": ""
+    },
+    "/photo/15/2": {
+      "alt_text": "A before-and-after comparison of a roof gable on a brick house, showing old and new shingles",
+      "dominant_colours": [
+        "#a9a9a9",
+        "#8b7d6b",
+        "#5c5c5c",
+        "#3a3a3a"
+      ],
+      "has_text_overlay": true,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/14/2",
+      "why_not": "Split before/after composite with text overlay"
+    },
+    "/photo/15/3": {
+      "alt_text": "Workers installing a new roof with underlayment paper visible on a brick house under a clear blue sky",
+      "dominant_colours": [
+        "#3a7bd5",
+        "#c9a876",
+        "#8b6f47",
+        "#4a3a2a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "work",
+      "subject_position": "full",
+      "url": "/photo/14/3",
+      "why_not": ""
+    },
+    "/photo/15/4": {
+      "alt_text": "A close-up view of a shingled roof with several black turbine vents and pipe stacks, with houses and trees in the background",
+      "dominant_colours": [
+        "#5c5c5c",
+        "#3a3a3a",
+        "#8b9b6b",
+        "#a9a9a9"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "detail",
+      "subject_position": "full",
+      "url": "/photo/14/4",
+      "why_not": ""
+    },
+    "/photo/15/5": {
+      "alt_text": "A brick house partially obscured by trees and shrubs viewed from the street with sunlight streaming through",
+      "dominant_colours": [
+        "#5c6b4a",
+        "#8b6f47",
+        "#3a3a3a",
+        "#c9c2b0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/14/5",
+      "why_not": "House is largely obscured by trees, not a clear building shot"
+    },
+    "/photo/15/6": {
+      "alt_text": "Stacks of roofing shingle bundles and equipment on a driveway with trucks parked on the street",
+      "dominant_colours": [
+        "#c9c2b0",
+        "#3a3a3a",
+        "#8b3a3a",
+        "#5c6b4a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "product",
+      "subject_position": "full",
+      "url": "/photo/14/6",
+      "why_not": "Supply staging shot, not a finished work or building image"
+    },
+    "/photo/15/7": {
+      "alt_text": "An aerial view of a large house with grey shingle roofing and a metal standing-seam roof section, surrounded by trees and a street",
+      "dominant_colours": [
+        "#5c5c5c",
+        "#8b9b6b",
+        "#3a3a3a",
+        "#c9c2b0"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/14/7",
+      "why_not": ""
+    },
+    "/photo/15/8": {
+      "alt_text": "A white pickup truck with roofing company branding parked on a residential street in front of a brick house with a large tree.",
+      "dominant_colours": [
+        "#8c8c78",
+        "#3a5f3a",
+        "#d9d9d9",
+        "#3355aa"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 4,
+      "subject": "exterior",
+      "subject_position": "right",
+      "url": "/photo/14/8",
+      "why_not": ""
+    },
+    "/photo/15/9": {
+      "alt_text": "The open dark entrance of a metal warehouse building with a Will Call Pick Up sign above the door.",
+      "dominant_colours": [
+        "#a9a9a9",
+        "#6b1e2b",
+        "#87ceeb",
+        "#1a1a1a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 3,
+      "subject": "exterior",
+      "subject_position": "full",
+      "url": "/photo/14/9",
+      "why_not": "Dim warehouse interior, not visually appealing for hero use"
+    },
+    "https://bertroofing.com/assets/avatar-1.webp": {
+      "alt_text": "A small circular profile photo of a smiling woman wearing a cap.",
+      "dominant_colours": [
+        "#e0c9a6",
+        "#2255aa",
+        "#ffffff"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 2,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://bertroofing.com/assets/avatar-1.webp",
+      "why_not": "Tiny avatar image, not suitable as hero"
+    },
+    "https://bertroofing.com/assets/avatar-2.webp": {
+      "alt_text": "A plain green circular icon with the letter C in the center.",
+      "dominant_colours": [
+        "#5a8a6a",
+        "#ffffff"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 1,
+      "subject": "other",
+      "subject_position": "centre",
+      "url": "https://bertroofing.com/assets/avatar-2.webp",
+      "why_not": "Generic placeholder avatar with no real subject"
+    },
+    "https://bertroofing.com/assets/avatar-3.webp": {
+      "alt_text": "A plain blue circular icon with the letter R in the center.",
+      "dominant_colours": [
+        "#1a8fd1",
+        "#ffffff"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 1,
+      "subject": "other",
+      "subject_position": "centre",
+      "url": "https://bertroofing.com/assets/avatar-3.webp",
+      "why_not": "Generic placeholder avatar with no real subject"
+    },
+    "https://bertroofing.com/assets/avatar-4.webp": {
+      "alt_text": "A small circular profile photo of a smiling woman with long dark hair.",
+      "dominant_colours": [
+        "#e0c9a6",
+        "#3a2a20",
+        "#ffffff"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": false,
+      "is_logo_or_badge": true,
+      "is_screenshot_or_document": false,
+      "quality": 2,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://bertroofing.com/assets/avatar-4.webp",
+      "why_not": "Tiny avatar image, not suitable as hero"
+    },
+    "https://bertroofing.com/assets/bert-roofing-east-dallas-contractor-1920.jpg": {
+      "alt_text": "A man in a blue polo shirt stands on a rooftop holding tools, with another worker nearby and a lake and city skyline in the background.",
+      "dominant_colours": [
+        "#87ceeb",
+        "#5c7d4f",
+        "#3355aa",
+        "#8c8c78"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://bertroofing.com/assets/bert-roofing-east-dallas-contractor-1920.jpg",
+      "why_not": ""
+    },
+    "https://bertroofing.com/assets/how-1-1280.webp": {
+      "alt_text": "A woman wearing a hard hat and tool belt kneels on a rooftop working with tools and a tablet, with another worker and a residential neighborhood with a lake visible in the background.",
+      "dominant_colours": [
+        "#5c7d4f",
+        "#87ceeb",
+        "#8c6d4a",
+        "#3355aa"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "centre",
+      "url": "https://bertroofing.com/assets/how-1-1280.webp",
+      "why_not": ""
+    },
+    "https://bertroofing.com/assets/how-2-1280.webp": {
+      "alt_text": "A man in a blue polo shirt with a tool belt smiles while holding a tablet and stylus, standing beside a table of roof shingle samples on a residential street.",
+      "dominant_colours": [
+        "#5b7fa6",
+        "#8a8a7a",
+        "#c9c2b0",
+        "#6b8e5a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "bright",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "people",
+      "subject_position": "right",
+      "url": "https://bertroofing.com/assets/how-2-1280.webp",
+      "why_not": ""
+    },
+    "https://bertroofing.com/assets/how-3-1280.webp": {
+      "alt_text": "A worker wearing a safety harness installs shingles on a steep roof while another worker carries materials up nearby, with a pickup truck and houses visible below.",
+      "dominant_colours": [
+        "#7d8a7a",
+        "#4a4a42",
+        "#c9c2b0",
+        "#a0a89a"
+      ],
+      "has_text_overlay": false,
+      "headline_region_luminance": "mixed",
+      "is_hero_candidate": true,
+      "is_logo_or_badge": false,
+      "is_screenshot_or_document": false,
+      "quality": 5,
+      "subject": "work",
+      "subject_position": "right",
+      "url": "https://bertroofing.com/assets/how-3-1280.webp",
+      "why_not": ""
+    }
+  },
+  "place_photos": [
+    "places/ChIJF7RYyhShToYRuTOyN0KbPcM/photos/AVoNoXScuL96nW87NOS5U8CxEAgurSyP2sVxkqOyxzyp5j9oqJFmaQYnVQqPJPAyBsrOGbiGSg79cMeMfhFACRrDMmsD_9Y8fBVqX3tThNStgzf6XmIZyMSDdEUlFRPKiPJWnqKYQ-AplwQsDfZPc0xvstJCt1yoS1DA_oKEHyz_rTy5Zl7EyykZO28dkey-x-lzQ8m-giXOH5s0mGjL74Ls5CEmN2tj2t5IdztoG4Lr9G0qmNmYuKQOKasSjcoq9tzFgOrsn81ecCxoexQfr7x7yIa9jADq9svLQQ4CeVFXWf5udUCk_8SdJfoBwydL6wZ-9ghYadRV1MbWM8Q34yxCD4d-I9sbrNtXpJtHWteSFEHbVbhgy3YAWw1yp8GXXPjP4wfDthY6o5sOG9Zs76TrcSyi78P9_7P66EUFjdQR15E",
+    "places/ChIJF7RYyhShToYRuTOyN0KbPcM/photos/AVoNoXTyKD1MJPVxRW1E36B0eB_DiBvmIuY9qyJXQo1ulIEDcX3NttBgpnqNZ9REcGqn2-7wPUbQ0nzqxPADpYd-myUE6IzJFM4F2VhX8gx73lF8vaeWM7HruYksFgkMbEiDWEie7Ix0wiHrXYd1LmWK9bEDTubrr4bw8OGpfM7GZ23weHyNtUTyGKVOmUppk6RKg8UFDqIquJU7x2fdcBpgi0NIe1X-yeXxFPHt2xODDr0ezGcQt84FICMmgiI4ZubXFSD_WBQ2KOTop8OXo7oA5J_mlJatgBFWVr0szVCPeo3oTZJmLoKCyrJ8MfssD9Q5SGNCPBeGATStr1zf48Ot8cw0SEI_rb-mrPdypD5HeFACR26gmK1LA4D4JZ-SmEjf0vxU8kD5XNd8yzoAshceB-i2WyARVv2dlb6CLXT2SNGJtXI_GAIlKfqwIE-SKjjy",
+    "places/ChIJF7RYyhShToYRuTOyN0KbPcM/photos/AVoNoXQPATCAPQffY-E4EM-yXGLhAY57EkpfycaKbnQfdPPwaJ0ScA5tF7AXbgWRpPhJQcTsQt7QWoDwN2VIT68h1EHiZw42gHDj-xTJ5_QU-SqLYnormsFyOuFxZJlXCNNTkFqmXDuApddX305Tr_LzFkQHg7gj1gxIvfgqFnaOWJch78ql-FPgXjgmwOitoP61Ey9Hqg0e_OsLZw5lnpFFLOOSHMZK-fksRDTvoUyC5rtAgjnb9Bq0pur5U9hKFPDIRDLz798J7rEWdFaQ2TO0Vy6Ahf8E9w2uH_lQTe3AJoov4A5gI15oOe2cuPLZ-iXgdfGp35tIOcj0VqbFKgtWVZQAqzCZTZ_2JS0xOJSIJo9oCimx-fNFlQnejNJloFKLwIFShHeBksNVwt2q5i5sWKhDWKUBPpV7S7g31bNiMeOklBUb5nKIYWC8WHY6h1e3",
+    "places/ChIJF7RYyhShToYRuTOyN0KbPcM/photos/AVoNoXSLN5M3SbKDIO0LThoMGf_a6RCFFApK4knP-Oap6YuivrNAl_ogXoPu7DmgFbH01xzz3G615HKKZwzC1RLdmJAVWpkYHz2OK-iI5e86BePa6ajqo9aIlbeQ6nnYl_n3oJrbsf8PQAeAHrsFmAYTGYgO8vloTSu-6L3FhhVb2_9ne5HCwHT7FNYAzPYhsdbKAg0ajR6nQLHxlLJoZS-58txtAJ7_eCKFO00KP_kLblhMx--ZNXQcXqgd7yivuYisZ7XL4heWm7ElEVxFchDsOB8CT0tpYIq6HDUjLrV0t_mBUh2253BeCgt__WaiojTBA8qD3gWGbgCL7uGlgYdk6xXZyre0cJn3wYG2CvzQ8f_DUwsUTEacts1uVbv0fddKPMgJKPNE-Zuf71r3ucgX6g3ZHkgc3HXToyrCShSXJRDEI7mBY8pJuIdrL9OA099P",
+    "places/ChIJF7RYyhShToYRuTOyN0KbPcM/photos/AVoNoXSAo-P2leppMezYt9AaXNB_Ma8GrjYFw-9hcgKWCo0EBiQ575LWV4ejgg1Ym2tepnwLpKzIeBdEkMMI6fZSOTq_rMTJLmX3RbwP_pi8H3hQ451O7KwV4OiKyejC_YHnA_FNPFHpK62lv1uKLat2_NIpXN5H2x-0hWfZgpukPzPpi1a_U9uZmStpzFlyfDe2e6ru48HOsJBFdAJiWwTPnI58y5RDG0wiA0osCxZaHi5yLSnOCC5hU9j7wfxNyjC6FNfrJ8_WTn5LDAxM4BzzARVJ-ovjjoRO40V-H88ejhQ0M0uYomHN2RUi_lnMHzZwsAQ9lqlaGw_Jnnmu6HPUd4pl3OIcx6K06PksgEqIQHharGnjQdtRifKItHeEadP26vBMeDyop2bppOoCgjmD_KcerNPHaP-6R_7UOFJrFizbJwIxHA64Aq6SmJpOvKyU",
+    "places/ChIJF7RYyhShToYRuTOyN0KbPcM/photos/AVoNoXSFZiJ7bxbPIciJH20jKpNYhxC8HFub7AthYQWv_u0PBaNHhQBxNjpiEaX2jDfQ_YGvkL_1FY09Q5-5ozXldccG2EkIpnEPRdcWFW5O2D3e9uXoRZyyXp3Gq_nm3pFEK8cnvqWi10XXHFj56TVOtvYaMPr8tEUZaY8aD80kFWjrcpXjq-CY_tGsFMJycZAii1kLIyHiheTSzV93ESMdFswVyiRNplCzjPScIT0oAG7YXHYXH2tUM4g-jR2itjFygpC4uxfl4qRRnNYuOeEsVZh0UUEq5gc6k8qBMNbA0KT-KyN6qgzED-GLCTWY4BVp8nzgGRsSTALPTpCPfcaeP9qdRJHjRdj-u0oyl6y4cPLcym0y5U62Almt5UMbJhAHIRShTLBpRCXJWJea50ehB_9Q1Y6dzlgEmgUAHQme9JF6JGvWSCBx5jorw5GfV5b_",
+    "places/ChIJF7RYyhShToYRuTOyN0KbPcM/photos/AVoNoXSf8whP79XFZcfb23w2RAhYoLvdCz7ZmfWmw--iVu0FIXlrJYsWO8FkFj1SZ0x977mf0znoO3LwdXlKvd8AvpXEEM-7xcSbMfWvwiQw26OO6rAPi5GUQwIPK_8KxFoYCE83QejpJFYt_LJc8MNK76XI-Nj_FPotNcYWtIvXRnDHB-sgUkuouM6TA_RYn7a27za3xCEb0X5BXVTWfSwK9WoH9-JiU2aPU95g8BCDFSX0QEOCdIyrAMQPWqGKItOs-3slMVBOs5XebmlrYzgiiQyli0zA5UFWoIjET6U4KlPnvDIYt_Dms67IFpvl2KUXlRjNvAVVzmGAc5qrrpUGo4ZPrsaZi0rWPS7C_EbmvqzHh74k4dl8Cz6HnrLjZwIpmVlsLeDF04G4_lJeF7HN1WX-f4OtS1n0fOeFUlZMBZmqqwc40XEHCi79Dk7cz91O",
+    "places/ChIJF7RYyhShToYRuTOyN0KbPcM/photos/AVoNoXREFM3MOy95Ae4KczelFXjheAD_J5RFbc5MXE1ETSxFKDg7Rinog24uRxg40OfHFvP01MHhZ8wuxi58D7LjlWX4_N6vfBzUVlh6tqHJGYFQgRAAyMrWfCQmzQgQDWxG4-PcX4JHBPu0Qqp6m4GHLpjK57BW3GmhnXgRTXXmax8yQ1PrkiySRiWnLBn2TUOekN5kChIF97QNiL9NTZHGCTqzT3cb_tok7IolcOVgCDESCls11qc1bDMz4-lk_YVONk9STdmzfYItL7gYFHDWrlpHTbvP-e896MO8Yac6Q5m2BHCvroIiDaYqtwMHd009K54q8Wzd3bHgrxLPCEgOZSnFgqw6CMKlvvJ1EUbg8PXtjbUkBBrz7_uAAYZ3UuNKsC5T5UrWDV7hXvwtNDolzEaFVGaNaAWb5KTRHd-t9fGrQ6ZP_C8wP94pGSvll0PT",
+    "places/ChIJF7RYyhShToYRuTOyN0KbPcM/photos/AVoNoXTxN9Wavn-DVnpFIs56OZ-XkRbvZrQqCVA01aJEp53fD9UTLxTj5WFcehOSxAjGtoGol-XGLwEkqCIqmSAK9AMVN83JchMeKSHG68gYMbjkc-ElAMCMG7zxzi_ghWr16l816asSOCL227Lm_exd2W1mfsVZu9uj8viqo9H5mmICtTedOjOYU6JtachgaIdeWEvKum6loYp1vf4dLj4NwwLjunPwJxOWHThZK32irjVKBp61Dw4dVsnMJ1q7aTdm4mhQyk2-TPoz0x42zTy-srM3EzkRcMjn5yVrmf3KvLIlhYYPUjlt_yBgiVQTJzaDYBn0F4L_5PraOFqvlLn2-97j5QZSpkq0wUjeerKaDL7NnnZy8vWgafr5hrb70vHQPx4jWCXfayRsST-KpVJHLDk7TL8Dm6V6omNRng3FTCx70DFx_n_YM-I1wx0FOtyq",
+    "places/ChIJF7RYyhShToYRuTOyN0KbPcM/photos/AVoNoXSpzCmJ-SOyIolakg8AU8PGCYmlN8F5sp4L3MYW54sTZf4wQFtOlFEUoB8rbR8rcOLoYfvTLtum7POGAvrf4aOtCPRDEk7Zdy8Xm2G1Gkpiozd8GOdV6ma5xMD0Yuh60A91BxQlAuRSpJSRCZkJ_veJUUwVe8ZPZltWneqMaLE7evDteUoPOF-8wOJ4hoYq8lX2WD2Udx29xzwNKpMjLZTEBg-G0A56ihbJnTFLRkan5M27dseZLD5iSQsa1SKq9J-cpTB6uuAbesPkBOneHhURwG5rMRVQiDjsgqImLPrO-3PD-FjmYr-9BJ7s6oaHSV0qg2fOEIL986VYFLw4t2UWnUnjZ2dkc0IpD2bUhM17-8vbkSBNCGSnekOQY28fM1hLfwWzI4eUoRpKmaZUS0td6xtWhFOv2LfV-_diqa0SHhj4HWaabsTHeyl-O4N0"
+  ],
+  "published": {
+    "about": "We had the best experience getting some repairs to my Mom's roof. We originally got estimates from 3 companies, and not only was the Bert quote very reasonable, but they actually listened to us and what we wanted done.",
+    "blocks": [
+      {
+        "entries": [],
+        "heading": "Schedule a Roof Inspection",
+        "images": [],
+        "kind": "feature",
+        "text": "Tell us about your roof and a Bert Roofing project manager will call to schedule a no-obligation inspection and written estimate. Insurance-related estimates and documentation are available. First Name * Last Name Phone * Email * Property Address * Briefly describe your roof issue (optional) Get My No-Obligation Quote By submitting this form you consent to receive text messages from Bert Roofing about your inspection, quote, and project. Message frequency may vary. Message and data rates may apply. Reply HELP for help, STOP to opt out. We never sell your data. 4.8 \u2605\u2605\u2605\u2605\u2605 100+ Google reviews"
+      },
+      {
+        "entries": [],
+        "heading": "Reviews From Your Neighbors",
+        "images": [
+          "https://bertroofing.com/assets/avatar-1.webp",
+          "https://bertroofing.com/assets/avatar-2.webp",
+          "https://bertroofing.com/assets/avatar-3.webp",
+          "https://bertroofing.com/assets/avatar-4.webp"
+        ],
+        "kind": "feature",
+        "text": "\u2605\u2605\u2605\u2605\u2605 4.8/5 on Google \u00b7 100+ verified reviews Barbara S. 08 December 2025 I needed some roof repair and I was very happy with Bert Roofing. The crew was professional and they cleaned up completely after they finished their work. They also explained what they were doing and answered every question I had. Read full review \u2192 Jerry A. 08 December 2025 I recommend Bert Roofing 100%. From the first phone call to the completion of the repair work, Bert Roofing couldn't have been better. I had a leak in my roof that dripped from the soffit onto my patio. Bert Roofing inspected it, located the source, and repaired it cleanly. Read full review \u2192 Carolyn G. 08 December 2025 We had the best experience getting some repairs to my Mom's roof. We originally got estimates from 3 companies, and not only was the Bert quote very reasonable, but they actually listened to us and what we wanted done. Read full"
+      },
+      {
+        "entries": [],
+        "heading": "From First Call to Final Inspection",
+        "images": [
+          "https://bertroofing.com/assets/how-1-1280.webp"
+        ],
+        "kind": "feature",
+        "text": "No pressure, no surprises, no high-pressure sales tactics. Three steps from inspection to final cleanup, with a single project manager assigned to your home. Step 01"
+      },
+      {
+        "entries": [],
+        "heading": "Schedule a No-Obligation Inspection",
+        "images": [
+          "https://bertroofing.com/assets/how-2-1280.webp"
+        ],
+        "kind": "feature",
+        "text": "A local project manager evaluates your roof and walks you through what they find. No pressure, no obligation. Most inspections take 30 to 45 minutes. Step 02"
+      },
+      {
+        "entries": [],
+        "heading": "Get a Clear Written Estimate",
+        "images": [
+          "https://bertroofing.com/assets/how-3-1280.webp"
+        ],
+        "kind": "feature",
+        "text": "Repair vs. replacement options, scope, materials, and pricing, all in writing with no hidden line items. Insurance claims documented for your adjuster. Step 03"
+      },
+      {
+        "entries": [],
+        "heading": "We Handle the Work",
+        "images": [],
+        "kind": "feature",
+        "text": "Professional installation by our own crews. Thorough cleanup with magnetic nail sweep. Final walk-through and full manufacturer and workmanship warranty. Schedule a Roof Inspection No obligation \u00b7 214-321-9341"
+      },
+      {
+        "entries": [],
+        "heading": "Roof Replacement",
+        "images": [
+          "https://bertroofing.com/assets/service-repair-1280.webp"
+        ],
+        "kind": "feature",
+        "text": "Complete tear-off and replacement using top-tier materials. We install everything from traditional asphalt shingles to luxury composite and synthetic slate, matched to your home's style and built to last for decades. Learn More"
+      },
+      {
+        "entries": [],
+        "heading": "Roof Repair",
+        "images": [
+          "https://bertroofing.com/assets/service-maintenance-1280.webp"
+        ],
+        "kind": "feature",
+        "text": "From storm damage to normal wear, our experienced team diagnoses and repairs roofing issues with professional precision, done right the first time. Learn More"
+      },
+      {
+        "entries": [],
+        "heading": "Roof Maintenance",
+        "images": [
+          "https://bertroofing.com/assets/service-skylight-1280.webp"
+        ],
+        "kind": "feature",
+        "text": "Proactive inspections and maintenance to extend the life of your roof. We identify small issues before they become costly problems. Learn More"
+      },
+      {
+        "entries": [],
+        "heading": "Skylights",
+        "images": [
+          "https://bertroofing.com/assets/service-storm-1280.webp"
+        ],
+        "kind": "feature",
+        "text": "As a VELUX Certified Installer, we bring natural light into your home with professional skylight installation, replacement, and integration with new or existing roofs. Learn More"
+      },
+      {
+        "entries": [],
+        "heading": "Storm Damage",
+        "images": [
+          "https://bertroofing.com/assets/about-photo-1280.webp"
+        ],
+        "kind": "feature",
+        "text": "Hail and wind damage assessment, roof repair and replacement, with detailed estimates, photos, and documentation for your insurer or adjuster. Learn More"
+      },
+      {
+        "entries": [],
+        "heading": "Common Questions",
+        "images": [],
+        "kind": "feature",
+        "text": "How long has Bert Roofing been in business? Bert Roofing has been in business since 1988, with Bert family roofing experience in Dallas dating to the 1960s. What areas in Dallas do you serve? We serve Greater Dallas, with a large concentration of work in Lakewood, Casa Linda, White Rock, Lake Highlands, Lower Greenville, and surrounding East Dallas neighborhoods. We also serve Preston Hollow, Highland Park, University Park, Richardson, Garland, and nearby areas. What types of roofing materials do you install? We install asphalt shingles, Class 3 and Class 4 impact-resistant shingles, standing seam metal, stone-coated steel, TPO, modified bitumen, and synthetic roofing products. Bert Roofing is a GAF Certified Contractor, Owens Corning Preferred Contractor, and CertainTeed Master Shingle Applicator. Do you offer free roof inspections? Yes. A Bert Roofing project manager will inspect your "
+      },
+      {
+        "entries": [],
+        "heading": "Pick the Service That Matches Your Roof",
+        "images": [
+          "https://bertroofing.com/assets/service-replacement-1920.webp"
+        ],
+        "kind": "feature",
+        "text": "Not sure which one you need? Our free inspection figures that out for you. There is no obligation, no high-pressure pitch, and most of the time the answer is a repair, not a replacement."
+      },
+      {
+        "entries": [],
+        "heading": "Gutters",
+        "images": [
+          "https://bertroofing.com/generative-photos/we-handle-the-work-1920.webp"
+        ],
+        "kind": "feature",
+        "text": "Seamless aluminum gutters and downspouts installed with new roofs and replacements. We do not take standalone gutter-only jobs. Timeline Bundled with roofing project Best for Roof replacements, drainage upgrades on older homes Learn more \u2192"
+      }
+    ],
+    "emails": [],
+    "has_locations_page": false,
+    "hours": [
+      "Fri 7:30am to 5pm",
+      "Saturday Closed",
+      "Sunday Closed",
+      "Sunday closed"
+    ],
+    "menu_items": [
+      {
+        "description": ",783.75",
+        "name": "Grand Total, Replacement Cost Value (RCV)",
+        "price": "$20"
+      }
+    ],
+    "menu_media": [],
+    "photos": [
+      "https://bertroofing.com/assets/bert-roofing-east-dallas-contractor-1920.jpg",
+      "https://bertroofing.com/assets/avatar-1.webp",
+      "https://bertroofing.com/assets/avatar-2.webp",
+      "https://bertroofing.com/assets/avatar-3.webp",
+      "https://bertroofing.com/assets/avatar-4.webp",
+      "https://bertroofing.com/assets/how-1-1280.webp",
+      "https://bertroofing.com/assets/how-2-1280.webp",
+      "https://bertroofing.com/assets/how-3-1280.webp"
+    ],
+    "products": [],
+    "services": [
+      "From First Call to Final Inspection",
+      "Roof Replacement",
+      "Roof Repair",
+      "Roof Maintenance",
+      "Skylights",
+      "Storm Damage",
+      "Professional. Experienced. Dallas-Focused.",
+      "Serving Dallas Homeowners Since 1988"
+    ],
+    "socials": [],
+    "tagline": "Family-owned Dallas roofing contractor since 1988. 40,000 roofs completed. Deep Dallas roots. 12x NTRCA Golden Hammer winner. A+ BBB."
+  },
+  "ratings": [
+    {
+      "reviews": 136,
+      "source": "google",
+      "source_url": "https://maps.google.com/?cid=14068571519679869881&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+      "value": 4.8
+    },
+    {
+      "reviews": 25,
+      "source": "yelp",
+      "source_url": "https://www.yelp.com/biz/bert-roofing-dallas?adjust_creative=fN9vLoKv3EduxHCZ7BEIUA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=fN9vLoKv3EduxHCZ7BEIUA",
+      "value": 4.2
+    }
+  ],
+  "site_reachable": true,
+  "site_status": "ok",
+  "sources_consulted": [
+    "google",
+    "yelp",
+    "their website"
+  ],
+  "testimonials": [
+    {
+      "author": "Cristin Damon",
+      "rating": 5,
+      "text": "I can\u2019t recommend Bert roofing enough. They provided a fast turn around on a roofing inspection and we were so impressed with the level of detail, we hired them to replace the roof once we closed. They were very timely, highly communicative, and great customer service. We are so happy with the outcome and the beautiful roof!"
+    },
+    {
+      "author": "Clint Compton",
+      "rating": 5,
+      "text": "Very thorough and very good. I have used Bert Roofing three times now. Each time they did and impeccable job and their pricing is very reasonable. Over the years, I have used other roofing companies, and they either charge a lot more or do a poor quality job and even worse they leave a huge mess everywhere. Bert Roofing is great because not only do they do a good job, and have a reasonable price, they clean up everything when they are done. I hope I don't need a lot of roofing in the future, but I will, of course, contact Bert if I need to."
+    },
+    {
+      "author": "Ken Holt",
+      "rating": 4,
+      "text": "Bert and his crew did an excellent job repairing my roof leak and chimney leak. The crew was courteous and respectful. It took a couple weeks after the completion of the roof repair before we got a good rain fall to see how the roof held up. I am satisfied with the work and would highly recommend Bert and for roof repairs. You\u2019re in good hands"
+    },
+    {
+      "author": "Jeff Vance",
+      "rating": 5,
+      "text": "Bert Roofing did an excellent job on our roof.  It had suffered hail and wind damage.\nBill Chittum of Bert Roofing did a great job walking us through the insurance claim process as well as guiding us through selecting the type of new roof.\nHe was professional, knowledgeable and accessible.\nWe strongly recommend this company for your new roof needs."
+    },
+    {
+      "author": "Jason Early",
+      "rating": 5,
+      "text": "I had a significant roof leak that needed urgent attention. Bert Roofing came out within a few days of scheduling to fix the issue, and the owner gave me a reasonable, honest quote. The team was out to fix the issue within a few days afterwards and came back to inspect the roof again after the next hard rain.\n\nOverall quick and efficient communication and solutioning from beginning to end. If I should have any future issues (hopefully not), I will be contracting this company again."
+    }
+  ],
+  "trade": "Roofing Contractor",
+  "url_check": null,
+  "website_url": "https://bertroofing.com/?utm_campaign=gmb"
+}

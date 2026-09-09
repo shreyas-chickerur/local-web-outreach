@@ -1,4 +1,5 @@
 {
+  "_gate_unresolved": false,
   "assumptions": [
     "google matched a listing in a different town: 2801 N Central Expy, Plano, TX 75075, USA",
     "website found via google: https://callmilestone.com/plano/plumbing",
@@ -9,7 +10,7 @@
     "google returns 5 locations under this name in one search"
   ],
   "design_direction": {
-    "accent": "blue",
+    "accent": "yellow",
     "architecture": "banded",
     "contradictions": [],
     "cta": {
@@ -19,22 +20,22 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "stats"
+      "services"
     ],
     "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "reviews",
+    "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "This is a home-services trade where a visitor's first question is 'can I trust the person who shows up at my house' \u2014 the near-6,000 five-star reviews and named technicians answer that better than any photograph, so proof leads and the quoted reviews come right after the stats band. To avoid duplicating the recent site (which already used ledger/facts/stats-first/stamped), this one leads with reviews rather than the stats section itself and uses a banded rhythm instead of a ledger rule, so the p",
+    "rationale": "This is a trade with 6,000+ five-star reviews and a fleet of branded vans \u2014 a visitor with a plumbing emergency needs proof of competence and a phone number fast, not a mood board, so the numbers still lead but the ledger/stamp/facts combination is swapped for a looser banded rhythm and a ticker so the page doesn't read as a copy of the same template already built for another contractor.",
     "read_by": "claude",
-    "signature": "stamp",
-    "signature_why": "A repeated licence/registration-style mark reinforces the trustworthy, vetted-technician feel that their reviews keep praising, without repeating the ledger-of-figures look already used on a competitor's site.",
+    "signature": "ticker",
+    "signature_why": "A thin running line of the review count, years served, and same-day promise reads like a dispatch board, which is exactly the reassurance someone with a leaking pipe wants before they dial.",
     "suppress": [],
     "type_treatment": "stamped",
     "understood": [
-      "This is a home-services trade where a visitor's first question is 'can I trust the person who shows up at my house' \u2014 the near-6,000 five-star reviews and named technicians answer that better than any"
+      "This is a trade with 6,000+ five-star reviews and a fleet of branded vans \u2014 a visitor with a plumbing emergency needs proof of competence and a phone number fast, not a mood board, so the numbers stil"
     ],
     "unsupported": []
   },
@@ -107,69 +108,69 @@
     "What are their opening hours?"
   ],
   "photo_labels": {
-    "/photo/5/0": "people",
-    "/photo/5/1": "product",
-    "/photo/5/2": "work",
-    "/photo/5/3": "product",
-    "/photo/5/4": "room",
-    "/photo/5/5": "detail",
-    "/photo/5/6": "product",
-    "/photo/5/7": "room",
-    "/photo/5/8": "work",
-    "/photo/5/9": "detail",
+    "/photo/9/0": "people",
+    "/photo/9/1": "product",
+    "/photo/9/2": "work",
+    "/photo/9/3": "product",
+    "/photo/9/4": "room",
+    "/photo/9/5": "detail",
+    "/photo/9/6": "product",
+    "/photo/9/7": "room",
+    "/photo/9/8": "work",
+    "/photo/9/9": "detail",
     "https://callmilestone.com/plano/wp-content/uploads/sites/7/2022/10/9A0A9697-2-web-res-med-quality.jpg": "people"
   },
   "photo_notes": {
-    "/photo/5/0": "A smiling bald man in a white polo shirt holding folders, standing in front of a branded yellow service van",
-    "/photo/5/1": "An outdoor air conditioning condenser unit next to a brick wall and green shrubs",
-    "/photo/5/2": "A hand adjusting colorful wiring inside an open furnace control panel",
-    "/photo/5/3": "Two gray gas water heaters installed side by side in a utility closet",
-    "/photo/5/4": "A tall entryway hallway with a crystal chandelier hanging from a high ceiling and a staircase to the side",
-    "/photo/5/5": "The underside of a kitchen sink showing a garbage disposal unit and connected pipes",
-    "/photo/5/6": "An outdoor standby generator and electrical panels mounted on a white brick wall next to an air conditioning unit",
-    "/photo/5/7": "A white toilet and bathtub in a bathroom with patterned wallpaper and tile flooring",
-    "/photo/5/8": "A person's hands using a yellow clamp meter to test electrical wiring inside an open equipment panel.",
-    "/photo/5/9": "A close-up of a brushed nickel bathroom faucet and sink basin with water droplets.",
+    "/photo/9/0": "A smiling bald man in a white polo shirt holding folders, standing in front of a branded yellow service van",
+    "/photo/9/1": "An outdoor air conditioning condenser unit next to a brick wall and green shrubs",
+    "/photo/9/2": "A hand adjusting colorful wiring inside an open furnace control panel",
+    "/photo/9/3": "Two gray gas water heaters installed side by side in a utility closet",
+    "/photo/9/4": "A tall entryway hallway with a crystal chandelier hanging from a high ceiling and a staircase to the side",
+    "/photo/9/5": "The underside of a kitchen sink showing a garbage disposal unit and connected pipes",
+    "/photo/9/6": "An outdoor standby generator and electrical panels mounted on a white brick wall next to an air conditioning unit",
+    "/photo/9/7": "A white toilet and bathtub in a bathroom with patterned wallpaper and tile flooring",
+    "/photo/9/8": "A person's hands using a yellow clamp meter to test electrical wiring inside an open equipment panel.",
+    "/photo/9/9": "A close-up of a brushed nickel bathroom faucet and sink basin with water droplets.",
     "https://callmilestone.com/plano/wp-content/uploads/sites/7/2022/10/9A0A9697-2-web-res-med-quality.jpg": "A smiling bald man in a white work shirt standing in front of a yellow and red branded service van parked outside a house."
   },
   "photo_sizes": {
-    "/photo/5/0": [
+    "/photo/9/0": [
       2400,
       1664
     ],
-    "/photo/5/1": [
+    "/photo/9/1": [
       1920,
       1440
     ],
-    "/photo/5/2": [
+    "/photo/9/2": [
       2400,
       1600
     ],
-    "/photo/5/3": [
+    "/photo/9/3": [
       1440,
       1920
     ],
-    "/photo/5/4": [
+    "/photo/9/4": [
       2400,
       3200
     ],
-    "/photo/5/5": [
+    "/photo/9/5": [
       1440,
       1920
     ],
-    "/photo/5/6": [
+    "/photo/9/6": [
       1440,
       1920
     ],
-    "/photo/5/7": [
+    "/photo/9/7": [
       2400,
       3200
     ],
-    "/photo/5/8": [
+    "/photo/9/8": [
       680,
       840
     ],
-    "/photo/5/9": [
+    "/photo/9/9": [
       2160,
       2880
     ],
@@ -179,7 +180,7 @@
     ]
   },
   "photo_vision": {
-    "/photo/5/0": {
+    "/photo/9/0": {
       "alt_text": "A smiling bald man in a white polo shirt holding folders, standing in front of a branded yellow service van",
       "dominant_colours": [
         "#e8d61a",
@@ -198,7 +199,7 @@
       "url": "/photo/5/0",
       "why_not": ""
     },
-    "/photo/5/1": {
+    "/photo/9/1": {
       "alt_text": "An outdoor air conditioning condenser unit next to a brick wall and green shrubs",
       "dominant_colours": [
         "#9a9a8c",
@@ -217,7 +218,7 @@
       "url": "/photo/5/1",
       "why_not": ""
     },
-    "/photo/5/2": {
+    "/photo/9/2": {
       "alt_text": "A hand adjusting colorful wiring inside an open furnace control panel",
       "dominant_colours": [
         "#c9c9c9",
@@ -236,7 +237,7 @@
       "url": "/photo/5/2",
       "why_not": "Close-up technical detail, not a broad appealing scene"
     },
-    "/photo/5/3": {
+    "/photo/9/3": {
       "alt_text": "Two gray gas water heaters installed side by side in a utility closet",
       "dominant_colours": [
         "#7a7a7a",
@@ -255,7 +256,7 @@
       "url": "/photo/5/3",
       "why_not": "Utilitarian equipment shot, low visual interest for a hero image"
     },
-    "/photo/5/4": {
+    "/photo/9/4": {
       "alt_text": "A tall entryway hallway with a crystal chandelier hanging from a high ceiling and a staircase to the side",
       "dominant_colours": [
         "#d9d3c8",
@@ -274,7 +275,7 @@
       "url": "/photo/5/4",
       "why_not": ""
     },
-    "/photo/5/5": {
+    "/photo/9/5": {
       "alt_text": "The underside of a kitchen sink showing a garbage disposal unit and connected pipes",
       "dominant_colours": [
         "#d9d0c0",
@@ -293,7 +294,7 @@
       "url": "/photo/5/5",
       "why_not": "Plumbing detail shot, not visually engaging for hero use"
     },
-    "/photo/5/6": {
+    "/photo/9/6": {
       "alt_text": "An outdoor standby generator and electrical panels mounted on a white brick wall next to an air conditioning unit",
       "dominant_colours": [
         "#e8e4dc",
@@ -312,7 +313,7 @@
       "url": "/photo/5/6",
       "why_not": ""
     },
-    "/photo/5/7": {
+    "/photo/9/7": {
       "alt_text": "A white toilet and bathtub in a bathroom with patterned wallpaper and tile flooring",
       "dominant_colours": [
         "#e8e4dc",
@@ -331,7 +332,7 @@
       "url": "/photo/5/7",
       "why_not": "Plain bathroom fixture shot, limited visual appeal for hero use"
     },
-    "/photo/5/8": {
+    "/photo/9/8": {
       "alt_text": "A person's hands using a yellow clamp meter to test electrical wiring inside an open equipment panel.",
       "dominant_colours": [
         "#c9a63b",
@@ -350,7 +351,7 @@
       "url": "/photo/5/8",
       "why_not": ""
     },
-    "/photo/5/9": {
+    "/photo/9/9": {
       "alt_text": "A close-up of a brushed nickel bathroom faucet and sink basin with water droplets.",
       "dominant_colours": [
         "#d9d3c8",

@@ -1,4 +1,5 @@
 {
+  "_gate_unresolved": false,
   "assumptions": [
     "website found via google: https://towsonfirm.com/?utm_source=GBP&utm_medium=GBP&utm_campaign=GBP_Frisco&utm_id=GBP_Frisco",
     "ignored a yelp result for 'Estes Law Office, P.L.L.C.' \u2014 different business",
@@ -18,24 +19,24 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "about"
+      "stats"
     ],
     "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "reviews",
     "mood": "refined",
-    "rationale": "This is a family law practice where a visitor's first question is \"can I trust this person with my divorce or custody case,\" not \"what does the office look like\" \u2014 so we lead with the 4.9 rating and review count, back it immediately with real client testimony, and keep the imagery (mostly small headshots and building exteriors) out of the way rather than forcing a gallery it can't support.",
+    "rationale": "Someone hiring a divorce or custody attorney needs proof of trust and competence before anything else \u2014 a 4.9 rating from 148 reviews and the words of past clients do that far better than photos of the building, and the firm only has two images strong enough to lead with anyway. A quiet, document-like layout with a navy accent reads as steady and professional, which is exactly the tone someone wants from a family lawyer during a stressful time.",
     "read_by": "claude",
     "signature": "quote",
-    "signature_why": "A family law client's own words about trust and being cared for during a hard time say more than any photo could, so we set one testimonial large across the page.",
+    "signature_why": "A family law client's own words carry more weight than any tagline this firm could write about itself.",
     "suppress": [
       "gallery"
     ],
     "type_treatment": "quiet",
     "understood": [
-      "This is a family law practice where a visitor's first question is \"can I trust this person with my divorce or custody case,\" not \"what does the office look like\" \u2014 so we lead with the 4.9 rating and r"
+      "Someone hiring a divorce or custody attorney needs proof of trust and competence before anything else \u2014 a 4.9 rating from 148 reviews and the words of past clients do that far better than photos of th"
     ],
     "unsupported": []
   },
@@ -99,32 +100,32 @@
     "What are their opening hours?"
   ],
   "photo_labels": {
-    "/photo/2/0": "people",
-    "/photo/2/1": "exterior",
-    "/photo/2/2": "exterior",
+    "/photo/3/0": "people",
+    "/photo/3/1": "exterior",
+    "/photo/3/2": "exterior",
     "https://towsonfirm.com/wp-content/uploads/2026/02/TowsonTop10.png": "award",
     "https://towsonfirm.com/wp-content/uploads/2026/03/about_image.webp": "people",
     "https://towsonfirm.com/wp-content/uploads/2026/03/towson-law-gfirm-1.webp": "logo",
     "https://towsonfirm.com/wp-content/uploads/2026/04/towson-law-firm-pllc-plaque-scaled.png": "unclear"
   },
   "photo_notes": {
-    "/photo/2/0": "A smiling man with brown hair wearing a dark blue suit, white shirt, and blue tie against a plain grey background.",
-    "/photo/2/1": "A brick and stone office building with a sign reading Towson above the entrance, parked cars in front under a cloudy sky.",
-    "/photo/2/2": "A brick and stone office building with a Towson Law Firm sign above the entrance, a young tree and lawn in front under a clear blue sky.",
+    "/photo/3/0": "A smiling man with brown hair wearing a dark blue suit, white shirt, and blue tie against a plain grey background.",
+    "/photo/3/1": "A brick and stone office building with a sign reading Towson above the entrance, parked cars in front under a cloudy sky.",
+    "/photo/3/2": "A brick and stone office building with a Towson Law Firm sign above the entrance, a young tree and lawn in front under a clear blue sky.",
     "https://towsonfirm.com/wp-content/uploads/2026/02/TowsonTop10.png": "A green badge with five stars reading Top 10 Frisco Divorce Attorney 2026 from TrustAnalytica.",
     "https://towsonfirm.com/wp-content/uploads/2026/03/about_image.webp": "Three people in a bright room with a fur rug, one man sitting in an armchair while a man and woman sit on a sofa reviewing papers, with text overlay reading Towson Law Firm, LLC.",
     "https://towsonfirm.com/wp-content/uploads/2026/03/towson-law-gfirm-1.webp": "A silver logo featuring a scale of justice icon with the letter T beside the words Towson Law Firm, PLLC."
   },
   "photo_sizes": {
-    "/photo/2/0": [
+    "/photo/3/0": [
       1024,
       1430
     ],
-    "/photo/2/1": [
+    "/photo/3/1": [
       1920,
       1440
     ],
-    "/photo/2/2": [
+    "/photo/3/2": [
       1179,
       1490
     ],
@@ -146,7 +147,7 @@
     ]
   },
   "photo_vision": {
-    "/photo/2/0": {
+    "/photo/3/0": {
       "alt_text": "A smiling man with brown hair wearing a dark blue suit, white shirt, and blue tie against a plain grey background.",
       "dominant_colours": [
         "#c9cdd0",
@@ -165,7 +166,7 @@
       "url": "/photo/2/0",
       "why_not": ""
     },
-    "/photo/2/1": {
+    "/photo/3/1": {
       "alt_text": "A brick and stone office building with a sign reading Towson above the entrance, parked cars in front under a cloudy sky.",
       "dominant_colours": [
         "#7a3b2e",
@@ -184,7 +185,7 @@
       "url": "/photo/2/1",
       "why_not": ""
     },
-    "/photo/2/2": {
+    "/photo/3/2": {
       "alt_text": "A brick and stone office building with a Towson Law Firm sign above the entrance, a young tree and lawn in front under a clear blue sky.",
       "dominant_colours": [
         "#1e6fbf",

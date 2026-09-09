@@ -1,11 +1,12 @@
 {
+  "_gate_unresolved": false,
   "assumptions": [
     "google matched a listing in a different town: 5566 Main St, Frisco, TX 75033, USA",
     "ignored a yelp result for 'Legacy Plumbing' \u2014 different business"
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "blue",
+    "accent": "navy",
     "architecture": "ledger",
     "contradictions": [],
     "cta": {
@@ -14,6 +15,7 @@
     },
     "defect": "",
     "emphasis": [
+      "stats",
       "reviews"
     ],
     "first_screen": "facts",
@@ -22,14 +24,14 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "A visitor calling a plumber wants proof of competence before anything else \u2014 the 4.7 rating and review count reassure faster than any photo could, and only one photo is even strong enough to lead with. Mixed reviews mean the reviews section should be visible but not oversold, so stats lead and reviews get modest emphasis rather than top billing, with a ledger-style rhythm and a working-log ticker that suit a trade rather than a boutique.",
+    "rationale": "This is a plumber judged on trust and competence, not atmosphere \u2014 only one photo is large enough to lead with and the reviews are mixed on reliability, so the page should open with the rating and review count as hard proof, backed by a ledger-style rhythm and a stamp mark that says 'licensed, on record' rather than a big lifestyle photo. Navy from their own work shirts keeps it feeling like a working trade, not a boutique.",
     "read_by": "claude",
-    "signature": "ticker",
-    "signature_why": "A thin running line of the rating, review count, and years-in-trade reads like a service log a plumber would actually keep, not a marketing flourish.",
+    "signature": "stamp",
+    "signature_why": "A repeated licence/registration mark reads as proof of a legitimate trade business, which is what a worried homeowner is checking for before they call.",
     "suppress": [],
     "type_treatment": "stamped",
     "understood": [
-      "A visitor calling a plumber wants proof of competence before anything else \u2014 the 4.7 rating and review count reassure faster than any photo could, and only one photo is even strong enough to lead with"
+      "This is a plumber judged on trust and competence, not atmosphere \u2014 only one photo is large enough to lead with and the reviews are mixed on reliability, so the page should open with the rating and rev"
     ],
     "unsupported": []
   },
@@ -79,73 +81,73 @@
     "What are their opening hours?"
   ],
   "photo_labels": {
-    "/photo/3/0": "work",
-    "/photo/3/1": "work",
-    "/photo/3/2": "work",
-    "/photo/3/3": "detail",
-    "/photo/3/4": "work",
-    "/photo/3/5": "product",
-    "/photo/3/6": "work",
-    "/photo/3/7": "work",
-    "/photo/3/8": "detail",
-    "/photo/3/9": "people"
+    "/photo/4/0": "work",
+    "/photo/4/1": "work",
+    "/photo/4/2": "work",
+    "/photo/4/3": "detail",
+    "/photo/4/4": "work",
+    "/photo/4/5": "product",
+    "/photo/4/6": "work",
+    "/photo/4/7": "work",
+    "/photo/4/8": "detail",
+    "/photo/4/9": "people"
   },
   "photo_notes": {
-    "/photo/3/0": "A man in a blue work uniform kneels to repair pipes beneath a wall-mounted bathroom sink with a toilet visible nearby.",
-    "/photo/3/1": "A man in a plaid shirt and blue overalls uses a plunger in a stainless steel kitchen sink.",
-    "/photo/3/2": "An overhead view of a man lying on the floor working on pipes under a kitchen sink, with tools and a wrench beside him.",
-    "/photo/3/3": "Close-up of two hands using a wrench and adjusting a valve on plumbing pipes under a sink.",
-    "/photo/3/4": "A man in an orange shirt uses a plunger on a toilet in a bathroom with tiled walls.",
-    "/photo/3/5": "Two gray gas water heaters installed side by side against a beige wall.",
-    "/photo/3/6": "A man in a blue cap and overalls kneels to work under a bathroom sink beside an open tool bag with tools scattered on the floor.",
-    "/photo/3/7": "A man in blue overalls kneels to inspect a garbage disposal unit under a kitchen sink, with a tool bag on the wooden floor beside him.",
-    "/photo/3/8": "A worker's torso wearing a tool belt with gloves, holding a pipe wrench and a loaded tool bag against a white background",
-    "/photo/3/9": "A man in a tan uniform and cap kneeling by an open cabinet under a sink, reaching into a toolbox with pliers"
+    "/photo/4/0": "A man in a blue work uniform kneels to repair pipes beneath a wall-mounted bathroom sink with a toilet visible nearby.",
+    "/photo/4/1": "A man in a plaid shirt and blue overalls uses a plunger in a stainless steel kitchen sink.",
+    "/photo/4/2": "An overhead view of a man lying on the floor working on pipes under a kitchen sink, with tools and a wrench beside him.",
+    "/photo/4/3": "Close-up of two hands using a wrench and adjusting a valve on plumbing pipes under a sink.",
+    "/photo/4/4": "A man in an orange shirt uses a plunger on a toilet in a bathroom with tiled walls.",
+    "/photo/4/5": "Two gray gas water heaters installed side by side against a beige wall.",
+    "/photo/4/6": "A man in a blue cap and overalls kneels to work under a bathroom sink beside an open tool bag with tools scattered on the floor.",
+    "/photo/4/7": "A man in blue overalls kneels to inspect a garbage disposal unit under a kitchen sink, with a tool bag on the wooden floor beside him.",
+    "/photo/4/8": "A worker's torso wearing a tool belt with gloves, holding a pipe wrench and a loaded tool bag against a white background",
+    "/photo/4/9": "A man in a tan uniform and cap kneeling by an open cabinet under a sink, reaching into a toolbox with pliers"
   },
   "photo_sizes": {
-    "/photo/3/0": [
+    "/photo/4/0": [
       1083,
       720
     ],
-    "/photo/3/1": [
+    "/photo/4/1": [
       474,
       316
     ],
-    "/photo/3/2": [
+    "/photo/4/2": [
       812,
       720
     ],
-    "/photo/3/3": [
+    "/photo/4/3": [
       1080,
       720
     ],
-    "/photo/3/4": [
+    "/photo/4/4": [
       1080,
       720
     ],
-    "/photo/3/5": [
+    "/photo/4/5": [
       2400,
       3200
     ],
-    "/photo/3/6": [
+    "/photo/4/6": [
       1080,
       720
     ],
-    "/photo/3/7": [
+    "/photo/4/7": [
       480,
       720
     ],
-    "/photo/3/8": [
+    "/photo/4/8": [
       666,
       375
     ],
-    "/photo/3/9": [
+    "/photo/4/9": [
       1080,
       720
     ]
   },
   "photo_vision": {
-    "/photo/3/0": {
+    "/photo/4/0": {
       "alt_text": "A man in a blue work uniform kneels to repair pipes beneath a wall-mounted bathroom sink with a toilet visible nearby.",
       "dominant_colours": [
         "#3b4a6b",
@@ -164,7 +166,7 @@
       "url": "/photo/3/0",
       "why_not": ""
     },
-    "/photo/3/1": {
+    "/photo/4/1": {
       "alt_text": "A man in a plaid shirt and blue overalls uses a plunger in a stainless steel kitchen sink.",
       "dominant_colours": [
         "#c9c2b3",
@@ -183,7 +185,7 @@
       "url": "/photo/3/1",
       "why_not": ""
     },
-    "/photo/3/2": {
+    "/photo/4/2": {
       "alt_text": "An overhead view of a man lying on the floor working on pipes under a kitchen sink, with tools and a wrench beside him.",
       "dominant_colours": [
         "#8a6a4a",
@@ -202,7 +204,7 @@
       "url": "/photo/3/2",
       "why_not": ""
     },
-    "/photo/3/3": {
+    "/photo/4/3": {
       "alt_text": "Close-up of two hands using a wrench and adjusting a valve on plumbing pipes under a sink.",
       "dominant_colours": [
         "#c9c2b3",
@@ -221,7 +223,7 @@
       "url": "/photo/3/3",
       "why_not": "close crop of hands and tools, no full scene or context"
     },
-    "/photo/3/4": {
+    "/photo/4/4": {
       "alt_text": "A man in an orange shirt uses a plunger on a toilet in a bathroom with tiled walls.",
       "dominant_colours": [
         "#e07a1a",
@@ -240,7 +242,7 @@
       "url": "/photo/3/4",
       "why_not": ""
     },
-    "/photo/3/5": {
+    "/photo/4/5": {
       "alt_text": "Two gray gas water heaters installed side by side against a beige wall.",
       "dominant_colours": [
         "#a8a8a0",
@@ -259,7 +261,7 @@
       "url": "/photo/3/5",
       "why_not": "static equipment shot, not action or people focused"
     },
-    "/photo/3/6": {
+    "/photo/4/6": {
       "alt_text": "A man in a blue cap and overalls kneels to work under a bathroom sink beside an open tool bag with tools scattered on the floor.",
       "dominant_colours": [
         "#e8e2d8",
@@ -278,7 +280,7 @@
       "url": "/photo/3/6",
       "why_not": ""
     },
-    "/photo/3/7": {
+    "/photo/4/7": {
       "alt_text": "A man in blue overalls kneels to inspect a garbage disposal unit under a kitchen sink, with a tool bag on the wooden floor beside him.",
       "dominant_colours": [
         "#e8e2d8",
@@ -297,7 +299,7 @@
       "url": "/photo/3/7",
       "why_not": ""
     },
-    "/photo/3/8": {
+    "/photo/4/8": {
       "alt_text": "A worker's torso wearing a tool belt with gloves, holding a pipe wrench and a loaded tool bag against a white background",
       "dominant_colours": [
         "#f2b134",
@@ -316,7 +318,7 @@
       "url": "/photo/3/8",
       "why_not": ""
     },
-    "/photo/3/9": {
+    "/photo/4/9": {
       "alt_text": "A man in a tan uniform and cap kneeling by an open cabinet under a sink, reaching into a toolbox with pliers",
       "dominant_colours": [
         "#d9c7a3",

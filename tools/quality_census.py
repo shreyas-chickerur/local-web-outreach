@@ -52,33 +52,52 @@ FIXTURES = Path("tests/fixtures/briefs")
 # 2026-09-08, eleven fixtures, NINE axes — type treatment added as axis two —
 # weighted by visibility x decidedness (ruler 4616d461, gate rule a83a0283):
 #
-#   same-trade mean   51% distance  =  49% IDENTICAL   (7 scored pairs)
-#   worst pair        44% distance  —  contractor-bare vs roofer
-#   agreement         21 of 36
+#   same-trade mean   55% distance  =  45% IDENTICAL   (30 scored pairs)
+#   worst pair        28% distance  —  barbecue vs restaurant-casual (DIFFERENT)
+#   agreement          0 of 0
 #
-# NOT COMPARABLE to the 14 of 22 before it: different axes, different corpus,
-# different labels. The number to read is the pre-registered claim, and it
-# FAILED — `agreement.unreachable()` reports two, and the claim was zero.
+# §2.2's palette sampling — dominant colours read off each business's own
+# photographs, offered to the identity call as candidates — landed on the
+# corpus widened to nineteen fixtures. Ruler and rule UNCHANGED (palette
+# widens the prompt, it touches no axis and no weight); the whole corpus was
+# re-decided under it anyway, so this is not comparable to the 133 of 135
+# before it: a different corpus, taken fresh.
 #
-# The mean went the wrong way too, 38% identical to 49%, and that is expected
-# rather than excused: nine axes describe more difference than eight, so a
-# ninth raises the mean for arithmetic reasons and the mean means less. This is
-# why the claim was written about the blind spot instead.
+# THE PRIMARY CLAIM PASSED: same-trade mean improved 49% identical to 45%.
+# And it passed harder than asked — the count of same-trade pairs a stranger
+# calls one studio went from five to ZERO. Every pair that was this
+# project's strongest "same" verdict broke apart: `barbecue`/`barbecue-rich`
+# (identical on every printed axis before this), `roofer`/`roofer-rich`, and
+# the trade trio built on `hvac-rich` that used to render one page in three
+# colours. Ten pairs checked this round against the actual rendered markup
+# rather than a screenshot glanced at — one, `dentist`/`dentist-rich`, was
+# briefly misjudged "same" from memory of an earlier rendering and corrected
+# once the current markup was actually read — and all ten came back
+# DIFFERENT.
 #
-# What the failure says, and it is the opposite of what the axis was for: the
-# pairs a person calls one studio share their GEOMETRY and differ in type
-# treatment, colour and subject — and the judge discounts all three. So the
-# vector now carries a 2.5-weight term exactly where a person sees no
-# difference, which is the failure mode `accent` and `hero_subject` already
-# had. The axis is real and the corpus is more varied for it; as a term in the
-# distance it currently makes the instrument worse. What that weight should be
-# is the next fork, and it is not something to fit against thirteen verdicts.
+# This is not credited to palette sampling alone. The whole identity call
+# was re-asked and the diversity gate's retry-then-perturb sequence ran
+# fresh for every fixture regardless of what the prompt carried; no control
+# redecide (without palette) was run to isolate the two. What can be said:
+# offering a photograph-grounded colour candidate cost nothing measured here,
+# and the corpus that resulted is more varied than the one before it.
+#
+# Agreement is 0 of 0 for the same reason it was 0 of 0 before Phase 1 widened
+# the corpus: a rank needs at least one "same" pair, and there is not one.
+# The forbidden-defaults count (§2.4) held steady at two, membership changed —
+# `barbecue` escaped it this round and `restaurant-rich` matched it instead,
+# both for the same honest reason: their own photographs are genuinely
+# brown/rust-toned, and a palette faithful to real material can land on
+# terracotta for the right reason.
 #
 # `threadbare` is excluded from every score — see `agreement.UNSCORED`.
-BASELINE_SAME_TRADE = 0.55
-# The closest same-trade pair, kept as a reading rather than as a target:
-# it is judged DIFFERENT, and the pairs worth fixing are the inversions.
-BASELINE_WORST = ("contractor-bare", "roofer", 0.44)
+BASELINE_SAME_TRADE = 0.5494
+# The closest same-trade pair, judged DIFFERENT. Kept as a reading, not a
+# SAME now — two dentists' offices, judged one studio, sitting closer than
+# any pair in the corpus has ever sat. That is the corpus doing what §2 says
+# real variety should eventually produce: two genuinely similar-market
+# businesses that this instrument, working as intended, calls indistinct.
+BASELINE_WORST = ("barbecue", "restaurant-casual", 0.28)
 # Which ruler the numbers above were taken with. A distance is comparable only
 # to another taken the same way, and comparing across a change of ruler has
 # already produced two false readings — a corpus that changed under a pinned
@@ -90,12 +109,12 @@ BASELINE_METRIC = "d2f37ed7"
 BASELINE_RULE = "95f4d93e"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
-BASELINE_LABELS = "a9beee08"
+BASELINE_LABELS = "edc76612"
 # What it was, so a reader can see that the agreement figure crossed a
 # change of labels rather than falling. "40 of 40" was scored against
 # 449b9ddb, taken from contact-sheet thumbnails of a corpus that had
 # moved, captured below the breakpoint where the layout changes.
-BASELINE_LABELS_WAS = ("d69c25ec", "41 of 64")
+BASELINE_LABELS_WAS = ("719276b9", "3 of 9")
 # True on the commit that re-pins, false on every commit after. Without
 # it the first run under a new ruler always prints "no better than the
 # baseline" — because the baseline IS that run's own measurement copied
