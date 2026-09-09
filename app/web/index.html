@@ -988,6 +988,8 @@ function pickVersion(version) {
                           ignored_tokens: row.notes?.ignored || [],
                           unmet: row.notes?.unmet || [],
                           contradictions: row.notes?.contradictions || [],
+                          changed: row.notes?.changed || [],
+                          blast_radius: row.notes?.blast_radius || [],
                           spec: row.spec, version} : null;
   drawWorkspace();
 }
@@ -1136,6 +1138,15 @@ function drawWorkspace() {
     ${(d.understood || []).length ? `<p class="diag-label">Understood</p>
       <div class="diag">${d.understood.map(x =>
         `<span class="got">${esc(x)}</span>`).join("")}</div>` : ""}
+    ${(d.changed || []).length ? `<p class="diag-label">What moved</p>
+      <div class="diag">${d.changed.map(x =>
+        `<span class="got">${esc(x)}</span>`).join("")}</div>` : ""}
+    ${(d.blast_radius || []).length ? `<p class="diag-label">Moved, but not asked for</p>
+      <div class="diag">${d.blast_radius.map(x =>
+        `<span class="stop">${esc(x)}</span>`).join("")}</div>
+      <p class="hint">These facets changed too, and nothing in what was
+         understood explains why. Worth a second look before trusting this
+         version.</p>` : ""}
     ${(d.ignored_tokens || []).length ? `<p class="diag-label">Ignored — not understood</p>
       <div class="diag">${d.ignored_tokens.map(x =>
         `<span class="skip">${esc(x)}</span>`).join("")}</div>` : ""}
@@ -1500,6 +1511,7 @@ async function sendInstruction() {
   WS.outline = data.outline || WS.outline;
   WS.diagnostics = {understood: data.understood, ignored_tokens: data.ignored_tokens,
                     unmet: data.unmet, contradictions: data.contradictions,
+                    changed: data.changed, blast_radius: data.blast_radius,
                     blocked: data.rejected, findings: data.findings,
                     defects: data.defects,
                     unchanged: data.unchanged, kind: data.kind,

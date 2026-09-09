@@ -91,6 +91,12 @@ class IterationResult:
     # Why the opening version looks the way it does, in words the operator can
     # repeat to the owner.
     rationale: str = ""
+    # Which facets actually moved this iteration, human-readable — the
+    # structural diff. Empty on the opening version: there is no "before".
+    changed: list[str] = field(default_factory=list)
+    # The subset of `changed` the instruction's own `understood` text never
+    # named — the blast-radius guard. See `unexplained_changes`.
+    blast_radius: list[str] = field(default_factory=list)
 
     @property
     def url(self) -> str | None:
@@ -110,7 +116,8 @@ class IterationResult:
             "unchanged": self.unchanged, "kind": self.kind,
             "unsupported": self.unsupported, "defect": self.defect,
             "read_by": self.read_by, "reader_error": self.reader_error,
-            "rationale": self.rationale,
+            "rationale": self.rationale, "changed": self.changed,
+            "blast_radius": self.blast_radius,
         }
 
 
@@ -135,6 +142,86 @@ def spec_from_config(config: dict) -> SiteSpec:
         understood=list(config.get("understood") or []),
         ignored=list(config.get("ignored_tokens") or []),
     )
+
+
+# The facets `spec_from_config` reads — everything an instruction can move,
+# as opposed to the diagnostic fields (`instruction`, `understood`,
+# `ignored_tokens`) that describe the reading rather than the result.
+FACETS: tuple[str, ...] = (
+    "mood", "accent", "lead_with", "emphasis", "suppress", "cta",
+    "first_screen", "type_treatment", "architecture", "signature",
+    "typeface", "hero_offset",
+)
+
+# Words in an instruction's own `understood` text that plausibly explain a
+# given facet moving. Not exhaustive — a heuristic over free text a model
+# wrote, not a proof — see `unexplained_changes`.
+_FACET_ALIASES: dict[str, tuple[str, ...]] = {
+    "mood": ("mood", "styled", "warm", "fresh", "bold", "refined",
+             "industrial", "night", "dark", "moody"),
+    "accent": ("accent", "colour", "color", "accented"),
+    "lead_with": ("lead", "led", "first", "top"),
+    "emphasis": ("emphasis", "emphasise", "emphasize"),
+    "suppress": ("suppress", "drop", "remove", "hide", "without"),
+    "cta": ("cta", "call to action", "button", "book", "order", "call",
+            "quote", "visit"),
+    "first_screen": ("first screen", "opening", "hero", "fold"),
+    "type_treatment": ("type", "lettering", "treatment", "typography"),
+    "architecture": ("architecture", "arrangement", "layout", "rhythm"),
+    "signature": ("signature", "device", "mark", "stamp"),
+    "typeface": ("typeface", "font", "face"),
+    "hero_offset": ("hero", "photo", "picture"),
+}
+
+
+def spec_diff(base: dict, config: dict) -> list[str]:
+    """Which facets moved between two configurations, human-readable.
+
+    Surfaced per iteration ("rest of F": a structural diff surfaced per
+    iteration) so a change is visible structurally — one line per facet —
+    rather than only guessable from re-reading the whole rendered page. The
+    cheaper review `plan.py`'s own docstring already asks for, one level up
+    from the plan: not just what the site now is, but what moved to make it
+    so.
+    """
+    changed = []
+    for facet in FACETS:
+        was, now = base.get(facet) or None, config.get(facet) or None
+        if was != now:
+            changed.append(f"{facet}: {was!r} -> {now!r}")
+    return changed
+
+
+def unexplained_changes(base: dict, config: dict) -> list[str]:
+    """Facets that moved without the instruction's own `understood` text
+    naming them anywhere — the blast-radius guard: an instruction that
+    changes one facet must not silently change others besides. This
+    project's own history is two copies of exactly that shape of defect
+    (`layout_bias` moving with `mood` though nothing asked it to; the
+    duplicate `_order()` reordering a page the plan never asked to move) —
+    this is the same check, run per iteration instead of found by accident
+    later.
+
+    A heuristic, not a proof: `understood` is free plain text a model
+    writes about its own reasoning, not a structured list of field names,
+    so this only catches a facet whose name — or a word closely tied to it
+    — never appears anywhere in that text. A model describing its own
+    reasoning honestly will almost always name what it touched; one that
+    does not is exactly what this exists to surface, not to block —
+    `IterationResult.blast_radius` is a warning the operator sees, not a
+    rejection.
+    """
+    understood_text = " ".join(
+        str(u) for u in (config.get("understood") or [])).lower()
+    unexplained = []
+    for facet in FACETS:
+        was, now = base.get(facet) or None, config.get(facet) or None
+        if was == now:
+            continue
+        aliases = _FACET_ALIASES.get(facet, (facet,))
+        if not any(alias in understood_text for alias in aliases):
+            unexplained.append(f"{facet}: {was!r} -> {now!r}")
+    return unexplained
 
 
 def current_config(conn: sqlite3.Connection, lead_id: int,
@@ -533,6 +620,13 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
     resolved = plan_for(brief, spec)
     html = build_from_spec(brief, spec)
 
+    # The structural diff and the blast-radius guard — computed once here,
+    # against the configuration this instruction actually started from, and
+    # carried through every return path below so a rejection or a no-op is
+    # just as legible as a save.
+    changed = spec_diff(base, config)
+    blast_radius = unexplained_changes(base, config)
+
     # The design audit: defects the operator should never have to catch. It
     # runs before the honesty gate because a page that fails on contrast is
     # worth knowing about even when it also fails on content.
@@ -551,7 +645,8 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
             contradictions=config["contradictions"],
             defects=defects, repairs=repairs,
             plan=resolved.as_dict(), outline=resolved.outline(),
-            rejected=True, findings=findings)
+            rejected=True, findings=findings,
+            changed=changed, blast_radius=blast_radius)
 
     if parent_version is None:
         history = sites.versions(conn, lead_id)
@@ -576,14 +671,16 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
                 plan=resolved.as_dict(), outline=resolved.outline(),
                 parent_version=parent_version, unchanged=True,
                 unsupported=unsupported_asks, read_by=read_by,
-                reader_error=reader_error)
+                reader_error=reader_error,
+                changed=changed, blast_radius=blast_radius)
 
     notes = {"mood": spec.mood, "understood": config["understood"],
              "unmet": spec.unmet, "ignored": config["ignored_tokens"],
              "contradictions": config["contradictions"],
              "defects": defects, "repairs": repairs,
              "plan": resolved.as_dict(),
-             "lead_with": spec.lead_with}
+             "lead_with": spec.lead_with,
+             "changed": changed, "blast_radius": blast_radius}
     version = sites.save(conn, lead_id, html, sentence, notes=notes,
                          actor=actor, spec_json=config,
                          parent_version=parent_version)
@@ -595,4 +692,5 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
         plan=resolved.as_dict(), outline=resolved.outline(),
         version=version, parent_version=parent_version,
         unsupported=unsupported_asks, read_by=read_by,
-        reader_error=reader_error)
+        reader_error=reader_error,
+        changed=changed, blast_radius=blast_radius)

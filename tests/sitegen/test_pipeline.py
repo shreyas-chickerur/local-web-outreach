@@ -489,3 +489,51 @@ def test_a_correction_after_the_first_build_can_reach_the_page(
     assert again.version is not None
     assert again.version != first.version
     assert again.parent_version == first.version
+
+
+# --------------------------------------------------- structural diff / F --- #
+# "Rest of F": a structural diff surfaced per iteration, and a blast-radius
+# guard so an instruction that changes one facet cannot silently change
+# others. `layout_bias` (a phantom axis moving with `mood`) and the
+# duplicate `_order()` (BRIEF's own history, see
+# .reviews/plan-page-disagreement.md) are two real instances of exactly the
+# defect shape this exists to surface.
+
+def test_spec_diff_names_only_the_facets_that_moved():
+    base = {"mood": "warm", "accent": "navy", "cta": "call"}
+    config = {"mood": "night", "accent": "navy", "cta": "call"}
+    assert pipeline.spec_diff(base, config) == ["mood: 'warm' -> 'night'"]
+
+
+def test_spec_diff_is_empty_when_nothing_moved():
+    base = {"mood": "warm", "emphasis": ["gallery"]}
+    config = {"mood": "warm", "emphasis": ["gallery"]}
+    assert pipeline.spec_diff(base, config) == []
+
+
+def test_unexplained_changes_is_empty_when_understood_names_the_facet():
+    base = {"mood": "warm"}
+    config = {"mood": "night", "understood": ["styled night"]}
+    assert pipeline.unexplained_changes(base, config) == []
+
+
+def test_unexplained_changes_flags_a_facet_understood_never_named():
+    """The blast-radius case: `architecture` moved and nothing in
+    `understood` says anything about arrangement, layout, or rhythm."""
+    base = {"mood": "warm", "architecture": "stacked"}
+    config = {"mood": "night", "architecture": "ledger",
+             "understood": ["styled night"]}
+    assert pipeline.unexplained_changes(base, config) == [
+        "architecture: 'stacked' -> 'ledger'"]
+
+
+def test_an_iteration_reports_what_it_changed(conn, lead):
+    first = iterate(conn, lead, "warm and rustic")
+    second = iterate(conn, lead, "make it darker", parent_version=first.version)
+    assert any("mood" in row for row in second.changed)
+
+
+def test_an_iteration_that_changes_nothing_reports_no_diff(conn, lead):
+    result = iterate(conn, lead, "make it like a surf shack with hammocks")
+    assert result.changed == []
+    assert result.blast_radius == []
