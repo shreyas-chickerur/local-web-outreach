@@ -32,6 +32,7 @@ from app.adapters import photos as photos_api
 from app.adapters.imageinfo import dimensions_of, measure
 from app.core.claims import CLAIM_RE
 from app.core.config import google_places_api_key, preview_base_url
+from app.site import contractorfacts
 from app.site.density import calculate_density_signal, density_attrs
 from app.site.plan import (
     NO_DATA,
@@ -45,6 +46,8 @@ from app.site.plan import (
 from app.site.spec import SiteSpec, parse_spec
 from app.site.styles import css, script
 from app.site.theme import Theme, theme_for
+from app.site.tradeprofile import CTA_BY_TRADE, CTA_LABEL, emphasis_for, facts_for, heading_for
+from app.site.tradeprofile import cta_words as _cta_words
 from app.store.photos import (
     HERO_PREFERENCE,
     NEVER_LEADS,
@@ -54,8 +57,9 @@ from app.store.photos import (
 from app.workbench.hours import parse_week
 
 # Sections in the order they read, when nothing asks otherwise.
-ORDER = ("hero", "stats", "recognition", "services", "menu", "gallery",
-         "about", "features", "partners", "reviews", "hours", "contact")
+ORDER = ("hero", "stats", "recognition", "credentials", "services", "menu",
+         "gallery", "about", "features", "partners", "reviews", "hours",
+         "contact")
 
 # How the photo pool is divided. The hero always takes index 0. The offer cards
 # take a run after it, but never so many that the gallery drops below the three
@@ -66,35 +70,13 @@ OFFER_ART_MAX = 4
 GALLERY_MIN = 3
 GALLERY_MAX = 12
 
-# What the action says, per trade. "Book a table" is restaurant wording and it
-# was reaching every business that resolved to `book` — a dentist's page went
-# out with a button offering a table, which is the kind of thing an owner spots
-# in one second and does not forget.
-#
-# A flat table per kind for now; it belongs with the trade profiles in Slice C
-# and moves there when they exist. Shipping wrong in the meantime was not an
-# option.
-_CTA_LABEL = {"call": "Call us", "book": "Book now", "order": "Order online",
-              "quote": "Get a quote", "visit": "Find us"}
-
-_CTA_BY_TRADE: dict[str, dict[str, str]] = {
-    "food": {"book": "Book a table", "order": "Order online",
-             "visit": "Find us"},
-    "care": {"book": "Book an appointment", "call": "Call the practice"},
-    "groom": {"book": "Book an appointment", "visit": "Find us"},
-    "body": {"book": "Book a class", "visit": "Find us"},
-    "desk": {"book": "Book a consultation", "call": "Call us",
-             "quote": "Request a consultation"},
-    "trade": {"book": "Book a visit", "quote": "Get a free estimate",
-              "call": "Call us"},
-    "retail": {"visit": "Find the shop", "order": "Shop online"},
-}
-
-
-def cta_words(kind: str, trade: str = "default") -> str:
-    """The button's wording, for this kind of action at this kind of business."""
-    per_trade = _CTA_BY_TRADE.get(trade, {})
-    return per_trade.get(kind) or _CTA_LABEL.get(kind, "Call us")
+# The button's wording and the trade profiles now live in
+# `app.site.tradeprofile` — this is the promised move, re-exported so
+# `from app.site.render import cta_words` still works for every existing
+# caller and test.
+_CTA_LABEL = CTA_LABEL
+_CTA_BY_TRADE = CTA_BY_TRADE
+cta_words = _cta_words
 
 
 @dataclass
@@ -801,10 +783,6 @@ def _proof_points(m: Material) -> list[str]:
     return points
 
 
-_FOOD_TRADES = ("restaurant", "cafe", "coffee", "bakery", "bar", "pizza",
-                "barbecue", "grill", "diner", "kitchen", "food")
-
-
 def _fills_rows(count: int) -> int:
     """How many cards to show so the last row is not one orphan.
 
@@ -819,13 +797,16 @@ def _fills_rows(count: int) -> int:
 
 
 def _offer_heading(m: Material) -> tuple[str, str]:
-    """Name the section after what the business actually does."""
-    trade = (m.trade or "").lower()
-    if m.menu_items or any(word in trade for word in _FOOD_TRADES):
-        return "On offer", "What we cook and serve"
-    if m.products and not m.services:
-        return "The shop", "What we make"
-    return "What we do", "How we can help"
+    """Name the section after what the business actually does.
+
+    From `tradeprofile.HEADING` — one table per trade rather than the two ad
+    hoc conditions this used to be (a food-word match against the trade
+    string, and products-with-no-services). `m.menu_items` still forces the
+    food heading regardless of `trade_kind`: a caterer classified `default`
+    that nonetheless published prices is shaped like a restaurant here.
+    """
+    kind = "food" if m.menu_items else m.trade_kind
+    return heading_for(kind, bool(m.services), bool(m.products))
 
 
 def _offer_item(item: str, index: int) -> str:
@@ -1113,6 +1094,53 @@ def _recognition(m: Material, t: Theme) -> str:
             f'</div></div></section>')
 
 
+def _credentials(m: Material, t: Theme) -> str:
+    """The trade facts a homeowner checks before anything else — corroborated.
+
+    Only facts `contractorfacts.found()` actually matched against this
+    business's own published text (`about` plus the raw `blocks` a scrape
+    kept). A trade this generator does not hunt facts for at all
+    (`tradeprofile.facts_for`) gets no section, the same as a trade with
+    material but nothing found in it — absence is the honest answer either
+    way, never a guess dressed as a fact.
+
+    Two compositions by count, the same split `_services` already draws
+    between few and several: one or two facts sit as a quiet row of stamped
+    pills, reusing `.stamps` — the mark `signature.py`'s own `stamp` device
+    already draws, so a page carrying both reads as one visual language, not
+    two; three or four earn a small card grid, reusing `.offer`'s cards
+    rather than inventing a second style for the same shape of content.
+    """
+    hunt = facts_for(m.trade_kind)
+    if not hunt:
+        return ""
+    text = " ".join(str(x) for x in (
+        m.about or "", " ".join(str(b.get("text", "")) for b in m.blocks)))
+    corroborated = contractorfacts.found(text)
+    present = [key for key in hunt if key in corroborated]
+    if not present:
+        return ""
+
+    eyebrow, heading = "Credentials", "What to expect"
+    if len(present) <= 2:
+        pills = "".join(f"<span>{e(contractorfacts.label_for(k))}</span>"
+                        for k in present)
+        return (f'<section id="credentials"><div class="wrap">'
+                f'<p class="eyebrow">{e(eyebrow)}</p>'
+                f'<div class="stamps">{pills}</div></div></section>')
+
+    cards = "".join(
+        f'<article class="offer" data-reveal data-delay="{i % 4}">'
+        f'<span class="idx">{i + 1:02d}</span>'
+        f'<h3>{e(contractorfacts.label_for(k))}</h3>'
+        f'<span class="rule"></span></article>'
+        for i, k in enumerate(present))
+    return (f'<section id="credentials"><div class="wrap">'
+            f'<div class="head" data-reveal><p class="eyebrow">{e(eyebrow)}</p>'
+            f'<h2>{e(heading)}</h2></div>'
+            f'<div class="offers">{cards}</div></div></section>')
+
+
 def _partners(m: Material, t: Theme) -> str:
     """Who they buy from, as a moving strip.
 
@@ -1352,10 +1380,10 @@ def _footer(m: Material) -> str:
 
 
 _BUILDERS = {
-    "stats": _stats, "recognition": _recognition, "services": _services,
-    "menu": _menu, "gallery": _gallery, "about": _about, "features": _features,
-    "partners": _partners, "reviews": _reviews, "hours": _hours,
-    "contact": _contact,
+    "stats": _stats, "recognition": _recognition, "credentials": _credentials,
+    "services": _services, "menu": _menu, "gallery": _gallery, "about": _about,
+    "features": _features, "partners": _partners, "reviews": _reviews,
+    "hours": _hours, "contact": _contact,
 }
 
 _NO_DATA = {
@@ -1366,6 +1394,8 @@ _NO_DATA = {
     "reviews": "no reviews with text came back for them",
     "stats": "there are not enough numbers we can stand behind",
     "recognition": "no award or nomination is published on their site",
+    "credentials": "this trade isn't hunted for these facts yet, or none of "
+                   "them turned up in their own published text",
     "partners": "their site does not list who they buy from",
     "features": "their site has no other sections to carry over",
     "hours": "no source publishes their opening hours",
@@ -1396,6 +1426,24 @@ def build(brief: dict, spec_text: str = "") -> tuple[str, SiteSpec]:
     return build_from_spec(brief, spec), spec
 
 
+def _ordering_spec(spec: SiteSpec, trade_kind: str) -> SiteSpec:
+    """`spec`, with the trade's own default emphasis when nothing else asked.
+
+    `spec.emphasis` from the identity call always wins — this only fills the
+    gap when the call named nothing, so a page's ordering is never opinion-
+    free, it is the trade's own opinion until a specific instruction replaces
+    it. A copy rather than a mutation, and `unmet` is reset to a fresh list
+    rather than carried over: `_order()` appends to `spec.unmet` for any
+    named section that turns out to be unavailable, and the trade default was
+    never asked for by anyone — reusing the real `unmet` list here would
+    report it as an instruction the identity call gave and did not get.
+    """
+    if spec.emphasis:
+        return spec
+    fallback = emphasis_for(trade_kind)
+    return replace(spec, emphasis=list(fallback), unmet=[]) if fallback else spec
+
+
 def plan_for(brief: dict, spec: SiteSpec) -> SitePlan:
     """Resolve everything the page will be, before any of it is emitted.
 
@@ -1412,7 +1460,8 @@ def plan_for(brief: dict, spec: SiteSpec) -> SitePlan:
 
     built = {key: builder(m, theme) for key, builder in _BUILDERS.items()}
     available = {key for key, html in built.items() if html}
-    order = apply_order([k for k in ORDER if k != "hero" and k in available], spec)
+    order = apply_order([k for k in ORDER if k != "hero" and k in available],
+                        _ordering_spec(spec, m.trade_kind))
 
     plan = SitePlan(name=m.name, mood=spec.mood, layout_bias=theme.layout_bias,
                     hero_photo=hero, hero_line=(m.tagline or m.about or ""),
@@ -1515,7 +1564,7 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
 
     sections = {key: builder(m, theme) for key, builder in _BUILDERS.items()}
     available = {"hero"} | {k for k, v in sections.items() if v}
-    order = _order(spec, available)
+    order = _order(_ordering_spec(spec, m.trade_kind), available)
 
     body = _hero(m, spec, theme, hero_photo)
     bands = ""
@@ -1598,7 +1647,14 @@ def unsupported(page: str, material: Material) -> list[str]:
         material.tagline or "", material.about or "",
         " ".join(material.services), " ".join(material.products),
         " ".join(str(i.get("name", "")) for i in material.menu_items),
-        " ".join(str(q.get("text", "")) for q in material.quotes))).lower()
+        " ".join(str(q.get("text", "")) for q in material.quotes),
+        # The raw scraped blocks (`_features`, `_recognition` and
+        # `_credentials` all print text straight out of these) were missing
+        # here — their own published page, just not the fields this list
+        # started with. Widening what counts as "their own words" only ever
+        # makes the guard more permissive of things they actually said, never
+        # less strict about anything else.
+        " ".join(str(b.get("text", "")) for b in material.blocks))).lower()
     text = re.sub(r"<script[^>]*>.*?</script>", " ", page, flags=re.S)
     text = re.sub(r"<[^>]+>", " ", text)
     return [claim for claim in {m.group(0) for m in _CLAIM_RE.finditer(text)}

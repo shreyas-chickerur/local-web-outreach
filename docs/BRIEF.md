@@ -162,7 +162,9 @@ not by trusting a glance at a small picture). See `.reviews/slice-b-phase-1.md`.
     verdicts    16 live, all judged whole-page against the current rendering,
                 five held out
 
-**Not started.** Slices C, D, E, G, H and the rest of F.
+**Slice C started, not finished** — see §5 and `.reviews/slice-b-phase-2.md`:
+trade profiles, four of nine contractor facts as a corroborated section, two
+compositions. **Not started.** Slices D, E, G, H and the rest of F.
 
 ## 2. The governing requirement
 
@@ -380,16 +382,36 @@ First point where sites should stop looking related.
 
 ### Slice C — compositions and trade structure
 
-Two to four real compositions per section, selected by content shape, page
-architecture, and the identity call. Headings stop being one hardcoded string
-per section and come from a per-trade table the model picks from. Trade profiles
-declaring which sections matter, in what order, and which facts extraction
-should hunt for — including the sections contractors need and the generator
-lacks: service area, licensed and insured, before-and-after, financing,
-emergency availability, warranty, manufacturer badges, response time, free
-estimate. The call-to-action label gets its trade dimension here.
+**Started — see `.reviews/slice-b-phase-2.md`.** Trade profiles
+(`app/site/tradeprofile.py`): per-trade headings for the "what we do"
+section, replacing the two ad hoc conditions it used to be; a per-trade
+default section emphasis, used only when the identity call named none; which
+contractor facts are worth hunting for, per trade. The call-to-action label's
+trade dimension (2e) turned out to already be shipped, just moved here from
+`render.py`.
+
+Four of the nine contractor facts the generator lacked, shipped as a
+corroborated `credentials` section (`app/site/contractorfacts.py`): licensed
+and insured, emergency availability, warranty, free estimate — each found by
+matching the business's own published text, never generated. Two
+compositions by count (a quiet row of pills, or a card grid). **Not built,
+disclosed rather than faked:** service area, before-and-after, financing,
+manufacturer badges, response time — each needs a kind of evidence (a service
+radius, a paired photo, a named lender, a badge image, a stated callback
+window) this material does not carry yet, and approximating one without it is
+the exact "invent a licence number" failure the brief warns against.
+
+Headings are deterministic per trade rather than something the identity call
+picks from a table — a disclosed scope reduction from "the model picks from",
+consistent with how the CTA table already worked before this phase touched
+it. No redecide: nothing here is a model decision, so nothing here is a new
+axis. Same-trade mean, agreement and gate collisions are all unchanged.
 
 Verdict point. First fair moment to ask whether someone pays a thousand dollars.
+Still not reached — three real contractor facts and a heading table are Slice
+C started, not Slice C done. Two to four compositions per section beyond
+`services`/`credentials`, and the model choosing among headings rather than a
+trade always picking the same one, remain open.
 
 ### Slice D — content completeness and copy selection
 

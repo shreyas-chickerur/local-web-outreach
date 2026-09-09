@@ -317,6 +317,8 @@ def test_the_offer_grid_does_not_leave_one_card_stranded():
 
 
 def test_the_offer_heading_follows_the_trade():
+    """From `tradeprofile.HEADING` — one table per trade, Slice C's own trade
+    profiles (§5), replacing the two ad hoc conditions this used to be."""
     food = _rich()
     food["trade"] = "Restaurant"
     assert "What we cook and serve" in build(food)[0]
@@ -324,7 +326,12 @@ def test_the_offer_heading_follows_the_trade():
     trade = _rich()
     trade["trade"] = "Roofing contractor"
     trade["published"] = {**trade["published"], "menu_items": []}
-    assert "How we can help" in build(trade)[0]
+    assert "What we handle" in build(trade)[0]
+
+    default = _rich()
+    default["trade"] = "Nonsense Business Category"
+    default["published"] = {**default["published"], "menu_items": []}
+    assert "How we can help" in build(default)[0]
 
 
 def test_two_offerings_do_not_get_a_grid_built_for_four():

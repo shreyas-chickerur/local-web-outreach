@@ -133,6 +133,7 @@ def apply_order(keys: list[str], spec: SiteSpec) -> list[str]:
 SECTION_RULES: tuple[tuple[str, str, str], ...] = (
     ("stats", "", "By the numbers"),
     ("recognition", "Recognition", ""),
+    ("credentials", "Credentials", "What to expect"),
     ("services", "", ""),
     ("menu", "On the menu", "What we serve"),
     ("gallery", "Gallery", "Have a look around"),
@@ -151,6 +152,8 @@ NO_DATA = {
     "reviews": "no reviews with text came back",
     "stats": "not enough numbers we can stand behind",
     "recognition": "no award is published on their site",
+    "credentials": "this trade isn't hunted for these facts, or none turned "
+                   "up in their own published text",
     "partners": "their site does not list who they buy from",
     "features": "their site has no other sections to carry over",
     "about": "their site has no text about themselves",
