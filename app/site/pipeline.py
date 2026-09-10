@@ -595,6 +595,34 @@ def _build_opening(conn: sqlite3.Connection, lead_id: int, brief: dict,
 def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
             *, parent_version: int | None = None,
             actor: str | None = None) -> IterationResult:
+    """Apply one instruction, store the result, and reply to it.
+
+    The reply (Slice H, item 2b) is written from the `IterationResult`
+    alone — `_iterate` below never touches `messages`, and `reply_for`
+    (`app.site.reply`) takes no page to read even if it wanted to; the
+    import is lazy only to avoid a cycle with `reply.py`'s own top-level
+    import of `IterationResult` from this module, not to hide anything
+    from a caller.
+    """
+    from app.site.reply import reply_for
+    from app.store import preferences
+
+    result = _iterate(conn, lead_id, sentence,
+                      parent_version=parent_version, actor=actor)
+    messages.add(conn, lead_id, "assistant", reply_for(result),
+                 version=result.version)
+    # A style preference, recorded regardless of whether this particular
+    # instruction ended up saving a version — a rejected or unchanged
+    # attempt still says what the operator wanted. Never from the opening
+    # build: that is the model's own choice, not an expressed preference.
+    if result.kind == "style" and result.understood:
+        preferences.record(conn, lead_id, result.understood)
+    return result
+
+
+def _iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
+             *, parent_version: int | None = None,
+             actor: str | None = None) -> IterationResult:
     """Apply one instruction and store the result, unless it fails the gate."""
     brief = leads.brief_with_overrides(conn, lead_id)
     base = current_config(conn, lead_id, parent_version)

@@ -144,6 +144,20 @@ CREATE TABLE IF NOT EXISTS discovery_cache (
     payload    TEXT NOT NULL,
     fetched_at TEXT NOT NULL
 );
+
+-- A style preference the operator expressed, tied to the lead it was said
+-- on. Read back grouped by phrase and counted across DISTINCT lead_id —
+-- Slice H item 4, a preference repeated across several businesses informing
+-- the NEXT one's opening call. See app/store/preferences.py for why this
+-- cannot move the frozen fixture corpus.
+CREATE TABLE IF NOT EXISTS preferences (
+    id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id INTEGER NOT NULL REFERENCES leads(id),
+    phrase  TEXT NOT NULL,
+    at      TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS preferences_by_phrase ON preferences (phrase);
 """
 
 

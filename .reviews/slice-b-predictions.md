@@ -2097,3 +2097,112 @@ nineteen).
 
 `make check`: ruff clean, mypy clean, 941 passed (the new freshness
 guard), 12 xfailed.
+
+# Round 5, Phase 2 — Slice H, the conversational workspace
+
+**Binding claim, pre-registered:** the reply builder cannot see the
+rendered page (structurally, proven by test), and an unmet instruction
+produces a question rather than a silent no-op. **Both PASSED** — see
+below.
+
+## What already existed, read before writing anything
+
+Per instruction, nothing already built was rebuilt. `app/store/
+messages.py` (the thread, its prose boundary, the AST test) was
+untouched. Reading `app/site/pipeline.py`'s `_build_opening()` before
+starting found item 2a already fully working — `if rationale and not
+messages.opened(conn, lead_id): messages.add(conn, lead_id, "assistant",
+rationale, version=version)` has been there since Slice F. Confirmed by
+actually running it (`pipeline.open_site` against a real fixture): the
+workspace opens with the model's own rationale as message one. It had no
+standing test; added one
+(`test_the_workspace_opens_on_the_rationale_not_an_empty_box`) rather
+than building a feature that already existed.
+
+## 2b/2c — the reply builder
+
+`app/site/reply.py`, `reply_for(result: IterationResult) -> str`. The
+structural proof of "never given the page": the function's own
+signature takes exactly one parameter, typed `IterationResult` — there
+is no second parameter for a page to ride in on, `IterationResult` itself
+carries no `html`/`page`/`rendered` field, and the module imports nothing
+from `app.site.render`. Three tests hold this directly
+(`tests/sitegen/test_reply.py`): the signature check, the
+`IterationResult` field check, and an AST scan mirroring
+`test_messages.py`'s own technique for the opposite boundary.
+
+Deterministic and template-based, a considered choice rather than a live
+model call: every field `reply_for` reads is already closed-vocabulary,
+plain-English material a PRIOR step produced (the model's own
+`understood` strings, or a rule-derived `"mood: 'quiet' -> 'warm'"` line)
+— turning that into a sentence is the same job `tools/build_review.py`'s
+`_plain_outline()` already does, not a second free-text pass that could
+drift from what the `IterationResult` actually says. It also means a
+reply is never blocked on the model being reachable, which matters most
+exactly when `reader_error` is set — the one case BRIEF's own instruction
+named explicitly ("the operator must be TOLD that, not left guessing").
+
+A DEFECT BECOMES A QUESTION: `unmet`, `contradictions`, and
+`ignored_tokens` all turn into "I ... What did you mean?" rather than a
+passive list. A gate rejection reports its findings plainly, without a
+question (nothing to ask — the instruction did not pass, full stop). A
+non-style instruction (a bug report or a request this cannot build) gets
+its own reply shape — never "Done —", which is the exact misread
+`_offer_heading` and its siblings already exist to avoid one level up
+the stack (answering a defect by pretending an edit happened).
+
+Wired into `pipeline.iterate()`: the existing function renamed to
+`_iterate` (unchanged internals, every branch untouched), wrapped by a
+new `iterate()` that calls `_iterate`, writes `reply_for(result)` to
+`messages`, and records style preferences (2d) — one exit point for the
+new behaviour rather than four early returns each needing the same two
+lines added.
+
+## 2d — repeated preferences, scoped to real leads by construction
+
+`app/store/preferences.py`: `record()` ties each understood phrase to
+the lead it was said on; `repeated(min_leads=3)` returns phrases said on
+at least three DISTINCT leads, most-repeated first. Deliberately exact
+string matching, not fuzzy — the same closed-vocabulary discipline as
+everywhere else in this project; conflating two different phrasings of
+"the same" preference would be inventing a similarity nothing measured.
+
+Threaded into `opening.opening_spec()`'s new `preferences` parameter,
+appended to `_prompt()` as one more consideration beside the sampled-
+palette line, worded as a lean rather than a rule ("worth leaning toward
+... never worth overriding what \[the business's own material\] says").
+`identity.decide()` computes `preferences.repeated(conn)` once and
+threads it through both of its own calls to `opening_spec()`.
+
+**Does this apply to the fixture corpus? No — not by a scope decision
+written here, but because the existing replay invariant makes it
+structurally unreachable.** `opening_spec()` returns `{**frozen,
+read_by:"frozen"}` for any brief carrying a `design_direction` — every
+fixture — before it ever calls `_prompt()` or looks at `preferences` at
+all. `test_a_frozen_brief_ignores_preferences_entirely`
+(`tests/sitegen/test_opening.py`) proves this directly: a Claude call
+that raises if reached at all, and identical output with an empty versus
+a four-item preferences list. No redecide follows from this phase — the
+full suite, `render_snapshots.json` and `test_the_instrument_reproduces.py`
+included, passed unchanged.
+
+## 2e — the prose boundary, re-confirmed rather than assumed
+
+`tests/store/test_messages.py::test_the_generator_cannot_reach_the_
+conversation` still passes with `reply.py` added — it does not import
+`app.store.messages` at all (the message write happens in
+`pipeline.iterate()`, already whitelisted), so the AST scan's allowed
+set (`{"pipeline.py"}`) needed no change. `identity.py`'s new import of
+`app.store.preferences` is not `messages` and does not trip the same
+check — a different table, closed-vocabulary phrases already validated
+as understood instructions, not free model prose.
+
+## Tests added
+
+`tests/sitegen/test_reply.py` (12), `tests/store/test_preferences.py`
+(5), three new cases in `tests/sitegen/test_opening.py`, four new cases
+in `tests/sitegen/test_pipeline.py` (the opening-rationale standing test
+plus three Slice H integration tests) — 24 new tests total.
+
+`make check`: ruff clean, mypy clean, 965 passed, 12 xfailed. No
+fixture's fingerprint or rendered bytes moved.

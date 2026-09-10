@@ -49,6 +49,45 @@ def test_an_instruction_produces_a_new_version(conn, lead):
     assert "led with the gallery" in result.understood
 
 
+# -------------------------------------------- Slice H: the conversation -- #
+def test_an_iteration_writes_an_assistant_reply_to_the_thread(conn, lead):
+    """2b: every reply grounded in what iterate() actually did. The user's
+    own turn is written by the web layer (server.py's /api/iterate, which
+    records it before ever calling iterate()) — this proves iterate()'s
+    own half, the reply."""
+    from app.store import messages
+
+    iterate(conn, lead, "warm and rustic, lead with the gallery")
+    thread = messages.thread(conn, lead)
+    assert [m["role"] for m in thread] == ["assistant"]
+    assert thread[-1]["version"] == 1
+    assert thread[-1]["text"]
+
+
+def test_a_style_edit_records_its_understood_phrases_as_preferences(conn, lead):
+    """2d: recorded regardless of eventual cross-lead accumulation — this
+    test only proves the recording half, not the 3-lead threshold, which
+    tests/store/test_preferences.py already covers directly."""
+    from app.store import preferences
+
+    iterate(conn, lead, "warm and rustic, lead with the gallery")
+    rows = conn.execute(
+        "SELECT phrase FROM preferences WHERE lead_id = ?", (lead,)).fetchall()
+    assert rows, "a style edit's understood phrases were not recorded"
+    assert preferences.repeated(conn, min_leads=1)
+
+
+def test_a_non_style_instruction_records_no_preference(conn, lead):
+    """A bug report is not a style preference — recording it would feed a
+    complaint about THIS business into what the NEXT one's opening call
+    leans toward."""
+    iterate(conn, lead, "warm and rustic, lead with the gallery")
+    before = conn.execute("SELECT COUNT(*) AS n FROM preferences").fetchone()["n"]
+    iterate(conn, lead, "the reviews section shows the wrong count")
+    after = conn.execute("SELECT COUNT(*) AS n FROM preferences").fetchone()["n"]
+    assert after == before
+
+
 def test_each_iteration_carries_the_last_configuration_forward(conn, lead):
     iterate(conn, lead, "warm and rustic, lead with the gallery")
     second = iterate(conn, lead, "actually make it darker")
@@ -392,6 +431,29 @@ def test_a_new_lead_opens_on_a_site_not_on_nothing(conn, lead, monkeypatch):
     result = pipeline.open_site(conn, lead)
     assert result.version is not None
     assert sites.html_for(conn, lead, result.version)
+
+
+def test_the_workspace_opens_on_the_rationale_not_an_empty_box(
+        conn, lead, monkeypatch):
+    """Slice H item 2a — this already worked (`_build_opening` has written
+    the rationale as the first message since Slice F), it simply had no
+    standing test of its own before this one."""
+    from app.site import opening
+    from app.store import messages
+
+    monkeypatch.setattr(pipeline.claude, "available", lambda: True)
+    monkeypatch.setattr(opening.claude, "available", lambda: True)
+    monkeypatch.setattr(
+        opening.claude, "structured",
+        lambda *a, **kw: {"mood": "warm", "accent": "gold", "cta": "book",
+                          "rationale": "Opened warm, led with the gallery."})
+    review_every_photo(conn, lead)
+    result = pipeline.open_site(conn, lead)
+    assert result.rationale == "Opened warm, led with the gallery."
+    thread = messages.thread(conn, lead)
+    assert thread[0]["role"] == "assistant"
+    assert thread[0]["text"] == "Opened warm, led with the gallery."
+    assert thread[0]["version"] == result.version
 
 
 def test_opening_twice_does_not_build_twice(conn, lead, monkeypatch):

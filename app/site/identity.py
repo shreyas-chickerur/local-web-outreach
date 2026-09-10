@@ -41,6 +41,7 @@ from app.site import firstscreen, opening
 from app.site.pipeline import spec_from_config
 from app.site.render import material_from_brief, plan_for
 from app.store import fingerprints as store
+from app.store import preferences
 
 # Asking twice is enough to tell "the model had a better answer and did not
 # reach for it" from "this business genuinely has one shape". Beyond that the
@@ -118,7 +119,13 @@ def decide(conn: sqlite3.Connection, lead_id: int, brief: dict) -> Decision:
     Returns the config to build from. A collision is not an error — it is a
     request for a different answer, and only an unresolvable one is reported.
     """
-    config = opening.opening_spec(brief)
+    # Slice H item 4: a style preference expressed across several other
+    # leads, offered to this one's opening call as a consideration. Cheap
+    # to compute unconditionally — the frozen check right below makes the
+    # cost of computing it for a fixture pure waste, never a mistake, since
+    # `opening_spec` never builds a prompt from it on that path.
+    wanted = preferences.repeated(conn)
+    config = opening.opening_spec(brief, preferences=wanted)
 
     # A replayed direction is already a resolved answer — the gate ran when it
     # was first decided. Re-gating it is re-asking by another name, and it
@@ -147,7 +154,8 @@ def decide(conn: sqlite3.Connection, lead_id: int, brief: dict) -> Decision:
         # "be different".
         shared = sorted({axis for _, moved in hit
                          for axis in fp.AXES if axis not in moved})
-        config = opening.opening_spec(brief, avoid=_avoidance(shared, prints, hit))
+        config = opening.opening_spec(
+            brief, avoid=_avoidance(shared, prints, hit), preferences=wanted)
 
     hit = fp.collisions(print_of(brief, config), prints)
     if not hit:

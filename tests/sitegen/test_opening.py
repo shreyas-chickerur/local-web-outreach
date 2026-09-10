@@ -87,6 +87,54 @@ def test_the_rationale_is_kept_but_never_reaches_the_page(monkeypatch):
     assert "rationale" not in {"mood", "accent", "cta", "lead_with"}
 
 
+def test_a_repeated_preference_reaches_the_prompt_as_a_consideration(monkeypatch):
+    """Slice H item 4. Offered beside the evidence, never worded as a rule —
+    `_prompt()`'s own line says "worth leaning toward", not "must"."""
+    captured = {}
+    monkeypatch.setattr(opening.claude, "available", lambda: True)
+
+    def capture(system, prompt, tool, **kw):
+        captured["prompt"] = prompt
+        return {"mood": "warm", "accent": "gold", "cta": "book", "rationale": ""}
+
+    monkeypatch.setattr(opening.claude, "structured", capture)
+    opening_spec(BRIEF, preferences=["opened warm", "led with reviews"])
+    assert "opened warm" in captured["prompt"]
+    assert "led with reviews" in captured["prompt"]
+    assert "REPEATEDLY ASKED" in captured["prompt"]
+
+
+def test_no_preferences_leaves_the_prompt_exactly_as_before(monkeypatch):
+    captured = {}
+    monkeypatch.setattr(opening.claude, "available", lambda: True)
+
+    def capture(system, prompt, tool, **kw):
+        captured["prompt"] = prompt
+        return {"mood": "warm", "accent": "gold", "cta": "book", "rationale": ""}
+
+    monkeypatch.setattr(opening.claude, "structured", capture)
+    opening_spec(BRIEF)
+    assert "REPEATEDLY ASKED" not in captured["prompt"]
+
+
+def test_a_frozen_brief_ignores_preferences_entirely(monkeypatch):
+    """The structural half of Slice H item 4's own binding claim: a brief
+    carrying a frozen design_direction — every fixture in the corpus —
+    returns before `_prompt()` is ever called, so no accumulated preference
+    can move what it renders. Proven by a Claude call that would raise if
+    reached at all."""
+    def must_not_be_called(*a, **kw):
+        raise AssertionError("opening_spec built a live prompt for a frozen brief")
+
+    monkeypatch.setattr(opening.claude, "structured", must_not_be_called)
+    frozen = {**BRIEF, "design_direction": {"mood": "quiet", "accent": "navy"}}
+    without = opening_spec(frozen)
+    with_prefs = opening_spec(
+        frozen, preferences=["opened warm", "led with reviews", "x", "y"])
+    assert without == with_prefs
+    assert with_prefs["read_by"] == "frozen"
+
+
 def test_the_evidence_is_fenced_and_labelled_as_data(monkeypatch):
     """Their website's text is untrusted input. It is quoted, and the answer is
     enum-validated, so the worst a hostile page achieves is a different mood."""
