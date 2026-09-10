@@ -137,13 +137,37 @@ row still said "4" after it was raised to six) — the same "two copies
 drift apart" failure this project keeps finding, this time in its own
 measurement tool.
 
+**Round 4's full design-review sweep (19 fixtures, not the 4-fixture
+sample) found a mislabeled heading on four real fixtures, and a second,
+independent copy of a text-truncation bug already fixed once.** A
+roofer, two HVAC contractors, and a law firm's own "services" section
+was headed "What we cook and serve" — the restaurant heading — because
+one function (`_offer_heading`) read `if m.menu_items` alone, without
+the `trade_kind == "food"` gate Round 3 already added everywhere else
+after the same underlying extraction misread a law firm's settlement
+figures as menu prices. Fixed at the root; a fifth affected fixture
+(`dentist`) the design review never happened to flag came along free.
+Separately, `signature.py`'s big pull-quote device had its own,
+never-touched copy of the word-boundary truncation bug Round 3 fixed
+for review cards — on `hvac`'s real testimonial it produced "...
+knowledgeable. H" with a decorative quote mark glued to the cut. Fixed
+the same way; a related styling issue (the decorative quote marks
+themselves reading as stray letters in this typeface) fixed alongside
+it. A third finding — a broken map embed on four fixtures — turned out
+NOT to be a site defect: reproduced under a controlled test as a pure
+artifact of `--disable-gpu`, the flag every screenshot tool in this
+project passes for stability. No real visitor's browser carries that
+flag. Disclosed, not fixed — there is nothing in this project's own
+code responsible for it. Full account: `.reviews/round-4.md`.
+
 ## What's deliberately not built
 
 - **Before-and-after, the last of nine contractor facts** — it needs a
   paired photo (a labelled before, a labelled after, of the same job)
   nothing in the current material carries, and approximating one without
   that pairing is the same invented-evidence failure the credential fix
-  refuses to do.
+  refuses to do. Re-checked as of Round 4: still no fixture's vision data
+  carries the pairing.
 - **Compositions beyond `services` and `reviews`** — `gallery`, `about`,
   and `hours` still have exactly one layout regardless of content shape.
   BRIEF §5 asks for two to four per section; this ships two or three, for
@@ -153,46 +177,50 @@ measurement tool.
   makes. Consistent with how the call-to-action wording already worked
   before this session touched it, but a disclosed reduction from what was
   asked.
-- **A judging round.** Agreement is still 0 of 0, deliberately skipped
-  two passes running now — every verdict checked so far has come back
-  DIFFERENT, so judging again would spend real money to reconfirm what
-  is already known rather than test anything new. See
-  `tests/test_the_instrument_reproduces.py`. Recommended, not attempted:
-  a full round is overdue now that this round moved the corpus twice.
-- **A full (not sampled) design review, and auto-repair of what it
-  finds.** The four-fixture sample's genuine findings are fixed; running
-  it across all nineteen (57 model calls) and building auto-repair for
-  the deterministic findings — both explicitly proposed for a later pass,
-  neither attempted here.
-- **Content selection and provenance** (Slice D's remaining items:
-  letting the model select and order its own sentences, a provenance
-  check replacing `unsupported()`), **backdrops, motion, video, and the
-  conversational workspace** — Slices D (partly), E, H. Not started.
+- **The conversational workspace (Slice H).** Opening rationale, replies
+  grounded in `IterationResult`, a defect becoming a question, cross-lead
+  preference accumulation — none of it started. Explicitly deferred by
+  Round 4's own instruction after Phases 1-3 (below) consumed the round:
+  a real conversational-interface feature deserves its own session, not
+  a tail-end addition. See `.reviews/round-4.md`.
 - **Growing the corpus past nineteen fixtures.**
+
+**Built this round (Round 4), previously listed here as not built:**
+copy selection and a real provenance layer (Slice D's remaining items —
+the model now picks and orders a business's own sentences by index,
+never retyping, so verbatim provenance holds by construction); the
+backdrop preference ladder, motion, and a separate human-review capture
+tool (Slice E — video is still dormant, no extraction path gathers one
+yet, disclosed rather than faked); the full 19-fixture design review
+sweep and auto-repair of what it found, by class (Slice G — two real
+render bugs fixed, one finding run to ground as a capture-tooling
+artifact and disclosed rather than "fixed"); a real judging round,
+rebuilding the ground truth from zero live verdicts. Full account in
+`.reviews/round-4.md`.
 
 ## Numbers not to trust, and why
 
-- **"61.52% same-trade distance"** is a real, current measurement under
-  this round's redecide (up from 56.10% before this round's photo
-  preference, menu fallback, and newly-verified contact facts moved the
-  corpus), but it is still the ONLY reading this exact axis set has ever
-  taken — there is no prior number under it to compare against. The
-  closest pair this corpus has ever produced is `barbecue`/`barbecue-rich`
-  at 17% apart (eight of twelve axes shared) — named because BRIEF's own
-  convention is to report the closest pair, not because it was judged.
-- **Agreement is 0 of 0, and no judging round has run for two passes
-  now, on purpose.** Every verdict checked across both passes came back
-  DIFFERENT — judging again would spend real money to confirm what a
-  redecide already implies rather than test anything new, so both
-  redecides retired every live verdict and replaced none of them. A
-  rank-based score needs at least one "same" verdict to rank against
-  something. Take "the vector agrees with a human" as unproven, not as
-  disproven and not as confirmed — and overdue for a real check now that
-  the corpus has moved twice with nothing re-judged.
-- **The held-out third is currently empty**, not stale — every held-out
-  verdict was retired across two redecides and none has been repopulated.
-  This is disclosed in `tests/test_the_instrument_reproduces.py`, not
-  hidden.
+- **"61.52% same-trade distance"** is unchanged since the round before
+  this one — Round 4 touched content selection, performance, and the
+  ground truth, not any axis or decision, so there was no redecide and
+  nothing here to move. The closest pair this corpus has ever produced,
+  `barbecue`/`barbecue-rich` at 17% apart (eight of twelve axes shared),
+  was JUDGED this round, not just reported — a stranger scrolling both
+  whole pages called it "same," which is the one case in the corpus
+  where the vector's sense of "close" and a stranger's agree.
+- **Agreement is no longer 0 of 0 — Round 4 rebuilt it from zero live
+  verdicts.** Fifteen fresh pairs, judged blind from whole-page renderings:
+  22/26 (85%) scored against every live verdict, 9/11 (82%) scored against
+  the held-out third alone (the number that actually says something about
+  generalising). Not a clean pass: every inversion traces to one disclosed
+  pair, `roofer`/`hvac-rich`, judged "same" by a stranger's eye but placed
+  69% apart by the vector — nearly the corpus-wide 80% mean. Reported as
+  found, not tuned toward or argued away. See `.reviews/round-4.md` and
+  `tests/fixtures/pairs.json`.
+- **The held-out third is no longer empty** — twelve of the fifteen new
+  verdicts landed there by a fixed hash of the two slugs, computed before
+  any verdict was recorded. `tests/test_the_instrument_reproduces.py`
+  pins the exact set.
 - **The content census's "77% of published material reaches the page"**
   is corrected for a double-count this round found in the census tool
   itself (a subset row was being summed into the total twice — see
@@ -220,10 +248,14 @@ contradicting each other on one page, and a scraper's menu-item
 extraction mistaking a law firm's settlement amounts for dinner prices
 on five pages; a nav floating over a photograph with no way to guarantee
 it stayed legible, and a CSS grid with a wider minimum than the phone
-showing it; and a corpus-wide measurement tool double-counting one of
-its own rows into a headline percentage (`.reviews/slice-b-
-predictions.md`, "Round 3"). None of these were caught by any test
-before someone looked — or, this round, before a measurement tool's own
-output was checked against a second, independent read of it. Trust what
-you see on the page over what any panel, test, or number claims about
-it, and say so if they don't match.
+showing it; a corpus-wide measurement tool double-counting one of its
+own rows into a headline percentage (`.reviews/slice-b-predictions.md`,
+"Round 3"); and, this round, the same menu-price extraction bug
+resurfacing in a heading function that never got the earlier fix, plus
+an independent copy of a review-quote truncation bug already fixed once
+elsewhere (`.reviews/round-4.md`). None of these were caught by any
+test before someone looked — or, this round, before a live blind
+judging session and a controlled before/after screenshot settled two
+close calls the design review alone could not. Trust what you see on
+the page over what any panel, test, or number claims about it, and say
+so if they don't match.

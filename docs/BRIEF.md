@@ -351,29 +351,100 @@ substantial undertaking in its own right); growing the corpus; the rest
 of Slice D (letting the model select and order its own sentences, a
 provenance check).
 
+**Done — Round 4 (Slice D's last item, Slice E, and Slice G in full).**
+Full account in `.reviews/slice-b-predictions.md` ("Round 4, Phase
+1/2/3"); tails pasted in `.reviews/round-4.md`.
+
+Phase 1: the rest of Slice D. `app/site/provenance.py` — every visible
+prose sentence checked as verbatim/prefix-cut source, a corroborated
+field, or (an empty, honestly-disclosed) generic-copy whitelist, kept
+as a SEPARATE layer beside the existing claims-gate rather than folded
+into it. `app/site/copyselect.py` — a real model call selects and
+orders sentences by INDEX into the exact candidates offered, never by
+retyping, which makes verbatim provenance true by construction. Frozen
+per lead alongside vision and the design direction. 100% (687/687)
+verbatim provenance across the real corpus; 85% (389/459) selection
+ratio. Content-only, no axis moved; screenshots recaptured.
+
+Phase 2: Slice E, instrumented before it was built, per the round's own
+standing rule. `tools/perf_census.py` — real LCP/CLS/INP from a headless
+browser's own `PerformanceObserver`, not estimated. `app/site/
+backdrop.py` — the preference ladder (their own video, dormant; a
+sequence of their own uncondemned stills; an abstract palette gradient;
+licensed stock, never reached, never fabricated) behind `first_screen
+== "type"`. `tools/motion_preview.py` — a separate, human-review-only
+capture tool with motion left on, verified to show a real crossfade;
+the deterministic pipeline needs no change, since the pre-existing
+global `prefers-reduced-motion` rule already covers any new animation.
+Motion does NOT become axis thirteen — its only live effect is a
+function of `first_screen`, failing the independence test every other
+axis met. Twelve of nineteen fixtures breach the 2MB weight budget, all
+pre-existing photo-gallery weight predating this phase; pinned as
+disclosed `xfail(strict=True)` regressions in `tests/
+test_performance_budgets.py`, the other 66 checks a real, green gate.
+
+Phase 3a: the full Slice G sweep, 19 fixtures × 3 widths, 57 model
+calls, 295 findings. Two real, deterministic, corpus-wide bugs found
+and fixed by class rather than patched per finding: `_offer_heading()`
+was picking the food-trade heading off a bare `if m.menu_items`,
+ignoring `trade_kind` — the same over-trusting menu-item extraction
+Round 3 already gated everywhere else, missed at this one call site —
+caught live as "What we cook and serve" on a roofer, two HVAC
+contractors, and a law firm; fixed to read `trade_kind` directly,
+fixing a fifth instance (`dentist`) the sample never flagged. The
+signature device's `quote` block had its own, independent, never-fixed
+copy of a text-truncation bug Round 3 already fixed once elsewhere
+(`_truncate_quote`); fixed the same way, plus a decorative curly-quote
+styling issue found verifying it (toned down so the marks read as
+punctuation, not stray letters). A WebGL map-embed error four findings
+raised was run to ground and confirmed a pure `--disable-gpu` capture-
+tooling artifact (every screenshot tool in this project passes that
+flag; no real visitor's browser does) — disclosed, not "fixed", the
+same finding shape as Round 3's CDP width-clamping discovery.
+
+Phase 3b: rebuilt the ground truth from 0 live verdicts (131 retired
+across two rounds). Fifteen fresh pairs, judged blind from whole-page
+renderings recaptured this session. Agreement, reported plainly: 22/26
+(85%) full, 9/11 (82%) held-out only — past the "4-5 scorable
+comparisons" floor this phase was bound to, not engineered to just
+clear it. Every inversion traces to one disclosed pair
+(`roofer`/`hvac-rich`, judged "same" by a stranger's eye, placed 69%
+apart by the vector) rather than being spread thin or argued away.
+
+**Not this round, disclosed rather than silently dropped:** Slice H,
+the conversational workspace — explicitly deferred; see §5. Growing the
+corpus past 19 fixtures. The map embed's WebGL-under-`--disable-gpu`
+finding is disclosed, not fixed — there is nothing in this project's
+own code responsible for it.
+
 **The instrument's current reading.**
 
-    agreement   0 of 0 — no "same" pair is left to rank, none judged this
-                round (deliberate, two rounds running — see above)
-                ruler a762bcc9, rule 254e171b, labels e3b0c442,
-                held-out e3b0c442
+    agreement   22/26 (85%) full, 9/11 (82%) held-out only — one
+                disclosed inversion, roofer/hvac-rich (69% by the
+                vector, judged "same" by a stranger)
+                ruler a762bcc9, rule 254e171b, labels 122e6ec8,
+                held-out 7aa64298
     census      same-trade 61.52% distance = 38.48% identical, 30 scored
-                pairs (was 56.10%/43.90% before this round's redecide)
-                closest pair barbecue / barbecue-rich at 17% (reported,
-                not judged)
+                pairs (unchanged this round — no redecide)
+                closest pair barbecue / barbecue-rich at 17%, JUDGED
+                "same" this round
     unreachable 0
     gate        0 of 171 pairs collide, whole corpus
     forbidden defaults  3 fixtures match (§2.4) — barbecue-rich,
-                barbecue, and restaurant-rich (barbecue joined this
-                round's redecide; a fact about the redecide, not
-                something tuned for)
-    content census  77% of published material reaches the page (was 73%,
-                corrected for a double-count the census tool itself had —
-                see above)
-    tests       849
+                barbecue, and restaurant-rich (unchanged this round)
+    content census  77% of published material reaches the page
+                (unchanged — Round 4 touched selection within a field,
+                not whether the field reaches the page at all)
+    provenance  100% (687/687) of rendered prose sentences
+                verbatim-or-prefix-cut source; 85% (389/459) selection
+                ratio (Round 4 Phase 1)
+    performance LCP/CLS/INP all within budget on 19/19 fixtures; weight
+                breaches 12/19, all pre-existing, pinned as disclosed
+                xfail (Round 4 Phase 2)
+    tests       940 passed, 12 xfailed
     fixtures    19
-    verdicts    0 live (none live going into this round either; nothing
-                to retire, nothing added)
+    verdicts    2 live, same-trade closest pair among them
+                (barbecue/barbecue-rich); 12 held out
 
 ## 2. The governing requirement
 
