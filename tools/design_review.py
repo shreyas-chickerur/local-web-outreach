@@ -1,16 +1,20 @@
-"""Slice G, sampled — BRIEF §5: "screenshot at three widths, send with the
-brief for a critique: defects only, closed categories."
+"""Slice G — BRIEF §5: "screenshot at three widths, send with the brief
+for a critique: defects only, closed categories."
 
-    .venv/bin/python tools/design_review.py
+    .venv/bin/python tools/design_review.py            # the 4-fixture sample
+    .venv/bin/python tools/design_review.py --full      # all 19, 57 calls
 
-Not the full slice. This is a cost-minimising first pass (BRIEF §5,
-`.reviews/first-pass.md`): four fixtures, chosen for shape rather than at
-random — one restaurant, one trade contractor, one professional practice,
-and the threadbare fixture that has almost nothing to work with — at three
-widths each. Twelve model calls, not the fifty-seven a full sweep over all
-nineteen fixtures at three widths would cost. The question this answers is
-narrower than "what does the review find": it is "does this instrument find
-anything a person would also flag, and is a full sweep worth paying for".
+The sampled run (`SAMPLE`, four fixtures chosen for shape rather than at
+random — one restaurant, one trade contractor, one professional
+practice, and the threadbare fixture with almost nothing to work with)
+was the cost-minimising first pass (BRIEF §5, `.reviews/first-pass.md`):
+twelve calls, answering "does this instrument find anything a person
+would also flag, and is a full sweep worth paying for" before paying for
+one. It did (a real nav-over-face collision, a truncated quote, a
+genuine cross-section contradiction), so `--full` runs the sweep BRIEF
+§5 actually asks for: all nineteen fixtures, still three widths each,
+fifty-seven calls, written to `--out` as JSON for a findings-vs-defects
+diff to run against afterward rather than read off stdout by eye.
 
 One call per (fixture, width) screenshot, not one call per fixture bundling
 all three — BRIEF's own phrase is "screenshot at three widths", plural
@@ -52,6 +56,8 @@ from app.store import db, leads, sites  # noqa: E402
 # sampled at random, so a finding can be read against why that fixture was
 # picked.
 SAMPLE = ("restaurant-rich", "hvac", "law", "threadbare")
+
+FULL = tuple(sorted(p.stem for p in FIXTURES.glob("*.json")))
 
 WIDTHS = (("desktop", 1440, 1100, 1.0), ("mobile", 390, 844, 1.0),
           ("page", 1440, 6000, 0.5))
@@ -124,6 +130,12 @@ def _review_one(slug: str, label: str, png: Path,
 
 
 def main() -> int:
+    full = "--full" in sys.argv
+    sample = FULL if full else SAMPLE
+    out_arg = next((a.split("=", 1)[1] for a in sys.argv
+                    if a.startswith("--out=")), None)
+    out_json = Path(out_arg) if out_arg else None
+
     if not claude.available():
         print("No ANTHROPIC_API_KEY — nothing to sample against.",
               file=sys.stderr)
@@ -136,7 +148,7 @@ def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     shots: dict[str, dict[str, Path]] = {}
     with db.session(FIXTURE_DB) as conn:
-        for slug in SAMPLE:
+        for slug in sample:
             path = FIXTURES / f"{slug}.json"
             lead_id = leads.save_brief(conn, json.loads(path.read_text()))
             for stage in STAGES:
@@ -157,7 +169,7 @@ def main() -> int:
     report: dict[str, dict[str, list[dict]]] = {}
     calls = 0
     with httpx.Client(timeout=60.0) as client:
-        for slug in SAMPLE:
+        for slug in sample:
             report[slug] = {}
             for label, *_ in WIDTHS:
                 png = shots.get(slug, {}).get(label)
@@ -165,8 +177,10 @@ def main() -> int:
                     continue
                 report[slug][label] = _review_one(slug, label, png, client)
                 calls += 1
+                print(f"  {slug}:{label} — {len(report[slug][label])} "
+                     f"finding(s)", flush=True)
 
-    print(f"\n{calls} model calls, {len(SAMPLE)} fixtures x "
+    print(f"\n{calls} model calls, {len(sample)} fixtures x "
           f"{len(WIDTHS)} widths\n")
     total_findings = 0
     by_category: dict[str, int] = {}
@@ -189,6 +203,10 @@ def main() -> int:
         print("by category: " + ", ".join(
             f"{cat}={n}" for cat, n in
             sorted(by_category.items(), key=lambda kv: -kv[1])))
+
+    if out_json:
+        out_json.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+        print(f"\n  wrote {out_json}")
     return 0
 
 

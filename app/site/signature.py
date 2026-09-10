@@ -23,7 +23,7 @@ built from this business's material is not a choice, it is an empty band.
 from __future__ import annotations
 
 from app.site import contractorfacts
-from app.site.render import Material, e
+from app.site.render import Material, _truncate_quote, e
 
 # Ordered. The fingerprint compares positionally and the census prints them.
 DEVICES: tuple[str, ...] = (
@@ -113,7 +113,14 @@ def render(device: str, m: Material) -> str:
         return (f'<section class="device" data-device="ledger"><div class="wrap">'
                 f'<table class="ledgerfig">{cells}</table></div></section>')
     if device == "quote":
-        said = str(m.quotes[0].get("text") or "")[:220].strip()
+        # A naive `text[:220]` character slice used to land mid-word —
+        # "...knowledgeable. H" on `hvac`, a lone capital letter with the
+        # decorative closing curly quote (`::after`) tacked directly onto
+        # it. The exact defect class `_truncate_quote`'s own docstring
+        # describes, already fixed once for `_review_card`/
+        # `_review_feature` — this was a second, independent
+        # implementation of the same idea that the fix never reached.
+        said = _truncate_quote(str(m.quotes[0].get("text") or ""), limit=220)
         return (f'<section class="device" data-device="quote">'
                 f'<div class="wrap"><blockquote class="bigquote">'
                 f'{e(said)}</blockquote></div></section>')

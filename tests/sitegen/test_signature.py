@@ -11,6 +11,8 @@ model call and no redecide needed to notice.
 
 from __future__ import annotations
 
+import re
+
 import pytest
 
 from app.site import signature as sig
@@ -55,6 +57,32 @@ def test_render_prints_the_corroborated_mark():
     page = sig.render("stamp", m)
     assert "Licensed &amp; insured" in page
     assert page.count("<span>") == 4
+
+
+def test_the_quote_device_never_cuts_a_word_in_half():
+    """`signature.render("quote", ...)` used to slice `text[:220]` with no
+    word boundary — a second, independent copy of the exact defect
+    `_truncate_quote` was already built to fix for `_review_card`/
+    `_review_feature` (`app/site/render.py`), never updated to use it.
+    Found on `hvac`'s real testimonial: the naive slice landed on
+    "...knowledgeable. H", a lone capital letter with the decorative
+    closing curly quote glued directly onto it — a Slice G design-review
+    finding, not a hypothetical."""
+    long_quote = ("Cody Roberts is an ultimate professional, transparent, "
+                 "honest, and totally focused on the homeowner's needs. "
+                 "From the moment Arturo arrived at my home, he was "
+                 "professional, courteous, and knowledgeable. He took the "
+                 "time to answer all of my questions.")
+    m = _plumber("Licensed and insured technicians on every call.")
+    m.quotes = ({"text": long_quote, "author": "A Customer"},)
+    page = sig.render("quote", m)
+    body = re.search(r'<blockquote class="bigquote">(.*?)</blockquote>',
+                     page, re.S).group(1)
+    assert body.endswith("…"), "a truncated quote must say it was shortened"
+    last_word = body[:-1].rsplit(" ", 1)[-1]
+    assert len(last_word) > 1, (
+        f"cut lands on a lone letter, the exact defect this test guards "
+        f"against: {body!r}")
 
 
 def test_care_and_desk_have_their_own_corroborating_fact():
