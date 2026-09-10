@@ -169,6 +169,33 @@ body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
   line-height:.92}
 .hero.first-type .sub{max-width:46ch;opacity:.72}
 .hero.first-type .wrap{padding-top:64px;padding-bottom:64px}
+/* BRIEF §5, Slice E: what fills `first-type` instead of staying empty —
+   the backdrop preference ladder (`app.site.backdrop`). More specific
+   than `.hero.first-type` alone (three classes, not two), so this wins
+   the cascade regardless of source order. */
+.hero.first-type.has-photo{color:#fff;background:transparent}
+.hero-stills{position:absolute;inset:-8% 0 0;z-index:-2;overflow:hidden}
+.hero-stills .still{position:absolute;inset:0;background-size:cover;
+  background-position:center;opacity:0;
+  animation:hero-still-cycle 16s ease-in-out infinite}
+.hero-stills .still:first-child{opacity:1}
+.hero-stills .still:nth-child(2){animation-delay:4s}
+.hero-stills .still:nth-child(3){animation-delay:8s}
+.hero-stills .still:nth-child(4){animation-delay:12s}
+@keyframes hero-still-cycle{
+  0%,6%{opacity:1} 25%,100%{opacity:0}
+}
+/* `prefers-reduced-motion` cancels every `animation` globally (see the
+   media query at the foot of this file) — the base state above,
+   `:first-child{opacity:1}` and every other `.still` at `opacity:0`, is
+   what is left standing: a single still poster frame, never a page
+   caught mid-crossfade. The same guarantee the deterministic capture
+   pipeline (`tools/contact_sheet.py`) already depends on for every other
+   animated rule on this page — this rung inherits it rather than needing
+   a second one. */
+.hero-generated{position:absolute;inset:0;z-index:-2;
+  background:linear-gradient(135deg,var(--raise) 0%,var(--bg) 55%,
+    color-mix(in srgb,var(--accent) 18%,var(--bg)) 100%)}
 
 /* SPLIT — type and photograph at exactly half each, hard-edged. No scrim,
    because nothing is set over the picture.
@@ -221,6 +248,14 @@ body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
 .bigquote{margin:0;font-family:'Unbounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   font-size:clamp(24px,4.2vw,58px);line-height:1.08;max-width:20ch;
   text-indent:-.4em}
+/* Set at the same size and weight as the quoted words themselves, a
+   curly quotation mark in a heavy display face reads as a stray letter
+   rather than punctuation — a Slice G design review misread the closing
+   mark as "a stray 'D'" on `hvac`'s real testimonial, and the opening
+   one as a doubled first letter ("CCody"). Toned down and dropped a
+   size so they read as an ornamental flourish, not more of the word. */
+.bigquote::before,.bigquote::after{color:var(--accent);opacity:.6;
+  font-size:.6em}
 .bigquote::before{content:"C"} .bigquote::after{content:"D"}
 
 [data-device="marquee"]{overflow:hidden;padding:clamp(28px,3vw,44px) 0;
@@ -876,7 +911,7 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;
 <body data-theme="fresh" data-type="centred" data-arch="gallery" data-signature="scroll_gallery" data-theme-layout="airy">
 <div class="progress"></div>
 <div class="bar"><a class="mark" href="#top">Drybar</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#gallery">Gallery</a><a href="#reviews">Reviews</a><a href="#contact">Visit</a></nav><a class="book" href="tel:4694441580">Book an appointment</a></div>
-<header class="hero first-type type-centred" id="top"><div class="wrap"><h1>Drybar</h1><p class="sub">Hair Salon</p><div class="facts"><span>&#9733; 4.5 &middot; 355 Google reviews</span></div><div class="actions"><a class="cta" href="tel:4694441580">Book an appointment</a></div></div></header>
+<header class="hero first-type type-centred has-photo" id="top"><div class="hero-stills"><div class="still" style="background-image:url(&quot;photos/3e3d36fb911ba8af74d2078b53b8e340.jpg&quot;)"></div><div class="still" style="background-image:url(&quot;photos/b1aae2c8ff8286231aeae7cb58d41e86.jpg&quot;)"></div><div class="still" style="background-image:url(&quot;photos/ac45a5845d043c7416a83f6c37b90eb1.jpg&quot;)"></div><div class="still" style="background-image:url(&quot;photos/ff1d1aefc9763bd27e77df19d44aa614.jpg&quot;)"></div></div><div class="veil"></div><div class="wrap"><h1>Drybar</h1><p class="sub">Hair Salon</p><div class="facts"><span>&#9733; 4.5 &middot; 355 Google reviews</span></div><div class="actions"><a class="cta" href="tel:4694441580">Book an appointment</a></div></div><div class="scrollcue"></div></header>
 <section id="gallery"><div class="wrap" data-measure="wide"><p class="eyebrow" data-reveal>Gallery</p><h2 data-reveal>Have a look around</h2><div class="mosaic" style="--cols:3;--cols-narrow:2"><button aria-label="Open photo 1" data-reveal data-delay="0"><img src="photos/ac45a5845d043c7416a83f6c37b90eb1.jpg" alt="A man wearing a face mask styles the hair of a seated woman wearing a yellow face mask in a salon." srcset="photos/ac45a5845d043c7416a83f6c37b90eb1.jpg 800w, photos/ac45a5845d043c7416a83f6c37b90eb1.jpg 1600w, photos/ac45a5845d043c7416a83f6c37b90eb1.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 2" data-reveal data-delay="1"><img src="photos/a7cb6d5d23d58604d85e42f78b2aeb09.jpg" alt="A close-up of long dark curled hair viewed from behind on a person facing away from the camera." srcset="photos/a7cb6d5d23d58604d85e42f78b2aeb09.jpg 800w, photos/a7cb6d5d23d58604d85e42f78b2aeb09.jpg 1600w, photos/a7cb6d5d23d58604d85e42f78b2aeb09.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 3" data-reveal data-delay="2"><img src="photos/b1aae2c8ff8286231aeae7cb58d41e86.jpg" alt="A smiling man styles the hair of a smiling seated woman with a curling iron at a salon counter with a bouquet of yellow flowers." srcset="photos/b1aae2c8ff8286231aeae7cb58d41e86.jpg 800w, photos/b1aae2c8ff8286231aeae7cb58d41e86.jpg 1600w, photos/b1aae2c8ff8286231aeae7cb58d41e86.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 4" data-reveal data-delay="3"><img src="photos/ff1d1aefc9763bd27e77df19d44aa614.jpg" alt="A close-up of long straight brown hair viewed from behind on a person wearing a teal top." srcset="photos/ff1d1aefc9763bd27e77df19d44aa614.jpg 800w, photos/ff1d1aefc9763bd27e77df19d44aa614.jpg 1600w, photos/ff1d1aefc9763bd27e77df19d44aa614.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 5" data-reveal data-delay="0"><img src="photos/600adb656a8e76f3bbcdc6f3f811a557.jpg" alt="The storefront of a salon with a black awning reading &#x27;drybar&#x27; next to other shops in an outdoor shopping plaza." srcset="photos/600adb656a8e76f3bbcdc6f3f811a557.jpg 800w, photos/600adb656a8e76f3bbcdc6f3f811a557.jpg 1600w, photos/600adb656a8e76f3bbcdc6f3f811a557.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 6" data-reveal data-delay="1"><img src="photos/c20ceec3a64950cb780c882dfdef0945.jpg" alt="A close-up of long straight blonde-highlighted hair with layered curls at the ends, viewed from behind on a person in a navy top." srcset="photos/c20ceec3a64950cb780c882dfdef0945.jpg 800w, photos/c20ceec3a64950cb780c882dfdef0945.jpg 1600w, photos/c20ceec3a64950cb780c882dfdef0945.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button></div></div></section>
 <section class="device" data-device="scroll_gallery"><div class="scrollstrip"><img src="photos/ac45a5845d043c7416a83f6c37b90eb1.jpg" alt="A man wearing a face mask styles the hair of a seated woman wearing a yellow face mask in a salon." loading="lazy"><img src="photos/3e3d36fb911ba8af74d2078b53b8e340.jpg" alt="An empty salon interior with black stools at a white counter, styling stations with mirrors, and shelves of hair products." loading="lazy"><img src="photos/a7cb6d5d23d58604d85e42f78b2aeb09.jpg" alt="A close-up of long dark curled hair viewed from behind on a person facing away from the camera." loading="lazy"><img src="photos/b1aae2c8ff8286231aeae7cb58d41e86.jpg" alt="A smiling man styles the hair of a smiling seated woman with a curling iron at a salon counter with a bouquet of yellow flowers." loading="lazy"><img src="photos/ff1d1aefc9763bd27e77df19d44aa614.jpg" alt="A close-up of long straight brown hair viewed from behind on a person wearing a teal top." loading="lazy"><img src="photos/600adb656a8e76f3bbcdc6f3f811a557.jpg" alt="The storefront of a salon with a black awning reading &#x27;drybar&#x27; next to other shops in an outdoor shopping plaza." loading="lazy"><img src="photos/c20ceec3a64950cb780c882dfdef0945.jpg" alt="A close-up of long straight blonde-highlighted hair with layered curls at the ends, viewed from behind on a person in a navy top." loading="lazy"><img src="photos/23ae1b5b09666c0d51aa2501fabfb682.jpg" alt="Two smiling women with curled blonde hair standing in a salon, one in the foreground and one slightly behind." loading="lazy"></div></section><div class="lightbox" role="dialog" aria-label="Photo"><button class="close" aria-label="Close">&times;</button><button class="prev" aria-label="Previous">&lsaquo;</button><img src="" alt=""><button class="next" aria-label="Next">&rsaquo;</button><div class="count"></div></div>
 <section id="stats" class="statband"><div class="wrap" data-measure="wide"><div class="stats"><div class="stat" data-reveal data-delay="0"><b>4.5</b><span>average rating</span></div><div class="stat" data-reveal data-delay="1"><b data-count="355">355</b><span>Google reviews</span></div></div></div></section>

@@ -221,6 +221,25 @@ rebuilding the ground truth from zero live verdicts. Full account in
   verdicts landed there by a fixed hash of the two slugs, computed before
   any verdict was recorded. `tests/test_the_instrument_reproduces.py`
   pins the exact set.
+- **Three comparisons no reweighting of the current axes can ever get
+  right, all tracing to `roofer`/`hvac-rich`.** `tools/quality_census.py`
+  prints these as "BLIND SPOT": the "same" pair (`roofer`/`hvac-rich`)
+  differs on a superset of what each "different" pair
+  (`dentist`/`law`, `roofer-rich`/`hvac-rich`, `law`/`law-rich`) differs
+  on, so no non-negative weighting can ever place the "same" pair closer.
+  This is a real, exact limit of the current axis set on these three
+  comparisons specifically — not evidence the whole instrument is broken,
+  and not something a threshold or a reweighting fixes. Known-open, not
+  chased this round.
+- **Twelve of nineteen fixtures breach the 2MB page-weight budget** —
+  every one a pre-existing, large photo gallery, none of them caused by
+  anything Round 4 added (the Slice E stills backdrop reuses images
+  already counted elsewhere, adding no bytes of its own). Pinned as
+  disclosed, `strict` `xfail` in `tests/test_performance_budgets.py` — an
+  actual fix would show as a hard failure (XPASS) rather than a silent
+  pass, so drift in either direction is caught. LCP, INP, and CLS are
+  clean on all nineteen fixtures; only weight is open. Known-open, not
+  fixed this round.
 - **The content census's "77% of published material reaches the page"**
   is corrected for a double-count this round found in the census tool
   itself (a subset row was being summed into the total twice — see

@@ -2043,3 +2043,57 @@ emptying its figures — caught by `test_the_committed_sheet_shows_the_
 corpus_that_shipped` before it was committed, not after.
 
 `make check`: ruff clean, mypy clean, 940 passed, 12 xfailed.
+
+# Round 5, Phase 1 — the stale review bundle
+
+**Binding claim, pre-registered:** a freshness guard on `.reviews/review/`
+must fail against the currently-committed bundle before anything is
+regenerated, and pass after — checked in both directions, not assumed.
+
+## What was found
+
+Confirmed the reported defect (`dentist.html` reading "What we cook and
+serve") and then found the actual scope was larger than reported: the
+committed review bundle (`.reviews/review/*.html`) was last touched at
+`d2bfbfa`, Round 3's own close-out — BEFORE Round 4's first commit. Every
+one of the nineteen committed pages predates the entire round: Phase 1's
+copy-selection changes, Phase 2's Slice E CSS, and Phase 3a's two render
+fixes are all missing from the committed bundle, not just the five
+fixtures the heading bug touched. `dentist`, `hvac-rich`, `hvac-second`,
+`law-rich`, and `roofer-rich` were the only ones with a VISIBLY wrong
+heading; all nineteen were byte-stale.
+
+## The freshness guard
+
+`tests/tools/test_build_review.py::test_the_committed_review_bundle_
+shows_the_corpus_that_shipped`: rebuilds every fixture through the
+identical path `tools/build_review.py`'s own `main()` uses (frozen
+direction replay, the same `_copy_photographs` URL rewrite) and diffs the
+fresh bytes against the committed file, byte for byte — not a hash
+comparison against a separate pinned file (there is no equivalent of
+`render_snapshots.json` for this bundle), since the committed file IS the
+thing being checked for freshness. Mirrors
+`test_the_committed_sheet_shows_the_corpus_that_shipped`'s reasoning,
+applied to full page content rather than printed axis captions.
+
+**Confirmed failing against the stale bundle, before regenerating
+anything:** all nineteen slugs reported stale, `AssertionError` naming
+each one.
+
+**Regenerated** via `tools/build_review.py` (all nineteen, relative photo
+paths — confirmed zero `base64` occurrences across the bundle).
+
+**Confirmed passing after regeneration:** the same test, unchanged, now
+green.
+
+## 1c — known-open items named in READ-ME-FIRST.md
+
+Added two disclosures that were previously absent: the three
+"BLIND SPOT" comparisons `quality_census.py` reports (all tracing to
+`roofer`/`hvac-rich` — a genuine axis-superset limit no reweighting can
+reach, not a bug), and the twelve pre-existing weight-budget `xfail`s
+(all photo-gallery weight predating Slice E, LCP/CLS/INP clean on all
+nineteen).
+
+`make check`: ruff clean, mypy clean, 941 passed (the new freshness
+guard), 12 xfailed.

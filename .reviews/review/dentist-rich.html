@@ -172,6 +172,33 @@ body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
   line-height:.92}
 .hero.first-type .sub{max-width:46ch;opacity:.72}
 .hero.first-type .wrap{padding-top:64px;padding-bottom:64px}
+/* BRIEF §5, Slice E: what fills `first-type` instead of staying empty —
+   the backdrop preference ladder (`app.site.backdrop`). More specific
+   than `.hero.first-type` alone (three classes, not two), so this wins
+   the cascade regardless of source order. */
+.hero.first-type.has-photo{color:#fff;background:transparent}
+.hero-stills{position:absolute;inset:-8% 0 0;z-index:-2;overflow:hidden}
+.hero-stills .still{position:absolute;inset:0;background-size:cover;
+  background-position:center;opacity:0;
+  animation:hero-still-cycle 16s ease-in-out infinite}
+.hero-stills .still:first-child{opacity:1}
+.hero-stills .still:nth-child(2){animation-delay:4s}
+.hero-stills .still:nth-child(3){animation-delay:8s}
+.hero-stills .still:nth-child(4){animation-delay:12s}
+@keyframes hero-still-cycle{
+  0%,6%{opacity:1} 25%,100%{opacity:0}
+}
+/* `prefers-reduced-motion` cancels every `animation` globally (see the
+   media query at the foot of this file) — the base state above,
+   `:first-child{opacity:1}` and every other `.still` at `opacity:0`, is
+   what is left standing: a single still poster frame, never a page
+   caught mid-crossfade. The same guarantee the deterministic capture
+   pipeline (`tools/contact_sheet.py`) already depends on for every other
+   animated rule on this page — this rung inherits it rather than needing
+   a second one. */
+.hero-generated{position:absolute;inset:0;z-index:-2;
+  background:linear-gradient(135deg,var(--raise) 0%,var(--bg) 55%,
+    color-mix(in srgb,var(--accent) 18%,var(--bg)) 100%)}
 
 /* SPLIT — type and photograph at exactly half each, hard-edged. No scrim,
    because nothing is set over the picture.
@@ -224,6 +251,14 @@ body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
 .bigquote{margin:0;font-family:'IBM Plex Serif',Georgia,serif;
   font-size:clamp(24px,4.2vw,58px);line-height:1.08;max-width:20ch;
   text-indent:-.4em}
+/* Set at the same size and weight as the quoted words themselves, a
+   curly quotation mark in a heavy display face reads as a stray letter
+   rather than punctuation — a Slice G design review misread the closing
+   mark as "a stray 'D'" on `hvac`'s real testimonial, and the opening
+   one as a doubled first letter ("CCody"). Toned down and dropped a
+   size so they read as an ornamental flourish, not more of the word. */
+.bigquote::before,.bigquote::after{color:var(--accent);opacity:.6;
+  font-size:.6em}
 .bigquote::before{content:"C"} .bigquote::after{content:"D"}
 
 [data-device="marquee"]{overflow:hidden;padding:clamp(28px,3vw,44px) 0;
@@ -881,7 +916,7 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;
 <div class="bar"><a class="mark" href="#top">Plano Dental Loft</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#services">What we do</a><a href="#reviews">Reviews</a><a href="#gallery">Gallery</a><a href="#about">About</a><a href="#hours">Hours</a><a href="#contact">Visit</a></nav></div>
 <header class="hero first-facts type-quiet has-photo" id="top"><div class="bgimg" style="background-image:url(&quot;https://primedds.com/wp-content/uploads/2022/04/dr-an-q-li2-1.jpg&quot;)"></div><div class="veil"></div><div class="wrap"><p class="tally"><b>4.5</b><span>from 114 Google reviews</span></p><h1>Plano Dental Loft</h1><p class="sub">Plano Dental Loft is the #1 dental implant &amp; denture repair center in Plano, Tx. Get teeth cleaning, dental crown &amp; other services right here. Call (469) 649-1990.</p><div class="facts"><span>3920 McDermott Rd Ste b</span><span>Wed: 9:00am to 4:00pm</span></div><div class="actions"><a class="cta" href="https://www.google.com/maps/search/?api=1&amp;query=Plano+Dental+Loft+3920+McDermott+Rd+Ste+b%2C+Plano%2C+TX+75025%2C+USA" target="_blank" rel="noopener">Find us</a><a class="cta ghost" href="https://www.google.com/maps/search/?api=1&amp;query=Plano+Dental+Loft+3920+McDermott+Rd+Ste+b%2C+Plano%2C+TX+75025%2C+USA" target="_blank" rel="noopener">Get directions</a></div></div><div class="scrollcue"></div></header>
 <section id="stats" class="statband"><div class="wrap"><div class="stats"><div class="stat" data-reveal data-delay="0"><b>4.5</b><span>average rating</span></div><div class="stat" data-reveal data-delay="1"><b data-count="114">114</b><span>Google reviews</span></div><div class="stat" data-reveal data-delay="2"><b data-count="8">8</b><span>services offered</span></div></div></div></section>
-<section class="device" data-device="quote"><div class="wrap"><blockquote class="bigquote">The entire Staff From the doctor to the dental assistants to the front desk was extremely helpful and knowledgeable.  They made us feel welcomed.  The doctor took care of my daughter I was so grateful since her first den</blockquote></div></section>
+<section class="device" data-device="quote"><div class="wrap"><blockquote class="bigquote">The entire Staff From the doctor to the dental assistants to the front desk was extremely helpful and knowledgeable.  They made us feel welcomed.  The doctor took care of my daughter I was so grateful since her first…</blockquote></div></section>
 <section id="services" data-density="dense" style="--density-scale:0.85"><div class="wrap"><div class="head" data-reveal><p class="eyebrow">Treatments</p><h2>Ways we can help</h2><p class="lede">Plano Dental Loft is the #1 dental implant &amp; denture repair center in Plano, Tx. Get teeth cleaning, dental crown &amp; other services right here. Call (469) 649-1990.</p></div><div class="offers"><article class="offer" data-reveal data-delay="0"><span class="idx">01</span><h3>MEET Dr. An Q. Le, DDS</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">02</span><h3>With Decades Of Experience.</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">03</span><h3>SPECIALITIES AVAILABLE AT PRIME DENTAL</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">04</span><h3>Melody H.</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="0"><span class="idx">05</span><h3>Jerell B.</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">06</span><h3>Debi C.</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">07</span><h3>Erica P.</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">08</span><h3>No Insurance? No problem.</h3><span class="rule"></span></article></div></div></section>
 <section id="reviews" data-ground="raise"><div class="wrap"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>4.5 stars from 114 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;The entire Staff From the doctor to the dental assistants to the front desk was extremely helpful and knowledgeable.  They made us feel welcomed.  The doctor took care of my daughter I was so grateful since her first dental exam ever ended up in a root canal.
 

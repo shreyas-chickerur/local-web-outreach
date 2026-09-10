@@ -168,6 +168,33 @@ body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
   line-height:.92}
 .hero.first-type .sub{max-width:46ch;opacity:.72}
 .hero.first-type .wrap{padding-top:64px;padding-bottom:64px}
+/* BRIEF §5, Slice E: what fills `first-type` instead of staying empty —
+   the backdrop preference ladder (`app.site.backdrop`). More specific
+   than `.hero.first-type` alone (three classes, not two), so this wins
+   the cascade regardless of source order. */
+.hero.first-type.has-photo{color:#fff;background:transparent}
+.hero-stills{position:absolute;inset:-8% 0 0;z-index:-2;overflow:hidden}
+.hero-stills .still{position:absolute;inset:0;background-size:cover;
+  background-position:center;opacity:0;
+  animation:hero-still-cycle 16s ease-in-out infinite}
+.hero-stills .still:first-child{opacity:1}
+.hero-stills .still:nth-child(2){animation-delay:4s}
+.hero-stills .still:nth-child(3){animation-delay:8s}
+.hero-stills .still:nth-child(4){animation-delay:12s}
+@keyframes hero-still-cycle{
+  0%,6%{opacity:1} 25%,100%{opacity:0}
+}
+/* `prefers-reduced-motion` cancels every `animation` globally (see the
+   media query at the foot of this file) — the base state above,
+   `:first-child{opacity:1}` and every other `.still` at `opacity:0`, is
+   what is left standing: a single still poster frame, never a page
+   caught mid-crossfade. The same guarantee the deterministic capture
+   pipeline (`tools/contact_sheet.py`) already depends on for every other
+   animated rule on this page — this rung inherits it rather than needing
+   a second one. */
+.hero-generated{position:absolute;inset:0;z-index:-2;
+  background:linear-gradient(135deg,var(--raise) 0%,var(--bg) 55%,
+    color-mix(in srgb,var(--accent) 18%,var(--bg)) 100%)}
 
 /* SPLIT — type and photograph at exactly half each, hard-edged. No scrim,
    because nothing is set over the picture.
@@ -220,6 +247,14 @@ body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
 .bigquote{margin:0;font-family:'Oswald',Impact,'Arial Narrow',sans-serif;
   font-size:clamp(24px,4.2vw,58px);line-height:1.08;max-width:20ch;
   text-indent:-.4em}
+/* Set at the same size and weight as the quoted words themselves, a
+   curly quotation mark in a heavy display face reads as a stray letter
+   rather than punctuation — a Slice G design review misread the closing
+   mark as "a stray 'D'" on `hvac`'s real testimonial, and the opening
+   one as a doubled first letter ("CCody"). Toned down and dropped a
+   size so they read as an ornamental flourish, not more of the word. */
+.bigquote::before,.bigquote::after{color:var(--accent);opacity:.6;
+  font-size:.6em}
 .bigquote::before{content:"C"} .bigquote::after{content:"D"}
 
 [data-device="marquee"]{overflow:hidden;padding:clamp(28px,3vw,44px) 0;
@@ -875,7 +910,7 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;
 <body data-theme="industrial" data-type="stamped" data-arch="stacked" data-signature="none" data-theme-layout="structured">
 <div class="progress"></div>
 <div class="bar"><a class="mark" href="#top">S.Handyman</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#contact">Visit</a></nav><a class="book" href="tel:9452898844">Call us</a></div>
-<header class="hero first-type type-stamped" id="top"><div class="wrap"><h1>S.Handyman</h1><p class="sub">General Contractor</p><div class="facts"><span>8655 Brookhollow Blvd</span></div><div class="actions"><a class="cta" href="tel:9452898844">Call (945) 289-8844</a><a class="cta ghost" href="https://www.google.com/maps/search/?api=1&amp;query=S.Handyman+8655+Brookhollow+Blvd%2C+Frisco%2C+TX+75034%2C+USA" target="_blank" rel="noopener">Get directions</a></div></div></header>
+<header class="hero first-type type-stamped has-generated-backdrop" id="top"><div class="hero-generated"></div><div class="wrap"><h1>S.Handyman</h1><p class="sub">General Contractor</p><div class="facts"><span>8655 Brookhollow Blvd</span></div><div class="actions"><a class="cta" href="tel:9452898844">Call (945) 289-8844</a><a class="cta ghost" href="https://www.google.com/maps/search/?api=1&amp;query=S.Handyman+8655+Brookhollow+Blvd%2C+Frisco%2C+TX+75034%2C+USA" target="_blank" rel="noopener">Get directions</a></div></div></header>
 <section id="contact"><div class="wrap"><div class="split"><div data-reveal><p class="eyebrow">Get in touch</p><h2>Reach us</h2><div class="reach"><a href="https://www.google.com/maps/search/?api=1&amp;query=8655+Brookhollow+Blvd%2C+Frisco%2C+TX+75034%2C+USA" target="_blank" rel="noopener"><span class="k">Address</span><span class="v">8655 Brookhollow Blvd, Frisco, TX 75034, USA</span></a><a href="tel:9452898844"><span class="k">Phone</span><span class="v">(945) 289-8844</span></a></div></div><div class="map" data-reveal data-delay="1"><iframe loading="lazy" title="Map of S.Handyman" src="https://www.openstreetmap.org/export/embed.html?bbox=-96.8126617,33.129570799999996,-96.8046617,33.135570799999996&amp;layer=mapnik&amp;marker=33.132570799999996,-96.8086617"></iframe></div></div></div></section>
 <div class="callbar"><a class="cta" href="tel:9452898844">Call us</a><a class="cta ghost" href="https://www.google.com/maps/search/?api=1&amp;query=8655+Brookhollow+Blvd%2C+Frisco%2C+TX+75034%2C+USA" target="_blank" rel="noopener">Directions</a></div>
 <footer><div class="wrap"><div class="row"><span>&copy; S.Handyman</span><span>8655 Brookhollow Blvd, Frisco, TX 75034, USA</span><a href="tel:9452898844">(945) 289-8844</a><button class="top">Back to top</button></div></div></footer>

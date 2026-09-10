@@ -170,6 +170,33 @@ body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
   line-height:.92}
 .hero.first-type .sub{max-width:46ch;opacity:.72}
 .hero.first-type .wrap{padding-top:64px;padding-bottom:64px}
+/* BRIEF §5, Slice E: what fills `first-type` instead of staying empty —
+   the backdrop preference ladder (`app.site.backdrop`). More specific
+   than `.hero.first-type` alone (three classes, not two), so this wins
+   the cascade regardless of source order. */
+.hero.first-type.has-photo{color:#fff;background:transparent}
+.hero-stills{position:absolute;inset:-8% 0 0;z-index:-2;overflow:hidden}
+.hero-stills .still{position:absolute;inset:0;background-size:cover;
+  background-position:center;opacity:0;
+  animation:hero-still-cycle 16s ease-in-out infinite}
+.hero-stills .still:first-child{opacity:1}
+.hero-stills .still:nth-child(2){animation-delay:4s}
+.hero-stills .still:nth-child(3){animation-delay:8s}
+.hero-stills .still:nth-child(4){animation-delay:12s}
+@keyframes hero-still-cycle{
+  0%,6%{opacity:1} 25%,100%{opacity:0}
+}
+/* `prefers-reduced-motion` cancels every `animation` globally (see the
+   media query at the foot of this file) — the base state above,
+   `:first-child{opacity:1}` and every other `.still` at `opacity:0`, is
+   what is left standing: a single still poster frame, never a page
+   caught mid-crossfade. The same guarantee the deterministic capture
+   pipeline (`tools/contact_sheet.py`) already depends on for every other
+   animated rule on this page — this rung inherits it rather than needing
+   a second one. */
+.hero-generated{position:absolute;inset:0;z-index:-2;
+  background:linear-gradient(135deg,var(--raise) 0%,var(--bg) 55%,
+    color-mix(in srgb,var(--accent) 18%,var(--bg)) 100%)}
 
 /* SPLIT — type and photograph at exactly half each, hard-edged. No scrim,
    because nothing is set over the picture.
@@ -222,6 +249,14 @@ body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
 .bigquote{margin:0;font-family:'Oswald',Impact,'Arial Narrow',sans-serif;
   font-size:clamp(24px,4.2vw,58px);line-height:1.08;max-width:20ch;
   text-indent:-.4em}
+/* Set at the same size and weight as the quoted words themselves, a
+   curly quotation mark in a heavy display face reads as a stray letter
+   rather than punctuation — a Slice G design review misread the closing
+   mark as "a stray 'D'" on `hvac`'s real testimonial, and the opening
+   one as a doubled first letter ("CCody"). Toned down and dropped a
+   size so they read as an ornamental flourish, not more of the word. */
+.bigquote::before,.bigquote::after{color:var(--accent);opacity:.6;
+  font-size:.6em}
 .bigquote::before{content:"C"} .bigquote::after{content:"D"}
 
 [data-device="marquee"]{overflow:hidden;padding:clamp(28px,3vw,44px) 0;
@@ -885,7 +920,7 @@ From the moment Arturo Moreno arrived at my home, he was professional, courteous
 <section class="device" data-device="quote" data-ground="raise"><div class="wrap"><blockquote class="bigquote">Cody Roberts is an ultimate professional, transparent, honest, and totally focused on the homeowner’s needs.
 
 6/29/26
-From the moment Arturo Moreno arrived at my home, he was professional, courteous, and knowledgeable. H</blockquote></div></section>
+From the moment Arturo Moreno arrived at my home, he was professional, courteous, and knowledgeable…</blockquote></div></section>
 <section id="stats" class="statband" data-ground="base"><div class="wrap"><div class="stats"><div class="stat" data-reveal data-delay="0"><b>4.9</b><span>average rating</span></div><div class="stat" data-reveal data-delay="1"><b data-count="6203">6203</b><span>Google reviews</span></div><div class="stat" data-reveal data-delay="2"><b data-count="2">2</b><span>services offered</span></div></div></div></section>
 <section id="services" data-density="sparse" style="--density-scale:1.25" data-ground="raise"><div class="wrap"><div class="offers offers-editorial"><div class="display" data-reveal><p class="eyebrow">Services</p><h2>What we handle</h2><p class="lede">Looking for plumbing services in Plano, TX? Milestone&#x27;s skilled plumbers are here for you. We can repair any plumbing issues you have. Call our Plumbers today!</p></div><div class="offers-side"><ol class="listing"><li data-reveal data-delay="0"><span class="idx">01</span><h3>Trusted Plano plumbers delivering fast, reliable service</h3></li><li data-reveal data-delay="1"><span class="idx">02</span><h3>A/C &amp; Heat</h3></li></ol><div class="editorial-art" data-reveal data-delay="1"><img src="https://callmilestone.com/plano/wp-content/uploads/sites/7/2022/10/9A0A9697-2-web-res-med-quality.jpg" alt="" loading="lazy" decoding="async"></div></div></div></div></section>
 <section id="credentials" data-ground="base"><div class="wrap"><p class="eyebrow">Credentials</p><div class="stamps"><span>Fast response</span></div></div></section>

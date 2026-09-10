@@ -171,6 +171,33 @@ body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
   line-height:.92}
 .hero.first-type .sub{max-width:46ch;opacity:.72}
 .hero.first-type .wrap{padding-top:64px;padding-bottom:64px}
+/* BRIEF §5, Slice E: what fills `first-type` instead of staying empty —
+   the backdrop preference ladder (`app.site.backdrop`). More specific
+   than `.hero.first-type` alone (three classes, not two), so this wins
+   the cascade regardless of source order. */
+.hero.first-type.has-photo{color:#fff;background:transparent}
+.hero-stills{position:absolute;inset:-8% 0 0;z-index:-2;overflow:hidden}
+.hero-stills .still{position:absolute;inset:0;background-size:cover;
+  background-position:center;opacity:0;
+  animation:hero-still-cycle 16s ease-in-out infinite}
+.hero-stills .still:first-child{opacity:1}
+.hero-stills .still:nth-child(2){animation-delay:4s}
+.hero-stills .still:nth-child(3){animation-delay:8s}
+.hero-stills .still:nth-child(4){animation-delay:12s}
+@keyframes hero-still-cycle{
+  0%,6%{opacity:1} 25%,100%{opacity:0}
+}
+/* `prefers-reduced-motion` cancels every `animation` globally (see the
+   media query at the foot of this file) — the base state above,
+   `:first-child{opacity:1}` and every other `.still` at `opacity:0`, is
+   what is left standing: a single still poster frame, never a page
+   caught mid-crossfade. The same guarantee the deterministic capture
+   pipeline (`tools/contact_sheet.py`) already depends on for every other
+   animated rule on this page — this rung inherits it rather than needing
+   a second one. */
+.hero-generated{position:absolute;inset:0;z-index:-2;
+  background:linear-gradient(135deg,var(--raise) 0%,var(--bg) 55%,
+    color-mix(in srgb,var(--accent) 18%,var(--bg)) 100%)}
 
 /* SPLIT — type and photograph at exactly half each, hard-edged. No scrim,
    because nothing is set over the picture.
@@ -223,6 +250,14 @@ body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
 .bigquote{margin:0;font-family:'DM Serif Display',Georgia,serif;
   font-size:clamp(24px,4.2vw,58px);line-height:1.08;max-width:20ch;
   text-indent:-.4em}
+/* Set at the same size and weight as the quoted words themselves, a
+   curly quotation mark in a heavy display face reads as a stray letter
+   rather than punctuation — a Slice G design review misread the closing
+   mark as "a stray 'D'" on `hvac`'s real testimonial, and the opening
+   one as a doubled first letter ("CCody"). Toned down and dropped a
+   size so they read as an ornamental flourish, not more of the word. */
+.bigquote::before,.bigquote::after{color:var(--accent);opacity:.6;
+  font-size:.6em}
 .bigquote::before{content:"C"} .bigquote::after{content:"D"}
 
 [data-device="marquee"]{overflow:hidden;padding:clamp(28px,3vw,44px) 0;
@@ -882,7 +917,7 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;
 <section id="gallery"><div class="wrap" data-measure="wide"><p class="eyebrow" data-reveal>Gallery</p><h2 data-reveal>Have a look around</h2><div class="mosaic" style="--cols:3;--cols-narrow:2"><button aria-label="Open photo 1" data-reveal data-delay="0"><img src="photos/54b5469cf9a6ebe415045394f0146b75.jpg" alt="Diners sit at a wooden counter watching two chefs work behind an open kitchen counter under a wood-slatted ceiling feature." srcset="photos/54b5469cf9a6ebe415045394f0146b75.jpg 800w, photos/54b5469cf9a6ebe415045394f0146b75.jpg 1600w, photos/54b5469cf9a6ebe415045394f0146b75.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 2" data-reveal data-delay="1"><img src="photos/88898764afc456c96eedf87c0e00a8ad.jpg" alt="A small glass bowl with a polka-dot pattern holds green noodles topped with a piece of sea urchin, served with chopsticks on a patterned rest." srcset="photos/88898764afc456c96eedf87c0e00a8ad.jpg 800w, photos/88898764afc456c96eedf87c0e00a8ad.jpg 1600w, photos/88898764afc456c96eedf87c0e00a8ad.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 3" data-reveal data-delay="2"><img src="photos/414d07369efe04374c1758b122ac46d7.jpg" alt="A white bowl of clear broth with a piece of fish and a leaf garnish, placed on a black tray with a red lacquered spoon beside it." srcset="photos/414d07369efe04374c1758b122ac46d7.jpg 800w, photos/414d07369efe04374c1758b122ac46d7.jpg 1600w, photos/414d07369efe04374c1758b122ac46d7.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 4" data-reveal data-delay="3"><img src="photos/496169e476ad23eb9088fe7cc4b9bc6c.jpg" alt="A wooden tray holding five small dishes of assorted Japanese food including oysters, vegetables, and a piece of fish." srcset="photos/496169e476ad23eb9088fe7cc4b9bc6c.jpg 800w, photos/496169e476ad23eb9088fe7cc4b9bc6c.jpg 1600w, photos/496169e476ad23eb9088fe7cc4b9bc6c.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 5" data-reveal data-delay="0"><img src="photos/763e18ac33bbc28011e01fe55a8dbd84.jpg" alt="A red lacquered bowl of rice topped with a piece of grilled fish and dark garnish, next to a matching lid." srcset="photos/763e18ac33bbc28011e01fe55a8dbd84.jpg 800w, photos/763e18ac33bbc28011e01fe55a8dbd84.jpg 1600w, photos/763e18ac33bbc28011e01fe55a8dbd84.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 6" data-reveal data-delay="1"><img src="photos/cfe597ea8a5be8a5b9c396db574fb9a9.jpg" alt="An assortment of sliced sashimi arranged on a fan-shaped porcelain plate with a dab of wasabi." srcset="photos/cfe597ea8a5be8a5b9c396db574fb9a9.jpg 800w, photos/cfe597ea8a5be8a5b9c396db574fb9a9.jpg 1600w, photos/cfe597ea8a5be8a5b9c396db574fb9a9.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button></div></div></section>
 <section class="device" data-device="quote"><div class="wrap" data-measure="wide"><blockquote class="bigquote">I really liked Ichika!
 
-I thought the presentation of the food was beautiful, and really demonstrated an element of care and precision. I&#x27;m not normally a big fan of sashimi, but the way it was prepared made it delicious</blockquote></div></section><div class="lightbox" role="dialog" aria-label="Photo"><button class="close" aria-label="Close">&times;</button><button class="prev" aria-label="Previous">&lsaquo;</button><img src="" alt=""><button class="next" aria-label="Next">&rsaquo;</button><div class="count"></div></div>
+I thought the presentation of the food was beautiful, and really demonstrated an element of care and precision. I&#x27;m not normally a big fan of sashimi, but the way it was prepared made it…</blockquote></div></section><div class="lightbox" role="dialog" aria-label="Photo"><button class="close" aria-label="Close">&times;</button><button class="prev" aria-label="Previous">&lsaquo;</button><img src="" alt=""><button class="next" aria-label="Next">&rsaquo;</button><div class="count"></div></div>
 <section id="stats" class="statband"><div class="wrap" data-measure="wide"><div class="stats"><div class="stat" data-reveal data-delay="0"><b>5.0</b><span>average rating</span></div><div class="stat" data-reveal data-delay="1"><b data-count="45">45</b><span>Google reviews</span></div></div></div></section>
 <section id="reviews" data-ground="raise"><div class="wrap" data-measure="wide"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>5.0 stars from 45 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I really liked Ichika!
 
