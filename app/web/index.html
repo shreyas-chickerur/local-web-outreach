@@ -430,6 +430,9 @@
   .diag .stop{background:var(--bad-bg);color:var(--bad);font-weight:600}
   .diag-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;
     color:var(--faint);font-weight:700;margin:0 0 7px}
+  .census-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+  .census-row{display:flex;flex-direction:column;gap:3px}
+  .census-row .hint{margin:0}
   .vchip{background:var(--raise);border:1px solid var(--line);border-radius:6px;
     padding:4px 10px;font-size:12px;cursor:pointer;font:inherit;color:var(--dim);
     font-family:var(--mono)}
@@ -939,6 +942,7 @@ async function openWorkspace(leadId, name) {
         versions: data.versions || [], events: data.events || [],
         active: (data.versions || [])[0]?.version ?? null,
         diagnostics: null, device: "phone", outline: data.outline || "",
+        census: data.census || [],
         rationale: data.rationale || "",
         signatureDevice: data.signature_device || "",
         signatureWhy: data.signature_why || "", unlocks: data.unlocks || [],
@@ -1078,6 +1082,19 @@ function drawWorkspace() {
   const outline = WS.outline
     ? `<p class="diag-label">The plan</p><pre class="planout">${esc(WS.outline)}</pre>`
     : "";
+  // BRIEF §5, Slice D item 3: what of their own material never reached the
+  // page, and why — the identical measurement a corpus-wide census runs
+  // (app.site.census), read for this one lead instead of all nineteen.
+  const census = (WS.census || []).length ? `
+    <p class="diag-label">What didn't reach the page</p>
+    <p class="hint">Everything they published, checked against what actually
+       rendered. Only what was dropped is listed here — the rest reached
+       the page.</p>
+    <div class="census-list">${WS.census.map(c => `
+      <div class="census-row">
+        <span class="stop">${esc(c.field)} (${c.reached} of ${c.of})</span>
+        <span class="hint">${esc(c.why)}</span>
+      </div>`).join("")}</div>` : "";
   const untagged = (WS.photos || []).filter(p => !p.label).length;
   const labeller = (WS.photos || []).length ? `
     <p class="diag-label">What each photo shows</p>
@@ -1221,7 +1238,7 @@ function drawWorkspace() {
       <div class="ws-head">Versions</div>
       <div class="ws-body">
         <div class="diag">${chips}</div>
-        ${trouble}${why}${signature}${unlocks}${outline}${diag}${labeller}
+        ${trouble}${why}${signature}${unlocks}${outline}${census}${diag}${labeller}
       </div>
     </section>
   </div>`;

@@ -141,3 +141,32 @@ def test_labelling_saves_as_you_move_rather_than_at_the_end():
         start = source.index(f"async function {mover}")
         body = source[start:start + 400]
         assert "await saveShot(" in body, mover
+
+
+def test_workspace_surfaces_what_did_not_reach_the_page(monkeypatch, tmp_path):
+    """BRIEF §5, Slice D item 3: the operator sees what of the business's own
+    material never reached the page, and why — reading `app.site.census`'s
+    `measure()` directly rather than a second implementation of it, so this
+    can only drift from the corpus-wide report (`tools/content_census.py`)
+    if `workspace()` stops calling it at all."""
+    from pathlib import Path
+
+    from app.site.pipeline import STAGES, run_stage
+    from app.store import db, leads
+
+    monkeypatch.setattr(db, "DEFAULT_PATH", tmp_path / "workbench.db")
+    fixture = json.loads(
+        Path("tests/fixtures/briefs/law-rich.json").read_text())
+    with db.session() as conn:
+        lead_id = leads.save_brief(conn, fixture)
+        for stage in STAGES:
+            run_stage(conn, lead_id, stage)
+
+    data = server.workspace(lead_id)
+    assert data["census"], "law-rich should have at least one dropped field"
+    for row in data["census"]:
+        assert set(row) == {"field", "reached", "of", "why"}
+        assert row["of"] > row["reached"]
+    # `fact:hours` drops on every fixture with published hours already
+    # scraped — the fallback fact is never consulted once that happens.
+    assert "fact:hours" in {row["field"] for row in data["census"]}

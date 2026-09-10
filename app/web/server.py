@@ -18,6 +18,7 @@ from app.adapters.gplaces import PlacesError, search
 from app.adapters.photos import fetch as fetch_photo
 from app.cli import available_directories
 from app.core.config import DEFAULT_PORT, google_places_api_key
+from app.site.census import measure as measure_census
 from app.site.pipeline import (
     STAGE_SAYS as STAGES_SAY,
 )
@@ -195,6 +196,21 @@ def workspace(lead_id: int) -> dict:
                 # not pretend the section is simply empty either.
                 trouble.append(f"Could not draw the plan: "
                                f"{type(exc).__name__}: {exc}")
+        # What of the business's own material never reached the page, and
+        # why — BRIEF §5, Slice D item 3. The identical function a corpus-
+        # wide report calls (`tools/content_census.py`), reused rather than
+        # reimplemented, against the opening version's own frozen
+        # direction — the same version `plan`/`outline` above describe.
+        census: list[dict] = []
+        if history and brief:
+            try:
+                dropped = measure_census(conn, brief.get("name") or str(lead_id),
+                                         lead_id).dropped()
+                census = [{"field": name, "reached": reached, "of": raw,
+                          "why": rule} for name, raw, reached, rule in dropped]
+            except Exception as exc:                           # noqa: BLE001
+                trouble.append(f"Could not measure what reached the page: "
+                               f"{type(exc).__name__}: {exc}")
         rationale = ""
         signature_why = ""
         signature_device = ""
@@ -215,6 +231,7 @@ def workspace(lead_id: int) -> dict:
             "events": leads.events(conn, lead_id),
             "outline": outline,
             "plan": plan,
+            "census": census,
             "rationale": rationale,
             "signature_device": signature_device,
             "signature_why": signature_why,

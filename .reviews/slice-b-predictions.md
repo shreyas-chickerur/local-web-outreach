@@ -1466,3 +1466,91 @@ menu" stat flagged in passing during Phase 2 turned out to be the exact
 fixtures, not 1 — fixed by the same `trade_kind == "food"` guard, not a
 separate patch. A `spawn_task` suggestion made for the narrower version
 of this bug was superseded and is stale.
+
+# Round 3, Phase 4 — surfacing the census in the workspace
+
+BRIEF §5, Slice D item 3: "the operator should be able to see, per lead,
+what of the business's own material did not reach the page and why."
+Instruction was explicit: "Reuse the census; do not write a second
+implementation of it."
+
+## The refactor this actually required
+
+`tools/content_census.py`'s `measure()` already took `(conn, slug,
+lead_id)` and never touched the fixture corpus directly — reusable in
+principle. But it lived in `tools/`, which `app/web/server.py` (the live
+workspace server) has no business depending on: `tools/` is one-off
+scripts, `app/` is the product. Importing a tools script into the server
+would have inverted that, and the FIRST time this project's own
+"two copies drift" defect showed up in this very file (the
+double-counting bug from Phase 3) was exactly because measurement logic
+sat somewhere it was awkward to import correctly.
+
+Moved `measure()`, `FixtureCensus`, and their helpers into
+`app/site/census.py` — a real library module — and left
+`tools/content_census.py` as a thin CLI: loop the fixture corpus, call
+the shared `measure()`, total the results. Verified byte-for-byte
+identical output from the CLI before and after the move (588/762, 77%,
+same per-fixture rows) — a pure relocation, no logic changed.
+
+## Wiring
+
+`workspace()` (`app/web/server.py`) now calls `census.measure()` against
+the SAME frozen opening direction `plan`/`outline` already describe (not
+the currently-active iteration, if the operator has since iterated —
+that is a real limitation, disclosed rather than silently assumed away;
+tracking the active version instead is a bigger design question this
+phase's scope did not ask to resolve). Returns `dropped()` as
+`{field, reached, of, why}` rows, degrading the same way every other
+`workspace()` field does — a failure appends to `trouble`, never blanks
+the screen.
+
+The workspace UI (`app/web/index.html`) gets a new panel, "What didn't
+reach the page", placed beside "The plan" (the other read-only,
+opening-version diagnostic) rather than inside the per-iteration
+`diagnostics` panel, since census does not change per iteration the way
+`understood`/`blast_radius` do. Each dropped field is shown with its own
+reason inline — not a hover tooltip, which would have hidden content an
+operator needs to actually read.
+
+## Verified live, not just by the standing test
+
+Started the real dev server (`.claude/launch.json`'s `workbench` config)
+against `workbench.db` — the actual persistent database this project's
+own interactive use has been building up, not a fixture — and opened the
+workspace for lead 1 (`The Heritage Table`, 46 real versions). The panel
+rendered correctly against real data: `fact:hours`, `services+products`,
+`menu_media`, `about_text`, `photos`, each with its own reason, matching
+what `tools/content_census.py` would say about the same lead. Confirmed
+no new console errors, and that switching between historical versions
+(`pickVersion`) leaves the panel untouched, as it should — it is not a
+per-iteration diagnostic.
+
+## Binding claims
+
+**Primary.** `workspace()` returns a `census` list, computed by the
+identical `measure()` a corpus-wide report calls — not a reimplementation
+— for any real lead with a frozen opening direction, degrading to
+`trouble` rather than raising. Confirmed against the reverted code
+(`KeyError: 'census'`) and restored
+(`test_workspace_surfaces_what_did_not_reach_the_page`).
+
+**Secondary.** The CLI tool's own output is unaffected by moving its
+measurement logic out from under it — checked directly, byte-for-byte,
+before trusting the refactor.
+
+## Falsification
+
+If moving `measure()` into `app/site/census.py` had changed any number
+`tools/content_census.py` reports, that would mean the "reuse, don't
+reimplement" refactor introduced a behavior change alongside the
+relocation — it did not; the CLI's full output was diffed before and
+after and is identical.
+
+## Outcome — 2026-09-09
+
+Landed as described. `make check` green (849 passed, one new standing
+test). Verified live against the real workbench database in addition to
+the standing test — screenshot taken, no console errors introduced,
+panel legible and correctly reasoned for a real lead outside the
+fixture corpus.
