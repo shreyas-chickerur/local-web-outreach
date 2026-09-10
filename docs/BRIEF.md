@@ -417,31 +417,50 @@ corpus past 19 fixtures. The map embed's WebGL-under-`--disable-gpu`
 finding is disclosed, not fixed — there is nothing in this project's
 own code responsible for it.
 
+**Done — Round 5.** The review bundle rebuilt after being found stale
+for the whole round (not just the five fixtures where it was visibly
+wrong), with the freshness guard `.reviews/review/` never had; Slice H
+built in full; the three unreachable comparisons diagnosed as a labels
+contradiction, not an axis gap; the twelve weight-budget xfails given a
+real, mixed, evidence-based answer rather than left unexamined. Full
+account: `.reviews/slice-b-predictions.md` ("Round 5, Phase 1/2, if
+room"). This is also the correction to a factual error in the Round 4
+entry directly above: it read "unreachable 0" — the three unreachable
+comparisons were already present the moment Phase 3b's `roofer`/
+`hvac-rich` verdict landed; that line was never re-checked against the
+literal census tail before being written. Left as written, corrected
+here, rather than edited quietly.
+
 **The instrument's current reading.**
 
     agreement   22/26 (85%) full, 9/11 (82%) held-out only — one
                 disclosed inversion, roofer/hvac-rich (69% by the
-                vector, judged "same" by a stranger)
+                vector, judged "same" by a stranger); Round 5 traced
+                every inversion to a self-contradiction in the verdicts
+                themselves, not a missing axis (§5, Slice G)
                 ruler a762bcc9, rule 254e171b, labels 122e6ec8,
                 held-out 7aa64298
     census      same-trade 61.52% distance = 38.48% identical, 30 scored
-                pairs (unchanged this round — no redecide)
+                pairs (unchanged — no redecide since Round 4)
                 closest pair barbecue / barbecue-rich at 17%, JUDGED
-                "same" this round
-    unreachable 0
+                "same"
+    unreachable 3, all tracing to roofer/hvac-rich — a labels
+                contradiction, confirmed by Round 5's own check, not
+                evidence for a fourteenth axis
     gate        0 of 171 pairs collide, whole corpus
     forbidden defaults  3 fixtures match (§2.4) — barbecue-rich,
-                barbecue, and restaurant-rich (unchanged this round)
+                barbecue, and restaurant-rich (unchanged)
     content census  77% of published material reaches the page
-                (unchanged — Round 4 touched selection within a field,
-                not whether the field reaches the page at all)
+                (unchanged since Round 4 Phase 1)
     provenance  100% (687/687) of rendered prose sentences
                 verbatim-or-prefix-cut source; 85% (389/459) selection
                 ratio (Round 4 Phase 1)
     performance LCP/CLS/INP all within budget on 19/19 fixtures; weight
-                breaches 12/19, all pre-existing, pinned as disclosed
-                xfail (Round 4 Phase 2)
-    tests       940 passed, 12 xfailed
+                breaches 12/19 — Round 5 sampled three with real fetched
+                data: one clears at the smallest existing responsive
+                tier (pure measurement artifact), two do not even then
+                (genuine weight) — not one answer for all twelve, see §5
+    tests       965 passed, 12 xfailed
     fixtures    19
     verdicts    2 live, same-trade closest pair among them
                 (barbecue/barbecue-rich); 12 held out
@@ -712,79 +731,108 @@ business's own copy happens to use a matching phrase.
 
 ### Slice D — content completeness and copy selection
 
-**Items 1 and 2 done, item 3 done, item 4 not started — see
-`.reviews/first-pass.md` and `.reviews/slice-b-predictions.md`
-("Round 3").** `app/site/census.py` (measurement logic — a library
-module, not a script, so the workspace and a corpus-wide report call the
-same function): every heading, paragraph, list, image and fact on their
-site, against whether it reached the page and which rule dropped it if
-not. 77% of published material reaches the page overall (was 73%, and
-that 73% turned out to be measured against a denominator the census
-tool's own grand total was double-counting — corrected before trusting
-either number). Acted on: a business's own photography now gets a real
-look-in for hero and every other photo-consuming section; `menu_media`
-now reaches the page; the `block:feature` cap raised 4 → 6 after
-checking what it was actually cutting off, fixture by fixture; a lone
-Google Business Profile claim now verifies address/phone on its own.
-Surfaced in the workspace: a "What didn't reach the page" panel, reusing
-`app.site.census.measure()` directly. **Not yet done:** letting the
-model select and order its own sentences — replacing `unsupported()`
-with a provenance check (every visible sentence a verbatim or
-prefix-cut span of source material, a whitelisted generic-copy member,
-or a corroborated field), keeping claim expression as a second layer.
+**Done, all four items — see `.reviews/first-pass.md`,
+`.reviews/slice-b-predictions.md` ("Round 3", "Round 4 Phase 1").**
+`app/site/census.py`: every heading, paragraph, list, image and fact on
+their site, against whether it reached the page and which rule dropped
+it if not. 77% of published material reaches the page overall. Acted
+on: a business's own photography gets a real look-in for hero and every
+photo-consuming section; `menu_media` reaches the page; the
+`block:feature` cap raised 4 → 6; a lone Google Business Profile claim
+verifies address/phone on its own. Surfaced in the workspace: a "What
+didn't reach the page" panel, reusing `app.site.census.measure()`
+directly.
+
+Item 4, done in Round 4 Phase 1: `app/site/provenance.py` — every
+visible prose sentence checked as verbatim-or-prefix-cut source, a
+whitelisted generic-copy member (empty today, honestly), or a
+corroborated field value, kept as a SECOND layer beside the existing
+claims gate rather than folded into it (they catch different problems —
+an unbacked assertion versus untraceable text). `app/site/copyselect.py`:
+the model selects and orders sentences by INDEX into the exact
+candidates offered, never by retyping, so verbatim provenance is true by
+construction. 100% (687/687) verbatim provenance, 85% (389/459)
+selection ratio, across the real corpus.
 
 ### Slice E — backdrops, motion, video
 
-Preference ladder, never skipped for effect: their own video; a sequence built
-from their own stills; an abstract backdrop generated from the palette;
-licensed stock last and heavily constrained — stock may not depict a place,
-person, or finished job a visitor could read as theirs. Encode that in code.
+**Done — see `.reviews/slice-b-predictions.md` ("Round 4, Phase 2").**
+The instrumentation came first, per the round's own standing rule:
+`tools/perf_census.py` measures real LCP/CLS/INP from a headless
+browser's own `PerformanceObserver`, not estimated. `app/site/
+backdrop.py`: the preference ladder — their own video (dormant, no
+extraction path gathers one yet, disclosed rather than faked); a
+sequence of 2+ of their own uncondemned stills; an abstract backdrop
+generated from the palette; licensed stock last, never reached, never
+fabricated (no source integrated). Fires behind `first_screen ==
+"type"`. `tools/motion_preview.py`: a separate, human-review-only
+capture tool, motion left on, verified against a real filmstrip. The
+deterministic capture pipeline needed no change — a pre-existing global
+`prefers-reduced-motion` rule already disables every animation, so
+`--force-prefers-reduced-motion` continues to guarantee a poster frame.
 
-`prefers-reduced-motion` cancels everything, poster frame always, muted and
-inline and looping, never the largest contentful element, budgeted near two
-megabytes. Hold Largest Contentful Paint under 2.5 seconds, Interaction to Next
-Paint under 200 milliseconds, Cumulative Layout Shift under 0.1. Motion level is
-a design-system property driving one choreography, not effects sprinkled per
-element.
+Motion did **not** become fingerprint axis thirteen: its only live
+rendering effect is a function of the existing `first_screen` axis,
+failing the independence test every other axis had to meet
+(`app/site/fingerprint.py`, written up beside the `layout_bias`
+precedent). LCP/CLS/INP are within budget on all nineteen fixtures;
+weight is not on twelve of them (all pre-existing photo-gallery weight
+predating this slice), pinned as disclosed `xfail` in
+`tests/test_performance_budgets.py` — see Round 5's "if room" 3b for a
+real, mixed answer on how much of that is measurement versus genuine
+weight, not yet acted on.
 
 ### Slice G — the design review
 
-**Sampled, not swept — see `.reviews/first-pass.md` and
-`.reviews/slice-b-predictions.md` ("Round 3, Phase 2").**
-`tools/design_review.py`: screenshot at three widths, one model call per
-screenshot, closed categories (hierarchy, crop, spacing, colour, imagery,
-credibility, "reads as a template") — matches the brief as written.
-Run on four fixtures only (one restaurant, one trade contractor, one
-professional practice, the threadbare fixture) to keep the cost of
-finding out whether this is worth it low; a full sweep over all 19
-fixtures at three widths would be 57 calls, not 12. It found real
-defects, confirmed and fixed the following round rather than acted on
-immediately: a nav floating over a face with no scrim (real), a review
-quote truncated mid-word (real), a review count contradicting itself
-(real, now its own BRIEF §4 invariant), and a duplicated CTA "cropped at
-the mobile edge" that turned out to be an artifact of the review's own
-screenshot tool clamping any sub-500px viewport to 500 — fixed properly
-(a real narrow-viewport capture path), which then found a genuine
-version of the same defect class elsewhere. **Recommendation confirmed:
-worth running in full** — the sample's hit rate on real, fixable defects
-was high even before accounting for the tooling artifact. **Not built:**
-the full 19-fixture sweep itself, findings joining the existing defects
-list, and auto-repair of the deterministic findings — all explicitly
-deferred as Phase 5 of the round that fixed what this sample found,
-conditional on there being room for a substantial undertaking in its own
-right.
+**Swept in full — see `.reviews/first-pass.md` and
+`.reviews/slice-b-predictions.md` ("Round 3, Phase 2"; "Round 4, Phase
+3a").** `tools/design_review.py --full`: all 19 fixtures, three widths,
+57 model calls, closed categories, findings written to JSON for a diff
+rather than read off stdout. The 4-fixture sample's own findings were
+confirmed and fixed the round before this one. The full sweep (295
+findings) found and fixed two further real, deterministic, corpus-wide
+bugs by class: a mislabeled restaurant heading on a roofer and two HVAC
+contractors (`_offer_heading()` missing a trade-kind gate three other
+call sites already had), and a second, independent copy of a
+text-truncation bug in the signature device's pull-quote (already fixed
+once elsewhere). A fourth finding — a broken map embed on four fixtures
+— was run to ground and confirmed a pure `--disable-gpu` capture-tooling
+artifact, not a site defect, the same finding shape as the earlier
+CTA-crop discovery. Auto-repair was by class, not per finding; the
+remaining ~290 findings are photographic/design judgment calls tied to
+specific source material, disclosed rather than chased.
+
+The ground truth was also rebuilt this pass (Round 4 Phase 3b, Round 5's
+own instructions call it "Slice H, the only untouched slice" — meaning
+this one was already closed by the time that round began): from 0 live
+verdicts to 15 fresh ones, judged blind from whole-page renderings.
+Agreement 22/26 (85%) full, 9/11 (82%) held-out — see §1's current
+reading.
 
 ### Slice H — the conversational workspace
 
-Close to Lovable, with one difference: the photographs are already labelled and
-the site is already sellable when the screen opens, so every exchange is a
-preference rather than a repair.
+**Done — see `.reviews/slice-b-predictions.md` ("Round 5, Phase 2").**
+Close to Lovable, with one difference: the photographs are already
+labelled and the site is already sellable when the screen opens, so
+every exchange is a preference rather than a repair.
 
-The conversation opens with Claude's rationale, not an empty box. Every reply is
-grounded in the `IterationResult` — the model sees what happened, never the
-page, so it cannot invent an outcome. It asks back: a defect becomes a question
-rather than a panel and no change. Later, repeated preferences accumulate across
-leads and feed the opening design.
+The conversation opens with Claude's rationale (`app/site/pipeline.py`'s
+`_build_opening()` — this was already built, since Slice F; it had no
+standing test before this round). Every reply is grounded in the
+`IterationResult` (`app/site/reply.py`, `reply_for()`) — the model sees
+what happened, never the page, which is provable rather than merely
+true: the function's own signature takes exactly one parameter, typed
+`IterationResult`, and `IterationResult` itself carries no rendered-HTML
+field. It asks back: `unmet`/`contradictions`/`ignored_tokens` become
+"I ... What did you mean?" rather than a passive list; `reader_error`
+(the model unreachable) is disclosed rather than left for the operator
+to notice on their own. Repeated preferences accumulate across leads
+(`app/store/preferences.py`, an exact phrase said on 3+ distinct leads)
+and feed the opening design's prompt as a consideration, never a
+constraint — proven, not just intended, to leave the fixture corpus
+untouched: `opening_spec()` returns a frozen `design_direction` before
+it ever looks at accumulated preferences, for every fixture, so there is
+no redecide to make here and none was made.
 
 ### Rest of F
 

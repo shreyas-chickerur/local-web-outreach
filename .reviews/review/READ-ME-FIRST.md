@@ -160,7 +160,27 @@ project passes for stability. No real visitor's browser carries that
 flag. Disclosed, not fixed — there is nothing in this project's own
 code responsible for it. Full account: `.reviews/round-4.md`.
 
-## What's deliberately not built
+**This review bundle itself was stale for the whole of Round 4, not
+just the five fixtures with a visibly wrong heading.** Every one of the
+nineteen committed pages here predated Phase 1's copy-selection changes,
+Phase 2's Slice E CSS, and Phase 3a's two render fixes — `dentist.html`
+still read "What we cook and serve" being the only one anyone had
+actually noticed by eye. A freshness guard now exists
+(`tests/tools/test_build_review.py`) that fails whenever a fresh render
+of a fixture no longer matches the committed page, confirmed to fail
+against the stale bundle before it was regenerated. If you are reading
+this, the guard passed on the commit that shipped it.
+
+**The three "unreachable" comparisons Round 4 left at zero — corrected,
+this file having been wrong about that — trace to one contradiction in
+the verdict set, not a missing axis.** `roofer`/`hvac-rich`'s own "same"
+reasoning names an order-swap between two sections and a small extra
+element, and dismisses both; the same two signals were each
+independently sufficient to call three OTHER pairs "different"
+(`dentist`/`law`, `roofer-rich`/`hvac-rich`, `law`/`law-rich`). No axis
+was built on the strength of this. `roofer`/`hvac-rich` is the one live
+verdict most worth a fresh, careful look in a future judging round
+rather than a same-session flip.
 
 - **Before-and-after, the last of nine contractor facts** — it needs a
   paired photo (a labelled before, a labelled after, of the same job)
@@ -177,12 +197,6 @@ code responsible for it. Full account: `.reviews/round-4.md`.
   makes. Consistent with how the call-to-action wording already worked
   before this session touched it, but a disclosed reduction from what was
   asked.
-- **The conversational workspace (Slice H).** Opening rationale, replies
-  grounded in `IterationResult`, a defect becoming a question, cross-lead
-  preference accumulation — none of it started. Explicitly deferred by
-  Round 4's own instruction after Phases 1-3 (below) consumed the round:
-  a real conversational-interface feature deserves its own session, not
-  a tail-end addition. See `.reviews/round-4.md`.
 - **Growing the corpus past nineteen fixtures.**
 
 **Built this round (Round 4), previously listed here as not built:**
@@ -197,6 +211,22 @@ render bugs fixed, one finding run to ground as a capture-tooling
 artifact and disclosed rather than "fixed"); a real judging round,
 rebuilding the ground truth from zero live verdicts. Full account in
 `.reviews/round-4.md`.
+
+**Built this round (Round 5), the last item BRIEF §5 named — the
+conversational workspace (Slice H).** The opening rationale
+(`_build_opening()`) turned out to already be working since Slice F,
+just untested; a standing test was added rather than a feature that
+already existed. New this round: `app/site/reply.py` grounds every
+reply in the `IterationResult` alone — structurally proven never to see
+the rendered page, since the function's own signature has no place for
+one — and turns an unmet, contradicted, or unrecognised instruction into
+a question rather than a silent no-op or a passive list. `app/store/
+preferences.py` accumulates a style preference across leads (an exact
+phrase said on three or more) and offers it to the next lead's opening
+call as a consideration, never a constraint — proven, not assumed, to
+leave this fixture corpus untouched (the frozen-replay check every
+fixture already hits returns before the preference is ever looked at).
+Full account in `.reviews/round-5.md`.
 
 ## Numbers not to trust, and why
 
@@ -222,24 +252,30 @@ rebuilding the ground truth from zero live verdicts. Full account in
   any verdict was recorded. `tests/test_the_instrument_reproduces.py`
   pins the exact set.
 - **Three comparisons no reweighting of the current axes can ever get
-  right, all tracing to `roofer`/`hvac-rich`.** `tools/quality_census.py`
-  prints these as "BLIND SPOT": the "same" pair (`roofer`/`hvac-rich`)
-  differs on a superset of what each "different" pair
-  (`dentist`/`law`, `roofer-rich`/`hvac-rich`, `law`/`law-rich`) differs
-  on, so no non-negative weighting can ever place the "same" pair closer.
-  This is a real, exact limit of the current axis set on these three
-  comparisons specifically — not evidence the whole instrument is broken,
-  and not something a threshold or a reweighting fixes. Known-open, not
-  chased this round.
-- **Twelve of nineteen fixtures breach the 2MB page-weight budget** —
-  every one a pre-existing, large photo gallery, none of them caused by
-  anything Round 4 added (the Slice E stills backdrop reuses images
-  already counted elsewhere, adding no bytes of its own). Pinned as
-  disclosed, `strict` `xfail` in `tests/test_performance_budgets.py` — an
-  actual fix would show as a hard failure (XPASS) rather than a silent
-  pass, so drift in either direction is caught. LCP, INP, and CLS are
-  clean on all nineteen fixtures; only weight is open. Known-open, not
-  fixed this round.
+  right, all tracing to `roofer`/`hvac-rich` — investigated this round,
+  and the answer is labels, not axes.** `roofer`/`hvac-rich`'s own "same"
+  reasoning names an order-swap between two sections and an extra small
+  element, and dismisses both as not enough to call it different — but
+  the same two signals were each independently sufficient to call three
+  OTHER pairs "different" (`dentist`/`law`, `roofer-rich`/`hvac-rich`,
+  `law`/`law-rich`). That is a self-contradiction in the verdict set, not
+  evidence the axis set is missing something — no axis was built on the
+  strength of this. `roofer`/`hvac-rich` is the one live verdict most
+  worth a fresh, careful look in a future judging round.
+- **Twelve of nineteen fixtures breach the 2MB page-weight budget — not
+  one answer, sampled with real data rather than assumed.** Every one a
+  pre-existing, large photo gallery, none of them caused by anything
+  Round 4 added. Fetching the actual smallest currently-offered
+  responsive tier (800px, via the live Google Places API) for three of
+  the twelve found `barbecue-rich` clears the budget at that size — a
+  pure measurement artifact, since no tool in this project has ever
+  actually served photos width-aware locally — but `law-rich` and
+  `roofer` do not clear it even then. The true split across all twelve
+  is unknown; recommended as its own scoped pass rather than guessed at.
+  Pinned as disclosed, `strict` `xfail` in
+  `tests/test_performance_budgets.py` either way — an actual fix would
+  show as a hard failure (XPASS), so drift in either direction is
+  caught. LCP, INP, and CLS are clean on all nineteen fixtures.
 - **The content census's "77% of published material reaches the page"**
   is corrected for a double-count this round found in the census tool
   itself (a subset row was being summed into the total twice — see
