@@ -1895,3 +1895,151 @@ round per the "if room" instruction:** no fixture's `photo_vision`
 carries any before/after pairing field — confirmed by direct inspection
 of all 19 fixtures' vision data, not assumed. Still correctly unbuilt;
 nothing changed here.
+
+# Round 4, Phase 3 — Slice G in full, and rebuild the ground truth
+
+## 3a — the full sweep, and two classes of defect fixed
+
+`tools/design_review.py --full`: extended from the 4-fixture sample to
+all 19, still 3 widths, 57 model calls (up from 12), findings written
+to `artifacts/design-review-full.json` for a proper diff rather than
+read off stdout. 295 findings total (credibility=64, spacing=59,
+hierarchy=46, crop=38, template=37, imagery=36, colour=15).
+
+The overwhelming majority are photographic/design judgment calls tied
+to a specific source photo or a specific business's own copy — a
+cropped face, a low review count, generic-feeling boilerplate — which
+are real observations but not code defects: the generator has no lever
+to un-crop a bad source photograph, and BRIEF's own standing rule
+(`quality_census.py`'s comment on `layout_bias`) is to prefer a
+standing test over chasing individual findings by eye. Scanned for
+recurring, corpus-wide PHRASE patterns instead, which is how a code
+defect actually announces itself in a per-screenshot review — a bug
+gets caught independently by four different fixtures' calls, an opinion
+does not.
+
+Two real, deterministic bugs surfaced this way, both fixed by class:
+
+**"What we cook and serve" on a roofer, two HVAC contractors, and a law
+firm.** `_offer_heading()` (`app/site/render.py`) read `kind = "food"
+if m.menu_items else m.trade_kind` — `m.menu_items` alone, ignoring
+`trade_kind`, the exact over-trusting `extract_menu_items` anchor Round
+3 already gated everywhere else (`_stats()`, `_menu()`) after it misread
+a law firm's settlement figures as "12 dishes on the menu". This one
+call site never got the gate. Fixed to read `trade_kind` directly,
+matching the other two call sites; a fifth instance (`dentist`) the
+57-call sample never happened to flag came along for free, since the
+fix is at the root cause rather than a patch per finding. Five
+fixtures' rendered bytes moved; `render_snapshots.json` regenerated.
+Standing regression test added (`test_a_stray_menu_item_does_not_
+borrow_the_food_heading`), confirmed to fail against the reverted code.
+
+**The signature device's own copy of a truncation bug already fixed
+once.** `signature.py`'s `quote` device sliced testimonial text with a
+bare `text[:220]`, no word boundary — the same defect `_truncate_quote`
+was built to fix for `_review_card`/`_review_feature`, in a second
+implementation the fix never reached. On `hvac`'s real testimonial it
+landed on "...knowledgeable. H", a lone capital letter with the
+decorative closing curly quote glued directly onto it. Fixed by reusing
+`_truncate_quote` rather than patching the slice in place. A second,
+independent issue surfaced verifying the fix visually: the decorative
+`::before`/`::after` curly quote marks render at full body size and
+weight with no distinguishing style, legible as punctuation on close
+reading but misread as a doubled first letter ("CCody Roberts") and a
+stray trailing letter by both the design review and a first glance at
+the same screenshot. Toned down (accent colour, 0.6 opacity, 0.6em) so
+they read as ornamental rather than more of the word — verified against
+a real capture both before and after, not just the CSS. Four fixtures
+carry the `quote` device; all four fixtures' bytes moved for the
+truncation fix, all 19 for the CSS-only quote-mark fix (inlined
+stylesheet). Standing regression test added directly against the
+device, confirmed to fail against the reverted code.
+
+**Run to ground, not "fixed":** the WebGL "your browser does not
+support WebGL" map error four findings raised independently
+(`contractor-bare`, `restaurant-bare`, `salon-rich`, `threadbare`). A
+controlled before/after capture of the same OpenStreetMap embed URL —
+identical Chrome, identical page, only `--disable-gpu` toggled —
+reproduces the exact error with the flag and shows a normal map without
+it. Every screenshot tool in this project (`contact_sheet.py`,
+`design_review.py`, `perf_census.py`) passes `--disable-gpu` for
+headless-rendering stability; no real visitor's browser carries that
+flag. Disclosed as a capture-tooling artifact, the same finding shape
+as Round 3's CDP width-clamping discovery, not a defect in the
+generated site — and not fixed, since there is nothing in this
+project's own code to fix.
+
+Also confirmed and left alone: `threadbare`'s "page content repeats
+twice" finding (a hallucination reading blank canvas below a short page
+as duplicated content — the `page` capture is a fixed 6000px window and
+`threadbare` does not fill it) and `law-rich`'s "Boad Certified"
+misspelling (verbatim in the fixture's own scraped `published.services`
+data alongside genuine navigation-link contamination — a source data
+quality issue, not a rendering bug).
+
+`make check`: ruff clean, mypy clean, 940 passed, 12 xfailed (the same
+twelve disclosed weight breaches, untouched by this phase).
+
+## 3b — rebuilding the ground truth
+
+The verdict set had sat at 0 live for two full rounds (131 retired, all
+of Round 3 and Round 4 Phase 1-2 with nothing to score against).
+Fifteen fresh verdicts, judged the same way the file's own header
+already specifies — whole page, scrolled top to bottom, blind, no axis
+values in view, `artifacts/contact-sheet/<slug>-page.png` — recaptured
+this same session, after every Phase 3a fix had landed, never reused
+from an earlier run.
+
+Pairs were chosen before judging, never after: some because the
+census's own "closest pairs" list called them close by the vector's own
+measure (the exact test of whether the instrument's sense of
+"similar" matches a stranger's), some for same-trade coverage.
+`is_held_out()` — a fixed hash of the two slugs — was computed on that
+already-decided list, not used to choose which pairs to include.
+Twelve of fifteen landed in the held-out third; eleven of those twelve
+came back "different", one — `roofer`/`hvac-rich` — came back "same":
+both pages open on an identical recipe (full-screen photograph, a
+rating number at display size in the corner, two buttons) and run an
+identical section set below it (a band of three numbers, an eight-card
+service grid under the same heading, a review grid, a twelve-photo
+"Recent jobs" gallery, a two-column closing paragraph), only two of
+those sections swapping order plus one small extra badge row.
+
+**Binding claim: enough pairs that the held-out third holds 4-5
+scorable comparisons.** One same against eleven different in the
+held-out set is eleven cross-comparisons — cleared, not engineered to
+just clear it.
+
+**Agreement, reported plainly.** Full (every live pair): **22/26
+(85%)**. Held-out only, the number that actually says something about
+generalising: **9/11 (82%)**. Both real, not tuned toward — every
+inversion (four in the full set, two held-out) traces to the one
+disputed pair: `roofer`/`hvac-rich` sits at 69% by the vector's own
+measure, nearly the corpus-wide 80% mean, further apart than several
+pairs judged "different". This is a genuine, disclosed mismatch between
+the instrument and a stranger's eye on one specific pair — reported as
+found, not argued away, and not re-judged to make the number move.
+`barbecue-rich`/`barbecue`, the closest same-trade pair the fingerprint
+has ever produced (17%, eight of twelve axes shared), was also judged
+and also came back "same" — landed in the tuning third by the same
+fixed hash, so it does not count toward the held-out score either way.
+
+`tests/test_the_instrument_reproduces.py`'s five tests that pinned the
+"0 live verdicts" state are rewritten, not weakened — each replaced
+with an equally exact pin against the new state (the labels hash, the
+held-out hash, the agreement tuple, the exact inversion pair, the exact
+live "same" set), confirmed to fail if any of those move again without
+a reason. `tools/quality_census.py`'s baseline constants re-pinned to
+match. `BASELINE_IS_FRESH` deliberately left `False`: the flag also
+gates the same-trade mean's own freshness message, and that number did
+not move this phase — only the agreement labels did — so `True` would
+have silently claimed "nothing to compare" on a real, still-valid "no
+better than baseline" reading.
+
+`.reviews/sheet/` recaptured at all five widths (`tools/contact_sheet.py`
+with no `--widths` filter). An earlier `--widths page`-only run
+regenerated the committed sheet without `thumb` screenshots, silently
+emptying its figures — caught by `test_the_committed_sheet_shows_the_
+corpus_that_shipped` before it was committed, not after.
+
+`make check`: ruff clean, mypy clean, 940 passed, 12 xfailed.
