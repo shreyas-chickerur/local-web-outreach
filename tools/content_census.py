@@ -26,6 +26,7 @@ from pathlib import Path
 from app.site.density import calculate_density_signal
 from app.site.pipeline import STAGES, run_stage, spec_from_config
 from app.site.render import (
+    FEATURE_CAP,
     _fills_rows,
     build_from_spec,
     material_from_brief,
@@ -105,12 +106,14 @@ def _blocks_summary(brief: dict, page: str) -> list[tuple[str, int, int, str]]:
             eligible = [b for b in group
                        if len((b.get("text") or "").split()) >= 18]
             short = len(group) - len(eligible)
-            shown = min(len(eligible), 4)
+            shown = min(len(eligible), FEATURE_CAP)
             reasons = []
             if short:
                 reasons.append(f"{short} under the 18-word minimum")
-            if len(eligible) > 4:
-                reasons.append(f"{len(eligible) - 4} beyond the 4-block cap")
+            if len(eligible) > FEATURE_CAP:
+                reasons.append(
+                    f"{len(eligible) - FEATURE_CAP} beyond the "
+                    f"{FEATURE_CAP}-block cap")
             rule = ("kept in full" if not reasons else
                     "dropped: " + ", ".join(reasons))
             rows.append((f"block:{kind}", len(group), shown, rule))
@@ -197,8 +200,19 @@ def measure(conn, slug: str, lead_id: int) -> FixtureCensus:
 
     menu_media = published.get("menu_media") or []
     if menu_media:
-        c.add("menu_media", len(menu_media), 0,
-              "dropped: no section builder reads this field at all")
+        # `_menu()` reads only the first entry (BRIEF §5) — a link or an
+        # embedded image, never invented structure from a document. Checked
+        # against the real page, not assumed: this line used to hardcode
+        # "no section builder reads this field at all" and stayed that way
+        # after `_menu()` was fixed to read it, exactly the kind of drift a
+        # second copy of "did this reach the page" always risks.
+        first = menu_media[0]
+        reached = 1 if first["url"] in page else 0
+        rule = ("kept" if reached and len(menu_media) == 1 else
+                "kept: the first; _menu() links to one document, not several"
+                if reached else
+                "dropped: not a food business, or no menu section built at all")
+        c.add("menu_media", len(menu_media), reached, rule)
 
     # about vs a story block: `_about()` prefers `blocks_of("story")[0]` over
     # `published.about` outright — not a truncation, a full replacement.
@@ -275,6 +289,15 @@ def main() -> int:
     rule_drop_totals: Counter[str] = Counter()
     for c in censuses:
         for name, raw, reached, rule in c.rows:
+            if "informational" in name:
+                # A subset of another row already being totalled ("photos"),
+                # printed per-fixture for diagnostic detail only. Summing it
+                # into the grand total double-counts those photos — found
+                # when this row started disappearing for fixtures whose own
+                # photography began reaching the page (BRIEF §5) and the
+                # OVERALL percentage moved for a reason unrelated to how
+                # much material actually reached the page.
+                continue
             base = re.sub(r"\s*\(.*\)$", "", name)
             totals[base] += raw
             reached_totals[base] += reached

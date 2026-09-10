@@ -11,13 +11,12 @@
     "architecture": "gallery",
     "contradictions": [],
     "cta": {
-      "kind": "order",
+      "kind": "visit",
       "label": ""
     },
     "defect": "",
     "emphasis": [
       "gallery",
-      "menu",
       "reviews"
     ],
     "first_screen": "photo",
@@ -26,17 +25,15 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "Hard Eight is a smokehouse people already trust in huge numbers (18,700+ reviews at 4.6) and they have nine strong, appetite-driving photographs of pit meats and the stone-walled dining room \u2014 the site should look and feel like walking into that room, so the pictures lead and a trade-shop condensed type stamps the name over them rather than competing with them.",
+    "rationale": "This is a family-run Texas pit barbecue place with strong, plentiful photography (six shots big enough to lead with) and a huge, glowing review base \u2014 the room and the food are the argument, so let the pictures and the crowd's own words do the selling, and send people through the door to eat.",
     "read_by": "claude",
-    "signature": "corner_inset",
-    "signature_why": "Setting the wordmark into the corner of a big smoker or brisket photo keeps the food as the hero while still stamping the name, like a brand burned into the wood.",
-    "suppress": [
-      "features"
-    ],
+    "signature": "duotone",
+    "signature_why": "A strip of the smoker and platter photos in warm duotone with one full-colour break makes the brisket the thing people remember, without turning the whole page into a slideshow.",
+    "suppress": [],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "Hard Eight is a smokehouse people already trust in huge numbers (18,700+ reviews at 4.6) and they have nine strong, appetite-driving photographs of pit meats and the stone-walled dining room \u2014 the sit"
+      "This is a family-run Texas pit barbecue place with strong, plentiful photography (six shots big enough to lead with) and a huge, glowing review base \u2014 the room and the food are the argument, so let th"
     ],
     "unsupported": []
   },

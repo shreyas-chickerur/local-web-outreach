@@ -25,19 +25,17 @@
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "credentials",
+    "lead_with": "stats",
     "mood": "refined",
-    "rationale": "Someone searching for a personal injury attorney after a catastrophic event wants proof of results and trustworthiness before anything else \u2014 case verdicts, ratings, and reviews \u2014 not a mood shot of the building. The refined, document-like ledger layout with navy and a credentials stamp reads as a serious, established trial firm rather than a lifestyle brand.",
+    "rationale": "Someone hiring an injury lawyer after a wreck or a death in the family needs proof of results and credibility before they need atmosphere, so the page opens on ratings, verdicts, and reviews rather than a picture of the building. Navy and a ledger-like structure read as a serious, established firm, and a single repeated credential mark keeps that trust signal present as they read.",
     "read_by": "claude",
     "signature": "none",
-    "signature_why": "A repeated Board Certified / verdict mark reinforces credibility the way a licence plate reassures a client that this firm is proven, not decorative.",
-    "suppress": [
-      "menu"
-    ],
+    "signature_why": "A repeated Board Certified / verdict-figure mark reinforces credibility every time a visitor scrolls, which is exactly what someone vetting a personal injury lawyer is looking to confirm.",
+    "suppress": [],
     "type_treatment": "quiet",
     "typeface": "libre-caslon-work-sans",
     "understood": [
-      "Someone searching for a personal injury attorney after a catastrophic event wants proof of results and trustworthiness before anything else \u2014 case verdicts, ratings, and reviews \u2014 not a mood shot of t"
+      "Someone hiring an injury lawyer after a wreck or a death in the family needs proof of results and credibility before they need atmosphere, so the page opens on ratings, verdicts, and reviews rather th"
     ],
     "unsupported": []
   },

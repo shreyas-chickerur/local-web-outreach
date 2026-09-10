@@ -92,30 +92,37 @@ FIXTURES = Path("tests/fixtures/briefs")
 #
 # `threadbare` is excluded from every score — see `agreement.UNSCORED`.
 #
-# A cost-minimising pass over the rest of Slice C (BRIEF §5, this project's
-# own "first pass" — see .reviews/first-pass.md): four more corroborated
-# contractor facts (service area, financing, a named manufacturer
-# certification, response time), a genuine third `services` composition
-# ("feature", exactly three, no card — this axis used to render the same
-# bordered-card markup as the dense grid, differing only in count, which
-# `test_axes_are_real.py`'s own standard calls a lie in the instrument), a
-# second `reviews` composition, and per-trade `gallery`/`contact` headings.
-# Content-only work (a content census, a structural diff, render snapshots)
-# needed no redecide at all.
+# Round 3, Phase 3 (BRIEF §5, content census — see .reviews/<phase>.md):
+# acting on what the census exposed. A business's own photography now
+# sorts first in the photo pool and hero scoring carries a small,
+# tie-breaking preference for it (`own_site_photos` measured 0 of 4 ever
+# used; verified this alone moves no fingerprint value — real quality
+# gaps still win). `menu_media` — a menu PDF or photograph, extracted
+# since Slice A but read by no section builder — now has one. The
+# `block:feature` cap raised 4 -> 6, checked fixture by fixture first
+# (some corpora are a real FAQ or service list cut off arbitrarily; fewer
+# are testimonial-shaped blocks a scraper mis-filed as "feature"). A lone,
+# uncontested Google Business Profile claim now verifies `address`/
+# `phone` on its own — Google verifies a listing against the business
+# before it goes live, a real corroboration of a different kind; genuine
+# conflicts between sources (still the larger share of what was dropped)
+# are unchanged, never presented as fact.
 #
-# Every item above touches `compositions` or `section_order`, so this
-# re-decided the corpus (ruler and rule UNCHANGED). Zero collisions on the
-# first attempt, across all 171 pairs.
+# The photo preference and the feature cap are content-only. The menu
+# fallback and the newly-verified contact facts touch `compositions`
+# and/or `section_order`, so this re-decided the corpus (ruler and rule
+# UNCHANGED). Zero collisions on the first attempt, across all 171 pairs.
 #
-# NO JUDGING ROUND THIS PASS, DELIBERATELY. Agreement was already 0 of 0
-# and all eleven pairs checked the round before this one were DIFFERENT —
-# judging again spends real money to confirm what is already known. Every
-# live verdict was retired when the redecide moved every fold; none
-# repopulated. The held-out third is genuinely empty, not stale.
-BASELINE_SAME_TRADE = 0.5610
+# NO JUDGING ROUND THIS PASS, DELIBERATELY (the round's own standing
+# rule). Agreement was already 0 of 0 and every prior verdict was
+# DIFFERENT; judging again spends real money to confirm what is already
+# known. Zero live verdicts before this redecide, zero after — nothing to
+# retire, nothing added.
+BASELINE_SAME_TRADE = 0.6152
 # The closest same-trade pair, unjudged this round (no judging pass) —
-# printed as a reading, not a verdict.
-BASELINE_WORST = ("contractor-bare", "hvac-second", 0.31)
+# printed as a reading, not a verdict. The closest this corpus has ever
+# produced: eight of twelve axes shared.
+BASELINE_WORST = ("barbecue", "barbecue-rich", 0.17)
 # Which ruler the numbers above were taken with. A distance is comparable only
 # to another taken the same way, and comparing across a change of ruler has
 # already produced two false readings — a corpus that changed under a pinned
@@ -232,7 +239,7 @@ def measure(conn, slug: str, lead_id: int) -> dict:
 
     scores = hero_scores(material.images, material.photo_labels,
                          material.trade_kind, material.size_of,
-                         material.photo_vision)
+                         material.photo_vision, own=frozenset(material.photos))
     return {
         "slug": slug,
         "trade": brief.get("trade"),

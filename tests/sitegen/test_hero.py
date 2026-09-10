@@ -446,6 +446,39 @@ def test_an_operator_typing_their_own_words_still_gets_them():
     assert out["cta"]["label"] == "Book a table"
 
 
+def test_a_close_tie_goes_to_the_businesss_own_photograph():
+    """BRIEF §5, content census: `own_site_photos` measured 0 of 4 ever
+    used across the corpus, because Google's photography — nearly always
+    more numerous, never worse on any single measured term here — filled
+    every slot first and the business's own never even got a fair look at
+    a real tie. `own_photo` is a genuine, if small, term now: two
+    otherwise-identical candidates resolve to the one that is theirs."""
+    look = sizes({"/google/0": (2000, 1200), "/theirs/0": (2000, 1200)})
+    assert pick_hero(("/google/0", "/theirs/0"), size_of=look,
+                     own=frozenset({"/theirs/0"})) == "/theirs/0"
+
+
+def test_the_own_photo_bonus_never_overrides_a_real_quality_gap():
+    """Small on purpose — a business's own snapshot does not outrank
+    Google's professionally shot, sharply cropped photograph just for
+    being theirs. See `HERO_WEIGHTS["own_photo"]`."""
+    look = sizes({"/google/sharp": (3200, 1880), "/theirs/blurry": (2000, 1150)})
+    chosen = pick_hero(("/google/sharp", "/theirs/blurry"), size_of=look,
+                       own=frozenset({"/theirs/blurry"}))
+    assert chosen == "/google/sharp"
+
+
+def test_material_images_puts_their_own_photography_first():
+    """Reversed from Google-first (BRIEF §5): every section beyond the hero
+    spends from this pool in plain order, so whichever source sorts first
+    is the only one most sections ever reach — see `Material.images`."""
+    from app.site.render import Material
+
+    m = Material(name="x", lead_id=9, place_photos=("g1", "g2"),
+                photos=("own1", "own2"))
+    assert m.images == ("own1", "own2", "/photo/9/0", "/photo/9/1")
+
+
 def test_no_frozen_fixture_ships_wording_from_the_wrong_trade():
     """The regression as it actually reached a page: every census run was
     rendering a dentist a button offering a table."""

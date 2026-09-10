@@ -15,25 +15,25 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "services"
+      "stats"
     ],
-    "first_screen": "type",
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "credentials",
     "mood": "industrial",
-    "rationale": "This is a 37-year-old family roofing outfit whose case rests on awards, BBB standing and a long run of specific 5-star reviews, not on styled photography \u2014 only 5 of 14 photos are even large enough to lead with. Leading with credentials in a stamped, ledger-like layout puts the licence/award/tenure proof in front of a homeowner in the first three seconds, which is what actually earns a call in this trade, and it deliberately breaks from the prior stats-led, signature-none industrial site by open",
+    "rationale": "Bert Roofing's real case is 37 years in business, a 4.8 rating over 136 reviews, and a dozen industry awards \u2014 a homeowner deciding who gets on their roof needs proof of credibility before pictures, so the page opens on the numbers (facts) rather than photography, since only two of their fourteen photos are strong enough to carry a lead image. To avoid duplicating the recent industrial/ledger/stamped/proof/oswald-barlow site, I kept the trade's honest industrial mood and ledger rhythm (the ruled",
     "read_by": "claude",
     "signature": "none",
-    "signature_why": "A repeated Golden Hammer / BBB / since-1988 mark is what a homeowner actually scans for before calling a roofer, and it reads as a workshop credential rather than decoration.",
+    "signature_why": "A 12x Golden Hammer winner since 1988 with an A+ BBB rating earns a repeated licence-style mark more than a moving strip or a big photo ever would \u2014 it says 'we're certified, check for yourself' at a glance.",
     "suppress": [
-      "menu"
+      "gallery"
     ],
-    "type_treatment": "stamped",
-    "typeface": "oswald-barlow",
+    "type_treatment": "wide",
+    "typeface": "oswald-inter",
     "understood": [
-      "This is a 37-year-old family roofing outfit whose case rests on awards, BBB standing and a long run of specific 5-star reviews, not on styled photography \u2014 only 5 of 14 photos are even large enough to"
+      "Bert Roofing's real case is 37 years in business, a 4.8 rating over 136 reviews, and a dozen industry awards \u2014 a homeowner deciding who gets on their roof needs proof of credibility before pictures, s"
     ],
     "unsupported": []
   },

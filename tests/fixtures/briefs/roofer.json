@@ -6,7 +6,7 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "gold",
+    "accent": "blue",
     "architecture": "stacked",
     "contradictions": [],
     "cta": {
@@ -15,36 +15,36 @@
     },
     "defect": "",
     "emphasis": [
-      "credentials",
-      "reviews"
+      "reviews",
+      "services"
     ],
-    "first_screen": "proof",
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "credentials",
     "mood": "industrial",
-    "rationale": "This is a roofing contractor working four states through W2 project managers, not a boutique \u2014 visitors need the 5.0/218-review proof and the insured/BBB credentials before anything else, so the page leads with the stats band rather than a photo. To stay clear of the near-identical ledger/stamped site already built, this one keeps the industrial trade feel but reads calmer: stacked rhythm instead of a ruled ledger, wide-tracked capitals instead of tight stamped type, oswald-inter instead of oswa",
+    "rationale": "This is a trade sale, not a showroom \u2014 a homeowner with hail damage wants proof of legitimacy (5.0 from 218 reviews, W2 employees, BBB A+, four-state reach) before they want pretty roof pictures, so the first screen leads with those facts rather than photography. To stay clear of the recent industrial/ledger/stamped/proof site, this one keeps the industrial trade mood but sets it calmer \u2014 quiet type, stacked rhythm instead of a printed-ledger feel, and a repeated credential stamp instead of the ",
     "read_by": "claude",
     "signature": "none",
-    "signature_why": "A repeated BBB A+ / W2-insured mark across the page hammers home the one credential a homeowner comparing roofers is actually checking for.",
+    "signature_why": "A W2-insured, BBB A+ roofing outfit working four states earns a repeated licence/credential mark more than a moving strip or a big quote \u2014 it's the thing a homeowner checks before they call.",
     "suppress": [],
-    "type_treatment": "wide",
+    "type_treatment": "quiet",
     "typeface": "oswald-inter",
     "understood": [
-      "This is a roofing contractor working four states through W2 project managers, not a boutique \u2014 visitors need the 5.0/218-review proof and the insured/BBB credentials before anything else, so the page "
+      "This is a trade sale, not a showroom \u2014 a homeowner with hail damage wants proof of legitimacy (5.0 from 218 reviews, W2 employees, BBB A+, four-state reach) before they want pretty roof pictures, so t"
     ],
     "unsupported": []
   },
   "facts": [
     {
       "candidates": [],
-      "confidence": "unverified",
+      "confidence": "verified",
       "corroborations": 1,
       "dissent": [],
       "field": "address",
       "label": "Address",
-      "score": 50,
+      "score": 65,
       "sources": [
         {
           "source_type": "google",

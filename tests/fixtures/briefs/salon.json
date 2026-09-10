@@ -8,8 +8,8 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "sky",
-    "architecture": "stacked",
+    "accent": "amber",
+    "architecture": "gallery",
     "contradictions": [],
     "cta": {
       "kind": "visit",
@@ -20,23 +20,23 @@
       "services",
       "reviews"
     ],
-    "first_screen": "photo",
+    "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "about",
     "mood": "refined",
-    "rationale": "This isn't a walk-in salon selling a cut, it's a landlord renting suites to independent stylists, so the visitor needs to feel the calm, upscale, well-kept building before anything else \u2014 a wide storefront photo under the bright sky reads as the promise, and a quiet stacked layout with reviews about Sam and cleanliness pulled forward does the reassuring the tagline can't do on its own. Choosing photo/stacked/margin_note over the recent split/gallery/corner_inset job keeps the same sky accent (it",
+    "rationale": "This isn't a salon selling haircuts to walk-ins \u2014 it's a landlord renting suites to independent beauty professionals, so the page needs to sell the space, the polish, and the support before anything else. Leading with the about (the pitch to prospective tenants) and the renovated, well-kept rooms, paired with a warm amber pulled from their own signage, reads as upscale and welcoming rather than clinical.",
     "read_by": "claude",
-    "signature": "margin_note",
-    "signature_why": "A running note beside the tenant-benefits copy lets the leasing pitch sit quietly next to the proof \u2014 Sam's warmth and the clean suites \u2014 without competing with it for the headline.",
+    "signature": "corner_inset",
+    "signature_why": "A type block inset into the corner of the storefront photo says \"boutique suites for professionals\" the moment the page loads, without competing with the room itself.",
     "suppress": [
       "stats"
     ],
-    "type_treatment": "quiet",
-    "typeface": "cormorant-karla",
+    "type_treatment": "wide",
+    "typeface": "fraunces-karla",
     "understood": [
-      "This isn't a walk-in salon selling a cut, it's a landlord renting suites to independent stylists, so the visitor needs to feel the calm, upscale, well-kept building before anything else \u2014 a wide store"
+      "This isn't a salon selling haircuts to walk-ins \u2014 it's a landlord renting suites to independent beauty professionals, so the page needs to sell the space, the polish, and the support before anything e"
     ],
     "unsupported": []
   },

@@ -6,7 +6,7 @@
   "chain_signals": [],
   "design_direction": {
     "accent": "gold",
-    "architecture": "column",
+    "architecture": "gallery",
     "contradictions": [],
     "cta": {
       "kind": "book",
@@ -14,23 +14,24 @@
     },
     "defect": "",
     "emphasis": [
+      "gallery",
       "reviews"
     ],
-    "first_screen": "split",
+    "first_screen": "type",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "gallery",
     "mood": "fresh",
-    "rationale": "The photography (6 strong shots of hair, stylists, and the bright room) is genuinely the argument here, so it still leads, but this time as a split first screen with a wordmark set wide and airy \u2014 reading as a boutique blow-dry bar rather than repeating the full-bleed photo-behind-name and corner_inset treatment already used elsewhere. A scroll_gallery lets people flip through the hair detail shots like a look-book, and pairing that with reviews raised up top backs the polish with the 4.5-star w",
+    "rationale": "Drybar is a bright, styled, photogenic room with six strong images and a loyal following \u2014 the visitor's first question is \"will my hair look like that,\" so a full-bleed photo opener with a moving gallery of results answers it before anything else, and gold pulled from their own warm lighting feels like their actual space rather than a generic salon palette. I've moved away from the recent site's split-screen wide-type layout toward a photo-led, centred, gallery-architecture page with a scrollin",
     "read_by": "claude",
     "signature": "scroll_gallery",
-    "signature_why": "A strip of hair and salon shots that a visitor can drag through feels like flipping a lookbook, which suits a blowout bar built on styled hair as the product.",
+    "signature_why": "A blowout bar sells the finished hair itself, so letting the photos scroll off the side keeps the strip of gorgeous results moving past the visitor like a look-book rather than a static grid.",
     "suppress": [],
-    "type_treatment": "wide",
+    "type_treatment": "centred",
     "typeface": "unbounded-manrope",
     "understood": [
-      "The photography (6 strong shots of hair, stylists, and the bright room) is genuinely the argument here, so it still leads, but this time as a split first screen with a wordmark set wide and airy \u2014 rea"
+      "Drybar is a bright, styled, photogenic room with six strong images and a loyal following \u2014 the visitor's first question is \"will my hair look like that,\" so a full-bleed photo opener with a moving gal"
     ],
     "unsupported": []
   },

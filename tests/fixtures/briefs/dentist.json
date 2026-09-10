@@ -8,7 +8,7 @@
   "chain_signals": [],
   "design_direction": {
     "accent": "teal",
-    "architecture": "stacked",
+    "architecture": "ledger",
     "contradictions": [],
     "cta": {
       "kind": "book",
@@ -17,25 +17,25 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "credentials"
+      "services"
     ],
     "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "reviews",
-    "mood": "warm",
-    "rationale": "People choosing a dentist want proof of gentleness and competence before they want atmosphere \u2014 strong ratings, warm staff photos, and real patient quotes do that work better than a moody hero shot. A calm, warm palette (teal accent rather than clinical blue) with quiet type keeps the tone reassuring rather than corporate, and leading with reviews and the team answers the visitor's actual question: will this be okay?",
+    "mood": "refined",
+    "rationale": "People choosing a dentist want to see ratings and what other patients experienced before anything else, and with only 2 photographs large enough to use well, the site should be built around proof of care and reputation rather than a gallery that has little material. A calm, ledger-like rhythm with a quiet name and a trustworthy teal reads as competent and reassuring, which is exactly what someone anxious about a dental visit needs to feel first.",
     "read_by": "claude",
-    "signature": "quote",
-    "signature_why": "A dental practice earns trust through what patients say about the chair, not through a hero photo, so a single review set large does the convincing.",
+    "signature": "none",
+    "signature_why": "A dental office earns trust through credentials and reviews laid out plainly, not through a flourish that would distract from that proof.",
     "suppress": [
-      "menu"
+      "gallery"
     ],
     "type_treatment": "quiet",
-    "typeface": "ibm-plex-serif-inter",
+    "typeface": "",
     "understood": [
-      "People choosing a dentist want proof of gentleness and competence before they want atmosphere \u2014 strong ratings, warm staff photos, and real patient quotes do that work better than a moody hero shot. A"
+      "People choosing a dentist want to see ratings and what other patients experienced before anything else, and with only 2 photographs large enough to use well, the site should be built around proof of c"
     ],
     "unsupported": []
   },

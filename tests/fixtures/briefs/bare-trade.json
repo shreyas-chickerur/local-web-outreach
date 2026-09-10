@@ -27,29 +27,29 @@
     "kind": "style",
     "lead_with": "stats",
     "mood": "refined",
-    "rationale": "People hiring a family lawyer are anxious and need proof of trust and competence before anything else \u2014 a 4.9 rating from 148 reviews and a named, credentialed attorney does that far better than photographs of the building, since only two images are even large enough to lead with. A ledger layout with a quoted review reads as a serious, document-like practice rather than a generic small-business template.",
+    "rationale": "This is a family law firm with only two usable photographs, so the site should sell trust and track record rather than atmosphere \u2014 a 4.9-star rating from 148 reviews and a named attorney is what someone in a custody dispute checks first, not a picture of the lobby. A quiet, ledger-like arrangement with a real client quote reads as a serious, established practice rather than a marketing page.",
     "read_by": "claude",
     "signature": "quote",
-    "signature_why": "A family law client's own words carry more weight than any stock photo of a courthouse, so setting one review at full size makes the trust visible immediately.",
+    "signature_why": "A family law client's own words carry more weight than any tagline, and setting one review at full size shows visitors this firm is trusted before they read anything else.",
     "suppress": [
       "gallery"
     ],
     "type_treatment": "quiet",
     "typeface": "libre-caslon-work-sans",
     "understood": [
-      "People hiring a family lawyer are anxious and need proof of trust and competence before anything else \u2014 a 4.9 rating from 148 reviews and a named, credentialed attorney does that far better than photo"
+      "This is a family law firm with only two usable photographs, so the site should sell trust and track record rather than atmosphere \u2014 a 4.9-star rating from 148 reviews and a named attorney is what some"
     ],
     "unsupported": []
   },
   "facts": [
     {
       "candidates": [],
-      "confidence": "unverified",
+      "confidence": "verified",
       "corroborations": 1,
       "dissent": [],
       "field": "address",
       "label": "Address",
-      "score": 50,
+      "score": 65,
       "sources": [
         {
           "source_type": "google",

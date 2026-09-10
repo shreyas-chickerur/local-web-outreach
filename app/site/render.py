@@ -97,6 +97,10 @@ class Material:
     services: tuple[str, ...] = ()
     products: tuple[str, ...] = ()
     menu_items: tuple[dict, ...] = ()
+    # {url, kind ("pdf"|"image"), label} — a menu they publish as a document
+    # or a photograph rather than parseable text. BRIEF §5, content census:
+    # extracted and stored, but read by no section builder until `_menu()`.
+    menu_media: tuple[dict, ...] = ()
     hours: tuple[str, ...] = ()
     photos: tuple[str, ...] = ()
     address: str | None = None
@@ -216,14 +220,30 @@ class Material:
 
     @property
     def images(self) -> tuple[str, ...]:
-        """Google's photography first: it is shot for the listing and is nearly
-        always better than what the business put on its own site. Served
-        through us, so the API key never appears in a page we hand over."""
+        """Their own photography first, then Google's.
+
+        Reversed from Google-first (BRIEF §5, content census): a business's
+        own photograph is the strongest signal of who they are, and the
+        operator is selling a site that looks made for them, not a
+        directory listing. Every section beyond the hero spends from this
+        pool in plain order (`take()`), so with Google's photos first —
+        nearly always more numerous — the pool never ran out before it
+        reached the business's own, and `own_site_photos` measured 0 of 4
+        ever used across the whole corpus. The hero is unaffected in the
+        common case: `pick_hero` scores every candidate on its own merits
+        (`hero_scores`, `HERO_WEIGHTS["own_photo"]`), not by position, so a
+        genuinely better Google photograph still wins; this only changes
+        which photograph appears when a section takes the first N without
+        scoring them, and which one wins an actual tie.
+
+        Served through us, so the API key never appears in a page we hand
+        over.
+        """
         proxied: tuple[str, ...] = ()
         if self.lead_id is not None and self.place_photos:
             proxied = tuple(f"/photo/{self.lead_id}/{i}"
                             for i in range(len(self.place_photos)))
-        return proxied + self.photos
+        return self.photos + proxied
 
 
 def material_from_brief(brief: dict) -> Material:
@@ -255,6 +275,7 @@ def material_from_brief(brief: dict) -> Material:
         services=tuple(published.get("services") or ()),
         products=tuple(published.get("products") or ()),
         menu_items=tuple(published.get("menu_items") or ()),
+        menu_media=tuple(published.get("menu_media") or ()),
         hours=tuple(published.get("hours") or ()) or (
             (trusted["hours"],) if "hours" in trusted else ()),
         photos=tuple(published.get("photos") or ()),
@@ -434,7 +455,13 @@ HERO_MIN_ASPECT = 1.15
 # because the whole point of a score is that the trade-offs are arguable, and
 # you cannot argue with a lexicographic tuple.
 HERO_WEIGHTS = {"resolution": 1.0, "aspect": 1.0, "subject": 0.9,
-                "quality": 1.1, "usable": 1.0, "headline": 0.4}
+                "quality": 1.1, "usable": 1.0, "headline": 0.4,
+                # Small on purpose (BRIEF §5, content census): a real
+                # quality gap must still win, so this only breaks a close
+                # call in favour of the business's own photograph rather
+                # than always overriding Google's, which the corpus mostly
+                # confirms is the better photography.
+                "own_photo": 0.2}
 
 # What disqualifies a photograph from leading, whatever else is right about it.
 # All three are things only looking at the picture can establish, which is why
@@ -591,12 +618,16 @@ def hero_scores(images: tuple[str, ...], labels: dict | None = None,
                 trade: str = "default",
                 size_of: Callable[[str], tuple[int, int] | None] | None = None,
                 vision: dict | None = None,
+                own: frozenset[str] | set[str] = frozenset(),
                 ) -> list[HeroScore]:
     """Every candidate, best first, with its reasons attached.
 
     Every photograph is considered. The old rule looked at the first ten, and
     Google's come first in the pool, so a business with ten Place photographs
     never had a single one of its own site's pictures examined.
+
+    `own` names which candidates are the business's own photography rather
+    than Google's — see `HERO_WEIGHTS["own_photo"]`.
     """
     look = size_of or measure
     labels = labels or {}
@@ -613,6 +644,7 @@ def hero_scores(images: tuple[str, ...], labels: dict | None = None,
             "quality": HERO_WEIGHTS["quality"] * _quality_term(seen),
             "usable": HERO_WEIGHTS["usable"] * _usable_term(seen),
             "headline": HERO_WEIGHTS["headline"] * _headline_term(seen),
+            "own_photo": HERO_WEIGHTS["own_photo"] * (1.0 if url in own else 0.0),
         }
         scored.append(HeroScore(url=url, total=sum(reasons.values()),
                                 reasons=reasons, size=size, label=label,
@@ -658,7 +690,8 @@ def pick_hero(images: tuple[str, ...], offset: int = 0,
               labels: dict | None = None, trade: str = "default",
               size_of: Callable[[str], tuple[int, int] | None] | None = None,
               vision: dict | None = None,
-              floor: bool = True) -> str | None:
+              floor: bool = True,
+              own: frozenset[str] | set[str] = frozenset()) -> str | None:
     """The lead photograph, as one score rather than a stack of filters.
 
     Resolution, how well the shape survives a hero crop, and how well the
@@ -671,7 +704,7 @@ def pick_hero(images: tuple[str, ...], offset: int = 0,
     """
     if not images:
         return None
-    scored = hero_scores(images, labels, trade, size_of, vision)
+    scored = hero_scores(images, labels, trade, size_of, vision, own)
     chosen = scored[offset % len(scored)]
 
     # No hero at all, when the best picture there is is one somebody looked at
@@ -698,7 +731,8 @@ def _hero(m: Material, spec: SiteSpec, t: Theme,
     """
     if photo is None:
         photo = pick_hero(m.images, spec.hero_offset, m.photo_labels,
-                          m.trade_kind, m.size_of, m.photo_vision)
+                          m.trade_kind, m.size_of, m.photo_vision,
+                          own=frozenset(m.photos))
     if photo:
         m.spent.add(photo)
     sub = m.tagline or m.about or m.trade or ""
@@ -943,7 +977,12 @@ def _stats(m: Material, t: Theme) -> str:
     # Only count something we actually have: a proud "0 services offered" is
     # the kind of detail that loses the room.
     offerings = len(m.services) + len(m.products)
-    if m.menu_items:
+    # `m.menu_items` alone is not enough: `extract_menu_items` anchors on any
+    # line matching a bare dollar-amount pattern, which also matches a law
+    # firm's "$50 Million Verdict" results page — `law-rich` published "12
+    # dishes on the menu" at $812, $55, $49 a plate. `trade_kind` is what
+    # tells food from a false positive; nothing in extraction knows it yet.
+    if m.menu_items and m.trade_kind == "food":
         tiles.append((f"{len(m.menu_items)}", "dishes on the menu", "count"))
     elif offerings:
         tiles.append((f"{offerings}", "services offered", "count"))
@@ -959,9 +998,38 @@ def _stats(m: Material, t: Theme) -> str:
             f'<div class="stats">{cells}</div></div></section>')
 
 
+def _menu_media(m: Material) -> str:
+    """A menu they publish as a document or a photograph rather than
+    parseable text — a PDF to open, or a scanned page to look at, never
+    embedded as if it were structured content we invented from it."""
+    first = m.menu_media[0]
+    label = e(first.get("label") or "View menu")
+    if first.get("kind") == "image":
+        return (f'<figure class="menu-media" data-reveal>'
+                f'<a href="{e(first["url"])}" target="_blank" rel="noopener">'
+                f'<img src="{e(first["url"])}" alt="{label}" loading="lazy">'
+                f'</a></figure>')
+    return (f'<a class="cta ghost menu-media" href="{e(first["url"])}" '
+            f'target="_blank" rel="noopener">{label}</a>')
+
+
 def _menu(m: Material, t: Theme) -> str:
-    if not m.menu_items:
+    # See `_stats()`: `extract_menu_items` anchors on a bare dollar amount,
+    # which a non-food business's own page can trip (a law firm's verdict
+    # amounts, read as prices) — `trade_kind` is the corroboration nothing
+    # upstream of here has. Same guard for `menu_media`: its own extraction
+    # matches "price" in a URL or link text, which a non-food business's
+    # pricing PDF could trip too.
+    if m.trade_kind != "food" or not (m.menu_items or m.menu_media):
         return ""
+    if not m.menu_items:
+        # No parsed dishes, but they published the menu itself — the
+        # honest fallback is pointing at their own document, never
+        # inventing structured items from it.
+        return (f'<section id="menu" data-ground="raise"><div class="wrap">'
+                f'<p class="eyebrow" data-reveal>On the menu</p>'
+                f'<h2 data-reveal>What we serve</h2>'
+                f'{_menu_media(m)}</div></section>')
     groups: list[str] = []
     for item in m.menu_items:
         group = str(item.get("group") or "").strip()
@@ -982,10 +1050,14 @@ def _menu(m: Material, t: Theme) -> str:
             parts.append(f'<p class="d">{e(item["description"])}</p>')
         rows.append(f'<li data-group="{e(item.get("group") or "All")}" data-reveal '
                     f'data-delay="{i % 4}">{"".join(parts)}</li>')
+    # The parsed items are usually a partial read of the real menu — a link
+    # to the document they actually publish is a truer "see everything"
+    # than a 24-item cap ever is.
+    media = f'<p class="menu-more">{_menu_media(m)}</p>' if m.menu_media else ""
     return (f'<section id="menu" data-ground="raise"><div class="wrap">'
             f'<p class="eyebrow" data-reveal>On the menu</p>'
             f'<h2 data-reveal>What we serve</h2>{filters}'
-            f'<ul class="dishes">{"".join(rows)}</ul></div></section>')
+            f'<ul class="dishes">{"".join(rows)}</ul>{media}</div></section>')
 
 
 # (tiles, wide columns, narrow columns) — every pairing divides exactly, so the
@@ -1342,6 +1414,24 @@ def trim_to_sentence(text: str, limit: int) -> str:
     return (window[:cut] if cut > 0 else window).rstrip(" ,;:-") + "…"
 
 
+# BRIEF §5, content census: `block:feature` at a 4-block cap was the single
+# biggest drop in the whole corpus (40 blocks dropped on one fixture alone).
+# Checked what items 5+ actually are, fixture by fixture, before moving the
+# number: some corpora (`law-rich`, a 14-question FAQ; `hvac-second`,
+# `roofer-rich`, `barbecue`, real service/catering detail) are genuine
+# substantive writing being cut off at an arbitrary point; a smaller number
+# are testimonial- or hours-shaped blocks a scraper filed under "feature" by
+# mistake, which start appearing around the 7th item on the fixtures checked
+# (`dentist-rich`'s "Melody H.", a customer name, is item 7). 6 recovers most
+# of the genuine loss (two more rows on every affected fixture) while staying
+# short of where the miscategorised content starts showing up on the
+# fixtures this was checked against — not a guarantee for a corpus this has
+# not seen, since the root defect (a scraper filing testimonials as
+# "feature" blocks) is still there and belongs to Slice D's later
+# provenance work, not to this number.
+FEATURE_CAP = 6
+
+
 def _features(m: Material, t: Theme) -> str:
     """Anything else their page had a section for, kept as alternating rows."""
     keep = [b for b in m.blocks
@@ -1350,7 +1440,7 @@ def _features(m: Material, t: Theme) -> str:
     if not keep:
         return ""
     rows = []
-    for i, block in enumerate(keep[:4]):
+    for i, block in enumerate(keep[:FEATURE_CAP]):
         relevant = [src for src in (block.get("images") or ())
                     if justified(src, block["heading"], block["text"])
                     and not is_text_graphic(src, block["heading"], block["text"])]
@@ -1563,7 +1653,8 @@ def plan_for(brief: dict, spec: SiteSpec) -> SitePlan:
     m = material_from_brief(brief)
     theme = theme_for(spec.mood, spec.accent, spec.typeface)
     hero = pick_hero(m.images, spec.hero_offset, m.photo_labels,
-                     m.trade_kind, m.size_of, m.photo_vision)
+                     m.trade_kind, m.size_of, m.photo_vision,
+                     own=frozenset(m.photos))
     if hero:
         m.spent.add(hero)
 
@@ -1680,7 +1771,8 @@ def build_from_spec(brief: dict, spec: SiteSpec) -> str:
     # `plan_for` has always done it in this order, which is why the plan and
     # the page disagreed about how many gallery tiles there were.
     hero_photo = pick_hero(m.images, spec.hero_offset, m.photo_labels,
-                           m.trade_kind, m.size_of, m.photo_vision)
+                           m.trade_kind, m.size_of, m.photo_vision,
+                           own=frozenset(m.photos))
     if hero_photo:
         m.spent.add(hero_photo)
 

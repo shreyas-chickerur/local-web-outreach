@@ -19,7 +19,24 @@ import re
 from dataclasses import dataclass
 from dataclasses import field as dc_field
 
-from app.workbench.types import Confidence, RawClaim
+from app.workbench.types import Confidence, RawClaim, SourceType
+
+# BRIEF §5, content census: `fact:address`/`fact:phone` were the largest
+# share of facts dropped as "no source verified" — 7 of the corpus's 19
+# fixtures, every one of them a single, uncontested Google Business Profile
+# claim (never Yelp alone, never their own site alone). The other dropped
+# instances (12, more than these 7) are genuine CONFLICTS — two sources
+# disagreeing on the address or the number — and stay dropped; recovering
+# those would mean guessing which source is right, which this module exists
+# to refuse.
+#
+# A Google Business Profile listing is not an anonymous scrape: Google
+# verifies it against the business itself (mail, phone, or video
+# verification) before it goes live, which is a real, if different, kind of
+# corroboration — closer to a second source than to an unverified web
+# claim. Scoped to address and phone only, the two fields this was checked
+# against; not extended to every field on the strength of two examples.
+_GBP_ALONE_IS_ENOUGH = frozenset({"address", "phone"})
 
 _COUNTRY_SUFFIXES = (", usa", ", united states", ", us")
 _STREET_ABBREV = {
@@ -145,12 +162,15 @@ def corroborate(claims: list[RawClaim]) -> list[Fact]:
                     "source_url": c.source_url}
                    for claims in ranked[1:] for c in claims]
         distinct = len({c.source_url for c in winning})
+        solo_gbp = (distinct == 1 and field_name in _GBP_ALONE_IS_ENOUGH
+                   and all(c.source_type == SourceType.GBP for c in winning))
+        verified = distinct >= 2 or solo_gbp
         facts.append(Fact(
             field=field_name,
             value=winning[0].value,
-            confidence=Confidence.VERIFIED if distinct >= 2 else Confidence.UNVERIFIED,
-            score=(min(0.6 + 0.15 * distinct, 0.98) - (0.1 if dissent else 0.0)
-                   if distinct >= 2 else 0.5),
+            confidence=Confidence.VERIFIED if verified else Confidence.UNVERIFIED,
+            score=((min(0.6 + 0.15 * distinct, 0.98) - (0.1 if dissent else 0.0))
+                   if distinct >= 2 else (0.65 if solo_gbp else 0.5)),
             corroborations=distinct,
             sources=[{"source_type": c.source_type.value, "source_url": c.source_url}
                      for c in winning],

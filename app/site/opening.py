@@ -319,7 +319,7 @@ def available_positions(brief: dict) -> list[str]:
         return ["type"]
     hero = pick_hero(material.images, 0, material.photo_labels,
                      material.trade_kind, material.size_of,
-                     material.photo_vision)
+                     material.photo_vision, own=frozenset(material.photos))
     return firstscreen.available(material, hero)
 
 
@@ -390,7 +390,7 @@ def sampled_accents(brief: dict) -> list[str]:
         return []
     hero = pick_hero(material.images, 0, material.photo_labels,
                      material.trade_kind, material.size_of,
-                     material.photo_vision)
+                     material.photo_vision, own=frozenset(material.photos))
     return palette.sample_accents(material, hero)
 
 

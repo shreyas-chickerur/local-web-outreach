@@ -10,8 +10,8 @@
     "google returns 5 locations under this name in one search"
   ],
   "design_direction": {
-    "accent": "navy",
-    "architecture": "ledger",
+    "accent": "yellow",
+    "architecture": "banded",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -19,7 +19,7 @@
     },
     "defect": "",
     "emphasis": [
-      "credentials",
+      "reviews",
       "services"
     ],
     "first_screen": "proof",
@@ -28,15 +28,17 @@
     "kind": "style",
     "lead_with": "reviews",
     "mood": "industrial",
-    "rationale": "This is a trade a homeowner calls in an emergency and wants reassurance fast: the named technicians in glowing reviews and the sheer volume of 5-star ratings are stronger proof than a bare stats band, so lead with reviews and back it with credentials and services rather than repeating the previous site's stats-led, banded, all-caps stamp. Navy (sampled from their own van livery) reads as trustworthy and calm against the industrial trade mood, distinct from the yellow-heavy version already built.",
+    "rationale": "With 6,203 Google reviews and named-technician testimonials as the strongest asset, the first screen should put that trust proof front and centre rather than repeat the stats-led, stamped-and-ledgered look already used elsewhere; a calmer quiet type treatment with a banded rhythm and a single full-size quote still reads as a trade site but avoids duplicating the near-identical recent design.",
     "read_by": "claude",
-    "signature": "ticker",
-    "signature_why": "A thin running line of the review count, years served, and same-day availability gives a skeptical homeowner the proof-facts a plumber needs without turning the whole first screen into a stat block like the last site did.",
-    "suppress": [],
-    "type_treatment": "stamped",
+    "signature": "quote",
+    "signature_why": "A plumber's real proof is what a named customer said about a named tech, so setting one review at full size does more work than a stat band ever could.",
+    "suppress": [
+      "features"
+    ],
+    "type_treatment": "quiet",
     "typeface": "oswald-inter",
     "understood": [
-      "This is a trade a homeowner calls in an emergency and wants reassurance fast: the named technicians in glowing reviews and the sheer volume of 5-star ratings are stronger proof than a bare stats band,"
+      "With 6,203 Google reviews and named-technician testimonials as the strongest asset, the first screen should put that trust proof front and centre rather than repeat the stats-led, stamped-and-ledgered"
     ],
     "unsupported": []
   },

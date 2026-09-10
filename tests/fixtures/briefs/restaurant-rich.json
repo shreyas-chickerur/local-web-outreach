@@ -7,7 +7,7 @@
   "chain_signals": [],
   "design_direction": {
     "accent": "terracotta",
-    "architecture": "gallery",
+    "architecture": "stacked",
     "contradictions": [],
     "cta": {
       "kind": "book",
@@ -15,26 +15,26 @@
     },
     "defect": "",
     "emphasis": [
-      "about",
+      "gallery",
       "reviews"
     ],
     "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "gallery",
+    "lead_with": "about",
     "mood": "warm",
-    "rationale": "The Heritage Table has eight strong photographs and a genuine sense of place \u2014 a lit house-building at night, a working kitchen garden, plated dishes \u2014 so the site should still open on imagery, but a split screen with the name inset in the corner of the exterior shot reads as a distinct restaurant rather than repeating the last dish-behind-name template. The wide, spaced wordmark and warm terracotta (from the string-lit exterior and cocktail shots) carry the 'uniquely comfortable fine dining' po",
+    "rationale": "The Heritage Table is a house-turned-restaurant with a real story \u2014 building history, whole-animal sourcing, a named chef \u2014 and only four photographs are strong enough to carry a gallery-led opening, so the first screen should split evenly between a photo and the story rather than let imagery alone do the work. Leading with about and pulling reviews and gallery up as secondary emphasis gives a visitor the narrative and the social proof a fine-dining-but-neighbourly spot needs before they book, w",
     "read_by": "claude",
-    "signature": "corner_inset",
-    "signature_why": "The building itself \u2014 the lit-up house at night \u2014 is their most recognisable image, so setting the name into its corner rather than floating over a dish makes the place, not a plate, the first thing people recognise.",
+    "signature": "margin_note",
+    "signature_why": "A short line of their own philosophy set beside the story text lets the farm-to-table ethos speak in the owner's own words without staging another photo spread.",
     "suppress": [
-      "partners"
+      "stats"
     ],
     "type_treatment": "wide",
-    "typeface": "fraunces-narrow-jost",
+    "typeface": "fraunces-karla",
     "understood": [
-      "The Heritage Table has eight strong photographs and a genuine sense of place \u2014 a lit house-building at night, a working kitchen garden, plated dishes \u2014 so the site should still open on imagery, but a "
+      "The Heritage Table is a house-turned-restaurant with a real story \u2014 building history, whole-animal sourcing, a named chef \u2014 and only four photographs are strong enough to carry a gallery-led opening, "
     ],
     "unsupported": []
   },

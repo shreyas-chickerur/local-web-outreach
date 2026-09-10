@@ -18,23 +18,23 @@
       "reviews",
       "services"
     ],
-    "first_screen": "proof",
+    "first_screen": "facts",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "People hire a plumber on trust and proof, not atmosphere: the 4.9/4.8 ratings and thousands of reviews are the strongest asset they have, so lead with those hard numbers and the guarantee, then back it up with real work photos and quoted reviews. A stamped, condensed trade-shop wordmark with a ledger rhythm and a red accent pulled from their own trucks and uniforms reads as a serious, established local outfit rather than a decorative small business.",
+    "rationale": "People call a plumber on proof, not atmosphere: with 2,272 Google reviews at 4.9 stars, leading with that number and the guarantee text builds trust in the first three seconds, and a trade-shop stamped wordmark with a ledger rhythm reads as a serious licensed outfit rather than a lifestyle brand.",
     "read_by": "claude",
     "signature": "none",
-    "signature_why": "A repeated licence/guarantee mark reinforces that these are vetted, licensed pros \u2014 the exact thing a homeowner checks before calling a plumber.",
+    "signature_why": "A plumber's credibility rests on licensing and guarantee, so repeating that mark like a certification stamp tells a homeowner this is a licensed, accountable outfit before they even scroll.",
     "suppress": [
-      "menu"
+      "recognition"
     ],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "People hire a plumber on trust and proof, not atmosphere: the 4.9/4.8 ratings and thousands of reviews are the strongest asset they have, so lead with those hard numbers and the guarantee, then back i"
+      "People call a plumber on proof, not atmosphere: with 2,272 Google reviews at 4.9 stars, leading with that number and the guarantee text builds trust in the first three seconds, and a trade-shop stampe"
     ],
     "unsupported": []
   },

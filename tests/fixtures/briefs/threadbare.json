@@ -14,38 +14,35 @@
     },
     "defect": "",
     "emphasis": [
-      "services",
       "contact"
     ],
     "first_screen": "type",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "services",
+    "lead_with": "contact",
     "mood": "industrial",
-    "rationale": "With only one small photo, there's nothing to lead with visually, so the page should open on bold type alone and get straight to what he does and how to reach him \u2014 a trade-shop wordmark over a clear services list reads as competent and no-nonsense, which is what someone hiring a handyman actually checks for.",
+    "rationale": "With only one small photo to work with, the page should lead with the name set like a trade mark and get straight to the phone number and address \u2014 a visitor googling a handyman wants to know who they are and how to reach them, not to look at a picture too small to matter.",
     "read_by": "claude",
     "signature": "none",
-    "signature_why": "A handyman's site should read like a trade van door, not a design showpiece \u2014 there's no imagery to hang a mark on, so the name set heavy is the whole statement.",
-    "suppress": [
-      "gallery"
-    ],
+    "signature_why": "A single trade name set heavy and tight reads like a truck door or a work van, which is exactly the trust signal a handyman needs, without borrowing a photo that isn't strong enough to carry the page.",
+    "suppress": [],
     "type_treatment": "stamped",
-    "typeface": "oswald-barlow",
+    "typeface": "",
     "understood": [
-      "With only one small photo, there's nothing to lead with visually, so the page should open on bold type alone and get straight to what he does and how to reach him \u2014 a trade-shop wordmark over a clear "
+      "With only one small photo to work with, the page should lead with the name set like a trade mark and get straight to the phone number and address \u2014 a visitor googling a handyman wants to know who they"
     ],
     "unsupported": []
   },
   "facts": [
     {
       "candidates": [],
-      "confidence": "unverified",
+      "confidence": "verified",
       "corroborations": 1,
       "dissent": [],
       "field": "address",
       "label": "Address",
-      "score": 50,
+      "score": 65,
       "sources": [
         {
           "source_type": "google",
@@ -56,12 +53,12 @@
     },
     {
       "candidates": [],
-      "confidence": "unverified",
+      "confidence": "verified",
       "corroborations": 1,
       "dissent": [],
       "field": "phone",
       "label": "Phone",
-      "score": 50,
+      "score": 65,
       "sources": [
         {
           "source_type": "google",

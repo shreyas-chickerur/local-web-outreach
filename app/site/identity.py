@@ -88,7 +88,7 @@ def perturb(brief: dict, config: dict, previous: list[dict]) -> tuple[dict, str]
 
         hero = pick_hero(material.images, 0, material.photo_labels,
                          material.trade_kind, material.size_of,
-                         material.photo_vision)
+                         material.photo_vision, own=frozenset(material.photos))
     except Exception:                                          # noqa: BLE001
         hero = None
 

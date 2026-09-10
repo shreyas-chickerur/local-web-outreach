@@ -611,6 +611,32 @@ def test_an_unmeasurable_image_is_not_treated_as_a_bad_one(monkeypatch):
     assert render_module.pick_hero(("only",)) == "only"
 
 
+def test_a_non_food_trades_stray_menu_items_never_render():
+    """`extract_menu_items` anchors on a bare dollar amount, which is not a
+    signal only a restaurant's page can trip — `law-rich` published "12
+    dishes on the menu" at $812, $55 and $49 a plate, each one actually a
+    line off its own "Notable Results" settlement-amount page. Nothing
+    upstream of rendering knows this is a false positive; `trade_kind` is
+    the corroboration that catches it, in both places `menu_items` reaches
+    the page (BRIEF §5, content census)."""
+    brief = _brief(trade="Attorney", published={
+        **_brief()["published"],
+        "menu_items": [{"name": "Wrongful Death Verdict", "price": "$49",
+                        "description": "MILLION"}]})
+    page, _ = build(brief)
+    assert 'id="menu"' not in page
+    assert "dishes on the menu" not in page.lower()
+    assert "Wrongful Death Verdict" not in page
+
+
+def test_a_food_trades_menu_items_still_render():
+    """The guard above must not silence a real menu."""
+    brief = _brief(trade="Restaurant")
+    page, _ = build(brief)
+    assert 'id="menu"' in page
+    assert "dishes on the menu" in page.lower()
+
+
 def test_a_feature_row_is_not_a_heading_over_a_wall_of_text():
     """The opening sentence carries the section and the rest supports it. A
     heading and one undifferentiated paragraph is the shape of filler."""
@@ -634,6 +660,12 @@ def test_proxied_photographs_are_offered_at_several_widths():
     sent the 2400 version to display at 390 points."""
     rich = _rich()
     rich["place_photos"] = [f"places/x/photos/{n}" for n in range(9)]
+    # This tests the srcset a PROXIED hero gets, not hero selection policy —
+    # `_rich()`'s own-site photos now win the (unrelated) tie-break for
+    # authenticity (`HERO_WEIGHTS["own_photo"]`) since neither side has a
+    # measurable size in this test, which would otherwise make the hero one
+    # of them instead of a proxied one.
+    rich["published"] = {**rich["published"], "photos": []}
     page, _ = build(rich)
     assert "?w=800 800w" in page and "2400w" in page
     assert "image-set(" in page              # the hero is a background image

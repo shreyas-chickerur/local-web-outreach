@@ -7,8 +7,8 @@
     "their own site has a locations page"
   ],
   "design_direction": {
-    "accent": "amber",
-    "architecture": "gallery",
+    "accent": "terracotta",
+    "architecture": "banded",
     "contradictions": [],
     "cta": {
       "kind": "order",
@@ -25,15 +25,17 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "warm",
-    "rationale": "Hutchins BBQ sells itself on the food and the packed-house atmosphere its ten strong photos already prove, so the gallery still leads \u2014 but I've swapped the stamped trade-shop lockup for wide-tracked type and a scrolling strip of photos instead of a static grid, so it reads as a beloved local joint rather than a workshop, and pulled the accent to amber (still sampled from their own porch/sign lighting) so it doesn't sit on the same terracotta-stamped-gallery look already used elsewhere.",
+    "rationale": "Hutchins has real photography of the smoke, the crowd, and the trays, plus a near-perfect review record (4.8 from nearly 14,000 people) \u2014 the site should open on that food and prove its popularity fast, then move visitors straight to ordering or booking catering, which is the actual business.",
     "read_by": "claude",
-    "signature": "scroll_gallery",
-    "signature_why": "With ten strong photos of smoke, crowds and trays, letting them run off the edge in a scrolling strip says \"busy, real, and there's more\" without boxing the food into a static grid.",
-    "suppress": [],
-    "type_treatment": "wide",
-    "typeface": "oswald-inter",
+    "signature": "duotone",
+    "signature_why": "A strip of the smoked-meat spread rendered in warm duotone with one full-colour break reads like the pitmaster's own photo of the tray, not a stock food shot.",
+    "suppress": [
+      "features"
+    ],
+    "type_treatment": "stamped",
+    "typeface": "oswald-barlow",
     "understood": [
-      "Hutchins BBQ sells itself on the food and the packed-house atmosphere its ten strong photos already prove, so the gallery still leads \u2014 but I've swapped the stamped trade-shop lockup for wide-tracked "
+      "Hutchins has real photography of the smoke, the crowd, and the trays, plus a near-perfect review record (4.8 from nearly 14,000 people) \u2014 the site should open on that food and prove its popularity fas"
     ],
     "unsupported": []
   },

@@ -1227,3 +1227,242 @@ One unrelated finding surfaced in passing and flagged separately rather
 than fixed here (out of scope for this phase): `law-rich`'s stats band
 prints "Dishes on the menu" as its third stat label — a restaurant-trade
 label applied to a law firm.
+
+**Correction, written during Phase 3**: this turned out not to be a
+cosmetic label bug at all — see Round 3, Phase 3 below. Fixed there,
+along with the same defect on four other non-food fixtures.
+
+# Round 3, Phase 3 — acting on the content census
+
+BRIEF §5, Slice D item 2: "fix what it exposes." Four items, named in the
+round's own instructions (3a-3d), each decided on its own evidence before
+any code was written, per fixture where the numbers disagreed with intuition.
+
+## 3a — a business's own photography, never once selected
+
+`own_site_photos` measured 0 of 4 ever used, corpus-wide, before this.
+`Material.images` put Google's photos first — "nearly always better than
+what the business put on its own site" — and every section beyond the
+hero spends from the pool in plain first-N order, so Google's larger
+pool never ran dry before reaching the business's own.
+
+**Decision: prefer AND reserve, not one or the other.** `Material.images`
+reversed to own-first, Google-second — this is what "reserve" actually
+means for a first-N consumer, since order is the only lever those
+sections have. Hero additionally got a real, small `own_photo` scoring
+term (`HERO_WEIGHTS["own_photo"] = 0.2`) — real weight, not just a
+position — but calibrated to only break a close tie, never override a
+resolution/aspect/quality gap Google's photo actually wins. Checked
+directly against all 19 fixtures with own photos: zero fingerprint values
+changed anywhere (`hero_subject` included) — Google's photos were simply,
+verifiably, better on the terms this scores, everywhere they were tried;
+this pass earns its "prefer" credit at the gallery/offer-card level, not
+by moving what leads the page. One test fixture (`test_proxied_
+photographs_are_offered_at_several_widths`) had accidentally been relying
+on Google-first order to test something unrelated (proxied-photo srcset
+widths) — fixed by clearing its own-site photos, not by weakening the
+new preference.
+
+Content-only: `make check` (post-fix, pre-redecide) showed zero
+fingerprint moves, only render-snapshot drift on the fixtures that
+actually had own photos. Regenerated.
+
+## 3b — `menu_media`, extracted since Slice A, read by nothing
+
+`Material` never had a `menu_media` field at all — `material_from_brief`
+dropped it on the floor before any section builder could have read it
+even if one tried. Added the field; `_menu()` now uses the first entry
+(never more — one document, not several) as a direct link (PDF) or an
+embedded image, appended after parsed `menu_items` when there are any,
+or as the section's only content when there are not.
+
+Also gated behind `trade_kind == "food"` — see 3c below for why that
+guard exists and what it was already protecting `_stats()` from.
+
+**Moves the corpus.** `restaurant-rich` has `menu_media` but no parsed
+`menu_items` — `_menu()` returning content for the first time added a
+`menu` section to its `section_order`/`compositions` that was not there
+before. Batched into the round's one redecide (see close-out below).
+
+## 3c — the real bug 3a's investigation surfaced: `menu_items` on a law firm
+
+Not one of the four named items, but found while confirming 3b touched
+nothing it shouldn't: `law-rich` was rendering "12 dishes on the menu" in
+its stats band, at prices of $812, $55, $49 — each one actually a line
+off the firm's own "Notable Results" settlement-amounts page.
+`extract_menu_items` (BRIEF era, `app/workbench/extract.py`) anchors on
+ANY bare dollar-amount pattern as the one unambiguous signal of a priced
+item — sound for a restaurant, and it does not know what business it is
+reading. Scanned the whole corpus for the same shape: **5 of 19
+fixtures** had it — `law-rich` (settlement amounts), `dentist` (a
+promotional "Special $500"), `hvac-rich` (a coupon, "10% Off... $109"),
+`hvac-second` (a financing banner, "$0 DOWN"), `roofer-rich` (an
+insurance estimate line, "$20,783.75") — every one a false positive, none
+a real menu.
+
+**Fix: gate on `trade_kind == "food"`, at both places `menu_items`
+reaches the page** (`_stats()`'s tile, `_menu()`'s whole section) —
+`plan_for`'s own architecture (a section's presence is read from whether
+its builder actually produced HTML, never re-derived) means gating the
+builders was sufficient; no separate plan-vs-page reconciliation needed.
+Confirmed the standing test fails against the reverted guard and passes
+restored (`test_a_non_food_trades_stray_menu_items_never_render`); a
+sibling test confirms real food-trade menus are untouched.
+
+This closes the exact defect a previous phase's design review sample
+would have flagged as "mislabeled stat" and had already spawned a
+follow-up task for — dismissed as superseded once this landed (see
+above).
+
+## 3c (as asked) — the `block:feature` 4-block cap
+
+The single biggest drop in the census (40 blocks on one fixture alone).
+Checked what items 5+ actually were before touching the number, fixture
+by fixture: `law-rich` (14 total) is a clean 14-question FAQ, substantive
+writing cut off arbitrarily; `barbecue`, `hvac-second`, `roofer-rich`
+(12-14 each) are real catering/service/FAQ detail. Some IS noise —
+`dentist-rich`'s items 7-9 are customer names ("Melody H.") that belong
+in reviews, not features — but that noise starts around item 7 on every
+fixture checked, not item 5.
+
+**Decision: raise 4 -> 6** (`FEATURE_CAP` in `app/site/render.py`).
+Recovers most of the genuine loss (two more rows everywhere it applies)
+while staying short of where the miscategorised content starts on the
+fixtures this was checked against — disclosed as a fixture-checked
+finding, not a guarantee for content this has not seen; the actual
+defect (a scraper filing testimonials as "feature") belongs to Slice D's
+provenance work, not to this number.
+
+Effect on page length: +1-2KB on the affected fixtures (verified
+directly, e.g. `law-rich` 73037 -> 74205 bytes). Effect on
+`test_the_corpus_matches_only_the_forbidden_defaults_we_know_about`:
+none — re-ran it immediately after the cap change alone, before the
+redecide, and it still passed unchanged. Content-only by itself; no
+fingerprint value moved from the cap in isolation.
+
+## 3d — `fact:address`/`fact:phone`, dropped as "no source verified"
+
+Read the actual `facts` array for every dropped instance (19 total,
+corpus-wide) rather than guessing at the shape of the problem:
+
+    7  single, uncontested Google Business Profile claim (never Yelp
+       alone, never their own site alone)
+    12 genuine CONFLICT — two sources actually disagree (a law firm's
+       Google phone number and its own site's number were different
+       numbers entirely)
+
+The 12 conflicts are the majority and are correctly dropped —
+`app/workbench/corroborate.py`'s own stated rule is "never presented as
+fact" when sources disagree, and recovering those would mean guessing
+which source is right, which is exactly what the module exists to
+refuse. The 7 single-Google cases are different in kind: a GBP listing
+is verified against the business by Google itself (mail, phone, or video
+verification) before it goes live, which is a real corroboration, just
+not an "independent second source" in the sense the rule was written
+for.
+
+**Decision: a lone Google Business Profile claim now verifies address
+and phone on its own** (`_GBP_ALONE_IS_ENOUGH`, scoped to exactly these
+two fields — not extended to every field on the strength of two
+examples). Standing tests added and confirmed against the reverted code
+(`test_a_lone_google_claim_verifies_address_and_phone`); the two
+existing tests that encoded the OLD blanket rule
+(`test_one_source_is_only_unverified`,
+`test_the_same_source_twice_does_not_corroborate_itself`) were updated
+to test it against a non-Google source instead, preserving their actual
+point (a lone source, or a duplicated one, still is not independent
+corroboration) rather than being weakened or deleted.
+
+Applied to the frozen fixture corpus by patching the 7 existing `facts`
+entries directly (confidence + score, matching what `corroborate()` would
+now produce from the same stored candidates/sources) — no re-research,
+no new network call, since the raw claims that motivated "unverified"
+haven't changed, only how they are scored.
+
+**Moves the corpus.** Four fixtures (`bare-trade`, `contractor-bare`,
+`dentist-rich`, `threadbare`) gained a `contact` section they did not
+have before, now that an address or phone exists to show. Batched into
+the round's one redecide.
+
+## A bug in the census tool itself, found verifying 3a's "no fingerprint
+## moved" claim
+
+`content_census.py`'s grand-total aggregator stripped the
+"(subset of photos, informational)" annotation off `own_site_photos`
+before summing it — which meant it was being added to the OVERALL total
+a second time, on top of the "photos" row it is explicitly a subset of.
+Every corpus-wide percentage this project has quoted from this tool
+carried a small, consistent overcount (766 total instead of the true
+762) that happened to still round to the same headline "73%" both ways,
+which is exactly how a double-count hides — it does not have to change
+the answer to be wrong. Fixed by excluding any row marked
+"informational" from the grand-total sums entirely, keeping it in the
+per-fixture diagnostic output where it is still useful.
+
+`content_census.py`'s own hardcoded strings — "no section builder reads
+this field at all" for `menu_media`, a literal "4" for the feature cap —
+also went stale the moment 3b/3c shipped, the exact "two copies drift
+apart" failure this project keeps finding, this time in its own
+measurement tool. Fixed: `menu_media`'s line now checks the real built
+page; the feature-cap line imports `FEATURE_CAP` instead of restating it.
+
+## Binding claims
+
+**Primary.** Content census overall percentage improves and every
+individual metric named in 3a-3d moves in the right direction, with the
+new percentage attributable to specific, explained fixes rather than a
+tooling artifact (checked directly: the census-tool bug above was found
+and fixed BEFORE trusting any of these numbers).
+
+**Secondary.** `make check` green after the one redecide the round's
+corpus-moving items (3b, 3d) require; zero collisions across all 171
+pairs; no judging round.
+
+## Falsification
+
+If raising `FEATURE_CAP` had pushed any fixture over a forbidden-default
+threshold, or lengthened a page enough to look templated, that would be
+grounds to prefer a smaller number or a different mechanism — checked
+directly (byte counts, the forbidden-defaults test) and neither
+happened.
+
+If the Google-alone corroboration change had recovered a fact that
+turned out to be WRONG on inspection (a real address/phone mismatch
+Google itself had wrong), that would be reason to reconsider a blanket
+"Google alone is enough" rule — inspected all 7 promoted facts by hand;
+none contradicts what the business's own site or a second directory
+would say, only the CONFLICTING cases (correctly excluded) show that
+kind of disagreement.
+
+## Outcome — 2026-09-09
+
+All four items landed. Content census overall: **73% -> 77%** (556/766
+double-counted -> 559/762 corrected pre-redecide -> 588/762 with all four
+fixes applied), the first count using the corrected, non-double-counting
+denominator throughout so the improvement is comparable start to finish:
+
+    own_site_photos   0% -> fully absorbed into `photos`, no longer its
+                      own dropped category — every fixture with own
+                      photos now uses at least one
+    menu_media        0% -> 38% (3 of 8)
+    block:feature      36% -> 52% (53/148 -> 77/148)
+    fact:address       42% -> 68% (8/19 -> 13/19)
+    fact:phone         56% -> 67% (10/18 -> 12/18)
+    OVERALL            73% -> 77% (corrected denominator both readings)
+
+One redecide, covering 3b (the menu fallback) and 3d (newly-verified
+contact facts) — 3a and 3c, verified content-only, needed none. Zero
+collisions on the first attempt across all 171 pairs. Same-trade mean
+moved 56.10% -> 61.52%; the corpus's closest-ever pair is now
+`barbecue`/`barbecue-rich` at 17% (eight of twelve axes shared) —
+reported, not judged, per the round's no-judging-round rule. Agreement
+stays 0 of 0, deliberately, for the same reason as Phase 1/2: nothing
+live to retire, nothing added. `make check` green (848 passed) — see
+`.reviews/<phase>.md` for the literal tail.
+
+A fifth, unplanned fix landed alongside 3c: the mislabeled "Dishes on the
+menu" stat flagged in passing during Phase 2 turned out to be the exact
+`extract_menu_items` false-positive this section describes, affecting 5
+fixtures, not 1 — fixed by the same `trade_kind == "food"` guard, not a
+separate patch. A `spawn_task` suggestion made for the narrower version
+of this bug was superseded and is stale.

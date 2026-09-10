@@ -6,7 +6,7 @@
   ],
   "chain_signals": [],
   "design_direction": {
-    "accent": "navy",
+    "accent": "orange",
     "architecture": "ledger",
     "contradictions": [],
     "cta": {
@@ -15,35 +15,36 @@
     },
     "defect": "",
     "emphasis": [
+      "stats",
       "reviews"
     ],
-    "first_screen": "facts",
+    "first_screen": "proof",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
     "lead_with": "stats",
     "mood": "industrial",
-    "rationale": "Only one photo is big enough to lead with and the rest are small work shots, mixed reviews included a serious complaint, so the safest first thing to show is the solid 4.7 rating and review count rather than gambling on imagery or a curated quote. A trade sells competence before atmosphere, and a stamped condensed wordmark with a ledger rhythm reads as a working trade outfit, not a boutique.",
+    "rationale": "Someone calling a plumber is checking competence and trust before anything else \u2014 the rating and mixed reviews need to be visible immediately, not the handful of small work photos, which only support the story here rather than lead it. A trade-shop stamped wordmark and ledger rhythm read as a working outfit, not a boutique, which is exactly the impression this business earns.",
     "read_by": "claude",
     "signature": "ticker",
-    "signature_why": "A thin line of ratings and review counts running under the fold reads like a service record, which is exactly what someone calling a plumber wants to check before dialing.",
+    "signature_why": "A thin running line of rating, review count, and years-on-the-job gives a nervous emergency caller the proof they need before they ever scroll to a photo.",
     "suppress": [],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "Only one photo is big enough to lead with and the rest are small work shots, mixed reviews included a serious complaint, so the safest first thing to show is the solid 4.7 rating and review count rath"
+      "Someone calling a plumber is checking competence and trust before anything else \u2014 the rating and mixed reviews need to be visible immediately, not the handful of small work photos, which only support "
     ],
     "unsupported": []
   },
   "facts": [
     {
       "candidates": [],
-      "confidence": "unverified",
+      "confidence": "verified",
       "corroborations": 1,
       "dissent": [],
       "field": "address",
       "label": "Address",
-      "score": 50,
+      "score": 65,
       "sources": [
         {
           "source_type": "google",
@@ -54,12 +55,12 @@
     },
     {
       "candidates": [],
-      "confidence": "unverified",
+      "confidence": "verified",
       "corroborations": 1,
       "dissent": [],
       "field": "phone",
       "label": "Phone",
-      "score": 50,
+      "score": 65,
       "sources": [
         {
           "source_type": "google",

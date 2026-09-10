@@ -39,35 +39,55 @@ LABELS = "e3b0c442"
 # LABELS is the same value for the same reason: no live verdict, held-out
 # or otherwise.
 HELD_OUT = "e3b0c442"
-SAME_TRADE_MEAN = 0.5610
-# A cost-minimising pass over the rest of Slice C (BRIEF §5): four more
-# corroborated contractor facts (service area, financing, a named
-# manufacturer certification, response time — the same discipline as the
-# first four, each found only by matching the business's own text, never
-# generated); a genuine third `services` composition ("feature", exactly
-# three items, no card — `density.LAYOUTS` has named this composition since
-# the density module was written, and `_services` rendered it with the same
-# bordered-card markup as the dense grid until now, differing only in
-# count, which is exactly the kind of axis `test_axes_are_real.py` exists
-# to catch); a second `reviews` composition (two or three, stacked, no
-# card); per-trade `gallery`/`contact` headings ("Have a look around" and
-# "Come and see us" fit a business a visitor walks into, not a contractor
-# who drives to the customer). Content-only otherwise (`tools/
-# content_census.py`, a structural diff per iteration, a blast-radius
-# guard, render snapshots) needed no redecide at all — see
-# `.reviews/first-pass.md`.
+SAME_TRADE_MEAN = 0.6152
+# Round 3, Phase 3 (BRIEF §5, content census — acting on what it exposed,
+# `.reviews/<phase>.md`):
 #
-# Every one of those touches `compositions`, `section_order`, or both, so
-# this re-decided the corpus (ruler and rule UNCHANGED — none of it touches
-# a weight or an axis definition). Zero collisions on the first attempt
-# this time, across all 171 pairs.
+# 3a. A business's own photography now sorts first in `Material.images`
+# (was Google-first), and hero scoring carries a new, deliberately small
+# `own_photo` term — `own_site_photos` measured 0 of 4 ever used before
+# this; verified NO fingerprint value moved from this change alone (hero
+# candidate quality gaps are real and the small bonus never overturns
+# them) — content-only, confirmed by comparing every axis value before
+# and after with nothing else touched.
+# 3b. `menu_media` (a menu PDF or photograph, extracted and stored since
+# Slice A but read by no section builder) now has one: `_menu()` links to
+# it directly when there is no parsed `menu_items` to show, and appends it
+# as a "see the whole menu" link when there is. Moves `section_order` for
+# any fixture that had `menu_media` but no `menu_items` (`restaurant-rich`
+# gained a `menu` section it never had).
+# 3c. `block:feature`'s cap raised 4 -> 6 (`FEATURE_CAP`): checked what
+# items 5+ actually were, fixture by fixture, before moving the number —
+# some corpora are a genuine FAQ or service list cut off arbitrarily;
+# fewer are testimonial- or hours-shaped blocks a scraper mis-filed as
+# "feature", which start appearing around item 7 on the fixtures checked.
+# 6 recovers most of the real loss without reaching that point. Content-
+# only: no fingerprint value moved from the cap alone.
+# 3d. A lone, uncontested Google Business Profile claim now verifies
+# `address`/`phone` on its own (`app/workbench/corroborate.py`) — GBP
+# listings are verified against the business by Google before they go
+# live, a real if different kind of corroboration; scoped to exactly
+# these two fields, not extended to others on the strength of two
+# examples. Genuine conflicts between sources (12 of the corpus's 19
+# dropped facts, more than the 7 lone-Google ones) are UNCHANGED — still
+# never presented as fact. Moves `section_order` for any fixture that
+# gained a `contact` section it did not have before (`bare-trade`,
+# `contractor-bare`, `dentist-rich`, `threadbare`).
 #
-# NO JUDGING ROUND THIS PASS, DELIBERATELY. Agreement was already 0 of 0
-# and every one of the eleven pairs checked last round was DIFFERENT —
-# judging again returns no new signal until the corpus can plausibly
-# produce a "same" pair, and a judging round costs real money for a result
-# already known. All eleven live verdicts were retired (every fold moved)
-# and none replaced; the held-out third is genuinely empty, not stale.
+# 3b and 3d together re-decided the corpus (ruler and rule UNCHANGED — no
+# weight or axis definition moved). Zero collisions on the first attempt,
+# across all 171 pairs. Same-trade mean moved 56.10% -> 61.52%; the
+# closest pair the corpus has ever produced is `barbecue`/`barbecue-rich`
+# at 17% (eight of twelve axes shared) — reported here because BRIEF's own
+# convention is to name the closest pair, not because it was judged: see
+# below.
+#
+# NO JUDGING ROUND THIS PASS, DELIBERATELY (the round's own standing
+# rule). Agreement was already 0 of 0 and every prior verdict was
+# DIFFERENT; judging again spends real money to confirm what is already
+# known rather than test anything new. There were zero live verdicts
+# before this redecide (all retired the previous pass) and there are zero
+# after — nothing to retire this time, and none added.
 AGREEMENT = (0, 0)
 
 

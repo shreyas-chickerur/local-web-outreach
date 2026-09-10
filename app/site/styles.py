@@ -708,6 +708,9 @@ html.reveals .editorial-art.in img{{clip-path:inset(0 0 0 0)}}
 .dishes .n{{font-weight:650;font-size:17px}}
 .dishes .p{{font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}}
 .dishes .d{{grid-column:1/-1;color:var(--dim);font-size:15px;margin:0}}
+.menu-more{{margin:clamp(24px,3vw,36px) 0 0}}
+figure.menu-media{{margin:0}}
+figure.menu-media img{{border-radius:var(--r);max-width:480px}}
 
 /* --------------------------------------------------------------- gallery -- */
 /* A fixed three-column rhythm with one aspect ratio and one gap, so the whole

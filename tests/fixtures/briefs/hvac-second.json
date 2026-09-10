@@ -9,7 +9,7 @@
   ],
   "design_direction": {
     "accent": "yellow",
-    "architecture": "banded",
+    "architecture": "ledger",
     "contradictions": [],
     "cta": {
       "kind": "call",
@@ -18,25 +18,25 @@
     "defect": "",
     "emphasis": [
       "reviews",
-      "credentials"
+      "stats"
     ],
-    "first_screen": "facts",
+    "first_screen": "split",
     "hero_offset": 0,
     "ignored_tokens": [],
     "kind": "style",
-    "lead_with": "stats",
+    "lead_with": "credentials",
     "mood": "industrial",
-    "rationale": "This is a 24/7 emergency HVAC contractor whose entire case is trust and proof \u2014 1,226 reviews at 4.9 stars, a uniformed fleet, and named technicians customers vouch for by name \u2014 so the first screen should lead with those facts rather than a lifestyle photo. I've kept the trade-shop mood, stats lead, and stamped name from the close comparison since those genuinely fit, but switched the architecture to banded and swapped the signature from none to a repeated stamp mark, and pulled the accent from",
+    "rationale": "This is a 24/7 emergency HVAC contractor with only 3 photos strong enough to carry a layout, so the page should open on proof of competence \u2014 credentials and the 4.9/1226-review record \u2014 rather than the stats-led facts screen the last job used; the ledger rhythm and stamp mark read as a licensed trade outfit, and yellow is pulled straight from their own vans and branding rather than invented.",
     "read_by": "claude",
     "signature": "none",
-    "signature_why": "Repeating the licensed-trade mark like a stamped badge across the page reinforces the sense of a certified crew of technicians, which is what a homeowner checks before calling anyone out for AC repair.",
+    "signature_why": "A repeated licence/registration-style mark reassures a homeowner that a 24/7 emergency call-out is going to a properly credentialed outfit, not a stranger with a van.",
     "suppress": [
-      "menu"
+      "features"
     ],
     "type_treatment": "stamped",
     "typeface": "oswald-barlow",
     "understood": [
-      "This is a 24/7 emergency HVAC contractor whose entire case is trust and proof \u2014 1,226 reviews at 4.9 stars, a uniformed fleet, and named technicians customers vouch for by name \u2014 so the first screen s"
+      "This is a 24/7 emergency HVAC contractor with only 3 photos strong enough to carry a layout, so the page should open on proof of competence \u2014 credentials and the 4.9/1226-review record \u2014 rather than t"
     ],
     "unsupported": []
   },

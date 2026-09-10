@@ -12,7 +12,6 @@
     },
     "defect": "",
     "emphasis": [
-      "gallery",
       "reviews"
     ],
     "first_screen": "photo",
@@ -21,15 +20,15 @@
     "kind": "style",
     "lead_with": "gallery",
     "mood": "refined",
-    "rationale": "Nine large, carefully plated dish photographs and unusually detailed five-star reviews are the strongest evidence Ichika has, so the site should open on the food and let the counter-kaiseki precision speak before anything else; a quiet, refined typographic touch keeps the focus on the plates rather than on branding.",
+    "rationale": "Ichika's own photography \u2014 nine dish shots strong enough to lead with, a wood-slatted open kitchen \u2014 is the argument for a five-star kaiseki counter, so the site should open on a full photo and let a wide gallery carry the room; red pulled from their own lacquerware ties the accent to what's actually on the plates rather than a generic Japanese-restaurant red.",
     "read_by": "claude",
-    "signature": "corner_inset",
-    "signature_why": "A quiet type block set into the corner of the sea-urchin dish photo lets the food fill the screen while still naming the restaurant, which suits a kaiseki counter where the plating is the argument.",
+    "signature": "quote",
+    "signature_why": "A single review at display size \u2014 'one of the most memorable meals we've had in the U.S.' \u2014 says more about a kaiseki counter than any badge could, and it's a line the owner could point to and say 'that's why it's there.'",
     "suppress": [],
     "type_treatment": "quiet",
-    "typeface": "cormorant-jost",
+    "typeface": "dm-serif-dm-sans",
     "understood": [
-      "Nine large, carefully plated dish photographs and unusually detailed five-star reviews are the strongest evidence Ichika has, so the site should open on the food and let the counter-kaiseki precision "
+      "Ichika's own photography \u2014 nine dish shots strong enough to lead with, a wood-slatted open kitchen \u2014 is the argument for a five-star kaiseki counter, so the site should open on a full photo and let a "
     ],
     "unsupported": []
   },

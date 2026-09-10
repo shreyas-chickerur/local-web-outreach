@@ -25,9 +25,34 @@ def test_two_independent_sources_verify_a_fact():
 
 
 def test_one_source_is_only_unverified():
-    facts = corroborate([_c("phone", "(469) 294-0067", "https://maps.google/x")])
+    """True for a single source in general — a lone claim from Yelp, their own
+    site, or OSM stays unverified. Google is the one exception: see
+    `test_a_lone_google_claim_verifies_address_and_phone`, BRIEF §5."""
+    facts = corroborate([_c("phone", "(469) 294-0067", "https://yelp.com/x",
+                            SourceType.YELP)])
     assert facts[0].confidence.value == "unverified"
     assert facts[0].is_fact is False
+
+
+def test_a_lone_google_claim_verifies_address_and_phone():
+    """BRIEF §5, content census: `fact:address`/`fact:phone` were the
+    largest share of facts dropped as unverified, every one of them a
+    single, uncontested Google Business Profile claim. A GBP listing is not
+    an anonymous scrape — Google verifies it against the business (mail,
+    phone, or video verification) before it goes live — so scoped to
+    exactly these two fields, a lone Google claim now verifies on its own.
+    """
+    facts = corroborate([_c("phone", "(469) 294-0067", "https://maps.google/x")])
+    assert facts[0].confidence.value == "verified"
+    assert facts[0].is_fact is True
+    assert facts[0].corroborations == 1
+
+
+def test_a_lone_google_claim_does_not_verify_other_fields():
+    """The exception is scoped to address and phone, not extended to every
+    field on the strength of two examples."""
+    facts = corroborate([_c("hours", "Mon-Fri 9-5", "https://maps.google/x")])
+    assert facts[0].confidence.value == "unverified"
 
 
 def test_disagreement_is_a_conflict_that_names_both_sources():
@@ -73,10 +98,12 @@ def test_phones_compare_by_digits(a, b):
 
 
 def test_the_same_source_twice_does_not_corroborate_itself():
-    """Independence is the whole point of the rule."""
+    """Independence is the whole point of the rule. A non-Google source
+    twice over is still one source; see `test_a_lone_google_claim_verifies_
+    address_and_phone` for why Google alone is scored differently."""
     facts = corroborate([
-        _c("phone", "(469) 294-0067", "https://maps.google/x"),
-        _c("phone", "(469) 294-0067", "https://maps.google/x"),
+        _c("phone", "(469) 294-0067", "https://yelp.com/x", SourceType.YELP),
+        _c("phone", "(469) 294-0067", "https://yelp.com/x", SourceType.YELP),
     ])
     assert facts[0].confidence.value == "unverified"
     assert facts[0].corroborations == 1

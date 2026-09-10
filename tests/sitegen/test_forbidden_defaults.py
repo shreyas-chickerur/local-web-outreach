@@ -33,16 +33,15 @@ FIXTURES = Path("tests/fixtures/briefs")
 # entry on its list.
 MATCHES = {
     "barbecue-rich": ["warm cream + serif display + terracotta"],
+    "barbecue": ["warm cream + serif display + terracotta"],
     "restaurant-rich": ["warm cream + serif display + terracotta"],
-    # `law` matched here after the credential-claims redecide (§4) and
-    # dropped out again after the cost-minimising pass over the rest of
-    # Slice C (BRIEF §5 — four more contractor facts, two new
-    # compositions, per-trade gallery/contact headings; one redecide,
-    # `.reviews/first-pass.md`). `restaurant-rich` picked up the same
-    # "warm cream + serif display + terracotta" default in its place. Two
-    # fixtures still match, same as before this pass — which two moved is
-    # a fact about the redecide, not something tuned for; the mood/accent
-    # presets in `app/site/opening.py` decide this, not this test.
+    # `barbecue` picked up the same default after Round 3's redecide
+    # (BRIEF §5, content census — own-photo hero preference, the menu
+    # fallback, a raised feature cap, Google-alone address/phone
+    # verification; `.reviews/<phase>.md`). Three fixtures match now,
+    # not two — which ones move with each redecide is a fact about the
+    # mood/accent presets in `app/site/opening.py`, not something tuned
+    # for here.
 }
 
 
