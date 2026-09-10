@@ -33,6 +33,7 @@ from app.adapters.imageinfo import dimensions_of, measure
 from app.core.claims import CLAIM_RE
 from app.core.config import google_places_api_key, preview_base_url
 from app.site import contractorfacts, contradiction
+from app.site.backdrop import select_backdrop
 from app.site.density import calculate_density_signal, density_attrs
 from app.site.plan import (
     NO_DATA,
@@ -101,6 +102,11 @@ class Material:
     # or a photograph rather than parseable text. BRIEF §5, content census:
     # extracted and stored, but read by no section builder until `_menu()`.
     menu_media: tuple[dict, ...] = ()
+    # BRIEF §5, Slice E: their own video, top of the backdrop preference
+    # ladder (`app.site.backdrop`). Dormant — no extraction path gathers
+    # one yet, so this is empty on every fixture today, disclosed rather
+    # than silently absent.
+    videos: tuple[str, ...] = ()
     # {group_name: [index, ...]} — which of a prose group's own sentences
     # to keep and in what order, frozen once by `app.site.copyselect`
     # (BRIEF §5) and replayed. Empty means "no frozen answer yet, or no
@@ -775,11 +781,34 @@ def _hero(m: Material, spec: SiteSpec, t: Theme,
             background = f'background-image:url(&quot;{e(photo)}&quot;)'
         layers = (f'<div class="bgimg" style="{background}"></div>'
                   f'<div class="veil"></div>')
+    generated_backdrop = False
     if position == "type":
-        # No photograph at all. The name at display size on the theme's own
-        # ground, which is what a page with nothing worth leading with should
-        # look like rather than a grey rectangle.
-        layers = ""
+        # No single photograph chosen to lead. The backdrop preference
+        # ladder (BRIEF §5, Slice E, `app.site.backdrop`) decides what
+        # fills the ground instead of it staying empty — their own video
+        # (dormant), a sequence of their own stills, or an abstract
+        # backdrop generated from the palette, in that order.
+        backdrop = select_backdrop(m)
+        if backdrop.kind == "stills":
+            # One size, not the primary hero's 1x/2x pair — up to four of
+            # these accumulate, and this is a backdrop behind display
+            # type, not the single sharpest thing on the page. Keeps the
+            # weight budget honest rather than paying retina cost four
+            # times over for a background photo.
+            frames = "".join(
+                f'<div class="still" style="background-image:url(&quot;'
+                f'{e(url)}{"&amp;" if "?" in url else "?"}w=1600&quot;)">'
+                f'</div>' if url.startswith("/photo/") else
+                f'<div class="still" style="background-image:url(&quot;'
+                f'{e(url)}&quot;)"></div>'
+                for url in backdrop.stills)
+            layers = (f'<div class="hero-stills">{frames}</div>'
+                     f'<div class="veil"></div>')
+        elif backdrop.kind == "generated":
+            layers = '<div class="hero-generated"></div>'
+            generated_backdrop = True
+        else:
+            layers = ""
     elif position == "split":
         # Type and photograph each taking exactly half, hard-edged. The scrim
         # goes: nothing is set over the picture, so nothing needs veiling.
@@ -818,9 +847,14 @@ def _hero(m: Material, spec: SiteSpec, t: Theme,
                   f'</div>')
 
     classes = (f"hero first-{position} type-{spec.type_treatment or 'quiet'}"
-               + (" has-photo" if layers else ""))
+               + (" has-photo" if layers and not generated_backdrop else "")
+               + (" has-generated-backdrop" if generated_backdrop else ""))
     return (f'<header class="{classes}" id="top">{layers}{body}'
-            + ('<div class="scrollcue"></div>' if layers else "")
+            # A generated backdrop is an abstract wash of colour, not
+            # something with real content to scroll past — the cue stays
+            # reserved for a real photograph or sequence behind the type.
+            + ('<div class="scrollcue"></div>'
+               if layers and not generated_backdrop else "")
             + "</header>")
 
 

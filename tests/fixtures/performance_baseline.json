@@ -1,0 +1,648 @@
+[
+  {
+    "slug": "barbecue-rich",
+    "lcp": 244,
+    "cls": 0,
+    "inp": 160,
+    "weight": 7360858,
+    "samples": [
+      {
+        "lcp": 244,
+        "cls": 0,
+        "inp": 176
+      },
+      {
+        "lcp": 264,
+        "cls": 0,
+        "inp": 160
+      },
+      {
+        "lcp": 236,
+        "cls": 0,
+        "inp": 176
+      },
+      {
+        "lcp": 236,
+        "cls": 0,
+        "inp": 168
+      },
+      {
+        "lcp": 256,
+        "cls": 0,
+        "inp": 168
+      }
+    ]
+  },
+  {
+    "slug": "barbecue",
+    "lcp": 296,
+    "cls": 0,
+    "inp": 64,
+    "weight": 6683429,
+    "samples": [
+      {
+        "lcp": 348,
+        "cls": 0,
+        "inp": 696
+      },
+      {
+        "lcp": 292,
+        "cls": 0,
+        "inp": 224
+      },
+      {
+        "lcp": 296,
+        "cls": 0,
+        "inp": 176
+      },
+      {
+        "lcp": 216,
+        "cls": 0,
+        "inp": 64
+      },
+      {
+        "lcp": 296,
+        "cls": 0,
+        "inp": 256
+      }
+    ]
+  },
+  {
+    "slug": "bare-trade",
+    "lcp": 312,
+    "cls": 0,
+    "inp": 24,
+    "weight": 72326,
+    "samples": [
+      {
+        "lcp": 248,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 304,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 328,
+        "cls": 0,
+        "inp": 32
+      },
+      {
+        "lcp": 312,
+        "cls": 0,
+        "inp": 32
+      },
+      {
+        "lcp": 320,
+        "cls": 0,
+        "inp": 48
+      }
+    ]
+  },
+  {
+    "slug": "contractor-bare",
+    "lcp": 152,
+    "cls": 0,
+    "inp": 16,
+    "weight": 2048802,
+    "samples": [
+      {
+        "lcp": 184,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 152,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 140,
+        "cls": 0,
+        "inp": 32
+      },
+      {
+        "lcp": 136,
+        "cls": 0,
+        "inp": 16
+      },
+      {
+        "lcp": 152,
+        "cls": 0,
+        "inp": 24
+      }
+    ]
+  },
+  {
+    "slug": "dentist-rich",
+    "lcp": 216,
+    "cls": 0,
+    "inp": 24,
+    "weight": 1939515,
+    "samples": [
+      {
+        "lcp": 236,
+        "cls": 0,
+        "inp": 48
+      },
+      {
+        "lcp": 216,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 332,
+        "cls": 0,
+        "inp": 40
+      },
+      {
+        "lcp": 196,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 212,
+        "cls": 0,
+        "inp": 560
+      }
+    ]
+  },
+  {
+    "slug": "dentist",
+    "lcp": 200,
+    "cls": 0,
+    "inp": 32,
+    "weight": 70266,
+    "samples": [
+      {
+        "lcp": 204,
+        "cls": 0,
+        "inp": 160
+      },
+      {
+        "lcp": 196,
+        "cls": 0,
+        "inp": 688
+      },
+      {
+        "lcp": 200,
+        "cls": 0,
+        "inp": 184
+      },
+      {
+        "lcp": 196,
+        "cls": 0,
+        "inp": 32
+      },
+      {
+        "lcp": 204,
+        "cls": 0,
+        "inp": 176
+      }
+    ]
+  },
+  {
+    "slug": "hvac-rich",
+    "lcp": 216,
+    "cls": 0,
+    "inp": 24,
+    "weight": 2695991,
+    "samples": [
+      {
+        "lcp": 216,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 220,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 216,
+        "cls": 0,
+        "inp": 32
+      },
+      {
+        "lcp": 208,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 200,
+        "cls": 0,
+        "inp": 24
+      }
+    ]
+  },
+  {
+    "slug": "hvac-second",
+    "lcp": 188,
+    "cls": 0,
+    "inp": 24,
+    "weight": 4010417,
+    "samples": [
+      {
+        "lcp": 176,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 188,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 204,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 172,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 188,
+        "cls": 0,
+        "inp": 24
+      }
+    ]
+  },
+  {
+    "slug": "hvac",
+    "lcp": 268,
+    "cls": 0,
+    "inp": 0,
+    "weight": 3252513,
+    "samples": [
+      {
+        "lcp": 268,
+        "cls": 0,
+        "inp": 0
+      },
+      {
+        "lcp": 280,
+        "cls": 0,
+        "inp": 0
+      },
+      {
+        "lcp": 264,
+        "cls": 0,
+        "inp": 0
+      },
+      {
+        "lcp": 264,
+        "cls": 0,
+        "inp": 0
+      },
+      {
+        "lcp": 280,
+        "cls": 0,
+        "inp": 136
+      }
+    ]
+  },
+  {
+    "slug": "law-rich",
+    "lcp": 304,
+    "cls": 0,
+    "inp": 32,
+    "weight": 8447159,
+    "samples": [
+      {
+        "lcp": 512,
+        "cls": 0,
+        "inp": 32
+      },
+      {
+        "lcp": 312,
+        "cls": 0,
+        "inp": 40
+      },
+      {
+        "lcp": 292,
+        "cls": 0,
+        "inp": 192
+      },
+      {
+        "lcp": 296,
+        "cls": 0,
+        "inp": 176
+      },
+      {
+        "lcp": 304,
+        "cls": 0,
+        "inp": 152
+      }
+    ]
+  },
+  {
+    "slug": "law",
+    "lcp": 184,
+    "cls": 0,
+    "inp": 24,
+    "weight": 70757,
+    "samples": [
+      {
+        "lcp": 180,
+        "cls": 0,
+        "inp": 160
+      },
+      {
+        "lcp": 196,
+        "cls": 0,
+        "inp": 160
+      },
+      {
+        "lcp": 196,
+        "cls": 0,
+        "inp": 160
+      },
+      {
+        "lcp": 176,
+        "cls": 0,
+        "inp": 168
+      },
+      {
+        "lcp": 184,
+        "cls": 0,
+        "inp": 24
+      }
+    ]
+  },
+  {
+    "slug": "restaurant-bare",
+    "lcp": 252,
+    "cls": 0,
+    "inp": 24,
+    "weight": 4622681,
+    "samples": [
+      {
+        "lcp": 260,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 256,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 240,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 240,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 252,
+        "cls": 0,
+        "inp": 24
+      }
+    ]
+  },
+  {
+    "slug": "restaurant-casual",
+    "lcp": 168,
+    "cls": 0,
+    "inp": 16,
+    "weight": 4906354,
+    "samples": [
+      {
+        "lcp": 168,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 184,
+        "cls": 0,
+        "inp": 144
+      },
+      {
+        "lcp": 168,
+        "cls": 0,
+        "inp": 16
+      },
+      {
+        "lcp": 168,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 160,
+        "cls": 0,
+        "inp": 24
+      }
+    ]
+  },
+  {
+    "slug": "restaurant-rich",
+    "lcp": 252,
+    "cls": 0,
+    "inp": 24,
+    "weight": 3082163,
+    "samples": [
+      {
+        "lcp": 268,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 252,
+        "cls": 0,
+        "inp": 32
+      },
+      {
+        "lcp": 248,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 268,
+        "cls": 0,
+        "inp": 32
+      },
+      {
+        "lcp": 252,
+        "cls": 0,
+        "inp": 24
+      }
+    ]
+  },
+  {
+    "slug": "roofer-rich",
+    "lcp": 260,
+    "cls": 0,
+    "inp": 24,
+    "weight": 71142,
+    "samples": [
+      {
+        "lcp": 276,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 256,
+        "cls": 0,
+        "inp": 144
+      },
+      {
+        "lcp": 268,
+        "cls": 0,
+        "inp": 144
+      },
+      {
+        "lcp": 244,
+        "cls": 0,
+        "inp": 168
+      },
+      {
+        "lcp": 260,
+        "cls": 0,
+        "inp": 160
+      }
+    ]
+  },
+  {
+    "slug": "roofer",
+    "lcp": 276,
+    "cls": 0,
+    "inp": 24,
+    "weight": 7974842,
+    "samples": [
+      {
+        "lcp": 276,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 264,
+        "cls": 0,
+        "inp": 24
+      },
+      {
+        "lcp": 288,
+        "cls": 0,
+        "inp": 40
+      },
+      {
+        "lcp": 264,
+        "cls": 0,
+        "inp": 48
+      },
+      {
+        "lcp": 276,
+        "cls": 0,
+        "inp": 40
+      }
+    ]
+  },
+  {
+    "slug": "salon-rich",
+    "lcp": 320,
+    "cls": 0,
+    "inp": 32,
+    "weight": 4281584,
+    "samples": [
+      {
+        "lcp": 316,
+        "cls": 0,
+        "inp": 32
+      },
+      {
+        "lcp": 324,
+        "cls": 0,
+        "inp": 32
+      },
+      {
+        "lcp": 328,
+        "cls": 0,
+        "inp": 32
+      },
+      {
+        "lcp": 320,
+        "cls": 0,
+        "inp": 48
+      },
+      {
+        "lcp": 312,
+        "cls": 0,
+        "inp": 32
+      }
+    ]
+  },
+  {
+    "slug": "salon",
+    "lcp": 172,
+    "cls": 0,
+    "inp": 0,
+    "weight": 3063693,
+    "samples": [
+      {
+        "lcp": 176,
+        "cls": 0,
+        "inp": 120
+      },
+      {
+        "lcp": 168,
+        "cls": 0,
+        "inp": 112
+      },
+      {
+        "lcp": 188,
+        "cls": 0,
+        "inp": 112
+      },
+      {
+        "lcp": 172,
+        "cls": 0,
+        "inp": 0
+      },
+      {
+        "lcp": 168,
+        "cls": 0,
+        "inp": 120
+      }
+    ]
+  },
+  {
+    "slug": "threadbare",
+    "lcp": 108,
+    "cls": 0,
+    "inp": 0,
+    "weight": 60282,
+    "samples": [
+      {
+        "lcp": 124,
+        "cls": 0,
+        "inp": 0
+      },
+      {
+        "lcp": 108,
+        "cls": 0,
+        "inp": 0
+      },
+      {
+        "lcp": 116,
+        "cls": 0,
+        "inp": 0
+      },
+      {
+        "lcp": 100,
+        "cls": 0,
+        "inp": 0
+      },
+      {
+        "lcp": 108,
+        "cls": 0,
+        "inp": 24
+      }
+    ]
+  }
+]

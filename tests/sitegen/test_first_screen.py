@@ -81,12 +81,30 @@ def test_no_two_positions_open_the_same_way():
                 assert screens[one] != screens[two], (one, two)
 
 
-def test_type_leads_with_no_photograph_at_all():
-    """Not a photographic hero with a missing image — a page composed for type,
-    which is what a business whose pictures were all condemned should get."""
+def test_type_with_photos_available_gets_a_stills_backdrop():
+    """`type` is an editorial choice, not only what a business with
+    nothing to show gets — BRIEF §5's backdrop preference ladder
+    (`app.site.backdrop`): real photos available become a stills
+    sequence rather than the plain, empty ground this position used to
+    be unconditionally. Never `bgimg` — that is the single-photo
+    treatment `photo`/`split`/`facts`/`proof` use; `type` with photos
+    gets the ladder's own `hero-stills` markup instead."""
     screen = first_screen("type")
+    assert "hero-stills" in screen
+    assert "has-photo" in screen
     assert "bgimg" not in screen
+
+
+def test_type_with_no_photographs_at_all_gets_a_generated_backdrop():
+    """A business whose pictures were all condemned, or who has none —
+    the ladder's last real rung: an abstract backdrop from the palette,
+    never a flat, empty ground."""
+    bare = {**BRIEF, "published": {**BRIEF["published"], "photos": []},
+           "photo_sizes": {}}
+    screen = band(build_from_spec(bare, SiteSpec(first_screen="type")))
+    assert "hero-generated" in screen
     assert "has-photo" not in screen
+    assert "bgimg" not in screen
 
 
 def test_split_sets_nothing_over_the_picture():
@@ -155,8 +173,15 @@ def test_the_first_screen_survives_a_round_trip_through_the_spec():
     assert spec_from_config({}).first_screen == "photo"
 
 
-def test_the_scroll_cue_only_appears_when_there_is_a_photograph_to_scroll_past():
-    assert "scrollcue" not in first_screen("type")
+def test_the_scroll_cue_only_appears_when_there_is_something_to_scroll_past():
+    """`type` with real photos now has a stills backdrop worth scrolling
+    past too (BRIEF §5) — only a `type` hero with truly nothing behind it
+    (the generated-backdrop rung) skips the cue."""
+    assert "scrollcue" in first_screen("type")
+    bare = {**BRIEF, "published": {**BRIEF["published"], "photos": []},
+           "photo_sizes": {}}
+    screen = band(build_from_spec(bare, SiteSpec(first_screen="type")))
+    assert "scrollcue" not in screen
     assert "scrollcue" in first_screen("photo")
 
 

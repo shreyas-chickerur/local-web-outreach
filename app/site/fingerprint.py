@@ -37,6 +37,18 @@ from app.site import theme
 # same decision twice. One decision, one axis. It comes back the moment Slice B
 # makes page architecture independently settable, which is what it was always
 # standing in for.
+#
+# `motion` (Slice E's backdrop feature, `app.site.backdrop`) is also
+# deliberately absent, for the same reason. The one live rendering change it
+# makes — a stills or generated backdrop instead of a plain one — only ever
+# fires at `first_screen == "type"`; it is not independently settable, so it
+# is `first_screen`'s consequence rather than a second decision. §3's own
+# test is "changing it alone must change the rendered page" — motion cannot
+# be changed alone while `first_screen` holds still, so it fails that test
+# today. It earns its own axis the day a motion choice varies independently
+# of hero position (e.g. a stills sequence a `photo` or `split` hero can also
+# carry) — a real decision-freeze question of its own, not squeezed in here
+# to raise the count.
 AXES: tuple[str, ...] = (
     "first_screen",
     "type_treatment",

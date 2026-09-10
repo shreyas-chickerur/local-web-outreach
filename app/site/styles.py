@@ -309,6 +309,33 @@ body:has(.hero.first-proof) .bar:not(.stuck){{background:var(--bg);
   line-height:.92}}
 .hero.first-type .sub{{max-width:46ch;opacity:.72}}
 .hero.first-type .wrap{{padding-top:64px;padding-bottom:64px}}
+/* BRIEF §5, Slice E: what fills `first-type` instead of staying empty —
+   the backdrop preference ladder (`app.site.backdrop`). More specific
+   than `.hero.first-type` alone (three classes, not two), so this wins
+   the cascade regardless of source order. */
+.hero.first-type.has-photo{{color:#fff;background:transparent}}
+.hero-stills{{position:absolute;inset:-8% 0 0;z-index:-2;overflow:hidden}}
+.hero-stills .still{{position:absolute;inset:0;background-size:cover;
+  background-position:center;opacity:0;
+  animation:hero-still-cycle 16s ease-in-out infinite}}
+.hero-stills .still:first-child{{opacity:1}}
+.hero-stills .still:nth-child(2){{animation-delay:4s}}
+.hero-stills .still:nth-child(3){{animation-delay:8s}}
+.hero-stills .still:nth-child(4){{animation-delay:12s}}
+@keyframes hero-still-cycle{{
+  0%,6%{{opacity:1}} 25%,100%{{opacity:0}}
+}}
+/* `prefers-reduced-motion` cancels every `animation` globally (see the
+   media query at the foot of this file) — the base state above,
+   `:first-child{{opacity:1}}` and every other `.still` at `opacity:0`, is
+   what is left standing: a single still poster frame, never a page
+   caught mid-crossfade. The same guarantee the deterministic capture
+   pipeline (`tools/contact_sheet.py`) already depends on for every other
+   animated rule on this page — this rung inherits it rather than needing
+   a second one. */
+.hero-generated{{position:absolute;inset:0;z-index:-2;
+  background:linear-gradient(135deg,var(--raise) 0%,var(--bg) 55%,
+    color-mix(in srgb,var(--accent) 18%,var(--bg)) 100%)}}
 
 /* SPLIT — type and photograph at exactly half each, hard-edged. No scrim,
    because nothing is set over the picture.
