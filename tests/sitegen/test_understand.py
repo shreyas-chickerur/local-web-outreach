@@ -51,6 +51,31 @@ def test_the_model_cannot_write_the_button_text():
     assert "Texas" not in str(out)
 
 
+def test_a_long_diagnostic_is_cut_at_a_word_boundary():
+    """A THIRD independent copy of the same defect `_truncate_quote`
+    (`app/site/render.py`) and the `quote` signature device
+    (`app/site/signature.py`) were each already found and fixed for:
+    `_texts()` used to slice `item.strip()[:200]` with no word boundary.
+    Found live in the workbench on a real "unsupported" answer — the
+    model's own explanation ("...the generator only produces static
+    pages with fixed sections and a call/book/order/quote/visit button
+    linked to a phone number or booking page") sliced to
+    "...linked to a phone number or", reading as if the sentence just
+    stops rather than as a shortened one."""
+    long = ("cannot add a live chat widget or any automated booking "
+           "functionality — the generator only produces static pages "
+           "with fixed sections and a call/book/order/quote/visit "
+           "button linked to a phone number or booking page")
+    out = apply_answer({"kind": "unsupported", "understood": [],
+                        "unsupported": [long]}, dict(DEFAULT_SPEC))
+    assert len(out["unsupported"]) == 1
+    cut = out["unsupported"][0]
+    assert cut.endswith("…"), "a truncated diagnostic must say it was shortened"
+    last_word = cut[:-1].rsplit(" ", 1)[-1]
+    assert len(last_word) > 1, (
+        f"cut lands mid-word, the exact defect this test guards against: {cut!r}")
+
+
 def test_a_field_the_model_invents_is_dropped():
     out = apply_answer({"kind": "style", "headline": "Family owned since 1994",
                         "footer_text": "hello", "understood": []},

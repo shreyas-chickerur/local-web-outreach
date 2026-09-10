@@ -181,11 +181,31 @@ def _enum_list(value: object, allowed: tuple[str, ...]) -> list[str]:
             if isinstance(item, str) and item in allowed]
 
 
+_TEXT_LIMIT = 200
+
+
+def _truncate_at_word(text: str, limit: int = _TEXT_LIMIT) -> str:
+    """Cut at a word boundary, with a mark that it was cut.
+
+    `text[:200]` alone can land mid-word — the same defect class
+    `render._truncate_quote` exists to prevent for a review quote, found
+    again here: an "unsupported"/"understood"/"defect" string is a
+    model's own sentence explaining itself to the operator, and a bare
+    slice reads as if the explanation just stops ("...linked to a phone
+    number or"), which is confusing in a different way than being wrong.
+    """
+    text = text.strip()
+    if len(text) <= limit:
+        return text
+    cut = text[:limit].rsplit(" ", 1)[0].rstrip(".,;:!?—–-")
+    return cut + "…"
+
+
 def _texts(value: object, limit: int = 8) -> list[str]:
     """Diagnostics shown to the operator. Never rendered into a page."""
     if not isinstance(value, list):
         return []
-    return [item.strip()[:200] for item in value[:limit]
+    return [_truncate_at_word(item) for item in value[:limit]
             if isinstance(item, str) and item.strip()]
 
 
@@ -204,7 +224,7 @@ def apply_answer(answer: dict, current: dict) -> dict:
     understood = _texts(answer.get("understood"))
     unsupported = _texts(answer.get("unsupported"))
     defect = answer.get("defect")
-    defect = defect.strip()[:400] if isinstance(defect, str) else ""
+    defect = _truncate_at_word(defect, 400) if isinstance(defect, str) else ""
 
     if kind != "style":
         # A complaint, a request for different facts, or something the renderer
