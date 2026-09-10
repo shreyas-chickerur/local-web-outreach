@@ -2206,3 +2206,98 @@ plus three Slice H integration tests) — 24 new tests total.
 
 `make check`: ruff clean, mypy clean, 965 passed, 12 xfailed. No
 fixture's fingerprint or rendered bytes moved.
+
+# Round 5, "if room" — the three items, investigated in order
+
+## 3a — the three unreachable comparisons: labels, not axes
+
+Pulled all four verdicts' own `why` text (`roofer`/`hvac-rich` [same],
+`dentist`/`law`, `roofer-rich`/`hvac-rich`, `law`/`law-rich` [different])
+and applied the exact test the last time this happened
+(`.reviews/slice-b-predictions.md`, the axis-two blind spot): do the
+"different" verdicts rest on a standard the "same" verdict's own why
+text also describes as present?
+
+They do. `roofer`/`hvac-rich`'s own "same" reasoning names two things
+and dismisses both: "reviews and services swapping which comes first"
+(an order swap) and "a short row of small labelled badges tucked into
+one of them" (an extra element the other page lacks). But an order swap
+is the FIRST reason given for `dentist`/`law` being called different,
+and for `roofer-rich`/`hvac-rich` being called different (credentials-
+before-stats vs. stats-immediately-after); and an extra element the
+other page lacks is the SOLE reason given for `law`/`law-rich` being
+called different (a nine-photo gallery there). The same two signals
+that were each independently sufficient to call three other pairs
+"different" were both present in `roofer`/`hvac-rich` and did not move
+its verdict.
+
+**That is a self-contradiction in these four verdicts, not evidence the
+vector is missing an axis.** No property named in any of the four `why`
+texts separates `roofer`/`hvac-rich` (same) from the three "different"
+pairs while also joining it to itself — the requirement `unreachable()`'s
+own docstring poses ("clearing it requires an axis where the different
+pair still differs and the same pair still matches") is unsatisfiable
+here for the same reason it was unsatisfiable last time: the labels
+disagree with each other before any axis gets a vote.
+
+**Not fixed this pass.** The precedent's own resolution to an identical
+finding was a full re-judging round, done carefully after a missing rule
+was named first — not a same-session flip of one contested verdict. This
+is disclosed, with the specific contradiction shown, rather than left
+implicit or quietly patched: `roofer`/`hvac-rich` is the one live verdict
+most worth a fresh, careful look in a future judging round, and the
+size-of-an-extra-element question ("a small badge row" vs. "a nine-photo
+gallery" — are these really the same class of difference?) deserves
+more than a same-session mechanical reversal. **No axis was built on the
+strength of this**, per instruction.
+
+## 3b — the twelve weight-budget xfails: partly measurement, partly real
+
+Sampled three of the twelve with real data rather than arguing from the
+architecture alone. `app/web/server.py`'s `/photo/` route already honours
+`?w=`, resizing via Google's own Places Photo API
+(`photos_api.nearest_width`/`fetch`) — the responsive path `srcset()`
+already emits (800/1600/2400) has never actually been exercised,
+though: zero of law-rich's ten photos had an 800px variant cached
+anywhere on disk before this check, because every local measurement and
+capture tool (`_link_photographs()`, reused by `perf_census.py`) links
+every `/photo/` reference to the SAME cached `MAX_WIDTH` file regardless
+of its own `?w=` — a real, disclosed tooling gap, not new information.
+
+Fetched the real 800px tier for three fixtures via the live Google API to
+see how much of the twelve that gap actually explains:
+
+    fixture           2400w (measured)   800w (real, smallest tier)
+    barbecue-rich     7188KB             1590KB   — clears the budget
+    law-rich          8249KB             2741KB   — still over
+    roofer            7788KB             4695KB   — still well over
+
+**Not a single answer.** For `barbecue-rich`, the measurement gap is the
+whole story — a real mobile visitor using the responsive path this
+project already built would load under budget today, and the xfail is
+purely an artifact of the local harness never honouring its own `?w=`
+parameter. For `law-rich` and `roofer`, it is not: even the smallest
+tier currently offered falls short, by a wide margin for `roofer`. Three
+fixtures is not twelve, but it is enough to say the true split is
+somewhere between "all measurement artifact" and "all genuine weight" —
+not either extreme, and not knowable without doing the same check on
+the other nine.
+
+**Decided, not left hanging:** this needs its own scoped pass, not a
+same-session patch of either kind — measuring the real path properly
+(teaching `perf_census.py` to serve photos width-aware rather than
+collapsed to one file, the same class of fix Round 3 already made once
+for the mobile-viewport capture width) would settle which fixtures clear
+on measurement alone; for the ones that do not, the real choice is
+between a narrower `srcset` tier for thumbnail-sized slots (a gallery
+tile renders far narrower than 800px), a stricter photo cap, or
+accepting that a photo-driven trade genuinely costs more to show
+properly. Recommended as the first item of a future round rather than
+guessed at here with two-thirds of the evidence missing.
+
+## 3c — before-and-after: re-confirmed, still unsupported
+
+Re-checked directly (not assumed from Round 4's finding): no fixture's
+`photo_vision` carries a before/after pairing field, scanned fresh
+across all nineteen. Nothing in this round added or could add one — no
+new fixtures, no new vision extraction. Still correctly unbuilt.
