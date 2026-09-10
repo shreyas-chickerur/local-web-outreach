@@ -50,6 +50,57 @@ def test_a_photograph_is_copied_and_linked_relatively(monkeypatch, tmp_path):
     assert copied.exists() and copied.read_bytes() == cached.read_bytes()
 
 
+def test_the_og_image_absolute_url_is_never_corrupted(monkeypatch, tmp_path):
+    """`app.site.render.absolute()` builds a real, server-reachable URL for
+    the og:image meta tag — `http://127.0.0.1:8099/photo/1/6` — the one
+    place `/photo/<lead>/<n>` appears NOT freshly preceded by a quote,
+    `&quot;`, or a `srcset` comma, but by the port number's own last digit.
+    The old regex matched there anyway and ate the leading slash: found on
+    17 of 19 committed pages as
+    `http://127.0.0.1:8099photos/<hash>.jpg`. This is metadata only — no
+    `<img>` tag uses `absolute()` — but a malformed URL there is still a
+    real, checkable bug a link-preview fetch would hit."""
+    br = load()
+    cached = tmp_path / "cache" / "somehash.jpg"
+    cached.parent.mkdir(parents=True)
+    cached.write_bytes(b"\xff\xd8\xff\xe0")
+    dest_dir = tmp_path / "review" / "photos"
+    dest_dir.mkdir(parents=True)
+    monkeypatch.setattr(br, "PHOTOS", dest_dir)
+    monkeypatch.setattr(br.photos_api, "_cache_path", lambda name, width: cached)
+
+    page = ('<meta property="og:image" '
+           'content="http://127.0.0.1:8099/photo/3/0">')
+    out = br._copy_photographs(page, {"lead_id": 3, "place_photos": ["a"]})
+
+    assert "http://127.0.0.1:8099/photo/3/0" in out, (
+        "the og:image URL must survive untouched — it is the one legitimate "
+        "absolute reference this function is not meant to rewrite")
+    assert "8099photos/" not in out, "the leading slash was eaten again"
+
+
+def test_a_full_srcset_list_rewrites_every_entry(monkeypatch, tmp_path):
+    """The one legitimate context where `/photo/` is NOT preceded by a
+    fresh quote or `&quot;` — a later width entry in the same `srcset`
+    list is preceded by `, ` instead. The lookbehind fix must not
+    over-correct and leave these unmatched."""
+    br = load()
+    cached = tmp_path / "cache" / "somehash.jpg"
+    cached.parent.mkdir(parents=True)
+    cached.write_bytes(b"\xff\xd8\xff\xe0")
+    dest_dir = tmp_path / "review" / "photos"
+    dest_dir.mkdir(parents=True)
+    monkeypatch.setattr(br, "PHOTOS", dest_dir)
+    monkeypatch.setattr(br.photos_api, "_cache_path", lambda name, width: cached)
+
+    page = ('srcset="/photo/3/0?w=800 800w, /photo/3/0?w=1600 1600w, '
+           '/photo/3/0?w=2400 2400w"')
+    out = br._copy_photographs(page, {"lead_id": 3, "place_photos": ["a"]})
+
+    assert "/photo/3/" not in out
+    assert out.count("photos/somehash.jpg") == 3
+
+
 def test_a_photograph_with_no_names_is_left_alone():
     br = load()
     page = '<img src="/photo/3/0">'
@@ -95,6 +146,26 @@ def test_the_committed_review_bundle_shows_the_corpus_that_shipped(
     from app.store import db, leads, sites
 
     br = load()
+
+    # An empty local photo cache is an environment fact, not staleness —
+    # `_copy_photographs` can only rewrite a `/photo/` URL when the cached
+    # file it points at exists on disk (see `_cache_path`/`cached.exists()`
+    # above); with nothing cached, every URL comes back UNCHANGED, which
+    # will never match a committed page that WAS built with a populated
+    # cache. That reads as all nineteen fixtures stale regardless of
+    # whether anything actually moved — hit directly on a machine that
+    # has run `make check` but never `tools/contact_sheet.py` or
+    # `tools/build_review.py` against a live key. Skipped, not xfailed:
+    # there is no assertion this can make either way without the cache.
+    if not any(br.photos_api.CACHE.glob("*.jpg")):
+        pytest.skip(
+            f"{br.photos_api.CACHE} is empty — this machine has never "
+            f"cached a photograph, so _copy_photographs cannot rewrite a "
+            f"single /photo/ URL and every fixture would read as stale "
+            f"regardless of whether the bundle actually moved. Run "
+            f"tools/build_review.py once (needs a Google Places API key) "
+            f"to populate the cache, then re-run this test.")
+
     monkeypatch.setattr(br, "PHOTOS", tmp_path / "photos")
     (tmp_path / "photos").mkdir()
 
@@ -125,3 +196,52 @@ def test_the_committed_review_bundle_shows_the_corpus_that_shipped(
         f"{stale} in .reviews/review/ no longer match a fresh render — "
         f"regenerate with tools/build_review.py (do not hand-edit the "
         f"committed pages)")
+
+
+# Real image formats this bundle actually contains, sniffed from the first
+# bytes rather than trusted from the `.jpg` extension every cached file
+# gets regardless of its real format — a real reviewer's browser sniffs
+# content the same way, but this test should not need one running to say
+# whether a referenced file is a real image or a truncated/empty one.
+_MAGIC = (
+    (b"\xff\xd8\xff", "JPEG"),
+    (b"\x89PNG\r\n\x1a\n", "PNG"),
+    (b"GIF87a", "GIF"), (b"GIF89a", "GIF"),
+    (b"RIFF", "WEBP"),  # a real WEBP also has "WEBP" at offset 8; close enough to rule out garbage
+)
+
+
+def test_every_referenced_photograph_is_a_real_non_empty_image():
+    """Round 5's freshness guard proves the referenced FILENAMES match a
+    fresh render; it does not open any of them. A page whose <img> silently
+    404s or points at zero bytes is exactly how this project nearly read a
+    conclusion off eleven grey rectangles (BRIEF §1) — checked here without
+    needing a browser, so it runs on every `make check` rather than only
+    when someone remembers to look."""
+    import re
+
+    missing: list[str] = []
+    empty: list[str] = []
+    unrecognised: list[str] = []
+    for html_file in sorted(OUT.glob("*.html")):
+        if html_file.name == "index.html":
+            continue
+        text = html_file.read_text()
+        for ref in sorted(set(re.findall(r'photos/[a-f0-9]+\.(?:jpg|png|webp|gif)',
+                                         text))):
+            path = OUT / ref
+            if not path.exists():
+                missing.append(f"{html_file.name} -> {ref}")
+                continue
+            data = path.read_bytes()[:16]
+            if not data:
+                empty.append(f"{html_file.name} -> {ref}")
+            elif not any(data.startswith(magic) for magic, _ in _MAGIC):
+                unrecognised.append(f"{html_file.name} -> {ref}")
+
+    assert not missing, f"referenced but absent from disk: {missing}"
+    assert not empty, f"referenced but zero bytes: {empty}"
+    assert not unrecognised, (
+        f"referenced files whose content is not a recognised image format "
+        f"(garbage or truncated, whatever the extension claims): "
+        f"{unrecognised}")

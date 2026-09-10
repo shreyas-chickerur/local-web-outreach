@@ -70,7 +70,19 @@ def _copy_photographs(page: str, brief: dict) -> str:
         return cache[index] or match.group(0)
 
     lead_id = brief.get("lead_id")
-    return re.sub(rf"/photo/{lead_id}/(\d+)(?:\?[^\s\"'&)]*)?", replace, page)
+    # `(?<![0-9A-Za-z])` — every LEGITIMATE occurrence of `/photo/<lead>/<n>`
+    # is preceded by a quote, `&quot;`, or `, ` (a later entry in one
+    # `srcset` list); the one occurrence that is not is inside the
+    # og:image meta tag's ABSOLUTE URL (`app.site.render.absolute()`),
+    # where it sits directly after the port number — `...8099/photo/1/6`.
+    # Matching there ate the leading slash and glued the port to
+    # `photos/<hash>.jpg` with nothing between them
+    # (`...8099photos/<hash>.jpg`), on 17 of 19 committed pages. The
+    # lookbehind excludes exactly that one case — a digit or letter
+    # immediately before the match — without needing to enumerate every
+    # legitimate preceding character.
+    return re.sub(rf"(?<![0-9A-Za-z])/photo/{lead_id}/(\d+)(?:\?[^\s\"'&)]*)?",
+                 replace, page)
 
 
 def e(text: object) -> str:

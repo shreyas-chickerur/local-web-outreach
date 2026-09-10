@@ -2301,3 +2301,131 @@ Re-checked directly (not assumed from Round 4's finding): no fixture's
 `photo_vision` carries a before/after pairing field, scanned fresh
 across all nineteen. Nothing in this round added or could add one — no
 new fixtures, no new vision extraction. Still correctly unbuilt.
+
+# Round 6, Phase 1 — correctness bugs in the artifact he opens
+
+Governing rule this round: only work with a right answer. No redecide,
+no new verdicts, no visual change to any page — the corpus must be
+byte-identical when the round ends. Baseline captured before touching
+anything: ruler `a762bcc9`, rule `254e171b`, labels `122e6ec8`, held-out
+`7aa64298`, `render_snapshots.json` sha256
+`554cdf5df2aeb45c1ec0684d103979191899e519ef1df5a7206f4a9ff0233765`.
+
+## 1a — the og:image bug, confirmed before fixing
+
+Confirmed the exact diagnosis: `app.site.render.absolute()` correctly
+builds `http://127.0.0.1:8099/photo/1/6`; `build_review.
+_copy_photographs`'s regex (`/photo/{lead_id}/(\d+)...`) matches
+anywhere in the page text, including the seven characters after the
+port number in that absolute URL, and rewrites the match to
+`photos/<hash>.jpg` with no leading slash — `...8099photos/<hash>.jpg`.
+17 of 19 committed pages carried this. `absolute()` is used in exactly
+one place (the og:image meta tag); no `<img>` uses it, so this was
+always metadata-only.
+
+Traced every legitimate context `/photo/<lead>/<n>` appears in a
+rendered page (an `<img src="...">`, a `srcset` list's later entries,
+a CSS `url(&quot;...&quot;)` background) and found each is preceded by
+a quote, `&quot;`, or `, ` — never by an alphanumeric character. The one
+occurrence that IS preceded by an alphanumeric character (the port
+number's own last digit) is the one inside `absolute()`'s output. Fixed
+with a negative lookbehind, `(?<![0-9A-Za-z])`, rather than enumerating
+every legitimate preceding character — excludes exactly the one case
+that was ever wrong.
+
+Two tests added: one constructs the exact og:image shape and asserts
+the URL survives byte-for-byte and `"8099photos/"` never appears; one
+constructs a full three-entry `srcset` list and asserts all three
+entries still rewrite (checking the fix does not over-correct and
+leave a legitimate later entry, preceded by `, ` rather than a fresh
+quote, unmatched). Both pass.
+
+## 1b — the freshness guard's false alarm
+
+Confirmed the failure mode directly: with `.cache/photos/` emptied,
+`_copy_photographs` cannot resolve any `/photo/` URL (every
+`_cache_path(...).exists()` check fails), so every URL comes back
+unchanged — which will never match a committed page that WAS built
+against a populated cache, regardless of whether the bundle actually
+moved. Added a guard: the freshness test now `pytest.skip()`s with a
+message naming the exact command to run first
+(`tools/build_review.py`) when `.cache/photos/` holds no `.jpg` files.
+Verified in both directions: moved the real cache aside, confirmed the
+test skips with the intended message rather than failing; restored it,
+confirmed the test runs and passes again.
+
+## 1c — every page verified to open offline with its photographs visible
+
+Not a code-change item — a verification, done with the project's own
+established headless-Chrome technique (`tools/contact_sheet.py`'s CDP
+plumbing) rather than trusted from file existence alone. First attempt
+via the interactive Browser pane tool was a false negative: it renders
+a `file://` URL as a static snapshot with no real network activity, so
+no image ever "loads" there regardless of whether the bundle works —
+abandoned in favour of a real headless Chrome instance, matching what
+this project already trusts for every other capture.
+
+A first CDP pass (no scrolling) found EVERY `<img>` on every page
+unloaded (`naturalWidth: 0`). Traced to `loading="lazy"` — used by
+default in `render.py` — combined with a headless viewport that never
+scrolls; this is normal browser behaviour; a real reader scrolling the
+page would trigger every one. Re-ran scrolling the full page height
+first: 12 of 14 on a sample page loaded; the remaining two were
+investigated individually rather than written off as noise:
+
+- An `<img src="">` inside a lightbox modal template (`role="dialog"
+  aria-label="Photo"`) — an intentionally empty slot a JS lightbox
+  fills in when opened, not a content defect. Browsers resolve an empty
+  relative `src` to the current document URL, which is why it showed
+  up in a naive scan.
+- An external `https://...netlify.app/.../*.svg` partner-logo image —
+  not a `/photo/` proxy URL at all, and never meant to be cached
+  locally by this bundle's own asset-copying (`_copy_photographs` only
+  ever touches `/photo/{lead_id}/(\d+)`). Out of scope for "their own
+  photographs" the same way a business's own external badge images
+  always have been.
+
+Swept all nineteen fixtures with the same technique (page-height
+scroll, then check every local `photos/*.jpg` `<img>`'s
+`naturalWidth`): one genuine hold-out, `salon-rich`, where one image
+stayed unloaded even after a full-page scroll. Investigated rather than
+dismissed: that fixture's gallery is a `.scrollstrip`
+(`overflow-x:auto`, the `scroll_gallery` composition) — a HORIZONTAL
+scroll container my first pass never scrolled. Scrolling it
+horizontally (`el.scrollLeft = el.scrollWidth`) loaded it immediately
+(`naturalWidth: 768`, `complete: true`). Not a bug; a gap in the check.
+
+Thirteen cached files were also found with a `.jpg` extension but real
+PNG content (`file` command confirms: 1080×1080 and 810×1080 RGB PNGs).
+Four of the thirteen are actually referenced (`roofer.html`,
+`law-rich.html`); the other nine are orphaned copies from an earlier
+`place_photos` list `_copy_photographs`'s `if not dest.exists()` never
+cleans up — harmless disk clutter, not investigated further, since
+nothing currently references them. Confirmed the four referenced ones
+render correctly regardless of the extension mismatch (browsers sniff
+real image content for `<img>`, not the URL's extension) — verified
+directly, not assumed.
+
+Added a permanent, browser-free standing test
+(`test_every_referenced_photograph_is_a_real_non_empty_image`): every
+`photos/*.{jpg,png,webp,gif}` reference in every committed page must
+exist on disk, be non-empty, and sniff as a recognised image format
+from its own first bytes — catches a missing, zero-byte, or garbage
+file on every `make check` without needing a browser at all. It would
+NOT have caught the og:image bug (that was a URL string malformed
+inside a `<meta>` tag with no file reference at all) or the two
+non-issues above (both real, valid files) — it catches a different,
+narrower class: a page pointing at something that plainly is not a
+photograph.
+
+## Binding claims, pass or fail
+
+| Claim | Result |
+|---|---|
+| The og:image rewrite bug reproduces exactly as diagnosed | **CONFIRMED** |
+| Fix leaves every legitimate rewrite (img, full srcset, CSS url) intact | **PASSED** |
+| Freshness guard skips (not fails) on an empty photo cache | **PASSED**, checked both directions |
+| Every page's own photographs are genuinely visible offline | **PASSED** — two apparent failures were investigated and explained, not dismissed; one genuine gap (`salon-rich`'s horizontal strip) was found in the CHECK, not the bundle |
+| Both hashes unchanged (ruler/rule/labels/held-out, render_snapshots.json) | **PASSED** — identical to the values captured before Phase 1 began |
+
+`make check`: ruff clean, mypy clean, 968 passed, 12 xfailed.
