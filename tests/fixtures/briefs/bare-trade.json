@@ -8,6 +8,54 @@
   "chain_signals": [
     "their own site has a locations page"
   ],
+  "copy_selection": {
+    "about": [
+      0,
+      1,
+      2
+    ],
+    "feature_0": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "feature_1": [
+      0,
+      3,
+      1,
+      2,
+      4
+    ],
+    "feature_2": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "feature_3": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "feature_4": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "feature_5": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
   "design_direction": {
     "accent": "navy",
     "architecture": "ledger",

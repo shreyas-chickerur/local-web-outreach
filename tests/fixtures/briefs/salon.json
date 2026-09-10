@@ -7,6 +7,45 @@
     "sources point at 2 different street addresses \u2014 each likely a separate branch",
     "their own site has a locations page"
   ],
+  "copy_selection": {
+    "feature_0": [
+      0,
+      1
+    ],
+    "feature_1": [
+      0,
+      1
+    ],
+    "feature_2": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "feature_3": [
+      0,
+      1
+    ],
+    "feature_4": [
+      4,
+      5,
+      6,
+      8,
+      9,
+      10
+    ],
+    "feature_5": [
+      0,
+      1,
+      4
+    ]
+  },
   "design_direction": {
     "accent": "amber",
     "architecture": "gallery",

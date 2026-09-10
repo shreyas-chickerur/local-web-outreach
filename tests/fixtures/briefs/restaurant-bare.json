@@ -2,6 +2,7 @@
   "_gate_unresolved": false,
   "assumptions": [],
   "chain_signals": [],
+  "copy_selection": {},
   "design_direction": {
     "accent": "red",
     "architecture": "gallery",

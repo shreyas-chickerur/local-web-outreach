@@ -1554,3 +1554,176 @@ test). Verified live against the real workbench database in addition to
 the standing test — screenshot taken, no console errors introduced,
 panel legible and correctly reasoned for a real lead outside the
 fixture corpus.
+
+# Round 4, Phase 1 — copy selection and provenance (Slice D's last item)
+
+BRIEF §5: the model selects and orders the business's own sentences and
+never authors one. Two deliverables: (1a/1b) a provenance layer checking
+every visible sentence is verbatim-or-prefix-cut source, whitelisted
+generic copy, or a corroborated-field value — kept SEPARATE from
+`app.core.claims`'s CLAIM_RE check, which catches a different shape of
+problem (an assertion nothing backs, vs. text that isn't traceably
+theirs at all); (1c) an actual model call that selects and orders
+sentences within those constraints, replacing the deterministic
+first-sentence-as-standfirst / trim-to-460-chars logic `_about()`/
+`_features()` use today.
+
+## Where free prose actually reaches the page today
+
+Audited every section builder for text that is the business's own
+multi-sentence prose (not a heading, a button, a stat tile, or a single
+name/price — those are template chrome or single-field values, never
+"selected sentences"): `_about()` (`.standfirst`/`.prose`, from
+`material.about` or a story block), `_features()` (same two classes, per
+block, from `block["text"]`), `_review_card`/`_review_feature` (the
+quote itself, from `quote["text"]`), menu item descriptions (`.d`, from
+`item["description"]`), and `_recognition()`'s `.accolade-note` (from an
+award block's text). Five spots, all deterministic today — none
+currently asks a model anything.
+
+## The provenance check (1a/1b)
+
+`app/site/provenance.py`, `unexplained_sentences(page, material)`:
+extracts sentences from exactly those five prose containers (identified
+by their own CSS class, `html.unescape`d, tags stripped) and checks each
+against a widened "own words" corpus (the same fields `unsupported()`
+already used, PLUS menu item descriptions, which the old check never
+needed since `CLAIM_RE` rarely appears there but a full-sentence check
+now does) via substring match after normalising whitespace/case —
+same technique `unsupported()` already uses, applied to every prose
+sentence rather than only ones matching a claim pattern. A small
+`GENERIC_COPY` whitelist exists for future hardcoded boilerplate; empty
+today, honestly, since nothing in this codebase currently authors a
+prose sentence outside these five sourced spots.
+
+`unsupported()` is UNTOUCHED — still the CLAIM_RE layer, still wired into
+the pipeline's gate exactly where it was. The new check is additive, a
+second call in the same gate function, not a replacement.
+
+## Copy selection (1c)
+
+A new adapter call, `app.site.copyselect.select(candidates, client=None)`:
+given named groups of source sentences (one group per prose spot — the
+about text's sentences, each feature block's sentences), returns which
+INDICES to keep and their display order, per group. Returning indices
+rather than re-typed text makes verbatim provenance true by
+construction — the rendered sentence is always `sentences[i]` from the
+original list, never a model's retyping of it, so there is nothing for
+the provenance check above to catch here by design, not by luck.
+
+Frozen once per lead, like every other model answer BRIEF §4 already
+names in this list ("design system, compositions, copy selection,
+vision, signature device") — computed during the same freeze pass that
+already handles vision and the design direction
+(`tools/make_fixtures.py freeze_vision`), stored in the brief as
+`copy_selection`, read by `_about()`/`_features()` at build time instead
+of the deterministic trim. Falls back to the existing deterministic
+method with no key — everything degrades, and the degraded path is the
+method already shipping today, not a new one.
+
+**No axis moves.** Copy selection is not a fingerprint input;
+`compositions`/`section_order` do not read sentence content. No
+redecide. Screenshots are invalidated (the words on the page change) —
+recaptured with `--widths page,fold` per instruction.
+
+## Binding claims
+
+**Primary.** The provenance check fails on synthetic text NOT sourced
+from `material` (a fabricated sentence injected into a test page) and
+passes on the real corpus once wired in, for all 19 fixtures.
+
+**Secondary.** `test_no_unverified_credential_ships` and
+`test_no_contradicted_fact_ships` both still pass, unchanged, proving
+the new layer is additive rather than a replacement that lost coverage.
+
+**Tertiary.** Copy selection, once frozen, reproduces byte-identically
+on a second `build_from_spec()` call with no client available — the
+determinism BRIEF §4 requires.
+
+## Falsification
+
+If the provenance check ever flags real, currently-shipping prose as
+unexplained, that means the "own words" corpus is missing a field the
+old `unsupported()` never needed (menu descriptions were exactly this
+case, found before writing the check rather than after). If copy
+selection ever renders a sentence NOT equal to `sentences[i]` for some
+`i` in the original candidate list, the by-construction guarantee above
+is false and the feature is unsafe to ship.
+
+## Outcome — 2026-09-10
+
+**Primary claim PASSED.** The provenance check catches a synthetic
+fabricated sentence in a test page and passes the real, current 19-fixture
+corpus with zero unexplained sentences — confirmed before any freezing,
+using the deterministic fallback path (no `copy_selection` present yet).
+
+**One correction, made before trusting the design further:** the group
+naming in this file's own pre-registration (`feature:0`) does not survive
+contact with the API — Claude's tool-use schema rejects property keys
+containing a colon (`HTTP 400: ... Property keys should match pattern
+'^[a-zA-Z0-9_.-]{1,64}$'`), found on the very first live call against
+`barbecue`'s real groups. Renamed to `feature_0` throughout
+(`app/site/copyselect.py`, `app/site/render.py`'s matching lookup key).
+Caught before any fixture was frozen under the broken name, so no
+re-freeze was needed on top of the rename.
+
+**Secondary claim PASSED.** `test_no_unverified_credential_ships` and
+`test_no_contradicted_fact_ships` both pass unchanged, run alongside the
+new provenance layer in `pipeline._gate` rather than folded into
+`unsupported()`.
+
+**Tertiary claim PASSED by construction, not just tested.** Copy
+selection is read from a frozen dict at render time
+(`_apply_copy_selection`); nothing in `_about()`/`_features()` calls the
+model. `make check` (865 passed) confirms nothing broke; determinism
+follows from there being no live call in the render path at all, the same
+guarantee every other frozen decision in this system already has.
+
+**Real freeze, all 19 fixtures, 19 model calls** (`tools/make_fixtures.py
+--vision-only`, which already re-runs `direction`/`page` under the
+EXISTING frozen `design_direction` — confirmed by
+`test_the_instrument_reproduces.py` staying green afterward: zero
+fingerprint values moved). `render_snapshots.json` regenerated (every
+fixture's bytes changed — expected, this changes what ships); screenshots
+recaptured (`--widths page,fold`, then `page,fold,thumb` for the
+committed sheet, per house practice).
+
+**1d — the numbers asked for.**
+
+Content census: still 77% overall, unchanged — expected and disclosed
+rather than a null result. The census counts whether a FIELD (an about
+text, a feature block) reached the page at all; copy selection decides
+WHICH SENTENCES within an already-counted field are kept, a finer grain
+than the census currently measures. Nothing here regressed; the census
+simply answers a different question than 1d's own ratio does.
+
+Sentence-provenance ratio, computed directly (not from the census):
+**687 of 687 rendered prose sentences (100%) are verbatim-or-prefix-cut**
+source material; 0% generic-library (the whitelist is empty — nothing in
+this codebase currently authors a boilerplate sentence); 0% rendered
+corroborated-field values (no current prose spot is built that way). This
+is not a coincidence of the check being lenient — it is what "select and
+order, never invent" guarantees when every group's answer is applied by
+INDEX into the exact list offered, never by re-reading model-generated
+text.
+
+Selection ratio (how much of what was available got kept, per fixture —
+the more informative number, since 100% verbatim was true before this
+phase too, by the old deterministic method):
+
+    barbecue-rich   19/22   86%        hvac             17/21   81%
+    barbecue        25/34   74%        law-rich         33/37   89%
+    bare-trade      32/33   97%        law              25/28   89%
+    dentist-rich    26/29   90%        restaurant-rich  11/12   92%
+    dentist         30/37   81%        roofer-rich      27/38   71%
+    hvac-rich       27/27  100%        roofer           31/34   91%
+    hvac-second     51/59   86%        salon            27/40   68%
+    TOTAL                              389/459  85%
+
+(`contractor-bare`, `restaurant-bare`, `salon-rich`, `threadbare` have no
+qualifying prose group at all — 0 candidates, nothing to select from,
+correctly absent above rather than shown as a false 100%.)
+
+`make check` green (865 passed) after the freeze and the snapshot
+regeneration. No redecide — every fingerprint test still passes
+unchanged.

@@ -5,6 +5,20 @@
     "ignored 1 social link(s) belonging to other businesses their site credits"
   ],
   "chain_signals": [],
+  "copy_selection": {
+    "feature_0": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "feature_1": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
   "design_direction": {
     "accent": "terracotta",
     "architecture": "stacked",

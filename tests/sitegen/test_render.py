@@ -611,6 +611,36 @@ def test_an_unmeasurable_image_is_not_treated_as_a_bad_one(monkeypatch):
     assert render_module.pick_hero(("only",)) == "only"
 
 
+def test_about_uses_a_frozen_copy_selection_when_one_exists():
+    """BRIEF §5: the model picks from their own sentences; the page
+    renders whichever ones a frozen `copy_selection` names, in that
+    order — never all of them by default once an answer exists."""
+    brief = _brief(published={
+        **_brief()["published"],
+        "about": "First sentence here. Second sentence here. Third one."})
+    brief["copy_selection"] = {"about": [2, 0]}
+    page, _ = build(brief)
+    block = _section(page, "about")
+    assert "Third one." in block
+    assert "First sentence here." in block
+    assert "Second sentence here." not in block
+    # Selection order: the standfirst is whichever sentence came first in
+    # the FROZEN order, not the source's own order.
+    assert block.index("Third one.") < block.index("First sentence here.")
+
+
+def test_about_falls_back_to_every_sentence_with_no_frozen_selection():
+    """No key when the lead was frozen, or not yet re-frozen — the
+    existing deterministic behaviour, unchanged."""
+    brief = _brief(published={
+        **_brief()["published"],
+        "about": "First sentence here. Second sentence here."})
+    page, _ = build(brief)
+    block = _section(page, "about")
+    assert "First sentence here." in block
+    assert "Second sentence here." in block
+
+
 def test_a_non_food_trades_stray_menu_items_never_render():
     """`extract_menu_items` anchors on a bare dollar amount, which is not a
     signal only a restaurant's page can trip — `law-rich` published "12

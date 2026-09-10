@@ -9,6 +9,33 @@
     "sources point at 2 different street addresses \u2014 each likely a separate branch",
     "google returns 5 locations under this name in one search"
   ],
+  "copy_selection": {
+    "about": [
+      0,
+      1
+    ],
+    "feature_0": [
+      0,
+      3,
+      1,
+      2,
+      4
+    ],
+    "feature_1": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "feature_2": [
+      0,
+      1,
+      2,
+      4,
+      5,
+      6
+    ]
+  },
   "design_direction": {
     "accent": "yellow",
     "architecture": "banded",

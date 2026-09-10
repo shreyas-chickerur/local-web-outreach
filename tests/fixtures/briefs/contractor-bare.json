@@ -5,6 +5,7 @@
     "ignored a yelp result for 'Legacy Plumbing' \u2014 different business"
   ],
   "chain_signals": [],
+  "copy_selection": {},
   "design_direction": {
     "accent": "orange",
     "architecture": "ledger",

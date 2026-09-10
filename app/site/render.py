@@ -101,6 +101,13 @@ class Material:
     # or a photograph rather than parseable text. BRIEF §5, content census:
     # extracted and stored, but read by no section builder until `_menu()`.
     menu_media: tuple[dict, ...] = ()
+    # {group_name: [index, ...]} — which of a prose group's own sentences
+    # to keep and in what order, frozen once by `app.site.copyselect`
+    # (BRIEF §5) and replayed. Empty means "no frozen answer yet, or no
+    # key when this brief was frozen" — `_about()`/`_features()` fall back
+    # to every sentence in its original order, exactly what shipped before
+    # this existed.
+    copy_selection: dict = dc_field(default_factory=dict)
     hours: tuple[str, ...] = ()
     photos: tuple[str, ...] = ()
     address: str | None = None
@@ -276,6 +283,7 @@ def material_from_brief(brief: dict) -> Material:
         products=tuple(published.get("products") or ()),
         menu_items=tuple(published.get("menu_items") or ()),
         menu_media=tuple(published.get("menu_media") or ()),
+        copy_selection=dict(brief.get("copy_selection") or {}),
         hours=tuple(published.get("hours") or ()) or (
             (trusted["hours"],) if "hours" in trusted else ()),
         photos=tuple(published.get("photos") or ()),
@@ -1205,10 +1213,15 @@ def _about(m: Material, t: Theme) -> str:
     m = replace(m, about=text)
 
     # Split off the first sentence to set as a standfirst. Falls back to the
-    # whole text when there is only one sentence, which is common.
-    sentences = re.split(r"(?<=[.!?])\s+", drop_dangling(text).strip())
+    # whole text when there is only one sentence, which is common. Stripped
+    # and filtered the same way `copyselect.groups_for` splits it at freeze
+    # time, so a frozen selection's indices always land on the sentence
+    # they were chosen from.
+    all_sentences = [s.strip() for s in re.split(
+        r"(?<=[.!?])\s+", drop_dangling(text).strip()) if s.strip()]
+    sentences = _apply_copy_selection(all_sentences, m.copy_selection, "about")
     opener = sentences[0] if len(sentences) > 1 else ""
-    rest = " ".join(sentences[1:]) if opener else text
+    rest = " ".join(sentences[1:]) if opener else " ".join(sentences)
 
     standfirst = (f'<p class="standfirst" data-reveal>{e(opener)}</p>'
                   if opener else "")
@@ -1414,6 +1427,23 @@ def trim_to_sentence(text: str, limit: int) -> str:
     return (window[:cut] if cut > 0 else window).rstrip(" ,;:-") + "…"
 
 
+def _apply_copy_selection(sentences: list[str], selection: dict,
+                           key: str) -> list[str]:
+    """Their own sentences, reordered and subset per a frozen copy-selection
+    answer (`app.site.copyselect`) if one exists for `key` — every index
+    into this exact list, so this only ever reorders or drops, never
+    invents. Falls back to every sentence in its original order with no
+    frozen answer (no key when the lead was frozen, or not yet re-frozen),
+    exactly what shipped before copy selection existed.
+    """
+    indices = selection.get(key)
+    if not isinstance(indices, list) or not indices:
+        return sentences
+    picked = [sentences[i] for i in indices
+             if isinstance(i, int) and 0 <= i < len(sentences)]
+    return picked or sentences
+
+
 # BRIEF §5, content census: `block:feature` at a 4-block cap was the single
 # biggest drop in the whole corpus (40 blocks dropped on one fixture alone).
 # Checked what items 5+ actually are, fixture by fixture, before moving the
@@ -1432,15 +1462,24 @@ def trim_to_sentence(text: str, limit: int) -> str:
 FEATURE_CAP = 6
 
 
+def feature_candidates(m: Material) -> list[dict]:
+    """Blocks `_features()` renders, in the same order and already capped —
+    shared with `tools/make_fixtures.py`'s copy-selection freezing so it
+    offers a model exactly the blocks that will actually be built from,
+    never a different set the two could quietly drift apart on."""
+    keep = [b for b in m.blocks
+           if b.get("kind") in ("feature", "events", "press")
+           and len(b.get("text", "").split()) >= 18]
+    return keep[:FEATURE_CAP]
+
+
 def _features(m: Material, t: Theme) -> str:
     """Anything else their page had a section for, kept as alternating rows."""
-    keep = [b for b in m.blocks
-            if b.get("kind") in ("feature", "events", "press")
-            and len(b.get("text", "").split()) >= 18]
+    keep = feature_candidates(m)
     if not keep:
         return ""
     rows = []
-    for i, block in enumerate(keep[:FEATURE_CAP]):
+    for i, block in enumerate(keep):
         relevant = [src for src in (block.get("images") or ())
                     if justified(src, block["heading"], block["text"])
                     and not is_text_graphic(src, block["heading"], block["text"])]
@@ -1463,10 +1502,19 @@ def _features(m: Material, t: Theme) -> str:
         # apart, the rest as prose. A heading over an undifferentiated block of
         # text is what "no organisation" looks like, and it is most of why a
         # section reads as filler even when the words are theirs.
-        body = trim_to_sentence(drop_dangling(block["text"]), 460)
-        sentences = re.split(r"(?<=[.!?])\s+", body)
+        full_text = drop_dangling(block["text"])
+        key = f"feature_{i}"
+        if key in m.copy_selection:
+            # Same split as `copyselect.groups_for` uses to freeze this
+            # group's candidates, so the frozen indices line up.
+            all_sentences = [s.strip() for s in re.split(
+                r"(?<=[.!?])\s+", full_text.strip()) if s.strip()]
+            sentences = _apply_copy_selection(all_sentences, m.copy_selection, key)
+        else:
+            sentences = re.split(r"(?<=[.!?])\s+",
+                                 trim_to_sentence(full_text, 460))
         opener = sentences[0] if len(sentences) > 1 else ""
-        rest = " ".join(sentences[1:]) if opener else body
+        rest = " ".join(sentences[1:]) if opener else " ".join(sentences)
         words = (f'<div class="words"><h3>{e(block["heading"])}</h3>'
                  + (f'<p class="standfirst">{e(opener)}</p>' if opener else "")
                  + (f'<p class="prose">{e(rest)}</p>' if rest.strip() else "")

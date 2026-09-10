@@ -7,6 +7,68 @@
   "chain_signals": [
     "google returns 5 locations under this name in one search"
   ],
+  "copy_selection": {
+    "feature_0": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      11,
+      12,
+      13
+    ],
+    "feature_1": [
+      0,
+      1,
+      3,
+      4,
+      6,
+      7,
+      8,
+      9
+    ],
+    "feature_2": [
+      0,
+      1,
+      2
+    ],
+    "feature_3": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "feature_4": [
+      0,
+      1,
+      2,
+      3,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "feature_5": [
+      0,
+      2,
+      3,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
   "design_direction": {
     "accent": "yellow",
     "architecture": "ledger",
@@ -213,6 +275,14 @@
     "https://www.onehourairdallas.com/wp-content/uploads/2021/01/air-conditioning-repair-richardson-tx-clock-image.png": [
       133,
       140
+    ],
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/6293828e30fb025780ee2960-e1722010014122.png": [
+      165,
+      76
+    ],
+    "https://www.onehourairdallas.com/wp-content/uploads/2024/11/Image-from-Asana-e1722009820245.png": [
+      70,
+      64
     ],
     "https://www.onehourairdallas.com/wp-content/uploads/2024/11/air-conditioner-repair-dallas-addison-tx-coupon-home-top.png": [
       694,

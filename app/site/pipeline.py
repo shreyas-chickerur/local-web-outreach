@@ -24,6 +24,7 @@ from app.adapters import claude, vision
 from app.adapters.claude import ClaudeError
 from app.site.audit import audit
 from app.site.iterate import DEFAULT_SPEC, parse_iteration_instruction
+from app.site.provenance import unexplained_sentences
 from app.site.render import (
     build_from_spec,
     material_from_brief,
@@ -506,6 +507,19 @@ def open_site(conn: sqlite3.Connection, lead_id: int,
         read_by=str(config.get("read_by") or "trade table"))
 
 
+def _gate(html: str, material) -> list[str]:
+    """No unverified fact ships, and no sentence of prose reaches the page
+    without a traceable source (BRIEF §5).
+
+    Two separate checks, deliberately not folded into one:
+    `unsupported()` (`app.core.claims.CLAIM_RE`) catches a specific SHAPE
+    of assertion nothing backs; `unexplained_sentences()`
+    (`app.site.provenance`) catches prose that is not traceably theirs at
+    all, whatever shape it takes. Both stay wired into every gate.
+    """
+    return unsupported(html, material) + unexplained_sentences(html, material)
+
+
 def _build_opening(conn: sqlite3.Connection, lead_id: int, brief: dict,
                    config: dict, *, actor: str | None = None,
                    parent_version: int | None = None,
@@ -529,7 +543,7 @@ def _build_opening(conn: sqlite3.Connection, lead_id: int, brief: dict,
     defects = [str(f) for f in report.failures]
     repairs = report.as_dict()["repairs"]
 
-    findings = unsupported(html, material_from_brief(brief))
+    findings = _gate(html, material_from_brief(brief))
     if findings:
         # The gate applies to the opening version too. A first draft that
         # invents something is not a better first impression than none.
@@ -636,7 +650,7 @@ def iterate(conn: sqlite3.Connection, lead_id: int, sentence: str,
 
     # The gatekeeper, immediately before the write and after every other
     # decision — so nothing added downstream of the parser can slip past it.
-    findings = unsupported(html, material_from_brief(brief))
+    findings = _gate(html, material_from_brief(brief))
     if findings:
         sites.reject(conn, lead_id, sentence, findings, actor=actor)
         return IterationResult(

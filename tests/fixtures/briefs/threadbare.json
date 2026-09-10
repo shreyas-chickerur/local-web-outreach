@@ -4,6 +4,7 @@
     "ignored a yelp result for 'Moe\u2019s Handyman Services' \u2014 different business"
   ],
   "chain_signals": [],
+  "copy_selection": {},
   "design_direction": {
     "accent": "brown",
     "architecture": "stacked",

@@ -5,6 +5,7 @@
     "ignored 1 social link(s) belonging to other businesses their site credits"
   ],
   "chain_signals": [],
+  "copy_selection": {},
   "design_direction": {
     "accent": "red",
     "architecture": "ledger",

@@ -198,6 +198,15 @@ def freeze_vision(payload: dict) -> int:
             url: said["description"]
             for url, said in photos.described(conn, stored).items()
             if said.get("description")}
+        # BRIEF §5, §4's own invariant list: copy selection is a model
+        # answer like any other here, frozen once and replayed. One call
+        # per lead covering every prose group (`about`, each qualifying
+        # `feature` block) rather than one per group, since nothing about
+        # the decision needs the others' answers, only the cost of asking
+        # does.
+        from app.site.copyselect import groups_for, select
+        groups = groups_for(material)
+        payload["copy_selection"] = select(groups) if groups else {}
     return len(payload["photo_vision"])
 
 
