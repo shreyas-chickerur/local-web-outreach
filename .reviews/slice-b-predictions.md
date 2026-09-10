@@ -2429,3 +2429,181 @@ photograph.
 | Both hashes unchanged (ruler/rule/labels/held-out, render_snapshots.json) | **PASSED** — identical to the values captured before Phase 1 began |
 
 `make check`: ruff clean, mypy clean, 968 passed, 12 xfailed.
+
+# Round 6, Phase 2 — the weight-budget harness re-measured honestly
+
+Same governing rule as Phase 1: measure, do not decide. No compression,
+no gallery caps, no budget change — genuine breaches go to
+`.reviews/DECISIONS-FOR-SHREYAS.md` item 2, not fixed here.
+
+## 2a — two real bugs in the harness, not one
+
+The diagnosed bug (the one this phase was scoped around): every
+`/photo/<lead>/<n>` reference in a rendered page was measured on disk at
+`photos_api.MAX_WIDTH` (2400px) regardless of which `srcset`/
+`image-set` candidate a real mobile browser would actually select for a
+390px-wide viewport — every fixture's weight was the cost of its
+LARGEST tier, never the one a phone downloads. Fixed with
+`_link_photographs_width_aware`: resolves each reference's own `?w=`
+(defaulting to `MAX_WIDTH` exactly as `app.web.server`'s real `/photo/`
+route does for a request with none) to `photos_api.nearest_width()`,
+fetching whichever (photo, width) pair is not already cached.
+
+A second bug, not diagnosed going in, found while building the
+replacement: the old measurement was disk-based and only ever walked
+`/photo/` references — every externally-hosted image a business's own
+page links directly (a "recent jobs" block, a feature photo pulled
+straight from their live site rather than through this project's own
+proxy) was silently absent from the total. `roofer` alone carries 10+MB
+of these, counted as zero before. Fixed with `_link_external_images` +
+a new `.cache/external/` (content-hash-of-URL keyed, real bytes, `None`
+returned rather than a placeholder on a genuine fetch failure — a
+business's asset having moved is a real, disclosed fact, not something
+to paper over).
+
+Both fixes reproduced the exact og:image regex-corruption bug Phase 1a
+fixed in `build_review.py` — in NEW code, not old: the first draft of
+`_link_photographs_width_aware` had no lookbehind and glued a relative
+path onto the port number in `render.absolute()`'s output the same way.
+Fixed identically, `(?<![0-9A-Za-z])`. A dedicated test
+(`test_the_og_image_absolute_url_survives_width_aware_linking`) asserts
+this specific shape can never regress again in this file either.
+
+Weight measurement itself moved from a disk-based sum to the real
+DevTools Network domain: `Network.loadingFinished`'s `encodedDataLength`
+per request, summed after a full-page scroll (to trigger every
+`loading="lazy"` image) and, discovered checking `salon-rich`, a
+horizontal scroll of any `.scrollstrip` gallery too — a plain vertical
+scroll never reaches a horizontally-scrolling gallery's later images,
+which would have UNDER-counted exactly the fixtures using that
+composition.
+
+A third, unrelated, previously-unknown bug was found blocking this very
+re-measurement: `bare-trade` hung indefinitely on every attempt. Root
+cause, found by comparing an isolated CDP reproduction against the real
+measurement path: the synthetic `Input.dispatchMouseEvent` click
+dispatched to sample INP was landing on a plain `<a href="https://www.
+google.com/maps/...">` CTA with no JS handler — both of `bare-trade`'s
+own CTAs are exactly this — and actually navigating the whole headless
+tab to Google Maps mid-measurement, replacing the fixture's own document
+before the weight-measuring scroll step ran against it. Fixed with a
+capture-phase click guard installed via
+`Page.addScriptToEvaluateOnNewDocument` (so it runs before the page's
+own scripts): `preventDefault()` on any `<a href>` click, letting the
+real click event still fire (INP is sampled from the event itself, not
+the navigation) while the tab never actually leaves. Verified in both
+directions: `git stash push -- tools/perf_census.py` reproduces the
+real-browser test's failure
+(`test_the_synthetic_inp_click_never_actually_navigates_the_tab`,
+`AssertionError: the synthetic click navigated the tab away: https://
+www.google.com/maps/search/?q=x`); `git stash pop` restores the passing
+fix. Confirmed the fix resolves the actual hang: three consecutive
+`bare-trade` runs, ~9.7s each, weight=584074 bytes every time.
+
+A secondary, defensive measurement change made alongside these: OSM's
+map-embed iframe (rendered for any fixture with lat/lon) made a real,
+potentially slow external request during measurement — blocked at DNS
+resolution (`--host-resolver-rules=MAP openstreetmap.org 127.0.0.1,...`)
+so a third party's uptime can never hang or skew a measurement run,
+matching the existing font-blocking rationale. Its own resource weight
+is deliberately excluded from the total (already broken under
+`--disable-gpu` per an earlier round's own finding, a WebGL-unsupported
+error, unrelated to this round).
+
+## 2b — all 19 re-measured
+
+    barbecue-rich      LCP=   180ms  CLS=0.000  INP=    0ms  weight=  2182KB  BREACH: weight
+    barbecue           LCP=   168ms  CLS=0.000  INP=    0ms  weight=  4272KB  BREACH: weight
+    bare-trade         LCP=   180ms  CLS=0.000  INP=   24ms  weight=   570KB
+    contractor-bare    LCP=   128ms  CLS=0.000  INP=    0ms  weight=   718KB
+    dentist-rich       LCP=   164ms  CLS=0.000  INP=    0ms  weight=  1089KB
+    dentist            LCP=   156ms  CLS=0.000  INP=    0ms  weight=   424KB
+    hvac-rich          LCP=   160ms  CLS=0.000  INP=    0ms  weight=  1682KB
+    hvac-second        LCP=   140ms  CLS=0.000  INP=    0ms  weight=  1021KB
+    hvac               LCP=   200ms  CLS=0.000  INP=  128ms  weight=  1276KB
+    law-rich           LCP=   188ms  CLS=0.000  INP=    0ms  weight=  4898KB  BREACH: weight
+    law                LCP=   156ms  CLS=0.000  INP=    0ms  weight=   816KB
+    restaurant-bare    LCP=   180ms  CLS=0.000  INP=   24ms  weight=  1345KB
+    restaurant-casual  LCP=   136ms  CLS=0.000  INP=    0ms  weight=  1823KB
+    restaurant-rich    LCP=   192ms  CLS=0.000  INP=   16ms  weight=  6544KB  BREACH: weight
+    roofer-rich        LCP=   228ms  CLS=0.000  INP=  152ms  weight=   667KB
+    roofer             LCP=   256ms  CLS=0.000  INP=    0ms  weight= 14032KB  BREACH: weight
+    salon-rich         LCP=   216ms  CLS=0.000  INP=   24ms  weight=  3039KB  BREACH: weight
+    salon              LCP=   172ms  CLS=0.000  INP=    0ms  weight=  2165KB  BREACH: weight
+    threadbare         LCP=   116ms  CLS=0.000  INP=    0ms  weight=    59KB
+
+    budgets: LCP<2500ms  INP<200ms  CLS<0.1  weight<2MB
+
+Net effect of measuring honestly: 5 fixtures that used to breach under
+the old (wrong-tier) method now clear (`hvac`, `hvac-rich`,
+`hvac-second`, `restaurant-bare`, `restaurant-casual` — their old
+"breach" was mostly the over-measured `/photo/` tier, not real gallery
+weight), and 2 (`roofer`, `restaurant-rich`) are far WORSE than the old
+number ever showed (their true weight is mostly external images the old
+method never counted). Twelve of nineteen clear; seven are real. Full
+per-fixture largest-contributor breakdown, and the actual decision
+this table feeds, is in `.reviews/DECISIONS-FOR-SHREYAS.md` item 2.
+
+## 2c — `KNOWN_BREACHES` updated to match
+
+Mechanical once 2b's numbers were in. Old 12-entry list replaced with
+the 7 fixtures genuinely over budget above.
+
+Building item 2's per-fixture table for the decisions file needed more
+than the aggregate weight number — "what the largest contributor is"
+required a real photos-vs-external breakdown per resource, not a guess
+from the total alone. A one-off diagnostic script (not committed —
+reuses `perf_census.py`'s own page-building and CDP plumbing, adds
+`Network.requestWillBeSent` tracking to map bytes back to URLs) found
+that two of the seven KNOWN_BREACHES reasons, written before this
+breakdown existed, were wrong about which contributor actually
+dominates: `barbecue` (labelled "large photo gallery") is in fact 58%
+external / 39% gallery (~2.4MB external vs ~1.7MB gallery of 4.3MB),
+and `law-rich` (same label) is 67% external / 31% gallery (~3.3MB vs
+~1.5MB of 4.9MB). Both corrected to name the actual dominant
+contributor rather than repeat the assumption. This is the same class
+of "measure honestly" fix Phase 2a made to the harness itself, applied
+to a descriptive string rather than a number — a wrong claim about
+which contributor is bigger is still a wrong claim, not a taste call.
+`restaurant-rich`, `roofer`, `salon-rich`, `salon`, `barbecue-rich`'s
+existing labels were checked against the same breakdown and confirmed
+accurate as written. Verified after the correction:
+
+    XFAIL tests/test_performance_budgets.py::test_fixture_holds_its_budget[barbecue-rich-weight] - large photo gallery, genuine — gallery photos are the larger share (~1.5MB of 2.2MB)
+    XFAIL tests/test_performance_budgets.py::test_fixture_holds_its_budget[barbecue-weight] - external feature-block images from the business's own live site are the larger share (~2.4MB of 4.3MB, vs ~1.7MB gallery) — corrected from an earlier, less precise 'photo gallery' label once the actual per-resource split was measured
+    XFAIL tests/test_performance_budgets.py::test_fixture_holds_its_budget[law-rich-weight] - external feature-block images from the business's own live site are the larger share (~3.3MB of 4.9MB, vs ~1.5MB gallery) — corrected from an earlier, less precise 'photo gallery' label once the actual per-resource split was measured
+    XFAIL tests/test_performance_budgets.py::test_fixture_holds_its_budget[restaurant-rich-weight] - external feature-block images from the business's own live site, genuine — the largest single contributor once measured honestly (~5.4MB of 6.5MB)
+    XFAIL tests/test_performance_budgets.py::test_fixture_holds_its_budget[roofer-weight] - external feature-block images from the business's own live site, genuine — 14MB, the worst in the corpus, almost none of it the /photo/ proxy (~10MB external of 14MB)
+    XFAIL tests/test_performance_budgets.py::test_fixture_holds_its_budget[salon-rich-weight] - large photo gallery, genuine — almost entirely gallery photos (~3.0MB of 3.0MB, no external images)
+    XFAIL tests/test_performance_budgets.py::test_fixture_holds_its_budget[salon-weight] - large photo gallery, genuine — gallery photos are the larger share (~1.3MB of 2.2MB)
+    ======================== 71 passed, 7 xfailed ==========================
+
+One measurement inconsistency surfaced building this same breakdown,
+disclosed rather than hidden: `hvac-rich` (well under budget either
+way) measured 1682KB in the committed baseline and 1982KB in the
+separate diagnostic pass — every other fixture matched the baseline
+within a few KB. Not investigated further since it does not change
+which side of the 2MB line anything falls on; noted in
+`.reviews/DECISIONS-FOR-SHREYAS.md` item 2 as a caveat on that one row.
+
+## 2d — genuine breaches: laid out as a decision, not fixed
+
+Per this round's own rule: no photo compression, no gallery cap, no
+budget change attempted here regardless of how clearly any of the seven
+breaches. All seven, their cost, and the options for each are in
+`.reviews/DECISIONS-FOR-SHREYAS.md` item 2.
+
+## Binding claims, pass or fail
+
+| Claim | Result |
+|---|---|
+| The diagnosed wrong-tier `/photo/` measurement bug reproduces and is fixed | **CONFIRMED / PASSED** |
+| External images are now counted; verified via a fixture (`roofer`) known to carry them | **PASSED** |
+| The og:image absolute-URL corruption cannot recur in this file's own linking code | **PASSED**, dedicated test |
+| `bare-trade`'s hang is a real, previously-unknown click-navigation bug, not environment flakiness | **CONFIRMED** — reproduced identically 3x before the fix, resolved deterministically 3x after |
+| The click-navigation fix is proven by a real-browser test that fails without it | **PASSED** — confirmed via `git stash` in both directions |
+| `KNOWN_BREACHES` matches the newly measured reality exactly, no stale or missing entries | **PASSED**, `test_no_stale_known_breach` + 71 passed / 7 xfailed |
+| No page, composition, budget, or copy changed | **PASSED** — this phase touched only `tools/perf_census.py`, its tests, and the breach list |
+| Both hashes unchanged (ruler/rule/labels/held-out, render_snapshots.json) | **PASSED** — identical to Phase 1's captured values |
+
+`make check`: ruff clean, mypy clean, (pending final combined run before commit).

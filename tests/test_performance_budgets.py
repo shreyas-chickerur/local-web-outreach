@@ -2,7 +2,10 @@
 
 Reads `tests/fixtures/performance_baseline.json`, the committed snapshot
 from `tools/perf_census.py` (real LCP/CLS/INP from a headless browser's
-own `PerformanceObserver`, page weight from disk) — the same pattern as
+own `PerformanceObserver`; weight from the real DevTools Network domain,
+summing what the browser genuinely transferred — Round 6 replaced a
+disk-based sum that used the wrong `srcset` tier and silently skipped
+every externally-hosted image) — the same pattern as
 `render_snapshots.json` and the committed contact sheet: a live browser
 measurement is slow and belongs in a tool run deliberately, not on every
 `make check`, so what runs here is a fast assertion against numbers
@@ -39,31 +42,47 @@ BUDGETS = {"lcp": BUDGET_LCP_MS, "inp": BUDGET_INP_MS,
           "cls": BUDGET_CLS, "weight": BUDGET_WEIGHT_BYTES}
 
 # Real, reproducible breaches as of the last `tools/perf_census.py` run
-# (2026-09-10, final — after every Slice E render/CSS change had landed,
-# not the mid-edit run this list would have differed under). All twelve
-# are WEIGHT, all pre-existing photo galleries predating Slice E: the
-# stills backdrop this phase adds reuses images `m.images` already
-# counted for the hero/gallery, so it adds no incremental weight of its
-# own — confirmed by these being the same fixtures with large photo
-# corpora in the census before Slice E touched anything. Also disclosed:
-# `_link_photographs()` (`tools/contact_sheet.py`) rewrites every
-# `/photo/` URL to the cached MAX_WIDTH file regardless of its own
-# `?w=` query, so a local file:// measurement cannot verify that a real
-# production proxy would actually serve the smaller requested variant —
-# a measurement caveat, not a claim this number is exact.
+# (Round 6 Phase 2 — the harness itself was rewritten this pass, not
+# just re-run: it used to measure every `/photo/` reference at
+# `MAX_WIDTH` regardless of which `srcset`/`image-set` candidate a real
+# mobile browser would select, AND silently skip every externally-hosted
+# image (a business's own "recent jobs" photos, pulled straight from
+# their live site) from the total entirely. Both fixed —
+# `_link_photographs_width_aware`/`_link_external_images` in
+# `tools/perf_census.py` — and the honest number moved in BOTH
+# directions at once: five fixtures that used to breach now clear
+# (`hvac`, `hvac-rich`, `hvac-second`, `restaurant-bare`,
+# `restaurant-casual` — their weight was mostly the /photo/ proxy's own
+# over-measured tier), and `roofer` and `restaurant-rich` are far WORSE
+# than the old number ever showed (their weight is mostly external
+# images the old measurement never counted at all). Twelve of nineteen
+# clear now; these seven are real, not measurement artifacts — see
+# `.reviews/DECISIONS-FOR-SHREYAS.md` item 2 for the actual photo/byte
+# breakdown per fixture and the options, none of them taken here.
 KNOWN_BREACHES: dict[tuple[str, str], str] = {
-    ("barbecue-rich", "weight"): "large photo gallery, predates Slice E",
-    ("barbecue", "weight"): "large photo gallery, predates Slice E",
-    ("hvac-rich", "weight"): "large photo gallery, predates Slice E",
-    ("hvac-second", "weight"): "large photo gallery, predates Slice E",
-    ("hvac", "weight"): "large photo gallery, predates Slice E",
-    ("law-rich", "weight"): "large photo gallery, predates Slice E",
-    ("restaurant-bare", "weight"): "large photo gallery, predates Slice E",
-    ("restaurant-casual", "weight"): "large photo gallery, predates Slice E",
-    ("restaurant-rich", "weight"): "large photo gallery, predates Slice E",
-    ("roofer", "weight"): "large photo gallery, predates Slice E",
-    ("salon-rich", "weight"): "large photo gallery, predates Slice E",
-    ("salon", "weight"): "large photo gallery, predates Slice E",
+    ("barbecue-rich", "weight"): "large photo gallery, genuine — gallery "
+        "photos are the larger share (~1.5MB of 2.2MB)",
+    ("barbecue", "weight"): "external feature-block images from the "
+        "business's own live site are the larger share (~2.4MB of "
+        "4.3MB, vs ~1.7MB gallery) — corrected from an earlier, less "
+        "precise 'photo gallery' label once the actual per-resource "
+        "split was measured",
+    ("law-rich", "weight"): "external feature-block images from the "
+        "business's own live site are the larger share (~3.3MB of "
+        "4.9MB, vs ~1.5MB gallery) — corrected from an earlier, less "
+        "precise 'photo gallery' label once the actual per-resource "
+        "split was measured",
+    ("restaurant-rich", "weight"): "external feature-block images from the "
+        "business's own live site, genuine — the largest single "
+        "contributor once measured honestly (~5.4MB of 6.5MB)",
+    ("roofer", "weight"): "external feature-block images from the "
+        "business's own live site, genuine — 14MB, the worst in the "
+        "corpus, almost none of it the /photo/ proxy (~10MB external "
+        "of 14MB)",
+    ("salon-rich", "weight"): "large photo gallery, genuine — almost "
+        "entirely gallery photos (~3.0MB of 3.0MB, no external images)",
+    ("salon", "weight"): "large photo gallery, genuine — gallery photos "
+        "are the larger share (~1.3MB of 2.2MB)",
 }
 
 
