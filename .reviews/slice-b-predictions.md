@@ -2606,4 +2606,102 @@ breaches. All seven, their cost, and the options for each are in
 | No page, composition, budget, or copy changed | **PASSED** — this phase touched only `tools/perf_census.py`, its tests, and the breach list |
 | Both hashes unchanged (ruler/rule/labels/held-out, render_snapshots.json) | **PASSED** — identical to Phase 1's captured values |
 
-`make check`: ruff clean, mypy clean, (pending final combined run before commit).
+`make check`: ruff clean, mypy clean, 980 passed, 7 xfailed. Both hashes
+confirmed unchanged immediately before commit
+(`9b5b9ae`): ruler `a762bcc9`, rule `254e171b`, labels `122e6ec8`,
+held-out `7aa64298`, `render_snapshots.json` sha256
+`554cdf5df2aeb45c1ec0684d103979191899e519ef1df5a7206f4a9ff0233765`.
+
+# Round 6, Phase 3 — dry-running his own checklist
+
+He will run, in order: `make check`; `quality_census.py`;
+`content_census.py`; `perf_census.py`; open `.reviews/review/index.html`;
+`grep -l "cook and serve" .reviews/review/*.html`; the credential-word
+`grep`; `WORKBENCH_DB=artifacts/fixtures.db make ui` then
+`localhost:8099`. Rule: run each one myself first, fix anything broken,
+confusing, or misleading in the TOOLING, never the sites.
+
+`make check`, `quality_census.py`, and `content_census.py` all ran
+clean, matching the state already established in Phases 1-2 exactly
+(85% agreement, same blind spot, same content-gate drop reasons) — no
+surprises, nothing to fix.
+
+`perf_census.py` itself, run exactly as he will run it, completed
+cleanly (19/19, 7 breaches, matching the committed baseline to the
+byte except `hvac-rich`'s already-disclosed noise). Since this
+overwrites `tests/fixtures/performance_baseline.json` on every run
+(that is the tool's job), the dry-run's own output was diffed against
+the committed version and reverted (`git checkout --`) rather than left
+as a stray, meaningless diff — the committed baseline is the one from
+the deliberate Phase 2 measurement, not an incidental side effect of
+this dry-run.
+
+**A real bug found running the credential-word grep and index.html
+open, and fixed:** covered above as its own commit
+(`883f382`) — `understand.py`'s diagnostic-string truncation cutting a
+model's own "why this can't be done" explanation off mid-sentence,
+found live testing the workbench's "impossible instruction" behaviour
+with a real POST to `/api/iterate`.
+
+**The workbench itself, dry-run against the fixture corpus
+(`WORKBENCH_DB=artifacts/fixtures.db`):**
+- Starts on a "Nowhere to look yet" empty state until "My leads" is
+  clicked (a location-based "Prospects" search is a separate tab) — the
+  fixture corpus is real and complete once there: "My leads · 19".
+- Opening a workspace (`Towson Law Firm, PLLC`, `VIP PLUMBING EXPERTS
+  LLC`) shows a real, non-empty rationale ("CLAUDE · V1" — a full
+  paragraph of actual reasoning, not a placeholder) and a real,
+  non-empty "WHAT ONE VISIT WOULD UNLOCK" panel (the "what didn't
+  reach the page" panel his checklist names) listing genuine
+  single-source facts to confirm — confirmed for two different leads,
+  not assumed from one.
+- Sent a genuinely impossible instruction ("add a live chat widget
+  that books appointments automatically") through the real UI. The
+  response correctly returned `kind: "unsupported"`, `unchanged: true`,
+  no version written, and a plain-English explanation of exactly why
+  (the generator only builds static pages) — rendered live in the
+  "ASKED FOR, AND NOT POSSIBLE YET" panel. This is the exact "an
+  impossible instruction returns a question" behaviour his checklist
+  asks to confirm, and it works, past the truncation bug above.
+- The in-session Browser pane's own live preview iframe (`/site/<id>/
+  <version>`) rendered blank inside the workspace view — traced to
+  `net::ERR_BLOCKED_BY_CLIENT` on that one request. Confirmed NOT a
+  product bug: `curl` and a direct navigation to the same URL both
+  return the real page with real content; this is specific to how this
+  testing tool's own preview pane handles that one same-origin iframe
+  request. Not something Shreyas will hit in his own browser, and nothing
+  in the product to fix.
+- `.reviews/review/index.html`'s thumbnails appeared as broken-image
+  icons in the same Browser pane, opened via `file://` — traced to the
+  SAME false-negative class Phase 1c already found and disclosed (the
+  pane silently converts a local `file://` page to a `data:` snapshot,
+  which breaks any relative-path image reference regardless of whether
+  the real file is fine). Verified with the project's own trusted
+  headless-Chrome technique (`tools/contact_sheet.py`'s CDP plumbing,
+  the same one Phase 1c used) instead of trusting the pane: all 19
+  thumbnails load (`naturalWidth: 720`) once scrolled into view — the
+  last card's own thumbnail needs a scroll to load at all, the exact
+  `loading="lazy"` behaviour already documented, not a new gap. All 38
+  `.html` links (thumbnail + name, per card) resolve to the right
+  fixture. Not a bug; a second confirmation of an already-known
+  testing-tool limitation, this time against a `file://` page rather
+  than a rendered site.
+
+Nothing else broken, confusing, or misleading found in the tooling
+itself. No prerequisite undocumented enough to need a
+`READ-ME-FIRST.md` addition beyond what Phase 1c already added.
+
+## Binding claims, pass or fail
+
+| Claim | Result |
+|---|---|
+| `make check` / `quality_census.py` / `content_census.py` run clean, matching Phases 1-2 | **PASSED** |
+| `perf_census.py`, run exactly as he will run it, completes cleanly and matches the committed baseline | **PASSED** (`hvac-rich` noise already disclosed) |
+| The workbench starts against the fixture corpus | **PASSED** — "My leads · 19" |
+| The "what didn't reach the page" panel renders with real content | **PASSED**, checked on two different leads |
+| An impossible instruction returns a real, plain-English explanation rather than silently failing or crashing | **PASSED** (after the truncation fix) |
+| The truncation bug is real, third-occurrence-of-a-known-class, and the regression test fails without the fix / passes with it | **CONFIRMED** |
+| Every apparent defect this phase surfaced was checked against a trusted method before being called real or dismissed | **PASSED** — one genuine bug fixed, two testing-tool false negatives identified and confirmed as such rather than assumed |
+| Both hashes unchanged (ruler/rule/labels/held-out, render_snapshots.json) | **PASSED** |
+
+`make check`: ruff clean, mypy clean, 981 passed, 7 xfailed.
