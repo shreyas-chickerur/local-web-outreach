@@ -119,9 +119,10 @@ FIXTURES = Path("tests/fixtures/briefs")
 # known. Zero live verdicts before this redecide, zero after — nothing to
 # retire, nothing added.
 BASELINE_SAME_TRADE = 0.6152
-# The closest same-trade pair, unjudged this round (no judging pass) —
-# printed as a reading, not a verdict. The closest this corpus has ever
-# produced: eight of twelve axes shared.
+# The closest same-trade pair, JUDGED as of Round 4 Phase 3b — a stranger
+# scrolling both whole pages called it "same" (see tests/fixtures/pairs.json).
+# The closest this corpus has ever produced: eight of twelve axes shared, and
+# the judgement agrees with the number for once.
 BASELINE_WORST = ("barbecue", "barbecue-rich", 0.17)
 # Which ruler the numbers above were taken with. A distance is comparable only
 # to another taken the same way, and comparing across a change of ruler has
@@ -134,19 +135,42 @@ BASELINE_METRIC = "a762bcc9"
 BASELINE_RULE = "254e171b"
 # And which judgements the agreement figure was taken against — the labels are
 # as much a part of the ruler as the weights, and they were re-judged blind.
-BASELINE_LABELS = "e3b0c442"
+#
+# Round 4 Phase 3b: the verdict set had sat at 0 live for two rounds. Fifteen
+# fresh verdicts, blind, from whole-page renderings recaptured the same
+# session (never a thumbnail, never memory) — two "same", thirteen
+# "different". Full agreement (every live pair, tuning set included):
+# 22/26 (85%). The held-out third alone — the only number that means
+# anything about whether the vector generalises, never used to choose a rule
+# or a weighting — is 9/11 (82%), comfortably past the 4-5 cross-comparisons
+# asked for as a floor. All four inversions trace to one pair,
+# `roofer`/`hvac-rich`: judged "same" (identical hero recipe, identical
+# section set and headings, only order and one small badge row differing) but
+# placed 69% apart by the vector — further apart than several pairs judged
+# "different". Reported plainly rather than explained away: a real,
+# disclosed mismatch between the instrument and a stranger's eye on this one
+# pair, not tuned around.
+BASELINE_LABELS = "122e6ec8"
 # What it was, so a reader can see that the agreement figure crossed a
 # change of labels rather than falling. "0 of 0" was scored against
-# 9ed8ff8e, eleven pairs taken before this pass's redecide retired them —
-# this pass judged none, so the new value is the hash of an empty set, not
-# a re-judged one.
-BASELINE_LABELS_WAS = ("9ed8ff8e", "0 of 0")
+# e3b0c442, the hash of an empty verdict set — two full rounds with nothing
+# live. Phase 3b is the first re-judging since, not a continuation of the
+# same labels.
+BASELINE_LABELS_WAS = ("e3b0c442", "0 of 0")
 # True on the commit that re-pins, false on every commit after. Without
 # it the first run under a new ruler always prints "no better than the
 # baseline" — because the baseline IS that run's own measurement copied
 # into a constant, and a self-comparison reads exactly like a confirmed
 # unchanged result.
-BASELINE_IS_FRESH = True
+#
+# False this round, on purpose, even though BASELINE_LABELS just moved:
+# this single flag also gates the SAME-TRADE MEAN's freshness message below,
+# and that number did not move — Phase 3b re-judged verdicts, it did not
+# redecide the corpus. Setting it True would correctly silence the labels
+# side and incorrectly claim the same-trade mean has nothing to compare
+# against, when "no better than the baseline" (unchanged, 0.6152) is the
+# true and more informative reading.
+BASELINE_IS_FRESH = False
 
 # One database on disk, shared by every tool that runs the fixtures.
 #

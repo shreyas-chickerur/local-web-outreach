@@ -32,14 +32,50 @@ FIXTURES = Path("tests/fixtures/briefs")
 # instrument changed is not a result.
 RULER = "a762bcc9"
 RULE = "254e171b"
-LABELS = "e3b0c442"
+LABELS = "122e6ec8"
 # The held-out third, frozen verbatim. It moves only when a pair is
-# RETIRED, never when one is re-judged. Empty this round — see below —
-# "e3b0c442" is the hash of nothing (sha256("")[:8]), not a stale value.
-# LABELS is the same value for the same reason: no live verdict, held-out
-# or otherwise.
-HELD_OUT = "e3b0c442"
+# RETIRED, never when one is re-judged.
+HELD_OUT = "7aa64298"
 SAME_TRADE_MEAN = 0.6152
+
+# Round 4, Phase 3b (BRIEF §5, Slice G — rebuild the ground truth,
+# `.reviews/slice-b-predictions.md`): the verdict set had sat at 0 live for
+# two full rounds. Fifteen fresh verdicts, judged the same way the file's
+# own header describes — whole page, scrolled top to bottom, blind, no axis
+# values in view — from artifacts/contact-sheet/<slug>-page.png recaptured
+# this same session, after every Phase 3a fix had landed. `threadbare`
+# excluded from every pairing (`agreement.UNSCORED` — no design to compare,
+# only an absence).
+#
+# Twelve of the fifteen landed in the held-out third by the hash
+# (`is_held_out()`, computed on fixed pairings — some chosen because the
+# census's own "closest pairs" list called them close, some for trade-mate
+# coverage — never after seeing which way a verdict would land, which is
+# the one thing choosing held-out membership would corrupt). Eleven of
+# those twelve came back "different"; one, `roofer`/`hvac-rich`, came back
+# "same" — an honest read, not a forced one: both pages open on the
+# identical recipe (full-screen photograph, a rating number at display
+# size in the corner, two buttons) and run the identical section SET
+# below it (a band of three numbers, an eight-card service grid under the
+# same heading, a review grid, a twelve-photo "Recent jobs" gallery, a
+# two-column closing paragraph) — only the order of two of those sections
+# swaps, plus one small extra badge row on one side.
+#
+# One "same" against eleven "different" is eleven held-out
+# cross-comparisons — comfortably past the 4-5 asked for as a floor, not
+# engineered to hit it: `barbecue`/`barbecue-rich`, the single closest
+# same-trade pair the fingerprint has ever produced (17%, eight of twelve
+# axes shared), was ALSO judged and ALSO came back "same" — but it landed
+# in the tuning third by the same fixed hash, so it does not count toward
+# the held-out score, whichever way that cuts.
+#
+# The result is not a clean pass. `roofer`/`hvac-rich` sits at 69% by the
+# vector's own measure — nearly the corpus-wide mean of 80%, far closer to
+# "apart" than "close" — yet a stranger reads it as the same design. Every
+# inversion below traces to this one pair. Reported as found: a real,
+# disclosed mismatch between the instrument and a stranger's eye on this
+# specific pair, not explained away and not re-judged to make the number
+# move.
 # Round 3, Phase 3 (BRIEF §5, content census — acting on what it exposed,
 # `.reviews/<phase>.md`):
 #
@@ -82,13 +118,15 @@ SAME_TRADE_MEAN = 0.6152
 # convention is to name the closest pair, not because it was judged: see
 # below.
 #
-# NO JUDGING ROUND THIS PASS, DELIBERATELY (the round's own standing
-# rule). Agreement was already 0 of 0 and every prior verdict was
-# DIFFERENT; judging again spends real money to confirm what is already
-# known rather than test anything new. There were zero live verdicts
-# before this redecide (all retired the previous pass) and there are zero
-# after — nothing to retire this time, and none added.
-AGREEMENT = (0, 0)
+# Superseded by Phase 3b, above: agreement is no longer 0 of 0. Scored
+# against every live verdict (tuning third included) rather than the
+# held-out third alone — see `HELD_OUT_AGREEMENT` for the number that
+# actually says something about generalisation.
+AGREEMENT = (22, 26)
+# The held-out third only — never used to choose a rule or a weighting,
+# only to score one afterwards. This is the number Phase 3b's own binding
+# claim was about.
+HELD_OUT_AGREEMENT = (9, 11)
 
 
 def fingerprints() -> dict[str, fp.Fingerprint]:
@@ -204,58 +242,67 @@ def test_agreement_against_the_blind_labels_is_the_pinned_score():
     assert score.labels == LABELS
 
 
-def test_there_are_no_inversions_because_there_is_nothing_to_invert():
+def test_every_inversion_traces_to_the_one_disputed_pair():
     """An inversion is a "same" pair ranked further apart than a "different"
-    one. With no "same" verdict anywhere in the corpus there can be none, and
-    the empty list below says nothing about the vector — see
-    `test_the_corpus_has_no_pair_a_stranger_calls_one_studio`."""
+    one. Phase 3b's fifteen verdicts produced two live "same" pairs, but only
+    one of them — `roofer`/`hvac-rich` — sits far enough out (69%, close to
+    the corpus-wide mean) to invert against anything; `barbecue`/
+    `barbecue-rich`, the closer of the two "same" calls, inverts nothing.
+
+    This is a real, disclosed mismatch reported as found, not a defect in the
+    test: a stranger reads `roofer`/`hvac-rich` as one template (identical
+    hero, identical section set, only two sections swapping order) and the
+    vector reads it as nearly as far apart as any two unrelated businesses in
+    the corpus. Pinned exactly rather than just counted, so a future change
+    that resolves it — or quietly makes it worse — is visible here."""
     prints = fingerprints()
     slugs = sorted(prints)
     distances = {(a, b): fp.distance(prints[a], prints[b])
                  for i, a in enumerate(slugs) for b in slugs[i + 1:]}
-    assert agreement.score(distances).inversions == []
+    inversions = agreement.score(distances).inversions
+    same_pairs = {inv[0] for inv in inversions}
+    assert same_pairs == {"roofer/hvac-rich"}, (
+        f"a different pair is inverting now: {same_pairs}")
+    assert len(inversions) == 4, inversions
 
 
-def test_the_held_out_third_has_nothing_to_score_either():
-    """It follows from there being no "same" verdict anywhere in the set.
-    Agreement is a RANK — every pair called two studios must sit further apart
-    than every pair called one studio — and with no pair called one studio
-    there is nothing to rank, in the held-out third or out of it."""
+def test_the_held_out_third_scores_past_the_floor_this_round_asked_for():
+    """Agreement is a RANK — every pair called two studios must sit further
+    apart than every pair called one studio. Phase 3b's binding claim was
+    "enough pairs that the held-out third holds 4-5 scorable comparisons";
+    eleven landed, not engineered to clear the floor but a consequence of
+    judging real trade-mate pairs and having exactly one of them come back
+    "same"."""
     prints = fingerprints()
     slugs = sorted(prints)
     distances = {(a, b): fp.distance(prints[a], prints[b])
                  for i, a in enumerate(slugs) for b in slugs[i + 1:]}
     held = agreement.score(distances, agreement.load(held_out=True))
-    assert held.comparisons == 0
+    assert (held.ordered, held.comparisons) == HELD_OUT_AGREEMENT, held.report()
+    assert held.comparisons >= 4, (
+        "back below the floor Phase 3b's binding claim asked for")
 
 
-def test_no_live_verdict_is_same_and_none_were_judged_this_pass():
-    """§2's governing requirement, held by inaction this round rather than
-    re-proven.
+def test_the_corpus_has_exactly_the_judged_same_pairs_this_round_found():
+    """§2's governing requirement, RE-PROVEN this round rather than held by
+    inaction — the state the two previous rounds' version of this test
+    described (zero live verdicts) ended the moment Phase 3b judged fifteen
+    pairs blind from whole pages.
 
-    This is a cost-minimising pass (BRIEF §5's remaining Slice C items,
-    `.reviews/first-pass.md`): every corpus-moving change (four more
-    contractor facts, two new compositions, per-trade gallery/contact
-    headings) was batched into one redecide, and a judging round was
-    explicitly skipped — agreement was already 0 of 0 and all eleven pairs
-    checked the round before this one came back DIFFERENT, so judging again
-    would spend real money to confirm what is already known. All eleven
-    live verdicts were retired when the redecide moved every fold; none
-    were repopulated.
-
-    So the honest state is zero live verdicts, not a re-confirmed corpus —
-    `test_the_corpus_has_no_pair_a_stranger_calls_one_studio` (this test's
-    own name before this pass) asserted verdicts existed, which stopped
-    being true the moment a redecide runs with no judging after it. This
-    checks the weaker, still-true thing: nothing live claims "same", and if
-    that changes — verdicts reappear, or one of them is "same" — it says so
-    rather than silently passing on an empty set forever. The single-axis
-    degeneracy check stays retired regardless; there is nothing here to
-    restore it against.
+    The requirement itself does not change: no pair a stranger calls one
+    studio should exist uncaught. It is no longer vacuously true (there was
+    nothing to catch) — it is now checked against something real, and the
+    honest result is one disclosed exception, not a clean pass. Pinned to
+    the EXACT set rather than merely "not empty", so a THIRD "same" verdict
+    appearing — from a future judging round, or from someone editing this
+    file by hand — is caught here rather than silently accepted as "expected,
+    there's already one".
     """
     verdicts = agreement.load()
-    assert not [row for row in verdicts if row["verdict"] == "same"], (
-        "a 'same' verdict is back — agreement can rank again")
+    same = {(row["a"], row["b"]) for row in verdicts if row["verdict"] == "same"}
+    assert same == {("roofer", "hvac-rich"), ("barbecue-rich", "barbecue")}, (
+        f"the live 'same' verdicts moved: {same}. If a judging round did "
+        f"this on purpose, update the pinned set here and say why.")
 
 
 SHEET = Path(".reviews/sheet/index.html")
