@@ -8,7 +8,7 @@
 <script>document.documentElement.className+=' reveals'</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
 <style>
 :root{
   --density-scale:1;
@@ -34,7 +34,7 @@
    stray wide element without creating a scroller. */
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;
   overflow-x:hidden;overflow-x:clip}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:'Barlow',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   font-size:clamp(16px, 15.28px + 0.1887vw, 18px);line-height:1.65;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 
@@ -53,10 +53,11 @@ p{text-wrap:pretty}
 .cta:focus-visible,.book:focus-visible{outline-offset:4px}
 
 ::selection{background:rgba(110,134,32,0.24);color:var(--ink)}
-h1{font-size:calc(clamp(43.87px, 28.83px + 3.958vw, 85.83px) * var(--density-scale));letter-spacing:-0.02em;font-variation-settings:"wght" 600}
-h2{font-size:calc(clamp(32.89px, 24.98px + 2.08vw, 54.93px) * var(--density-scale));letter-spacing:-0.012em;font-variation-settings:"wght" 500}
-h3{font-size:calc(clamp(21.34px, 18.91px + 0.6397vw, 28.12px) * var(--density-scale));letter-spacing:-0em;font-variation-settings:"wght" 500}
-.lede{font-size:calc(clamp(18.48px, 17.04px + 0.3792vw, 22.5px) * var(--density-scale))}
+h1{font-size:calc(clamp(34.46px, 25.54px + 2.348vw, 59.35px) * var(--density-scale));letter-spacing:-0.014em;font-variation-settings:"wght" 600}
+h2{font-size:calc(clamp(26.68px, 21.95px + 1.245vw, 39.88px) * var(--density-scale));letter-spacing:-0.007em;font-variation-settings:"wght" 500}
+h3{font-size:calc(clamp(20.66px, 18.47px + 0.5782vw, 26.79px) * var(--density-scale));letter-spacing:-0em;font-variation-settings:"wght" 500}
+.lede{font-size:calc(clamp(18.18px, 16.83px + 0.3564vw, 21.96px) * var(--density-scale))}
+body{font-variation-settings:"opsz" 18,"wght" 400}
 p{margin:0 0 1em;max-width:68ch}
 a{color:var(--accent)}
 img{max-width:100%;display:block}
@@ -73,7 +74,7 @@ section[data-ground="raise"]{background:var(--raise);color:var(--on-raise)}
 section[data-ground="accent"]{background:var(--accent);color:var(--on-accent)}
 section[data-ground="base"]{background:var(--bg);color:var(--on-base)}
 .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;
-  font-weight:700;color:var(--accent);margin:0 0 14px;font-family:'Barlow',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+  font-weight:700;color:var(--accent);margin:0 0 14px;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
 
 /* ---------------------------------------------------------------- chrome -- */
 .bar{position:fixed;inset:0 0 auto;z-index:40;display:flex;align-items:center;
@@ -84,7 +85,8 @@ section[data-ground="base"]{background:var(--bg);color:var(--on-base)}
    the edge so no shadow is needed, and the saturate() stops content going grey
    as it passes underneath. */
 body:has(.hero.first-type) .bar,
-body:has(.hero.first-split) .bar{color:var(--ink)}
+body:has(.hero.first-split) .bar,
+body:has(.hero.first-proof) .bar{color:var(--ink)}
 /* The split's chrome gets its own ground. Left translucent it ran dark ink
    across the photograph — legible left of the midpoint and not right of it,
    which is a contrast failure the audit cannot see because there is no
@@ -92,6 +94,17 @@ body:has(.hero.first-split) .bar{color:var(--ink)}
    legibility and wrapped the navigation onto three lines; a header band above
    a hard-edged split is the composition this position was already making. */
 body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
+  border-bottom:1px solid rgba(22,24,26,0.1)}
+/* `first-proof` puts its photograph in a narrow band across the very top —
+   exactly where the fixed nav sits — and turns its veil off because the type
+   never sits over the photograph at all (see `.hero.first-proof .veil`
+   above). Nobody told the nav: left translucent and white, as every other
+   position starts, it read as navigation links floating across a stranger's
+   face with no scrim to guarantee legibility, a collision a design review
+   caught that no test here did. Solid from the first frame, matching the
+   ground the claims below it already sit on, so the nav is never over the
+   photograph at all rather than merely hoping it stays legible on top of it. */
+body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
   border-bottom:1px solid rgba(22,24,26,0.1)}
 .bar.stuck{background:rgba(255,255,255,0.72);color:var(--ink);
   -webkit-backdrop-filter:blur(14px) saturate(180%);
@@ -126,7 +139,17 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   background-position:center;will-change:transform}
 .hero .veil{position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,rgba(20,22,24,0.88) 0%,rgba(20,22,24,0.58) 42%,rgba(20,22,24,0.26) 100%)}
 .hero.has-photo{color:#fff}
-.hero .wrap{padding-bottom:clamp(52px,9vh,110px);padding-top:120px}
+/* `min-width:0` overrides the grid item default of `min-width:auto`, which
+   otherwise sizes this implicit column to its content's min-content width
+   rather than the hero's own. `.hero.first-proof .proof` sets three columns
+   at `minmax(190px,1fr)` — a real minimum of 570px at three items — and with
+   nothing here capping it, the hero (and everything in its `.wrap`,
+   including the hero actions) grew to 570px on a 390px viewport instead of
+   wrapping the proof row, clipping the second action button by the width
+   that grid track went over. A collision a design review caught ("Get
+   directions" cropped) that no test here did until the corpus-wide
+   collision check below was built to catch this shape of bug generally. */
+.hero .wrap{padding-bottom:clamp(52px,9vh,110px);padding-top:120px;min-width:0}
 .hero h1{margin-bottom:.22em;max-width:16ch}
 .hero .sub{font-size:clamp(17px,2vw,25px);max-width:40ch;opacity:.94;
   margin-bottom:30px;line-height:1.4}
@@ -192,7 +215,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
 .ledgerfig{width:100%;border-collapse:collapse;font-family:'Oswald',Impact,'Arial Narrow',sans-serif}
 .ledgerfig th,.ledgerfig td{padding:14px 0;border-bottom:1px solid rgba(22,24,26,0.1);
   text-align:left;font-weight:400}
-.ledgerfig th{font-family:'Barlow',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:.16em;
+.ledgerfig th{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:.16em;
   text-transform:uppercase;opacity:.7;width:40%}
 .ledgerfig td{font-size:clamp(22px,3vw,40px);text-align:right}
 
@@ -220,7 +243,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
 
 [data-index]::after{content:attr(data-index);position:absolute;top:
   clamp(18px,2.4vw,38px);left:clamp(10px,2vw,26px);font-size:12px;
-  letter-spacing:.14em;opacity:.45;font-family:'Barlow',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+  letter-spacing:.14em;opacity:.45;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
 
 [data-device="ticker"]{padding:0;border-top:1px solid rgba(22,24,26,0.1);
   border-bottom:1px solid rgba(22,24,26,0.1);overflow:hidden}
@@ -364,7 +387,7 @@ body:has(section[data-ground]) section+section::before{opacity:1}
   gap:clamp(12px,1.6vw,22px);flex-wrap:wrap}
 .hero.first-facts .tally b{font-size:clamp(64px,11vw,168px);font-weight:400;
   letter-spacing:-.03em}
-.hero.first-facts .tally span{font-family:'Barlow',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+.hero.first-facts .tally span{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   font-size:clamp(14px,1.5vw,18px);letter-spacing:.02em;opacity:.86;
   font-weight:600;text-transform:uppercase}
 .hero.first-facts h1{font-size:clamp(22px,2.6vw,34px);margin-bottom:.5em;
@@ -474,7 +497,7 @@ section[data-ground="raise"] .card{background:var(--bg)}
 .listing .idx{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:12px;letter-spacing:.16em;
   color:var(--accent)}
 .listing h3{margin:0;line-height:1.08;
-  font-size:calc(clamp(28.47px, 22.93px + 1.46vw, 43.95px) * var(--density-scale))}
+  font-size:calc(clamp(23.48px, 20.18px + 0.8683vw, 32.69px) * var(--density-scale))}
 .editorial-art{margin-top:clamp(24px,3vw,40px);border-radius:var(--r);
   overflow:hidden;aspect-ratio:5/3}
 .editorial-art img{width:100%;height:100%;object-fit:cover;
@@ -512,7 +535,7 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
 .offer-feature .idx{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;font-size:12px;
   letter-spacing:.16em;color:var(--accent)}
 .offer-feature h3{margin:16px 0 0;line-height:1.1;
-  font-size:calc(clamp(28.47px, 22.93px + 1.46vw, 43.95px) * var(--density-scale))}
+  font-size:calc(clamp(23.48px, 20.18px + 0.8683vw, 32.69px) * var(--density-scale))}
 .offer-feature .rule{display:block;height:2px;width:34px;
   background:var(--accent);margin-top:20px;
   transition:width .45s cubic-bezier(.2,.7,.3,1)}
@@ -546,6 +569,9 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
 .dishes .n{font-weight:650;font-size:17px}
 .dishes .p{font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
 .dishes .d{grid-column:1/-1;color:var(--dim);font-size:15px;margin:0}
+.menu-more{margin:clamp(24px,3vw,36px) 0 0}
+figure.menu-media{margin:0}
+figure.menu-media img{border-radius:var(--r);max-width:480px}
 
 /* --------------------------------------------------------------- gallery -- */
 /* A fixed three-column rhythm with one aspect ratio and one gap, so the whole
@@ -615,11 +641,11 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 @media (max-width:820px){.accolade-grid{grid-template-columns:1fr;
   align-items:start;gap:26px}}
 .accolade{max-width:15ch;margin:0 0 .3em;
-  font-size:calc(clamp(37.98px, 26.99px + 2.894vw, 68.66px) * var(--density-scale))}
+  font-size:calc(clamp(30.32px, 23.75px + 1.729vw, 48.65px) * var(--density-scale))}
 .accolade-band .eyebrow{margin-bottom:22px}
 .accolade-band .eyebrow::after{content:"";display:block;width:64px;height:3px;
   background:var(--accent);margin-top:14px;border-radius:2px}
-.accolade-note{font-size:calc(clamp(18.48px, 17.04px + 0.3792vw, 22.5px) * var(--density-scale));
+.accolade-note{font-size:calc(clamp(18.18px, 16.83px + 0.3564vw, 21.96px) * var(--density-scale));
   max-width:36ch;color:var(--dim);margin:0}
 .accolade-band .proof{margin:30px 0 0;font-size:13px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--dim)}
@@ -638,7 +664,7 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 .marquee li{padding:clamp(18px,2vw,30px) clamp(22px,3vw,48px);
   border-left:1px solid var(--line);min-width:max-content}
 .marquee .who{display:block;font-family:'Oswald',Impact,'Arial Narrow',sans-serif;
-  font-size:calc(clamp(21.34px, 18.91px + 0.6397vw, 28.12px) * var(--density-scale));line-height:1.15;
+  font-size:calc(clamp(20.66px, 18.47px + 0.5782vw, 26.79px) * var(--density-scale));line-height:1.15;
   letter-spacing:-0em}
 .marquee .note{display:block;color:var(--dim);font-size:14px;margin-top:8px;
   max-width:26ch}
@@ -657,7 +683,7 @@ section[data-ground="raise"] .quote{background:var(--bg)}
    distinction a feature row is a heading and a paragraph, which is the shape
    of filler. */
 .feature .standfirst{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;
-  font-size:calc(clamp(21.34px, 18.91px + 0.6397vw, 28.12px) * var(--density-scale));line-height:1.3;
+  font-size:calc(clamp(20.66px, 18.47px + 0.5782vw, 26.79px) * var(--density-scale));line-height:1.3;
   letter-spacing:-0em;margin:0 0 .55em;color:var(--ink);
   text-wrap:balance;max-width:24ch}
 .feature.wide .standfirst,.feature.narrow .standfirst{max-width:34ch}
@@ -693,10 +719,10 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 /* The opening line in the display face, larger and looser: it does the work a
    pull quote does, without inventing a quote nobody said. */
 .standfirst{font-family:'Oswald',Impact,'Arial Narrow',sans-serif;
-  font-size:calc(clamp(21.34px, 18.91px + 0.6397vw, 28.12px) * var(--density-scale));
+  font-size:calc(clamp(20.66px, 18.47px + 0.5782vw, 26.79px) * var(--density-scale));
   line-height:1.28;letter-spacing:-0em;margin:0 0 .7em;
   text-wrap:balance}
-.prose{font-size:calc(clamp(18.48px, 17.04px + 0.3792vw, 22.5px) * var(--density-scale));line-height:1.72;
+.prose{font-size:calc(clamp(18.18px, 16.83px + 0.3564vw, 21.96px) * var(--density-scale));line-height:1.72;
   color:var(--dim);margin:0}
 .prose.dropcap::first-letter{float:left;font-family:'Oswald',Impact,'Arial Narrow',sans-serif;
   font-size:3.1em;line-height:.82;padding:.06em .09em 0 0;color:var(--accent)}
@@ -848,22 +874,21 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;
 }
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "Bert Roofing", "address": {"@type": "PostalAddress", "streetAddress": "10021 Cayuga Dr, Dallas, TX 75228, USA"}, "telephone": "(214) 321-9341", "aggregateRating": {"@type": "AggregateRating", "ratingValue": 4.8, "reviewCount": 136}, "geo": {"@type": "GeoCoordinates", "latitude": 32.8330779, "longitude": -96.6893407}}</script></head>
-<body data-theme="industrial" data-type="stamped" data-arch="ledger" data-signature="none" data-theme-layout="structured">
+<body data-theme="industrial" data-type="wide" data-arch="ledger" data-signature="none" data-theme-layout="structured">
 <div class="progress"></div>
-<div class="bar"><a class="mark" href="#top">Bert Roofing</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#reviews">Reviews</a><a href="#services">What we do</a><a href="#gallery">Gallery</a><a href="#about">About</a><a href="#hours">Hours</a><a href="#contact">Visit</a></nav><a class="book" href="tel:2143219341">Get a free estimate</a></div>
-<header class="hero first-type type-stamped" id="top"><div class="wrap"><h1>Bert Roofing</h1><p class="sub">Family-owned Dallas roofing contractor since 1988. 40,000 roofs completed. Deep Dallas roots. 12x NTRCA Golden Hammer winner. A+ BBB.</p><div class="facts"><span>&#9733; 4.8 &middot; 136 Google reviews</span><span>10021 Cayuga Dr</span><span>Fri 7:30am to 5pm</span></div><div class="actions"><a class="cta" href="tel:2143219341">Get a free estimate</a><a class="cta ghost" href="https://www.google.com/maps/search/?api=1&amp;query=Bert+Roofing+10021+Cayuga+Dr%2C+Dallas%2C+TX+75228%2C+USA" target="_blank" rel="noopener">Get directions</a></div></div></header>
+<div class="bar"><a class="mark" href="#top">Bert Roofing</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#reviews">Reviews</a><a href="#services">What we do</a><a href="#about">About</a><a href="#hours">Hours</a><a href="#contact">Visit</a></nav><a class="book" href="tel:2143219341">Get a free estimate</a></div>
+<header class="hero first-facts type-wide has-photo" id="top"><div class="bgimg" style="background-image:url(&quot;photos/c6a02260f8d89666264e54de5a0a4d07.jpg&quot;);background-image:-webkit-image-set(url(&quot;photos/c6a02260f8d89666264e54de5a0a4d07.jpg&quot;) 1x, url(&quot;photos/c6a02260f8d89666264e54de5a0a4d07.jpg&quot;) 2x);background-image:image-set(url(&quot;photos/c6a02260f8d89666264e54de5a0a4d07.jpg&quot;) 1x, url(&quot;photos/c6a02260f8d89666264e54de5a0a4d07.jpg&quot;) 2x)"></div><div class="veil"></div><div class="wrap"><p class="tally"><b>4.8</b><span>from 136 Google reviews</span></p><h1>Bert Roofing</h1><p class="sub">Family-owned Dallas roofing contractor since 1988. 40,000 roofs completed. Deep Dallas roots. 12x NTRCA Golden Hammer winner. A+ BBB.</p><div class="facts"><span>10021 Cayuga Dr</span><span>Fri 7:30am to 5pm</span></div><div class="actions"><a class="cta" href="tel:2143219341">Get a free estimate</a><a class="cta ghost" href="https://www.google.com/maps/search/?api=1&amp;query=Bert+Roofing+10021+Cayuga+Dr%2C+Dallas%2C+TX+75228%2C+USA" target="_blank" rel="noopener">Get directions</a></div></div><div class="scrollcue"></div></header>
 <section data-rule="on" id="credentials"><div class="wrap" data-measure="tight"><div class="head" data-reveal><p class="eyebrow">Credentials</p><h2>What to expect</h2></div><div class="offers"><article class="offer" data-reveal data-delay="0"><span class="idx">01</span><h3>Workmanship warranty</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">02</span><h3>Free estimate</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">03</span><h3>Service area</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">04</span><h3>Manufacturer certified</h3><span class="rule"></span></article></div></div></section>
-<section data-rule="on" id="stats" class="statband"><div class="wrap" data-measure="tight"><div class="stats"><div class="stat" data-reveal data-delay="0"><b>4.8</b><span>average rating</span></div><div class="stat" data-reveal data-delay="1"><b data-count="136">136</b><span>Google reviews</span></div><div class="stat" data-reveal data-delay="2"><b data-count="1">1</b><span>dishes on the menu</span></div></div></div></section>
-<section data-rule="on" id="reviews" data-ground="raise"><div class="wrap" data-measure="tight"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>4.8 stars from 136 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I can’t recommend Bert roofing enough. They provided a fast turn around on a roofing inspection and we were so impressed with the level of detail, we hired them to replace the roof once we closed. They were very timely, highly communicative, and great customer service. We are so happy with the outcome and the beautiful roof!&rdquo;</p><figcaption class="who">Cristin Damon &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="1"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Very thorough and very good. I have used Bert Roofing three times now. Each time they did and impeccable job and their pricing is very reasonable. Over the years, I have used other roofing companies, and they either charge a lot more or do a poor quality job and even worse they leave a huge mess everywhere. Bert Roofing is great because n&rdquo;</p><figcaption class="who">Clint Compton &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="2"><div class="stars">&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Bert and his crew did an excellent job repairing my roof leak and chimney leak. The crew was courteous and respectful. It took a couple weeks after the completion of the roof repair before we got a good rain fall to see how the roof held up. I am satisfied with the work and would highly recommend Bert and for roof repairs. You’re in good&rdquo;</p><figcaption class="who">Ken Holt &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="3"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Bert Roofing did an excellent job on our roof.  It had suffered hail and wind damage.
+<section data-rule="on" id="stats" class="statband"><div class="wrap" data-measure="tight"><div class="stats"><div class="stat" data-reveal data-delay="0"><b>4.8</b><span>average rating</span></div><div class="stat" data-reveal data-delay="1"><b data-count="136">136</b><span>Google reviews</span></div><div class="stat" data-reveal data-delay="2"><b data-count="8">8</b><span>services offered</span></div></div></div></section>
+<section data-rule="on" id="reviews" data-ground="raise"><div class="wrap" data-measure="tight"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>4.8 stars from 136 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I can’t recommend Bert roofing enough. They provided a fast turn around on a roofing inspection and we were so impressed with the level of detail, we hired them to replace the roof once we closed. They were very timely, highly communicative, and great customer service. We are so happy with the outcome and the beautiful roof!&rdquo;</p><figcaption class="who">Cristin Damon &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="1"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Very thorough and very good. I have used Bert Roofing three times now. Each time they did and impeccable job and their pricing is very reasonable. Over the years, I have used other roofing companies, and they either charge a lot more or do a poor quality job and even worse they leave a huge mess everywhere. Bert Roofing is great because…&rdquo;</p><figcaption class="who">Clint Compton &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="2"><div class="stars">&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Bert and his crew did an excellent job repairing my roof leak and chimney leak. The crew was courteous and respectful. It took a couple weeks after the completion of the roof repair before we got a good rain fall to see how the roof held up. I am satisfied with the work and would highly recommend Bert and for roof repairs. You’re in good…&rdquo;</p><figcaption class="who">Ken Holt &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="3"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Bert Roofing did an excellent job on our roof.  It had suffered hail and wind damage.
 Bill Chittum of Bert Roofing did a great job walking us through the insurance claim process as well as guiding us through selecting the type of new roof.
 He was professional, knowledgeable and accessible.
-We strongly recommend this company for your new r&rdquo;</p><figcaption class="who">Jeff Vance &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I had a significant roof leak that needed urgent attention. Bert Roofing came out within a few days of scheduling to fix the issue, and the owner gave me a reasonable, honest quote. The team was out to fix the issue within a few days afterwards and came back to inspect the roof again after the next hard rain.
+We strongly recommend this company for your new…&rdquo;</p><figcaption class="who">Jeff Vance &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I had a significant roof leak that needed urgent attention. Bert Roofing came out within a few days of scheduling to fix the issue, and the owner gave me a reasonable, honest quote. The team was out to fix the issue within a few days afterwards and came back to inspect the roof again after the next hard rain.
 
-Overall quick and efficient&rdquo;</p><figcaption class="who">Jason Early &middot; Google</figcaption></figure></div></div></section>
+Overall quick and efficient…&rdquo;</p><figcaption class="who">Jason Early &middot; Google</figcaption></figure></div></div></section>
 <section data-rule="on" id="services" data-density="dense" style="--density-scale:0.85"><div class="wrap" data-measure="tight"><div class="head" data-reveal><p class="eyebrow">On offer</p><h2>What we cook and serve</h2><p class="lede">Family-owned Dallas roofing contractor since 1988. 40,000 roofs completed. Deep Dallas roots. 12x NTRCA Golden Hammer winner. A+ BBB.</p></div><div class="offers"><article class="offer" data-reveal data-delay="0"><span class="idx">01</span><h3>From First Call to Final Inspection</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">02</span><h3>Roof Replacement</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">03</span><h3>Roof Repair</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">04</span><h3>Roof Maintenance</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="0"><span class="idx">05</span><h3>Skylights</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">06</span><h3>Storm Damage</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">07</span><h3>Professional. Experienced. Dallas-Focused.</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">08</span><h3>Serving Dallas Homeowners Since 1988</h3><span class="rule"></span></article></div></div></section>
-<section data-rule="on" id="gallery"><div class="wrap" data-measure="tight"><p class="eyebrow" data-reveal>Our work</p><h2 data-reveal>Recent jobs</h2><div class="mosaic" style="--cols:3;--cols-narrow:2"><button aria-label="Open photo 1" data-reveal data-delay="0"><img src="photos/514bbbf5482da111456ad259375b70e1.jpg" alt="A before-and-after comparison image of a roof section with a pipe vent, showing new shingles installed on the after side" srcset="photos/514bbbf5482da111456ad259375b70e1.jpg 800w, photos/514bbbf5482da111456ad259375b70e1.jpg 1600w, photos/514bbbf5482da111456ad259375b70e1.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 2" data-reveal data-delay="1"><img src="photos/0aa8153bba0787a0816c78d3c650a0a1.jpg" alt="A two-story green house with a covered front porch, brick accents, and a landscaped front yard" srcset="photos/0aa8153bba0787a0816c78d3c650a0a1.jpg 800w, photos/0aa8153bba0787a0816c78d3c650a0a1.jpg 1600w, photos/0aa8153bba0787a0816c78d3c650a0a1.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 3" data-reveal data-delay="2"><img src="photos/18f3f796e6bba3a8709b6b96354fd740.jpg" alt="A before-and-after comparison of a roof gable on a brick house, showing old and new shingles" srcset="photos/18f3f796e6bba3a8709b6b96354fd740.jpg 800w, photos/18f3f796e6bba3a8709b6b96354fd740.jpg 1600w, photos/18f3f796e6bba3a8709b6b96354fd740.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 4" data-reveal data-delay="3"><img src="photos/e92f15ca4e0e0ca6a5237a3d9204cb1e.jpg" alt="Workers installing a new roof with underlayment paper visible on a brick house under a clear blue sky" srcset="photos/e92f15ca4e0e0ca6a5237a3d9204cb1e.jpg 800w, photos/e92f15ca4e0e0ca6a5237a3d9204cb1e.jpg 1600w, photos/e92f15ca4e0e0ca6a5237a3d9204cb1e.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 5" data-reveal data-delay="0"><img src="photos/cd57ff4de5d21bdf7a6858c134f84260.jpg" alt="A close-up view of a shingled roof with several black turbine vents and pipe stacks, with houses and trees in the background" srcset="photos/cd57ff4de5d21bdf7a6858c134f84260.jpg 800w, photos/cd57ff4de5d21bdf7a6858c134f84260.jpg 1600w, photos/cd57ff4de5d21bdf7a6858c134f84260.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 6" data-reveal data-delay="1"><img src="photos/0cf05384ac40ad6c517560b666452dc6.jpg" alt="A brick house partially obscured by trees and shrubs viewed from the street with sunlight streaming through" srcset="photos/0cf05384ac40ad6c517560b666452dc6.jpg 800w, photos/0cf05384ac40ad6c517560b666452dc6.jpg 1600w, photos/0cf05384ac40ad6c517560b666452dc6.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 7" data-reveal data-delay="2"><img src="photos/f7993b044db4ee44e23753326b21f929.jpg" alt="Stacks of roofing shingle bundles and equipment on a driveway with trucks parked on the street" srcset="photos/f7993b044db4ee44e23753326b21f929.jpg 800w, photos/f7993b044db4ee44e23753326b21f929.jpg 1600w, photos/f7993b044db4ee44e23753326b21f929.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 8" data-reveal data-delay="3"><img src="photos/be8811c5a70b1ebf4d85f80ac45268e9.jpg" alt="A white pickup truck with roofing company branding parked on a residential street in front of a brick house with a large tree." srcset="photos/be8811c5a70b1ebf4d85f80ac45268e9.jpg 800w, photos/be8811c5a70b1ebf4d85f80ac45268e9.jpg 1600w, photos/be8811c5a70b1ebf4d85f80ac45268e9.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 9" data-reveal data-delay="0"><img src="photos/74b5869fde1c1a2848815cbc2b5a8f65.jpg" alt="The open dark entrance of a metal warehouse building with a Will Call Pick Up sign above the door." srcset="photos/74b5869fde1c1a2848815cbc2b5a8f65.jpg 800w, photos/74b5869fde1c1a2848815cbc2b5a8f65.jpg 1600w, photos/74b5869fde1c1a2848815cbc2b5a8f65.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 10" data-reveal data-delay="1"><img src="https://bertroofing.com/assets/bert-roofing-east-dallas-contractor-1920.jpg" alt="A man in a blue polo shirt stands on a rooftop holding tools, with another worker nearby and a lake and city skyline in the background." loading="lazy" decoding="async"></button><button aria-label="Open photo 11" data-reveal data-delay="2"><img src="https://bertroofing.com/assets/avatar-1.webp" alt="A small circular profile photo of a smiling woman wearing a cap." loading="lazy" decoding="async"></button><button aria-label="Open photo 12" data-reveal data-delay="3"><img src="https://bertroofing.com/assets/avatar-2.webp" alt="A plain green circular icon with the letter C in the center." loading="lazy" decoding="async"></button></div></div></section><div class="lightbox" role="dialog" aria-label="Photo"><button class="close" aria-label="Close">&times;</button><button class="prev" aria-label="Previous">&lsaquo;</button><img src="" alt=""><button class="next" aria-label="Next">&rsaquo;</button><div class="count"></div></div>
 <section data-rule="on" id="about"><div class="wrap" data-measure="tight"><div class="split"><div data-reveal><p class="eyebrow">About</p><h2>What we are about</h2><span class="flourish"></span></div><div class="story"><p class="standfirst" data-reveal>We had the best experience getting some repairs to my Mom&#x27;s roof.</p><p class="prose" data-reveal data-delay="1">We originally got estimates from 3 companies, and not only was the Bert quote very reasonable, but they actually listened to us and what we wanted done.</p></div></div></div></section>
-<section data-rule="on" id="more"><div class="wrap" data-measure="tight"><article class="feature wide" data-reveal><div class="words"><h3>Schedule a Roof Inspection</h3><p class="standfirst">Tell us about your roof and a Bert Roofing project manager will call to schedule a no-obligation inspection and written estimate.</p><p class="prose">Insurance-related estimates and documentation are available. First Name * Last Name Phone * Email * Property Address * Briefly describe your roof issue (optional) Get My No-Obligation Quote By submitting this form you consent to receive text messages from Bert Roofing about your inspection, quote, and project.</p></div></article><article class="feature offset" data-reveal><div class="words"><h3>Reviews From Your Neighbors</h3><p class="standfirst">★★★★★ 4.8/5 on Google · 100+ verified reviews Barbara S.</p><p class="prose">08 December 2025 I needed some roof repair and I was very happy with Bert Roofing. The crew was professional and they cleaned up completely after they finished their work. They also explained what they were doing and answered every question I had. Read full review → Jerry A. 08 December 2025 I recommend Bert Roofing 100%.</p></div></article><article class="feature narrow" data-reveal><div class="words"><h3>From First Call to Final Inspection</h3><p class="standfirst">No pressure, no surprises, no high-pressure sales tactics.</p><p class="prose">Three steps from inspection to final cleanup, with a single project manager assigned to your home. Step 01</p></div></article><article class="feature plain" data-reveal><div class="words"><h3>Schedule a No-Obligation Inspection</h3><p class="standfirst">A local project manager evaluates your roof and walks you through what they find.</p><p class="prose">No pressure, no obligation. Most inspections take 30 to 45 minutes. Step 02</p></div></article></div></section>
+<section data-rule="on" id="more"><div class="wrap" data-measure="tight"><article class="feature wide" data-reveal><div class="words"><h3>Schedule a Roof Inspection</h3><p class="standfirst">Tell us about your roof and a Bert Roofing project manager will call to schedule a no-obligation inspection and written estimate.</p><p class="prose">Insurance-related estimates and documentation are available. First Name * Last Name Phone * Email * Property Address * Briefly describe your roof issue (optional) Get My No-Obligation Quote By submitting this form you consent to receive text messages from Bert Roofing about your inspection, quote, and project.</p></div></article><article class="feature offset" data-reveal><div class="words"><h3>Reviews From Your Neighbors</h3><p class="standfirst">★★★★★ 4.8/5 on Google · 100+ verified reviews Barbara S.</p><p class="prose">08 December 2025 I needed some roof repair and I was very happy with Bert Roofing. The crew was professional and they cleaned up completely after they finished their work. They also explained what they were doing and answered every question I had. Read full review → Jerry A. 08 December 2025 I recommend Bert Roofing 100%.</p></div></article><article class="feature narrow" data-reveal><div class="words"><h3>From First Call to Final Inspection</h3><p class="standfirst">No pressure, no surprises, no high-pressure sales tactics.</p><p class="prose">Three steps from inspection to final cleanup, with a single project manager assigned to your home. Step 01</p></div></article><article class="feature plain" data-reveal><div class="words"><h3>Schedule a No-Obligation Inspection</h3><p class="standfirst">A local project manager evaluates your roof and walks you through what they find.</p><p class="prose">No pressure, no obligation. Most inspections take 30 to 45 minutes. Step 02</p></div></article><article class="feature wide" data-reveal><div class="words"><h3>Get a Clear Written Estimate</h3><p class="standfirst">Repair vs.</p><p class="prose">replacement options, scope, materials, and pricing, all in writing with no hidden line items. Insurance claims documented for your adjuster. Step 03</p></div></article><article class="feature offset" data-reveal><div class="words"><h3>We Handle the Work</h3><p class="standfirst">Professional installation by our own crews.</p><p class="prose">Thorough cleanup with magnetic nail sweep. Final walk-through and full manufacturer and workmanship warranty. Schedule a Roof Inspection No obligation · 214-321-9341</p></div></article></div></section>
 <section data-rule="on" id="hours" data-ground="raise"><div class="wrap narrow"><p class="eyebrow" data-reveal>Hours</p><div class="openflag" data-week='{"fri": "0730-1700", "sat": "closed", "sun": "closed"}' data-reveal><i></i><span>Opening hours</span></div><ul class="hourlist" data-reveal data-delay="1"><li><span>Fri 7:30am to 5pm</span></li><li><span>Saturday Closed</span></li><li><span>Sunday Closed</span></li><li><span>Sunday closed</span></li></ul></div></section>
 <section data-rule="on" id="contact"><div class="wrap" data-measure="tight"><div class="split"><div data-reveal><p class="eyebrow">Get in touch</p><h2>Reach us</h2><div class="reach"><a href="https://www.google.com/maps/search/?api=1&amp;query=10021+Cayuga+Dr%2C+Dallas%2C+TX+75228%2C+USA" target="_blank" rel="noopener"><span class="k">Address</span><span class="v">10021 Cayuga Dr, Dallas, TX 75228, USA</span></a><a href="tel:2143219341"><span class="k">Phone</span><span class="v">(214) 321-9341</span></a></div></div><div class="map" data-reveal data-delay="1"><iframe loading="lazy" title="Map of Bert Roofing" src="https://www.openstreetmap.org/export/embed.html?bbox=-96.69334070000001,32.8300779,-96.6853407,32.8360779&amp;layer=mapnik&amp;marker=32.8330779,-96.6893407"></iframe></div></div></div></section>
 <div class="callbar"><a class="cta" href="tel:2143219341">Get a free estimate</a><a class="cta ghost" href="https://www.google.com/maps/search/?api=1&amp;query=10021+Cayuga+Dr%2C+Dallas%2C+TX+75228%2C+USA" target="_blank" rel="noopener">Directions</a></div>

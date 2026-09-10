@@ -83,7 +83,8 @@ section[data-ground="base"]{background:var(--bg);color:var(--on-base)}
    the edge so no shadow is needed, and the saturate() stops content going grey
    as it passes underneath. */
 body:has(.hero.first-type) .bar,
-body:has(.hero.first-split) .bar{color:var(--ink)}
+body:has(.hero.first-split) .bar,
+body:has(.hero.first-proof) .bar{color:var(--ink)}
 /* The split's chrome gets its own ground. Left translucent it ran dark ink
    across the photograph — legible left of the midpoint and not right of it,
    which is a contrast failure the audit cannot see because there is no
@@ -91,6 +92,17 @@ body:has(.hero.first-split) .bar{color:var(--ink)}
    legibility and wrapped the navigation onto three lines; a header band above
    a hard-edged split is the composition this position was already making. */
 body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
+  border-bottom:1px solid rgba(22,24,26,0.1)}
+/* `first-proof` puts its photograph in a narrow band across the very top —
+   exactly where the fixed nav sits — and turns its veil off because the type
+   never sits over the photograph at all (see `.hero.first-proof .veil`
+   above). Nobody told the nav: left translucent and white, as every other
+   position starts, it read as navigation links floating across a stranger's
+   face with no scrim to guarantee legibility, a collision a design review
+   caught that no test here did. Solid from the first frame, matching the
+   ground the claims below it already sit on, so the nav is never over the
+   photograph at all rather than merely hoping it stays legible on top of it. */
+body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
   border-bottom:1px solid rgba(22,24,26,0.1)}
 .bar.stuck{background:rgba(255,255,255,0.72);color:var(--ink);
   -webkit-backdrop-filter:blur(14px) saturate(180%);
@@ -125,7 +137,17 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   background-position:center;will-change:transform}
 .hero .veil{position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,rgba(20,22,24,0.88) 0%,rgba(20,22,24,0.58) 42%,rgba(20,22,24,0.26) 100%)}
 .hero.has-photo{color:#fff}
-.hero .wrap{padding-bottom:clamp(52px,9vh,110px);padding-top:120px}
+/* `min-width:0` overrides the grid item default of `min-width:auto`, which
+   otherwise sizes this implicit column to its content's min-content width
+   rather than the hero's own. `.hero.first-proof .proof` sets three columns
+   at `minmax(190px,1fr)` — a real minimum of 570px at three items — and with
+   nothing here capping it, the hero (and everything in its `.wrap`,
+   including the hero actions) grew to 570px on a 390px viewport instead of
+   wrapping the proof row, clipping the second action button by the width
+   that grid track went over. A collision a design review caught ("Get
+   directions" cropped) that no test here did until the corpus-wide
+   collision check below was built to catch this shape of bug generally. */
+.hero .wrap{padding-bottom:clamp(52px,9vh,110px);padding-top:120px;min-width:0}
 .hero h1{margin-bottom:.22em;max-width:16ch}
 .hero .sub{font-size:clamp(17px,2vw,25px);max-width:40ch;opacity:.94;
   margin-bottom:30px;line-height:1.4}
@@ -545,6 +567,9 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
 .dishes .n{font-weight:650;font-size:17px}
 .dishes .p{font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
 .dishes .d{grid-column:1/-1;color:var(--dim);font-size:15px;margin:0}
+.menu-more{margin:clamp(24px,3vw,36px) 0 0}
+figure.menu-media{margin:0}
+figure.menu-media img{border-radius:var(--r);max-width:480px}
 
 /* --------------------------------------------------------------- gallery -- */
 /* A fixed three-column rhythm with one aspect ratio and one gap, so the whole
@@ -846,13 +871,14 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;
   .marquee ul{animation:none!important;flex-wrap:wrap;width:auto}
 }
 </style>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "S.Handyman", "geo": {"@type": "GeoCoordinates", "latitude": 33.132570799999996, "longitude": -96.8086617}}</script></head>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "S.Handyman", "address": {"@type": "PostalAddress", "streetAddress": "8655 Brookhollow Blvd, Frisco, TX 75034, USA"}, "telephone": "(945) 289-8844", "geo": {"@type": "GeoCoordinates", "latitude": 33.132570799999996, "longitude": -96.8086617}}</script></head>
 <body data-theme="industrial" data-type="stamped" data-arch="stacked" data-signature="none" data-theme-layout="structured">
 <div class="progress"></div>
-<div class="bar"><a class="mark" href="#top">S.Handyman</a><button class="burger" aria-label="Menu">&#9776;</button><nav></nav></div>
-<header class="hero first-type type-stamped" id="top"><div class="wrap"><h1>S.Handyman</h1><p class="sub">General Contractor</p><div class="actions"></div></div></header>
-
-<footer><div class="wrap"><div class="row"><span>&copy; S.Handyman</span><button class="top">Back to top</button></div></div></footer>
+<div class="bar"><a class="mark" href="#top">S.Handyman</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#contact">Visit</a></nav><a class="book" href="tel:9452898844">Call us</a></div>
+<header class="hero first-type type-stamped" id="top"><div class="wrap"><h1>S.Handyman</h1><p class="sub">General Contractor</p><div class="facts"><span>8655 Brookhollow Blvd</span></div><div class="actions"><a class="cta" href="tel:9452898844">Call (945) 289-8844</a><a class="cta ghost" href="https://www.google.com/maps/search/?api=1&amp;query=S.Handyman+8655+Brookhollow+Blvd%2C+Frisco%2C+TX+75034%2C+USA" target="_blank" rel="noopener">Get directions</a></div></div></header>
+<section id="contact"><div class="wrap"><div class="split"><div data-reveal><p class="eyebrow">Get in touch</p><h2>Reach us</h2><div class="reach"><a href="https://www.google.com/maps/search/?api=1&amp;query=8655+Brookhollow+Blvd%2C+Frisco%2C+TX+75034%2C+USA" target="_blank" rel="noopener"><span class="k">Address</span><span class="v">8655 Brookhollow Blvd, Frisco, TX 75034, USA</span></a><a href="tel:9452898844"><span class="k">Phone</span><span class="v">(945) 289-8844</span></a></div></div><div class="map" data-reveal data-delay="1"><iframe loading="lazy" title="Map of S.Handyman" src="https://www.openstreetmap.org/export/embed.html?bbox=-96.8126617,33.129570799999996,-96.8046617,33.135570799999996&amp;layer=mapnik&amp;marker=33.132570799999996,-96.8086617"></iframe></div></div></div></section>
+<div class="callbar"><a class="cta" href="tel:9452898844">Call us</a><a class="cta ghost" href="https://www.google.com/maps/search/?api=1&amp;query=8655+Brookhollow+Blvd%2C+Frisco%2C+TX+75034%2C+USA" target="_blank" rel="noopener">Directions</a></div>
+<footer><div class="wrap"><div class="row"><span>&copy; S.Handyman</span><span>8655 Brookhollow Blvd, Frisco, TX 75034, USA</span><a href="tel:9452898844">(945) 289-8844</a><button class="top">Back to top</button></div></div></footer>
 <script>
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 

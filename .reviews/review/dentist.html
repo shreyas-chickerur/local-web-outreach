@@ -8,23 +8,23 @@
 <script>document.documentElement.className+=' reveals'</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@300..700&family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&family=Jost:wght@200..700&display=swap" rel="stylesheet">
 <style>
 :root{
   --density-scale:1;
-  --bg:#fbf7f1; --surface:#ffffff; --raise:#f4ece1; --ink:#2a1f16;
-  --dim:#6f5c49; --accent:#1eaba7; --accent-soft:#defbfa;
-  --accent-ink:#111111; --line:#e9dcc9; --r:14px;
+  --bg:#f7f5f2; --surface:#ffffff; --raise:#efece6; --ink:#17181a;
+  --dim:#585a55; --accent:#1b5452; --accent-soft:#e5efef;
+  --accent-ink:#ffffff; --line:#e3ded5; --r:3px;
   /* Two layers doing different jobs: a hairline-tight contact shadow to seat
      the card, and a wide, very faint cast to lift it. A single heavy shadow
      reads as a border with a blur on it. */
-  --shadow:0 1px 1px rgba(42,31,22,0.04),0 8px 30px rgba(42,31,22,0.055);
-  --lift:0 2px 4px rgba(42,31,22,0.04),0 22px 48px -12px rgba(42,31,22,0.16);
-  --hairline:rgba(42,31,22,0.1);
+  --shadow:0 1px 1px rgba(23,24,26,0.04),0 8px 30px rgba(23,24,26,0.055);
+  --lift:0 2px 4px rgba(23,24,26,0.04),0 22px 48px -12px rgba(23,24,26,0.16);
+  --hairline:rgba(23,24,26,0.1);
   /* Foregrounds computed against each ground, never paired by hand. */
-  --on-base:#2a1f16;
-  --on-raise:#2a1f16;
-  --on-accent:#2a1f16;
+  --on-base:#17181a;
+  --on-raise:#17181a;
+  --on-accent:#f7f5f2;
   --pad:clamp(20px,5vw,44px);
 }
 *{box-sizing:border-box}
@@ -34,13 +34,13 @@
    stray wide element without creating a scroller. */
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;
   overflow-x:hidden;overflow-x:clip}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   font-size:clamp(16px, 15.28px + 0.1887vw, 18px);line-height:1.65;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");opacity:.05;mix-blend-mode:multiply}
-h1,h2,h3{font-family:'IBM Plex Serif',Georgia,serif;line-height:1.05;margin:0 0 .5em;
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;line-height:1.05;margin:0 0 .5em;
   /* Stops a headline dropping one word onto its own line at an awkward width.
      Unsupported engines ignore it and wrap as before. */
   text-wrap:balance}
@@ -54,12 +54,12 @@ p{text-wrap:pretty}
 :focus:not(:focus-visible){outline:none}
 .cta:focus-visible,.book:focus-visible{outline-offset:4px}
 
-::selection{background:rgba(30,171,167,0.24);color:var(--ink)}
-h1{font-size:calc(clamp(32.26px, 24.56px + 2.027vw, 53.75px) * var(--density-scale));letter-spacing:-0.01em;font-variation-settings:"wght" 600}
-h2{font-size:calc(clamp(25.54px, 21.31px + 1.112vw, 37.32px) * var(--density-scale));letter-spacing:-0.005em;font-variation-settings:"wght" 500}
-h3{font-size:calc(clamp(20.21px, 18.17px + 0.5383vw, 25.92px) * var(--density-scale));letter-spacing:-0em;font-variation-settings:"wght" 500}
-.lede{font-size:calc(clamp(17.98px, 16.69px + 0.3411vw, 21.6px) * var(--density-scale))}
-body{font-variation-settings:"opsz" 18,"wght" 400}
+::selection{background:rgba(27,84,82,0.24);color:var(--ink)}
+h1{font-size:calc(clamp(49.34px, 30.83px + 4.872vw, 101px) * var(--density-scale));letter-spacing:0em;font-variation-settings:"wght" 600}
+h2{font-size:calc(clamp(33.9px, 25.68px + 2.164vw, 56.83px) * var(--density-scale));letter-spacing:0em;font-variation-settings:"wght" 500}
+h3{font-size:calc(clamp(23.29px, 20.17px + 0.8203vw, 31.98px) * var(--density-scale));letter-spacing:0em;font-variation-settings:"wght" 500}
+.lede{font-size:calc(clamp(19.3px, 17.62px + 0.4425vw, 23.99px) * var(--density-scale))}
+body{font-variation-settings:"wght" 400}
 p{margin:0 0 1em;max-width:68ch}
 a{color:var(--accent)}
 img{max-width:100%;display:block}
@@ -76,7 +76,7 @@ section[data-ground="raise"]{background:var(--raise);color:var(--on-raise)}
 section[data-ground="accent"]{background:var(--accent);color:var(--on-accent)}
 section[data-ground="base"]{background:var(--bg);color:var(--on-base)}
 .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;
-  font-weight:700;color:var(--accent);margin:0 0 14px;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+  font-weight:700;color:var(--accent);margin:0 0 14px;font-family:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
 
 /* ---------------------------------------------------------------- chrome -- */
 .bar{position:fixed;inset:0 0 auto;z-index:40;display:flex;align-items:center;
@@ -87,7 +87,8 @@ section[data-ground="base"]{background:var(--bg);color:var(--on-base)}
    the edge so no shadow is needed, and the saturate() stops content going grey
    as it passes underneath. */
 body:has(.hero.first-type) .bar,
-body:has(.hero.first-split) .bar{color:var(--ink)}
+body:has(.hero.first-split) .bar,
+body:has(.hero.first-proof) .bar{color:var(--ink)}
 /* The split's chrome gets its own ground. Left translucent it ran dark ink
    across the photograph — legible left of the midpoint and not right of it,
    which is a contrast failure the audit cannot see because there is no
@@ -95,17 +96,28 @@ body:has(.hero.first-split) .bar{color:var(--ink)}
    legibility and wrapped the navigation onto three lines; a header band above
    a hard-edged split is the composition this position was already making. */
 body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
-  border-bottom:1px solid rgba(42,31,22,0.1)}
+  border-bottom:1px solid rgba(23,24,26,0.1)}
+/* `first-proof` puts its photograph in a narrow band across the very top —
+   exactly where the fixed nav sits — and turns its veil off because the type
+   never sits over the photograph at all (see `.hero.first-proof .veil`
+   above). Nobody told the nav: left translucent and white, as every other
+   position starts, it read as navigation links floating across a stranger's
+   face with no scrim to guarantee legibility, a collision a design review
+   caught that no test here did. Solid from the first frame, matching the
+   ground the claims below it already sit on, so the nav is never over the
+   photograph at all rather than merely hoping it stays legible on top of it. */
+body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
+  border-bottom:1px solid rgba(23,24,26,0.1)}
 .bar.stuck{background:rgba(255,255,255,0.72);color:var(--ink);
   -webkit-backdrop-filter:blur(14px) saturate(180%);
   backdrop-filter:blur(14px) saturate(180%);
-  border-bottom:1px solid rgba(42,31,22,0.1);
+  border-bottom:1px solid rgba(23,24,26,0.1);
   padding-top:10px;padding-bottom:10px}
 /* Without blur support the translucency reads as a bug, so fall back opaque. */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .bar.stuck{background:var(--surface);box-shadow:var(--shadow)}
 }
-.bar .mark{font-family:'IBM Plex Serif',Georgia,serif;font-weight:700;font-size:19px;
+.bar .mark{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:19px;
   letter-spacing:-.02em;text-decoration:none;color:inherit}
 .bar nav{margin-left:auto;display:flex;gap:26px}
 .bar nav a{color:inherit;text-decoration:none;font-size:14.5px;font-weight:600;
@@ -127,9 +139,19 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   overflow:hidden;background:var(--raise);isolation:isolate}
 .hero .bgimg{position:absolute;inset:-8% 0 0;z-index:-2;background-size:cover;
   background-position:center;will-change:transform}
-.hero .veil{position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,rgba(38,24,14,0.84) 0%,rgba(38,24,14,0.54) 42%,rgba(38,24,14,0.22) 100%)}
+.hero .veil{position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,rgba(18,18,16,0.84) 0%,rgba(18,18,16,0.54) 42%,rgba(18,18,16,0.22) 100%)}
 .hero.has-photo{color:#fff}
-.hero .wrap{padding-bottom:clamp(52px,9vh,110px);padding-top:120px}
+/* `min-width:0` overrides the grid item default of `min-width:auto`, which
+   otherwise sizes this implicit column to its content's min-content width
+   rather than the hero's own. `.hero.first-proof .proof` sets three columns
+   at `minmax(190px,1fr)` — a real minimum of 570px at three items — and with
+   nothing here capping it, the hero (and everything in its `.wrap`,
+   including the hero actions) grew to 570px on a 390px viewport instead of
+   wrapping the proof row, clipping the second action button by the width
+   that grid track went over. A collision a design review caught ("Get
+   directions" cropped) that no test here did until the corpus-wide
+   collision check below was built to catch this shape of bug generally. */
+.hero .wrap{padding-bottom:clamp(52px,9vh,110px);padding-top:120px;min-width:0}
 .hero h1{margin-bottom:.22em;max-width:16ch}
 .hero .sub{font-size:clamp(17px,2vw,25px);max-width:40ch;opacity:.94;
   margin-bottom:30px;line-height:1.4}
@@ -192,14 +214,14 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
    applies to it too. */
 .device{padding:clamp(56px,7vw,110px) 0}
 
-.ledgerfig{width:100%;border-collapse:collapse;font-family:'IBM Plex Serif',Georgia,serif}
-.ledgerfig th,.ledgerfig td{padding:14px 0;border-bottom:1px solid rgba(42,31,22,0.1);
+.ledgerfig{width:100%;border-collapse:collapse;font-family:'Playfair Display',Georgia,serif}
+.ledgerfig th,.ledgerfig td{padding:14px 0;border-bottom:1px solid rgba(23,24,26,0.1);
   text-align:left;font-weight:400}
-.ledgerfig th{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:.16em;
+.ledgerfig th{font-family:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:.16em;
   text-transform:uppercase;opacity:.7;width:40%}
 .ledgerfig td{font-size:clamp(22px,3vw,40px);text-align:right}
 
-.bigquote{margin:0;font-family:'IBM Plex Serif',Georgia,serif;
+.bigquote{margin:0;font-family:'Playfair Display',Georgia,serif;
   font-size:clamp(24px,4.2vw,58px);line-height:1.08;max-width:20ch;
   text-indent:-.4em}
 .bigquote::before{content:"C"} .bigquote::after{content:"D"}
@@ -207,7 +229,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
 [data-device="marquee"]{overflow:hidden;padding:clamp(28px,3vw,44px) 0;
   background:var(--accent);color:var(--on-accent)}
 .runner{display:flex;gap:clamp(28px,4vw,64px);white-space:nowrap;
-  font-family:'IBM Plex Serif',Georgia,serif;font-size:clamp(18px,2.4vw,34px);
+  font-family:'Playfair Display',Georgia,serif;font-size:clamp(18px,2.4vw,34px);
   animation:runner 38s linear infinite}
 .runner span::after{content:"2";margin-left:clamp(28px,4vw,64px);
   opacity:.5}
@@ -223,10 +245,10 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
 
 [data-index]::after{content:attr(data-index);position:absolute;top:
   clamp(18px,2.4vw,38px);left:clamp(10px,2vw,26px);font-size:12px;
-  letter-spacing:.14em;opacity:.45;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+  letter-spacing:.14em;opacity:.45;font-family:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
 
-[data-device="ticker"]{padding:0;border-top:1px solid rgba(42,31,22,0.1);
-  border-bottom:1px solid rgba(42,31,22,0.1);overflow:hidden}
+[data-device="ticker"]{padding:0;border-top:1px solid rgba(23,24,26,0.1);
+  border-bottom:1px solid rgba(23,24,26,0.1);overflow:hidden}
 .tickline{display:flex;gap:clamp(20px,3vw,44px);white-space:nowrap;
   padding:14px 0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;
   animation:runner 46s linear infinite}
@@ -243,7 +265,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   margin-left:clamp(0px,6vw,120px)}
 .knock p{margin:0;font-size:clamp(17px,2vw,25px)}
 
-.runoff{font-family:'IBM Plex Serif',Georgia,serif;font-size:clamp(64px,15vw,220px);
+.runoff{font-family:'Playfair Display',Georgia,serif;font-size:clamp(64px,15vw,220px);
   line-height:.86;white-space:nowrap;margin-left:clamp(12px,4vw,80px);
   opacity:.12;user-select:none}
 
@@ -252,7 +274,7 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   justify-content:flex-start}
 .insetblock{background:var(--bg);color:var(--ink);
   padding:clamp(18px,2.4vw,34px) clamp(22px,3vw,44px);
-  font-family:'IBM Plex Serif',Georgia,serif;font-size:clamp(18px,2.4vw,32px);
+  font-family:'Playfair Display',Georgia,serif;font-size:clamp(18px,2.4vw,32px);
   margin:0 0 0 clamp(0px,4vw,72px)}
 
 .scrollstrip{display:flex;gap:14px;overflow-x:auto;padding-inline:
@@ -296,7 +318,7 @@ body:has(section[data-ground]) section+section::before{opacity:1}
 [data-arch="ledger"] section[data-rule="on"]+section[data-rule="on"]::before{
   display:none}
 [data-arch="ledger"] section[data-rule="on"]>.wrap{border-top:1px solid
-  rgba(42,31,22,0.1);padding-top:clamp(28px,3.4vw,52px)}
+  rgba(23,24,26,0.1);padding-top:clamp(28px,3.4vw,52px)}
 [data-arch="ledger"] .wrap[data-measure="tight"]{
   width:min(880px,100% - var(--pad)*2)}
 [data-arch="ledger"] h2{font-size:clamp(20px,2.2vw,30px)}
@@ -363,11 +385,11 @@ body:has(section[data-ground]) section+section::before{opacity:1}
 /* line-height under 1 clipped the box shorter than the glyphs, and a serif
    4.9 at 168px then sat on top of the name. */
 .hero.first-facts .tally{margin:0 0 .22em;line-height:1;
-  font-family:'IBM Plex Serif',Georgia,serif;display:flex;align-items:baseline;
+  font-family:'Playfair Display',Georgia,serif;display:flex;align-items:baseline;
   gap:clamp(12px,1.6vw,22px);flex-wrap:wrap}
 .hero.first-facts .tally b{font-size:clamp(64px,11vw,168px);font-weight:400;
   letter-spacing:-.03em}
-.hero.first-facts .tally span{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+.hero.first-facts .tally span{font-family:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   font-size:clamp(14px,1.5vw,18px);letter-spacing:.02em;opacity:.86;
   font-weight:600;text-transform:uppercase}
 .hero.first-facts h1{font-size:clamp(22px,2.6vw,34px);margin-bottom:.5em;
@@ -430,7 +452,7 @@ body:has(section[data-ground]) section+section::before{opacity:1}
 /* Not a link, so no lift and no shadow — the same promise .offer used to make.
    Only the border moves, which reads as attention rather than as a button. */
 .card:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
-.card .num{font-family:'IBM Plex Serif',Georgia,serif;font-size:13px;color:var(--accent);
+.card .num{font-family:'Playfair Display',Georgia,serif;font-size:13px;color:var(--accent);
   letter-spacing:.1em;margin-bottom:12px}
 .card h3{margin:0}
 section[data-ground="raise"] .card{background:var(--bg)}
@@ -474,10 +496,10 @@ section[data-ground="raise"] .card{background:var(--bg)}
   border-bottom:1px solid var(--line);transition:padding-left .4s
   cubic-bezier(.2,.7,.3,1)}
 .listing li:hover{padding-left:10px}
-.listing .idx{font-family:'IBM Plex Serif',Georgia,serif;font-size:12px;letter-spacing:.16em;
+.listing .idx{font-family:'Playfair Display',Georgia,serif;font-size:12px;letter-spacing:.16em;
   color:var(--accent)}
 .listing h3{margin:0;line-height:1.08;
-  font-size:calc(clamp(22.72px, 19.72px + 0.7909vw, 31.1px) * var(--density-scale))}
+  font-size:calc(clamp(28.1px, 22.89px + 1.371vw, 42.63px) * var(--density-scale))}
 .editorial-art{margin-top:clamp(24px,3vw,40px);border-radius:var(--r);
   overflow:hidden;aspect-ratio:5/3}
 .editorial-art img{width:100%;height:100%;object-fit:cover;
@@ -497,7 +519,7 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
   transition:border-color .4s ease,background .4s ease}
 .offer:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));
   background:var(--raise)}
-.offer .idx{font-family:'IBM Plex Serif',Georgia,serif;font-size:12px;letter-spacing:.16em;
+.offer .idx{font-family:'Playfair Display',Georgia,serif;font-size:12px;letter-spacing:.16em;
   color:var(--accent);margin-bottom:auto}
 .offer h3{margin:14px 0 0;line-height:1.15}
 .offer .rule{display:block;height:2px;width:34px;background:var(--accent);
@@ -512,10 +534,10 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
 @media (max-width:860px){.offers-feature{grid-template-columns:1fr}}
 .offer-feature{padding-top:clamp(20px,2.2vw,28px);
   border-top:1px solid var(--line)}
-.offer-feature .idx{font-family:'IBM Plex Serif',Georgia,serif;font-size:12px;
+.offer-feature .idx{font-family:'Playfair Display',Georgia,serif;font-size:12px;
   letter-spacing:.16em;color:var(--accent)}
 .offer-feature h3{margin:16px 0 0;line-height:1.1;
-  font-size:calc(clamp(22.72px, 19.72px + 0.7909vw, 31.1px) * var(--density-scale))}
+  font-size:calc(clamp(28.1px, 22.89px + 1.371vw, 42.63px) * var(--density-scale))}
 .offer-feature .rule{display:block;height:2px;width:34px;
   background:var(--accent);margin-top:20px;
   transition:width .45s cubic-bezier(.2,.7,.3,1)}
@@ -527,7 +549,7 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
   color:var(--accent-ink)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
   gap:26px;text-align:center}
-.stat b{display:block;font-family:'IBM Plex Serif',Georgia,serif;font-size:clamp(38px,5.4vw,64px);
+.stat b{display:block;font-family:'Playfair Display',Georgia,serif;font-size:clamp(38px,5.4vw,64px);
   line-height:1;font-variant-numeric:tabular-nums}
 .stat span{display:block;margin-top:10px;font-size:13.5px;letter-spacing:.1em;
   text-transform:uppercase;opacity:.86;font-weight:600}
@@ -549,6 +571,9 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
 .dishes .n{font-weight:650;font-size:17px}
 .dishes .p{font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
 .dishes .d{grid-column:1/-1;color:var(--dim);font-size:15px;margin:0}
+.menu-more{margin:clamp(24px,3vw,36px) 0 0}
+figure.menu-media{margin:0}
+figure.menu-media img{border-radius:var(--r);max-width:480px}
 
 /* --------------------------------------------------------------- gallery -- */
 /* A fixed three-column rhythm with one aspect ratio and one gap, so the whole
@@ -600,7 +625,7 @@ section[data-ground="raise"] .quote{background:var(--bg)}
   max-width:760px}
 .quote-feature{padding-top:clamp(20px,2.2vw,28px);border-top:1px solid var(--line)}
 .quote-feature p{margin:12px 0 0;font-size:clamp(18px,1.7vw,22px);
-  line-height:1.5;font-family:'IBM Plex Serif',Georgia,serif;font-weight:600}
+  line-height:1.5;font-family:'Playfair Display',Georgia,serif;font-weight:600}
 .quote-feature .who{display:block;margin-top:14px;font-size:13.5px;
   color:var(--dim);font-weight:600}
 
@@ -618,11 +643,11 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 @media (max-width:820px){.accolade-grid{grid-template-columns:1fr;
   align-items:start;gap:26px}}
 .accolade{max-width:15ch;margin:0 0 .3em;
-  font-size:calc(clamp(28.7px, 22.94px + 1.517vw, 44.79px) * var(--density-scale))}
+  font-size:calc(clamp(40.9px, 28.4px + 3.289vw, 75.76px) * var(--density-scale))}
 .accolade-band .eyebrow{margin-bottom:22px}
 .accolade-band .eyebrow::after{content:"";display:block;width:64px;height:3px;
   background:var(--accent);margin-top:14px;border-radius:2px}
-.accolade-note{font-size:calc(clamp(17.98px, 16.69px + 0.3411vw, 21.6px) * var(--density-scale));
+.accolade-note{font-size:calc(clamp(19.3px, 17.62px + 0.4425vw, 23.99px) * var(--density-scale));
   max-width:36ch;color:var(--dim);margin:0}
 .accolade-band .proof{margin:30px 0 0;font-size:13px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--dim)}
@@ -640,9 +665,9 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 .marquee:hover ul{animation-play-state:paused}
 .marquee li{padding:clamp(18px,2vw,30px) clamp(22px,3vw,48px);
   border-left:1px solid var(--line);min-width:max-content}
-.marquee .who{display:block;font-family:'IBM Plex Serif',Georgia,serif;
-  font-size:calc(clamp(20.21px, 18.17px + 0.5383vw, 25.92px) * var(--density-scale));line-height:1.15;
-  letter-spacing:-0em}
+.marquee .who{display:block;font-family:'Playfair Display',Georgia,serif;
+  font-size:calc(clamp(23.29px, 20.17px + 0.8203vw, 31.98px) * var(--density-scale));line-height:1.15;
+  letter-spacing:0em}
 .marquee .note{display:block;color:var(--dim);font-size:14px;margin-top:8px;
   max-width:26ch}
 @keyframes drift{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -659,9 +684,9 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 /* The opening line carries the section; the rest supports it. Without the
    distinction a feature row is a heading and a paragraph, which is the shape
    of filler. */
-.feature .standfirst{font-family:'IBM Plex Serif',Georgia,serif;
-  font-size:calc(clamp(20.21px, 18.17px + 0.5383vw, 25.92px) * var(--density-scale));line-height:1.3;
-  letter-spacing:-0em;margin:0 0 .55em;color:var(--ink);
+.feature .standfirst{font-family:'Playfair Display',Georgia,serif;
+  font-size:calc(clamp(23.29px, 20.17px + 0.8203vw, 31.98px) * var(--density-scale));line-height:1.3;
+  letter-spacing:0em;margin:0 0 .55em;color:var(--ink);
   text-wrap:balance;max-width:24ch}
 .feature.wide .standfirst,.feature.narrow .standfirst{max-width:34ch}
 .feature .prose{color:var(--dim);max-width:56ch;line-height:1.68}
@@ -695,13 +720,13 @@ section[data-ground="raise"] .quote{background:var(--bg)}
 .story{max-width:62ch}
 /* The opening line in the display face, larger and looser: it does the work a
    pull quote does, without inventing a quote nobody said. */
-.standfirst{font-family:'IBM Plex Serif',Georgia,serif;
-  font-size:calc(clamp(20.21px, 18.17px + 0.5383vw, 25.92px) * var(--density-scale));
-  line-height:1.28;letter-spacing:-0em;margin:0 0 .7em;
+.standfirst{font-family:'Playfair Display',Georgia,serif;
+  font-size:calc(clamp(23.29px, 20.17px + 0.8203vw, 31.98px) * var(--density-scale));
+  line-height:1.28;letter-spacing:0em;margin:0 0 .7em;
   text-wrap:balance}
-.prose{font-size:calc(clamp(17.98px, 16.69px + 0.3411vw, 21.6px) * var(--density-scale));line-height:1.72;
+.prose{font-size:calc(clamp(19.3px, 17.62px + 0.4425vw, 23.99px) * var(--density-scale));line-height:1.72;
   color:var(--dim);margin:0}
-.prose.dropcap::first-letter{float:left;font-family:'IBM Plex Serif',Georgia,serif;
+.prose.dropcap::first-letter{float:left;font-family:'Playfair Display',Georgia,serif;
   font-size:3.1em;line-height:.82;padding:.06em .09em 0 0;color:var(--accent)}
 .story p+p{margin-top:1em}
 /* A short rule under the heading, so the left column is not just two lines
@@ -851,19 +876,17 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;
 }
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "Frisco Dental Care", "telephone": "(972) 712-0500", "aggregateRating": {"@type": "AggregateRating", "ratingValue": 4.7, "reviewCount": 83}, "geo": {"@type": "GeoCoordinates", "latitude": 33.1509152, "longitude": -96.86182079999999}}</script></head>
-<body data-theme="warm" data-type="quiet" data-arch="stacked" data-signature="quote" data-theme-layout="structured">
+<body data-theme="refined" data-type="quiet" data-arch="ledger" data-signature="none" data-theme-layout="editorial">
 <div class="progress"></div>
-<div class="bar"><a class="mark" href="#top">Frisco Dental Care</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#reviews">Reviews</a><a href="#services">What we do</a><a href="#gallery">Gallery</a><a href="#about">About</a><a href="#hours">Hours</a><a href="#contact">Visit</a></nav><a class="book" href="tel:9727120500">Book an appointment</a></div>
+<div class="bar"><a class="mark" href="#top">Frisco Dental Care</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#reviews">Reviews</a><a href="#services">What we do</a><a href="#about">About</a><a href="#hours">Hours</a><a href="#contact">Visit</a></nav><a class="book" href="tel:9727120500">Book an appointment</a></div>
 <header class="hero first-proof type-quiet has-photo" id="top"><div class="bgimg" style="background-image:url(&quot;photos/5e7dd4dbcf4229aeed76b9b913780802.jpg&quot;);background-image:-webkit-image-set(url(&quot;photos/5e7dd4dbcf4229aeed76b9b913780802.jpg&quot;) 1x, url(&quot;photos/5e7dd4dbcf4229aeed76b9b913780802.jpg&quot;) 2x);background-image:image-set(url(&quot;photos/5e7dd4dbcf4229aeed76b9b913780802.jpg&quot;) 1x, url(&quot;photos/5e7dd4dbcf4229aeed76b9b913780802.jpg&quot;) 2x)"></div><div class="veil"></div><div class="wrap"><h1>Frisco Dental Care</h1><p class="sub">We know that going to the dentist can be difficult sometimes, so we do everything we can to make sure you&#x27;re relaxed and comfortable in our Frisco dental office. Our first priority is to treat you as we want to be treated: with respect, patience, and clarity.</p><ul class="proof"><li>4.7 stars from 83 reviews</li><li>Mon - Thu 9:00 am - 5:00 pm</li></ul><div class="actions"><a class="cta" href="tel:9727120500">Book an appointment</a></div></div><div class="scrollcue"></div></header>
-<section id="reviews" data-ground="raise"><div class="wrap"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>4.7 stars from 83 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Great dentist office.  Dr Phillips is very gentle and comforting.   I had a crown refitted and a teeth cleaning.   Everyone in the office is friendly and knowledgeable.&rdquo;</p><figcaption class="who">J M (Texas Foodie) &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="1"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;This office is top notch. Not only are the friendly, they provide great service, reasonable prices and only recommend services required. They also are willing to work with patients that need to reschedule. If you&#x27;re looking for a great dentist. This is the place to go&rdquo;</p><figcaption class="who">Mike &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="2"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;They were right on time, explained the process /costs, performed the work and had me on the road in 20 minutes. My teeth look great, can’t tell where they were repaired!&rdquo;</p><figcaption class="who">Shawn Owen &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="3"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I broke a tooth, googled for a close dentist that had good reviews. That led me to Frisco Dental Care. They got me in the next day. I would absolutely recommend them to anyone needing a dentist! Every single one in there, from the front desk all the way to the Dr. were so kind and so helpful and instantly made me feel comfortable knowing&rdquo;</p><figcaption class="who">Laurie Dennis &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I have been a patient of Dr. Phillips for at least 25 years.  He is a good dentist who listens well and takes time to explain. Very happy with him.  And Roxanne has been cleaning my teeth for several years and is always careful and gentle.  I recommend his office.&rdquo;</p><figcaption class="who">Steve Marinelli &middot; Google</figcaption></figure></div></div></section>
-<section class="device" data-device="quote"><div class="wrap"><blockquote class="bigquote">Great dentist office.  Dr Phillips is very gentle and comforting.   I had a crown refitted and a teeth cleaning.   Everyone in the office is friendly and knowledgeable.</blockquote></div></section>
-<section id="stats" class="statband"><div class="wrap"><div class="stats"><div class="stat" data-reveal data-delay="0"><b>4.7</b><span>average rating</span></div><div class="stat" data-reveal data-delay="1"><b data-count="83">83</b><span>Google reviews</span></div><div class="stat" data-reveal data-delay="2"><b data-count="1">1</b><span>dishes on the menu</span></div></div></div></section>
-<section id="services" data-density="dense" style="--density-scale:0.85"><div class="wrap"><div class="head" data-reveal><p class="eyebrow">On offer</p><h2>What we cook and serve</h2></div><div class="offers"><article class="offer" data-reveal data-delay="0"><span class="idx">01</span><h3>Dr. Garry Phillips</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">02</span><h3>Dental Insurance Accepted</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">03</span><h3>DENTAL INSURANCE PARTNERS</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">04</span><h3>Meet the Dentist</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="0"><span class="idx">05</span><h3>Meet the Team</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">06</span><h3>Before &amp; After</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">07</span><h3>Cosmetic Dentistry Veneers</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">08</span><h3>Teeth Whitening</h3><span class="rule"></span></article></div></div></section>
-<section id="gallery"><div class="wrap"><p class="eyebrow" data-reveal>Gallery</p><h2 data-reveal>Have a look around</h2><div class="mosaic" style="--cols:3;--cols-narrow:2"><button aria-label="Open photo 1" data-reveal data-delay="0"><img src="photos/46ce0a63a37112a0ac5c2a7a0aef14e2.jpg" alt="Storefront of a dental care office with a blue illuminated sign, stone facade, and landscaped bushes and flowers out front" srcset="photos/46ce0a63a37112a0ac5c2a7a0aef14e2.jpg 800w, photos/46ce0a63a37112a0ac5c2a7a0aef14e2.jpg 1600w, photos/46ce0a63a37112a0ac5c2a7a0aef14e2.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 2" data-reveal data-delay="1"><img src="photos/d23694dafba209a603f3ca89f657a212.jpg" alt="An empty dental treatment chair with overhead light and monitor arm in a clinic room decorated with a train photograph" srcset="photos/d23694dafba209a603f3ca89f657a212.jpg 800w, photos/d23694dafba209a603f3ca89f657a212.jpg 1600w, photos/d23694dafba209a603f3ca89f657a212.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 3" data-reveal data-delay="2"><img src="photos/6014151527fa853d15acb58bd8971efc.jpg" alt="A dental professional in a mask and gloves working on a patient reclined in a treatment chair" srcset="photos/6014151527fa853d15acb58bd8971efc.jpg 800w, photos/6014151527fa853d15acb58bd8971efc.jpg 1600w, photos/6014151527fa853d15acb58bd8971efc.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 4" data-reveal data-delay="3"><img src="photos/5780f2fe1e3dba7f4f2aff22c4922823.jpg" alt="A smiling man in a plaid shirt sitting in an office chair at a desk with a computer monitor and clock" srcset="photos/5780f2fe1e3dba7f4f2aff22c4922823.jpg 800w, photos/5780f2fe1e3dba7f4f2aff22c4922823.jpg 1600w, photos/5780f2fe1e3dba7f4f2aff22c4922823.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 5" data-reveal data-delay="0"><img src="photos/7d115922bd6c231ed37dbb7bf8d178dd.jpg" alt="A smiling woman at a reception desk holding papers next to a computer monitor and printer" srcset="photos/7d115922bd6c231ed37dbb7bf8d178dd.jpg 800w, photos/7d115922bd6c231ed37dbb7bf8d178dd.jpg 1600w, photos/7d115922bd6c231ed37dbb7bf8d178dd.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 6" data-reveal data-delay="1"><img src="photos/25ba7b3a41ae7d234642d7af9323519a.jpg" alt="An empty dental treatment chair with overhead light and a monitor showing a purple flower image" srcset="photos/25ba7b3a41ae7d234642d7af9323519a.jpg 800w, photos/25ba7b3a41ae7d234642d7af9323519a.jpg 1600w, photos/25ba7b3a41ae7d234642d7af9323519a.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 7" data-reveal data-delay="2"><img src="photos/d1068324602307c552af77354be4a511.jpg" alt="A smiling woman at a front desk speaking with a man in a striped shirt across the counter" srcset="photos/d1068324602307c552af77354be4a511.jpg 800w, photos/d1068324602307c552af77354be4a511.jpg 1600w, photos/d1068324602307c552af77354be4a511.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 8" data-reveal data-delay="3"><img src="photos/025aab4ad4e2ec80003c6e3de73341e6.jpg" alt="" srcset="photos/025aab4ad4e2ec80003c6e3de73341e6.jpg 800w, photos/025aab4ad4e2ec80003c6e3de73341e6.jpg 1600w, photos/025aab4ad4e2ec80003c6e3de73341e6.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 9" data-reveal data-delay="0"><img src="photos/71bbbdec22f94bb641c0ff8314c317ea.jpg" alt="" srcset="photos/71bbbdec22f94bb641c0ff8314c317ea.jpg 800w, photos/71bbbdec22f94bb641c0ff8314c317ea.jpg 1600w, photos/71bbbdec22f94bb641c0ff8314c317ea.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 10" data-reveal data-delay="1"><img src="https://www.friscodentalcare.com/assets/images/index-banner.jpg" alt="" loading="lazy" decoding="async"></button><button aria-label="Open photo 11" data-reveal data-delay="2"><img src="https://www.friscodentalcare.com/assets/images/index-join.jpg" alt="" loading="lazy" decoding="async"></button><button aria-label="Open photo 12" data-reveal data-delay="3"><img src="https://www.friscodentalcare.com/assets/images/index-financial.png" alt="" loading="lazy" decoding="async"></button></div></div></section><div class="lightbox" role="dialog" aria-label="Photo"><button class="close" aria-label="Close">&times;</button><button class="prev" aria-label="Previous">&lsaquo;</button><img src="" alt=""><button class="next" aria-label="Next">&rsaquo;</button><div class="count"></div></div>
-<section id="about"><div class="wrap"><div class="split"><div data-reveal><p class="eyebrow">About</p><h2>What we are about</h2><span class="flourish"></span></div><div class="story"><p class="standfirst" data-reveal>We know that going to the dentist can be difficult sometimes, so we do everything we can to make sure you&#x27;re relaxed and comfortable in our Frisco dental office.</p><p class="prose" data-reveal data-delay="1">Our first priority is to treat you as we want to be treated: with respect, patience, and clarity.</p></div></div></div></section>
-<section id="more"><div class="wrap"><article class="feature wide" data-reveal><div class="words"><h3>Dr. Garry Phillips</h3><p class="standfirst">We know that going to the dentist can be difficult sometimes, so we do everything we can to make sure you’re relaxed and comfortable – whether you’re coming in for a routine exam, emergency dentistry , or Invisalign .</p><p class="prose">Our first priority is to treat you as we want to be treated: with respect, patience and clarity. Give Us a Call Our Services In Proud Association</p></div></article><article class="feature offset" data-reveal><div class="words"><h3>Dental Insurance Accepted</h3><p class="standfirst">Trying to find a new dentist in Frisco with your new insurance?</p><p class="prose">Call us so we can help! Don’t have insurance? That’s not a problem! We have a great in-office payment plan to get you started! Schedule an Appointment</p></div></article><article class="feature narrow" data-reveal><div class="words"><h3>Our Dental Services</h3><p class="standfirst">See All Our Services Family Dentistry Where your family’s health is our priority!</p><p class="prose">From regular cleanings to full mouth rehabilitation, our services will be available to you. Invisalign Invisalign is a comfortable alternative to wire braces. So, you can get the smile you’ve always dreamed of at our nearby office! Dental Crowns A crown provides the functionality of a healthy tooth while the damaged one is given time to heal and repair itself.</p></div><div class="shot"><img src="https://www.friscodentalcare.com/assets/images/index-services.jpg" alt="" loading="lazy" decoding="async"></div></article><article class="feature plain" data-reveal><div class="words"><h3>Our Services</h3><p class="standfirst">We provide a wide range of professional dental services in Frisco to meet your needs.</p><p class="prose">We promise to provide every service with a smile, and to the highest level of satisfaction. Become A Patient Invisalign → Cosmetic Dentistry → Dental Crowns → Family Dentistry → Implants →</p></div><div class="shot"><img src="https://www.friscodentalcare.com/assets/images/services-1.jpg" alt="" loading="lazy" decoding="async"></div></article></div></section>
-<section id="hours" data-ground="raise"><div class="wrap narrow"><p class="eyebrow" data-reveal>Hours</p><div class="openflag" data-week='{"mon": "0900-1700", "tue": "0900-1700", "wed": "0900-1700", "thu": "0900-1700", "sat": "closed", "sun": "closed"}' data-reveal><i></i><span>Opening hours</span></div><ul class="hourlist" data-reveal data-delay="1"><li><span>Mon - Thu 9:00 am - 5:00 pm</span></li><li><span>Sat - Sun Closed</span></li><li><span>Monday 9:00 am – 5:00 pm</span></li><li><span>Tuesday 9:00 am – 5:00 pm</span></li><li><span>Wednesday 9:00 am – 5:00 pm</span></li><li><span>Thursday 9:00 am - 5:00 pm</span></li></ul></div></section>
-<section id="contact"><div class="wrap"><div class="split"><div data-reveal><p class="eyebrow">Visit</p><h2>Come and see us</h2><div class="reach"><a href="tel:9727120500"><span class="k">Phone</span><span class="v">(972) 712-0500</span></a></div></div><div class="map" data-reveal data-delay="1"><iframe loading="lazy" title="Map of Frisco Dental Care" src="https://www.openstreetmap.org/export/embed.html?bbox=-96.8658208,33.1479152,-96.85782079999998,33.1539152&amp;layer=mapnik&amp;marker=33.1509152,-96.86182079999999"></iframe></div></div></div></section>
+<section data-rule="on" id="reviews" data-ground="raise"><div class="wrap" data-measure="tight"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>4.7 stars from 83 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Great dentist office.  Dr Phillips is very gentle and comforting.   I had a crown refitted and a teeth cleaning.   Everyone in the office is friendly and knowledgeable.&rdquo;</p><figcaption class="who">J M (Texas Foodie) &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="1"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;This office is top notch. Not only are the friendly, they provide great service, reasonable prices and only recommend services required. They also are willing to work with patients that need to reschedule. If you&#x27;re looking for a great dentist. This is the place to go&rdquo;</p><figcaption class="who">Mike &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="2"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;They were right on time, explained the process /costs, performed the work and had me on the road in 20 minutes. My teeth look great, can’t tell where they were repaired!&rdquo;</p><figcaption class="who">Shawn Owen &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="3"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I broke a tooth, googled for a close dentist that had good reviews. That led me to Frisco Dental Care. They got me in the next day. I would absolutely recommend them to anyone needing a dentist! Every single one in there, from the front desk all the way to the Dr. were so kind and so helpful and instantly made me feel comfortable knowing…&rdquo;</p><figcaption class="who">Laurie Dennis &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I have been a patient of Dr. Phillips for at least 25 years.  He is a good dentist who listens well and takes time to explain. Very happy with him.  And Roxanne has been cleaning my teeth for several years and is always careful and gentle.  I recommend his office.&rdquo;</p><figcaption class="who">Steve Marinelli &middot; Google</figcaption></figure></div></div></section>
+<section data-rule="on" id="stats" class="statband"><div class="wrap" data-measure="tight"><div class="stats"><div class="stat" data-reveal data-delay="0"><b>4.7</b><span>average rating</span></div><div class="stat" data-reveal data-delay="1"><b data-count="83">83</b><span>Google reviews</span></div><div class="stat" data-reveal data-delay="2"><b data-count="8">8</b><span>services offered</span></div></div></div></section>
+<section data-rule="on" id="services" data-density="dense" style="--density-scale:0.85"><div class="wrap" data-measure="tight"><div class="head" data-reveal><p class="eyebrow">On offer</p><h2>What we cook and serve</h2></div><div class="offers"><article class="offer" data-reveal data-delay="0"><span class="idx">01</span><h3>Dr. Garry Phillips</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">02</span><h3>Dental Insurance Accepted</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">03</span><h3>DENTAL INSURANCE PARTNERS</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">04</span><h3>Meet the Dentist</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="0"><span class="idx">05</span><h3>Meet the Team</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="1"><span class="idx">06</span><h3>Before &amp; After</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="2"><span class="idx">07</span><h3>Cosmetic Dentistry Veneers</h3><span class="rule"></span></article><article class="offer" data-reveal data-delay="3"><span class="idx">08</span><h3>Teeth Whitening</h3><span class="rule"></span></article></div></div></section>
+<section data-rule="on" id="about"><div class="wrap" data-measure="tight"><div class="split"><div data-reveal><p class="eyebrow">About</p><h2>What we are about</h2><span class="flourish"></span></div><div class="story"><p class="standfirst" data-reveal>We know that going to the dentist can be difficult sometimes, so we do everything we can to make sure you&#x27;re relaxed and comfortable in our Frisco dental office.</p><p class="prose" data-reveal data-delay="1">Our first priority is to treat you as we want to be treated: with respect, patience, and clarity.</p></div></div></div></section>
+<section data-rule="on" id="more"><div class="wrap" data-measure="tight"><article class="feature wide" data-reveal><div class="words"><h3>Dr. Garry Phillips</h3><p class="standfirst">We know that going to the dentist can be difficult sometimes, so we do everything we can to make sure you’re relaxed and comfortable – whether you’re coming in for a routine exam, emergency dentistry , or Invisalign .</p><p class="prose">Our first priority is to treat you as we want to be treated: with respect, patience and clarity. Give Us a Call Our Services In Proud Association</p></div></article><article class="feature offset" data-reveal><div class="words"><h3>Dental Insurance Accepted</h3><p class="standfirst">Trying to find a new dentist in Frisco with your new insurance?</p><p class="prose">Call us so we can help! Don’t have insurance? That’s not a problem! We have a great in-office payment plan to get you started! Schedule an Appointment</p></div></article><article class="feature narrow" data-reveal><div class="words"><h3>Our Dental Services</h3><p class="standfirst">See All Our Services Family Dentistry Where your family’s health is our priority!</p><p class="prose">From regular cleanings to full mouth rehabilitation, our services will be available to you. Invisalign Invisalign is a comfortable alternative to wire braces. So, you can get the smile you’ve always dreamed of at our nearby office! Dental Crowns A crown provides the functionality of a healthy tooth while the damaged one is given time to heal and repair itself.</p></div></article><article class="feature plain" data-reveal><div class="words"><h3>Our Services</h3><p class="standfirst">We provide a wide range of professional dental services in Frisco to meet your needs.</p><p class="prose">We promise to provide every service with a smile, and to the highest level of satisfaction. Become A Patient Invisalign → Cosmetic Dentistry → Dental Crowns → Family Dentistry → Implants →</p></div><div class="shot"><img src="https://www.friscodentalcare.com/assets/images/services-1.jpg" alt="" loading="lazy" decoding="async"></div></article><article class="feature wide" data-reveal><div class="words"><h3>Invisalign</h3><p class="standfirst">Want a straight smile that shows your inner confidence without traditional metal braces?</p><p class="prose">Introducing Invisalign, the clear way to get the smile you’ve always wanted. Invisalign works by adjusting the teeth using applied pressure. But unlike braces, you don’t have to give up on popcorn, candy, gum, or any of your favorite foods. Invisalign is also more comfortable when compared to traditional braces.</p></div></article><article class="feature offset" data-reveal><div class="words"><h3>Cosmetic Dentistry</h3><p class="standfirst">Our cosmetic dentistry solutions are world-class, and hundreds of patients trust them and rely on us for their dental needs.</p><p class="prose">With Dr. Philips&#x27; unique skills and long experience, we can provide customized and ideal solutions for most aesthetic dental issues. Learn More</p></div></article></div></section>
+<section data-rule="on" id="hours" data-ground="raise"><div class="wrap narrow"><p class="eyebrow" data-reveal>Hours</p><div class="openflag" data-week='{"mon": "0900-1700", "tue": "0900-1700", "wed": "0900-1700", "thu": "0900-1700", "sat": "closed", "sun": "closed"}' data-reveal><i></i><span>Opening hours</span></div><ul class="hourlist" data-reveal data-delay="1"><li><span>Mon - Thu 9:00 am - 5:00 pm</span></li><li><span>Sat - Sun Closed</span></li><li><span>Monday 9:00 am – 5:00 pm</span></li><li><span>Tuesday 9:00 am – 5:00 pm</span></li><li><span>Wednesday 9:00 am – 5:00 pm</span></li><li><span>Thursday 9:00 am - 5:00 pm</span></li></ul></div></section>
+<section data-rule="on" id="contact"><div class="wrap" data-measure="tight"><div class="split"><div data-reveal><p class="eyebrow">Visit</p><h2>Come and see us</h2><div class="reach"><a href="tel:9727120500"><span class="k">Phone</span><span class="v">(972) 712-0500</span></a></div></div><div class="map" data-reveal data-delay="1"><iframe loading="lazy" title="Map of Frisco Dental Care" src="https://www.openstreetmap.org/export/embed.html?bbox=-96.8658208,33.1479152,-96.85782079999998,33.1539152&amp;layer=mapnik&amp;marker=33.1509152,-96.86182079999999"></iframe></div></div></div></section>
 <div class="callbar"><a class="cta" href="tel:9727120500">Book an appointment</a></div>
 <footer><div class="wrap"><div class="row"><span>&copy; Frisco Dental Care</span><a href="tel:9727120500">(972) 712-0500</a><button class="top">Back to top</button></div></div></footer>
 <script>

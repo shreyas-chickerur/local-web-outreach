@@ -75,29 +75,67 @@ attempted redecide this session DID produce a genuine unresolved collision
 hidden) before a retry cleared it — the gate's failure mode is disclosure,
 not silent collision, which is the property that matters most.
 
-**A sampled design review (Slice G, four fixtures, not the full nineteen)
-surfaced real defects this project has no other way of catching.** Two
-kinds, and they are different problems. First, layout collisions the
-generator itself causes: on `law`, the nav links sit directly on top of
-the attorney's face in the hero photo, and body text is hidden behind a
-stats banner further down the page; on mobile, `hvac` and
-`restaurant-rich` both show a CTA button duplicated and cropped at the
-viewport edge. These are rendering bugs, not content problems, and
-nothing in this repository's test suite would have caught them — they
-only show up in a screenshot. Second, and more interesting: `hvac`'s own
-published "about" text claims "over 20,000 5 star reviews", while the
-structured review count sitting one section away says 6,203 — both are
-real numbers from the same business's own Google listing, not anything
-this project invented, and nothing here cross-checks one published fact
-against another for internal consistency. That is a materially different
-failure mode than the credential-claims defect above (that was an
-UNVERIFIED claim; this is two VERIFIED claims that contradict each
-other), and this pass found it only because a vision model was asked to
-read the whole page rather than because a rule looked for it. Neither
-class of finding has been fixed this pass — Slice G was sampled
-specifically to answer whether running it in full is worth the cost, not
-to act on what it found. See `.reviews/first-pass.md` for the full
-finding list and the recommendation.
+**The sampled design review's findings are fixed — one of them was a
+tooling artifact, and chasing it down found a second, real bug of the
+same shape.** `law`'s nav sitting on the attorney's face is fixed
+(`.hero.first-proof` gets a solid nav ground, like every other position
+that puts a photo up top). A quote-truncation bug that cut a review
+mid-word ("outstanding" -> "outta") — very likely what a design review
+actually saw and described as "cut off" text — is fixed with a
+word-boundary truncation. The "duplicated CTA cropped at the mobile
+edge" finding turned out not to be a page defect at all: Chrome's
+headless `--screenshot` mode silently clamps any viewport request under
+500px to exactly 500, so every "mobile" screenshot this project has
+ever taken — this review's included — was captured 110px wider than
+labelled and cropped on output. Fixed properly (a real sub-500px capture
+path over the DevTools protocol, `tools/contact_sheet.py`), and
+verifying it properly found a real version of the same defect on
+`law-rich`: a CSS grid with a genuine 570px minimum, wider than any
+phone, that grew the whole hero instead of wrapping — fixed with one
+declaration. A standing test (`test_no_element_collides_with_another.py`)
+now checks every fixture at three widths for a clipped control or text
+painted over by another element.
+
+**The contradiction gap named here previously is closed, and the same
+class of bug was checked for corpus-wide.** `hvac`'s own "about" text
+claimed 20,000 reviews against a corroborated count of 6,203 two
+sections away — a genuine internal contradiction between two backed
+facts, distinct from the credential-claims defect above (that was one
+UNVERIFIED claim; this was two VERIFIED ones disagreeing). Fixed: a
+sentence stating a review count that contradicts the corroborated value
+is dropped before it reaches any section, never rewritten. A corpus-wide
+scan before writing the fix found this was the only instance in the
+19-fixture corpus.
+
+**A second false-content bug, the same shape as the credential claim,
+found acting on the content census and fixed on five fixtures.**
+`law-rich` was rendering "12 dishes on the menu" at prices of $812, $55
+and $49 — every one actually a line off the firm's own settlement-results
+page, not a menu. The extraction that builds `menu_items` anchors on any
+bare dollar amount as the one unambiguous signal of a priced item, which
+is sound for a restaurant and knows nothing about what business it is
+reading. The same false positive was checked for and found on four more
+fixtures — a dental promo, a plumbing coupon, a financing banner, an
+insurance estimate, none of them a menu. Fixed by gating menu content on
+`trade_kind == "food"` at both places it could reach the page. Disclosed
+here because it is the same class of defect as the licensure claim
+above — invented-sounding structure that was never actually true for the
+business showing it — just caught by acting on a measurement tool
+rather than by reading the corpus by eye.
+
+**The content census itself undercounted, in a way that happened to look
+right.** Its own grand-total line was adding a subset row
+(`own_site_photos`) into the total a second time, on top of the "photos"
+row it is explicitly a subset of — a real double-count that had been
+quietly inflating every "share of published material reached the page"
+percentage this project has quoted, and it did not have to change the
+headline number to be wrong: 556/766 and the corrected 556/762 both
+round to "73%". Fixed, along with two lines that had gone stale the
+moment the fixes below shipped (`menu_media`'s row still said "read by no
+section builder" after one started reading it; the feature-block cap's
+row still said "4" after it was raised to six) — the same "two copies
+drift apart" failure this project keeps finding, this time in its own
+measurement tool.
 
 ## What's deliberately not built
 
@@ -116,37 +154,55 @@ finding list and the recommendation.
   before this session touched it, but a disclosed reduction from what was
   asked.
 - **A judging round.** Agreement is still 0 of 0, deliberately skipped
-  this pass — every verdict checked so far has come back DIFFERENT, so
-  judging again would spend real money to reconfirm what is already known
-  rather than test anything new. See `tests/test_the_instrument_reproduces.py`.
-- **Content completeness, copy selection, backdrops, motion, video, the
-  conversational workspace, and a full (not sampled) design review** —
-  Slices D (mostly), E, G (beyond the four-fixture sample), H, and
-  growing the corpus past nineteen fixtures. Not started at all.
+  two passes running now — every verdict checked so far has come back
+  DIFFERENT, so judging again would spend real money to reconfirm what
+  is already known rather than test anything new. See
+  `tests/test_the_instrument_reproduces.py`. Recommended, not attempted:
+  a full round is overdue now that this round moved the corpus twice.
+- **A full (not sampled) design review, and auto-repair of what it
+  finds.** The four-fixture sample's genuine findings are fixed; running
+  it across all nineteen (57 model calls) and building auto-repair for
+  the deterministic findings — both explicitly proposed for a later pass,
+  neither attempted here.
+- **Content selection and provenance** (Slice D's remaining items:
+  letting the model select and order its own sentences, a provenance
+  check replacing `unsupported()`), **backdrops, motion, video, and the
+  conversational workspace** — Slices D (partly), E, H. Not started.
+- **Growing the corpus past nineteen fixtures.**
 
 ## Numbers not to trust, and why
 
-- **"56.10% same-trade distance"** is a real, current measurement under
-  this pass's redecide (up from 53.33% before Batch B's new facts and
-  compositions moved the corpus), but it is still the ONLY reading this
-  exact axis set has ever taken — there is no prior number under it to
-  compare against, so "Slice C moved this in the right direction" is a
-  plausible read, not a proven one.
-- **Agreement is 0 of 0, and no judging round ran this pass, on purpose.**
-  Eleven pairs were checked by hand two rounds ago (on top of sixteen the
-  round before that) and every single one came back DIFFERENT — judging
-  again would spend real money to confirm what a redecide already implies
-  rather than test anything new, so this pass's redecide retired all
-  eleven live verdicts and replaced none of them. A rank-based score needs
-  at least one "same" verdict to rank against something. Take "the vector
-  agrees with a human" as unproven, not as disproven and not as confirmed.
+- **"61.52% same-trade distance"** is a real, current measurement under
+  this round's redecide (up from 56.10% before this round's photo
+  preference, menu fallback, and newly-verified contact facts moved the
+  corpus), but it is still the ONLY reading this exact axis set has ever
+  taken — there is no prior number under it to compare against. The
+  closest pair this corpus has ever produced is `barbecue`/`barbecue-rich`
+  at 17% apart (eight of twelve axes shared) — named because BRIEF's own
+  convention is to report the closest pair, not because it was judged.
+- **Agreement is 0 of 0, and no judging round has run for two passes
+  now, on purpose.** Every verdict checked across both passes came back
+  DIFFERENT — judging again would spend real money to confirm what a
+  redecide already implies rather than test anything new, so both
+  redecides retired every live verdict and replaced none of them. A
+  rank-based score needs at least one "same" verdict to rank against
+  something. Take "the vector agrees with a human" as unproven, not as
+  disproven and not as confirmed — and overdue for a real check now that
+  the corpus has moved twice with nothing re-judged.
 - **The held-out third is currently empty**, not stale — every held-out
-  verdict from the prior round was retired (the rendering changed under it
-  twice this session) and none has been repopulated yet. This is disclosed
-  in `tests/test_the_instrument_reproduces.py`, not hidden.
-- **Ratings, review counts and "dishes on the menu" tallies** on each page
-  are read from Google's own data at the time each business was researched —
-  they will have drifted since. Nothing here is refreshed automatically.
+  verdict was retired across two redecides and none has been repopulated.
+  This is disclosed in `tests/test_the_instrument_reproduces.py`, not
+  hidden.
+- **The content census's "77% of published material reaches the page"**
+  is corrected for a double-count this round found in the census tool
+  itself (a subset row was being summed into the total twice — see
+  above) — the PRIOR reading of "73%" was against an inflated denominator
+  the whole time, so this is not quite an apples-to-apples "+4 points",
+  though the true corrected baseline (73%, recomputed) to this round's
+  77% is a real improvement from four specific, disclosed fixes.
+- **Ratings and review counts** on each page are read from Google's own
+  data at the time each business was researched — they will have drifted
+  since. Nothing here is refreshed automatically.
 - **The `.captured.json` manifest and `artifacts/` directory are not
   committed** — regenerate the full contact sheet and this review bundle
   with `tools/contact_sheet.py` and `tools/build_review.py` if either looks
@@ -155,12 +211,19 @@ finding list and the recommendation.
 
 ## If you find something that looks wrong
 
-It might be. Two real ones were found and fixed already: the workbench's
-"plan" panel disagreeing with the rendered page on section order for
-seventeen of nineteen fixtures, found verifying this bundle
-(`.reviews/plan-page-disagreement.md`); and a licensure claim printed with
-no corroboration on six pages, found by a reader of the corpus itself
-rather than by any test in this repository
-(`.reviews/slice-c-credential-claims.md`). Trust what you see on the page
-over what any panel, test, or number claims about it, and say so if they
-don't match.
+It might be. Real ones found and fixed so far: the workbench's "plan"
+panel disagreeing with the rendered page on section order for seventeen
+of nineteen fixtures (`.reviews/plan-page-disagreement.md`); a licensure
+claim printed with no corroboration on six pages
+(`.reviews/slice-c-credential-claims.md`); two verified facts
+contradicting each other on one page, and a scraper's menu-item
+extraction mistaking a law firm's settlement amounts for dinner prices
+on five pages; a nav floating over a photograph with no way to guarantee
+it stayed legible, and a CSS grid with a wider minimum than the phone
+showing it; and a corpus-wide measurement tool double-counting one of
+its own rows into a headline percentage (`.reviews/slice-b-
+predictions.md`, "Round 3"). None of these were caught by any test
+before someone looked — or, this round, before a measurement tool's own
+output was checked against a second, independent read of it. Trust what
+you see on the page over what any panel, test, or number claims about
+it, and say so if they don't match.

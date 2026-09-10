@@ -277,6 +277,104 @@ paired photo nothing in this corpus's photo data carries).
     fixtures    19
     verdicts    0 live (eleven retired this redecide, none re-judged)
 
+**Done — Round 3: the review-count contradiction, the sampled review's
+findings, and acting on the content census (BRIEF §4, §5 — full account
+in `.reviews/slice-b-predictions.md`).**
+
+Phase 1: `hvac` printed two verified facts that contradicted each
+other — its own "about" text claimed 20,000 reviews against a
+corroborated 6,203 two sections away. A corpus-wide scan found this was
+the only instance. Fixed (`app/site/contradiction.py`): a sentence
+stating a review count that contradicts the corroborated value is
+dropped, never rewritten. New BRIEF §4 invariant; standing test
+(`test_no_contradicted_fact_ships.py`), confirmed against the reverted
+code and restored. Content-only, no redecide.
+
+Phase 2: confirmed each of the sampled design review's three claimed
+defects before changing anything, per instruction. Two were real
+(`law`'s nav floating over the attorney's photo with no scrim; a
+review-quote truncation cutting a word in half) and fixed. The third
+("duplicated CTA cropped at the mobile edge") was a tooling artifact —
+Chrome's headless `--screenshot` mode silently clamps any requested
+width under 500px to exactly 500, so every "mobile" screenshot this
+project has ever taken was captured 110px wider than labelled and
+cropped on output. Fixed properly with a real sub-500px capture path
+over the DevTools protocol (`tools/contact_sheet.py`); verifying it
+found a real version of the same defect class on `law-rich` (a CSS grid
+with a genuine 570px minimum, wider than any phone) and fixed that too.
+Standing test (`test_no_element_collides_with_another.py`) checks every
+fixture at three widths for a clipped control or painted-over text.
+Re-ran the sampled review against the fixed tooling: the nav and
+truncation findings are gone; the CTA finding's description changed from
+"cropped" to a pure duplication observation. Content-only, no redecide.
+
+Phase 3: acted on the content census, item by item. A business's own
+photography, never once selected (`Material.images` reversed to
+own-first; a small, tie-breaking `own_photo` hero-scoring term) —
+verified content-only, no fingerprint value moved. `menu_media`, read by
+no section builder since Slice A because `Material` did not even carry
+the field — now linked directly. Verifying that surfaced a real,
+separate bug: `law-rich` was rendering a law firm's settlement amounts
+as "12 dishes on the menu" — the generic price-anchored menu-item
+extraction doesn't know what business it is reading. A corpus scan found
+four more instances (a dental promo, a plumbing coupon, a financing
+banner, an insurance estimate); fixed by gating menu content on
+`trade_kind == "food"`. The `block:feature` cap raised 4 → 6, checked
+fixture by fixture first (some corpora are a real FAQ cut off
+arbitrarily; a smaller amount is testimonial content a scraper mis-filed,
+starting around item 7, not item 5) — content-only. A lone, uncontested
+Google Business Profile claim now verifies `address`/`phone` on its own
+(genuine conflicts between sources, the larger share of what was
+dropped, are unchanged). Also fixed: the census tool's own grand-total
+was double-counting a subset row into its headline percentage, and two
+of its lines had gone stale the moment the fixes above shipped — the
+same "two copies drift apart" defect this project keeps finding, this
+time in its own measurement tool. Content census: **73% → 77%**
+(corrected denominator both readings). One redecide (the menu fallback
+and the newly-verified contact facts move `section_order`); re-pinned;
+zero collisions across 171 pairs; no judging round.
+
+Phase 4: the content census surfaced in the workspace (Slice D item 3).
+Moved the measurement itself (`measure()`, `FixtureCensus`) from
+`tools/content_census.py` into `app/site/census.py` — a real library
+module the live server can depend on — so `workspace()` calls the
+identical function a corpus-wide report does, not a second
+implementation of it. New "What didn't reach the page" panel in the
+workbench UI. Verified against the real, persistent `workbench.db`, not
+just fixtures.
+
+**Not this round, disclosed rather than silently dropped:** a judging
+round (two passes running now with none — recommended, not attempted);
+the full 19-fixture Slice G sweep and auto-repair of its findings
+(Phase 5, explicitly conditional on "room" — not attempted, a
+substantial undertaking in its own right); growing the corpus; the rest
+of Slice D (letting the model select and order its own sentences, a
+provenance check).
+
+**The instrument's current reading.**
+
+    agreement   0 of 0 — no "same" pair is left to rank, none judged this
+                round (deliberate, two rounds running — see above)
+                ruler a762bcc9, rule 254e171b, labels e3b0c442,
+                held-out e3b0c442
+    census      same-trade 61.52% distance = 38.48% identical, 30 scored
+                pairs (was 56.10%/43.90% before this round's redecide)
+                closest pair barbecue / barbecue-rich at 17% (reported,
+                not judged)
+    unreachable 0
+    gate        0 of 171 pairs collide, whole corpus
+    forbidden defaults  3 fixtures match (§2.4) — barbecue-rich,
+                barbecue, and restaurant-rich (barbecue joined this
+                round's redecide; a fact about the redecide, not
+                something tuned for)
+    content census  77% of published material reaches the page (was 73%,
+                corrected for a double-count the census tool itself had —
+                see above)
+    tests       849
+    fixtures    19
+    verdicts    0 live (none live going into this round either; nothing
+                to retire, nothing added)
+
 ## 2. The governing requirement
 
 A generator's characteristic failure is that its output is recognisable as its
@@ -543,21 +641,26 @@ business's own copy happens to use a matching phrase.
 
 ### Slice D — content completeness and copy selection
 
-**First step done — see `.reviews/first-pass.md`.**
-`tools/content_census.py`: every heading, paragraph, list, image and
-fact on their site, against whether it reached the page and which rule
-dropped it if not, read off the real pipeline rather than reimplemented.
-73% of published material reaches the page overall; `block:feature` at
-36% is the single biggest loss (a 4-block cap); `fact:hours` is 0%
-reached corpus-wide (superseded by `published.hours` everywhere it would
-fire — a pure fallback that never runs, not a bug, but worth knowing);
-`menu_media` is read by no section builder at all. **Not yet done:**
-fixing what the census exposes, surfacing it in the workspace, and
-letting the model select and order its own sentences — replacing
-`unsupported()` with a provenance check (every visible sentence a
-verbatim or prefix-cut span of source material, a whitelisted
-generic-copy member, or a corroborated field), keeping claim expression
-as a second layer.
+**Items 1 and 2 done, item 3 done, item 4 not started — see
+`.reviews/first-pass.md` and `.reviews/slice-b-predictions.md`
+("Round 3").** `app/site/census.py` (measurement logic — a library
+module, not a script, so the workspace and a corpus-wide report call the
+same function): every heading, paragraph, list, image and fact on their
+site, against whether it reached the page and which rule dropped it if
+not. 77% of published material reaches the page overall (was 73%, and
+that 73% turned out to be measured against a denominator the census
+tool's own grand total was double-counting — corrected before trusting
+either number). Acted on: a business's own photography now gets a real
+look-in for hero and every other photo-consuming section; `menu_media`
+now reaches the page; the `block:feature` cap raised 4 → 6 after
+checking what it was actually cutting off, fixture by fixture; a lone
+Google Business Profile claim now verifies address/phone on its own.
+Surfaced in the workspace: a "What didn't reach the page" panel, reusing
+`app.site.census.measure()` directly. **Not yet done:** letting the
+model select and order its own sentences — replacing `unsupported()`
+with a provenance check (every visible sentence a verbatim or
+prefix-cut span of source material, a whitelisted generic-copy member,
+or a corroborated field), keeping claim expression as a second layer.
 
 ### Slice E — backdrops, motion, video
 
@@ -575,7 +678,8 @@ element.
 
 ### Slice G — the design review
 
-**Sampled, not swept — see `.reviews/first-pass.md`.**
+**Sampled, not swept — see `.reviews/first-pass.md` and
+`.reviews/slice-b-predictions.md` ("Round 3, Phase 2").**
 `tools/design_review.py`: screenshot at three widths, one model call per
 screenshot, closed categories (hierarchy, crop, spacing, colour, imagery,
 credibility, "reads as a template") — matches the brief as written.
@@ -583,13 +687,21 @@ Run on four fixtures only (one restaurant, one trade contractor, one
 professional practice, the threadbare fixture) to keep the cost of
 finding out whether this is worth it low; a full sweep over all 19
 fixtures at three widths would be 57 calls, not 12. It found real
-defects: rendering-level layout collisions no test here catches (a nav
-sitting on a face, hidden text behind a banner, cropped duplicate CTAs on
-mobile), and a genuine internal contradiction in one business's own
-published facts (a review count that disagrees with itself two sections
-apart). **Not built:** findings joining the existing defects list,
-auto-repair of the deterministic findings, and running it on every
-lead's opening version rather than four sampled fixtures.
+defects, confirmed and fixed the following round rather than acted on
+immediately: a nav floating over a face with no scrim (real), a review
+quote truncated mid-word (real), a review count contradicting itself
+(real, now its own BRIEF §4 invariant), and a duplicated CTA "cropped at
+the mobile edge" that turned out to be an artifact of the review's own
+screenshot tool clamping any sub-500px viewport to 500 — fixed properly
+(a real narrow-viewport capture path), which then found a genuine
+version of the same defect class elsewhere. **Recommendation confirmed:
+worth running in full** — the sample's hit rate on real, fixable defects
+was high even before accounting for the tooling artifact. **Not built:**
+the full 19-fixture sweep itself, findings joining the existing defects
+list, and auto-repair of the deterministic findings — all explicitly
+deferred as Phase 5 of the round that fixed what this sample found,
+conditional on there being room for a substantial undertaking in its own
+right.
 
 ### Slice H — the conversational workspace
 

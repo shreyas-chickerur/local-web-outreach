@@ -12,8 +12,8 @@
 :root{
   --density-scale:1;
   --bg:#f2f2ef; --surface:#ffffff; --raise:#e8e8e4; --ink:#16181a;
-  --dim:#4f5459; --accent:#0a2669; --accent-soft:#dde6fa;
-  --accent-ink:#ffffff; --line:#dcdcd6; --r:0px;
+  --dim:#4f5459; --accent:#c2610d; --accent-soft:#fbeadc;
+  --accent-ink:#111111; --line:#dcdcd6; --r:0px;
   /* Two layers doing different jobs: a hairline-tight contact shadow to seat
      the card, and a wide, very faint cast to lift it. A single heavy shadow
      reads as a border with a blur on it. */
@@ -23,7 +23,7 @@
   /* Foregrounds computed against each ground, never paired by hand. */
   --on-base:#16181a;
   --on-raise:#16181a;
-  --on-accent:#f2f2ef;
+  --on-accent:#000000;
   --pad:clamp(20px,5vw,44px);
 }
 *{box-sizing:border-box}
@@ -51,7 +51,7 @@ p{text-wrap:pretty}
 :focus:not(:focus-visible){outline:none}
 .cta:focus-visible,.book:focus-visible{outline-offset:4px}
 
-::selection{background:rgba(10,38,105,0.24);color:var(--ink)}
+::selection{background:rgba(194,97,13,0.24);color:var(--ink)}
 h1{font-size:calc(clamp(43.87px, 28.83px + 3.958vw, 85.83px) * var(--density-scale));letter-spacing:-0.02em;font-variation-settings:"wght" 600}
 h2{font-size:calc(clamp(32.89px, 24.98px + 2.08vw, 54.93px) * var(--density-scale));letter-spacing:-0.012em;font-variation-settings:"wght" 500}
 h3{font-size:calc(clamp(21.34px, 18.91px + 0.6397vw, 28.12px) * var(--density-scale));letter-spacing:-0em;font-variation-settings:"wght" 500}
@@ -83,7 +83,8 @@ section[data-ground="base"]{background:var(--bg);color:var(--on-base)}
    the edge so no shadow is needed, and the saturate() stops content going grey
    as it passes underneath. */
 body:has(.hero.first-type) .bar,
-body:has(.hero.first-split) .bar{color:var(--ink)}
+body:has(.hero.first-split) .bar,
+body:has(.hero.first-proof) .bar{color:var(--ink)}
 /* The split's chrome gets its own ground. Left translucent it ran dark ink
    across the photograph — legible left of the midpoint and not right of it,
    which is a contrast failure the audit cannot see because there is no
@@ -91,6 +92,17 @@ body:has(.hero.first-split) .bar{color:var(--ink)}
    legibility and wrapped the navigation onto three lines; a header band above
    a hard-edged split is the composition this position was already making. */
 body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
+  border-bottom:1px solid rgba(22,24,26,0.1)}
+/* `first-proof` puts its photograph in a narrow band across the very top —
+   exactly where the fixed nav sits — and turns its veil off because the type
+   never sits over the photograph at all (see `.hero.first-proof .veil`
+   above). Nobody told the nav: left translucent and white, as every other
+   position starts, it read as navigation links floating across a stranger's
+   face with no scrim to guarantee legibility, a collision a design review
+   caught that no test here did. Solid from the first frame, matching the
+   ground the claims below it already sit on, so the nav is never over the
+   photograph at all rather than merely hoping it stays legible on top of it. */
+body:has(.hero.first-proof) .bar:not(.stuck){background:var(--bg);
   border-bottom:1px solid rgba(22,24,26,0.1)}
 .bar.stuck{background:rgba(255,255,255,0.72);color:var(--ink);
   -webkit-backdrop-filter:blur(14px) saturate(180%);
@@ -125,7 +137,17 @@ body:has(.hero.first-split) .bar:not(.stuck){background:var(--bg);
   background-position:center;will-change:transform}
 .hero .veil{position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,rgba(20,22,24,0.88) 0%,rgba(20,22,24,0.58) 42%,rgba(20,22,24,0.26) 100%)}
 .hero.has-photo{color:#fff}
-.hero .wrap{padding-bottom:clamp(52px,9vh,110px);padding-top:120px}
+/* `min-width:0` overrides the grid item default of `min-width:auto`, which
+   otherwise sizes this implicit column to its content's min-content width
+   rather than the hero's own. `.hero.first-proof .proof` sets three columns
+   at `minmax(190px,1fr)` — a real minimum of 570px at three items — and with
+   nothing here capping it, the hero (and everything in its `.wrap`,
+   including the hero actions) grew to 570px on a 390px viewport instead of
+   wrapping the proof row, clipping the second action button by the width
+   that grid track went over. A collision a design review caught ("Get
+   directions" cropped) that no test here did until the corpus-wide
+   collision check below was built to catch this shape of bug generally. */
+.hero .wrap{padding-bottom:clamp(52px,9vh,110px);padding-top:120px;min-width:0}
 .hero h1{margin-bottom:.22em;max-width:16ch}
 .hero .sub{font-size:clamp(17px,2vw,25px);max-width:40ch;opacity:.94;
   margin-bottom:30px;line-height:1.4}
@@ -545,6 +567,9 @@ html.reveals .editorial-art.in img{clip-path:inset(0 0 0 0)}
 .dishes .n{font-weight:650;font-size:17px}
 .dishes .p{font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
 .dishes .d{grid-column:1/-1;color:var(--dim);font-size:15px;margin:0}
+.menu-more{margin:clamp(24px,3vw,36px) 0 0}
+figure.menu-media{margin:0}
+figure.menu-media img{border-radius:var(--r);max-width:480px}
 
 /* --------------------------------------------------------------- gallery -- */
 /* A fixed three-column rhythm with one aspect ratio and one gap, so the whole
@@ -846,17 +871,18 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;
   .marquee ul{animation:none!important;flex-wrap:wrap;width:auto}
 }
 </style>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "VIP PLUMBING EXPERTS LLC", "aggregateRating": {"@type": "AggregateRating", "ratingValue": 4.7, "reviewCount": 57}, "geo": {"@type": "GeoCoordinates", "latitude": 33.1530027, "longitude": -96.8387686}}</script></head>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "VIP PLUMBING EXPERTS LLC", "address": {"@type": "PostalAddress", "streetAddress": "5566 Main St, Frisco, TX 75033, USA"}, "telephone": "(469) 486-0687", "aggregateRating": {"@type": "AggregateRating", "ratingValue": 4.7, "reviewCount": 57}, "geo": {"@type": "GeoCoordinates", "latitude": 33.1530027, "longitude": -96.8387686}}</script></head>
 <body data-theme="industrial" data-type="stamped" data-arch="ledger" data-signature="ticker" data-theme-layout="structured">
 <div class="progress"></div>
-<div class="bar"><a class="mark" href="#top">VIP PLUMBING EXPERTS LLC</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#gallery">Gallery</a><a href="#reviews">Reviews</a></nav></div>
-<header class="hero first-facts type-stamped has-photo" id="top"><div class="bgimg" style="background-image:url(&quot;photos/85fe6758e674a46255d8028bbf331c6d.jpg&quot;);background-image:-webkit-image-set(url(&quot;photos/85fe6758e674a46255d8028bbf331c6d.jpg&quot;) 1x, url(&quot;photos/85fe6758e674a46255d8028bbf331c6d.jpg&quot;) 2x);background-image:image-set(url(&quot;photos/85fe6758e674a46255d8028bbf331c6d.jpg&quot;) 1x, url(&quot;photos/85fe6758e674a46255d8028bbf331c6d.jpg&quot;) 2x)"></div><div class="veil"></div><div class="wrap"><p class="tally"><b>4.7</b><span>from 57 Google reviews</span></p><h1>VIP PLUMBING EXPERTS LLC</h1><p class="sub">Plumber</p><div class="actions"></div></div><div class="scrollcue"></div></header>
+<div class="bar"><a class="mark" href="#top">VIP PLUMBING EXPERTS LLC</a><button class="burger" aria-label="Menu">&#9776;</button><nav><a href="#gallery">Gallery</a><a href="#reviews">Reviews</a><a href="#contact">Visit</a></nav><a class="book" href="tel:4694860687">Call us</a></div>
+<header class="hero first-proof type-stamped has-photo" id="top"><div class="bgimg" style="background-image:url(&quot;photos/85fe6758e674a46255d8028bbf331c6d.jpg&quot;);background-image:-webkit-image-set(url(&quot;photos/85fe6758e674a46255d8028bbf331c6d.jpg&quot;) 1x, url(&quot;photos/85fe6758e674a46255d8028bbf331c6d.jpg&quot;) 2x);background-image:image-set(url(&quot;photos/85fe6758e674a46255d8028bbf331c6d.jpg&quot;) 1x, url(&quot;photos/85fe6758e674a46255d8028bbf331c6d.jpg&quot;) 2x)"></div><div class="veil"></div><div class="wrap"><h1>VIP PLUMBING EXPERTS LLC</h1><p class="sub">Plumber</p><ul class="proof"><li>4.7 stars from 57 reviews</li><li>TX 75033</li></ul><div class="actions"><a class="cta" href="tel:4694860687">Call (469) 486-0687</a><a class="cta ghost" href="https://www.google.com/maps/search/?api=1&amp;query=VIP+PLUMBING+EXPERTS+LLC+5566+Main+St%2C+Frisco%2C+TX+75033%2C+USA" target="_blank" rel="noopener">Get directions</a></div></div><div class="scrollcue"></div></header>
 <section data-rule="on" id="stats" class="statband"><div class="wrap" data-measure="tight"><div class="stats"><div class="stat" data-reveal data-delay="0"><b>4.7</b><span>average rating</span></div><div class="stat" data-reveal data-delay="1"><b data-count="57">57</b><span>Google reviews</span></div></div></div></section>
-<section data-rule="on" class="device" data-device="ticker"><div class="tickline"><span>4.7 stars</span><span>57 reviews</span><span>4.7 stars</span><span>57 reviews</span><span>4.7 stars</span><span>57 reviews</span></div></section>
+<section data-rule="on" class="device" data-device="ticker"><div class="tickline"><span>4.7 stars</span><span>57 reviews</span><span>5566 Main St, Frisco, TX 75033, USA</span><span>4.7 stars</span><span>57 reviews</span><span>5566 Main St, Frisco, TX 75033, USA</span><span>4.7 stars</span><span>57 reviews</span><span>5566 Main St, Frisco, TX 75033, USA</span></div></section>
 <section data-rule="on" id="gallery"><div class="wrap" data-measure="tight"><p class="eyebrow" data-reveal>Our work</p><h2 data-reveal>Recent jobs</h2><div class="mosaic" style="--cols:3;--cols-narrow:2"><button aria-label="Open photo 1" data-reveal data-delay="0"><img src="photos/f6f88dfefaf908f53d400b9861b212e1.jpg" alt="A man in a blue work uniform kneels to repair pipes beneath a wall-mounted bathroom sink with a toilet visible nearby." srcset="photos/f6f88dfefaf908f53d400b9861b212e1.jpg 800w, photos/f6f88dfefaf908f53d400b9861b212e1.jpg 1600w, photos/f6f88dfefaf908f53d400b9861b212e1.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 2" data-reveal data-delay="1"><img src="photos/e68c5fa4f179ad086bcad67f7b619d5d.jpg" alt="A man in a plaid shirt and blue overalls uses a plunger in a stainless steel kitchen sink." srcset="photos/e68c5fa4f179ad086bcad67f7b619d5d.jpg 800w, photos/e68c5fa4f179ad086bcad67f7b619d5d.jpg 1600w, photos/e68c5fa4f179ad086bcad67f7b619d5d.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 3" data-reveal data-delay="2"><img src="photos/57776d440dee191036737e1268bd032a.jpg" alt="An overhead view of a man lying on the floor working on pipes under a kitchen sink, with tools and a wrench beside him." srcset="photos/57776d440dee191036737e1268bd032a.jpg 800w, photos/57776d440dee191036737e1268bd032a.jpg 1600w, photos/57776d440dee191036737e1268bd032a.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 4" data-reveal data-delay="3"><img src="photos/147ad50964732ec8de8dbe134d4fb969.jpg" alt="Close-up of two hands using a wrench and adjusting a valve on plumbing pipes under a sink." srcset="photos/147ad50964732ec8de8dbe134d4fb969.jpg 800w, photos/147ad50964732ec8de8dbe134d4fb969.jpg 1600w, photos/147ad50964732ec8de8dbe134d4fb969.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 5" data-reveal data-delay="0"><img src="photos/0882fe0801784e7ba9385ec0b4025da8.jpg" alt="A man in an orange shirt uses a plunger on a toilet in a bathroom with tiled walls." srcset="photos/0882fe0801784e7ba9385ec0b4025da8.jpg 800w, photos/0882fe0801784e7ba9385ec0b4025da8.jpg 1600w, photos/0882fe0801784e7ba9385ec0b4025da8.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button><button aria-label="Open photo 6" data-reveal data-delay="1"><img src="photos/6cdce196be16471448780277d9870979.jpg" alt="Two gray gas water heaters installed side by side against a beige wall." srcset="photos/6cdce196be16471448780277d9870979.jpg 800w, photos/6cdce196be16471448780277d9870979.jpg 1600w, photos/6cdce196be16471448780277d9870979.jpg 2400w" sizes="(max-width:700px) 100vw, 33vw" loading="lazy" decoding="async"></button></div></div></section><div class="lightbox" role="dialog" aria-label="Photo"><button class="close" aria-label="Close">&times;</button><button class="prev" aria-label="Previous">&lsaquo;</button><img src="" alt=""><button class="next" aria-label="Next">&rsaquo;</button><div class="count"></div></div>
-<section data-rule="on" id="reviews" data-ground="raise"><div class="wrap" data-measure="tight"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>4.7 stars from 57 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;</div><p>&ldquo;Used VIP plumbing a few years ago during an emergency toilet near overflow situation occurring before I had to leave for work, the guy arrived cordially &amp; promptly, but charged me $389 and left without solving a simple clog in my plumbing, instead wanted to return for more diagnostic testing which would cost another few hundred. My sirens&rdquo;</p><figcaption class="who">T M &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="1"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I used VIP Plumbing Experts to repair an outside faucet.  The repair required more than replacing the assembly as the piping inside the wall could not be loosen. John explained the issue and provided several options to resolve the issue.  One option was to replace the washer, but it was a temporary fix.  I asked John to repair it.  I grea&rdquo;</p><figcaption class="who">Ray Castillo &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="2"><div class="stars">&#9733;</div><p>&ldquo;I too wish that I would have read the reviews about John and his lack of responsibility.  I set an appointment up last Friday with John to come out first thing this morning.  When I spoke with him it was never mentioned that he might be late.  I called several times this morning and left several messages, but absolutely so response, no ca&rdquo;</p><figcaption class="who">Kathy Andrews &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="3"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;John of VIP Plumbing is excellent.  Professional, personable and thorough.  In the fall of 2020 he installed a hot water recirculation system in our house that has been wonderful.  We wish we had done it sooner.  John was incredibly patient, answering my many questions about it.  And now he came quickly to fix a leak after the arctic weat&rdquo;</p><figcaption class="who">Kate Kerstetter &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;VIP plumbing did an amazing job with helping to diagnose our water heater issue, helping to shut off the leak and then installing a tankless heater. Jon did an excellent job of explaining what the issue was and he professionally recommended a viable solution. He also was the only plumber to answer the phone during a Saturday evening over&rdquo;</p><figcaption class="who">Sooman Kim &middot; Google</figcaption></figure></div></div></section>
-
-<footer><div class="wrap"><div class="row"><span>&copy; VIP PLUMBING EXPERTS LLC</span><button class="top">Back to top</button></div></div></footer>
+<section data-rule="on" id="reviews" data-ground="raise"><div class="wrap" data-measure="tight"><p class="eyebrow" data-reveal>Reviews</p><h2 data-reveal>4.7 stars from 57 reviews</h2><div class="quotes"><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;</div><p>&ldquo;Used VIP plumbing a few years ago during an emergency toilet near overflow situation occurring before I had to leave for work, the guy arrived cordially &amp; promptly, but charged me $389 and left without solving a simple clog in my plumbing, instead wanted to return for more diagnostic testing which would cost another few hundred. My…&rdquo;</p><figcaption class="who">T M &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="1"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;I used VIP Plumbing Experts to repair an outside faucet.  The repair required more than replacing the assembly as the piping inside the wall could not be loosen. John explained the issue and provided several options to resolve the issue.  One option was to replace the washer, but it was a temporary fix.  I asked John to repair it.  I…&rdquo;</p><figcaption class="who">Ray Castillo &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="2"><div class="stars">&#9733;</div><p>&ldquo;I too wish that I would have read the reviews about John and his lack of responsibility.  I set an appointment up last Friday with John to come out first thing this morning.  When I spoke with him it was never mentioned that he might be late.  I called several times this morning and left several messages, but absolutely so response, no…&rdquo;</p><figcaption class="who">Kathy Andrews &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="3"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;John of VIP Plumbing is excellent.  Professional, personable and thorough.  In the fall of 2020 he installed a hot water recirculation system in our house that has been wonderful.  We wish we had done it sooner.  John was incredibly patient, answering my many questions about it.  And now he came quickly to fix a leak after the arctic…&rdquo;</p><figcaption class="who">Kate Kerstetter &middot; Google</figcaption></figure><figure class="quote" data-reveal data-delay="0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;VIP plumbing did an amazing job with helping to diagnose our water heater issue, helping to shut off the leak and then installing a tankless heater. Jon did an excellent job of explaining what the issue was and he professionally recommended a viable solution. He also was the only plumber to answer the phone during a Saturday evening over…&rdquo;</p><figcaption class="who">Sooman Kim &middot; Google</figcaption></figure></div></div></section>
+<section data-rule="on" id="contact"><div class="wrap" data-measure="tight"><div class="split"><div data-reveal><p class="eyebrow">Get in touch</p><h2>Reach us</h2><div class="reach"><a href="https://www.google.com/maps/search/?api=1&amp;query=5566+Main+St%2C+Frisco%2C+TX+75033%2C+USA" target="_blank" rel="noopener"><span class="k">Address</span><span class="v">5566 Main St, Frisco, TX 75033, USA</span></a><a href="tel:4694860687"><span class="k">Phone</span><span class="v">(469) 486-0687</span></a></div></div><div class="map" data-reveal data-delay="1"><iframe loading="lazy" title="Map of VIP PLUMBING EXPERTS LLC" src="https://www.openstreetmap.org/export/embed.html?bbox=-96.8427686,33.1500027,-96.83476859999999,33.1560027&amp;layer=mapnik&amp;marker=33.1530027,-96.8387686"></iframe></div></div></div></section>
+<div class="callbar"><a class="cta" href="tel:4694860687">Call us</a><a class="cta ghost" href="https://www.google.com/maps/search/?api=1&amp;query=5566+Main+St%2C+Frisco%2C+TX+75033%2C+USA" target="_blank" rel="noopener">Directions</a></div>
+<footer><div class="wrap"><div class="row"><span>&copy; VIP PLUMBING EXPERTS LLC</span><span>5566 Main St, Frisco, TX 75033, USA</span><a href="tel:4694860687">(469) 486-0687</a><button class="top">Back to top</button></div></div></footer>
 <script>
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
