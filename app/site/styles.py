@@ -388,6 +388,14 @@ body:has(.hero.first-proof) .bar:not(.stuck){{background:var(--bg);
 .bigquote{{margin:0;font-family:{t.display.stack};
   font-size:clamp(24px,4.2vw,58px);line-height:1.08;max-width:20ch;
   text-indent:-.4em}}
+/* Set at the same size and weight as the quoted words themselves, a
+   curly quotation mark in a heavy display face reads as a stray letter
+   rather than punctuation — a Slice G design review misread the closing
+   mark as "a stray 'D'" on `hvac`'s real testimonial, and the opening
+   one as a doubled first letter ("CCody"). Toned down and dropped a
+   size so they read as an ornamental flourish, not more of the word. */
+.bigquote::before,.bigquote::after{{color:var(--accent);opacity:.6;
+  font-size:.6em}}
 .bigquote::before{{content:"\201C"}} .bigquote::after{{content:"\201D"}}
 
 [data-device="marquee"]{{overflow:hidden;padding:clamp(28px,3vw,44px) 0;

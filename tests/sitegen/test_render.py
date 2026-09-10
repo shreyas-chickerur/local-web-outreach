@@ -416,6 +416,23 @@ def test_the_offer_heading_follows_the_trade():
     assert "How we can help" in build(default)[0]
 
 
+def test_a_stray_menu_item_does_not_borrow_the_food_heading():
+    """`extract_menu_items` anchors on any bare dollar amount — Round 3
+    already found it misreading a law firm's settlement figures as "12
+    dishes on the menu" and gated `_stats()`/`_menu()` on
+    `trade_kind == "food"`. `_offer_heading` had the same
+    `if m.menu_items` shortcut and was never given the same gate — a
+    Slice G sweep caught the result live on four real fixtures (roofer,
+    HVAC, and a law firm's own services section headed "What we cook and
+    serve"). This is that bug, isolated: a non-food trade with a
+    non-empty `menu_items` must still get its own trade's heading."""
+    trade = _rich()
+    trade["trade"] = "Roofing contractor"
+    page = build(trade)[0]           # the fixture's own menu_items, non-empty
+    assert "What we cook and serve" not in page
+    assert "What we handle" in page
+
+
 def test_two_offerings_do_not_get_a_grid_built_for_four():
     """auto-fit collapses its empty tracks, so two items become two half-width
     slabs with dead space down the middle. The sparse case must not use it."""

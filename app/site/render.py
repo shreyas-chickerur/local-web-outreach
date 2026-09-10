@@ -894,12 +894,20 @@ def _offer_heading(m: Material) -> tuple[str, str]:
 
     From `tradeprofile.HEADING` — one table per trade rather than the two ad
     hoc conditions this used to be (a food-word match against the trade
-    string, and products-with-no-services). `m.menu_items` still forces the
-    food heading regardless of `trade_kind`: a caterer classified `default`
-    that nonetheless published prices is shaped like a restaurant here.
+    string, and products-with-no-services).
+
+    `m.menu_items` alone used to force the food heading regardless of
+    `trade_kind` — the same over-trusting `extract_menu_items` anchors on
+    any bare dollar amount that `_stats()`/`_menu()` already gate on
+    `trade_kind == "food"` (Round 3: a law firm's settlement figures read
+    as "12 dishes on the menu"). Those two call sites got the gate; this
+    one did not, and a Slice G sweep caught the result directly — a
+    roofer's, an HVAC contractor's, and a law firm's own services section
+    headed "What we cook and serve", the restaurant heading, on any
+    fixture with enough scraped text for a stray price to be
+    misclassified as a menu item.
     """
-    kind = "food" if m.menu_items else m.trade_kind
-    return heading_for(kind, bool(m.services), bool(m.products))
+    return heading_for(m.trade_kind, bool(m.services), bool(m.products))
 
 
 def _offer_item(item: str, index: int) -> str:
