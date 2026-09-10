@@ -228,6 +228,23 @@ leave this fixture corpus untouched (the frozen-replay check every
 fixture already hits returns before the preference is ever looked at).
 Full account in `.reviews/round-5.md`.
 
+**Round 6 — a hand-review pass, deliberately scoped to work with a
+right answer only.** Two real bugs fixed in this bundle itself, neither
+a rendering change: the og:image meta tag's absolute URL was corrupted
+on 17 of 19 pages (metadata only, invisible on the page — see below);
+the freshness guard that regenerates this bundle failed on any machine
+with an empty photo cache, an environment artifact, now a clear skip
+instead. Every page's own photographs were verified to genuinely load
+offline, not just exist on disk. The performance harness had two real
+bugs of its own (see the weight-budget bullet below, corrected). No
+composition, heading, photo, or budget changed — every question that
+needed a human's own judgment (the one contested pair, the weight
+budget, remaining single-composition sections, the ninth contractor
+fact, growing the corpus, what the agreement figure is and isn't
+evidence of) was written up with evidence rather than decided:
+`.reviews/DECISIONS-FOR-SHREYAS.md`. Full account in
+`.reviews/round-6.md`.
+
 ## Numbers not to trust, and why
 
 - **"61.52% same-trade distance"** is unchanged since the round before
@@ -262,20 +279,28 @@ Full account in `.reviews/round-5.md`.
   evidence the axis set is missing something — no axis was built on the
   strength of this. `roofer`/`hvac-rich` is the one live verdict most
   worth a fresh, careful look in a future judging round.
-- **Twelve of nineteen fixtures breach the 2MB page-weight budget — not
-  one answer, sampled with real data rather than assumed.** Every one a
-  pre-existing, large photo gallery, none of them caused by anything
-  Round 4 added. Fetching the actual smallest currently-offered
-  responsive tier (800px, via the live Google Places API) for three of
-  the twelve found `barbecue-rich` clears the budget at that size — a
-  pure measurement artifact, since no tool in this project has ever
-  actually served photos width-aware locally — but `law-rich` and
-  `roofer` do not clear it even then. The true split across all twelve
-  is unknown; recommended as its own scoped pass rather than guessed at.
-  Pinned as disclosed, `strict` `xfail` in
-  `tests/test_performance_budgets.py` either way — an actual fix would
-  show as a hard failure (XPASS), so drift in either direction is
-  caught. LCP, INP, and CLS are clean on all nineteen fixtures.
+- **Seven of nineteen fixtures breach the 2MB page-weight budget —
+  corrected in Round 6 from a wrongly-measured twelve.** The harness
+  itself had two real bugs: it measured every `/photo/` reference at
+  the largest tier regardless of what a mobile `srcset` would actually
+  select, and it silently never counted a business's own
+  externally-hosted images (a "recent jobs" block pulled straight from
+  their live site) at all. Fixed with the real DevTools Network domain
+  rather than a disk estimate, and the honest number moved in BOTH
+  directions: five of the old twelve clear now (`hvac`, `hvac-rich`,
+  `hvac-second`, `restaurant-bare`, `restaurant-casual` — their old
+  "breach" was mostly the over-measured proxy tier), and `roofer`/
+  `restaurant-rich` are far WORSE than the old number ever showed
+  (their true weight is mostly external images the old measurement
+  never counted). The seven that remain split into two different
+  problems — three dominated by this project's own photo gallery,
+  four by a business's own externally-hosted images — with different
+  costs to fix either. See `.reviews/DECISIONS-FOR-SHREYAS.md` item 2
+  for the full per-fixture table and the options, none taken. Pinned as
+  disclosed, `strict` `xfail` in `tests/test_performance_budgets.py`
+  either way — an actual fix would show as a hard failure (XPASS), so
+  drift in either direction is caught. LCP, INP, and CLS are clean on
+  all nineteen fixtures.
 - **The content census's "77% of published material reaches the page"**
   is corrected for a double-count this round found in the census tool
   itself (a subset row was being summed into the total twice — see
@@ -308,9 +333,17 @@ own rows into a headline percentage (`.reviews/slice-b-predictions.md`,
 "Round 3"); and, this round, the same menu-price extraction bug
 resurfacing in a heading function that never got the earlier fix, plus
 an independent copy of a review-quote truncation bug already fixed once
-elsewhere (`.reviews/round-4.md`). None of these were caught by any
-test before someone looked — or, this round, before a live blind
-judging session and a controlled before/after screenshot settled two
-close calls the design review alone could not. Trust what you see on
-the page over what any panel, test, or number claims about it, and say
-so if they don't match.
+elsewhere (`.reviews/round-4.md`). In Round 6: this bundle's own
+og:image URL corrupted on 17 of 19 pages (metadata only); the
+performance harness measuring the wrong `/photo/` tier and silently
+skipping externally-hosted images entirely; a synthetic click used to
+measure page performance actually navigating a fixture's tab away to
+Google Maps mid-measurement, on any page whose call-to-action is a
+plain external link; and, in the live workbench (not this bundle), an
+operator-facing diagnostic string cut off mid-sentence with no word
+boundary — the THIRD independent occurrence of that exact defect shape
+in this codebase (`.reviews/round-6.md`). None of these were caught by
+any test before someone looked — or, this round, before dry-running the
+review checklist itself, exactly as you are about to. Trust what you
+see on the page over what any panel, test, or number claims about it,
+and say so if they don't match.

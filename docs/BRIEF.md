@@ -465,6 +465,70 @@ here, rather than edited quietly.
     verdicts    2 live, same-trade closest pair among them
                 (barbecue/barbecue-rich); 12 held out
 
+**Done — Round 6.** A hand-review pass, deliberately scoped to work with
+a right answer only — no redecide, no new verdicts, no visual change to
+any page. Two real correctness bugs fixed in the artifact he opens: the
+og:image meta tag's absolute URL was corrupted on 17 of 19 committed
+pages (`build_review._copy_photographs`'s regex matched inside
+`render.absolute()`'s own output, glued a relative path onto the port
+number); the freshness guard failed on any machine with an empty photo
+cache, an environment artifact mistaken for staleness. Both fixed, every
+page's own photographs verified to actually load offline (not just
+exist on disk). The weight-measurement harness itself had two real
+bugs — every `/photo/` reference measured at the largest tier
+regardless of what a mobile `srcset` would select, and every
+externally-hosted image (a business's own "recent jobs" photos) silently
+never counted at all — fixed with real DevTools Network-domain
+measurement; the honest number moved in both directions, five fixtures
+that used to breach now clear and two are far worse than the old number
+ever showed. A third, unrelated, previously-unknown bug was found and
+fixed incidentally: a synthetic click used to sample INP could actually
+navigate the tab away on a fixture whose CTA is a plain external link.
+Dry-running his own review checklist found and fixed a fourth bug, in
+the workbench itself: an operator-facing diagnostic string (why an
+instruction can't be done) was hard-truncated with no word boundary,
+the third independent occurrence of a defect class already fixed twice
+before in this codebase. Every taste call this round could have made —
+the `roofer`/`hvac-rich` disagreement, whether 2MB is the right weight
+budget for an image-heavy trade, deterministic headings, the remaining
+single-composition sections, the ninth contractor fact, growing the
+corpus, what the agreement figure is and isn't evidence of — was
+written up as a decision with evidence instead:
+`.reviews/DECISIONS-FOR-SHREYAS.md`. Full account:
+`.reviews/slice-b-predictions.md` ("Round 6, Phase 1/2/3").
+
+**The instrument's current reading.**
+
+    agreement   22/26 (85%) full, 9/11 (82%) held-out only — unchanged;
+                no redecide this round (§5, Slice G, still open)
+                ruler a762bcc9, rule 254e171b, labels 122e6ec8,
+                held-out 7aa64298
+    census      same-trade 61.52% distance = 38.48% identical, 30 scored
+                pairs (unchanged — no redecide since Round 4)
+                closest pair barbecue / barbecue-rich at 17%, JUDGED
+                "same"
+    unreachable 3, all tracing to roofer/hvac-rich — unchanged, still
+                not re-judged (see decisions file item 1)
+    gate        0 of 171 pairs collide, whole corpus
+    forbidden defaults  3 fixtures match (§2.4) — barbecue-rich,
+                barbecue, and restaurant-rich (unchanged)
+    content census  77% of published material reaches the page
+                (unchanged since Round 4 Phase 1)
+    provenance  100% (687/687) of rendered prose sentences
+                verbatim-or-prefix-cut source; 85% (389/459) selection
+                ratio (unchanged since Round 4 Phase 1)
+    performance LCP/CLS/INP all within budget on 19/19 fixtures; weight
+                measured honestly this round (Round 6 Phase 2) — 7/19
+                breach, down from the old, wrongly-measured 12/19; two
+                (roofer, restaurant-rich) are worse than the old number
+                ever showed, since it never counted external images at
+                all; see decisions file item 2 for the full table and
+                options, none taken this round
+    tests       981 passed, 7 xfailed
+    fixtures    19
+    verdicts    2 live, same-trade closest pair among them
+                (barbecue/barbecue-rich); 12 held out
+
 ## 2. The governing requirement
 
 A generator's characteristic failure is that its output is recognisable as its
@@ -711,8 +775,14 @@ reviews, or a card grid at four or more). **Not built, disclosed rather
 than faked:** before-and-after, the last fact — it needs a paired photo
 (a labelled before, a labelled after, of the same job) this material does
 not carry, and approximating one without it is the exact "invent a
-licence number" failure the brief warns against. **Also not built:**
-`gallery`, `about`, and `hours` still have exactly one composition each.
+licence number" failure the brief warns against. Checked again, a third
+time, in Round 6: still no fixture carries the pairing; recommended
+there (`.reviews/DECISIONS-FOR-SHREYAS.md` item 5) to mark this
+closed-blocked rather than re-checked a fourth time, pending his
+agreement on the phrasing. **Also not built:** `gallery`, `about`, and
+`hours` still have exactly one composition each — Round 6 laid out what
+a second composition for each would cost (item 4 of the same file),
+built none of them.
 
 Headings are deterministic per trade rather than something the identity
 call picks from a table — a disclosed scope reduction from "the model
@@ -776,11 +846,17 @@ rendering effect is a function of the existing `first_screen` axis,
 failing the independence test every other axis had to meet
 (`app/site/fingerprint.py`, written up beside the `layout_bias`
 precedent). LCP/CLS/INP are within budget on all nineteen fixtures;
-weight is not on twelve of them (all pre-existing photo-gallery weight
-predating this slice), pinned as disclosed `xfail` in
-`tests/test_performance_budgets.py` — see Round 5's "if room" 3b for a
-real, mixed answer on how much of that is measurement versus genuine
-weight, not yet acted on.
+weight is not on seven of them, pinned as disclosed `xfail` in
+`tests/test_performance_budgets.py`. That count used to read twelve,
+wrongly: Round 6 found and fixed two real bugs in `tools/perf_census.py`
+itself (every `/photo/` reference measured at the largest tier
+regardless of what a mobile `srcset` would select; every
+externally-hosted image silently never counted at all) and re-measured
+honestly with the real DevTools Network domain — five of the old twelve
+clear now, and two (`roofer`, `restaurant-rich`) are far worse than the
+old number ever showed. See `.reviews/DECISIONS-FOR-SHREYAS.md` item 2
+for the full per-fixture table and the options for the seven genuine
+breaches, none acted on yet.
 
 ### Slice G — the design review
 
@@ -808,6 +884,22 @@ this one was already closed by the time that round began): from 0 live
 verdicts to 15 fresh ones, judged blind from whole-page renderings.
 Agreement 22/26 (85%) full, 9/11 (82%) held-out — see §1's current
 reading.
+
+Round 6 found and fixed two more real bugs in the committed review
+artifact itself (`.reviews/review/`, the bundle a human reviewer
+actually opens), neither a rendering change to any page: 17 of 19
+pages carried a corrupted og:image URL (`build_review.
+_copy_photographs`'s regex matched inside `render.absolute()`'s own
+output, metadata-only, invisible on the page); the freshness guard
+failed on any machine with an empty photo cache, an environment
+artifact mistaken for staleness, now a clear skip instead. Every page's
+own photographs were also verified to genuinely load offline, not just
+exist on disk — two apparent failures were investigated and explained
+(a lightbox's intentionally empty `src`, an external partner-logo SVG
+never meant to be proxied), and one genuine gap was found in the
+CHECKING technique, not the bundle (a horizontal `.scrollstrip` gallery
+needs its own scroll to trigger `loading="lazy"`, not just a vertical
+one).
 
 ### Slice H — the conversational workspace
 
