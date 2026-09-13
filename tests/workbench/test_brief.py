@@ -130,6 +130,74 @@ def test_a_menu_pdf_is_read_not_just_linked(monkeypatch):
     assert pub.menu_media and pub.menu_media[0]["readable"] is True
 
 
+class _MultiPageFetcher:
+    """A different page's HTML per URL — the plain `_Fetcher` always
+    returns the same page, which cannot exercise a real multi-level
+    crawl."""
+
+    def __init__(self, pages: dict[str, str]):
+        self._pages = pages
+        self.fetched: list[str] = []
+
+    def fetch(self, url):
+        self.fetched.append(url)
+        html = self._pages.get(url)
+        return FetchResult(ok=html is not None, status=200 if html else 404,
+                           final_url=url, html=html or "", elapsed_ms=5)
+
+
+def test_a_page_linked_only_from_a_depth_one_page_is_still_reached():
+    """Cause 3: the crawl used to be one level deep, so anything linked
+    only from a SECOND page (never the homepage itself) was invisible —
+    exactly the shape of a real restaurant's site, where the homepage
+    links "Our Philosophy" and the philosophy page is the one that links
+    the actual story."""
+    home = ('<html><head><title>Home | Craftway Kitchen | Frisco TX</title></head>'
+           '<body><a href="/philosophy/">Our Philosophy</a></body></html>')
+    philosophy = ('<html><body>'
+                  '<h2>Our Roots</h2>'
+                  '<p>Started in 1994, this family has served Blackland '
+                  'Prairie cuisine for three generations, sourcing every '
+                  'ingredient from farms within an hour of the kitchen.</p>'
+                  '<a href="/chefs-tasting-menu/">Chef&#8217;s Tasting Menu</a>'
+                  '</body></html>')
+    tasting = ('<html><body>'
+              '<h2>Chef&#8217;s Tasting Menu</h2>'
+              '<p>A seven-course paired dinner built around whatever the '
+              'farms send us that week, curated fresh every single week.</p>'
+              '</body></html>')
+    brief = build_brief("craftwaykitchen.com", fetcher=_MultiPageFetcher({
+        "https://craftwaykitchen.com/": home,
+        "https://craftwaykitchen.com/philosophy/": philosophy,
+        "https://craftwaykitchen.com/chefs-tasting-menu/": tasting,
+    }))
+    pub = brief.published
+    assert pub is not None
+    headings = {b["heading"] for b in pub.blocks}
+    assert "Our Roots" in headings
+    # The tasting-menu page is TWO levels from the homepage (homepage ->
+    # philosophy -> tasting menu) — only reachable at all if the crawl
+    # itself goes two levels deep, not one.
+    assert "Chef’s Tasting Menu" in headings
+
+
+def test_the_crawl_never_leaves_the_page_budget(monkeypatch):
+    """A large site's real link graph must not turn "read their content"
+    into "crawl the whole site" — the page budget caps total fetches
+    regardless of how many same-host links exist."""
+    import app.workbench.brief as brief_module
+    monkeypatch.setattr(brief_module, "CRAWL_PAGE_BUDGET", 3)
+
+    home = "<html><body>" + "".join(
+        f'<a href="/page-{i}/">p{i}</a>' for i in range(50)) + "</body></html>"
+    fetcher = _MultiPageFetcher({f"https://craftwaykitchen.com/page-{i}/":
+                                 "<html><body>x</body></html>" for i in range(50)})
+    fetcher._pages["https://craftwaykitchen.com/"] = home
+    build_brief("craftwaykitchen.com", fetcher=fetcher)
+    crawled = [u for u in fetcher.fetched if "/page-" in u]
+    assert len(crawled) <= 3
+
+
 def test_an_unreadable_menu_pdf_is_disclosed_not_silent(monkeypatch):
     """A stale link (the PDF now 404s, or is a scan with no text layer)
     must not read as "this business has no menu" — `readable: False`

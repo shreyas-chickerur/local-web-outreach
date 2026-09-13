@@ -1136,20 +1136,74 @@ def _pages_matching(html: str, base_url: str, paths: tuple[str, ...],
     return found
 
 
-def content_page_urls(html: str, base_url: str, limit: int = 10) -> list[str]:
-    """Every page of theirs worth reading, in one list.
+# Same-host paths that are real pages on the site but never worth reading:
+# cart/checkout machinery, admin/login screens, syndication feeds, and the
+# auto-generated archive pages (tag, category, author, pagination) a CMS
+# produces by the hundred. None of it is the business talking about
+# itself, and visiting it first would spend the whole page budget before
+# a real page is ever reached.
+_JUNK_PAGE_RE = re.compile(
+    r"/(cart|checkout|account|my-account|login|wp-admin|wp-login|wp-json|"
+    r"feed|rss|tag|category|author|page/\d+|search|sitemap)(/|$|[.?]|php)"
+    r"|[?&]s=",
+    re.IGNORECASE)
 
-    "Carry over what their site says" means reading the pages where they say
-    it. Menu and contact were the only two families visited, which is why a
-    business whose entire personality lives on an Our Story page arrived here
-    with nothing to put in an About section.
+# The keyword lists are a PRIORITY ORDERING now, not a gate — see
+# `content_page_urls`. Menu first (the highest-value page a restaurant's
+# site can have), then contact, then everything else worth naming.
+_PRIORITY_PATHS = _MENU_PATHS + _CONTACT_PATHS + _STORY_PATHS
+
+
+def _priority(url: str) -> int:
+    """Lower sorts first. A page whose last path segment names something
+    on the priority list is worth reaching before the budget runs out;
+    everything else is still a real candidate, just not moved to the
+    front of the queue."""
+    last = urlparse(url).path.strip("/").lower().split("/")[-1]
+    for index, path in enumerate(_PRIORITY_PATHS):
+        if last == path or last.startswith(path):
+            return index
+    return len(_PRIORITY_PATHS)
+
+
+def content_page_urls(html: str, base_url: str, limit: int = 20) -> list[str]:
+    """Same-host pages worth reading, priority-ordered.
+
+    Used to be a keyword GATE, one level deep: only a link whose last path
+    segment named "menu", "contact", "our-story" or similar was ever
+    visited, and only from the homepage — a business whose personality
+    lives on a page named something the lists never anticipated
+    ("blackland-prairie-cuisine", a chef's-tasting-menu page) was invisible,
+    and anything linked only from a SECOND page was never reached at all.
+
+    Every same-host page (excluding assets, media, and known junk) is now a
+    real candidate; the keyword lists just decide which ones are worth
+    reaching FIRST when the page budget cannot fit them all.
+    `app.workbench.brief._read_their_site` calls this at TWO levels (the
+    homepage, then each page it fetched from that first level) for an
+    actual depth-2 crawl — this function only ever looks at the ONE page's
+    own links, exactly as before; the depth comes from calling it twice.
     """
-    seen: list[str] = []
-    for paths in (_MENU_PATHS, _CONTACT_PATHS, _STORY_PATHS):
-        for url in _pages_matching(html, base_url, paths, limit):
-            if url not in seen:
-                seen.append(url)
-    return seen[:limit]
+    base_host = urlparse(base_url).netloc.lower()
+    home = base_url.rstrip("/")
+    found: list[str] = []
+    for href in re.findall(r'href=["\']([^"\']+)["\']', html or "", re.IGNORECASE):
+        if href.startswith(("mailto:", "tel:", "#", "javascript:")):
+            continue
+        absolute = urljoin(base_url, href).split("#", 1)[0]
+        parsed = urlparse(absolute)
+        if parsed.netloc.lower() != base_host:
+            continue
+        if _MEDIA_RE.search(absolute) or _ASSET_RE.search(absolute):
+            continue
+        if _JUNK_PAGE_RE.search(f"{parsed.path}?{parsed.query}".lower()):
+            continue
+        if absolute.rstrip("/") == home:
+            continue
+        if absolute not in found:
+            found.append(absolute)
+    found.sort(key=_priority)
+    return found[:limit]
 
 
 def menu_page_urls(html: str, base_url: str, limit: int = 3) -> list[str]:

@@ -227,9 +227,26 @@ def _read_menu_pdfs(extracted: ExtractedSite) -> None:
                 extracted.menu_items.append(item)
 
 
+# Cause 3 of "thicken the brief": the crawl used to be one level deep and
+# keyword-gated, so a business whose whole personality lived on a page
+# linked only from ANOTHER content page (not the homepage) — or named
+# something neither `_MENU_PATHS` nor `_STORY_PATHS` anticipated — was
+# invisible. Depth 2 (homepage, then every page it links to, then every
+# page THOSE link to) reaches that material; a page budget stops a large
+# site's real link graph from turning "read their content" into "crawl
+# the whole site" — 24 is generous headroom past the old limit of 10 for
+# a small business's real page count (menu, drinks, wine, story, events,
+# team, press, gallery, and a few more) without approaching what a
+# chain's storefront-per-city sitemap would produce.
+CRAWL_DEPTH = 2
+CRAWL_PAGE_BUDGET = 24
+
+
 def _read_their_site(url: str, fetcher: SiteFetcher
                      ) -> tuple[ExtractedSite | None, bool, str, UrlCheck]:
-    """Fetch their homepage plus the pages that actually carry content."""
+    """Fetch their homepage plus the pages that actually carry content,
+    breadth-first, up to `CRAWL_DEPTH` levels deep and `CRAWL_PAGE_BUDGET`
+    pages total."""
     check = validate(url, fetcher)
     result = check.result
     if result is None or not result.html:
@@ -242,10 +259,35 @@ def _read_their_site(url: str, fetcher: SiteFetcher
         state = "insecure"
     base = result.final_url or url
     extracted = extract_from_html(result.html, base)
-    for page in content_page_urls(result.html, base):
+
+    visited = {base}
+    depth_of: dict[str, int] = {}
+    queue = content_page_urls(result.html, base, limit=CRAWL_PAGE_BUDGET)
+    for page in queue:
+        depth_of[page] = 1
+    fetched = 0
+    i = 0
+    while i < len(queue) and fetched < CRAWL_PAGE_BUDGET:
+        page = queue[i]
+        i += 1
+        if page in visited:
+            continue
+        visited.add(page)
         sub = fetcher.fetch(page)
-        if sub.ok and sub.html:
-            extracted = merge(extracted, extract_from_html(sub.html, page))
+        fetched += 1
+        if not (sub.ok and sub.html):
+            continue
+        extracted = merge(extracted, extract_from_html(sub.html, page))
+        if depth_of[page] >= CRAWL_DEPTH:
+            continue
+        remaining = CRAWL_PAGE_BUDGET - len(queue)
+        if remaining <= 0:
+            continue
+        for link in content_page_urls(sub.html, page, limit=remaining):
+            if link not in visited and link not in depth_of:
+                depth_of[link] = depth_of[page] + 1
+                queue.append(link)
+
     _read_menu_pdfs(extracted)
     return extracted, True, ("insecure" if check.fault == "certificate" else "ok"), check
 

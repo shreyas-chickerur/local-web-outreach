@@ -9,6 +9,7 @@ from app.workbench.extract import (
     _PRODUCT_LIMIT,
     _SERVICE_LIMIT,
     _clean_service,
+    content_page_urls,
     extract_from_html,
     menu_page_urls,
     merge,
@@ -248,6 +249,53 @@ def test_stylesheet_is_not_followed_as_a_page():
             '<a href="/menus/">Menus</a>')
     assert menu_page_urls(html, "https://example.com/") == [
         "https://example.com/menus/"]
+
+
+def test_a_page_named_nothing_the_keyword_lists_anticipated_is_still_found():
+    """Cause 3 of "thicken the brief": `content_page_urls` used to be a
+    GATE — only a link whose last path segment named "menu", "contact",
+    "our-story" or similar was ever visited. A page called
+    "blackland-prairie-cuisine" (a restaurant's actual philosophy page,
+    found live) named nothing on any keyword list and was invisible.
+    Every same-host page is now a candidate; the keyword lists only
+    decide ordering."""
+    html = ('<a href="/blackland-prairie-cuisine/">Our Philosophy</a>'
+           '<a href="/menu/">Menu</a>')
+    urls = content_page_urls(html, "https://example.com/")
+    assert "https://example.com/blackland-prairie-cuisine/" in urls
+    # Priority ordering, not just inclusion: the keyword-matched page
+    # still comes first when both are candidates.
+    assert urls.index("https://example.com/menu/") < urls.index(
+        "https://example.com/blackland-prairie-cuisine/")
+
+
+def test_the_homepage_itself_is_never_re_added():
+    html = '<a href="/">Home</a><a href="/about/">About</a>'
+    urls = content_page_urls(html, "https://example.com/")
+    assert "https://example.com/" not in urls
+    assert "https://example.com/about/" in urls
+
+
+def test_cms_plumbing_is_excluded_even_though_same_host():
+    """A tag archive, an author page, a login screen — real pages on the
+    site, never worth spending the crawl's page budget on."""
+    html = ("".join(f'<a href="{path}">x</a>' for path in (
+        "/tag/brisket/", "/category/news/", "/author/admin/",
+        "/wp-admin/", "/wp-login.php", "/cart/", "/checkout/",
+        "/page/2/", "/feed/", "/?s=search")) +
+        '<a href="/our-story/">Our Story</a>')
+    urls = content_page_urls(html, "https://example.com/")
+    assert urls == ["https://example.com/our-story/"]
+
+
+def test_a_different_host_is_never_crawled():
+    html = '<a href="https://booking.otherhost.com/table">Reserve</a>'
+    assert content_page_urls(html, "https://example.com/") == []
+
+
+def test_the_page_budget_is_respected():
+    html = "".join(f'<a href="/page-{i}/">p{i}</a>' for i in range(30))
+    assert len(content_page_urls(html, "https://example.com/", limit=5)) == 5
 
 
 def test_schema_org_gives_the_business_its_own_voice():
