@@ -8,6 +8,13 @@ requires-python = ">=3.11"
 dependencies = [
     "httpx>=0.27,<1.0",
     "python-dotenv>=1.0,<2.0",
+    # A small business's menu or price list is very often a PDF, not a page —
+    # extract.py used to discard it outright ("a PDF/photo menu is media,
+    # not a page"). Pure Python, no system library (no poppler, no C
+    # extension) — reads the text layer a PDF actually carries; a
+    # scanned/image-only PDF correctly comes back empty rather than an OCR
+    # guess, which app.adapters.pdf_read treats as "unreadable", not "no menu".
+    "pypdf>=4.0,<7.0",
 ]
 
 [project.optional-dependencies]

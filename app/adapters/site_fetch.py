@@ -198,3 +198,19 @@ class HttpSiteFetcher:
             html=resp.text,
             elapsed_ms=elapsed_ms,
         )
+
+
+def fetch_bytes(url: str, timeout: float = 15.0) -> bytes | None:
+    """The raw bytes behind a URL — a menu PDF, never text. `None` on any
+    failure; the caller (`app.workbench.brief`) is the one that knows
+    whether "could not fetch" and "fetched, unreadable" mean different
+    things worth recording differently."""
+    try:
+        with httpx.Client(follow_redirects=True, timeout=timeout,
+                          headers={"User-Agent": "lwo-qualifier/0.1"}) as client:
+            resp = client.get(url)
+        if resp.status_code >= 400:
+            return None
+        return resp.content
+    except httpx.HTTPError:
+        return None

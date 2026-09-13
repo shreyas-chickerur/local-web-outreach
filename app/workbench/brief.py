@@ -20,12 +20,14 @@ import re
 from dataclasses import dataclass, field, replace
 
 from app.adapters.directory import DirectoryPlace, DirectorySource
-from app.adapters.site_fetch import SiteFetcher, default_fetcher
+from app.adapters.pdf_read import read_pdf_text
+from app.adapters.site_fetch import SiteFetcher, default_fetcher, fetch_bytes
 from app.workbench.corroborate import Fact, corroborate
 from app.workbench.extract import (
     ExtractedSite,
     content_page_urls,
     extract_from_html,
+    extract_menu_items,
     merge,
     social_belongs_to,
 )
@@ -194,6 +196,37 @@ def site_state(status: int | None, ok: bool) -> str:
     return "error"
 
 
+def _read_menu_pdfs(extracted: ExtractedSite) -> None:
+    """Read the text out of every PDF menu already found, in place.
+
+    A PDF is not a link to send a visitor away to, it is a page this
+    project simply could not read before — the single biggest cause of an
+    empty `menu_items` list for a restaurant whose real menu lives at
+    `.../menu.pdf`. Anchored on price the same way `extract_menu_items`
+    already reads an HTML page, because a PDF's own text has no markup left
+    to key off once extracted — a price is still the one unambiguous
+    signal that a line names something for sale rather than a footer note.
+
+    A PDF that cannot be read (a stale link now 404ing, a scanned page with
+    no text layer) is marked `readable: False` on its own `menu_media`
+    entry rather than silently left alone — "found a menu PDF, could not
+    read it" is a real, disclosable fact, not the same as "no menu PDF".
+    """
+    for media in extracted.menu_media:
+        if media.get("kind") != "pdf":
+            continue
+        data = fetch_bytes(media["url"])
+        text = read_pdf_text(data) if data else None
+        media["readable"] = text is not None
+        if not text:
+            continue
+        known = {i["name"].lower() for i in extracted.menu_items}
+        for item in extract_menu_items(text):
+            if item["name"].lower() not in known and len(extracted.menu_items) < 24:
+                known.add(item["name"].lower())
+                extracted.menu_items.append(item)
+
+
 def _read_their_site(url: str, fetcher: SiteFetcher
                      ) -> tuple[ExtractedSite | None, bool, str, UrlCheck]:
     """Fetch their homepage plus the pages that actually carry content."""
@@ -213,6 +246,7 @@ def _read_their_site(url: str, fetcher: SiteFetcher
         sub = fetcher.fetch(page)
         if sub.ok and sub.html:
             extracted = merge(extracted, extract_from_html(sub.html, page))
+    _read_menu_pdfs(extracted)
     return extracted, True, ("insecure" if check.fault == "certificate" else "ok"), check
 
 

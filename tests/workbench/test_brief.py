@@ -93,6 +93,57 @@ def test_an_unreachable_site_is_reported_not_hidden():
     assert brief.published is None
 
 
+_PDF_MENU_SITE = """
+<html><head><title>Home | Craftway Kitchen | Frisco TX</title></head><body>
+<a href="/menu.pdf">Dinner Menu</a>
+</body></html>
+"""
+
+
+def _pdf_bytes(text: str) -> bytes:
+    stream = text.encode()
+    return (
+        b"%PDF-1.4\n"
+        b"1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n"
+        b"2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n"
+        b"3 0 obj<</Type/Page/Parent 2 0 R/Resources<</Font<</F1 4 0 R>>>>"
+        b"/MediaBox[0 0 400 200]/Contents 5 0 R>>endobj\n"
+        b"4 0 obj<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>endobj\n"
+        b"5 0 obj<</Length " + str(len(stream)).encode() + b">>\nstream\n"
+        + stream + b"\nendstream\nendobj\n"
+        b"xref\n0 6\n0000000000 65535 f \n"
+        b"trailer<</Size 6/Root 1 0 R>>\nstartxref\n0\n%%EOF")
+
+
+def test_a_menu_pdf_is_read_not_just_linked(monkeypatch):
+    """Cause 1 of "thicken the brief": a PDF used to be found (`menu_media`)
+    but never read. Its own text now reaches `menu_items` the same way an
+    HTML page's would."""
+    import app.workbench.brief as brief_module
+
+    data = _pdf_bytes("BT /F1 18 Tf 20 100 Td (Short Rib $32) Tj ET")
+    monkeypatch.setattr(brief_module, "fetch_bytes", lambda url, timeout=15.0: data)
+    brief = build_brief("craftwaykitchen.com", fetcher=_Fetcher(_PDF_MENU_SITE))
+    pub = brief.published
+    assert pub is not None
+    assert any(i["name"] == "Short Rib" for i in pub.menu_items)
+    assert pub.menu_media and pub.menu_media[0]["readable"] is True
+
+
+def test_an_unreadable_menu_pdf_is_disclosed_not_silent(monkeypatch):
+    """A stale link (the PDF now 404s, or is a scan with no text layer)
+    must not read as "this business has no menu" — `readable: False`
+    says plainly that a PDF was found and could not be read."""
+    import app.workbench.brief as brief_module
+
+    monkeypatch.setattr(brief_module, "fetch_bytes", lambda url, timeout=15.0: None)
+    brief = build_brief("craftwaykitchen.com", fetcher=_Fetcher(_PDF_MENU_SITE))
+    pub = brief.published
+    assert pub is not None
+    assert pub.menu_items == []
+    assert pub.menu_media and pub.menu_media[0]["readable"] is False
+
+
 # ------------------------------ the name path ------------------------------- #
 def test_a_name_lookup_finds_the_website():
     google = _Dir("google", _place(address="1 Main St, Frisco, TX",
