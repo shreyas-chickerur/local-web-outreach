@@ -74,6 +74,28 @@ def test_a_fixture_carries_no_lead_id():
         assert brief.get("lead_id") is None, slug
 
 
+def test_the_serialiser_does_not_re_cap_below_the_extractors_own_limit():
+    """"Thicken the brief" (Cause 4) raised extract.py's own caps on
+    services/products/menu_items — found, re-freezing the fixture corpus
+    against them, that `published_to_dict` had its OWN, smaller caps
+    (8/8/12) that silently threw the extra content away again before a
+    fixture or a rendered page ever saw it. The same "two functions have
+    to agree about one field" failure this file's own docstring already
+    names for `photos`, found a second time for a different field."""
+    from app.workbench.extract import _SERVICE_LIMIT
+
+    site = ExtractedSite()
+    site.services = [f"Service {i}" for i in range(_SERVICE_LIMIT)]
+    site.products = [f"Product {i}" for i in range(_SERVICE_LIMIT)]
+    site.menu_items = [{"name": f"Dish {i}"} for i in range(_SERVICE_LIMIT)]
+    stored = brief_to_dict(Brief(name="X", location=None, website_url="https://x",
+                                 notes=None, published=site))
+    pub = stored["published"]
+    assert len(pub["services"]) == _SERVICE_LIMIT
+    assert len(pub["products"]) == _SERVICE_LIMIT
+    assert len(pub["menu_items"]) == _SERVICE_LIMIT
+
+
 def test_the_serialiser_puts_photographs_where_the_renderer_reads_them():
     """The bug itself, pinned. Two functions have to agree about one field."""
     site = ExtractedSite()

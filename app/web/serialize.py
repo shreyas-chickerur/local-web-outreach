@@ -33,13 +33,25 @@ def fact_to_dict(fact: Fact) -> dict:
 
 
 def published_to_dict(site: ExtractedSite) -> dict:
+    # services/products/menu_items are NOT re-sliced here. This function
+    # used to cap them at 8/8/12 — smaller, in every case, than
+    # `app.workbench.extract`'s own caps (raised to 20/15/24 as part of
+    # "thicken the brief", Cause 4) — so extraction's own raised ceiling
+    # was silently undone the moment a brief was serialised for storage
+    # or the workspace, before a fixture or a rendered page ever saw the
+    # extra content. Found re-freezing the fixture corpus against the
+    # newly-raised caps: the numbers did not move, because THIS was the
+    # real ceiling all along. One cap, in extract.py, is the source of
+    # truth now — the exact "two functions have to agree about one
+    # field" failure `test_the_serialiser_puts_photographs_where_the_
+    # renderer_reads_them` already exists to catch for a different field.
     return {
         "tagline": site.description,
         "about": site.about,
-        "services": site.services[:8],
-        "products": site.products[:8],
+        "services": site.services,
+        "products": site.products,
         "hours": site.hours[:7],
-        "menu_items": site.menu_items[:12],
+        "menu_items": site.menu_items,
         "menu_media": site.menu_media[:4],
         "photos": site.images[:8],
         "socials": site.socials,
