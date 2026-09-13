@@ -5,6 +5,9 @@ from __future__ import annotations
 import pytest
 
 from app.workbench.extract import (
+    _BLOCK_TEXT_LIMIT,
+    _PRODUCT_LIMIT,
+    _SERVICE_LIMIT,
     _clean_service,
     extract_from_html,
     menu_page_urls,
@@ -207,6 +210,36 @@ def test_page_furniture_is_not_an_offering():
     </body></html>"""
     site = extract_from_html(html, "https://example.com/")
     assert site.services == ["Weed Control & Fertilization"]
+
+
+def test_a_long_real_block_is_not_cut_at_the_old_900_character_mark():
+    """Cause 4 of "thicken the brief": a real "our story"/"philosophy"
+    section, found live running to two full paragraphs, used to be cut
+    mid-sentence at 900 characters. Raised to 1800 — this proves a block
+    between the two survives whole now."""
+    paragraph = ("This family has served Blackland Prairie cuisine for "
+                "three generations, sourcing every ingredient from farms "
+                "within an hour of the kitchen and building menus that "
+                "change with whatever the growers bring in that week. ") * 6
+    assert 900 < len(paragraph) <= _BLOCK_TEXT_LIMIT
+    html = f"<h2>Our Story</h2><p>{paragraph}</p>"
+    site = extract_from_html(html, "https://example.com/")
+    block = next(b for b in site.blocks if b["heading"] == "Our Story")
+    assert block["text"] == paragraph.strip()
+
+
+def test_more_than_a_dozen_services_are_kept():
+    """A lawn-care company's or a bar's real offering list is often
+    longer than the old 12-item cap once the whole site is read."""
+    html = "".join(f"<h2>Service Number {i}</h2>" for i in range(_SERVICE_LIMIT + 5))
+    site = extract_from_html(html, "https://example.com/")
+    assert len(site.services) == _SERVICE_LIMIT
+
+
+def test_more_than_eight_products_are_kept():
+    html = "".join(f"<h2>Bottled Sauce {i}</h2>" for i in range(_PRODUCT_LIMIT + 5))
+    site = extract_from_html(html, "https://example.com/")
+    assert len(site.products) == _PRODUCT_LIMIT
 
 
 def test_stylesheet_is_not_followed_as_a_page():

@@ -532,7 +532,18 @@ _BLOCK_KINDS: tuple[tuple[str, str], ...] = (
 )
 
 # A block has to say something. Nav lists and button rows have headings too.
-_BLOCK_MIN_WORDS = 12
+# Raised from 12: Cause 4 of "thicken the brief" — the deeper, budget-wide
+# crawl this round added (CRAWL_DEPTH=2, up to CRAWL_PAGE_BUDGET pages,
+# `app.workbench.brief`) reads far more of a site's own pages than a single
+# homepage fetch ever did, and every one of them is a new source of the
+# exact nav-soup `reads_as_prose()` exists to reject (a footer's opening
+# hours restated under a heading, a caption row). A slightly higher floor
+# keeps that filter meaningful as the number of candidate blocks grows,
+# without touching the OTHER two things that already decide "is this
+# real": a sentence-ending mark must be present, and capitalised words
+# must stay under 42% — a short block that clears those two still has to
+# clear this one.
+_BLOCK_MIN_WORDS = 15
 # Opening times, and the label rows that sit beside them.
 _TIME_RE = re.compile(r"\d{1,2}(:\d{2})?\s?(am|pm)\b", re.IGNORECASE)
 
@@ -574,6 +585,30 @@ _BLOCK_STOP = frozenset({
     "main menu", "privacy", "terms", "sitemap", "site map",
 })
 
+# How much of a single block's own text to keep. Doubled from 900: a real
+# "our story" or "philosophy" page — read live building this fix — runs to
+# two full paragraphs, and 900 characters was cutting genuine substance
+# partway through a sentence, not trimming padding.
+_BLOCK_TEXT_LIMIT = 1800
+# How many of a page's headed sections to keep — both HERE, at one page's
+# own extraction, and again in `merge()` once several pages are combined.
+# Raised from 12/14 to one shared 20: the mismatched pair meant the second
+# limit never actually mattered (this one always ran first and threw the
+# excess away before merge saw it), and a business crawled two levels deep
+# genuinely has more than a dozen sections worth carrying.
+_BLOCK_LIMIT = 20
+
+# How many named services / products to keep — at one page's own
+# extraction and again once pages are merged, same reasoning as
+# `_BLOCK_LIMIT` above (a mismatched pair of caps means the smaller one
+# always wins first, so both move together). A multi-page crawl now reads
+# a menu, a drinks list, a services page, and a service-area page that a
+# single homepage fetch never saw — a lawn-care company's or a bar's real
+# offering list is often longer than a dozen items once the whole site is
+# actually read, and a shop's product range is often more than eight.
+_SERVICE_LIMIT = 20
+_PRODUCT_LIMIT = 15
+
 
 def read_blocks(html: str, base_url: str) -> list[dict]:
     """The page's own sections, lifted whole.
@@ -599,7 +634,7 @@ def read_blocks(html: str, base_url: str) -> list[dict]:
             continue
         raw.append({
             "heading": heading,
-            "text": _text(_ANY_TAG_RE.sub(" ", body))[:900],
+            "text": _text(_ANY_TAG_RE.sub(" ", body))[:_BLOCK_TEXT_LIMIT],
             "images": [urljoin(base_url, url) for url, _ in _img_sources(body)
                        if not _JUNK_IMAGE_RE.search(url)][:8],
         })
@@ -653,7 +688,7 @@ def read_blocks(html: str, base_url: str) -> list[dict]:
         if enough and not any(b["heading"].lower() == current["heading"].lower()
                               for b in blocks):
             blocks.append(current)
-    return blocks[:12]
+    return blocks[:_BLOCK_LIMIT]
 
 
 def social_handle(url: str) -> str:
@@ -781,14 +816,14 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
             seen.add(name.lower())
             (out.products if _PRODUCT_RE.search(name) else out.services).append(name)
     for fragment in _LI_RE.findall(clean):
-        if len(out.services) >= 12:
+        if len(out.services) >= _SERVICE_LIMIT:
             break
         name = _clean_service(fragment)
         if name and name.lower() not in seen and " " in name:
             seen.add(name.lower())
             (out.products if _PRODUCT_RE.search(name) else out.services).append(name)
-    out.services = out.services[:12]
-    out.products = out.products[:8]
+    out.services = out.services[:_SERVICE_LIMIT]
+    out.products = out.products[:_PRODUCT_LIMIT]
 
     out.blocks = read_blocks(clean, base_url)
     out.phone, out.address, ld_hours = read_structured_data(html)
@@ -871,16 +906,17 @@ def merge(primary: ExtractedSite, extra: ExtractedSite) -> ExtractedSite:
     primary.mobile_ready = primary.mobile_ready or extra.mobile_ready
     known = {b["heading"].lower() for b in primary.blocks}
     for block in extra.blocks:
-        if block["heading"].lower() not in known and len(primary.blocks) < 14:
+        if block["heading"].lower() not in known and len(primary.blocks) < _BLOCK_LIMIT:
             primary.blocks.append(block)
     primary.address = primary.address or extra.address
     primary.description = primary.description or extra.description
     for svc in extra.services:
-        if svc.lower() not in {s.lower() for s in primary.services} and len(primary.services) < 12:
+        if (svc.lower() not in {s.lower() for s in primary.services}
+                and len(primary.services) < _SERVICE_LIMIT):
             primary.services.append(svc)
     for product in extra.products:
         if (product.lower() not in {p.lower() for p in primary.products}
-                and len(primary.products) < 8):
+                and len(primary.products) < _PRODUCT_LIMIT):
             primary.products.append(product)
     for hour in extra.hours:
         if hour not in primary.hours and len(primary.hours) < 7:
