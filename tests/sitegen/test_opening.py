@@ -11,6 +11,7 @@ from app.site.opening import (
     available_sections,
     digest,
     fallback_opening,
+    full_digest,
     opening_spec,
 )
 from app.site.theme import ACCENT_NAMES
@@ -157,6 +158,48 @@ def test_the_digest_carries_their_own_words():
     text = digest(BRIEF)
     assert "Ichika" in text and "Kaiseki, twelve seats." in text
     assert "The best meal in Texas." in text
+
+
+def test_full_digest_cites_the_archived_files_own_path_and_hash():
+    """"The design prompt references the exact file path and hash, so a
+    revision can always answer 'what did the model actually see?'" — the
+    citation has to be IN the prompt text itself, not just available
+    somewhere in the brief dict, since the prompt is what a later review
+    actually reads."""
+    brief = {"name": "Craftway Kitchen",
+            "_archive": {"path": "briefs/craftway-kitchen/2026-01-01T00-00-00.json",
+                        "hash": "abc123", "captured_at": "2026-01-01T00:00:00+00:00"}}
+    text = full_digest(brief)
+    assert "briefs/craftway-kitchen/2026-01-01T00-00-00.json" in text
+    assert "abc123" in text
+
+
+def test_full_digest_carries_the_whole_brief_uncapped():
+    """`digest()` is left alone for whatever old, cheap-prompt path still
+    wants it — this is the design path's own evidence, and it must not
+    silently drop a service, a menu item, a block, or a testimonial past
+    `digest()`'s own caps (services[:10], menu_items[:12], blocks[:4] at
+    text[:250], quotes[:3])."""
+    long_block_text = "word " * 100  # far past digest()'s own 250-char cut
+    brief = {
+        "name": "Ichika", "trade": "Japanese Restaurant",
+        "published": {
+            "services": [f"Service {i}" for i in range(15)],
+            "menu_items": [{"name": f"Dish {i}"} for i in range(15)],
+            "blocks": [{"heading": f"Section {i}", "text": long_block_text}
+                      for i in range(6)],
+        },
+        "testimonials": [{"text": f"Review {i}"} for i in range(5)],
+    }
+    text = full_digest(brief)
+    for i in range(15):
+        assert f"Service {i}" in text
+        assert f"Dish {i}" in text
+    for i in range(6):
+        assert f"Section {i}" in text
+    assert text.count("word") >= 100 * 6  # every block's full text, not cut at 250
+    for i in range(5):
+        assert f"Review {i}" in text
 
 
 def test_available_sections_are_ones_the_plan_would_actually_build():

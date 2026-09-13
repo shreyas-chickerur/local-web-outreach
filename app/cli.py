@@ -16,6 +16,8 @@ from app.adapters.osm import NominatimSource
 from app.adapters.places import GooglePlacesDirectory
 from app.adapters.yelp import YelpSource
 from app.core.config import google_places_api_key, yelp_api_key
+from app.store import brief_archive
+from app.web.serialize import brief_to_dict
 from app.workbench.brief import build_brief, format_brief
 
 
@@ -48,6 +50,9 @@ def cmd_brief(args: argparse.Namespace) -> int:
         # A bad input is a user mistake, not a crash. Say what to do instead.
         print(f"error: {exc}", file=sys.stderr)
         return 2
+    # A permanent, never-overwritten copy of this crawl — a re-run of this
+    # same command writes a NEW file, never touches an old one.
+    brief_archive.save(brief_to_dict(brief))
     print()
     print(format_brief(brief))
     print()

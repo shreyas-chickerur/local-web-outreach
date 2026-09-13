@@ -63,6 +63,24 @@ def test_a_failing_source_does_not_blank_the_page(monkeypatch):
     assert "yelp timed out" in result["error"]
 
 
+def test_a_successful_lookup_archives_the_crawl(monkeypatch, tmp_path):
+    """The versioned-brief-storage half of "thicken the brief": every real
+    crawl through the actual production entry point gets a permanent,
+    never-overwritten copy, not just a DB row the next re-crawl will
+    replace."""
+    from app.store import brief_archive, db
+
+    monkeypatch.setattr(db, "DEFAULT_PATH", tmp_path / "workbench.db")
+    monkeypatch.setattr(brief_archive, "ARCHIVE_ROOT", tmp_path / "briefs")
+    monkeypatch.setattr(server, "build_brief",
+                        lambda *a, **kw: _brief(name="Craftway Kitchen"))
+    result = server.lookup("craftwaykitchen.com", None, None)
+    assert "error" not in result
+    pointer = brief_archive.current("Craftway Kitchen", root=tmp_path / "briefs")
+    assert pointer is not None
+    assert (tmp_path / "briefs" / pointer["path"].split("/")[-2]).is_dir()
+
+
 def test_routes(monkeypatch):
     monkeypatch.setattr(server, "lookup", lambda *a: {"name": "Test Co"})
     assert json.loads(json.dumps(server.lookup("x", None, None)))["name"] == "Test Co"

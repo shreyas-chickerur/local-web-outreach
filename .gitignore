@@ -29,6 +29,16 @@ outbox/
 workbench.db
 workbench.db-*
 
+# The versioned brief archive (app/store/brief_archive.py) — every real
+# crawl, kept, never overwritten. Real local operator data, same reasoning
+# as workbench.db: it belongs on the machine that did the research, not in
+# version control. Root-anchored (leading /): an unanchored `briefs/`
+# matches a directory of that name at ANY depth, including the real,
+# committed fixture corpus at tests/fixtures/briefs/ — found the hard way,
+# it silently broke `_refuse_if_untracked_fixtures()`'s own guard test by
+# hiding that whole directory from `git status`.
+/briefs/
+
 # Cached Google Place photos.
 .cache/
 

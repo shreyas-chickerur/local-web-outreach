@@ -33,7 +33,7 @@ from app.site.pipeline import (
 from app.site.pipeline import iterate as run_iteration
 from app.site.render import build as build_site
 from app.site.render import material_from_brief, plan_for
-from app.store import db, leads, messages, photos, sites
+from app.store import brief_archive, db, leads, messages, photos, sites
 from app.web.serialize import brief_to_dict
 from app.workbench.brief import build_brief
 from app.workbench.categories import BY_KEY, CATEGORIES
@@ -62,6 +62,11 @@ def lookup(query: str, location: str | None, notes: str | None) -> dict:
         return {"error": f"Lookup failed: {type(exc).__name__}: {exc}"}
 
     payload = brief_to_dict(brief)
+    # A permanent, never-overwritten copy of THIS crawl, before the DB's own
+    # cached row (which the next re-crawl will overwrite) ever sees it — so
+    # "what did the model actually see" always has a real file and hash to
+    # point at, not a row that has since changed twice.
+    payload["_archive"] = brief_archive.save(payload)
     # Researching the same business twice must not discard what you were told
     # the first time, so the stored lead is refreshed and read back with your
     # confirmations applied over the fresh directory data.
