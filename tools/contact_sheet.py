@@ -31,24 +31,27 @@ from __future__ import annotations
 
 import argparse
 import base64
-import contextlib
 import hashlib
 import html
 import json
 import os
 import re
 import shutil
-import socket
-import struct
 import subprocess
 import sys
-import tempfile
-import time
-import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from app.adapters import photos as photos_api
+from app.adapters.chrome_cdp import cdp_session as _cdp_session
+
+# The DevTools plumbing (chrome() binary discovery, the WebSocket
+# handshake/frame codec, the launch-Chrome-and-drive-it-over-CDP session)
+# used to be defined here and re-imported into `tools/perf_census.py` — one
+# real implementation, reached from a second place rather than copied.
+# `app.adapters.chrome_cdp` is now that one implementation, reused a third
+# time by `app.adapters.site_fetch.ChromeSiteFetcher`.
+from app.adapters.chrome_cdp import chrome
 from app.site import fingerprint as fp
 from app.site.pipeline import STAGES, run_stage, spec_from_config
 from app.site.render import build_from_spec, material_from_brief, plan_for
@@ -66,10 +69,6 @@ FIXTURES = Path("tests/fixtures/briefs")
 FIXTURE_DB = Path("artifacts/fixtures.db")
 
 OUT = Path("artifacts/contact-sheet")
-CHROME = ("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-          "/Applications/Chromium.app/Contents/MacOS/Chromium",
-          shutil.which("google-chrome") or "",
-          shutil.which("chromium") or "")
 # The second row is the one that decides. Above the fold is the only second
 # that matters — it is what the owner sees when the laptop is turned around —
 # and page architecture is mostly a below-the-fold property. If two sites are
@@ -119,10 +118,6 @@ MAX_WORKERS = 6
 MANIFEST = Path(".reviews/sheet/.captured.json")
 
 
-def chrome() -> str | None:
-    return next((path for path in CHROME if path and Path(path).exists()), None)
-
-
 # Chrome's headless `--screenshot` CLI mode silently clamps any requested
 # `--window-size` width below this to exactly 500 CSS pixels — confirmed by
 # measuring `window.innerWidth` from inside the page: 390, 450 and 500 all
@@ -138,111 +133,6 @@ def chrome() -> str | None:
 # edge" finding that would not reproduce through any other means of
 # checking the same page at the same width — see `.reviews/<phase>.md`).
 CDP_MIN_WIDTH = 500
-
-
-@contextlib.contextmanager
-def _cdp_session(binary: str, page: Path, width: int, height: int, scale: float,
-                  timeout: float = 20.0):
-    """A Chrome instance, one page open in it at the given viewport, and a
-    `call(method, params)` function to drive it over the DevTools protocol —
-    shared by `_cdp_screenshot` (below `CDP_MIN_WIDTH`) and `evaluate_in_page`
-    (measuring layout at any width, screenshot or not).
-
-    `Emulation.setDeviceMetricsOverride` sets the CSS viewport directly and
-    is not subject to the CLI `--window-size` flag's floor (see
-    `CDP_MIN_WIDTH`) — the same mechanism Playwright/Puppeteer use for
-    mobile emulation, reached here over a raw WebSocket rather than a new
-    dependency, since the only thing needed is one request-response round
-    trip per command.
-
-    A long-lived Chrome instance rather than one-shot `--screenshot`: this
-    project already found that a fresh `--user-data-dir` makes
-    `--headless=new` hang on exit under `--screenshot` specifically (see
-    `shoot`'s docstring). Managing the process ourselves and terminating it
-    explicitly on the way out sidesteps that — nothing here waits for
-    Chrome to exit on its own.
-    """
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind(("127.0.0.1", 0))
-    port = sock.getsockname()[1]
-    sock.close()
-
-    with tempfile.TemporaryDirectory(prefix="cdp-shot-") as profile:
-        proc = subprocess.Popen(
-            [binary, "--headless=new", "--disable-gpu", "--hide-scrollbars",
-             f"--remote-debugging-port={port}", f"--user-data-dir={profile}",
-             "--host-resolver-rules=MAP fonts.googleapis.com 127.0.0.1,"
-             "MAP fonts.gstatic.com 127.0.0.1",
-             "--disable-background-networking", "--disable-sync",
-             "--disable-default-apps", "--disable-component-update",
-             "--metrics-recording-only", "--no-default-browser-check",
-             "--no-service-autorun", "--disable-features=Translate,OptimizationHints",
-             "--force-prefers-reduced-motion", "about:blank"],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        try:
-            deadline = time.monotonic() + timeout
-            while time.monotonic() < deadline:
-                try:
-                    with urllib.request.urlopen(
-                            f"http://127.0.0.1:{port}/json/version", timeout=0.5):
-                        break
-                except OSError:
-                    time.sleep(0.1)
-            else:
-                raise TimeoutError("devtools endpoint never came up")
-
-            target_req = urllib.request.Request(
-                f"http://127.0.0.1:{port}/json/new?{page.resolve().as_uri()}",
-                method="PUT")
-            with urllib.request.urlopen(target_req, timeout=5) as r:
-                target = json.loads(r.read())
-            ws_url = target["webSocketDebuggerUrl"]
-            host_port, _, path = ws_url[len("ws://"):].partition("/")
-            host, ws_port = host_port.split(":")
-
-            with socket.create_connection((host, int(ws_port)), timeout=timeout) as ws:
-                ws.settimeout(timeout)
-                _ws_handshake(ws, host, int(ws_port), "/" + path)
-
-                msg_id = 0
-
-                def call(method: str, params: dict | None = None) -> dict:
-                    nonlocal msg_id
-                    msg_id += 1
-                    _ws_send(ws, {"id": msg_id, "method": method,
-                                  "params": params or {}})
-                    while True:
-                        response = _ws_recv(ws)
-                        if response.get("id") == msg_id:
-                            return response
-                        # An unsolicited event (e.g. Page.frameNavigated) —
-                        # not the answer to this call, keep waiting for it.
-
-                call("Page.enable")
-                call("Emulation.setDeviceMetricsOverride", {
-                    "width": width, "height": height,
-                    "deviceScaleFactor": scale, "mobile": True})
-                # The page was requested via `/json/new`'s own URL
-                # parameter, which can already be complete by the time the
-                # WebSocket connects — poll readiness rather than waiting on
-                # a load event that may already have fired.
-                ready_deadline = time.monotonic() + timeout
-                while time.monotonic() < ready_deadline:
-                    state = call("Runtime.evaluate", {
-                        "expression": "document.readyState",
-                        "returnByValue": True})
-                    if (state.get("result", {}).get("result", {}).get("value")
-                            == "complete"):
-                        break
-                    time.sleep(0.05)
-                yield call
-        finally:
-            proc.terminate()
-            try:
-                proc.wait(timeout=10)
-            except subprocess.TimeoutExpired:
-                proc.kill()
-                proc.wait(timeout=5)
 
 
 def _cdp_screenshot(binary: str, page: Path, out: Path, width: int, height: int,
@@ -274,63 +164,6 @@ def evaluate_in_page(binary: str, page: Path, width: int, height: int,
         if exception:
             raise RuntimeError(f"evaluate failed: {exception}")
         return result.get("result", {}).get("result", {}).get("value")
-
-
-def _ws_handshake(sock: socket.socket, host: str, port: int, path: str) -> None:
-    key = base64.b64encode(os.urandom(16)).decode()
-    request = (f"GET {path} HTTP/1.1\r\nHost: {host}:{port}\r\n"
-               f"Upgrade: websocket\r\nConnection: Upgrade\r\n"
-               f"Sec-WebSocket-Key: {key}\r\nSec-WebSocket-Version: 13\r\n\r\n")
-    sock.sendall(request.encode())
-    response = b""
-    while b"\r\n\r\n" not in response:
-        response += sock.recv(4096)
-
-
-def _ws_send(sock: socket.socket, data: dict) -> None:
-    payload = json.dumps(data).encode()
-    header = bytearray([0x81])
-    mask = os.urandom(4)
-    length = len(payload)
-    if length < 126:
-        header.append(0x80 | length)
-    elif length < 65536:
-        header.append(0x80 | 126)
-        header += struct.pack(">H", length)
-    else:
-        header.append(0x80 | 127)
-        header += struct.pack(">Q", length)
-    header += mask
-    masked = bytes(b ^ mask[i % 4] for i, b in enumerate(payload))
-    sock.sendall(bytes(header) + masked)
-
-
-def _ws_recv(sock: socket.socket) -> dict:
-    while True:
-        head = b""
-        while len(head) < 2:
-            head += sock.recv(2 - len(head))
-        length = head[1] & 0x7F
-        if length == 126:
-            ext = b""
-            while len(ext) < 2:
-                ext += sock.recv(2 - len(ext))
-            length = struct.unpack(">H", ext)[0]
-        elif length == 127:
-            ext = b""
-            while len(ext) < 8:
-                ext += sock.recv(8 - len(ext))
-            length = struct.unpack(">Q", ext)[0]
-        payload = b""
-        while len(payload) < length:
-            chunk = sock.recv(length - len(payload))
-            if not chunk:
-                break
-            payload += chunk
-        opcode = head[0] & 0x0F
-        if opcode == 1:
-            return json.loads(payload.decode())
-        # A ping or other control frame — not a JSON-RPC reply, keep waiting.
 
 
 def shoot(binary: str, page: Path, out: Path, width: int, height: int,

@@ -20,7 +20,7 @@ import re
 from dataclasses import dataclass, field, replace
 
 from app.adapters.directory import DirectoryPlace, DirectorySource
-from app.adapters.site_fetch import HttpSiteFetcher, SiteFetcher
+from app.adapters.site_fetch import SiteFetcher, default_fetcher
 from app.workbench.corroborate import Fact, corroborate
 from app.workbench.extract import (
     ExtractedSite,
@@ -226,7 +226,13 @@ def build_brief(
 ) -> Brief:
     """Research one company and return everything we could establish."""
     resolved: ResolvedInput = resolve_input(raw, location=location, notes=notes)
-    fetcher = fetcher or HttpSiteFetcher()
+    # Render, then extract: a raw HTTP GET sees a near-empty shell on any
+    # site that draws itself with JavaScript. `default_fetcher()` renders
+    # through a real headless Chrome when one is on this machine and falls
+    # back to a plain GET per-page otherwise — the same "the degraded path
+    # still works" shape as `app.site.opening`'s Claude-then-trade-table
+    # fallback.
+    fetcher = fetcher or default_fetcher()
     directories = directories or []
 
     brief = Brief(name=resolved.name or raw.strip(), location=resolved.location,

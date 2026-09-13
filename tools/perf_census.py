@@ -46,17 +46,14 @@ import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from contact_sheet import (  # noqa: E402
-    FIXTURE_DB,
-    FIXTURES,
-    OUT,
-    _ws_handshake,
-    _ws_recv,
-    _ws_send,
-    chrome,
-)
+from contact_sheet import FIXTURE_DB, FIXTURES, OUT  # noqa: E402
 
+# The DevTools plumbing itself (chrome() binary discovery, the WebSocket
+# handshake/frame codec) lives in one place now, `app.adapters.chrome_cdp` —
+# this file used to reach it back out of `contact_sheet`, which had its own
+# copy; both now import the same implementation.
 from app.adapters import photos as photos_api  # noqa: E402
+from app.adapters.chrome_cdp import _ws_handshake, _ws_recv, _ws_send, chrome  # noqa: E402
 from app.core.config import google_places_api_key  # noqa: E402
 from app.site.pipeline import STAGES, run_stage, spec_from_config  # noqa: E402
 from app.site.render import build_from_spec  # noqa: E402

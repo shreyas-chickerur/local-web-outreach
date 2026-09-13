@@ -13,6 +13,8 @@ from typing import Protocol
 
 import httpx
 
+from app.adapters import chrome_cdp
+
 
 @dataclass(frozen=True)
 class FetchResult:
@@ -43,6 +45,130 @@ def _is_tls_failure(exc: Exception) -> bool:
 
 class SiteFetcher(Protocol):
     def fetch(self, url: str) -> FetchResult: ...
+
+
+# A page's HTML is what a server sent; a page's DOM is what a browser drew.
+# Where a site builds its own content client-side — a JavaScript menu, a
+# React storefront — `HttpSiteFetcher`'s raw response is a near-empty shell:
+# the platform reads source, the world renders. `render_document()` renders
+# it too, then reads back the DOM a real visitor would see.
+_MAIN_DOC_TIMEOUT = 20.0
+# A page's own scripts can keep running past `document.readyState ==
+# "complete"` (a menu widget that fetches its items, a slow analytics tag) —
+# a fixed settle window catches most of that without waiting on a network
+# that may never go fully idle. `tools/perf_census.py` settles 1.5s after
+# load for the same reason before trusting what it measures.
+_SETTLE_SECONDS = 1.5
+_CERT_ERROR_MARKERS = ("cert", "ssl", "erroraborted")
+
+
+def render_document(binary: str, url: str, timeout: float = _MAIN_DOC_TIMEOUT
+                    ) -> FetchResult:
+    """Fetch `url` the way a visitor's browser would: run its JavaScript,
+    then read back the DOM it produced.
+
+    Reuses `app.adapters.chrome_cdp.cdp_session` for every piece that is
+    hard to get right twice (the Chrome launch, the WebSocket handshake,
+    the JSON-RPC framing) rather than a fourth copy of it. The session
+    itself is opened on `about:blank` and the real navigation happens
+    inside this function instead, because the main document's HTTP status
+    can only be read from a `Network.responseReceived` event, and that
+    event has to be listened for BEFORE the navigation that produces it —
+    `cdp_session`'s own initial navigation (via `/json/new?<target>`)
+    starts before a caller has any chance to enable the Network domain.
+    """
+    start = time.perf_counter()
+    status: int | None = None
+    failed_error: str | None = None
+
+    def on_event(message: dict) -> None:
+        nonlocal status, failed_error
+        method = message.get("method")
+        params = message.get("params") or {}
+        if method == "Network.responseReceived" and params.get("type") == "Document":
+            if status is None:
+                status = params.get("response", {}).get("status")
+        elif method == "Network.loadingFailed" and params.get("type") == "Document":
+            failed_error = failed_error or params.get("errorText")
+
+    try:
+        with chrome_cdp.cdp_session(
+                binary, "about:blank", 1440, 900, 1.0, timeout=timeout,
+                on_event=on_event) as call:
+            call("Network.enable")
+            call("Runtime.enable")
+            call("Page.navigate", {"url": url})
+            deadline = time.monotonic() + timeout
+            while time.monotonic() < deadline:
+                state = call("Runtime.evaluate", {
+                    "expression": "document.readyState", "returnByValue": True})
+                if (state.get("result", {}).get("result", {}).get("value")
+                        == "complete"):
+                    break
+                time.sleep(0.05)
+            time.sleep(_SETTLE_SECONDS)
+            location = call("Runtime.evaluate", {
+                "expression": "location.href", "returnByValue": True})
+            final_url = location.get("result", {}).get("result", {}).get("value")
+            dom = call("Runtime.evaluate", {
+                "expression": "document.documentElement.outerHTML",
+                "returnByValue": True})
+            html = dom.get("result", {}).get("result", {}).get("value") or ""
+    except (TimeoutError, OSError) as exc:
+        elapsed_ms = int((time.perf_counter() - start) * 1000)
+        return FetchResult(ok=False, status=None, final_url=None, html="",
+                           elapsed_ms=elapsed_ms, error=str(exc))
+
+    elapsed_ms = int((time.perf_counter() - start) * 1000)
+    tls_error = bool(failed_error and any(
+        marker in failed_error.lower() for marker in _CERT_ERROR_MARKERS))
+    if failed_error and status is None:
+        return FetchResult(ok=False, status=None, final_url=final_url, html="",
+                           elapsed_ms=elapsed_ms, error=failed_error,
+                           tls_error=tls_error)
+    return FetchResult(
+        ok=(status is None or status < 400) and bool(html),
+        status=status, final_url=final_url, html=html,
+        elapsed_ms=elapsed_ms, tls_error=tls_error)
+
+
+class ChromeSiteFetcher:
+    """Fetch through a real, headless Chrome rather than a raw HTTP GET —
+    render, then extract, so a page that draws itself with JavaScript is
+    read the way a visitor's browser sees it rather than the empty shell
+    the server actually sent.
+
+    Falls back to a plain HTTP GET, per URL, when Chrome is not installed
+    or a render attempt errors — the same "a real answer is better, but a
+    degraded one is not nothing" shape `app.site.opening`'s Claude-then-
+    trade-table fallback already uses. A page that genuinely needs no
+    JavaScript loses nothing by falling back; a JS-built page that fails
+    to render still gets *a* result rather than none.
+    """
+
+    def __init__(self, fallback: SiteFetcher | None = None,
+                timeout: float = _MAIN_DOC_TIMEOUT) -> None:
+        self._fallback = fallback or HttpSiteFetcher()
+        self._timeout = timeout
+        self._binary = chrome_cdp.chrome()
+
+    def fetch(self, url: str) -> FetchResult:
+        if self._binary is None:
+            return self._fallback.fetch(url)
+        try:
+            return render_document(self._binary, url, self._timeout)
+        except Exception:  # noqa: BLE001 — a render bug must not lose the fetch
+            return self._fallback.fetch(url)
+
+
+def default_fetcher() -> SiteFetcher:
+    """The best fetcher this machine can actually run.
+
+    Mirrors `app.adapters.claude.available()`'s own pattern: prefer the
+    real capability, degrade to the simpler one rather than failing, and
+    let the caller stay ignorant of which it got.
+    """
+    return ChromeSiteFetcher() if chrome_cdp.chrome() else HttpSiteFetcher()
 
 
 class HttpSiteFetcher:
