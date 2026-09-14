@@ -592,11 +592,20 @@ _BLOCK_STOP = frozenset({
 _BLOCK_TEXT_LIMIT = 1800
 # How many of a page's headed sections to keep — both HERE, at one page's
 # own extraction, and again in `merge()` once several pages are combined.
-# Raised from 12/14 to one shared 20: the mismatched pair meant the second
-# limit never actually mattered (this one always ran first and threw the
-# excess away before merge saw it), and a business crawled two levels deep
-# genuinely has more than a dozen sections worth carrying.
-_BLOCK_LIMIT = 20
+# Raised again, from 20 to 40: a single uncapped measurement across real
+# fixtures found natural block counts from 6 to 227 with the depth-2 crawl,
+# and 20 was binding on the large majority of them. There is no single
+# number that stops binding on all of them without also swallowing noise —
+# inspecting law-rich's own blocks past position ~35 found individual FAQ
+# sub-questions from deep practice-area subpages and an unrelated sponsored
+# blog post (a Baylor Athletics feature), not further distinct sections
+# about the business itself. 40 roughly doubles the previous cap, clears
+# every fixture that was genuinely under the old one, and reaches well into
+# the largest sites' real content (awards, admissions, client testimonials,
+# in-the-news items) before crossing into that per-FAQ granularity. Fully
+# unbinding the largest sites would mean deduplicating near-identical
+# per-page content, a crawl-shape problem, not a cap problem.
+_BLOCK_LIMIT = 40
 
 # How many named services / products to keep — at one page's own
 # extraction and again once pages are merged, same reasoning as
