@@ -1,12 +1,11 @@
 """Phase 2b: the three gaps the Phase 2 port reopened.
 
-Gaps 1 and 2 were reproduced independently before anything was changed
-(confirmed exactly at `9b7b6c5`, commit `f6d139f`), then closed in
-Step 2 (`app/site/seam_gates.py`, `app/site/contradiction.py`). Their
-tests now assert the FIXED behaviour, so this file doubles as the
-regression guard against reopening either gap a second time. Gap 3
-(nothing reproduces the real design page's findings) is still open —
-Step 4 closes it.
+All three were reproduced independently before anything was changed
+(confirmed exactly at `9b7b6c5`, commit `f6d139f`), then closed: gaps 1
+and 2 in Step 2 (`app/site/seam_gates.py`, `app/site/contradiction.py`),
+gap 3 in Step 4 (`tests/sitegen/test_seam_design_page.py`). Every test
+here now asserts the FIXED behaviour, so this file doubles as the
+regression guard against reopening any of the three a second time.
 """
 
 from __future__ import annotations
@@ -77,18 +76,17 @@ def test_gap_2_an_invented_number_is_now_checked():
         f"the unbacked-number gap is reopened again: {findings}")
 
 
-def test_gap_3_nothing_references_the_real_design_page():
-    """The 40-finding classification from Phase 2's handoff exists only
-    as prose in .reviews/phase-2-seam.md -- no test or tool re-derives
-    it. This test itself is the reproduction: it exists to fail loudly
-    (an AssertionError naming the missing file) until Step 4 adds the
-    real one, rather than let the gap go unnoticed a second time."""
+def test_gap_3_the_real_design_page_is_now_reproducible():
+    """At 9b7b6c5, the 40-finding classification from Phase 2's handoff
+    existed only as prose in .reviews/phase-2-seam.md -- no test or tool
+    re-derived it. Step 4 (`tests/sitegen/test_seam_design_page.py`)
+    closed this: this asserts that a real test now references the
+    design page export and pins a finding count, rather than leaving
+    this file claiming a gap that is already closed."""
     referencing = [
         p for p in Path("tests").rglob("*.py")
         if p.name != "test_seam_reopened_gaps.py"
         and "hvac-claude-design" in p.read_text()
     ]
-    assert referencing == [], (
-        "a test now references the design page export -- update this "
-        "test's own premise rather than leaving it claiming a gap that "
-        "is already closed")
+    assert referencing, (
+        "gap 3 is reopened: nothing references the design page export again")
