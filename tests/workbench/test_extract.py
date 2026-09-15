@@ -6,6 +6,7 @@ import pytest
 
 from app.workbench.extract import (
     _clean_service,
+    content_page_urls,
     extract_from_html,
     menu_page_urls,
     merge,
@@ -215,6 +216,22 @@ def test_stylesheet_is_not_followed_as_a_page():
             '<a href="/menus/">Menus</a>')
     assert menu_page_urls(html, "https://example.com/") == [
         "https://example.com/menus/"]
+
+
+def test_whitespace_padded_href_does_not_smuggle_an_external_page():
+    """theheritagetable.com had `<a href=" https://www.comebackcreek.com/">`.
+
+    The leading space stops urljoin from recognizing the scheme, so it joins
+    the whole string onto base_url as if it were a relative path. The
+    resulting garbage URL's netloc still matches base_host, and its last path
+    segment ("about") matches a tracked path family, so the malformed,
+    guaranteed-to-404 URL slips into the crawl candidates alongside the real
+    same-host link.
+    """
+    html = ('<a href=" https://www.comebackcreek.com/about">External</a>'
+            '<a href="/menu">Menu</a>')
+    assert content_page_urls(html, "https://www.theheritagetable.com/") == [
+        "https://www.theheritagetable.com/menu"]
 
 
 def test_schema_org_gives_the_business_its_own_voice():
