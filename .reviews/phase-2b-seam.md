@@ -159,6 +159,25 @@ gate changes (`app/site/seam_gates.py`, `app/site/contradiction.py`,
   `provenance.py` only), and not something the round's instruction
   asked me to re-freeze.
 
+  > **Correction, 2026-09-15 (Phase 2c):** this "pre-existing" claim is
+  > wrong, and the round's own resource rule ("run that test at 9b7b6c5
+  > before writing the word") would have caught it. Both tests **pass**
+  > at `9b7b6c5` and **fail** at `c39e1cb` (checked directly, in a
+  > worktree, both directions) — this is new drift Phase 2b itself
+  > introduced, not a stale snapshot from before the round. The actual
+  > cause: Step 2's widened `contradiction.REVIEW_COUNT_RE` reads
+  > `roofer-rich`'s own real "100+ Google reviews" / "100+ verified
+  > reviews" as an exact count of 100, which reads as contradicting the
+  > corroborated `136` (`contradicts(100, 136)` was `True`) even though
+  > 136 satisfies the "at least 100" the business actually stated —
+  > `reconcile()` then drops both sentences from the page before render,
+  > which is the literal bytes these two tests pin. Fixed in Phase 2c:
+  > `REVIEW_COUNT_RE` now captures "N+"/"over N"/"more than N" as a
+  > lower-bound flag, and `contradicts()` only treats a floor as
+  > contradicting when it sits ABOVE the corroborated count. Both tests
+  > pass again, without re-pinning either fixture. See
+  > `.reviews/phase-2c-seam.md`.
+
 None of the round's own seam work is implicated in any of the 15.
 
 ## Verdict
