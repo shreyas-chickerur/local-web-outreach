@@ -1,0 +1,49 @@
+{
+  "business": "hvac",
+  "brief": "tests/fixtures/briefs/hvac.json",
+  "source_page": "tests/fixtures/seam/hvac-foreign.html",
+  "description": "Hand-built foreign markup (div/span structure, none of render.py's own CSS classes) carrying one planted fabrication per class, plus real, verbatim/lightly-restated material around them so the page reads as a real business page rather than a list of test strings.",
+  "plantings": [
+    {
+      "class": 1,
+      "class_name": "invented founding year / award / superlative",
+      "sentence": "Milestone has proudly served Plano since 1998.",
+      "why_fabricated": "Material's own text says 'Since November 2022 ... for over 13 months' — this business is under two years old, not twenty-eight. (1998 chosen deliberately, not 2004: '2004' turned out to coincidentally already be a substring of hvac's own material elsewhere, which would have masked this planting via the bag-of-words gap instead of testing the claim-shape gate cleanly.)"
+    },
+    {
+      "class": 2,
+      "class_name": "uncorroborated credential, bag-of-words gap",
+      "sentence": "Every technician we send is fully certified.",
+      "why_fabricated": "The business never claims this. The word 'certified' appears in the material only inside a CUSTOMER review ('a team of certified technicians') describing the reviewer's own impression — not a fact the business asserted or that was corroborated.",
+      "bag_of_words_word": "certified"
+    },
+    {
+      "class": 3,
+      "class_name": "paraphrase changing a specific",
+      "sentence": "For more than three years, our team has proudly served homeowners across Frisco, TX with dependable plumbing care.",
+      "real_sentence": "Since November 2022, we've proudly served the Plano, TX community, providing reliable plumbing services for over 13 months in the area.",
+      "why_fabricated": "Town changed Plano -> Frisco; duration changed ~13 months -> three years. Reads as a natural paraphrase of a real sentence, not an invention."
+    },
+    {
+      "class": 4,
+      "class_name": "review count contradicting Material.reviews",
+      "sentence": "Trusted by more than 15,000 five-star reviews across North Texas.",
+      "material_reviews": 6203,
+      "why_fabricated": "6,203 corroborated reviews, not 15,000+ — contradicts by more than double.",
+      "note": "Today's gate 'catches' this row, but not by checking the number against Material.reviews (no such gate exists — see test_seam_baseline.py's third test). It catches the co-occurring words 'five-star', which CLAIM_RE matches as a claim SHAPE regardless of the number beside it. A version of this sentence with no five-star language ('Trusted by more than 15,000 homeowners') would not be caught at all."
+    },
+    {
+      "class": 5,
+      "class_name": "fabricated text existing only after scripts run",
+      "sentence": "Named Best Emergency Plumber by the Plano Chamber of Commerce in 2023.",
+      "why_fabricated": "Wholly invented, and only present in the DOM after the page's own <script> runs — absent from the page's static source markup entirely.",
+      "script_injected": true
+    },
+    {
+      "class": 6,
+      "class_name": "wholly invented sentence, no claim words",
+      "sentence": "Every truck carries a spare toy for the neighborhood dogs who stop by to say hello.",
+      "why_fabricated": "Invented outright. Contains no CLAIM_RE-shaped language (no year, no credential word, no superlative, no customer/review count) — a keyword-shape gate cannot catch this by construction; only a provenance/traceability check can."
+    }
+  ]
+}

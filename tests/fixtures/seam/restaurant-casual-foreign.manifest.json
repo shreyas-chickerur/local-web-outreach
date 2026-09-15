@@ -1,0 +1,49 @@
+{
+  "business": "restaurant-casual",
+  "brief": "tests/fixtures/briefs/restaurant-casual.json",
+  "source_page": "tests/fixtures/seam/restaurant-casual-foreign.html",
+  "description": "Hand-built foreign markup for a second business, a different trade register (food, not a trade), so the planted-fabrication classes are not accidentally tied to one kind of page.",
+  "plantings": [
+    {
+      "class": 1,
+      "class_name": "invented founding year / award / superlative",
+      "sentence": "Whisk Crêpes Café has been a Dallas favorite since 2009.",
+      "why_fabricated": "No founding year appears anywhere in the material — invented outright."
+    },
+    {
+      "class": 2,
+      "class_name": "uncorroborated credential/claim, bag-of-words gap",
+      "sentence": "Guests consistently describe us as a 5-star dining experience.",
+      "why_fabricated": "The exact phrase '5-star' appears in the material only inside one customer's review of a MISHAP ('What could've been a 5-star review is now 4') — the opposite of praise — not a fact the business asserted.",
+      "bag_of_words_word": "5-star"
+    },
+    {
+      "class": 3,
+      "class_name": "paraphrase changing a specific",
+      "sentence": "Julien hosted underground dinners for 20 to 100 guests while living in Paris.",
+      "real_sentence": "Julien hosted underground dinners for 10 to 50 guests and hosted parties for his friends and family.",
+      "why_fabricated": "Guest count doubled (10-50 -> 20-100) — a real sentence with its one specific number changed."
+    },
+    {
+      "class": 4,
+      "class_name": "review count contradicting Material.reviews",
+      "sentence": "Loved by more than 3,000 five-star reviews across Dallas.",
+      "material_reviews": 121,
+      "why_fabricated": "121 corroborated reviews, not 3,000+ — contradicts by roughly 25x.",
+      "note": "Today's gate 'catches' this row via CLAIM_RE's five-star SHAPE pattern, not by checking the number against Material.reviews (no such gate exists). Same caveat as hvac's class 4 planting."
+    },
+    {
+      "class": 5,
+      "class_name": "fabricated text existing only after scripts run",
+      "sentence": "Featured on Dallas Eats Magazine's 'Top 10 Hidden Gems' list in 2022.",
+      "why_fabricated": "Wholly invented publication/feature, only present in the DOM after the page's own <script> runs.",
+      "script_injected": true
+    },
+    {
+      "class": 6,
+      "class_name": "wholly invented sentence, no claim words",
+      "sentence": "The café's wooden tables were hand-selected by Julien from a reclaimed barn in East Texas.",
+      "why_fabricated": "Invented outright. No CLAIM_RE-shaped language at all — only a provenance/traceability check can catch this."
+    }
+  ]
+}
