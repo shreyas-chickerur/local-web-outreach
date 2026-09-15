@@ -1085,6 +1085,7 @@ def _pages_matching(html: str, base_url: str, paths: tuple[str, ...],
     for href in re.findall(r'href=["\']([^"\']+)["\']', html or "", re.IGNORECASE):
         if href.startswith(("mailto:", "tel:", "#", "javascript:")):
             continue
+        href = href.strip()
         absolute = urljoin(base_url, href)
         parsed = urlparse(absolute)
         if parsed.netloc.lower() != base_host:
