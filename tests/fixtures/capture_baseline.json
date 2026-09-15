@@ -1,0 +1,137 @@
+[
+  {
+    "slug": "barbecue",
+    "pages_crawled": 27,
+    "blocks": 20,
+    "block_chars": 5022,
+    "menu_items": 24,
+    "services": 16,
+    "capture_pct": 0.3492063492063492
+  },
+  {
+    "slug": "bare-trade",
+    "pages_crawled": 30,
+    "blocks": 20,
+    "block_chars": 14214,
+    "menu_items": 1,
+    "services": 19,
+    "capture_pct": 0.34230108757870636
+  },
+  {
+    "slug": "dentist-rich",
+    "pages_crawled": 28,
+    "blocks": 20,
+    "block_chars": 5400,
+    "menu_items": 4,
+    "services": 19,
+    "capture_pct": 0.19595835884874463
+  },
+  {
+    "slug": "dentist",
+    "pages_crawled": 28,
+    "blocks": 20,
+    "block_chars": 11068,
+    "menu_items": 4,
+    "services": 20,
+    "capture_pct": 0.23836969946480033
+  },
+  {
+    "slug": "hvac-rich",
+    "pages_crawled": 30,
+    "blocks": 20,
+    "block_chars": 10028,
+    "menu_items": 3,
+    "services": 20,
+    "capture_pct": 0.13266162888329136
+  },
+  {
+    "slug": "hvac-second",
+    "pages_crawled": 30,
+    "blocks": 20,
+    "block_chars": 16770,
+    "menu_items": 1,
+    "services": 20,
+    "capture_pct": 0.18433978618896274
+  },
+  {
+    "slug": "hvac",
+    "pages_crawled": 30,
+    "blocks": 20,
+    "block_chars": 9855,
+    "menu_items": 3,
+    "services": 20,
+    "capture_pct": 0.2139138665404638
+  },
+  {
+    "slug": "law-rich",
+    "pages_crawled": 30,
+    "blocks": 20,
+    "block_chars": 30767,
+    "menu_items": 24,
+    "services": 20,
+    "capture_pct": 0.1964748574390876
+  },
+  {
+    "slug": "law",
+    "pages_crawled": 30,
+    "blocks": 20,
+    "block_chars": 6919,
+    "menu_items": 1,
+    "services": 20,
+    "capture_pct": 0.08772806798300425
+  },
+  {
+    "slug": "restaurant-casual",
+    "pages_crawled": 9,
+    "blocks": 2,
+    "block_chars": 1813,
+    "menu_items": 0,
+    "services": 1,
+    "capture_pct": 0.6632124352331606
+  },
+  {
+    "slug": "restaurant-rich",
+    "pages_crawled": 18,
+    "blocks": 6,
+    "block_chars": 3473,
+    "menu_items": 0,
+    "services": 8,
+    "capture_pct": 0.20435762584522915
+  },
+  {
+    "slug": "roofer-rich",
+    "pages_crawled": 30,
+    "blocks": 20,
+    "block_chars": 6817,
+    "menu_items": 1,
+    "services": 20,
+    "capture_pct": 0.17170856412441415
+  },
+  {
+    "slug": "roofer",
+    "pages_crawled": 14,
+    "blocks": 20,
+    "block_chars": 8580,
+    "menu_items": 0,
+    "services": 20,
+    "capture_pct": 0.3283687943262411
+  },
+  {
+    "slug": "salon-rich",
+    "pages_crawled": 26,
+    "blocks": 14,
+    "block_chars": 12109,
+    "menu_items": 20,
+    "services": 15,
+    "capture_pct": 0.19394351820347056
+  },
+  {
+    "slug": "salon",
+    "pages_crawled": 1,
+    "blocks": 20,
+    "block_chars": 16509,
+    "menu_items": 0,
+    "services": 19,
+    "capture_pct": 0.7772397094430993
+  }
+]
