@@ -43,9 +43,12 @@ def cmd_brief(args: argparse.Namespace) -> int:
         print("note: only OpenStreetMap is configured. Set GOOGLE_PLACES_API_KEY "
               "to find websites and YELP_API_KEY to cover service businesses.\n",
               file=sys.stderr)
+    def _progress(message: str) -> None:
+        print(f"... {message}", file=sys.stderr, flush=True)
+
     try:
         brief = build_brief(args.input, location=args.location, notes=args.notes,
-                            directories=directories)
+                            directories=directories, on_progress=_progress)
     except ValueError as exc:
         # A bad input is a user mistake, not a crash. Say what to do instead.
         print(f"error: {exc}", file=sys.stderr)

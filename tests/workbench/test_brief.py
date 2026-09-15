@@ -181,6 +181,26 @@ def test_a_page_linked_only_from_a_depth_one_page_is_still_reached():
     assert "Chef’s Tasting Menu" in headings
 
 
+def test_on_progress_is_told_about_each_page_the_crawl_reads():
+    """The crawl is the slow part — real page fetches, one at a time — and
+    a caller with no visibility into it sees nothing at all for however
+    long that takes. `on_progress` is optional and additive: every
+    existing caller that omits it (every test above this one) behaves
+    exactly as before."""
+    home = ('<html><head><title>Home | Craftway Kitchen | Frisco TX</title></head>'
+           '<body><a href="/philosophy/">Our Philosophy</a></body></html>')
+    philosophy = ('<html><body><h2>Our Roots</h2><p>' + 'word ' * 20 + '</p>'
+                 '</body></html>')
+    seen: list[str] = []
+    build_brief("craftwaykitchen.com", fetcher=_MultiPageFetcher({
+        "https://craftwaykitchen.com/": home,
+        "https://craftwaykitchen.com/philosophy/": philosophy,
+    }), on_progress=seen.append)
+    assert any("reading their website" in m for m in seen)
+    assert any("homepage" in m for m in seen)
+    assert any("philosophy" in m for m in seen)
+
+
 def test_the_crawl_never_leaves_the_page_budget(monkeypatch):
     """A large site's real link graph must not turn "read their content"
     into "crawl the whole site" — the page budget caps total fetches

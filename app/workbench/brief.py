@@ -17,6 +17,7 @@ Two paths in:
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field, replace
 
 from app.adapters.directory import DirectoryPlace, DirectorySource
@@ -242,11 +243,21 @@ CRAWL_DEPTH = 2
 CRAWL_PAGE_BUDGET = 24
 
 
-def _read_their_site(url: str, fetcher: SiteFetcher
+def _read_their_site(url: str, fetcher: SiteFetcher, *,
+                      on_progress: Callable[[str], None] | None = None
                      ) -> tuple[ExtractedSite | None, bool, str, UrlCheck]:
     """Fetch their homepage plus the pages that actually carry content,
     breadth-first, up to `CRAWL_DEPTH` levels deep and `CRAWL_PAGE_BUDGET`
-    pages total."""
+    pages total.
+
+    `on_progress`, if given, is called with a one-line status after the
+    homepage and after every page fetched during the crawl — this is the
+    slow part (real headless-Chrome renders, one page at a time), and
+    without it a caller sees nothing at all for however long that takes.
+    Optional and additive: every existing caller that omits it behaves
+    exactly as before.
+    """
+    report = on_progress or (lambda _msg: None)
     check = validate(url, fetcher)
     result = check.result
     if result is None or not result.html:
@@ -259,6 +270,7 @@ def _read_their_site(url: str, fetcher: SiteFetcher
         state = "insecure"
     base = result.final_url or url
     extracted = extract_from_html(result.html, base)
+    report(f"read homepage: {base}")
 
     visited = {base}
     depth_of: dict[str, int] = {}
@@ -275,6 +287,7 @@ def _read_their_site(url: str, fetcher: SiteFetcher
         visited.add(page)
         sub = fetcher.fetch(page)
         fetched += 1
+        report(f"read page {fetched}/{CRAWL_PAGE_BUDGET}: {page}")
         if not (sub.ok and sub.html):
             continue
         extracted = merge(extracted, extract_from_html(sub.html, page))
@@ -288,6 +301,8 @@ def _read_their_site(url: str, fetcher: SiteFetcher
                 depth_of[link] = depth_of[page] + 1
                 queue.append(link)
 
+    if any(m.get("kind") == "pdf" for m in extracted.menu_media):
+        report("reading menu PDF(s)")
     _read_menu_pdfs(extracted)
     return extracted, True, ("insecure" if check.fault == "certificate" else "ok"), check
 
@@ -299,8 +314,15 @@ def build_brief(
     notes: str | None = None,
     directories: list[DirectorySource] | None = None,
     fetcher: SiteFetcher | None = None,
+    on_progress: Callable[[str], None] | None = None,
 ) -> Brief:
-    """Research one company and return everything we could establish."""
+    """Research one company and return everything we could establish.
+
+    `on_progress`, if given, is called with a one-line status at each major
+    step — optional and additive, so every existing caller behaves exactly
+    as before.
+    """
+    report = on_progress or (lambda _msg: None)
     resolved: ResolvedInput = resolve_input(raw, location=location, notes=notes)
     # Render, then extract: a raw HTTP GET sees a near-empty shell on any
     # site that draws itself with JavaScript. `default_fetcher()` renders
@@ -322,7 +344,9 @@ def build_brief(
     # name guessed from a domain ("Theheritagetable") matches nothing, while the
     # real name from their page title matches immediately.
     if brief.website_url:
-        published, reachable, state, check = _read_their_site(brief.website_url, fetcher)
+        report(f"reading their website: {brief.website_url}")
+        published, reachable, state, check = _read_their_site(
+            brief.website_url, fetcher, on_progress=on_progress)
         brief.url_check = check
         brief.site_reachable = reachable
         brief.site_status = state
@@ -351,10 +375,11 @@ def build_brief(
     # --- directories, now that we know what the business is called ------------
     nearby: dict[str, int] = {}
     for directory in directories:
+        source_name = getattr(directory, "name", "directory")
+        report(f"checking {source_name}")
         place = directory.lookup(brief.name, brief.location or "")
         if place is None:
             continue
-        source_name = getattr(directory, "name", "directory")
         if not same_business(brief.name, place.name):
             brief.assumptions.append(
                 f"ignored a {source_name} result for {place.name!r} — different business")
@@ -406,7 +431,9 @@ def build_brief(
 
     # A website discovered by a directory still needs reading.
     if brief.website_url and brief.published is None:
-        published, reachable, state, check = _read_their_site(brief.website_url, fetcher)
+        report(f"reading their website: {brief.website_url}")
+        published, reachable, state, check = _read_their_site(
+            brief.website_url, fetcher, on_progress=on_progress)
         brief.url_check = check
         brief.site_reachable = reachable
         brief.site_status = state
