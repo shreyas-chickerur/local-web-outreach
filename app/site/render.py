@@ -485,10 +485,13 @@ def _stats(m: Material, t: Theme) -> str:
     # Only count something we actually have: a proud "0 services offered" is
     # the kind of detail that loses the room.
     offerings = len(m.services) + len(m.products)
-    if m.menu_items:
+    # A price scraped off a "pricing" or "services" page is not a dish just
+    # because it has a $ next to it — a law firm's fee schedule is not a menu.
+    if m.menu_items and m.trade_kind == "food":
         tiles.append((f"{len(m.menu_items)}", "dishes on the menu", "count"))
-    elif offerings:
-        tiles.append((f"{offerings}", "services offered", "count"))
+    elif offerings + len(m.menu_items):
+        tiles.append((f"{offerings + len(m.menu_items)}", "services offered",
+                      "count"))
     if len(tiles) < 2:
         return ""
     cells = "".join(

@@ -327,6 +327,25 @@ def test_the_offer_heading_follows_the_trade():
     assert "How we can help" in build(trade)[0]
 
 
+def test_the_third_stat_follows_the_trade_not_menu_items():
+    """A law firm's fee schedule gets scraped by the same $-anchored heuristic
+    that finds a restaurant's menu, but a fee schedule is not a menu — the
+    stats band must call it what it actually is."""
+    firm = _rich()
+    firm["trade"] = "Personal injury attorney"
+    firm["published"] = {**firm["published"],
+                         "menu_items": [{"name": "Free Consultation",
+                                         "price": "$0", "description": ""}],
+                         "services": ["Case Review", "Litigation"]}
+    page, _ = build(firm)
+    assert "dishes on the menu" not in page
+    assert "services offered" in page
+
+    restaurant = _rich()
+    restaurant["trade"] = "Restaurant"
+    assert "dishes on the menu" in build(restaurant)[0]
+
+
 def test_two_offerings_do_not_get_a_grid_built_for_four():
     """auto-fit collapses its empty tracks, so two items become two half-width
     slabs with dead space down the middle. The sparse case must not use it."""
