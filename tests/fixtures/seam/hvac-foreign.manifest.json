@@ -44,6 +44,37 @@
       "class_name": "wholly invented sentence, no claim words",
       "sentence": "Every truck carries a spare toy for the neighborhood dogs who stop by to say hello.",
       "why_fabricated": "Invented outright. Contains no CLAIM_RE-shaped language (no year, no credential word, no superlative, no customer/review count) — a keyword-shape gate cannot catch this by construction; only a provenance/traceability check can."
+    },
+    {
+      "class": "4b",
+      "class_name": "unbacked large number, no five-star wording riding along",
+      "sentence": "4.9 average rating from 90,000 Google reviews",
+      "material_reviews": 6203,
+      "why_fabricated": "6,203 corroborated reviews, not 90,000 — contradicts by roughly 14x. Unlike class 4, this sentence has no 'five-star' wording for CLAIM_RE to coincidentally catch, and REVIEW_COUNT_RE (contradiction.py) requires the number immediately beside 'review(s)' with only spaces/tabs between -- the word 'Google' sitting between '90,000' and 'reviews' breaks that match. Phase 2b's own reproduction (test_seam_reopened_gaps.py) confirms this is [] from every gate before Step 2."
+    },
+    {
+      "class": "7a",
+      "class_name": "short-form claim: badge",
+      "sentence": "BBB A+ Accredited",
+      "why_fabricated": "Invented outright -- no BBB accreditation appears anywhere in hvac's real material. Three words, a <span class=\"badge\">, no terminal punctuation -- exactly the shape is_template_chrome() exempted from the claims check before Step 2."
+    },
+    {
+      "class": "7b",
+      "class_name": "short-form claim: stat tile with an invented number",
+      "sentence": "25,000+ Jobs Completed",
+      "why_fabricated": "Invented outright -- no jobs-completed count appears anywhere in hvac's real material. A stat tile, two short spans, no terminal punctuation."
+    },
+    {
+      "class": "7c",
+      "class_name": "short-form claim: heading of three words or fewer",
+      "sentence": "Award-Winning Service",
+      "why_fabricated": "Invented outright -- no award appears anywhere in hvac's real material. Exactly three words in an <h2> -- the exact shape the old is_template_chrome() exempted regardless of tag."
+    },
+    {
+      "class": "7d",
+      "class_name": "short-form claim: inside <button>",
+      "sentence": "#1 Rated in Texas",
+      "why_fabricated": "Invented outright -- no such ranking appears anywhere in hvac's real material. Everything in <button> was unconditionally chrome before Step 2, whatever it said."
     }
   ]
 }

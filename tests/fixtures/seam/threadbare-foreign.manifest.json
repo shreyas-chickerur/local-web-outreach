@@ -1,0 +1,44 @@
+{
+  "business": "threadbare",
+  "brief": "tests/fixtures/briefs/threadbare.json",
+  "source_page": "tests/fixtures/seam/threadbare-foreign.html",
+  "description": "Phase 2b's own reproduction case (the round's own instruction, reproduced verbatim as its own planted page): threadbare has no about text and no blocks at all (confirmed in tests/sitegen/test_seam_reopened_gaps.py), so every claim on this page is uncorroborated by construction -- there is no bag-of-words gap to exploit (class 2 elsewhere) because there are no bare words anywhere in the material to coincidentally match against. Every planting here is class 7 (short-form claim) except the founding year and the button, which carries three claims in one long sentence that is NOT exempt under the tightened button rule (Step 2: a <button> longer than three words is prose).",
+  "plantings": [
+    {
+      "class": 2,
+      "class_name": "uncorroborated credential, no material at all to bag-of-words against",
+      "sentence": "Licensed & Insured",
+      "why_fabricated": "threadbare's material has no about text and no blocks -- nothing corroborates this, and unlike hvac's class 2 planting there is not even a coincidental bare-word match to exploit. Three tokens ('Licensed', '&', 'Insured') in an <h1> -- exactly the length the old is_template_chrome() exempted regardless of tag."
+    },
+    {
+      "class": 1,
+      "class_name": "invented founding year",
+      "sentence": "Since 1987",
+      "why_fabricated": "No founding date anywhere in threadbare's material (there is no material). Two words in a bare <div> -- old is_template_chrome() exempted this as a 'single field value' (<=4 words, no terminal punctuation)."
+    },
+    {
+      "class": "7b",
+      "class_name": "short-form claim: stat-shaped",
+      "sentence": "25+ Years Experience",
+      "why_fabricated": "Invented outright. Three words in a bare <div>, no terminal punctuation."
+    },
+    {
+      "class": "7c",
+      "class_name": "short-form claim: heading-shaped (rendered as a bare div here, not an h-tag)",
+      "sentence": "Award-Winning Service",
+      "why_fabricated": "Invented outright. Three words, no terminal punctuation -- CLAIM_RE matches 'award-winning' directly."
+    },
+    {
+      "class": "7a",
+      "class_name": "short-form claim: badge-shaped",
+      "sentence": "BBB A+ Accredited",
+      "why_fabricated": "Invented outright. Three words, no terminal punctuation."
+    },
+    {
+      "class": "7d",
+      "class_name": "short-form claim: inside <button>, but long enough to be prose under the tightened rule",
+      "sentence": "Board-certified, family-owned and voted #1 in Texas",
+      "why_fabricated": "Invented outright -- three separate CLAIM_RE-shaped claims in one sentence ('Board-certified', 'family-owned', 'voted'). Nine words, well past the three-word button exemption Step 2 sets -- this is prose, not a short label, and was unconditionally exempt before Step 2 purely for being inside <button> regardless of length."
+    }
+  ]
+}

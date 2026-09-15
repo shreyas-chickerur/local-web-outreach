@@ -162,7 +162,11 @@ def test_class_5_is_caught_once_the_dom_is_actually_rendered(manifest_path):
     this exact fixture into the one browser session this round budgets
     for rather than opening a second one just to re-prove this."""
     manifest, html, material = _load(manifest_path)
-    planting = next(p for p in manifest["plantings"] if p.get("script_injected"))
+    planting = next((p for p in manifest["plantings"] if p.get("script_injected")), None)
+    if planting is None:
+        pytest.skip(f"{manifest['business']} carries no script-injected "
+                    f"planting (threadbare's page has no <script> at all, "
+                    f"matching the round's own given snippet)")
     # Every seam fixture's script does exactly one insertAdjacentHTML
     # call into an empty slot div — simulate its effect directly rather
     # than parsing the <script> body.
