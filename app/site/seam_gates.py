@@ -208,17 +208,31 @@ def _credential_backed_remainder(sentence: str, material_facts: frozenset[str]) 
     removes what is actually backed; a fact this material does not
     corroborate leaves its span untouched, so an uncorroborated
     credential word still reaches CLAIM_RE / the provenance check same
-    as before."""
+    as before.
+
+    The exact-label case is checked FIRST and, when it applies, wins
+    outright — found the hard way, against the real corpus, not
+    invented: two of ten labels (`contractorfacts.label_for` for
+    "financing" -> "Financing available", "warranty" -> "Workmanship
+    warranty") only PARTIALLY match their own pattern ("financing"/
+    "warranty" alone, per contractorfacts.py's own note that a label
+    does not always match its own trigger phrase). Computing every
+    pattern span first and merging them with the label's span by
+    position let the smaller regex span "financing" win the overlap
+    and left "available" as a bogus finding on hvac-rich's real,
+    corroborated Financing badge. The label, when it IS the whole
+    sentence and its key is corroborated, is simply the fact — nothing
+    else in the sentence to explain.
+    """
+    stripped = sentence.strip()
+    key = _LABEL_TO_KEY.get(stripped)
+    if stripped and key is not None and key in material_facts:
+        return ""
     spans: list[tuple[int, int]] = []
     for fact in contractorfacts.FACTS:
         if fact.key not in material_facts:
             continue
         spans.extend(m.span() for m in fact.pattern.finditer(sentence))
-    stripped = sentence.strip()
-    key = _LABEL_TO_KEY.get(stripped)
-    if key is not None and key in material_facts and stripped:
-        start = sentence.find(stripped)
-        spans.append((start, start + len(stripped)))
     if not spans:
         return sentence
     parts: list[str] = []
@@ -457,7 +471,31 @@ def _corroborated_numbers(material) -> frozenset[str]:
     scan of free text (a number inside a verbatim-matched sentence is
     the OTHER half of the round's own rule, handled separately in
     unbacked_numbers by skipping verbatim-matched sentences entirely,
-    the same way every other check in this module does)."""
+    the same way every other check in this module does).
+
+    Phase 2c's own finding (`.reviews/NEXT-ROUND.md`), investigated and
+    NOT changed here — see the handoff for the full account. The round's
+    own rule ("a number counts only when it stands alone as the field
+    value, or sits in the same run as the field it came from") reads as
+    "drop the per-digit hours/address fallback, rely on the sentence-level
+    `bare in own` check instead." Tried exactly that; it broke the real
+    19-fixture corpus's own zero-findings invariant on 8 of 19 fixtures.
+    Cause: `visible_text_runs()` merges adjacent, unpunctuated sibling
+    text into ONE run — e.g. roofer-rich's own rendered
+    "10021 Cayuga Dr Fri 7:30am to 5pm" glues its address straight onto
+    an unrelated hours line with no separating punctuation for
+    `SENTENCE_RE` to split on. `bare in own` needs the WHOLE sentence to
+    be a substring of `own`; this glued hybrid never is, address and
+    hours being two separate fields in `_corroborated_facts()`, so
+    every digit in it — the real street number, the real closing time —
+    depended entirely on this per-field fallback. The coincidence the
+    round names (4, 5, 8, 20, 24 all separately "corroborated" for
+    unrelated reasons) is real, but a correct fix needs a number tied to
+    which FIELD backs it — not a flat set — which is a bigger change
+    than fits this round's "small" framing, and a regression on the real
+    corpus is a harder failure than the coincidence it would have closed.
+    Left as Phase 2b built it.
+    """
     nums: set[str] = set()
     if material.rating is not None:
         nums.add(_normalize_number(str(material.rating)))

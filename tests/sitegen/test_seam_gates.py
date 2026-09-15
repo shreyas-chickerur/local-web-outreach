@@ -11,6 +11,7 @@ import pytest
 
 from app.core.claims import CLAIM_RE
 from app.site import contractorfacts, provenance
+from app.site import seam_gates as sg
 from app.site.contradiction import contradicts
 from app.site.render import material_from_brief, unsupported
 from app.site.seam_gates import (
@@ -81,6 +82,28 @@ def test_unsupported_sentences_backs_a_credential_via_contractorfacts_not_verbat
     page = '<h3>Licensed &amp; insured</h3>'
     runs = visible_text_runs(page)
     assert unsupported_sentences(runs, material) == []
+
+
+def test_every_fact_label_alone_is_fully_backed_when_its_key_is_corroborated():
+    """Found while fixing gap 1 against the real corpus: two of ten
+    labels ("Financing available" for `financing`, "Workmanship
+    warranty" for `warranty`) only PARTIALLY match their own
+    contractorfacts pattern ("financing"/"warranty" alone -- see
+    contractorfacts.py's own note that a label does not always match its
+    own trigger phrase). Computing every pattern span and merging them
+    by position let the smaller regex span win over the label's own
+    whole-sentence span and left "available"/"Workmanship" as a bogus
+    finding -- caught on hvac-rich's real Financing badge
+    (tools/seam_corpus_check.py, old=0 new=1 before this fix). The exact
+    label, alone, must back itself fully for every fact, not just the
+    ones whose pattern happens to cover the whole label."""
+    for fact in contractorfacts.FACTS:
+        label = contractorfacts.label_for(fact.key)
+        material_facts = frozenset({fact.key})
+        remainder = sg._credential_backed_remainder(label, material_facts)
+        assert sg._is_pure_connective_remainder(remainder), (
+            f"{fact.key!r}'s own label {label!r} left a non-glue remainder: "
+            f"{remainder!r}")
 
 
 def test_unsupported_sentences_runs_unconditionally_even_inside_a_button():
