@@ -33,7 +33,11 @@ import re
 # test over rendered HTML, where an unrelated heading and the next
 # section's can sit a newline apart; requiring the words on one line keeps
 # both readings of "contradiction" the same thing.
-_REVIEW_COUNT_RE = re.compile(
+# Public: Phase 2 Step 3 (app.site.seam_gates) imports both this and
+# `contradicts` to build a real GATE over the rendered page, rather than
+# copying either — and tests/test_no_contradicted_fact_ships.py, which
+# used to carry its own second copy of both, now imports them too.
+REVIEW_COUNT_RE = re.compile(
     r"\b([\d,]{2,})\+?[ \t]*(?:5[- ]star[ \t]+)?reviews?\b", re.IGNORECASE)
 
 # How far a stated count can drift from the corroborated one before it reads
@@ -45,7 +49,7 @@ _ABSOLUTE_FLOOR = 10
 _RELATIVE_TOLERANCE = 0.15
 
 
-def _contradicts(claimed: int, actual: int) -> bool:
+def contradicts(claimed: int, actual: int) -> bool:
     return abs(claimed - actual) > max(_ABSOLUTE_FLOOR,
                                        round(actual * _RELATIVE_TOLERANCE))
 
@@ -59,10 +63,10 @@ def reconcile(text: str | None, reviews: int | None) -> str | None:
     sentences = re.split(r"(?<=[.!?])\s+", text)
     kept = []
     for sentence in sentences:
-        match = _REVIEW_COUNT_RE.search(sentence)
+        match = REVIEW_COUNT_RE.search(sentence)
         if match:
             claimed = int(match.group(1).replace(",", ""))
-            if _contradicts(claimed, reviews):
+            if contradicts(claimed, reviews):
                 continue
         kept.append(sentence)
     return " ".join(kept)

@@ -29,20 +29,19 @@ from pathlib import Path
 
 import pytest
 
+from app.site.contradiction import REVIEW_COUNT_RE as _REVIEW_COUNT_RE
+from app.site.contradiction import contradicts as _contradicts
+
 pytestmark = pytest.mark.unit
 
 FIXTURES = Path("tests/fixtures/briefs")
 
-# Same expression and tolerance as `app.site.contradiction` — this test
-# reads the rendered PAGE, the module reads free text before it is rendered,
+# Imported, not copied (Phase 2, Step 3): this test reads the rendered
+# PAGE, `app.site.contradiction` reads free text before it is rendered,
 # and the two must agree on what counts as a contradiction or this test
-# could pass for a reason unrelated to whether the fix actually works.
-_REVIEW_COUNT_RE = re.compile(
-    r"\b([\d,]{2,})\+?[ \t]*(?:5[- ]star[ \t]+)?reviews?\b", re.IGNORECASE)
-
-
-def _contradicts(claimed: int, actual: int) -> bool:
-    return abs(claimed - actual) > max(10, round(actual * 0.15))
+# could pass for a reason unrelated to whether the fix actually works —
+# a second copy of the same expression and tolerance could drift from
+# the real one silently. This file used to carry that second copy.
 
 
 def test_no_fixture_states_a_review_count_that_contradicts_the_corroborated_one():

@@ -39,7 +39,7 @@ _PROSE_RE = re.compile(
     re.S)
 
 _TAG_RE = re.compile(r"<[^>]+>")
-_SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
+SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
 
 
 def _prose_sentences(page: str) -> list[str]:
@@ -51,11 +51,11 @@ def _prose_sentences(page: str) -> list[str]:
         text = html.unescape(_TAG_RE.sub(" ", inner or "")).strip()
         if not text:
             continue
-        sentences.extend(s.strip() for s in _SENTENCE_RE.split(text) if s.strip())
+        sentences.extend(s.strip() for s in SENTENCE_RE.split(text) if s.strip())
     return sentences
 
 
-def _own_sentences(material) -> str:
+def own_words(material) -> str:
     """Every field a sentence of prose could legitimately have come from,
     as one normalised blob for a substring check.
 
@@ -85,7 +85,7 @@ def unexplained_sentences(page: str, material) -> list[str]:
     `trim_to_sentence`) — stripped before the substring check, since the
     ellipsis itself is never in the source text.
     """
-    own_words = _own_sentences(material)
+    own = own_words(material)
     found: list[str] = []
     seen: set[str] = set()
     for sentence in _prose_sentences(page):
@@ -93,7 +93,7 @@ def unexplained_sentences(page: str, material) -> list[str]:
         if normalised in GENERIC_COPY:
             continue
         bare = normalised.rstrip("…").strip().lower()
-        if bare and bare in own_words:
+        if bare and bare in own:
             continue
         if normalised not in seen:
             seen.add(normalised)

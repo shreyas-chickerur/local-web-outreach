@@ -36,6 +36,22 @@ def test_a_bundled_page_is_exactly_the_case_this_exists_for():
 
 # ------------------------------ visible_text_runs -------------------------- #
 
+def test_head_and_title_are_never_visible_text():
+    """Found running the ported gates against the real seam fixtures:
+    a page's own <title> text was leaking into a run tagged with
+    whatever block happened to be open when <body> started, since
+    neither <head> nor <title> is a block tag and neither was being
+    skipped — the exact "found by using it" class of bug this codebase
+    keeps catching."""
+    runs = visible_text_runs(
+        '<html><head><title>Milestone Plumbing — Plano, TX</title>'
+        '<meta name="description" content="also not visible"></head>'
+        '<body><p>Real text.</p></body></html>')
+    texts = [r.text for r in runs]
+    assert texts == ["Real text."]
+    assert not any("Milestone Plumbing" in t for t in texts)
+
+
 def test_script_and_style_contents_are_never_visible_text():
     runs = visible_text_runs(
         '<body><script>var x = "not real content";</script>'

@@ -37,8 +37,13 @@ from html.parser import HTMLParser
 # Never contribute visible text: script/style bodies are code or CSS, not
 # prose, and a bundled page's entire document sometimes lives inside one
 # of these — the exact case `needs_render()` exists to route around, not
-# to accidentally read as text here.
-_SKIP_TAGS = frozenset({"script", "style", "template", "svg", "noscript"})
+# to accidentally read as text here. `head` (so `<title>`, `<meta>`) is
+# never rendered visible content at all, no matter what it contains —
+# found live: a page's own <title> text was leaking into a "visible" run
+# tagged with whatever block happened to be open when <body> started,
+# since neither <head> nor <title> is a block tag and neither was being
+# skipped.
+_SKIP_TAGS = frozenset({"script", "style", "template", "svg", "noscript", "head"})
 
 # Block-level tags start a new run; everything else (span, a, b, em,
 # strong, label, and any tag not listed) is inline and folds into
@@ -97,13 +102,30 @@ class _Walker(HTMLParser):
     def _path(self) -> str:
         return ">".join(self._stack) or "body"
 
+    def _pop_through(self, tag: str) -> None:
+        if self._stack and self._stack[-1] == tag:
+            self._stack.pop()
+        elif tag in self._stack:
+            while self._stack and self._stack[-1] != tag:
+                self._stack.pop()
+            if self._stack:
+                self._stack.pop()
+
     def handle_starttag(self, tag: str, attrs: list) -> None:
+        # Void elements are never balanced by a later handle_endtag call
+        # (no </meta>, no </br> in real markup) — counting them toward
+        # skip depth or the element stack would never be undone. Checked
+        # BEFORE the skip-depth branch, or a void tag inside a skipped
+        # region (<meta> inside <head>) inflates skip_depth forever,
+        # since no matching close ever arrives to bring it back down —
+        # found running this against a real page with a <head><meta>.
+        if tag in _VOID_TAGS:
+            if not self._skip_depth:
+                self._buf.append(" ")
+            return
         if self._skip_depth or tag in _SKIP_TAGS:
             self._skip_depth += 1
             self._stack.append(tag)
-            return
-        if tag in _VOID_TAGS:
-            self._buf.append(" ")
             return
         if tag in _BLOCK_TAGS:
             self._flush()
@@ -119,23 +141,20 @@ class _Walker(HTMLParser):
 
     def handle_endtag(self, tag: str) -> None:
         if self._skip_depth:
-            if tag in self._stack:
-                while self._stack and self._stack[-1] != tag:
-                    self._stack.pop()
-                if self._stack:
-                    self._stack.pop()
-            if tag in _SKIP_TAGS:
-                self._skip_depth = max(0, self._skip_depth - 1)
+            # Symmetric with handle_starttag: every non-void open while
+            # skipping counts one, every close counts one back down,
+            # regardless of the tag's own name — not just the ones
+            # literally named in _SKIP_TAGS, or a <title> closing inside
+            # <head> never brings the depth back down and every run for
+            # the rest of the document is silently swallowed as "skip".
+            self._skip_depth -= 1
+            self._pop_through(tag)
             return
         if tag in _BLOCK_TAGS:
             self._flush()
         else:
             self._buf.append(" ")
-        if tag in self._stack:
-            while self._stack and self._stack[-1] != tag:
-                self._stack.pop()
-            if self._stack:
-                self._stack.pop()
+        self._pop_through(tag)
         if tag in _BLOCK_TAGS:
             self._buf_tag = self._stack[-1] if self._stack else "body"
             self._buf_path = self._path()
