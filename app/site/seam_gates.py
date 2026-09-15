@@ -171,6 +171,28 @@ def _material_contractor_facts(material) -> frozenset[str]:
     return frozenset(contractorfacts.found(text))
 
 
+# The `credentials` SECTION's own printed label ("Manufacturer
+# certified", "Free estimate", "Service area"...) does not always match
+# the very pattern that detected the fact in the business's own words —
+# `contractorfacts.py`'s patterns are tuned to a business's real
+# phrasing ("certified installer", "financing"), not to the device's own
+# fixed label text. Found running Step 2's fix against the real corpus:
+# "Manufacturer certified" (the label) matches none of the
+# manufacturer_badge patterns, so contractorfacts.found() on the
+# RENDERED label came back empty even on fixtures where the fact is
+# genuinely, separately corroborated. A label that IS one of these exact
+# strings is checked by KEY instead of by re-matching its own pattern.
+_LABEL_TO_KEY = {contractorfacts.label_for(fact.key): fact.key
+                 for fact in contractorfacts.FACTS}
+
+
+def _credential_backed(sentence: str, material_facts: frozenset[str]) -> bool:
+    if set(contractorfacts.found(sentence)) & material_facts:
+        return True
+    key = _LABEL_TO_KEY.get(sentence.strip())
+    return key is not None and key in material_facts
+
+
 def unsupported_sentences(runs: list[VisibleRun], material) -> list[str]:
     """Port of `render.unsupported()`: a CLAIM_RE match only counts if
     the SENTENCE it appears in is itself verbatim-or-prefix-cut source,
@@ -198,7 +220,7 @@ def unsupported_sentences(runs: list[VisibleRun], material) -> list[str]:
             bare = _bare(sentence)
             if bare and bare in own:
                 continue
-            if set(contractorfacts.found(sentence)) & material_facts:
+            if _credential_backed(sentence, material_facts):
                 # "Licensed & insured" built by contractorfacts.py's own
                 # credentials section passes because the corroborating
                 # FACT is present in their own material (checked here,
@@ -213,14 +235,129 @@ def unsupported_sentences(runs: list[VisibleRun], material) -> list[str]:
     return found
 
 
+# Four more shapes found running Step 2's fix against the real
+# 19-fixture corpus (documented in .reviews/phase-2b-seam.md's
+# "boilerplate list" section) — none of them a model-authored sentence,
+# all of them structural output the rendered page carries regardless of
+# which business it names:
+#
+# A run of star glyphs (a rating widget drawn as repeated characters,
+# not text) has no claim in it to explain.
+_STAR_ONLY_RE = re.compile(r"^[★☆\s]+$")
+
+# A bare 1-2 digit run (a <span class="idx"> carousel/list index sitting
+# beside a heading) is a structural position label, not a number CLAIM
+# about the business — the same reasoning "24/7" already gets in
+# unbacked_numbers, and the round's own worked example (barbecue-rich's
+# "03" beside "Turkey Sandwich review") is exactly this shape colliding
+# with a DIFFERENT check (the review-count regex) for the same reason.
+_STRUCTURAL_INDEX_RE = re.compile(r"^\d{1,2}$")
+
+# A merged call-to-action + directions label ("Find us Get directions") —
+# render.py glues a short CTA and a directions label into one run with
+# no intervening punctuation for SENTENCE_RE to split on. Checked by
+# subtraction (remove every known phrase, nothing survives) rather than
+# enumerating every combination, so a CTA this corpus does not happen to
+# pair with "directions" is still recognised.
+_GENERIC_CTA_PHRASES = (
+    "Find us", "Call us", "Book a table", "Book an appointment",
+    "Get a free estimate", "Call to order", "Schedule a consultation",
+    "Get directions", "Directions",
+)
+
+
+def _is_generic_cta_combo(sentence: str) -> bool:
+    remainder = sentence
+    for phrase in sorted(_GENERIC_CTA_PHRASES, key=len, reverse=True):
+        remainder = remainder.replace(phrase, "")
+    return not remainder.strip()
+
+
+# A review's own author name, printed with its source platform
+# ("Jeff Willie · Google") — `material.quotes` carries the bare author
+# name only; the " · Google" is render.py's own attribution suffix, not
+# part of the sourced text, so a literal own-words check never matches
+# the combined string.
+_AUTHOR_PLATFORM_RE = re.compile(r"^(.*?)\s*·\s*\S+$")
+
+
+def _is_quote_author_with_platform(sentence: str, material) -> bool:
+    match = _AUTHOR_PLATFORM_RE.match(sentence)
+    if not match:
+        return False
+    name = match.group(1).strip().lower()
+    if not name:
+        # A review with no stated author renders as just "· Google" --
+        # still the same attribution shape, not a claim.
+        return True
+    return any(str(q.get("author", "")).strip().lower() == name
+              for q in material.quotes)
+
+
+def _is_known_structural_shape(sentence: str, material) -> bool:
+    return (bool(_STAR_ONLY_RE.match(sentence))
+            or bool(_STRUCTURAL_INDEX_RE.match(sentence))
+            or _is_generic_cta_combo(sentence)
+            or _is_quote_author_with_platform(sentence, material))
+
+
+# A footer or stat line combining SEVERAL corroborated fields with
+# render.py's own label/connective words ("Address 9225 Preston Rd,
+# Frisco, TX 75033, USA Phone (972) 377-2046 Instagram Follow along") —
+# every fact-bearing NUMBER in it is unbacked_numbers()'s job,
+# unconditionally, so this only ever has to answer for WORDS. That is
+# the real difference from Phase 2's removed `_is_all_facts_and_
+# boilerplate`: that one exempted the numbers too, silently, which is
+# gap 2 — this one only ever looks at [a-z]+ tokens, and a genuine claim
+# word ("certified", "award-winning") is neither a glue word here nor
+# present in _corroborated_facts, so it still reaches a finding.
+_FOOTER_GLUE_WORDS = frozenset({
+    "address", "phone", "email", "follow", "along", "get", "directions",
+    "instagram", "facebook", "tiktok", "linkedin", "yelp", "twitter", "x",
+    # Review/rating connective words. Phase 2's _BOILERPLATE_WORDS
+    # included these too and it was a real masking risk THERE, because
+    # that mechanism also hid the number beside them (gap 2). Safe here:
+    # unbacked_numbers() checks every number in this same text
+    # unconditionally, regardless of whether the text passes this check,
+    # so "18702" in "18702 Google reviews" is still independently
+    # checked against material.reviews even when the WORDS around it are
+    # recognised as glue.
+    "average", "rating", "stars", "star", "google", "reviews", "review",
+    "from", "across",
+    "mon", "tue", "wed", "thu", "fri", "sat", "sun",
+    "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
+    "am", "pm",
+    # "N dishes on the menu" / "N services offered" -- the counts
+    # themselves are in _corroborated_numbers (len(menu_items)/
+    # len(services)), so these connective words are safe the same way.
+    "dishes", "menu", "services", "offered", "on", "call",
+})
+_WORD_RE = re.compile(r"[a-z]+")
+
+
+def _is_all_facts_and_footer_glue(text: str, material) -> bool:
+    facts_words = frozenset(_WORD_RE.findall(_corroborated_facts(material)))
+    words = _WORD_RE.findall(text.lower())
+    return bool(words) and all(w in _FOOTER_GLUE_WORDS or w in facts_words
+                              for w in words)
+
+
 def unexplained_prose(runs: list[VisibleRun], material) -> list[str]:
     """Port of `provenance.unexplained_sentences()`: every visible
     sentence that is not template chrome (`is_template_chrome` — now
     only nav/label/form and a short `<a>`/`<button>`, Phase 2b's own
     tightened rule), checked the same verbatim-or-prefix-cut way as
-    before.
+    before. Also backed by `_credential_backed` (the same path
+    `unsupported_sentences` uses — a device label like "Manufacturer
+    certified" is not itself a literal source sentence, but IS a fact
+    genuinely present in the material) and `_is_known_structural_shape`
+    (a star-glyph rating, a carousel index, a merged CTA label, a
+    review's own author+platform attribution — all real, all
+    deterministic renderer output, none of them a sentence to trace to
+    a source).
     """
     own = _own(material)
+    material_facts = _material_contractor_facts(material)
     found: list[str] = []
     seen: set[str] = set()
     for run in runs:
@@ -229,8 +366,14 @@ def unexplained_prose(runs: list[VisibleRun], material) -> list[str]:
         for sentence in _sentences_of(run):
             if sentence in provenance.GENERIC_COPY:
                 continue
+            if _is_known_structural_shape(sentence, material):
+                continue
+            if _is_all_facts_and_footer_glue(sentence, material):
+                continue
             bare = _bare(sentence)
             if bare and bare in own:
+                continue
+            if _credential_backed(sentence, material_facts):
                 continue
             if sentence not in seen:
                 seen.add(sentence)
@@ -267,6 +410,15 @@ def _corroborated_numbers(material) -> frozenset[str]:
         nums.add(_normalize_number(str(material.reviews)))
     if material.phone:
         nums.add(re.sub(r"\D", "", material.phone))
+        # A rendered phone number is usually punctuated ("(972) 471-5462"),
+        # which splits it into separate digit runs for _NUMBER_RE -- the
+        # single concatenated string above never matches any of them
+        # individually.
+        nums.update(_normalize_number(n) for n in _NUMBER_RE.findall(material.phone))
+    if material.address:
+        # Street number, suite number, zip code -- every digit run in
+        # their own real address, the same way phone digits already are.
+        nums.update(_normalize_number(n) for n in _NUMBER_RE.findall(material.address))
     for h in material.hours:
         nums.update(_normalize_number(n) for n in _NUMBER_RE.findall(h))
     for item in material.menu_items:
@@ -297,6 +449,13 @@ def unbacked_numbers(runs: list[VisibleRun], material) -> list[str]:
     seen: set[str] = set()
     for run in runs:
         for sentence in _sentences_of(run):
+            if _STRUCTURAL_INDEX_RE.match(sentence):
+                # A bare 1-2 digit run is a carousel/list position label
+                # (<span class="idx">03</span>), not a quantity claim —
+                # same reasoning as "24/7" below, and the round's own
+                # worked example for why a NUMBER beside unrelated text
+                # is not automatically a claim about the business.
+                continue
             bare = _bare(sentence)
             if bare and bare in own:
                 continue

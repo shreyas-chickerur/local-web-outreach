@@ -22,11 +22,31 @@ from __future__ import annotations
 import html
 import re
 
-# Small and boring on purpose (BRIEF §5) — nothing in this codebase
-# currently authors a prose sentence outside the five sourced spots below,
-# so this is empty rather than populated with something invented to look
-# used. A real generic phrase belongs here the day one actually ships.
-GENERIC_COPY: frozenset[str] = frozenset()
+# Small and boring on purpose (BRIEF §5). Was empty until Phase 2b: this
+# gate (via app.site.seam_gates, which reads every visible sentence, not
+# only the five CSS-class prose spots below) is the first reader that
+# ever saw these — every one of render.py's own deterministic section
+# headings and call-to-action labels, none of them a claim about the
+# business, none of them model-authored, all of them the same fixed
+# string for a given spec every time. Harvested empirically by running
+# the ported gate against the real 19-fixture corpus and reading what
+# repeated across unrelated businesses (a real, business-specific
+# sentence never does that) — see .reviews/phase-2b-seam.md. Safe for
+# the OLD gate too: it never reads any of these (none sits in one of the
+# five prose classes below), so populating this list changes nothing
+# there.
+GENERIC_COPY: frozenset[str] = frozenset({
+    "Gallery", "Have a look around", "Reviews", "On offer",
+    "What we cook and serve", "On the menu", "What we serve",
+    "What we offer", "Hours", "Opening hours", "Visit",
+    "Come and see us", "Find us", "Get in touch", "Reach us", "Call us",
+    "What we handle", "Credentials", "What to expect", "Recent jobs",
+    "What we are about", "How we can help", "Our story", "Our office",
+    "Where we work", "Practice areas", "Schedule a consultation",
+    "Ways we can help", "Treatments", "Services", "Book an appointment",
+    "Book a table", "Call to order", "View Menu", "Recognition",
+    "Our work",
+})
 
 # One pattern per prose spot, keyed to the exact class `render.py` gives
 # it. `re.S` so a sentence spanning a line break in the emitted HTML still
