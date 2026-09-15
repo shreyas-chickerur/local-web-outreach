@@ -57,9 +57,13 @@ def test_gap_1_a_corroborated_credential_no_longer_launders_the_whole_sentence()
 def test_gap_2_a_true_lower_bound_review_count_is_not_a_contradiction():
     """roofer-rich's own material says '100+ Google reviews' and '100+
     verified reviews'; the corroborated count is 136, which satisfies both
-    floors. Neither sentence contradicts the corroborated count."""
-    assert not contradicts(100, 136), (
+    floors. A floor claim (`lower_bound=True`) contradicts only when it
+    sits ABOVE the corroborated count -- 100 does not."""
+    assert not contradicts(100, 136, lower_bound=True), (
         "'100+' now reads as an exact 100, not a floor 136 satisfies")
+    assert contradicts(20000, 6203, lower_bound=True), (
+        "'20,000+' against a corroborated 6,203 should still contradict"
+    )
 
 
 def test_gap_2_the_shipped_roofer_rich_page_still_carries_its_real_review_count():

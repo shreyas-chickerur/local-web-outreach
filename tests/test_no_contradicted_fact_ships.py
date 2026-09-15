@@ -69,8 +69,9 @@ def test_no_fixture_states_a_review_count_that_contradicts_the_corroborated_one(
                 continue
             text = re.sub(r"<[^>]+>", " ", page)
             for match in _REVIEW_COUNT_RE.finditer(text):
-                claimed = int(match.group(1).replace(",", ""))
-                if _contradicts(claimed, material.reviews):
+                claimed = int(match.group("num").replace(",", ""))
+                lower_bound = bool(match.group("bound") or match.group("plus"))
+                if _contradicts(claimed, material.reviews, lower_bound):
                     offenders.setdefault(path.stem, []).append(match.group(0))
 
     assert not offenders, (
@@ -100,3 +101,47 @@ def test_the_hvac_fixture_specifically_no_longer_contradicts_itself():
     assert "20,000" not in page, (
         "the contradicting claim from their own about text is still on "
         "the page")
+
+
+# Phase 2c (`.reviews/NEXT-ROUND.md`): Phase 2b's own widened
+# `REVIEW_COUNT_RE` read "N+" as an exact N, so a true FLOOR claim
+# ("100+ Google reviews", corroborated 136) was dropped as if it
+# contradicted the very count it is consistent with. Both directions,
+# plus the case that motivated the widening in the first place, held
+# together so a future change cannot fix one and reopen the other.
+def test_a_lower_bound_review_count_below_the_corroborated_value_is_kept():
+    assert not _contradicts(100, 136, lower_bound=True)
+
+
+def test_a_lower_bound_review_count_far_above_the_corroborated_value_is_dropped():
+    assert _contradicts(20000, 6203, lower_bound=True)
+
+
+def test_over_n_reviews_still_drops_on_the_real_hvac_fixture():
+    """The exact real-corpus case `contradicts()` was written for: hvac's
+    own about text says "over 20,000 5 star reviews" against a
+    corroborated 6,203 -- "over" is a floor claim too, and 20,000 sits
+    far enough above 6,203 that it still contradicts."""
+    import json as _json
+    from pathlib import Path as _Path
+
+    from app.site.contradiction import reconcile
+
+    brief = _json.loads(_Path("tests/fixtures/briefs/hvac.json").read_text())
+    about = brief["published"]["about"]
+    assert "over 20,000 5 star reviews" in about
+    assert "20,000" not in (reconcile(about, 6203) or "")
+
+
+def test_review_count_re_reads_n_plus_over_and_more_than_as_a_lower_bound():
+    for text in ("100+ Google reviews", "over 100 Google reviews",
+                "more than 100 Google reviews"):
+        match = _REVIEW_COUNT_RE.search(text)
+        assert match, text
+        assert match.group("num") == "100"
+        assert match.group("bound") or match.group("plus"), (
+            f"{text!r} should read as a lower-bound claim")
+    match = _REVIEW_COUNT_RE.search("100 Google reviews")
+    assert match and not (match.group("bound") or match.group("plus")), (
+        "a bare count with no '+'/'over'/'more than' is an exact claim, "
+        "not a floor")

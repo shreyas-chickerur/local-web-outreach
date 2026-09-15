@@ -56,8 +56,15 @@ _REVIEW_WORD = r"google|yelp|facebook|verified|genuine|happy|satisfied|five[- ]s
 # `contradicts` to build a real GATE over the rendered page, rather than
 # copying either — and tests/test_no_contradicted_fact_ships.py, which
 # used to carry its own second copy of both, now imports them too.
+#
+# Phase 2c's own finding (`.reviews/NEXT-ROUND.md`): "N+" and "over N" /
+# "more than N" are a LOWER BOUND, not an exact count — "100+ Google
+# reviews" is a true statement about a business with 136. Named groups so
+# a lower-bound reading (the `bound` prefix, or a trailing `+`) is visible
+# to every caller without re-deriving it from the matched text.
 REVIEW_COUNT_RE = re.compile(
-    rf"\b([\d,]{{2,}})\+?[ \t]*(?:(?:{_REVIEW_WORD})[ \t]+){{0,2}}reviews?\b",
+    rf"\b(?:(?P<bound>over|more than)\s+)?(?P<num>[\d,]{{2,}})(?P<plus>\+)?"
+    rf"[ \t]*(?:(?:{_REVIEW_WORD})[ \t]+){{0,2}}reviews?\b",
     re.IGNORECASE)
 
 # How far a stated count can drift from the corroborated one before it reads
@@ -69,9 +76,17 @@ _ABSOLUTE_FLOOR = 10
 _RELATIVE_TOLERANCE = 0.15
 
 
-def contradicts(claimed: int, actual: int) -> bool:
-    return abs(claimed - actual) > max(_ABSOLUTE_FLOOR,
-                                       round(actual * _RELATIVE_TOLERANCE))
+def contradicts(claimed: int, actual: int, lower_bound: bool = False) -> bool:
+    """`lower_bound` is True for an "N+"/"over N"/"more than N" claim — a
+    floor, satisfied by any real count at or above it. It contradicts only
+    when the claimed floor sits ABOVE the corroborated count by more than
+    tolerance ("100+" against 136 is true; "20,000+" against 6,203 is
+    not) — never when the real count exceeds the stated floor, which is
+    exactly what a floor claim allows."""
+    tolerance = max(_ABSOLUTE_FLOOR, round(actual * _RELATIVE_TOLERANCE))
+    if lower_bound:
+        return claimed - actual > tolerance
+    return abs(claimed - actual) > tolerance
 
 
 def reconcile(text: str | None, reviews: int | None) -> str | None:
@@ -85,8 +100,9 @@ def reconcile(text: str | None, reviews: int | None) -> str | None:
     for sentence in sentences:
         match = REVIEW_COUNT_RE.search(sentence)
         if match:
-            claimed = int(match.group(1).replace(",", ""))
-            if contradicts(claimed, reviews):
+            claimed = int(match.group("num").replace(",", ""))
+            lower_bound = bool(match.group("bound") or match.group("plus"))
+            if contradicts(claimed, reviews, lower_bound):
                 continue
         kept.append(sentence)
     return " ".join(kept)

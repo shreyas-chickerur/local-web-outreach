@@ -186,11 +186,57 @@ _LABEL_TO_KEY = {contractorfacts.label_for(fact.key): fact.key
                  for fact in contractorfacts.FACTS}
 
 
-def _credential_backed(sentence: str, material_facts: frozenset[str]) -> bool:
-    if set(contractorfacts.found(sentence)) & material_facts:
-        return True
-    key = _LABEL_TO_KEY.get(sentence.strip())
-    return key is not None and key in material_facts
+# Phase 2c's own finding (`.reviews/NEXT-ROUND.md`): `_credential_backed`
+# used to return a bool and the two callers below `continue`d past the
+# WHOLE sentence on True. hvac's own material corroborates
+# `licensed_insured` — but "Licensed and insured, award-winning and voted
+# best in Plano." is one sentence, and the old behaviour let the real
+# credential vouch for the two invented superlatives riding along with it.
+# The bag-of-words laundering gap Phase 2b closed once (a word anywhere in
+# their material excusing a whole sentence), reopened one level up (a FACT
+# anywhere in the sentence excusing the whole sentence). Fixed the same way:
+# narrow what gets exempted to exactly the matched span, never the sentence
+# around it, and let every other check run on what is left.
+_CONNECTIVE_ONLY_RE = re.compile(r"^[\s,&]*(?:and[\s,&]*)*$", re.IGNORECASE)
+
+
+def _credential_backed_remainder(sentence: str, material_facts: frozenset[str]) -> str:
+    """`sentence` with every span a corroborated credential accounts for
+    removed — a `contractorfacts` pattern match for a fact in
+    `material_facts`, and the device's own exact label
+    (`_LABEL_TO_KEY`) when the whole sentence IS that label. Only ever
+    removes what is actually backed; a fact this material does not
+    corroborate leaves its span untouched, so an uncorroborated
+    credential word still reaches CLAIM_RE / the provenance check same
+    as before."""
+    spans: list[tuple[int, int]] = []
+    for fact in contractorfacts.FACTS:
+        if fact.key not in material_facts:
+            continue
+        spans.extend(m.span() for m in fact.pattern.finditer(sentence))
+    stripped = sentence.strip()
+    key = _LABEL_TO_KEY.get(stripped)
+    if key is not None and key in material_facts and stripped:
+        start = sentence.find(stripped)
+        spans.append((start, start + len(stripped)))
+    if not spans:
+        return sentence
+    parts: list[str] = []
+    cursor = 0
+    for start, end in sorted(spans):
+        if start < cursor:
+            continue
+        parts.append(sentence[cursor:start])
+        cursor = end
+    parts.append(sentence[cursor:])
+    return "".join(parts)
+
+
+def _is_pure_connective_remainder(remainder: str) -> bool:
+    """"Licensed & insured" backs both halves of itself, via two separate
+    contractorfacts spans for the same fact -- what is left after removing
+    both is just the "&" that joined them. Nothing left to explain."""
+    return bool(_CONNECTIVE_ONLY_RE.match(remainder))
 
 
 def unsupported_sentences(runs: list[VisibleRun], material) -> list[str]:
@@ -210,6 +256,13 @@ def unsupported_sentences(runs: list[VisibleRun], material) -> list[str]:
     threadbare-foreign.html`) still came back clean, because every
     credential badge was short enough, or inside a <button>, to skip
     this check entirely regardless of whether anything backed it.
+
+    Phase 2c's own finding: a backed credential exempts only its own
+    matched span (`_credential_backed_remainder`), never the rest of the
+    sentence it sits in — CLAIM_RE runs on what is left, so "Licensed and
+    insured, award-winning and voted best in Plano." still surfaces the
+    two invented claims even though "licensed ... insured" is genuinely
+    corroborated.
     """
     own = _own(material)
     material_facts = _material_contractor_facts(material)
@@ -220,14 +273,8 @@ def unsupported_sentences(runs: list[VisibleRun], material) -> list[str]:
             bare = _bare(sentence)
             if bare and bare in own:
                 continue
-            if _credential_backed(sentence, material_facts):
-                # "Licensed & insured" built by contractorfacts.py's own
-                # credentials section passes because the corroborating
-                # FACT is present in their own material (checked here,
-                # explicitly) — never because the run happened to be
-                # short or sat inside a <button>.
-                continue
-            for match in CLAIM_RE.finditer(sentence):
+            remainder = _credential_backed_remainder(sentence, material_facts)
+            for match in CLAIM_RE.finditer(remainder):
                 claim = match.group(0)
                 if claim.lower() not in seen:
                     seen.add(claim.lower())
@@ -347,7 +394,7 @@ def unexplained_prose(runs: list[VisibleRun], material) -> list[str]:
     sentence that is not template chrome (`is_template_chrome` — now
     only nav/label/form and a short `<a>`/`<button>`, Phase 2b's own
     tightened rule), checked the same verbatim-or-prefix-cut way as
-    before. Also backed by `_credential_backed` (the same path
+    before. Also backed by `_credential_backed_remainder` (the same path
     `unsupported_sentences` uses — a device label like "Manufacturer
     certified" is not itself a literal source sentence, but IS a fact
     genuinely present in the material) and `_is_known_structural_shape`
@@ -355,6 +402,13 @@ def unexplained_prose(runs: list[VisibleRun], material) -> list[str]:
     review's own author+platform attribution — all real, all
     deterministic renderer output, none of them a sentence to trace to
     a source).
+
+    Phase 2c's own finding: a credential backs only its own matched span,
+    same as `unsupported_sentences` — a sentence is exempted here only
+    when what is left after removing every backed span is nothing but
+    connective glue (`_is_pure_connective_remainder`); a real remaining
+    claim keeps the WHOLE original sentence in `found`, since this check
+    (unlike CLAIM_RE) reports full sentences, not fragments.
     """
     own = _own(material)
     material_facts = _material_contractor_facts(material)
@@ -373,7 +427,8 @@ def unexplained_prose(runs: list[VisibleRun], material) -> list[str]:
             bare = _bare(sentence)
             if bare and bare in own:
                 continue
-            if _credential_backed(sentence, material_facts):
+            remainder = _credential_backed_remainder(sentence, material_facts)
+            if _is_pure_connective_remainder(remainder):
                 continue
             if sentence not in seen:
                 seen.add(sentence)
@@ -487,8 +542,10 @@ def contradicted_review_counts(runs: list[VisibleRun], material) -> list[str]:
             match = contradiction.REVIEW_COUNT_RE.search(sentence)
             if not match:
                 continue
-            claimed = int(match.group(1).replace(",", ""))
-            if contradiction.contradicts(claimed, material.reviews) and sentence not in seen:
+            claimed = int(match.group("num").replace(",", ""))
+            lower_bound = bool(match.group("bound") or match.group("plus"))
+            if (contradiction.contradicts(claimed, material.reviews, lower_bound)
+                    and sentence not in seen):
                 seen.add(sentence)
                 found.append(sentence)
     return found
