@@ -1,20 +1,26 @@
-"""Phase 2, Step 3: the existing content gates, ported onto `visible.py`.
+"""Phase 2/2b: the existing content gates, ported onto `visible.py`.
 
-Three gates, unchanged in PURPOSE from what they replace, changed in
+Four gates, unchanged in PURPOSE from what they replace, changed in
 WHAT THEY READ — a rendered page's visible text runs
-(`app.site.visible.visible_text_runs`), never source markup — and, for
-`unsupported_sentences`, changed in HOW they decide a claim is backed:
-sentence-level, not bag-of-words. See `.reviews/phase-2-seam.md` for the
-gap each change closes and the planted-fabrication corpus
-(`tests/fixtures/seam/`) that pins it.
+(`app.site.visible.visible_text_runs`), never source markup — and in
+HOW they decide something is backed: sentence-level, not bag-of-words,
+and never exempted from a check just because a run is short. See
+`.reviews/phase-2-seam.md` and `.reviews/phase-2b-seam.md` for the gaps
+each change closes and the planted-fabrication corpus
+(`tests/fixtures/seam/`) that pins them.
 
-`gate()` is the ported `pipeline._gate()`: the same two checks, sentence-
-aware now, plus a third that never existed as a gate at all — the
-review-count contradiction, imported from `app.site.contradiction`
-rather than reimplemented (that module's own `REVIEW_COUNT_RE` and
-`contradicts` are exactly what `contradiction.reconcile()` already
-uses on OUR OWN pre-render text; a rendered-page gate needs the same
-expression and tolerance, not a second copy that could drift from it).
+Phase 2b's own finding: Phase 2's `is_template_chrome()` did two jobs
+at once — deciding what to exempt from PROVENANCE (a full sentence
+check) and deciding what to exempt from the CLAIMS check (`CLAIM_RE`)
+— and a short run (a badge, a stat tile, a `<button>`) got both for
+free, regardless of whether anything corroborated it. `gate()` is the
+ported `pipeline._gate()`: `unsupported_sentences()` and
+`unexplained_prose()` (the original two, sentence-aware and now
+correctly separated), `unbacked_numbers()` (new — no gate before this
+round ever checked a number at all), and `contradicted_review_counts()`
+(new in Phase 2 — imported from `app.site.contradiction` rather than
+reimplemented, so the pre-render transform and this rendered-page gate
+cannot drift apart).
 """
 
 from __future__ import annotations
@@ -22,86 +28,67 @@ from __future__ import annotations
 import re
 
 from app.core.claims import CLAIM_RE
-from app.site import contradiction, provenance
+from app.site import contractorfacts, contradiction, provenance
 from app.site.visible import VisibleRun
 
-# The closed rule Step 3 asks for, in place of provenance.py's old five
-# CSS classes: what counts as template chrome, by TAG and SHAPE, not by
-# a class list a foreign page will never share.
+# Chrome for PROVENANCE (unexplained_prose) only — Phase 2b narrows this
+# from Phase 2's version, which also exempted any heading of <=3 words
+# and any run of <=4 words with no terminal punctuation. Both of those
+# turned out to double as an exemption from the CLAIMS check too (see
+# unsupported_sentences below, which no longer calls this at all) and
+# a stat tile / badge / short button is exactly the shape a planted
+# short-form claim (Phase 2b class 7) takes. Left standing because it is
+# still correct for what it actually says: navigation, a form, and a
+# label are never a sentence a business wrote for this page to read as
+# prose, and a genuinely short link/button text ("Home", "Read more")
+# is a control label, not an assertion — a LONGER one is prose, and Step
+# 2's own worked example (threadbare's <button>, nine words) is exactly
+# why the length limit stays at three, not "everything in <button>".
+_CHROME_TAGS = frozenset({"nav", "label", "form"})
+_SHORT_CHROME_TAGS = frozenset({"a", "button"})
+_SHORT_CHROME_WORD_LIMIT = 3
+
+# Phase 2's `_BOILERPLATE_WORDS` / `_is_all_facts_and_boilerplate()` is
+# gone outright, not narrowed — the mechanism itself (exempt a run whose
+# words are all "safe" connectives) is what let gap 2 through, since it
+# scanned only `[a-z]+` and could never see a number at all. Numbers are
+# now `unbacked_numbers()`'s job, unconditionally; text is chrome only by
+# the tag rule above. Audited on the way out, per Step 2's own
+# instruction, one line per entry:
 #
-# - nav/button/a/label/form: never a sentence a business wrote for this
-#   page to read as prose — navigation, a control, a form field.
-# - a heading of three words or fewer: a section title ("Our Services"),
-#   not an assertion.
-# - four words or fewer with no sentence-ending punctuation: a single
-#   field value — a price, a phone number, a bare stat ("15,000+",
-#   "$99", "6203") — never "selected sentences" (BRIEF §5's own phrase
-#   for what this file is scoped to, carried over from the five-class
-#   version this replaces).
-_CHROME_TAGS = frozenset({"nav", "button", "a", "label", "form"})
-_HEADING_TAGS = frozenset({"h1", "h2", "h3", "h4", "h5", "h6"})
-_TERMINAL_PUNCTUATION_RE = re.compile(r"[.!?]")
+# DELETED, and were the actual masking risk (directly enabled gap 2 —
+# each one is a word that sits right next to the number in "N average
+# rating from M [word] reviews", making the whole phrase read as "safe"
+# connective text with the fabricated number invisible inside it):
+#   average, rating, stars, star, from, across, google, reviews, review
+#
+# DELETED, but were not themselves adjacent to a claim or a number (no
+# masking incident traces to these — removed anyway because the whole
+# mechanism is gone, not because any one of them was independently
+# risky):
+#   follow, along, get, directions, direction, call, book, order,
+#   estimate, free, written, clear, table, to, a, an, the, and, for, on,
+#   off, offer, what, we, cook, serve, am, pm, mon, tue, wed, thu, fri,
+#   sat, sun, monday, tuesday, wednesday, thursday, friday, saturday,
+#   sunday, address, phone, email, dishes, menu, instagram, facebook,
+#   tiktok, linkedin, yelp, twitter, x
+#
+# "dishes"/"menu" (the "N dishes on the menu" stat) deserve their own
+# note: masking WAS possible here too, in principle, the same shape as
+# the review-count case — but `_corroborated_numbers()` below adds
+# `len(material.menu_items)` explicitly, so `unbacked_numbers()` now
+# checks that count on its own regardless of what surrounds it.
 
 
-# Boilerplate connective words a rendered stat tile, footer, or CTA is
-# built from regardless of which business it names — "4.6 average
-# rating", "Get a free estimate", "Follow along", "Mon - Fri: 8:00am to
-# 6:00pm". None of these ASSERT anything about the business on their
-# own; every fact-bearing word beside them (the number, the address,
-# the platform name) already has to clear `_corroborated_facts`
-# separately. A closed list, not a heuristic guess: every entry here
-# was found by running this gate against the real 19-fixture corpus
-# and reading what was left over once every genuine corroborated field
-# value was already accounted for.
-_BOILERPLATE_WORDS = frozenset({
-    "average", "rating", "stars", "star", "from", "across", "google",
-    "reviews", "review", "follow", "along", "get", "directions",
-    "direction", "call", "book", "order", "estimate", "free", "written",
-    "clear", "table", "to", "a", "an", "the", "and", "for", "on", "off",
-    "offer", "what", "we", "cook", "serve", "am", "pm",
-    "mon", "tue", "wed", "thu", "fri", "sat", "sun", "monday", "tuesday",
-    "wednesday", "thursday", "friday", "saturday", "sunday",
-    "address", "phone", "email", "dishes", "menu",
-    "instagram", "facebook", "tiktok", "linkedin", "yelp", "twitter", "x",
-})
-_WORD_RE = re.compile(r"[a-z]+")
-
-
-def _is_all_facts_and_boilerplate(text: str, material) -> bool:
-    """True if nothing in `text` is left unaccounted for once every
-    digit/punctuation, every corroborated field value, and every known
-    boilerplate connective word is set aside — a stat tile or a footer
-    line built entirely out of real facts and glue, however they got
-    merged into one run, is not "unexplained": there is no free-form
-    assertion left inside it to explain."""
-    facts = _corroborated_facts(material)
-    remainder = text.lower()
-    for value in sorted((v for v in re.split(r"\s{2,}|(?<=\S)(?=\d)", facts) if v),
-                        key=len, reverse=True):
-        remainder = remainder.replace(value, " ")
-    for word in _WORD_RE.findall(remainder):
-        if word not in _BOILERPLATE_WORDS and word not in facts:
-            return False
-    return True
-
-
-def is_template_chrome(run: VisibleRun, material=None) -> bool:
-    """The closed rule. A function, not a table, so it is testable on
-    its own and every caller applies exactly the same one.
-
-    `material`, when given, additionally excludes a run built entirely
-    out of corroborated field values and boilerplate connectives (a
-    merged stat tile, an address/hours footer) regardless of its own
-    length or punctuation — see `_is_all_facts_and_boilerplate`.
-    """
+def is_template_chrome(run: VisibleRun) -> bool:
+    """The closed rule for PROVENANCE only. Never consulted by
+    unsupported_sentences() or unbacked_numbers() — a claim or a number
+    is backed by evidence, never by which tag it happens to sit in."""
     if run.tag in _CHROME_TAGS:
         return True
-    words = run.text.split()
-    if run.tag in _HEADING_TAGS and len(words) <= 3:
-        return True
-    if len(words) <= 4 and not _TERMINAL_PUNCTUATION_RE.search(run.text):
-        return True
-    return material is not None and _is_all_facts_and_boilerplate(run.text, material)
+    if run.tag in _SHORT_CHROME_TAGS:
+        return len(run.text.split()) <= _SHORT_CHROME_WORD_LIMIT
+    return False
 
 
 def _sentences_of(run: VisibleRun) -> list[str]:
@@ -115,10 +102,7 @@ def _sentences_of(run: VisibleRun) -> list[str]:
 # entities are already decoded into real curly-quote characters sitting
 # directly in the text (`“I recently had…”`), and a trailing ellipsis a
 # truncated quote ends with can itself be followed by a closing quote
-# mark (`…”`) rather than being the very last character — found running
-# this against the real 19-fixture corpus: every quoted testimonial on
-# every fixture came back as a "new" false-positive finding purely
-# because of this, not because the quote itself was unsupported.
+# mark (`…”`) rather than being the very last character.
 _WRAPPING_PUNCTUATION = "\"'“”‘’…"
 
 
@@ -131,8 +115,8 @@ def _own(material) -> str:
     `provenance.own_words()`'s free-text fields, plus every corroborated
     structured field and scraped heading/entry `_corroborated_facts`
     covers. One shared corpus for every check in this module, so a
-    heading found verbatim by one function is not somehow re-flagged
-    by another that forgot to widen the same way."""
+    heading found verbatim by one function is not somehow re-flagged by
+    another that forgot to widen the same way."""
     return provenance.own_words(material) + " " + _corroborated_facts(material)
 
 
@@ -176,35 +160,50 @@ def _corroborated_facts(material) -> str:
     return re.sub(r"\s+", " ", " ".join(parts)).strip().lower()
 
 
+def _material_contractor_facts(material) -> frozenset[str]:
+    """Which `contractorfacts` keys the business's OWN words (about +
+    every block's text) actually corroborate — the same source
+    `app.site.contractorfacts.found()` is already trusted against
+    elsewhere in this codebase (the `credentials` section builder),
+    reused here rather than a second read of the same fields."""
+    text = " ".join([material.about or ""]
+                    + [str(b.get("text", "")) for b in material.blocks])
+    return frozenset(contractorfacts.found(text))
+
+
 def unsupported_sentences(runs: list[VisibleRun], material) -> list[str]:
     """Port of `render.unsupported()`: a CLAIM_RE match only counts if
-    the SENTENCE it appears in is itself verbatim-or-prefix-cut source —
-    not merely a claim PHRASE appearing anywhere in the material, which
+    the SENTENCE it appears in is itself verbatim-or-prefix-cut source,
+    OR the claim is a credential `contractorfacts.found()` also finds
+    in the business's own material (`_material_contractor_facts`) — not
+    merely a claim PHRASE appearing anywhere in the material, which
     lets an unrelated word (a customer review's incidental "certified
     technicians") launder an unrelated, uncorroborated sentence built by
-    whoever wrote the page. See tests/fixtures/seam/*-foreign.manifest.json
-    class 2 for the exact planted case this closes.
+    whoever wrote the page.
+
+    Runs UNCONDITIONALLY — no chrome exemption. Phase 2b's own finding:
+    exempting short runs and everything in <button> here (Phase 2's
+    version) reopened the credential invariant outright — a page with
+    NO corroborating material at all (`tests/fixtures/seam/
+    threadbare-foreign.html`) still came back clean, because every
+    credential badge was short enough, or inside a <button>, to skip
+    this check entirely regardless of whether anything backed it.
     """
     own = _own(material)
+    material_facts = _material_contractor_facts(material)
     found: list[str] = []
     seen: set[str] = set()
     for run in runs:
-        if is_template_chrome(run, material):
-            # A badge assembled from already-corroborated words ("Licensed
-            # & insured", built by app.site.contractorfacts's own match
-            # against their material) is UI chrome, not a sentence to
-            # re-check word-by-word against CLAIM_RE — the same reasoning
-            # `is_template_chrome` already applies for unexplained_prose,
-            # applied consistently here too. Found running this against
-            # the real corpus: the combined heading "Licensed & insured"
-            # is not itself a literal substring of their material even
-            # though both words individually are, which is exactly the
-            # bag-of-words gap this gate exists to close elsewhere — the
-            # fix is not to re-open it for an already-corroborated device.
-            continue
         for sentence in _sentences_of(run):
             bare = _bare(sentence)
             if bare and bare in own:
+                continue
+            if set(contractorfacts.found(sentence)) & material_facts:
+                # "Licensed & insured" built by contractorfacts.py's own
+                # credentials section passes because the corroborating
+                # FACT is present in their own material (checked here,
+                # explicitly) — never because the run happened to be
+                # short or sat inside a <button>.
                 continue
             for match in CLAIM_RE.finditer(sentence):
                 claim = match.group(0)
@@ -216,15 +215,16 @@ def unsupported_sentences(runs: list[VisibleRun], material) -> list[str]:
 
 def unexplained_prose(runs: list[VisibleRun], material) -> list[str]:
     """Port of `provenance.unexplained_sentences()`: every visible
-    sentence that is not template chrome (`is_template_chrome`, a closed
-    tag/shape rule, not five CSS classes), checked the same
-    verbatim-or-prefix-cut way as before.
+    sentence that is not template chrome (`is_template_chrome` — now
+    only nav/label/form and a short `<a>`/`<button>`, Phase 2b's own
+    tightened rule), checked the same verbatim-or-prefix-cut way as
+    before.
     """
     own = _own(material)
     found: list[str] = []
     seen: set[str] = set()
     for run in runs:
-        if is_template_chrome(run, material):
+        if is_template_chrome(run):
             continue
         for sentence in _sentences_of(run):
             if sentence in provenance.GENERIC_COPY:
@@ -238,15 +238,86 @@ def unexplained_prose(runs: list[VisibleRun], material) -> list[str]:
     return found
 
 
+# Matches an integer, a comma-grouped integer, a decimal, an "N+" count,
+# or a percent — the shapes Phase 2b's own instruction names (integers,
+# comma groups, decimals, N+, percents, years; a year is just a 4-digit
+# integer, no separate pattern needed). "24/7" is excluded before this
+# ever runs (see unbacked_numbers) — it is an idiom for round-the-clock
+# availability (contractorfacts.py's own "emergency" pattern reads it
+# the same way), not a quantity claim, and its two halves are not
+# independently a fact to corroborate.
+_NUMBER_RE = re.compile(r"\b\d[\d,]*(?:\.\d+)?%?\+?")
+_TWENTY_FOUR_SEVEN_RE = re.compile(r"\b24\s*/\s*7\b")
+
+
+def _normalize_number(token: str) -> str:
+    return token.rstrip("%").rstrip("+").replace(",", "")
+
+
+def _corroborated_numbers(material) -> frozenset[str]:
+    """Every number that IS, itself, a corroborated field value — not a
+    scan of free text (a number inside a verbatim-matched sentence is
+    the OTHER half of the round's own rule, handled separately in
+    unbacked_numbers by skipping verbatim-matched sentences entirely,
+    the same way every other check in this module does)."""
+    nums: set[str] = set()
+    if material.rating is not None:
+        nums.add(_normalize_number(str(material.rating)))
+    if material.reviews is not None:
+        nums.add(_normalize_number(str(material.reviews)))
+    if material.phone:
+        nums.add(re.sub(r"\D", "", material.phone))
+    for h in material.hours:
+        nums.update(_normalize_number(n) for n in _NUMBER_RE.findall(h))
+    for item in material.menu_items:
+        nums.update(_normalize_number(n)
+                   for n in _NUMBER_RE.findall(str(item.get("price", ""))))
+    # A count OUR OWN RENDERER computes and may print ("24 dishes on the
+    # menu") -- a real, deterministic fact about the page, not a claim
+    # about the business, but still a number a run can state.
+    nums.add(str(len(material.menu_items)))
+    nums.add(str(len(material.services)))
+    return frozenset(n for n in nums if n)
+
+
+def unbacked_numbers(runs: list[VisibleRun], material) -> list[str]:
+    """Every number (integer, comma group, decimal, N+, percent, year)
+    in any visible run that neither equals a corroborated field value
+    nor sits inside a sentence already verbatim-or-prefix-cut from their
+    own material. Runs UNCONDITIONALLY, same as unsupported_sentences —
+    no chrome exemption, no length exemption. This is the gate that did
+    not exist before Phase 2b: Phase 2's `_is_all_facts_and_boilerplate`
+    scanned only `[a-z]+` runs, so "90,000" in "4.9 average rating from
+    90,000 Google reviews" was invisible to every check that ran, gate
+    or contradiction alike.
+    """
+    own = _own(material)
+    corroborated = _corroborated_numbers(material)
+    found: list[str] = []
+    seen: set[str] = set()
+    for run in runs:
+        for sentence in _sentences_of(run):
+            bare = _bare(sentence)
+            if bare and bare in own:
+                continue
+            cleaned = _TWENTY_FOUR_SEVEN_RE.sub(" ", sentence)
+            for token in _NUMBER_RE.findall(cleaned):
+                normalized = _normalize_number(token)
+                if not normalized or normalized in corroborated:
+                    continue
+                if token not in seen:
+                    seen.add(token)
+                    found.append(token)
+    return found
+
+
 def contradicted_review_counts(runs: list[VisibleRun], material) -> list[str]:
-    """The gate that did not exist before this round: a sentence stating
-    a review count that contradicts `material.reviews`, read straight
-    off the rendered page. Same expression (`contradiction.REVIEW_COUNT_RE`)
-    and same tolerance (`contradiction.contradicts`) `contradiction.
-    reconcile()` already applies to free text before render — imported,
-    not copied, so the two readings of "contradiction" cannot drift
-    apart (the standing test used to carry its own copy of both; that
-    is folded into this same import now too).
+    """A sentence stating a review count that contradicts
+    `material.reviews`, read straight off the rendered page. Same
+    expression (`contradiction.REVIEW_COUNT_RE`) and same tolerance
+    (`contradiction.contradicts`) `contradiction.reconcile()` already
+    applies to free text before render — imported, not copied, so the
+    two readings of "contradiction" cannot drift apart.
     """
     if material.reviews is None:
         return []
@@ -265,8 +336,8 @@ def contradicted_review_counts(runs: list[VisibleRun], material) -> list[str]:
 
 
 def gate(runs: list[VisibleRun], material) -> list[str]:
-    """The ported `pipeline._gate()`: all three, concatenated, exactly
-    the shape the original two-function version already had."""
+    """The ported `pipeline._gate()`: all four, concatenated."""
     return (unsupported_sentences(runs, material)
             + unexplained_prose(runs, material)
+            + unbacked_numbers(runs, material)
             + contradicted_review_counts(runs, material))

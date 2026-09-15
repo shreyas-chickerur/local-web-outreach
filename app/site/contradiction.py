@@ -25,20 +25,40 @@ from __future__ import annotations
 
 import re
 
-# A number, optionally comma-grouped, immediately followed by "review(s)",
-# optionally preceded by a star rating ("5-star reviews"). The one quantity
-# with a corroborated structured counterpart (`Material.reviews`). Only
-# plain spaces/tabs between the parts, never a newline — this operates on
-# one sentence at a time, but the same expression is reused by the standing
-# test over rendered HTML, where an unrelated heading and the next
-# section's can sit a newline apart; requiring the words on one line keeps
-# both readings of "contradiction" the same thing.
+# A number, optionally comma-grouped, followed by up to two review/
+# rating-context words, then "review(s)" — "90,000 Google reviews",
+# "15,000 five-star reviews", "6,203 reviews". Widened in Phase 2b from
+# a fixed "optionally a star rating" slot: that version required the
+# number to sit immediately beside "review(s)" (only "5-star" tolerated
+# in between), so "90,000 Google reviews" — a real shape a rendered page
+# can carry — was invisible to this expression entirely, the one place
+# gap 2's own unbacked number WOULD have been caught if this pattern had
+# reached it.
+#
+# Deliberately NOT "any word, up to three of them" (the round's own
+# first phrasing): tried that first, and it turned
+# tests/test_no_contradicted_fact_ships.py red on the real corpus —
+# barbecue-rich renders a service literally titled "Turkey Sandwich
+# review by Sabrina" (someone's name, not a review count), and "03
+# Turkey Sandwich review" (the "03" a sibling carousel index the
+# standing test's own simpler tag-stripping concatenates onto it)
+# matched as a false "review count" purely because two arbitrary words
+# sat between a number and the word "review". A closed, small allowlist
+# of the words that actually appear in this shape avoids that collision
+# entirely while still catching the real one.
+_REVIEW_WORD = r"google|yelp|facebook|verified|genuine|happy|satisfied|five[- ]star|5[- ]star"
+# Only plain spaces/tabs between the parts, never a newline — this
+# operates on one sentence at a time, but the same expression is reused
+# by the standing test over rendered HTML, where an unrelated heading
+# and the next section's can sit a newline apart; requiring the words on
+# one line keeps both readings of "contradiction" the same thing.
 # Public: Phase 2 Step 3 (app.site.seam_gates) imports both this and
 # `contradicts` to build a real GATE over the rendered page, rather than
 # copying either — and tests/test_no_contradicted_fact_ships.py, which
 # used to carry its own second copy of both, now imports them too.
 REVIEW_COUNT_RE = re.compile(
-    r"\b([\d,]{2,})\+?[ \t]*(?:5[- ]star[ \t]+)?reviews?\b", re.IGNORECASE)
+    rf"\b([\d,]{{2,}})\+?[ \t]*(?:(?:{_REVIEW_WORD})[ \t]+){{0,2}}reviews?\b",
+    re.IGNORECASE)
 
 # How far a stated count can drift from the corroborated one before it reads
 # as a contradiction rather than rounding or a slightly stale scrape. Both a

@@ -1,9 +1,12 @@
-"""Phase 2b: the three gaps the Phase 2 port reopened, reproduced
-independently before anything is changed.
+"""Phase 2b: the three gaps the Phase 2 port reopened.
 
-Confirms, does not rediscover: all three reproduce exactly at `9b7b6c5`.
-If any of them stopped reproducing, this file would need to say what
-differs instead of silently building on a wrong premise.
+Gaps 1 and 2 were reproduced independently before anything was changed
+(confirmed exactly at `9b7b6c5`, commit `f6d139f`), then closed in
+Step 2 (`app/site/seam_gates.py`, `app/site/contradiction.py`). Their
+tests now assert the FIXED behaviour, so this file doubles as the
+regression guard against reopening either gap a second time. Gap 3
+(nothing reproduces the real design page's findings) is still open —
+Step 4 closes it.
 """
 
 from __future__ import annotations
@@ -33,13 +36,14 @@ def _threadbare_material():
     return material_from_brief(brief)
 
 
-def test_gap_1_the_credential_invariant_is_reopened():
-    """`is_template_chrome()` exempts short runs and everything in
-    <button> from `unsupported_sentences()` entirely -- so a page with
-    NO corroborating material for any of it still comes back clean.
-    threadbare has no about text and no blocks (confirmed below,
-    not assumed), so every one of these 9 claims is genuinely
-    uncorroborated."""
+def test_gap_1_the_credential_invariant_stays_closed():
+    """At 9b7b6c5, `is_template_chrome()` exempted short runs and
+    everything in <button> from `unsupported_sentences()` entirely --
+    so a page with NO corroborating material for any of it (threadbare
+    has no about text and no blocks, confirmed below, not assumed)
+    still came back clean. Step 2 removed that exemption from the
+    claims check outright; this asserts the gate now catches every one
+    of the 9 genuinely uncorroborated claims the old gate also caught."""
     material = _threadbare_material()
     assert material.about is None
     assert material.blocks == ()
@@ -49,18 +53,19 @@ def test_gap_1_the_credential_invariant_is_reopened():
 
     runs = visible_text_runs(_THREADBARE_CREDENTIAL_PAGE)
     new_findings = gate(runs, material)
-    assert new_findings == [], (
-        f"expected the reopened gap (0 findings) at 9b7b6c5; got {new_findings}. "
-        f"If this is no longer empty, the premise for Step 2 has changed.")
+    assert len(new_findings) >= 9, (
+        f"the credential invariant is reopened again: {new_findings}")
 
 
-def test_gap_2_an_invented_number_is_never_checked():
-    """`_is_all_facts_and_boilerplate()` only scans `[a-z]+` runs, so a
-    digit is invisible to it -- an invented review count is chrome as
-    long as the words around it are boilerplate. The contradiction gate
-    separately misses it because REVIEW_COUNT_RE requires the number
-    immediately beside "review(s)", and "Google" sits between them
-    here."""
+def test_gap_2_an_invented_number_is_now_checked():
+    """At 9b7b6c5, `_is_all_facts_and_boilerplate()` only scanned
+    `[a-z]+` runs, so a digit was invisible to it -- an invented review
+    count was chrome as long as the words around it were boilerplate,
+    and the contradiction gate separately missed it because
+    REVIEW_COUNT_RE required the number immediately beside "review(s)".
+    Step 2 added unbacked_numbers() (unconditional, no chrome exemption)
+    and widened REVIEW_COUNT_RE to a closed review/rating-word
+    allowlist; this asserts the number is now caught."""
     brief = json.loads(Path("tests/fixtures/briefs/hvac.json").read_text())
     material = material_from_brief(brief)
     assert material.reviews == 6203
@@ -68,9 +73,8 @@ def test_gap_2_an_invented_number_is_never_checked():
     html = "<p>4.9 average rating from 90,000 Google reviews</p>"
     runs = visible_text_runs(html)
     findings = gate(runs, material)
-    assert findings == [], (
-        f"expected the reopened gap (0 findings) at 9b7b6c5; got {findings}. "
-        f"If this is no longer empty, the premise for Step 2 has changed.")
+    assert any("90,000" in f or "90000" in f for f in findings), (
+        f"the unbacked-number gap is reopened again: {findings}")
 
 
 def test_gap_3_nothing_references_the_real_design_page():

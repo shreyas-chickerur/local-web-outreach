@@ -10,11 +10,12 @@ from pathlib import Path
 import pytest
 
 from app.site.contradiction import contradicts
-from app.site.render import material_from_brief
+from app.site.render import material_from_brief, unsupported
 from app.site.seam_gates import (
     contradicted_review_counts,
     gate,
     is_template_chrome,
+    unbacked_numbers,
     unexplained_prose,
     unsupported_sentences,
 )
@@ -64,25 +65,115 @@ def test_unsupported_sentences_still_lets_a_verbatim_credential_claim_through():
     assert unsupported_sentences(runs, material) == []
 
 
+def test_unsupported_sentences_backs_a_credential_via_contractorfacts_not_verbatim():
+    """Step 2's own explicit path: "Licensed & insured" (contractorfacts.py's
+    own phrasing, in a short <h3> badge -- not a literal match for hvac's
+    real "Licensed and Insured ... fully licensed") must pass because
+    contractorfacts.found() finds the SAME fact ("licensed_insured") in
+    both the run and hvac's own material -- not because the run is short,
+    and not because it happens to be a verbatim substring."""
+    brief = json.loads(Path("tests/fixtures/briefs/hvac.json").read_text())
+    material = material_from_brief(brief)
+    page = '<h3>Licensed &amp; insured</h3>'
+    runs = visible_text_runs(page)
+    assert unsupported_sentences(runs, material) == []
+
+
+def test_unsupported_sentences_runs_unconditionally_even_inside_a_button():
+    """The credential invariant reopened (Phase 2b's gap 1): a claim
+    inside <button>, with NOTHING in the material to corroborate it
+    (threadbare has no about text, no blocks), must still be caught --
+    this is the exact planted case, checked directly rather than only
+    through the parametrized corpus sweep."""
+    brief = json.loads(Path("tests/fixtures/briefs/threadbare.json").read_text())
+    material = material_from_brief(brief)
+    page = '<button>Board-certified, family-owned and voted #1 in Texas</button>'
+    runs = visible_text_runs(page)
+    findings = unsupported_sentences(runs, material)
+    assert findings, "a claim inside <button> must not be exempt from CLAIM_RE"
+
+
+# ------------------------------ unbacked_numbers ---------------------------- #
+
+def test_unbacked_numbers_catches_an_invented_count_with_boilerplate_around_it():
+    """Phase 2b's gap 2, closed: the exact reproduction case, with no
+    five-star wording riding along for CLAIM_RE to coincidentally catch."""
+    brief = json.loads(Path("tests/fixtures/briefs/hvac.json").read_text())
+    material = material_from_brief(brief)
+    page = "<p>4.9 average rating from 90,000 Google reviews</p>"
+    runs = visible_text_runs(page)
+    findings = unbacked_numbers(runs, material)
+    assert "90,000" in findings, findings
+
+
+def test_unbacked_numbers_accepts_the_real_corroborated_rating_and_review_count():
+    brief = json.loads(Path("tests/fixtures/briefs/hvac.json").read_text())
+    material = material_from_brief(brief)
+    assert material.rating == 4.9
+    assert material.reviews == 6203
+    page = "<p>4.9 average rating from 6,203 Google reviews</p>"
+    runs = visible_text_runs(page)
+    assert unbacked_numbers(runs, material) == []
+
+
+def test_unbacked_numbers_does_not_flag_24_7_as_a_quantity_claim():
+    """"24/7" is an idiom for round-the-clock availability (the same
+    reading contractorfacts.py's own "emergency" pattern already gives
+    it), not two independent numbers to corroborate."""
+    brief = json.loads(Path("tests/fixtures/briefs/hvac.json").read_text())
+    material = material_from_brief(brief)
+    page = "<p>Our technicians are available 24/7 for emergencies.</p>"
+    runs = visible_text_runs(page)
+    assert unbacked_numbers(runs, material) == []
+
+
+def test_unbacked_numbers_skips_a_verbatim_matched_sentence_entirely():
+    """A number inside a sentence that is itself verbatim/prefix-cut
+    source material is backed by the sentence, not by the number
+    matching a structured field -- the round's own second path."""
+    brief = json.loads(Path("tests/fixtures/briefs/hvac.json").read_text())
+    material = material_from_brief(brief)
+    # Real, verbatim block text containing a number ("13 months") that
+    # is not itself a corroborated structured field value.
+    page = ("<p>Since November 2022, we&#8217;ve proudly served the Plano, "
+           "TX community, providing reliable plumbing services for over "
+           "13 months in the area.</p>")
+    runs = visible_text_runs(page)
+    assert unbacked_numbers(runs, material) == []
+
+
 # --------------------------- the closed chrome rule ------------------------- #
 
-def test_is_template_chrome_excludes_nav_and_buttons_by_tag():
+def test_is_template_chrome_always_exempts_nav_label_and_form():
     assert is_template_chrome(VisibleRun(text="Contact", tag="nav", path="nav"))
+    assert is_template_chrome(VisibleRun(text="Email address", tag="label", path="label"))
+    assert is_template_chrome(VisibleRun(text="Newsletter signup form", tag="form", path="form"))
+
+
+def test_is_template_chrome_exempts_a_short_button_or_link_only():
+    """Phase 2b's own tightened rule: a or button is chrome only at
+    three words or fewer. A longer one is prose -- threadbare's own
+    planted button ("Board-certified, family-owned and voted #1 in
+    Texas", 9 words) is exactly why "everything in <button>" (Phase 2's
+    version) was too permissive."""
     assert is_template_chrome(VisibleRun(text="Book Now", tag="button", path="button"))
-
-
-def test_is_template_chrome_excludes_short_headings():
-    assert is_template_chrome(VisibleRun(text="Our Services", tag="h2", path="h2"))
-    assert not is_template_chrome(
-        VisibleRun(text="Why Plano Trusts Our Emergency Plumbers", tag="h2", path="h2"))
-
-
-def test_is_template_chrome_excludes_single_field_values():
-    assert is_template_chrome(VisibleRun(text="15,000+", tag="span", path="span"))
-    assert is_template_chrome(VisibleRun(text="$99", tag="div", path="div"))
+    assert is_template_chrome(VisibleRun(text="Learn more", tag="a", path="a"))
     assert not is_template_chrome(VisibleRun(
-        text="Every truck carries a spare toy for the neighborhood dogs.",
-        tag="div", path="div"))
+        text="Board-certified, family-owned and voted #1 in Texas",
+        tag="button", path="button"))
+
+
+def test_is_template_chrome_no_longer_exempts_headings_or_short_field_values():
+    """Phase 2's version exempted any heading of <=3 words and any run
+    of <=4 words with no terminal punctuation -- exactly the shape a
+    planted short-form claim (class 7) takes, and exactly why the
+    credential invariant reopened. Neither exemption survives Phase 2b:
+    a heading or a bare stat now has to be backed like anything else
+    (by unsupported_sentences/unbacked_numbers, not by being exempted
+    from unexplained_prose here)."""
+    assert not is_template_chrome(VisibleRun(text="Our Services", tag="h2", path="h2"))
+    assert not is_template_chrome(VisibleRun(text="15,000+", tag="span", path="span"))
+    assert not is_template_chrome(VisibleRun(text="$99", tag="div", path="div"))
 
 
 def test_unexplained_prose_reads_prose_render_never_wrote_the_classes_for():
@@ -180,6 +271,27 @@ def test_class_5_is_caught_once_the_dom_is_actually_rendered(manifest_path):
     assert _caught(planting["sentence"], findings), (
         f"class 5 ({manifest['business']}) not caught even once rendered: "
         f"{findings}")
+
+
+@pytest.mark.parametrize("manifest_path", MANIFESTS)
+def test_the_ported_gate_is_a_superset_of_the_old_gate_on_every_planted_page(manifest_path):
+    """The "not weakened" claim, as a test rather than prose. For every
+    planted page, read as SOURCE (the old gate never read rendered
+    output, so this is the only fair comparison — class 5's
+    script-injected addition is checked separately above and is not
+    part of this claim): every claim phrase render.unsupported() finds
+    must also appear somewhere in the ported gate's findings. The ported
+    gate finding MORE (headings, numbers, credentials the old gate never
+    checked) is expected and is not a superset violation; finding FEWER
+    of the old gate's own claims would be."""
+    manifest, html, material = _load(manifest_path)
+    old_findings = unsupported(html, material)
+    new_findings = gate(visible_text_runs(html), material)
+    missing = [f for f in old_findings
+              if not any(f.lower() in nf.lower() for nf in new_findings)]
+    assert missing == [], (
+        f"{manifest['business']}: the ported gate lost claims the old "
+        f"gate caught: {missing} (old: {old_findings}, new: {new_findings})")
 
 
 @pytest.mark.parametrize("business", ["hvac", "restaurant-casual"])
