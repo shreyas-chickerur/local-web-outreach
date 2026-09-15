@@ -4,16 +4,28 @@
 `content.files["Main.dc.html"]` in its own `<script id="appifact-doc">`
 state block (`tests/sitegen/test_seam_design_page.py`), against the
 real brief `tests/fixtures/briefs/hvac.json`. The fixed gate
-(`app.site.seam_gates.gate`) raises **42** findings, pinned by
-`test_the_gate_finding_count_is_pinned`. Every one is classified below:
-the design's own sentence, the closest real source span it traces to
-(quoted, with its location), and a verdict — **verbatim**, **true
-reworded**, **changed specific**, or **invented**.
+(`app.site.seam_gates.gate`) raised **42** findings when this document
+was first written, pinned by `test_the_gate_finding_count_is_pinned`.
+Every one is classified below: the design's own sentence, the closest
+real source span it traces to (quoted, with its location), and a
+verdict — **verbatim**, **true reworded**, **changed specific**, or
+**invented**.
 
-**Verdict tally: 25 verbatim, 16 true reworded, 1 changed specific, 0
-invented.**
+**2026-09-15 (Phase 2c) update:** the count is now **48** — see
+"Six more findings" below the original 42, added once
+`_credential_backed_remainder` (`.reviews/NEXT-ROUND.md`) stopped
+letting a real credential (`Licensed & insured`, `24/7 emergency`,
+`Same-day service`) exempt the WHOLE sentence it shared with a separate,
+true-but-reworded caption. All 6 are real; none is invented or changed
+specific. The rows below (0-41) are unchanged from the original
+classification and keep their original numbers so existing
+cross-references (e.g. "finding #18") still point at the same row.
 
-## The 42 findings
+**Verdict tally (all 48): 25 verbatim, 22 true reworded, 1 changed
+specific, 0 invented.** (Original 42: 25 verbatim, 16 true reworded, 1
+changed specific, 0 invented.)
+
+## The original 42 findings
 
 | # | Design page text | Closest source span | Location | Verdict |
 |---|---|---|---|---|
@@ -59,6 +71,28 @@ invented.**
 | 39 | "92" | "92°F" | `blocks[30]`, `[32]` | verbatim |
 | 40 | "2,000" | "2,000 square foot single-family home" | `blocks[30]` | verbatim |
 | 41 | "30" | "thirty years old" | `blocks[31]` | verbatim |
+
+## Six more findings (Phase 2c, 2026-09-15)
+
+Before the credential-remainder fix, each of these 6 sentences carried a
+real, corroborated credential somewhere inside it (`Licensed & insured`
+→ `licensed_insured`, `24/7 emergency` / `24/7 emergency line` →
+`emergency`, `Same-day service` → `response_time`), and the OLD
+`_credential_backed()` exempted the entire sentence on that match alone
+— so the true-reworded caption riding beside the credential was never
+reached by the provenance check at all. Fixed: the credential now
+exempts only its own matched span, and the rest of the sentence is
+checked the same as any other. All 6 trace to real material; none is
+invented.
+
+| # | Design page text | Closest source span | Location | Verdict |
+|---|---|---|---|---|
+| 42 | "Licensed & insured Drug tested and background checked, so every visit gives you peace of mind." | "Licensed and Insured Drug tested, background checked, and fully licensed, giving you peace of mind." | `blocks[9]` ("Plano's Most Trusted AC Service" block) | true reworded |
+| 43 | "Same-day service Fully stocked trucks ready to handle most repairs the same day you call." | "Same-Day Service : Our fully stocked trucks carry the parts needed to handle most plumbing repairs on the same day." | `blocks[2]` | true reworded |
+| 44 | "24/7 emergency line A real team member answers your emergency call, any hour." | "24/7 Emergency Service We have team members available 24/7 to answer your emergency phone call." | `blocks[9]` | true reworded |
+| 45 | "Call now for same-day service, or reach us online any time — a real team member answers 24/7 for emergencies." | composite of "Call Now For Service Schedule Online Now" (`blocks[2]`, `[9]`) and "team members available 24/7 to answer your emergency phone call" (`blocks[9]`) | `blocks[2]`, `[9]` | true reworded |
+| 46 | "HOURS Mon–Fri, 8am–5pm 24/7 emergency line" | `material.hours = ('Mon-Tue-Wed-Thu-Fri-Sat-Sun 00:00-24:00', 'Monday-Friday 8am-5pm')` + "24/7 Emergency Service" (`blocks[9]`) | `facts` (hours), `blocks[9]` | true reworded — day names abbreviated, dash style changed |
+| 47 | "© Milestone Electric, A/C & Plumbing Licensed & insured · Family-owned since 2004" | business name (`facts`) + "Licensed and Insured" (`blocks[9]`) + "Since 2004, Milestone is a family-owned and operated home service company" (`blocks[7]`) | `facts` (name), `blocks[7]`, `[9]` | true reworded — footer composite of three real facts |
 
 ## Notes on two specific rows the round asked to check independently
 

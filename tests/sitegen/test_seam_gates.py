@@ -9,9 +9,12 @@ from pathlib import Path
 
 import pytest
 
+from app.core.claims import CLAIM_RE
+from app.site import contractorfacts, provenance
 from app.site.contradiction import contradicts
 from app.site.render import material_from_brief, unsupported
 from app.site.seam_gates import (
+    _material_contractor_facts,
     contradicted_review_counts,
     gate,
     is_template_chrome,
@@ -25,6 +28,7 @@ pytestmark = pytest.mark.unit
 
 SEAM = Path("tests/fixtures/seam")
 MANIFESTS = sorted(SEAM.glob("*-foreign.manifest.json"))
+REAL_FIXTURES = Path("tests/fixtures/briefs")
 
 
 def _load(manifest_path: Path):
@@ -309,3 +313,156 @@ def test_the_control_page_is_still_not_flagged_by_the_ported_gate(business):
     assert findings == [], (
         f"{business} control page (verbatim-only, zero plantings) was "
         f"flagged by the ported gate: {findings}")
+
+
+# --------------------- Phase 2c: widening the superset claim ---------------- #
+#
+# The superset test above only ever ran over the 3 hand-built manifests, and
+# no planted sentence in them paired a corroborated credential with a second
+# claim — which is exactly how class 8's gap (the whole-sentence
+# `_credential_backed` exemption) got past it. Two more sweeps, per
+# `.reviews/NEXT-ROUND.md`: every sentence of the real 19-fixture corpus's
+# own rendered pages, and a generated set covering every corroborated
+# credential of every real fixture paired with every CLAIM_RE shape, in one
+# sentence — the exhaustive version of class 8, not just the one hand-picked
+# example.
+
+def _build_real_fixture_page(path: Path):
+    from app.site.pipeline import STAGES, run_stage, spec_from_config
+    from app.site.render import build_from_spec
+    from app.store import db, leads, sites
+
+    with db.session(":memory:") as conn:
+        lead_id = leads.save_brief(conn, json.loads(path.read_text()))
+        for stage in STAGES:
+            run_stage(conn, lead_id, stage)
+        brief = leads.brief_with_overrides(conn, lead_id)
+        stored = sites.recall_stage(conn, lead_id, "direction") or {}
+        config = dict(stored.get("config") or {})
+        assert config.get("read_by") == "frozen", (
+            f"{path.stem} did not replay a frozen direction")
+        spec = spec_from_config(config)
+        material = material_from_brief(brief)
+        page = build_from_spec(brief, spec)
+    return material, page
+
+
+def test_the_ported_gate_is_a_superset_of_the_old_gate_on_every_real_fixture_page():
+    """Same claim as the manifest version above, over every REAL fixture's
+    own rendered page instead of hand-built foreign markup -- so the
+    superset claim does not rest only on pages built for this test."""
+    missing_by_fixture: dict[str, list[str]] = {}
+    sentence_count = 0
+    for path in sorted(REAL_FIXTURES.glob("*.json")):
+        material, page = _build_real_fixture_page(path)
+        runs = visible_text_runs(page)
+        sentence_count += sum(
+            len([s for s in provenance.SENTENCE_RE.split(r.text) if s.strip()])
+            for r in runs)
+        old_findings = unsupported(page, material)
+        new_findings = gate(runs, material)
+        missing = [f for f in old_findings
+                  if not any(f.lower() in nf.lower() for nf in new_findings)]
+        if missing:
+            missing_by_fixture[path.stem] = missing
+    assert missing_by_fixture == {}, (
+        f"the ported gate lost claims the old gate caught on a real "
+        f"fixture's own page: {missing_by_fixture}")
+    assert sentence_count > 0
+
+
+# One concrete, self-checked example per CLAIM_RE alternative (see
+# app/core/claims.py) -- generated from the pattern by hand once, then
+# proven still matching below, so a future edit to CLAIM_RE that adds or
+# changes an alternative is caught here rather than silently narrowing what
+# this sweep covers.
+#
+# "Ranked#1", not "#1" or "voted #1": found while writing this sweep, and
+# reported rather than fixed (out of Part A's scope -- app/core/claims.py
+# is not one of the files this round touches, and CLAIM_RE is shared with
+# the vision pass, so widening it needs its own corpus-wide check).
+# `\b#1\b` requires a WORD character immediately before "#" with no space,
+# since "#" is itself non-word -- "#1", "the #1" and "voted #1" (the shape
+# every real plant in this corpus actually uses) never match; only a form
+# glued straight onto a preceding letter, like "Ranked#1", satisfies the
+# \b on both sides. The "#1" alternative is effectively dead code against
+# any natural sentence. See the handoff for this round.
+_CLAIM_RE_EXAMPLES = (
+    "since 1994", "est. 1994", "20+ years", "award-winning", "voted",
+    "best in Texas", "number one", "Ranked#1", "family-owned", "family-run",
+    "trusted by thousands", "500 happy customers", "five-star", "5-star",
+    "licensed", "bonded", "insured", "certified", "accredited",
+    "board-certified", "admitted to the bar", "state bar",
+    "registered nurse",
+)
+
+# One phrase per contractorfacts.FACTS key that its OWN pattern matches --
+# not always the section's printed LABEL (contractorfacts.py's own note:
+# "Manufacturer certified" matches none of the manufacturer_badge patterns),
+# so this is the trigger text a business's real material would need to say,
+# checked below.
+_FACT_TRIGGER_PHRASE: dict[str, str] = {
+    "licensed_insured": "Licensed and insured",
+    "emergency": "24/7 emergency service",
+    "warranty": "backed by our workmanship warranty",
+    "free_estimate": "ask about our free estimate",
+    "service_area": "proudly serving the service area",
+    "financing": "financing available",
+    "manufacturer_badge": "an authorized dealer",
+    "response_time": "same-day service",
+    "admitted_to_bar": "admitted to the bar",
+    "registered_practice": "a board-certified practice",
+}
+
+
+def test_claim_re_examples_actually_match_claim_re():
+    for example in _CLAIM_RE_EXAMPLES:
+        assert CLAIM_RE.search(example), example
+
+
+def test_fact_trigger_phrases_actually_match_their_own_pattern():
+    assert set(_FACT_TRIGGER_PHRASE) == {f.key for f in contractorfacts.FACTS}
+    for fact in contractorfacts.FACTS:
+        phrase = _FACT_TRIGGER_PHRASE[fact.key]
+        assert fact.pattern.search(phrase), (fact.key, phrase)
+
+
+def _credential_claim_cases():
+    for path in sorted(REAL_FIXTURES.glob("*.json")):
+        brief = json.loads(path.read_text())
+        material = material_from_brief(brief)
+        for key in sorted(_material_contractor_facts(material)):
+            for claim in _CLAIM_RE_EXAMPLES:
+                yield pytest.param(
+                    path.stem, key, claim,
+                    id=f"{path.stem}-{key}-{claim.replace(' ', '_')[:16]}")
+
+
+_GENERATED_CASES = list(_credential_claim_cases())
+
+
+def test_generated_cases_cover_every_real_fixtures_corroborated_credential():
+    """A floor on the sweep itself: if this drops to 0, the corpus stopped
+    corroborating any contractorfacts credential and the sweep below would
+    pass vacuously."""
+    assert len(_GENERATED_CASES) > 0
+
+
+@pytest.mark.parametrize("slug,fact_key,claim", _GENERATED_CASES)
+def test_a_generated_credential_plus_claim_sentence_is_still_caught(slug, fact_key, claim):
+    """The exhaustive version of class 8: every corroborated credential of
+    every real fixture, paired with every CLAIM_RE shape, in one sentence.
+    A corroborated credential must never launder an invented claim riding
+    beside it in the same sentence, whichever credential and whichever
+    claim shape."""
+    brief = json.loads((REAL_FIXTURES / f"{slug}.json").read_text())
+    material = material_from_brief(brief)
+    trigger = _FACT_TRIGGER_PHRASE[fact_key]
+    sentence = f"{trigger}, and {claim}."
+    page = f"<p>{sentence}</p>"
+    runs = visible_text_runs(page)
+    findings = gate(runs, material)
+    assert any(claim.lower() in f.lower() or f.lower() in claim.lower()
+              for f in findings), (
+        f"{slug}: the corroborated credential {fact_key!r} laundered the "
+        f"claim {claim!r} riding beside it in {sentence!r}: {findings}")

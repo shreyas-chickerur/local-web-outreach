@@ -75,6 +75,12 @@
       "class_name": "short-form claim: inside <button>",
       "sentence": "#1 Rated in Texas",
       "why_fabricated": "Invented outright -- no such ranking appears anywhere in hvac's real material. Everything in <button> was unconditionally chrome before Step 2, whatever it said."
+    },
+    {
+      "class": 8,
+      "class_name": "credential-laundered claim",
+      "sentence": "Licensed and insured, award-winning and voted best in Plano.",
+      "why_fabricated": "'Licensed and insured' is a real, corroborated credential -- hvac's own block text says 'Licensed and Insured ... fully licensed'. 'award-winning' and 'voted best in Plano' are invented outright; no award or ranking appears anywhere in hvac's real material. Phase 2c's own reproduction (NEXT-ROUND.md): before the fix, _credential_backed() exempted the WHOLE sentence once it found the real credential anywhere in it, so the two invented claims riding beside it were never checked -- one true credential vouching for everything sharing its sentence, the bag-of-words gap one level up."
     }
   ]
 }

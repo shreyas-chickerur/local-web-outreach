@@ -69,9 +69,17 @@ def test_extraction_finds_real_design_content_not_the_editor_chrome():
 def test_the_gate_finding_count_is_pinned():
     """The reproducible version of Phase 2's 40-finding claim. The count
     moved to 42 in Phase 2b (unbacked_numbers() and the tightened
-    provenance rule are both new since Phase 2's own 40) -- pinned here
-    so a future change to either gate or this page is a deliberate,
-    visible decision, not a silent drift. Every finding is classified in
+    provenance rule are both new since Phase 2's own 40), then to 48 in
+    Phase 2c: `_credential_backed_remainder` (`.reviews/NEXT-ROUND.md`)
+    exempts only a credential's own matched span, not the whole sentence
+    -- 6 sentences on this real page were previously hidden entirely by
+    the whole-sentence version, each one a real "Licensed & insured" /
+    "24/7 emergency" / "Same-day service" credential riding beside its
+    own true-reworded caption that the OLD, narrower provenance check
+    would have flagged on its own had the credential exemption not
+    swallowed the whole sentence first. Pinned here so a future change to
+    either gate or this page is a deliberate, visible decision, not a
+    silent drift. Every finding is classified in
     .reviews/phase-2-design-page-findings.md.
     """
     main = extract_main_dc_html(DESIGN_PAGE.read_text())
@@ -79,5 +87,5 @@ def test_the_gate_finding_count_is_pinned():
     material = material_from_brief(brief)
     runs = visible_text_runs(main)
     findings = gate(runs, material)
-    assert len(findings) == 42, (
-        f"expected 42 findings, got {len(findings)}: {findings}")
+    assert len(findings) == 48, (
+        f"expected 48 findings, got {len(findings)}: {findings}")
