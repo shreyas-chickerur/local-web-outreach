@@ -80,7 +80,7 @@ def validate(direction: ArtDirection, *, available_devices: tuple[str, ...]) -> 
     if set(direction.section_rhythm) - set(SECTION_WEIGHTS):
         raise ArtDirectionError(f"{direction.section_rhythm!r} uses a "
                                 f"weight outside {SECTION_WEIGHTS!r}")
-    for a, b in zip(direction.section_rhythm, direction.section_rhythm[1:]):
+    for a, b in zip(direction.section_rhythm, direction.section_rhythm[1:], strict=False):
         if a == b:
             raise ArtDirectionError(
                 f"section_rhythm {direction.section_rhythm!r} repeats "
