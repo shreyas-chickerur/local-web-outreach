@@ -37,7 +37,7 @@
     {"item": "never animate the hero image", "result": "pass", "element": "unchanged from v1 -- the reframed hero image still carries no [data-reveal] or transition"}
   ],
   "gate": {
-    "flag_off_findings": 8,
+    "flag_off_findings": 7,
     "flag_on_findings": 6,
     "authored_display_text_candidates": [
       "Bert Roofing", "No pressure, no surprises, no high-pressure sales tactics.",

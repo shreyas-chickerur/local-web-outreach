@@ -37,7 +37,7 @@
     {"item": "never animate the hero image", "result": "pass", "element": "unchanged from v1"}
   ],
   "gate": {
-    "flag_off_findings": 7,
+    "flag_off_findings": 8,
     "flag_on_findings": 5,
     "authored_display_text_candidates": [
       "Status Roofing LLC", "A referral partner who protects your closing timelines.",
