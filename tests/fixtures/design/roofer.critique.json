@@ -1,0 +1,55 @@
+{
+  "business": "roofer",
+  "version": "revised",
+  "source_file": "tests/fixtures/design/roofer.html",
+  "playbook_hash": "046d04f828fd",
+  "art_direction_content_hash": "7a8658e25f11",
+  "playbook_required_elements": [
+    {"item": "call action reachable on phones", "result": "pass", "element": "unchanged from v1"},
+    {"item": "service area near the top", "result": "pass", "element": "unchanged from v1"},
+    {"item": "business's own photo as hero", "result": "pass", "element": "unchanged from v1"},
+    {"item": "named technician from reviews", "result": "pass", "element": "unchanged from v1"},
+    {"item": "job story (problem, found, result)", "result": "n/a", "element": "unchanged from v1 -- no such block exists in this business's material"},
+    {"item": "reviews with names", "result": "pass", "element": "unchanged from v1"},
+    {"item": "hours incl. emergency, corroborated", "result": "n/a", "element": "unchanged from v1"}
+  ],
+  "playbook_section_order": {"result": "pass", "note": "unchanged from v1"},
+  "playbook_forbidden": [
+    {"item": "no generic icon-card grid as the MAIN structural device", "result": "pass", "element": "unchanged from v1"},
+    {"item": "no stock-looking illustration", "result": "pass", "element": "unchanged from v1"},
+    {"item": "no centred-everything layout", "result": "pass", "element": "unchanged from v1"},
+    {"item": "no identical section heights", "result": "pass", "element": "unchanged from v1"},
+    {"item": "no placeholder where a real photograph exists", "result": "pass", "element": "fixed this revision -- work-shingles.jpg now anchors .cover (a 2-column layout with the photo), exterior-finished.jpg now sits in the reviews grid as a third card. 3 of 4 supplied photographs used, up from 1 of 4; aerial-install.jpg remains supplied but unused"}
+  ],
+  "art_direction_checks": [
+    {"item": "mood: regional scale", "result": "pass", "element": "unchanged from v1"},
+    {"item": "type pairing: league-spartan-dm-sans", "result": "pass", "element": "unchanged from v1"},
+    {"item": "palette: base #faf6ef / ink #201a10 / accent #8e620b", "result": "pass", "element": "unchanged from v1"},
+    {"item": "photograph treatment: full_bleed", "result": "partial", "element": "the hero stays full-bleed; the two newly-added photos (.cover-photo, .review-photo) are cropped into contained boxes, not full-bleed -- a deliberate variation for a supporting image rather than a hero, but worth naming since the art direction named one treatment for the whole page"},
+    {"item": "signature device: ledger", "result": "pass", "element": "unchanged from v1"},
+    {"item": "section rhythm: heavy/light/breathing/heavy/light/breathing/heavy, visually distinct adjacent backgrounds", "result": "pass", "element": "unchanged from v1"}
+  ],
+  "motion_spec_checks": [
+    {"item": "reveal on scroll via a real observer, not CSS-only", "result": "pass", "element": "unchanged from v1"},
+    {"item": "hover and focus states on every control", "result": "pass", "element": "unchanged from v1"},
+    {"item": "one signature motion moment tied to the signature device", "result": "pass", "element": "fixed this revision -- each .ledger-row now carries its own IntersectionObserver target and a ::after rule that draws left-to-right (transform: scaleX) with a 140ms stagger per row, evoking a line being ruled into an actual ledger rather than a generic fade"},
+    {"item": "cancelled under prefers-reduced-motion", "result": "pass", "element": "extended this revision -- .ledger-row::after is forced to its final scaleX(1) state under prefers-reduced-motion, same as every other motion in the page"},
+    {"item": "never animate the hero image", "result": "pass", "element": "unchanged from v1"}
+  ],
+  "gate": {
+    "flag_off_findings": 7,
+    "flag_on_findings": 5,
+    "authored_display_text_candidates": [
+      "Status Roofing LLC", "A referral partner who protects your closing timelines.",
+      "What homeowners ask us", "Service area", "Phone",
+      "Roofing and insurance claims, handled"
+    ]
+  },
+  "summary": {
+    "playbook_required_pass": 5, "playbook_required_total": 5, "playbook_required_na": 2,
+    "playbook_forbidden_pass": 5, "playbook_forbidden_total": 5,
+    "art_direction_pass": 5, "art_direction_total": 6,
+    "motion_pass": 5, "motion_total": 5,
+    "gate_findings_flag_on_v1_to_revised": "5 -> 5 (unchanged; the revision targeted craft/photo-use findings, not gate findings, both already clean)"
+  }
+}
