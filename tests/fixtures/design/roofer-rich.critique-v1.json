@@ -1,0 +1,54 @@
+{
+  "business": "roofer-rich",
+  "version": "v1",
+  "source_file": "tests/fixtures/design/roofer-rich-v1.html",
+  "playbook_hash": "046d04f828fd",
+  "art_direction_content_hash": "40193b467ac6",
+  "playbook_required_elements": [
+    {"item": "call action reachable on phones", "result": "pass", "element": ".callbar + hero/closing tel: buttons"},
+    {"item": "service area near the top", "result": "pass", "element": ".hero-area line under the headline"},
+    {"item": "business's own photo as hero", "result": "pass", "element": ".hero img, hero-truck.jpg"},
+    {"item": "named technician from reviews", "result": "pass", "element": "Bill Chittum, named in Jeff Vance's review"},
+    {"item": "job story (problem, found, result)", "result": "n/a", "element": "no such block exists in this business's material -- the real 3-step process (inspection/decision/completion) was used instead, via the index signature device"},
+    {"item": "reviews with names", "result": "pass", "element": "Cristin Damon, Jeff Vance, Jason Early, Clint Compton (4 of 5 corroborated named reviewers used; Ken Holt not used)"},
+    {"item": "hours incl. emergency, corroborated", "result": "pass", "element": "\"Fri 7:30am to 5pm\" -- printed exactly as corroborated, no other days invented"}
+  ],
+  "playbook_section_order": {"result": "pass", "note": "matches the planned 7-section order"},
+  "playbook_forbidden": [
+    {"item": "no generic icon-card grid as the MAIN structural device", "result": "pass", "element": ".index-list (numbered steps) is the main device; .badge-row has no icons"},
+    {"item": "no stock-looking illustration", "result": "pass", "element": "n/a"},
+    {"item": "no centred-everything layout", "result": "pass", "element": "left-aligned throughout except .closing"},
+    {"item": "no identical section heights", "result": "pass", "element": "heights vary"},
+    {"item": "no placeholder where a real photograph exists", "result": "partial", "element": "3 of 4 supplied photographs used (hero-truck.jpg, work-install.jpg, aerial-finished.jpg); detail-vents.jpg embedded but unused"}
+  ],
+  "art_direction_checks": [
+    {"item": "mood: quietly thorough", "result": "pass", "element": "calm serif type, muted blue accent, procedural 3-step content, no hype language"},
+    {"item": "type pairing: ibm-plex-serif-inter", "result": "pass", "element": "Google Fonts IBM Plex Serif (display) + Inter (body)"},
+    {"item": "palette: base #f2f6f8 / ink #141c22 / accent #0e71aa", "result": "pass", "element": ":root custom properties, used throughout"},
+    {"item": "photograph treatment: framed", "result": "fail", "element": "the hero (the page's largest, most prominent photo) is rendered full-bleed with a gradient scrim, the same treatment hvac and roofer used, not framed/inset -- only the small review-grid photos got an actual border/frame treatment. The art direction's named treatment for the page as a whole is not reflected in its most prominent use"},
+    {"item": "signature device: index", "result": "pass", "element": ".index-list, three numbered steps down the page"},
+    {"item": "section rhythm: heavy/light/breathing/heavy/light/breathing/heavy, visually distinct adjacent backgrounds", "result": "pass", "element": "every adjacent pair uses a genuinely different background (hero dark photo, credentials light --base, cover tinted --breathing, index dark --ink, reviews light --base, details tinted --breathing, closing dark --ink)"}
+  ],
+  "motion_spec_checks": [
+    {"item": "reveal on scroll via a real observer, not CSS-only", "result": "pass", "element": "IntersectionObserver in the trailing <script>"},
+    {"item": "hover and focus states on every control", "result": "pass", "element": ".cta-btn:hover/:focus-visible, a:hover/:focus-visible"},
+    {"item": "one signature motion moment tied to the signature device", "result": "pass", "element": "each .index-item's number swims in from the margin with a 160ms stagger, tied directly to what an index device is"},
+    {"item": "cancelled under prefers-reduced-motion", "result": "pass", "element": "@media (prefers-reduced-motion: reduce) forces .index-num to its final state"},
+    {"item": "never animate the hero image", "result": "pass", "element": ".hero img carries no [data-reveal] or transition"}
+  ],
+  "gate": {
+    "flag_off_findings": 8,
+    "flag_on_findings": 6,
+    "authored_display_text_candidates": [
+      "Bert Roofing", "No pressure, no surprises, no high-pressure sales tactics.",
+      "Three steps, one project manager", "Hours", "Service area", "Schedule a roof inspection"
+    ],
+    "note": "found and fixed within this same session, before saving v1: the hero subhead originally dropped 'and written estimate' from feature_0[0], a real rewording/truncation violation of the exact source sentence -- corrected to the full sentence before finalizing."
+  },
+  "summary": {
+    "playbook_required_pass": 6, "playbook_required_total": 6, "playbook_required_na": 1,
+    "playbook_forbidden_pass": 4, "playbook_forbidden_total": 5,
+    "art_direction_pass": 5, "art_direction_total": 6,
+    "motion_pass": 5, "motion_total": 5
+  }
+}

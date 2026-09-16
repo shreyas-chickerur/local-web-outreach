@@ -1,0 +1,54 @@
+{
+  "business": "roofer-rich",
+  "version": "revised",
+  "source_file": "tests/fixtures/design/roofer-rich.html",
+  "playbook_hash": "046d04f828fd",
+  "art_direction_content_hash": "40193b467ac6",
+  "playbook_required_elements": [
+    {"item": "call action reachable on phones", "result": "pass", "element": "unchanged from v1"},
+    {"item": "service area near the top", "result": "pass", "element": "unchanged from v1"},
+    {"item": "business's own photo as hero", "result": "pass", "element": "unchanged from v1 (now framed, see below)"},
+    {"item": "named technician from reviews", "result": "pass", "element": "unchanged from v1"},
+    {"item": "job story (problem, found, result)", "result": "n/a", "element": "unchanged from v1"},
+    {"item": "reviews with names", "result": "pass", "element": "unchanged from v1"},
+    {"item": "hours incl. emergency, corroborated", "result": "pass", "element": "unchanged from v1"}
+  ],
+  "playbook_section_order": {"result": "pass", "note": "unchanged from v1"},
+  "playbook_forbidden": [
+    {"item": "no generic icon-card grid as the MAIN structural device", "result": "pass", "element": "unchanged from v1"},
+    {"item": "no stock-looking illustration", "result": "pass", "element": "unchanged from v1"},
+    {"item": "no centred-everything layout", "result": "pass", "element": "unchanged from v1"},
+    {"item": "no identical section heights", "result": "pass", "element": "unchanged from v1"},
+    {"item": "no placeholder where a real photograph exists", "result": "pass", "element": "fixed this revision -- detail-vents.jpg now anchors .cover in a 2-column layout beside its real copy. 4 of 4 supplied photographs used, up from 3 of 4"}
+  ],
+  "art_direction_checks": [
+    {"item": "mood: quietly thorough", "result": "pass", "element": "unchanged from v1"},
+    {"item": "type pairing: ibm-plex-serif-inter", "result": "pass", "element": "unchanged from v1"},
+    {"item": "palette: base #f2f6f8 / ink #141c22 / accent #0e71aa", "result": "pass", "element": "unchanged from v1"},
+    {"item": "photograph treatment: framed", "result": "pass", "element": "fixed this revision -- restructured .hero into an outer section on the page's own base tone with a rounded, inset .hero-frame holding the photo, so the page's largest photo now reads as a framed, inset image with a visible mat rather than an edge-to-edge full-bleed hero. .cover-photo also framed (a white 6px border + shadow) to match"},
+    {"item": "signature device: index", "result": "pass", "element": "unchanged from v1"},
+    {"item": "section rhythm: heavy/light/breathing/heavy/light/breathing/heavy, visually distinct adjacent backgrounds", "result": "pass", "element": "unchanged from v1"}
+  ],
+  "motion_spec_checks": [
+    {"item": "reveal on scroll via a real observer, not CSS-only", "result": "pass", "element": "unchanged from v1"},
+    {"item": "hover and focus states on every control", "result": "pass", "element": "unchanged from v1"},
+    {"item": "one signature motion moment tied to the signature device", "result": "pass", "element": "unchanged from v1"},
+    {"item": "cancelled under prefers-reduced-motion", "result": "pass", "element": "unchanged from v1"},
+    {"item": "never animate the hero image", "result": "pass", "element": "unchanged from v1 -- the reframed hero image still carries no [data-reveal] or transition"}
+  ],
+  "gate": {
+    "flag_off_findings": 8,
+    "flag_on_findings": 6,
+    "authored_display_text_candidates": [
+      "Bert Roofing", "No pressure, no surprises, no high-pressure sales tactics.",
+      "Three steps, one project manager", "Hours", "Service area", "Schedule a roof inspection"
+    ]
+  },
+  "summary": {
+    "playbook_required_pass": 6, "playbook_required_total": 6, "playbook_required_na": 1,
+    "playbook_forbidden_pass": 5, "playbook_forbidden_total": 5,
+    "art_direction_pass": 6, "art_direction_total": 6,
+    "motion_pass": 5, "motion_total": 5,
+    "gate_findings_flag_on_v1_to_revised": "6 -> 6 (unchanged; the revision targeted the photo-treatment and photo-use findings, not gate findings, both already clean)"
+  }
+}
