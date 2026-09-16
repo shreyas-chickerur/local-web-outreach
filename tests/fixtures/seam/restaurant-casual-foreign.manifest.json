@@ -68,6 +68,18 @@
       "class_name": "short-form claim: inside <button>",
       "sentence": "Voted #1 Café",
       "why_fabricated": "Invented outright -- no such vote or ranking appears anywhere in the material. Everything in <button> was unconditionally chrome before Step 2, whatever it said."
+    },
+    {
+      "class": 9,
+      "class_name": "superlative: \"top rated\"",
+      "sentence": "Top rated crêperie in Oak Cliff",
+      "why_fabricated": "Invented outright -- no such ranking appears anywhere in the material. Planted after CLAIM_RE gained a top[- ]rated alternative it never had before (round after Phase 2c)."
+    },
+    {
+      "class": 10,
+      "class_name": "superlative: \"top-rated\"",
+      "sentence": "Dallas diners keep calling us the top-rated spot for crêpes in the city.",
+      "why_fabricated": "Invented outright -- no such ranking appears anywhere in the material. The hyphenated spelling, planted separately from class 9's spaced form so both CLAIM_RE alternatives ('top[- ]rated' matching either) are exercised by a real planting, not just a self-check example."
     }
   ]
 }

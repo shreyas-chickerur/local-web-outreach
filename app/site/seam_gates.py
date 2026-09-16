@@ -479,7 +479,9 @@ def _corroborated_numbers(material) -> frozenset[str]:
     value, or sits in the same run as the field it came from") reads as
     "drop the per-digit hours/address fallback, rely on the sentence-level
     `bare in own` check instead." Tried exactly that; it broke the real
-    19-fixture corpus's own zero-findings invariant on 8 of 19 fixtures.
+    19-fixture corpus's own zero-findings invariant on 13 of 19 fixtures
+    (verified with the full corpus check, not the truncated run this
+    number was first, wrongly, reported from — see the handoff).
     Cause: `visible_text_runs()` merges adjacent, unpunctuated sibling
     text into ONE run — e.g. roofer-rich's own rendered
     "10021 Cayuga Dr Fri 7:30am to 5pm" glues its address straight onto

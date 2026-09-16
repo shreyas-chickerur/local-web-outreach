@@ -400,19 +400,19 @@ def test_the_ported_gate_is_a_superset_of_the_old_gate_on_every_real_fixture_pag
 # changes an alternative is caught here rather than silently narrowing what
 # this sweep covers.
 #
-# "Ranked#1", not "#1" or "voted #1": found while writing this sweep, and
-# reported rather than fixed (out of Part A's scope -- app/core/claims.py
-# is not one of the files this round touches, and CLAIM_RE is shared with
-# the vision pass, so widening it needs its own corpus-wide check).
-# `\b#1\b` requires a WORD character immediately before "#" with no space,
-# since "#" is itself non-word -- "#1", "the #1" and "voted #1" (the shape
-# every real plant in this corpus actually uses) never match; only a form
-# glued straight onto a preceding letter, like "Ranked#1", satisfies the
-# \b on both sides. The "#1" alternative is effectively dead code against
-# any natural sentence. See the handoff for this round.
+# "voted #1", not "Ranked#1": found while writing this sweep at Part A that
+# `\b#1\b` required a WORD character glued directly onto "#" with no space,
+# so "#1", "the #1" and "voted #1" (the shape every real plant in this
+# corpus actually uses) never matched -- effectively dead code against any
+# natural sentence. Fixed as its own alternative
+# (`(?<!\w)#1\b`, outside the shared `\b(...)\b` group) before Part B, per
+# the round after this one; the natural form is the real self-check now.
+# "top rated"/"top-rated" added the same round -- CLAIM_RE never had this
+# superlative at all before.
 _CLAIM_RE_EXAMPLES = (
     "since 1994", "est. 1994", "20+ years", "award-winning", "voted",
-    "best in Texas", "number one", "Ranked#1", "family-owned", "family-run",
+    "best in Texas", "number one", "voted #1", "top rated", "top-rated",
+    "family-owned", "family-run",
     "trusted by thousands", "500 happy customers", "five-star", "5-star",
     "licensed", "bonded", "insured", "certified", "accredited",
     "board-certified", "admitted to the bar", "state bar",

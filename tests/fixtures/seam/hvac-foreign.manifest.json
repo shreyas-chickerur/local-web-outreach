@@ -81,6 +81,18 @@
       "class_name": "credential-laundered claim",
       "sentence": "Licensed and insured, award-winning and voted best in Plano.",
       "why_fabricated": "'Licensed and insured' is a real, corroborated credential -- hvac's own block text says 'Licensed and Insured ... fully licensed'. 'award-winning' and 'voted best in Plano' are invented outright; no award or ranking appears anywhere in hvac's real material. Phase 2c's own reproduction (NEXT-ROUND.md): before the fix, _credential_backed() exempted the WHOLE sentence once it found the real credential anywhere in it, so the two invented claims riding beside it were never checked -- one true credential vouching for everything sharing its sentence, the bag-of-words gap one level up."
+    },
+    {
+      "class": 9,
+      "class_name": "superlative: \"top rated\"",
+      "sentence": "Top rated plumbing company in Plano",
+      "why_fabricated": "Invented outright -- no such ranking appears anywhere in hvac's real material. Planted after CLAIM_RE gained a top[- ]rated alternative it never had before (round after Phase 2c)."
+    },
+    {
+      "class": 10,
+      "class_name": "superlative: \"top-rated\"",
+      "sentence": "Homeowners across North Texas call us the top-rated choice for plumbing repairs.",
+      "why_fabricated": "Invented outright -- no such ranking appears anywhere in hvac's real material. The hyphenated spelling, planted separately from class 9's spaced form so both CLAIM_RE alternatives ('top[- ]rated' matching either) are exercised by a real planting, not just a self-check example."
     }
   ]
 }

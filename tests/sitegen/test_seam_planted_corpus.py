@@ -10,9 +10,22 @@ misses everything.
 This file is the BASELINE, run against today's gates exactly as
 `pipeline._gate()` combines them (`unsupported()` + `unexplained_
 sentences()`), reading SOURCE markup only — no browser, matching how
-`_gate()` actually runs today. It is expected to be red: that is the
-point of this step. Step 3 ports the gates onto a rendered-DOM read
-and reports the same table again, after.
+`_gate()` actually runs today. It documents which classes the currently
+WIRED gate misses, not which classes the fixed one does (Step 3's
+`test_seam_gates.py` is the one that must be all-green on every class).
+
+Before the round after Phase 2c, this file was allowed to be red
+overall — 12 (formerly 13; `class7d`'s "#1" planting started passing
+here once CLAIM_RE's dead `#1` alternative was fixed) of its rows fail
+by design, one baseline gap per (business, class). Left red, a real new
+gap in the CURRENTLY WIRED gate (as opposed to the fixed one) could add
+a 13th failure here and nobody would notice it wasn't one of the
+already-known ones. `xfail(strict=True)` names each expected failure
+individually instead: the file is green when nothing has changed, red
+if a known gap gets fixed without updating this list (XPASS, under
+`strict`, IS a failure) or a new gap opens up (a genuine, unmarked
+failure). See `.reviews/phase-2c-seam.md` for the round that made this
+change and confirmed each of these 12 against `9b7b6c5`/`c39e1cb`.
 """
 
 from __future__ import annotations
@@ -29,6 +42,23 @@ pytestmark = pytest.mark.unit
 
 SEAM = Path("tests/fixtures/seam")
 MANIFESTS = sorted(SEAM.glob("*-foreign.manifest.json"))
+
+# (business, class) pairs the currently-wired gate (unsupported() +
+# unexplained_sentences(), source markup, no browser) is known not to
+# catch. classes 2/3/5/6 fail identically at 9b7b6c5 (Phase 2, before
+# this corpus grew past its original six classes) -- genuinely
+# pre-existing. 4b/7b (hvac) and 7a/7b (restaurant-casual) did not exist
+# at 9b7b6c5 (Phase 2b's Step 1 added them) but were already failing,
+# byte-identically, at c39e1cb (Phase 2b's own handoff, before Phase 2c
+# touched anything) -- pre-existing relative to every round that could
+# plausibly have fixed them without this file naming it a decision.
+_KNOWN_GATE_GAPS: frozenset[tuple[str, str]] = frozenset({
+    ("hvac", "2"), ("hvac", "3"), ("hvac", "5"), ("hvac", "6"),
+    ("hvac", "4b"), ("hvac", "7b"),
+    ("restaurant-casual", "2"), ("restaurant-casual", "3"),
+    ("restaurant-casual", "5"), ("restaurant-casual", "6"),
+    ("restaurant-casual", "7a"), ("restaurant-casual", "7b"),
+})
 
 
 def _load(manifest_path: Path) -> tuple[dict, str, object]:
@@ -60,17 +90,27 @@ def _cases():
     for manifest_path in MANIFESTS:
         manifest, _, _ = _load(manifest_path)
         for planting in manifest["plantings"]:
+            business = manifest["business"]
+            class_num = str(planting["class"])
+            marks = []
+            if (business, class_num) in _KNOWN_GATE_GAPS:
+                marks.append(pytest.mark.xfail(
+                    strict=True,
+                    reason=f"known gap in the currently-wired gate, class "
+                           f"{class_num} ({business}) -- see "
+                           f"_KNOWN_GATE_GAPS above and "
+                           f".reviews/phase-2c-seam.md"))
             yield pytest.param(
                 manifest_path, planting["class"], planting["sentence"],
-                id=f"{manifest['business']}-class{planting['class']}")
+                id=f"{business}-class{planting['class']}", marks=marks)
 
 
 @pytest.mark.parametrize("manifest_path,class_num,sentence", list(_cases()))
 def test_todays_gates_catch_the_planted_fabrication(manifest_path, class_num, sentence):
-    """The baseline table, one row per planting. Expected RED overall —
-    see the module docstring. A row that already passes says today's
-    gate happens to catch that shape; it is not evidence the gate reads
-    the rendered page (see the control-page test below for that)."""
+    """The baseline table, one row per planting. Every row not in
+    `_KNOWN_GATE_GAPS` must pass; the ones IN it are `xfail(strict=True)`
+    and must fail exactly as expected (see the module docstring) --
+    either way this file is green on a normal run."""
     manifest, html, material = _load(manifest_path)
     findings = _current_gate_findings(html, material)
     assert _caught(sentence, findings), (

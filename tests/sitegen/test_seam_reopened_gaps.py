@@ -42,17 +42,25 @@ def test_gap_1_the_credential_invariant_stays_closed():
     has no about text and no blocks, confirmed below, not assumed)
     still came back clean. Step 2 removed that exemption from the
     claims check outright; this asserts the gate now catches every one
-    of the 9 genuinely uncorroborated claims the old gate also caught."""
+    of the genuinely uncorroborated claims the old gate also caught.
+
+    The count moved 9 -> 10 the round after Phase 2c: CLAIM_RE's "#1"
+    alternative used to require a word character glued directly onto
+    "#" with no space (`\\b#1\\b` can never match "voted #1"), so the
+    button's own "#1" was invisible to `unsupported()` even though the
+    button text is right there in `_THREADBARE_CREDENTIAL_PAGE`. Fixed
+    in `app/core/claims.py`; "#1" is now its own real finding, not
+    folded into "voted"."""
     material = _threadbare_material()
     assert material.about is None
     assert material.blocks == ()
 
     old_findings = unsupported(_THREADBARE_CREDENTIAL_PAGE, material)
-    assert len(old_findings) == 9, old_findings
+    assert len(old_findings) == 10, old_findings
 
     runs = visible_text_runs(_THREADBARE_CREDENTIAL_PAGE)
     new_findings = gate(runs, material)
-    assert len(new_findings) >= 9, (
+    assert len(new_findings) >= 10, (
         f"the credential invariant is reopened again: {new_findings}")
 
 
