@@ -1,0 +1,76 @@
+{
+  "business": "hvac",
+  "version": "revised",
+  "source_file": "tests/fixtures/design/hvac.html",
+  "playbook_hash": "046d04f828fd",
+  "art_direction_content_hash": "f5925aa15b16",
+  "playbook_required_elements": [
+    {"item": "call action reachable on phones", "result": "pass", "element": ".callbar (fixed, max-width:720px) + hero/closing tel: buttons"},
+    {"item": "service area near the top", "result": "pass", "element": ".hero-area, directly under the headline"},
+    {"item": "business's own photo as hero", "result": "pass", "element": ".hero img, real technician+van photo (b2048518.assetcdn.net)"},
+    {"item": "named technician from reviews", "result": "pass", "element": "Luis Percy (signature quote), Daniel Tucker (review card)"},
+    {"item": "job story (problem, found, result)", "result": "pass", "element": ".story section, 3 numbered steps"},
+    {"item": "reviews with names", "result": "pass", "element": "Jessica Gluck, Daniel Salzman, Ron Brenners"},
+    {"item": "hours incl. emergency, corroborated", "result": "pass", "element": ".details .detail-block (Hours: Mon-Fri 8am-5pm + \"24/7 emergency service\")"}
+  ],
+  "playbook_section_order": {"result": "pass", "note": "unchanged from v1 -- matches the planned 7-section order exactly"},
+  "playbook_forbidden": [
+    {"item": "no generic icon-card grid as the MAIN structural device", "result": "pass", "element": ".cover-grid (3 cards, no icons, one section of seven)"},
+    {"item": "no stock-looking illustration", "result": "pass", "element": "n/a -- only real photographs used"},
+    {"item": "no centred-everything layout", "result": "pass", "element": "unchanged from v1"},
+    {"item": "no identical section heights down the page", "result": "pass", "element": "unchanged from v1"},
+    {"item": "no placeholder where a real photograph exists", "result": "pass", "element": "n/a -- no placeholders present"}
+  ],
+  "art_direction_checks": [
+    {"item": "mood: workhorse trust", "result": "pass", "element": "unchanged from v1"},
+    {"item": "type pairing: oswald-barlow", "result": "pass", "element": "unchanged from v1"},
+    {"item": "palette: base #f7f3ea / ink #211a12 / accent #866713", "result": "pass", "element": "unchanged from v1"},
+    {"item": "photograph treatment: vignette_scrim", "result": "pass", "element": "unchanged from v1"},
+    {"item": "signature device: quote", "result": "pass", "element": "unchanged from v1"},
+    {"item": "section rhythm: heavy/light/breathing/heavy/light/breathing/heavy, no two adjacent sharing a weight", "result": "fail", "element": "same gap as v1, not touched by this revision -- .quote-signature and .cover still share the identical --base background"}
+  ],
+  "motion_spec_checks": [
+    {"item": "reveal on scroll via a real observer, not CSS-only", "result": "pass", "element": "unchanged from v1"},
+    {"item": "hover and focus states on every control", "result": "pass", "element": "unchanged from v1"},
+    {"item": "one signature motion moment tied to the signature device", "result": "pass", "element": "unchanged from v1"},
+    {"item": "cancelled under prefers-reduced-motion", "result": "pass", "element": "unchanged from v1"},
+    {"item": "never animate the hero image", "result": "pass", "element": "unchanged from v1"}
+  ],
+  "content_completeness_regressions": [
+    {
+      "item": "Electrical cover card",
+      "result": "fail",
+      "element": ".cover-grid .cover-card:nth-child(2)",
+      "note": "v1's body text (\"We know that not every problem occurs at a convenient time...\") was drawn from block 23, which was never in the numbered copy list handed to the design session -- a real copy-rule violation. The revision fixed the violation by DELETING the text rather than sourcing compliant text, leaving the card as a bare heading with no supporting copy. Correct per the copy rule; a regression in craft and page balance (the Plumbing card beside it still carries two lines of real body text, so the row now reads unevenly)."
+    },
+    {
+      "item": "Air conditioning cover card",
+      "result": "fail",
+      "element": ".cover-grid .cover-card:nth-child(3)",
+      "note": "Same cause and same trade-off as the Electrical card -- v1's text came from block 9, also outside the numbered copy list."
+    },
+    {
+      "item": "job-story stat panel",
+      "result": "partial",
+      "element": ".stat-panel",
+      "note": "v1 rendered a 2x2 grid of labelled before/after stat tiles (Indoor temperature, Airflow, Temperature split) by slicing individual values out of one real but run-on sentence (job_story_block_32[1]), which is itself a copy-rule violation (selecting sub-sentence fragments, not whole listed sentences). The revision replaced it with two full verbatim sentences as flowing prose -- correct per the copy rule, but a plainer, less scannable presentation of the same real result."
+    }
+  ],
+  "gate": {
+    "flag_off_findings": 13,
+    "flag_on_findings": 9,
+    "authored_display_text_candidates": [
+      "Milestone Electric, A/C & Plumbing", "Plumbing", "Electrical",
+      "Air conditioning", "Zero airflow, after hours", "Hours",
+      "Service area", "Credentials", "Same-day plumbing, electrical & AC for Plano"
+    ]
+  },
+  "summary": {
+    "playbook_required_pass": 7, "playbook_required_total": 7,
+    "playbook_forbidden_pass": 5, "playbook_forbidden_total": 5,
+    "art_direction_pass": 5, "art_direction_total": 6,
+    "motion_pass": 5, "motion_total": 5,
+    "content_completeness_pass": 0, "content_completeness_total": 3,
+    "gate_findings_flag_on_v1_to_revised": "23 -> 9"
+  }
+}

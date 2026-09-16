@@ -1,0 +1,54 @@
+{
+  "business": "hvac",
+  "version": "v1",
+  "source_file": "tests/fixtures/design/hvac-v1.html",
+  "playbook_hash": "046d04f828fd",
+  "art_direction_content_hash": "f5925aa15b16",
+  "playbook_required_elements": [
+    {"item": "call action reachable on phones", "result": "pass", "element": ".callbar (fixed, max-width:720px) + hero/closing tel: buttons"},
+    {"item": "service area near the top", "result": "pass", "element": ".hero-area, directly under the headline"},
+    {"item": "business's own photo as hero", "result": "pass", "element": ".hero img, real technician+van photo (b2048518.assetcdn.net)"},
+    {"item": "named technician from reviews", "result": "pass", "element": "Luis Percy (signature quote), Daniel Tucker (review card)"},
+    {"item": "job story (problem, found, result)", "result": "pass", "element": ".story section, 3 numbered steps"},
+    {"item": "reviews with names", "result": "pass", "element": "Jessica Gluck, Daniel Salzman, Ron Brenners"},
+    {"item": "hours incl. emergency, corroborated", "result": "pass", "element": ".details .detail-block (Hours: Mon-Fri 8am-5pm + 24/7 emergency line copy)"}
+  ],
+  "playbook_section_order": {"result": "pass", "note": "matches the planned 7-section order exactly: opening, trust proof, covered, job story, reviews, credentials/hours, closing"},
+  "playbook_forbidden": [
+    {"item": "no generic icon-card grid as the MAIN structural device", "result": "pass", "element": ".cover-grid (3 cards, no icons, one section of seven)"},
+    {"item": "no stock-looking illustration", "result": "pass", "element": "n/a -- only real photographs used"},
+    {"item": "no centred-everything layout", "result": "pass", "element": "hero/story/reviews left-aligned or asymmetric; only .quote-signature and .closing are centred, each a deliberate device"},
+    {"item": "no identical section heights down the page", "result": "pass", "element": "heights vary: hero tall, quote compact, cover medium, story tall, reviews medium, details compact, closing large"},
+    {"item": "no placeholder where a real photograph exists", "result": "pass", "element": "n/a -- no placeholders present"}
+  ],
+  "art_direction_checks": [
+    {"item": "mood: workhorse trust", "result": "pass", "element": "direct copy + real work photography, no styled studio set"},
+    {"item": "type pairing: oswald-barlow", "result": "pass", "element": "Google Fonts Oswald (display) + Barlow (body) loaded and applied"},
+    {"item": "palette: base #f7f3ea / ink #211a12 / accent #866713", "result": "pass", "element": ":root custom properties, used throughout"},
+    {"item": "photograph treatment: vignette_scrim", "result": "pass", "element": ".hero::after and .story-photo::after gradient scrims"},
+    {"item": "signature device: quote", "result": "pass", "element": ".quote-signature, full-display blockquote with animated quote-mark"},
+    {"item": "section rhythm: heavy/light/breathing/heavy/light/breathing/heavy, no two adjacent sharing a weight", "result": "fail", "element": ".quote-signature (light) and .cover (breathing) both render on the identical --base cream background with generous whitespace -- the LABELS differ but the two sections are visually indistinguishable in weight, reading as one continuous light zone rather than two distinct rhythm beats"}
+  ],
+  "motion_spec_checks": [
+    {"item": "reveal on scroll via a real observer, not CSS-only", "result": "pass", "element": "IntersectionObserver in the trailing <script>"},
+    {"item": "hover and focus states on every control", "result": "pass", "element": ".cta-btn:hover/:focus-visible, a:hover/:focus-visible"},
+    {"item": "one signature motion moment tied to the signature device", "result": "pass", "element": ".quote-draw svg path stroke-dashoffset draw-in on reveal"},
+    {"item": "cancelled under prefers-reduced-motion", "result": "pass", "element": "@media (prefers-reduced-motion: reduce) block"},
+    {"item": "never animate the hero image", "result": "pass", "element": ".hero img carries no [data-reveal] or transition"}
+  ],
+  "gate": {
+    "flag_off_findings": 27,
+    "flag_on_findings": 23,
+    "authored_display_text_candidates": [
+      "Milestone Electric, A/C & Plumbing", "Plumbing", "Electrical",
+      "Air conditioning", "Zero airflow, after hours", "Hours",
+      "Service area", "Credentials", "Same-day plumbing, electrical & AC for Plano"
+    ]
+  },
+  "summary": {
+    "playbook_required_pass": 7, "playbook_required_total": 7,
+    "playbook_forbidden_pass": 5, "playbook_forbidden_total": 5,
+    "art_direction_pass": 5, "art_direction_total": 6,
+    "motion_pass": 5, "motion_total": 5
+  }
+}
