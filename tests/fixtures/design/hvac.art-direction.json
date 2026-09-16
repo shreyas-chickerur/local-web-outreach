@@ -1,0 +1,23 @@
+{
+  "accent": "#866713",
+  "accent_name": "mustard",
+  "base": "#f7f3ea",
+  "business": "hvac",
+  "content_hash": "f5925aa15b16",
+  "ink": "#211a12",
+  "mood": "workhorse trust",
+  "mood_why": "Milestone's own words lead with speed and follow-through (\"same-day\", \"fully stocked trucks\", \"peace of mind\") and their photographs show real trucks, technicians and a completed panel job, not a styled studio set -- the material earns a page that reads as capable and immediate, not polished-generic.",
+  "photo_treatment": "vignette_scrim",
+  "section_rhythm": [
+    "heavy",
+    "light",
+    "breathing",
+    "heavy",
+    "light",
+    "breathing",
+    "heavy"
+  ],
+  "signature_device": "quote",
+  "signature_why": "Milestone's strongest real asset is five named-author Google reviews (Jeff Willie, Mandana Shahbazi, Farrah Carlton, Brett Conway, James Kerr) behind a real 4.9-star, 6,203-review count -- one review set at full display size does more to earn a stranger's trust than a stat band or an icon grid ever could for someone deciding who to let into their home.",
+  "type_pair": "oswald-barlow"
+}

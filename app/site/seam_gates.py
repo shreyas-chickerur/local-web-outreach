@@ -591,9 +591,58 @@ def contradicted_review_counts(runs: list[VisibleRun], material) -> list[str]:
     return found
 
 
-def gate(runs: list[VisibleRun], material) -> list[str]:
-    """The ported `pipeline._gate()`: all four, concatenated."""
-    return (unsupported_sentences(runs, material)
-            + unexplained_prose(runs, material)
-            + unbacked_numbers(runs, material)
-            + contradicted_review_counts(runs, material))
+_AUTHORED_DISPLAY_TAGS = frozenset({"h1", "h2", "h3", "button"})
+_AUTHORED_DISPLAY_MAX_WORDS = 8
+
+
+def authored_display_text_candidates(runs: list[VisibleRun]) -> list[str]:
+    """Phase 3, Step 3's `ALLOW_AUTHORED_DISPLAY_TEXT` flag, this round
+    only (see `.reviews/NEXT-ROUND.md`): a heading or button label may be
+    model-written if it is 8 words or fewer, has no digit, and matches no
+    `CLAIM_RE` shape. Those three are closed, checkable rules; the
+    fourth ("names nothing except the business, its trade, or its town")
+    is not, for a foreign design page — `visible_text_runs()` reads TAG
+    only, deliberately, never CSS class (see its own module docstring),
+    so a `<div class="eyebrow">` is indistinguishable by shape from any
+    other div, and nothing here can confirm what a short string names.
+    This returns every heading/button run passing the three closed
+    checks — every candidate still needs the name-scope read by eye
+    before it is accepted, and an eyebrow div never reaches this
+    function at all, a known gap named in the round's own handoff.
+    """
+    found: list[str] = []
+    seen: set[str] = set()
+    for run in runs:
+        if run.tag not in _AUTHORED_DISPLAY_TAGS:
+            continue
+        text = run.text.strip()
+        if not text or text in seen:
+            continue
+        if len(text.split()) > _AUTHORED_DISPLAY_MAX_WORDS:
+            continue
+        if any(ch.isdigit() for ch in text):
+            continue
+        if CLAIM_RE.search(text):
+            continue
+        seen.add(text)
+        found.append(text)
+    return found
+
+
+def gate(runs: list[VisibleRun], material,
+         *, allow_authored_display_text: bool = False) -> list[str]:
+    """The ported `pipeline._gate()`: all four, concatenated. With
+    `allow_authored_display_text=True` (Phase 3 only, default False so
+    every existing caller is unaffected), a finding that is also an
+    `authored_display_text_candidates()` string is dropped from the
+    result — call that function directly to get the exempted list back
+    for reporting, since `gate()` itself only ever returns findings.
+    """
+    findings = (unsupported_sentences(runs, material)
+               + unexplained_prose(runs, material)
+               + unbacked_numbers(runs, material)
+               + contradicted_review_counts(runs, material))
+    if allow_authored_display_text:
+        authored = set(authored_display_text_candidates(runs))
+        findings = [f for f in findings if f not in authored]
+    return findings
