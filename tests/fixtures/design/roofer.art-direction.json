@@ -1,0 +1,23 @@
+{
+  "accent": "#8e620b",
+  "accent_name": "amber",
+  "base": "#faf6ef",
+  "business": "roofer",
+  "content_hash": "7a8658e25f11",
+  "ink": "#201a10",
+  "mood": "regional scale",
+  "mood_why": "Status Roofing's own words lead with reach and process, not a single local crew -- \"Two Hubs. Four States. One Standard,\" W2 employee crews, insurance-claim handling, and market expansion into Austin -- the material earns a page that reads as a bigger, more procedural operation, not a warm neighborhood shop.",
+  "photo_treatment": "full_bleed",
+  "section_rhythm": [
+    "heavy",
+    "light",
+    "breathing",
+    "heavy",
+    "light",
+    "breathing",
+    "heavy"
+  ],
+  "signature_device": "ledger",
+  "signature_why": "Status Roofing's real material is unusually document-shaped for this trade -- W2 employee documentation, insurance-claim paperwork, a real FAQ about the insurance process -- a ruled, tabular ledger device reads as the professional, paper-trail credibility their own words already lead with, more than a single review could.",
+  "type_pair": "league-spartan-dm-sans"
+}

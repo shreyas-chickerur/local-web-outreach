@@ -1,0 +1,23 @@
+{
+  "accent": "#0e71aa",
+  "accent_name": "sky",
+  "base": "#f2f6f8",
+  "business": "roofer-rich",
+  "content_hash": "40193b467ac6",
+  "ink": "#141c22",
+  "mood": "quietly thorough",
+  "mood_why": "Bert Roofing's own material corroborates four real credentials (warranty, free estimate, service area, manufacturer badge) and describes a plain three-step process -- inspection, decision, completion -- with a named project manager at each step. Nothing in their own words reaches for excitement; the material earns a calm, procedural page, not a louder one.",
+  "photo_treatment": "framed",
+  "section_rhythm": [
+    "heavy",
+    "light",
+    "breathing",
+    "heavy",
+    "light",
+    "breathing",
+    "heavy"
+  ],
+  "signature_device": "index",
+  "signature_why": "Bert Roofing's own site already frames the job as three numbered steps (inspection, decision, completion) with a named project manager at each -- a numbered index device makes that real structure the spine of the page instead of restating it as three more paragraphs.",
+  "type_pair": "ibm-plex-serif-inter"
+}
