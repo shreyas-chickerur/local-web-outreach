@@ -22,7 +22,8 @@ from dataclasses import dataclass, field, replace
 
 from app.adapters.directory import DirectoryPlace, DirectorySource
 from app.adapters.pdf_read import read_pdf_text
-from app.adapters.site_fetch import SiteFetcher, default_fetcher, fetch_bytes
+from app.adapters.site_fetch import FetchResult, SiteFetcher, default_fetcher, fetch_bytes
+from app.site.visible import visible_text_runs
 from app.workbench.corroborate import Fact, corroborate
 from app.workbench.extract import (
     ExtractedSite,
@@ -80,6 +81,11 @@ class Brief:
     trade: str | None = None            # "Restaurant", as the directory files it
     latitude: float | None = None
     longitude: float | None = None
+    # Every document the crawl attempted on their own site, in the order it
+    # read them: {url, kind (page | pdf), read, reason, text}. Kept so the
+    # claim checks can search the business's own words as they stood on the
+    # day of this crawl, instead of a hand-made copy nothing keeps current.
+    pages: list[dict] = field(default_factory=list)
 
     @property
     def looks_like_a_chain(self) -> bool:
@@ -212,7 +218,24 @@ def site_state(status: int | None, ok: bool) -> str:
     return "error"
 
 
-def _read_menu_pdfs(extracted: ExtractedSite) -> None:
+def _page_entry(url: str, result: FetchResult) -> dict:
+    """One attempted page, with its visible text or the reason there is none.
+
+    The reason is only ever what the fetch itself reported, most specific
+    first. A failure recorded as just "not read" leaves a person unable to
+    tell a dead link from a site that turns crawlers away.
+    """
+    if result.ok and result.html:
+        text = "\n".join(run.text for run in visible_text_runs(result.html))
+        return {"url": url, "kind": "page", "read": True, "reason": "", "text": text}
+    reason = ("certificate error" if result.tls_error
+              else result.error if result.error
+              else f"status {result.status}" if result.status and result.status >= 400
+              else "empty response")
+    return {"url": url, "kind": "page", "read": False, "reason": reason, "text": ""}
+
+
+def _read_menu_pdfs(extracted: ExtractedSite, pages: list[dict]) -> None:
     """Read the text out of every PDF menu already found, in place.
 
     A PDF is not a link to send a visitor away to, it is a page this
@@ -234,6 +257,13 @@ def _read_menu_pdfs(extracted: ExtractedSite) -> None:
         data = fetch_bytes(media["url"])
         text = read_pdf_text(data) if data else None
         media["readable"] = text is not None
+        # The text is kept whole, not only the priced lines read out of it
+        # below: a wine list names wines without prices on the same line, and
+        # a claim naming one needs the list itself to be checked against.
+        pages.append({"url": media["url"], "kind": "pdf", "read": bool(text),
+                      "reason": ("" if text else "no text layer" if data
+                                 else "could not download"),
+                      "text": text or ""})
         if not text:
             continue
         known = {i["name"].lower() for i in extracted.menu_items}
@@ -260,7 +290,7 @@ CRAWL_PAGE_BUDGET = 24
 
 def _read_their_site(url: str, fetcher: SiteFetcher, *,
                       on_progress: Callable[[str], None] | None = None
-                     ) -> tuple[ExtractedSite | None, bool, str, UrlCheck]:
+                     ) -> tuple[ExtractedSite | None, bool, str, UrlCheck, list[dict]]:
     """Fetch their homepage plus the pages that actually carry content,
     breadth-first, up to `CRAWL_DEPTH` levels deep and `CRAWL_PAGE_BUDGET`
     pages total.
@@ -271,6 +301,9 @@ def _read_their_site(url: str, fetcher: SiteFetcher, *,
     without it a caller sees nothing at all for however long that takes.
     Optional and additive: every existing caller that omits it behaves
     exactly as before.
+
+    The last value returned is every document attempted, read or not, as
+    `_page_entry` describes it.
     """
     report = on_progress or (lambda _msg: None)
     check = validate(url, fetcher)
@@ -278,13 +311,19 @@ def _read_their_site(url: str, fetcher: SiteFetcher, *,
     if result is None or not result.html:
         state = ("blocked" if check.blocked
                  else "insecure" if check.fault == "certificate" else "unreachable")
-        return None, False, state, check
+        # Recorded even here, in the address check's own words: when nothing
+        # at all could be read, why is the one thing a person needs, and the
+        # check has already told a refused reader from a dead server.
+        return None, False, state, check, [{
+            "url": check.working or url, "kind": "page", "read": False,
+            "reason": check.note or state, "text": ""}]
     url = check.working or url
     state = site_state(result.status, bool(result.ok and result.html))
     if check.fault == "certificate":
         state = "insecure"
     base = result.final_url or url
     extracted = extract_from_html(result.html, base)
+    pages = [_page_entry(base, result)]
     report(f"read homepage: {base}")
 
     visited = {base}
@@ -303,6 +342,10 @@ def _read_their_site(url: str, fetcher: SiteFetcher, *,
         sub = fetcher.fetch(page)
         fetched += 1
         report(f"read page {fetched}/{CRAWL_PAGE_BUDGET}: {page}")
+        # Recorded before the failure check, not after: a page skipped on
+        # failure used to vanish, and "we never saw it" read exactly like
+        # "the site does not say so" to everything downstream.
+        pages.append(_page_entry(page, sub))
         if not (sub.ok and sub.html):
             continue
         extracted = merge(extracted, extract_from_html(sub.html, page))
@@ -318,8 +361,9 @@ def _read_their_site(url: str, fetcher: SiteFetcher, *,
 
     if any(m.get("kind") == "pdf" for m in extracted.menu_media):
         report("reading menu PDF(s)")
-    _read_menu_pdfs(extracted)
-    return extracted, True, ("insecure" if check.fault == "certificate" else "ok"), check
+    _read_menu_pdfs(extracted, pages)
+    return (extracted, True, ("insecure" if check.fault == "certificate" else "ok"),
+            check, pages)
 
 
 def build_brief(
@@ -360,7 +404,7 @@ def build_brief(
     # real name from their page title matches immediately.
     if brief.website_url:
         report(f"reading their website: {brief.website_url}")
-        published, reachable, state, check = _read_their_site(
+        published, reachable, state, check, brief.pages = _read_their_site(
             brief.website_url, fetcher, on_progress=on_progress)
         brief.url_check = check
         brief.site_reachable = reachable
@@ -459,7 +503,7 @@ def build_brief(
     # A website discovered by a directory still needs reading.
     if brief.website_url and brief.published is None:
         report(f"reading their website: {brief.website_url}")
-        published, reachable, state, check = _read_their_site(
+        published, reachable, state, check, brief.pages = _read_their_site(
             brief.website_url, fetcher, on_progress=on_progress)
         brief.url_check = check
         brief.site_reachable = reachable

@@ -102,4 +102,5 @@ def brief_to_dict(brief: Brief) -> dict:
         "trade": brief.trade,
         "latitude": brief.latitude,
         "longitude": brief.longitude,
+        "pages": brief.pages,
     }

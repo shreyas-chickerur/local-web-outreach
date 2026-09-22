@@ -558,3 +558,106 @@ def test_the_working_spelling_is_read_and_the_fault_is_kept():
     assert any("www." not in u for u in fetcher.tried)
     assert brief.published is not None
     assert "certificate" in format_brief(brief).lower()
+
+
+# ------------------------- the text the crawl read -------------------------- #
+class _FailingFetcher(_MultiPageFetcher):
+    """Pages it has serve normally; a URL listed in `errors` fails the way a
+    real fetch does when it never gets a response — no status, an error."""
+
+    def __init__(self, pages: dict[str, str], errors: dict[str, str]):
+        super().__init__(pages)
+        self._errors = errors
+
+    def fetch(self, url):
+        if url in self._errors:
+            self.fetched.append(url)
+            return FetchResult(ok=False, status=None, final_url=url, html="",
+                               elapsed_ms=5, error=self._errors[url])
+        return super().fetch(url)
+
+
+def _pages(brief) -> list[dict]:
+    # Through the serializer, not off the dataclass: `brief_to_dict` copies
+    # only the keys it names, so a field that never reaches it never reaches
+    # the archive or the database either.
+    from app.web.serialize import brief_to_dict
+    return brief_to_dict(brief)["pages"]
+
+
+def test_every_page_the_crawl_reads_keeps_its_text():
+    """The crawl read the business's own pages and kept only the fields it
+    extracted. The claim checks then had nothing of the business's own words
+    to search, and fell back on a hand-made copy two weeks out of date."""
+    home = ('<html><head><title>Home | Craftway Kitchen | Frisco TX</title></head>'
+            '<body><p>Scratch kitchen on Main Street.</p>'
+            '<a href="/wine/">Wine</a></body></html>')
+    wine = ('<html><body><h2>Wine</h2><p>Cabernet Sauvignon, Napa Valley</p>'
+            '<a href="/story/">Our story</a></body></html>')
+    story = '<html><body><p>Opened in 2013 by two sisters.</p></body></html>'
+    pages = _pages(build_brief("craftwaykitchen.com", fetcher=_MultiPageFetcher({
+        "https://craftwaykitchen.com/": home,
+        "https://craftwaykitchen.com/wine/": wine,
+        "https://craftwaykitchen.com/story/": story,
+    })))
+    assert [p["url"] for p in pages] == [
+        "https://craftwaykitchen.com/",
+        "https://craftwaykitchen.com/wine/",
+        "https://craftwaykitchen.com/story/",
+    ]
+    assert all(p["read"] and p["kind"] == "page" and p["reason"] == "" for p in pages)
+    assert "Scratch kitchen on Main Street." in pages[0]["text"]
+    assert "Cabernet Sauvignon, Napa Valley" in pages[1]["text"]
+    assert "Opened in 2013" in pages[2]["text"]
+    assert "<p>" not in pages[1]["text"]
+
+
+def test_a_page_that_fails_is_kept_with_its_reason():
+    """A page skipped on failure vanished, and "we never saw it" read exactly
+    like "the site does not say so" to everything downstream."""
+    home = ('<html><head><title>Home | Craftway Kitchen | Frisco TX</title></head>'
+            '<body><a href="/gone/">Old menu</a><a href="/slow/">Events</a>'
+            '</body></html>')
+    pages = _pages(build_brief("craftwaykitchen.com", fetcher=_FailingFetcher(
+        {"https://craftwaykitchen.com/": home},
+        {"https://craftwaykitchen.com/slow/": "timed out"})))
+    by_url = {p["url"]: p for p in pages}
+    gone = by_url["https://craftwaykitchen.com/gone/"]
+    slow = by_url["https://craftwaykitchen.com/slow/"]
+    assert (gone["read"], gone["reason"], gone["text"]) == (False, "status 404", "")
+    assert (slow["read"], slow["reason"]) == (False, "timed out")
+
+
+def test_a_site_that_cannot_be_reached_still_says_why():
+    """The case where the reason matters most is the one where nothing at all
+    was read."""
+    pages = _pages(build_brief("dead-site.example", fetcher=_Fetcher(ok=False)))
+    assert len(pages) == 1
+    assert pages[0]["read"] is False
+    assert pages[0]["reason"]
+
+
+def test_a_menu_pdf_keeps_its_text_not_only_its_items(monkeypatch):
+    """A PDF's lines were used for menu items and then dropped, so a wine list
+    kept as a PDF could never back a claim that named a wine."""
+    import app.workbench.brief as brief_module
+
+    data = _pdf_bytes("BT /F1 18 Tf 20 100 Td (Short Rib $32) Tj ET")
+    monkeypatch.setattr(brief_module, "fetch_bytes", lambda url, timeout=15.0: data)
+    pdfs = [p for p in _pages(build_brief("craftwaykitchen.com",
+                                          fetcher=_Fetcher(_PDF_MENU_SITE)))
+            if p["kind"] == "pdf"]
+    assert len(pdfs) == 1
+    assert pdfs[0]["url"].endswith("/menu.pdf")
+    assert pdfs[0]["read"] is True
+    assert "Short Rib $32" in pdfs[0]["text"]
+
+
+def test_a_menu_pdf_that_cannot_be_read_says_which_way_it_failed(monkeypatch):
+    import app.workbench.brief as brief_module
+
+    monkeypatch.setattr(brief_module, "fetch_bytes", lambda url, timeout=15.0: None)
+    pdfs = [p for p in _pages(build_brief("craftwaykitchen.com",
+                                          fetcher=_Fetcher(_PDF_MENU_SITE)))
+            if p["kind"] == "pdf"]
+    assert (pdfs[0]["read"], pdfs[0]["reason"]) == (False, "could not download")
