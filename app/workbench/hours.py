@@ -34,8 +34,13 @@ def _day(word: str) -> str | None:
     return None
 
 
-def _minutes(text: str) -> str | None:
-    """'5:00 PM' -> '1700'. Twelve-hour and 24-hour clocks both appear."""
+def _read_time(text: str) -> tuple[str, str] | None:
+    """'5:00 PM' -> ('1700', 'pm'). The meridiem is returned as well as applied.
+
+    Which one was written matters later: a range where only the closing time
+    says PM is the normal way to write an evening, and the opening time has to
+    borrow it.
+    """
     match = _TIME.match(text.strip())
     if match is None:
         return None
@@ -48,7 +53,72 @@ def _minutes(text: str) -> str | None:
         hour = 0
     if not (0 <= hour <= 24 and 0 <= minute < 60):
         return None
-    return f"{hour:02d}{minute:02d}"
+    return f"{hour:02d}{minute:02d}", meridiem
+
+
+def _minutes(text: str) -> str | None:
+    """'5:00 PM' -> '1700'. Twelve-hour and 24-hour clocks both appear."""
+    read = _read_time(text)
+    return read[0] if read else None
+
+
+_TIME_TOKEN = re.compile(r"\d{1,2}(?::\d{2})?\s*(?:am|pm)?", re.IGNORECASE)
+
+
+def _segments(line: str) -> list[str]:
+    """One line can hold a whole week: "Sun-Wed 5-9pm, Thu-Sat 5-10pm".
+
+    That is how a footer writes it, and reading the line as one entry applied
+    the FIRST range to every day named anywhere on it — a restaurant open an
+    hour later at the weekend had that hour quietly deleted.
+
+    Only split where the pieces stand alone. "Tuesday through Saturday, 11am to
+    9pm" is one entry whose comma separates the days from the times, and
+    splitting it would throw both halves away.
+    """
+    parts = [p for p in re.split(r"[,;|]", line) if p.strip()]
+    whole = [p for p in parts
+             if _DAY_WORD.search(p) and len(_TIME_TOKEN.findall(p)) >= 2]
+    return whole if len(whole) >= 2 else [line]
+
+
+def _close_after_open(opens: str, opens_said: str,
+                      closes: str, closes_said: str) -> str:
+    """"9-5" is nine in the morning to five in the evening, not to five a.m.
+
+    When neither end says which half of the day it is, the only thing that
+    settles it is that a closing time comes after an opening one. Without this
+    the commonest shorthand a small business writes — "Mon-Fri 9-5" — was read
+    as a twenty-hour overnight shift, and the screen said so with a straight
+    face.
+    """
+    if opens_said or closes_said or closes > opens:
+        return closes
+    shifted = f"{(int(closes[:2]) + 12) % 24:02d}{closes[2:]}"
+    return shifted if shifted > opens else closes
+
+
+def _borrow_meridiem(opens: str, opens_said: str,
+                     closes: str, closes_said: str) -> str:
+    """Google writes an evening as "5:00 – 9:00 PM", marking only the close.
+
+    Read literally that is five in the morning to nine at night, which is what
+    was being stored for a restaurant that opens at five in the afternoon — and
+    because their own site said 1700, the two sources "disagreed" and the hours
+    were dropped as a conflict. For a business whose hours both sources state
+    identically.
+
+    The rule is the one a person applies without thinking: an unmarked opening
+    time takes the closing time's meridiem when doing so still leaves the range
+    running forwards. "8:00 – 5:00 PM" does not — eight in the evening to five
+    in the evening is backwards — so that one stays as morning.
+    """
+    if opens_said or not closes_said:
+        return opens
+    shifted = f"{(int(opens[:2]) + 12) % 24:02d}{opens[2:]}"
+    if closes_said == "pm" and int(opens[:2]) < 12 and shifted < closes:
+        return shifted
+    return opens
 
 
 def parse_week(lines: list[str]) -> dict[str, str]:
@@ -58,35 +128,39 @@ def parse_week(lines: list[str]) -> dict[str, str]:
     partial rather than inventing a closed day.
     """
     week: dict[str, str] = {}
-    for line in lines:
-        matches = [(m, _day(m.group(0))) for m in _DAY_WORD.finditer(line)]
-        found = [(m, d) for m, d in matches if d]
-        days = [d for _, d in found]
-        if not days:
-            continue
-        # "Mon-Fri" is a range; "Mon, Wed" is a list. What separates the two day
-        # words decides which — read the text between them rather than guessing
-        # from the names, since sources abbreviate to two, three or four letters.
-        joined = (line[found[0][0].end():found[1][0].start()]
-                  if len(found) == 2 else "")
-        if len(days) == 2 and re.fullmatch(r"\s*(to|[-–—])\s*", joined, re.IGNORECASE):
-            start, end = _INDEX[days[0]], _INDEX[days[1]]
-            span = (list(range(start, end + 1)) if start <= end
-                    else list(range(start, 7)) + list(range(0, end + 1)))
-            days = [DAYS[i] for i in span]
-
-        # Day names carry no digits, so times can be read straight off the line.
-        if _CLOSED.search(line):
-            value = "closed"
-        else:
-            times = [_minutes(t) for t in re.findall(
-                r"\d{1,2}(?::\d{2})?\s*(?:am|pm)?", line, re.IGNORECASE)]
-            times = [t for t in times if t]
-            if len(times) < 2:
+    for whole in lines:
+        for line in _segments(whole):
+            matches = [(m, _day(m.group(0))) for m in _DAY_WORD.finditer(line)]
+            found = [(m, d) for m, d in matches if d]
+            days = [d for _, d in found]
+            if not days:
                 continue
-            value = f"{times[0]}-{times[1]}"
-        for day in days:
-            week.setdefault(day, value)
+            # "Mon-Fri" is a range; "Mon, Wed" is a list. What separates the two day
+            # words decides which — read the text between them rather than guessing
+            # from the names, since sources abbreviate to two, three or four letters.
+            joined = (line[found[0][0].end():found[1][0].start()]
+                      if len(found) == 2 else "")
+            if len(days) == 2 and re.fullmatch(r"\s*(to|[-–—])\s*", joined, re.IGNORECASE):
+                start, end = _INDEX[days[0]], _INDEX[days[1]]
+                span = (list(range(start, end + 1)) if start <= end
+                        else list(range(start, 7)) + list(range(0, end + 1)))
+                days = [DAYS[i] for i in span]
+
+            # Day names carry no digits, so times can be read straight off the line.
+            if _CLOSED.search(line):
+                value = "closed"
+            else:
+                read = [_read_time(t) for t in re.findall(
+                    r"\d{1,2}(?::\d{2})?\s*(?:am|pm)?", line, re.IGNORECASE)]
+                times = [r for r in read if r]
+                if len(times) < 2:
+                    continue
+                (opens, opens_said), (closes, closes_said) = times[0], times[1]
+                opens = _borrow_meridiem(opens, opens_said, closes, closes_said)
+                closes = _close_after_open(opens, opens_said, closes, closes_said)
+                value = f"{opens}-{closes}"
+            for day in days:
+                week.setdefault(day, value)
     return week
 
 
