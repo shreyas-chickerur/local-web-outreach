@@ -11,6 +11,7 @@ from app.workbench.extract import (
     _clean_service,
     content_page_urls,
     extract_from_html,
+    extract_menu_items,
     menu_page_urls,
     merge,
     social_belongs_to,
@@ -502,3 +503,39 @@ def test_only_a_number_written_or_introduced_as_one_is_a_phone_number(
 
     phone, _, _, _ = read_structured_data(f"<html><body>{body}</body></html>")
     assert phone == expected
+
+
+def test_a_menu_that_prints_prices_without_a_dollar_sign_is_still_read():
+    """Fish Shack in Plano prints "18.95" in its own table cell beside the
+    dish, with no dollar sign. Only a price with "$" was recognised, so a
+    menu of about eighty dishes was read as one: the only line on the page
+    that had one was a beer special."""
+    html = """<table>
+      <tr><td><strong>Santorini Cocktail</strong><br></td>
+          <td align="right">large<br>small</td>
+          <td align="right">13.95<br>10.95</td></tr>
+      <tr><td><strong>Salmon</strong><br></td><td align="right">18.95</td></tr>
+      <tr><td><strong>Catfish (3)</strong></td><td align="right">16.95</td></tr>
+      <tr><td><strong>Sea Scallops</strong></td><td align="right">Mkt Price</td></tr>
+      <tr><td><strong>One Pound Hot Boiled Shrimp<br>
+          &nbsp;&nbsp;&nbsp;1/2 Pound </strong></td><td>&nbsp;</td>
+          <td align="right">21.95<br>16.95</td></tr>
+      <tr><td><strong>Chilled Shrimp</strong></td><td>(6)<br>(12)</td>
+          <td align="right">10.95<br>15.95</td></tr>
+      <tr><td class="menu_heading"><span>FRESH GRILLED FISH OF THE DAY</span><br>
+          Served with Rice and Vegetables</td><td align="right">16.95</td></tr>
+    </table>"""
+    items = {i["name"]: i["price"] for i in extract_menu_items(html)}
+    assert items == {"Santorini Cocktail": "$13.95", "Salmon": "$18.95",
+                     "Catfish (3)": "$16.95",
+                     "One Pound Hot Boiled Shrimp": "$21.95",
+                     "Chilled Shrimp": "$10.95",
+                     "FRESH GRILLED FISH OF THE DAY": "$16.95"}
+
+
+def test_a_bare_number_in_prose_is_not_a_price():
+    """The dollar sign was the only thing keeping ordinary numbers out. A
+    bare decimal counts only when it stands alone, the way a menu's price
+    column prints it."""
+    html = "<p>Rated 4.50 by our regulars since 2013.</p><p>Open 10.30 daily</p>"
+    assert extract_menu_items(html) == []

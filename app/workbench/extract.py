@@ -83,6 +83,22 @@ _HOURS_RE = re.compile(
 _MENU_PATHS = ("menu", "menus", "food", "drinks", "dinner", "lunch", "brunch",
                "breakfast", "pricing", "prices", "our-services", "services")
 _PRICE_RE = re.compile(r"\$\s?\d{1,4}(?:\.\d{2})?")
+# A price with no dollar sign, trusted only when it is the whole line: that is
+# how a menu's price column prints once the table is flattened ("Salmon", then
+# "18.95"). Fish Shack's eighty-dish menu read as one item without this. Inside
+# prose a bare decimal is a rating or a time, so it never counts there.
+_BARE_PRICE_LINE_RE = re.compile(r"^\d{1,3}\.\d{2}$")
+# What can sit between a dish and its price column, all found on Fish Shack's
+# menu: the dish's other price ("13.95" then "10.95"), a size or count label
+# ("large", "(6)", "1/2 Pound"), and a line saying what it comes with. Each was
+# printed as the dish's name before it was skipped here.
+_BETWEEN_NAME_AND_PRICE_RE = re.compile(
+    r"^(?:\d{1,3}\.\d{2}"
+    r"|(?:large|small|regular|half|whole|cup|bowl)"
+    r"(?:\s+(?:large|small|regular|half|whole|cup|bowl))*"
+    r"|\(\d+\)"
+    r"|(?:\d+/\d+|one|half a)\s+(?:pound|lb)s?"
+    r"|(?:all\s+)?served with .*)$", re.IGNORECASE)
 _BLOCK_RE = re.compile(
     r"</?(p|div|li|tr|td|th|h[1-6]|section|article|br|ul|ol|dl|dt|dd)[^>]*>",
     re.IGNORECASE)
@@ -106,14 +122,21 @@ def extract_menu_items(html: str) -> list[dict]:
     seen: set[str] = set()
     lines = html_to_lines(html)
     for i, line in enumerate(lines):
-        match = _PRICE_RE.search(line)
-        if not match or len(line) > 220:
-            continue
-        price = match.group(0).replace(" ", "")
-        name = line[: match.start()].strip(" .-–—$\u2022|")
-        description = line[match.end():].strip(" .-–—|")
-        if not name and i:                       # price on its own line
-            name = lines[i - 1].strip(" .-–—|")
+        if _BARE_PRICE_LINE_RE.match(line):
+            price, description = f"${line}", ""
+            k = i - 1
+            while k > 0 and _BETWEEN_NAME_AND_PRICE_RE.match(lines[k]):
+                k -= 1
+            name = lines[k].strip(" .-–—|") if k >= 0 else ""
+        else:
+            match = _PRICE_RE.search(line)
+            if not match or len(line) > 220:
+                continue
+            price = match.group(0).replace(" ", "")
+            name = line[: match.start()].strip(" .-–—$\u2022|")
+            description = line[match.end():].strip(" .-–—|")
+            if not name and i:                       # price on its own line
+                name = lines[i - 1].strip(" .-–—|")
         if not (2 < len(name) <= 70) or name.lower() in _NAV_NOISE:
             continue
         if _PRICE_RE.search(name) or name.lower() in seen:
