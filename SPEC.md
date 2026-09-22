@@ -37,8 +37,8 @@ Found by that crawl, for `read-ladder`:
   and `extract_menu_media` did not recognise it as a menu.
 - `fetch_bytes` drops the status code, so a 404 PDF is recorded as "could not
   download" rather than "status 404".
-- Six of the 24 page slots went to WordPress short links (`?p=2673`) that
-  duplicate pages already read, and two to `xmlrpc.php`.
+- Of 18 documents attempted, seven were WordPress short links (`?p=2673`)
+  duplicating pages already read, and two were `xmlrpc.php`.
 
 ## Decisions made with this map
 
