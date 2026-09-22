@@ -84,9 +84,12 @@ def _stem(word: str) -> str:
     "purchases". That is the same fact, and a checker that calls it unsourced
     trains the reader to ignore it.
     """
+    # A stem is matched as a substring of the source, so it must be a prefix of
+    # every spelling: "hushpuppies" used to become "hushpuppy", which is not in
+    # "hushpuppies", and Fish Shack's own menu came back unsourced.
     for ending in ("ing", "ies", "ed", "es", "s"):
         if len(word) > len(ending) + 3 and word.endswith(ending):
-            return word[: -len(ending)] + ("y" if ending == "ies" else "")
+            return word[: -len(ending)]
     return word
 
 
@@ -106,6 +109,8 @@ def _fold(text: str) -> str:
                 .replace("&mdash;", "-").replace("&ndash;", "-")
                 .replace("&middot;", ".").replace("&rsquo;", "'"))
     text = _WS.sub(" ", unescape(text).lower())
+    # "3,351 reviews" on a page and 3351 in a brief are the same number.
+    text = re.sub(r"(?<=\d),(?=\d{3}\b)", "", text)
     # "fifteen Texas farms" and "15 named" are the same claim.
     return re.sub(r"\b[a-z]+\b",
                   lambda m: _NUMBER_WORDS.get(m.group(0), m.group(0)), text)

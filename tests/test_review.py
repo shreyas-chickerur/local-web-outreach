@@ -477,3 +477,20 @@ def test_the_text_searched_comes_from_the_same_brief_the_page_is_judged_against(
     assert "Cabernet" in text and "Merlot" not in text
     assert where["capture_hash"] != "old"
     conn.close()
+
+
+def test_a_plural_in_ies_and_a_thousands_comma_are_still_found_in_the_source():
+    """Fish Shack's page said "Hushpuppies", "Veggies" and "3,351 Google
+    reviews", all of which its own site and the brief carry, and all came back
+    unsourced: "hushpuppies" was stemmed to "hushpuppy" and then looked for in
+    text that never says that, and "3,351" was looked for in a brief that
+    stores 3351. A checker that flags the business's own menu teaches the
+    reviewer to stop reading it."""
+    from app.review.checks import inventory
+
+    brief = {"ratings": [{"source": "google", "value": 4.5, "reviews": 3351}]}
+    text = "12 Hushpuppies 3.95\nVeggies & Rice 5.95\nFISH SHACK SPECIALTIES"
+    page = ("<p>Twelve Hushpuppies for the table.</p><p>Veggies &amp; Rice, 5.95.</p>"
+            "<p>Fish Shack Specialties, six of them.</p><p>4.5 from 3,351 Google reviews.</p>")
+    unsourced = [f.title for f in inventory(page, brief, text) if f.verdict == "unsourced"]
+    assert unsourced == []
