@@ -376,3 +376,104 @@ def test_a_failed_rebuild_never_loses_the_correction(tmp_path, monkeypatch):
     assert answer["correction_saved"] is True
     assert "no model key" in answer["why"]
     conn.close()
+
+
+# --------------------- the checks read the crawl's page text --------------------- #
+def _archive(tmp_path, brief: dict) -> None:
+    import json
+
+    slug = tmp_path / "briefs" / "fish-shack"
+    slug.mkdir(parents=True)
+    (slug / "2026-09-22T21-59-02.000000+00-00.json").write_text(json.dumps(brief))
+    (slug / "current.json").write_text(json.dumps({
+        "path": "briefs/fish-shack/2026-09-22T21-59-02.000000+00-00.json", "hash": "x"}))
+
+
+_PAGES = [
+    {"url": "http://fish.test/", "kind": "page", "read": True, "reason": "",
+     "text": "Fantastic Grilled, Boiled, and Fried Seafood\nHOURS: 10:30am to 10:00pm"},
+    {"url": "http://fish.test/wine/", "kind": "page", "read": True, "reason": "",
+     "text": "Cabernet Sauvignon, Napa Valley 1994"},
+    {"url": "http://fish.test/gone.pdf", "kind": "pdf", "read": False,
+     "reason": "could not download", "text": ""},
+]
+
+
+def test_the_checks_search_the_crawls_page_text_not_a_hand_made_capture(tmp_path):
+    """The claim inventory judged every page against `live-site.md`, a copy made
+    by hand on 16 September that nothing kept current, and gave confident
+    answers from it. The crawl's own stored text is the only source now."""
+    from app.review.run import material
+
+    _archive(tmp_path, {"name": "Fish Shack", "facts": [], "pages": _PAGES})
+    stale = tmp_path / "captures" / "fish-shack"
+    stale.mkdir(parents=True)
+    (stale / "live-site.md").write_text("Merlot, Sonoma 2001")
+    _brief, text, meta = material("Fish Shack", root=tmp_path)
+    assert "Cabernet Sauvignon, Napa Valley 1994" in text
+    assert "Merlot" not in text
+    assert meta["capture_hash"] and "live-site" not in meta["capture_file"]
+
+
+def test_a_page_the_crawl_could_not_read_is_listed_with_its_reason():
+    """A claim that could only be backed by a page nobody could read is not the
+    same as a claim nobody made. The reviewer is told which page and why."""
+    from app.review.run import findings, page_text
+
+    brief = {"name": "Fish Shack", "facts": [], "pages": _PAGES}
+    rows = findings("<p>Hello.</p>", brief, page_text(brief))
+    unread = [r for r in rows if r["verdict"] == "unmeasured"]
+    assert len(unread) == 1
+    assert "gone.pdf" in unread[0]["title"] + unread[0]["detail"]
+    assert "could not download" in unread[0]["detail"]
+
+
+def test_a_brief_crawled_before_page_text_was_kept_says_so():
+    from app.review.run import findings, page_text
+
+    brief = {"name": "Old Lead", "facts": []}
+    rows = findings("<p>Hello.</p>", brief, page_text(brief))
+    assert rows[0]["verdict"] == "unmeasured"
+    assert "re-crawl" in (rows[0]["title"] + rows[0]["detail"]).lower()
+
+
+def test_a_corrected_fact_outranks_the_crawl_that_it_replaced():
+    """What the operator was told outranks every source. A page still printing
+    the number they corrected must come back contradicted, not corroborated by
+    the very crawl text the correction replaced."""
+    from app.review.run import findings, page_text
+
+    brief = {"name": "Acme", "facts": [{
+        "field": "phone", "value": "(222) 222-2222", "confidence": "operator_verified",
+        "superseded": "(111) 111-1111", "sources": []}],
+        "pages": [{"url": "http://acme.test/", "kind": "page", "read": True, "reason": "",
+                   "text": "Call us: (111) 111-1111"}]}
+    page = "<p>Call us today at (111) 111-1111.</p>"
+    rows = findings(page, brief, page_text(brief))
+    contradicted = [r for r in rows if r["verdict"] == "contradicted"]
+    assert contradicted and "you were told" in contradicted[0]["detail"]
+    assert not [r for r in rows if r["verdict"] == "corroborated" and "111" in r["quote"]]
+
+
+def test_the_text_searched_comes_from_the_same_brief_the_page_is_judged_against(
+        tmp_path, monkeypatch):
+    """The facts came from the lead's brief in the database and the text from the
+    archived file. When the two were different crawls, a claim was judged
+    against one crawl's facts and another crawl's words."""
+    import app.web.server as server
+    from app.store import db, leads
+
+    conn = db.connect(tmp_path / "t.db")
+    lead = leads.save_brief(conn, {
+        "name": "Fish Shack", "location": "Plano, TX", "website_url": "http://fish.test/",
+        "facts": [{"field": "phone", "value": "(469) 229-0838", "confidence": "verified"}],
+        "published": {}, "assumptions": [], "open_questions": [], "sources_consulted": [],
+        "pages": [{"url": "http://fish.test/", "kind": "page", "read": True, "reason": "",
+                   "text": "Cabernet Sauvignon"}]})
+    monkeypatch.setattr(server.review_run, "material", lambda name: (
+        {"name": name, "facts": [{"field": "phone", "value": "x"}]}, "Merlot",
+        {"brief_hash": "abc", "capture_hash": "old", "capture_file": "archive"}))
+    _brief, text, where = server._review_brief(conn, lead, "Fish Shack")
+    assert "Cabernet" in text and "Merlot" not in text
+    assert where["capture_hash"] != "old"
+    conn.close()

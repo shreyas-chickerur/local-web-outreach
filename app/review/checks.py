@@ -212,7 +212,7 @@ def _unsourced(sentence: str, missing: dict[str, str],
             stage="claim", verdict="unsourced",
             title=f"Check {shown}{more}",
             detail=(f"The page says {shown}{more}. Nothing in the brief or in "
-                    "the capture of their own site contains it, in any spelling "
+                    "the text the crawl read from their own site contains it, in any spelling "
                     "— not as a figure, not spelled out. The generator wrote it: "
                     "either it came from somewhere nobody recorded, or it is "
                     "invented. Confirm it against their site or ask them, then "
@@ -252,8 +252,11 @@ def _sentences(text: str) -> list[str]:
 
 def _verified_fields(brief: dict) -> dict[str, str]:
     out = {}
+    # "operator_verified" is what the operator was told at the door, which
+    # outranks two agreeing sources. It was left out, so a page printing the
+    # number they had corrected was never called a contradiction.
     for fact in brief.get("facts") or []:
-        if fact.get("confidence") == "verified" and fact.get("value"):
+        if fact.get("confidence") in ("verified", "operator_verified") and fact.get("value"):
             out[str(fact.get("field"))] = str(fact["value"])
     return out
 
@@ -339,11 +342,16 @@ def contradictions(html: str, brief: dict,
             head = _fold(value.split(",")[0])
             present = head in page
         if not present:
+            told = any(f.get("field") == field_name
+                       and f.get("confidence") == "operator_verified"
+                       for f in brief.get("facts") or [])
+            why = ("which is what you were told, and it outranks every source" if told
+                   else "corroborated by two independent sources")
             out.append(Finding(
                 stage="claim", verdict="contradicted",
                 title=f"The page does not carry the verified {field_name}",
-                detail=f"The brief has {field_name} as {value!r}, corroborated by two "
-                       f"independent sources, and it does not appear on the page.",
+                detail=f"The brief has {field_name} as {value!r}, {why}, and it does "
+                       f"not appear on the page.",
                 quote="", evidence=value, resources=sources or []))
     return out
 

@@ -1,5 +1,6 @@
 """Assemble a version's findings from the same material the prompt was built
-from — the brief, the capture of the business's own site, and the page itself.
+from — the brief, the text the crawl read from the business's own site, and the
+page itself.
 
 Kept apart from `checks` so the checks stay pure functions over text, testable
 without a database, and apart from `store.reviews` so the record does not
@@ -16,7 +17,6 @@ from pathlib import Path
 from app.review import checks
 
 BRIEFS = Path("briefs")
-CAPTURES = Path("captures")
 
 
 def _slug(name: str) -> str:
@@ -27,18 +27,28 @@ def _hash(text: str) -> str:
     return hashlib.sha256(text.encode()).hexdigest()[:16]
 
 
-def material(name: str, *, root: Path | None = None) -> tuple[dict, str, dict]:
-    """The brief and the capture for a business, with their hashes.
+def page_text(brief: dict) -> str:
+    """Every page the crawl read on their own site, as one text to search.
 
-    A missing capture is not an error — an early lead may not have one — but
-    it is recorded, because a claim check run without the business's own words
-    can only ever return "unsourced" and somebody should be told that rather
-    than reading a wall of warnings as evidence of fabrication.
+    This replaced `captures/<slug>/live-site.md`, a copy made by hand that
+    nothing kept current: the checks gave confident answers from a site as it
+    stood weeks earlier. Pages are separated by a blank line, so a passage
+    never runs from one page into the next.
+    """
+    return "\n\n".join(p.get("text", "") for p in brief.get("pages") or []
+                        if p.get("read") and p.get("text"))
+
+
+def material(name: str, *, root: Path | None = None) -> tuple[dict, str, dict]:
+    """The archived brief for a business and the page text it carries, hashed.
+
+    A brief with no page text is not an error — every crawl before the crawl
+    kept its pages has none — but it is recorded, because a claim check run
+    without the business's own words can only ever return "unsourced".
     """
     base = root or Path()
     slug = _slug(name)
     brief_path = base / BRIEFS / slug / "current.json"
-    capture_path = base / CAPTURES / slug / "live-site.md"
 
     brief: dict = {}
     if brief_path.exists():
@@ -55,19 +65,46 @@ def material(name: str, *, root: Path | None = None) -> tuple[dict, str, dict]:
                 brief_path = pointed_at
             else:
                 brief = {}
-    capture = capture_path.read_text() if capture_path.exists() else ""
-
-    return brief, capture, {
+    text = page_text(brief)
+    pages = brief.get("pages") or []
+    return brief, text, {
         "brief_file": str(brief_path) if brief else "",
         "brief_hash": _hash(json.dumps(brief, sort_keys=True, default=str)) if brief else "",
-        "capture_file": str(capture_path) if capture_path.exists() else "",
-        "capture_hash": _hash(capture) if capture else "",
-        "capture_missing": not capture,
+        # Kept under the old key names: the reviews table and the review screen
+        # already store and print them.
+        "capture_file": (f"page text of {sum(1 for p in pages if p.get('read'))} of "
+                         f"{len(pages)} pages, in {brief_path}") if pages else "",
+        "capture_hash": _hash(text) if text else "",
+        "capture_missing": not text,
     }
+
+
+def _without_superseded(brief: dict, text: str) -> tuple[dict, str]:
+    """The brief and page text with every value a correction replaced removed.
+
+    A correction outranks the crawl, but the crawl's page text still prints the
+    old value, and so does the brief's own record of what was superseded. Both
+    are searched for support, so a page repeating the corrected-away phone
+    number came back corroborated by the very text the correction replaced.
+    """
+    # ponytail: matches the old value's words with any punctuation between, so
+    # "(111) 111-1111" also catches "111-111-1111"; an abbreviated address
+    # ("E" for "East") still gets through. Normalise per field if that bites.
+    old = [str(f["superseded"]) for f in brief.get("facts") or [] if f.get("superseded")]
+    for value in old:
+        words = re.findall(r"[A-Za-z0-9]+", value)
+        if words:
+            text = re.sub(r"\W*".join(map(re.escape, words)), " ", text, flags=re.IGNORECASE)
+    judged = {k: v for k, v in brief.items() if k != "pages"}
+    judged["facts"] = [{k: v for k, v in f.items() if k != "superseded"}
+                       for f in brief.get("facts") or []]
+    return judged, text
 
 
 def findings(html: str, brief: dict, capture: str) -> list[dict]:
     """Everything the checks can see, ordered so the sharp end is first."""
+    pages = brief.get("pages")
+    brief, capture = _without_superseded(brief, capture)
     where = []
     if brief.get("website_url"):
         where.append({"label": "The business's own site", "url": brief["website_url"]})
@@ -82,11 +119,20 @@ def findings(html: str, brief: dict, capture: str) -> list[dict]:
     found = list(checks.contradictions(html, brief, where))
     found += checks.mechanics(html, brief)
     found += checks.inventory(html, brief, capture, where)
-    if not capture:
+    for page in pages or []:
+        if not page.get("read"):
+            found.insert(0, checks.Finding(
+                stage="claim", verdict="unmeasured",
+                title=f"Could not read {page.get('url', 'a page')}",
+                detail=f"The crawl tried this {page.get('kind', 'page')} and could not "
+                       f"read it: {page.get('reason') or 'no reason recorded'}. A claim "
+                       "only that page could back shows as unsourced below.",
+                locator=page.get("url", "")))
+    if pages is None:
         found.insert(0, checks.Finding(
             stage="claim", verdict="unmeasured",
-            title="No capture of the business's own site",
+            title="This brief was crawled before page text was kept",
             detail="Every claim below is unsourced by default, because there is "
-                   "nothing to check it against. Re-crawl before reading this as "
-                   "evidence of anything."))
+                   "none of the business's own text to check it against. Re-crawl "
+                   "before reading this as evidence of anything."))
     return [f.as_row() for f in found]

@@ -2302,7 +2302,7 @@ function drawReview() {
   let body;
   if (RV.loading) {
     body = `<div class="rv-scroll"><p class="hint">Reading the page against the
-      brief and the capture…</p></div>`;
+      brief and the text of their own site…</p></div>`;
   } else if (RV.error) {
     body = `<div class="rv-scroll"><p class="rv-blocked">${esc(RV.error)}</p></div>`;
   } else {
@@ -2357,7 +2357,7 @@ function drawReview() {
       <h2>Approve — ${esc(WS ? WS.name : "")}</h2>
       <span class="sub">v${esc(String(RV.version || ""))}${
         RV.open_count ? " · " + RV.open_count + " still open" : ""}</span>
-      <span class="sub">brief ${esc(RV.brief_hash || "—")} · capture ${esc(RV.capture_hash || "—")}</span>
+      <span class="sub">brief ${esc(RV.brief_hash || "—")} · page text ${esc(RV.capture_hash || "—")}</span>
       <button class="mini close" onclick="closeReview()">← back to the workbench</button>
     </div>
     ${body}${footer}</div>`;

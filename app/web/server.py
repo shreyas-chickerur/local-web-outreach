@@ -365,8 +365,9 @@ def _review_brief(conn, lead_id: int, name: str) -> tuple[dict, str, dict]:
     published, and a check that does not know that reports a fact you fixed
     yourself as a contradiction.
 
-    The archive still supplies the capture and both hashes, so the record of
-    which crawl this review belongs to is unchanged.
+    The page text searched comes from that same brief. Taking it from the
+    archive meant that when the two held different crawls, a claim was judged
+    against one crawl's facts and another crawl's words.
     """
     archived, capture, where = review_run.material(name)
     try:
@@ -375,8 +376,14 @@ def _review_brief(conn, lead_id: int, name: str) -> tuple[dict, str, dict]:
         return archived, capture, where
     if not brief.get("facts") and archived.get("facts"):
         return archived, capture, where
-    where = {**where, "checked_against": "the lead's brief, with your corrections"}
-    return brief, capture, where
+    text = review_run.page_text(brief)
+    pages = brief.get("pages") or []
+    where = {**where, "checked_against": "the lead's brief, with your corrections",
+             "capture_hash": review_run._hash(text) if text else "",
+             "capture_file": (f"page text of {sum(1 for p in pages if p.get('read'))} of "
+                              f"{len(pages)} pages, in the lead's brief") if pages else "",
+             "capture_missing": not text}
+    return brief, text, where
 
 
 def refresh_review(conn, lead_id: int, version: int) -> dict:
