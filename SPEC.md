@@ -28,9 +28,17 @@ excluded. It is not yet a lead.
 
 Build order: `page-text` → `checks-read-crawl` → `read-ladder` → `claim-mapping`.
 
-The first two cost no credits. The Heritage Table's wine menu is live text now,
-so they may be enough on their own to turn "Cabernet" from unsourced into
-corroborated. The image reader comes after that has been measured.
+The first two cost no credits. The real crawl on 22 September settled the
+question this paragraph used to leave open: The Heritage Table's wine list is
+an image, so "Cabernet" can only be sourced once `read-ladder` reads images.
+
+Found by that crawl, for `read-ladder`:
+- The wine list image is lazy-loaded (`data-src`) and titled "Wine List Web",
+  and `extract_menu_media` did not recognise it as a menu.
+- `fetch_bytes` drops the status code, so a 404 PDF is recorded as "could not
+  download" rather than "status 404".
+- Six of the 24 page slots went to WordPress short links (`?p=2673`) that
+  duplicate pages already read, and two to `xmlrpc.php`.
 
 ## Decisions made with this map
 

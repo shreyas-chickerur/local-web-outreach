@@ -10,8 +10,12 @@ Fourteen versions, each parented. Its page is **finished as a design** — the
 owner has judged the colour, structure and experience good and does not want
 them reopened. What remains for it is factual validation.
 
-Its site is WordPress at `https://www.theheritagetable.com/dev/`, menus are
-live text rather than the PDFs an early capture concluded, and the footer
+Its site is WordPress at `https://www.theheritagetable.com/dev/`. Its menus
+are **not** live text, correcting what this file said before: the real crawl
+of 22 September found the wine list is an image (`Wine-List-Web-5-pdf.jpg`,
+uploaded July 2026, lazy-loaded through `data-src`), and the dinner menu PDF it
+links returns 404. The site's firewall refuses plain command-line requests
+(406); only the crawl's Chrome gets through. The footer
 writes the address as `7110 Main St. Frisco, TX 75033` with no comma before the
 town — which is what broke the address reader until it was fixed.
 

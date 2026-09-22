@@ -78,20 +78,27 @@ database) → `leads.brief_with_overrides`, with nothing hand-made in between.
 **Description:** Run the real command and open what it wrote.
 
 **Acceptance criteria:**
-- [ ] `make brief Q="The Heritage Table, Frisco, TX 75033"` completes.
-- [ ] The newest file in `briefs/the-heritage-table/` and the lead 1 row in
+- [x] `make brief Q="The Heritage Table, Frisco, TX 75033"` completes.
+- [x] The newest file in `briefs/the-heritage-table/` and the lead 1 row in
       `workbench.db` both hold `pages`.
-- [ ] Reported: how many pages were attempted, which failed and why, the
+- [x] Reported: how many pages were attempted, which failed and why, the
       stored size, and whether "Cabernet" and "Sauvignon" appear.
 
 **Verification:**
-- [ ] Manual: read the archived file and the database row directly
+- [x] Manual: read the archived file and the database row directly
 
 **Dependencies:** checkpoint above
 
 **Files:** `docs/state-of-play.md` (what is now true, and what is stale)
 
 **Scope:** no code
+
+**Result, 22 September:** 18 documents attempted, 60,844 bytes of text, the
+same in the archive (`2026-09-22T21-44-35`) and in lead 1's database row.
+Three failed with reasons: `xmlrpc.php` status 405, `?p=2703` timed out, the
+dinner menu PDF could not download (the server returns 404). "Cabernet",
+"Sauvignon", "Non-alcoholic" and "forty-eight" appear in none of it: the wine
+list is an image. See `SPEC.md` for what this hands to `read-ladder`.
 
 ## Checkpoint: review with Shreyas
 
