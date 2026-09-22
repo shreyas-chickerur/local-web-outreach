@@ -43,6 +43,8 @@ when there is nothing behind it.
 - **Hours and address together**, with directions one tap away.
 - **Rating with its count** when a directory publishes one ("4.5 from 3,351
   Google reviews"), never a rating without its count.
+- **Prices in one format.** A business's own site often mixes "$3.00" with
+  "6.50"; the page picks one and prints every price that way.
 - **The business's own voice where it has one**: a story, a chef, a history,
   a farm list. Absent is fine; invented is not.
 
@@ -69,3 +71,23 @@ long menu may show its signature section first and fold the rest.
   with the photographs swapped.
 - Centred-everything layout, identical section heights, or a grid of
   identical icon cards as the main structure.
+
+## 5. Never repeat what an earlier site used
+
+Each finished site takes its practical information (hours, address, phone,
+how to get there) in a form that belongs to that place. Shreyas, 22 September
+2026: Fish Shack's first build repeated The Heritage Table's shapes closely
+enough that the two read as one template. Every device below has been used and
+is forbidden on the next site; add each new site's to this list when it is
+built.
+
+| Site | Device used, never to repeat |
+|---|---|
+| The Heritage Table | a dark full-width strip of hours · address · phone, four items in a row |
+| The Heritage Table | a dark "visit" block led by the address as a giant headline, an hours list, and two buttons |
+| The Heritage Table | cream and deep green, editorial serif |
+| Fish Shack | a drawing of the business's own roadside sign, its marquee reading the hours |
+| Fish Shack | a not-to-scale street sketch built from the business's own directions |
+| Fish Shack | the footer as a call-ahead order ticket with a torn edge |
+| Fish Shack | a letterboard of weekday specials with today's row lit |
+| Fish Shack | harbor navy, sign red and kraft; a sign-painter slab with a typewriter face for prices |
