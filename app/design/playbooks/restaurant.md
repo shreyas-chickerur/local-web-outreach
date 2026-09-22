@@ -84,7 +84,8 @@ built.
 | Site | Device used, never to repeat |
 |---|---|
 | The Heritage Table | a dark full-width strip of hours · address · phone, four items in a row |
-| The Heritage Table | a dark "visit" block led by the address as a giant headline, an hours list, and two buttons |
+| The Heritage Table | a "visit" block: a one-line headline over labelled columns of hours, address, contact and social links, with one button |
+| Fish Shack, rejected | a dark "visit" block led by the address as a giant headline, an hours list and two buttons, which read as The Heritage Table's |
 | The Heritage Table | cream and deep green, editorial serif |
 | Fish Shack | a drawing of the business's own roadside sign, its marquee reading the hours |
 | Fish Shack | a not-to-scale street sketch built from the business's own directions |
