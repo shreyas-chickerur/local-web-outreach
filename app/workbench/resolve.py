@@ -50,9 +50,14 @@ example test invalid localhost local
 # "Ryno Lawn Care in Frisco, TX" loses "Lawn Care" to the city group. A city is
 # at most three words, which is what keeps the match tight.
 _CITY = r"[A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,2}"
+# A postal code may follow the state, and people type one: "Frisco, TX 75033"
+# is how an address is copied out of a listing. Without this the whole string
+# stays in the name, the location stays None, and the different-town check that
+# depends on it never runs.
+_ZIP = r"(?:\s+\d{5}(?:-\d{4})?)?"
 _LOCATION_TAIL_RES = (
-    re.compile(rf"\s+in\s+({_CITY},\s*[A-Z]{{2}})\s*$"),
-    re.compile(rf",\s*({_CITY},\s*[A-Z]{{2}})\s*$"),
+    re.compile(rf"\s+in\s+({_CITY},\s*[A-Z]{{2}}{_ZIP})\s*$"),
+    re.compile(rf",\s*({_CITY},\s*[A-Z]{{2}}{_ZIP})\s*$"),
 )
 
 
