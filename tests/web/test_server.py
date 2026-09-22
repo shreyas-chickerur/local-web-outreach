@@ -211,3 +211,18 @@ def test_no_class_is_styled_by_two_unrelated_rules():
             if re.fullmatch(r"\.[\w-]+", selector.strip()):
                 count[selector.strip()] += 1
     assert not [s for s, n in count.items() if n > 1]
+
+
+def test_every_fault_the_address_check_reports_has_its_own_headline():
+    """Every fault was headlined "The link on their Google listing is broken".
+    Fish Shack's link works; its site simply has no https. Telling an owner
+    their working link is broken is the fastest way to lose the room."""
+    import re
+
+    from app.workbench.weburl import FAULTS
+
+    page = server._UI.read_text()
+    table = re.search(r"const FAULT_HEADLINES = \{(.*?)\};", page, re.S)
+    assert table, "the page has no headline per fault"
+    named = set(re.findall(r'"([a-z-]+)":', table.group(1)))
+    assert set(FAULTS) <= named, sorted(set(FAULTS) - named)

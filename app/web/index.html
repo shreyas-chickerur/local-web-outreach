@@ -1864,6 +1864,19 @@ function jumpTo(url, text) {
   return `${url}#:~:text=${encodeURIComponent(needle)}`;
 }
 
+// One headline per fault `app/workbench/weburl.py` can report. Every fault
+// used to read "broken", including a site that works and only lacks https,
+// which is not what you want to tell an owner whose link opens fine.
+const FAULT_HEADLINES = {
+  "certificate": "Their listing's link throws a security warning",
+  "not-found": "The link on their Google listing is a dead page",
+  "no-https": "Their site works, but every browser marks it not secure",
+  "http-link": "Their listing still links the old http address",
+  "parked": "Their domain has lapsed",
+  "dead": "The link on their Google listing is broken",
+  "redirected": "Their listing's link lands somewhere else",
+};
+
 // One source's contribution: who said it, where in their page, their own
 // words, and the way to go and look at it.
 function srcLine(s, value) {
@@ -1980,7 +1993,7 @@ function render(d) {
   const listing = fixedSite ? settled : u ? `<div class="listing in ${
       u.blocked ? "unknown" : ["http-link", "redirected"].includes(u.fault) ? "mild" : ""}">
     <b>${u.blocked ? "We could not check their site"
-         : "The link on their Google listing is broken"}</b>
+         : FAULT_HEADLINES[u.fault] || "The link on their Google listing is broken"}</b>
     <div class="urls">
       <span>published</span><a href="${esc(u.published)}" target="_blank"
         rel="noopener">${esc(u.published)}</a>

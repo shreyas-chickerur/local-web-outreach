@@ -635,7 +635,17 @@ def _line_around(html: str, at: int, width: int = 140, *,
     this on the page they are looking at. `already_text` is for a caller that
     searched the stripped text, where the offset means nothing in the markup.
     """
-    window = html[max(0, at - width): at + width]
+    start, end = max(0, at - width), at + width
+    # Widened to the nearest space on each side: a fixed character count lands
+    # inside words, and Fish Shack's footer was quoted as "asual Oyster Bar".
+    # Capped, because minified markup can run for thousands of characters
+    # without a space.
+    floor, ceiling = max(0, start - 40), min(len(html), end + 40)
+    while start > floor and not html[start - 1].isspace():
+        start -= 1
+    while end < ceiling and not html[end].isspace():
+        end += 1
+    window = html[start:end]
     if already_text:
         return _text(window)
     return _text(_ANY_TAG_RE.sub(" ", _TAG_RE.sub(" ", window)))

@@ -277,3 +277,21 @@ def test_the_same_place_written_two_ways_still_counts_as_one():
 
     assert normalize("7110 Main St. Frisco, TX 75033", "address") == \
         normalize("7110 Main St, Frisco, TX 75033, USA", "address")
+
+
+def test_a_quote_never_starts_or_ends_halfway_through_a_word():
+    """Fish Shack's address was quoted as "asual Oyster Bar Setting ...": the
+    window around the match started at a fixed character count, which
+    landed inside "casual". A quote an owner reads has to be words they
+    wrote, whole."""
+    from app.workbench.extract import _line_around
+
+    text = ("Fantastic Grilled, Boiled, and Fried Seafood in a Casual Oyster Bar "
+            "Setting. Plano: 700 East 15th Street Plano, TX 75074 Ph: "
+            "469-229-0838 Fax: 469-229-0848 HOURS: Sun - Thu - 10:30am")
+    at = text.index("700 East")
+    for width in range(20, 80):
+        quote = _line_around(text, at, width, already_text=True)
+        words = text.split()
+        assert quote.split()[0] in words and quote.split()[-1] in words, (width, quote)
+        assert "700 East" in quote
