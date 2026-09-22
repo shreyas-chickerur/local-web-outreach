@@ -189,3 +189,25 @@ def test_workspace_surfaces_what_did_not_reach_the_page(monkeypatch, tmp_path):
     # `fact:hours` drops on every fixture with published hours already
     # scraped — the fallback fact is never consulted once that happens.
     assert "fact:hours" in {row["field"] for row in data["census"]}
+
+
+def test_no_class_is_styled_by_two_unrelated_rules():
+    """The evidence block under each fact reused `.ev`, a name the history
+    timeline already owned. The timeline's grid (a 20px rail, then the text)
+    was applied to every piece of evidence: the source tag was crushed into
+    the rail and the quote printed on top of it, unreadable, on every lead.
+
+    Rules inside a media query are allowed to repeat a class; that is how a
+    narrow layout overrides a wide one."""
+    import collections
+    import re
+
+    page = server._UI.read_text()
+    css = "\n".join(re.findall(r"<style>(.*?)</style>", page, re.S))
+    css = re.sub(r"@media[^{]*\{((?:[^{}]*\{[^{}]*\})*)\s*\}", "", css)
+    count: collections.Counter[str] = collections.Counter()
+    for selectors, _body in re.findall(r"([^{}]+)\{([^{}]*)\}", css):
+        for selector in selectors.split(","):
+            if re.fullmatch(r"\.[\w-]+", selector.strip()):
+                count[selector.strip()] += 1
+    assert not [s for s, n in count.items() if n > 1]
