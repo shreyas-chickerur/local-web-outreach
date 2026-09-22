@@ -10,6 +10,7 @@ and why. Read backwards, the trail explains every value on the screen.
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 from datetime import UTC, datetime
 from urllib.parse import urlparse
@@ -21,7 +22,81 @@ from app.workbench.resolve import town_of
 
 # "website" is here because a listing's URL is as correctable as its phone
 # number, and the correction is worth the same audit trail.
-VERIFIABLE = ("address", "phone", "hours", "website")
+VERIFIABLE_FACTS = ("address", "phone", "hours", "website")
+
+# Everything else worth confirming lives under `published`: read off the
+# business's own site by one source, with nothing to corroborate it and, until
+# now, no way to say it was wrong. Four fields could be corrected; the rest of
+# a generated page — its tagline, its story, what the business sells, who to
+# email — could not be touched at all.
+#
+# `where` is the key under `published` ("" means the brief's own top level);
+# `shape` is how the operator's typing is read back into it. The audit trail
+# always keeps the raw text they typed, whatever the shape.
+PUBLISHED_FIELDS: dict[str, tuple[str, str]] = {
+    "name": ("", "text"),
+    "tagline": ("tagline", "text"),
+    "about": ("about", "text"),
+    "services": ("services", "lines"),
+    "email": ("emails", "lines"),
+    "photos": ("photos", "lines"),
+    "menu_items": ("menu_items", "dishes"),
+    "socials": ("socials", "links"),
+}
+VERIFIABLE = VERIFIABLE_FACTS + tuple(PUBLISHED_FIELDS)
+
+FIELD_LABELS = {
+    "address": "Address", "phone": "Phone", "hours": "Hours",
+    "website": "Website", "name": "Business name", "tagline": "Tagline",
+    "about": "Their story", "services": "What they sell",
+    "email": "Email address", "photos": "Photographs",
+    "menu_items": "Menu items", "socials": "Social profiles",
+}
+
+_PRICE = re.compile(r"\$\s?\d[\d,.]*")
+
+
+def _lines(text: str) -> list[str]:
+    """One item per line. People also paste lists separated by · or ;."""
+    parts = re.split(r"[\n;\u00b7|]+", text or "")
+    return [p.strip(" -\u2014\u2013\t") for p in parts if p.strip(" -\u2014\u2013\t")]
+
+
+def _dishes(text: str) -> list[dict]:
+    """"Short Rib - $32 - braised overnight" back into what the page renders."""
+    out: list[dict] = []
+    for line in _lines(text):
+        price = _PRICE.search(line)
+        without = (line[:price.start()] + " " + line[price.end():]
+                   if price else line)
+        bits = [b.strip(" \u2014\u2013-\t") for b in
+                re.split(r"\s+[\u2014\u2013-]\s+", without)]
+        bits = [b for b in bits if b]
+        if not bits:
+            continue
+        out.append({"name": bits[0], "price": price.group(0).strip() if price else "",
+                    "description": " ".join(bits[1:])})
+    return out
+
+
+def _links(text: str) -> list[dict]:
+    """"Facebook https://..." or a bare address; the platform is the host."""
+    out: list[dict] = []
+    for line in _lines(text):
+        found = re.search(r"https?://\S+", line)
+        if not found:
+            continue
+        url = found.group(0)
+        said = line[:found.start()].strip(" -\u2014:\t")
+        if not said:
+            host = re.sub(r"^www\.", "", url.split("//", 1)[-1].split("/")[0])
+            said = host.split(".")[0].title()
+        out.append({"name": said, "url": url})
+    return out
+
+
+_SHAPES = {"text": lambda v: v.strip(), "lines": _lines,
+           "dishes": _dishes, "links": _links}
 STATUSES = ("new", "to visit", "visited", "interested", "not interested")
 
 
@@ -125,20 +200,41 @@ def set_status(conn: sqlite3.Connection, lead_id: int, status: str,
 
 
 def verify(conn: sqlite3.Connection, lead_id: int, field: str, value: str,
-           note: str | None = None, actor: str | None = None) -> None:
-    """Record what you were actually told, and what it replaced."""
+           note: str | None = None, actor: str | None = None) -> dict:
+    """Record what you were actually told, and what it replaced.
+
+    Returns the kind of statement it turned out to be and the value it
+    displaced, because what happens next depends on it: confirming what the
+    sources already said changes no page, and a correction changes one.
+    """
     if field not in VERIFIABLE:
         raise ValueError(f"cannot verify {field!r} — one of {', '.join(VERIFIABLE)}")
     if not value.strip():
         raise ValueError("a confirmed value cannot be blank")
     brief = load_brief(conn, lead_id)
-    previous = next((f.get("value") for f in brief.get("facts", [])
-                     if f.get("field") == field), None)
+    published = brief.get("published") or {}
+    where = PUBLISHED_FIELDS.get(field)
+    previous: str | None
+    if where:
+        key = where[0]
+        previous = _as_text(brief.get("name") if not key else published.get(key))
+    else:
+        previous = next((f.get("value") for f in brief.get("facts", [])
+                         if f.get("field") == field), None)
+    # What the operator confirmed last time outranks what the sources said, so
+    # that is what a new statement is compared against. Comparing against the
+    # crawl instead reports a re-confirmation of your own correction as a fresh
+    # correction — which, now that a correction rebuilds the page, is a
+    # generation run bought for nothing.
+    standing = _overrides(conn, lead_id).get(field)
+    if standing:
+        previous = standing["new_value"]
     # Confirming what the sources already said is not a correction, and the
     # trail should not imply the value changed when it did not.
     kind = "verified" if previous == value.strip() else "corrected"
     record(conn, lead_id, kind, field=field, old_value=previous,
            new_value=value.strip(), note=note, actor=actor)
+    return {"kind": kind, "was": previous, "value": value.strip()}
 
 
 def load_brief(conn: sqlite3.Connection, lead_id: int) -> dict:
@@ -188,6 +284,7 @@ def brief_with_overrides(conn: sqlite3.Connection, lead_id: int) -> dict:
     brief["photo_notes"] = written or dict(brief.get("photo_notes") or {})
 
     overrides = _overrides(conn, lead_id)
+    applied = dict(overrides)          # `overrides` is emptied by pop() below
     facts = brief.get("facts", [])
     for fact in facts:
         event = overrides.pop(fact.get("field"), None)
@@ -214,12 +311,80 @@ def brief_with_overrides(conn: sqlite3.Connection, lead_id: int) -> dict:
             "verified_note": event["note"],
         })
     brief["facts"] = facts
+    # The same correction, applied where generation will actually read it.
+    # A fact the page never looks up is a fact the page cannot be wrong about;
+    # `published` is where the tagline, the story, the services and the rest
+    # are read from, so an override that stops at `facts` changes nothing a
+    # visitor would see.
+    published = brief.setdefault("published", {})
+    was = dict(brief.get("published_superseded") or {})
+    for field, (where, shape) in PUBLISHED_FIELDS.items():
+        event = applied.get(field)
+        if event is None:
+            continue
+        value = _SHAPES[shape](event["new_value"] or "")
+        if not value:
+            continue
+        target = brief if not where else published
+        key = where or "name"
+        if target.get(key) != value:
+            was[field] = target.get(key)
+        target[key] = value
+    brief["published_superseded"] = was
+    brief["confirmable"] = _confirmable(brief, applied)
     # A question you have answered is no longer a question.
     answered = {f["field"] for f in facts if f["confidence"] == "operator_verified"}
     brief["open_questions"] = [
         q for q in brief.get("open_questions", [])
         if not any(word in q.lower() for word in _QUESTION_WORDS(answered))]
     return brief
+
+
+def _as_text(value: object) -> str:
+    """A published value as the operator would type it back."""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list):
+        lines = []
+        for item in value:
+            if isinstance(item, dict) and "url" in item and "name" in item:
+                lines.append(f"{item['name']} {item['url']}")
+            elif isinstance(item, dict):
+                bits = [str(item.get("name") or ""), str(item.get("price") or ""),
+                        str(item.get("description") or "")]
+                lines.append(" \u2014 ".join(b for b in bits if b))
+            else:
+                lines.append(str(item))
+        return "\n".join(lines)
+    return "" if value is None else str(value)
+
+
+def _confirmable(brief: dict, applied: dict[str, dict]) -> list[dict]:
+    """Everything outside `facts` that an operator can now confirm.
+
+    These come off the business's own site with one source and no
+    corroboration, so they carry no confidence score and never did: a page's
+    whole story, everything it says the business sells, and who to write to
+    were simply taken on trust. This is the list the screen offers.
+    """
+    published = brief.get("published") or {}
+    rows: list[dict] = []
+    for field, (where, _shape) in PUBLISHED_FIELDS.items():
+        value = brief.get("name") if not where else published.get(where)
+        event = applied.get(field)
+        rows.append({
+            "field": field,
+            "label": FIELD_LABELS.get(field, field.title()),
+            "value": _as_text(value),
+            "count": len(value) if isinstance(value, list) else None,
+            "confidence": "operator_verified" if event else (
+                "unverified" if value else "missing"),
+            "verified_by": event["actor"] if event else None,
+            "verified_at": event["at"] if event else None,
+            "verified_note": event["note"] if event else None,
+            "superseded": _as_text((brief.get("published_superseded") or {}).get(field)),
+        })
+    return rows
 
 
 def _QUESTION_WORDS(fields: set[str]) -> list[str]:  # noqa: N802
