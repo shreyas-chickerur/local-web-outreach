@@ -59,8 +59,12 @@ page scrolled to the exact sentence, using a text fragment.
   is hand-made, dated 16 September, and the claim inventory judges every
   historical claim against it. This is the most misleading thing in the
   repository right now: it produces confident answers from a two-week-old copy.
-- The only open review is against **version 13**; the live page is version 14.
-  Re-running the checks opens a fresh review against 14.
+- Version 14 has its review (review 2, opened 22 September, against crawl
+  `72fe0c4a`). Re-running the checks in memory on 22 September gave the
+  identical 187 findings, and nothing is decided on it yet. Review 1, against
+  version 13, is still open and holds the only decisions made so far.
+- A second lead exists, Oishii Sushi & Pan-Asian in Plano (lead 7), created 21
+  September with no site built. It is not in the trade either.
 - The Heritage Table's versions were written by hand, not by `pipeline.py`. A
   correction now triggers `iterate()`, which may not cope with a hand-authored
   page. The failure path is handled and the correction is never lost, but the
