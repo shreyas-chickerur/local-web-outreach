@@ -120,6 +120,21 @@ def normalize(value: str, field_name: str = "") -> str:
     return _norm_generic(value)
 
 
+def _said(claim: RawClaim) -> dict:
+    """One source's contribution, with its own words attached.
+
+    `quote` and `found_in` are omitted rather than written empty when a source
+    had nothing to quote, so a screen can tell "this source said nothing
+    quotable" apart from "nobody has looked".
+    """
+    said = {"source_type": claim.source_type.value, "source_url": claim.source_url}
+    if claim.quote:
+        said["quote"] = claim.quote
+    if claim.found_in:
+        said["found_in"] = claim.found_in
+    return said
+
+
 def corroborate(claims: list[RawClaim]) -> list[Fact]:
     """Group claims by field and score each by how many sources back it."""
     by_field: dict[str, list[RawClaim]] = {}
@@ -132,8 +147,7 @@ def corroborate(claims: list[RawClaim]) -> list[Fact]:
         for claim in group:
             by_value.setdefault(normalize(claim.value, field_name), []).append(claim)
 
-        all_sources = [{"source_type": c.source_type.value, "source_url": c.source_url}
-                       for c in group]
+        all_sources = [_said(c) for c in group]
 
         # Rank by how many independent sources back each value. A value backed
         # by two sources beats a lone dissenter; only a genuine tie is a
@@ -152,14 +166,12 @@ def corroborate(claims: list[RawClaim]) -> list[Fact]:
                 score=0.3,
                 corroborations=len(all_sources),
                 sources=all_sources,
-                candidates=[{"value": c.value, "source_type": c.source_type.value,
-                             "source_url": c.source_url} for c in group],
+                candidates=[dict(_said(c), value=c.value) for c in group],
             ))
             continue
 
         winning = ranked[0]
-        dissent = [{"value": c.value, "source_type": c.source_type.value,
-                    "source_url": c.source_url}
+        dissent = [dict(_said(c), value=c.value)
                    for claims in ranked[1:] for c in claims]
         distinct = len({c.source_url for c in winning})
         solo_gbp = (distinct == 1 and field_name in _GBP_ALONE_IS_ENOUGH
@@ -172,8 +184,7 @@ def corroborate(claims: list[RawClaim]) -> list[Fact]:
             score=((min(0.6 + 0.15 * distinct, 0.98) - (0.1 if dissent else 0.0))
                    if distinct >= 2 else (0.65 if solo_gbp else 0.5)),
             corroborations=distinct,
-            sources=[{"source_type": c.source_type.value, "source_url": c.source_url}
-                     for c in winning],
+            sources=[_said(c) for c in winning],
             dissent=dissent,
         ))
     return facts

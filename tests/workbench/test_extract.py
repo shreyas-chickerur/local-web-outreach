@@ -447,3 +447,58 @@ def test_a_profile_belongs_to_the_business_or_it_is_not_theirs():
                                  "The Heritage Table")
     assert not social_belongs_to("https://instagram.com/1836farms/",
                                  "The Heritage Table")
+
+
+def test_ten_digits_in_markup_are_not_a_phone_number():
+    """WordPress appends a Unix timestamp to an edited image, and the filename
+    lands in the page's own structured data:
+
+        …/uploads/2019/09/the-heritage-table-logo_Black1-e1568175315.png
+
+    The shape check found those ten digits and published 1568175315 as the
+    number to call. The fallback now reads only what a visitor can see.
+    """
+    from app.workbench.extract import read_structured_data
+
+    page = ('<html><head><script type="application/ld+json">'
+            '{"@type":"WebSite","url":"http://x.test/wp-content/uploads/2019/09/'
+            'the-heritage-table-logo_Black1-e1568175315.png"}</script></head>'
+            '<body><p>Dinner nightly on Main Street.</p></body></html>')
+    phone, _, _, evidence = read_structured_data(page)
+    assert phone is None
+    assert "phone" not in evidence
+
+
+def test_a_number_a_visitor_can_read_is_still_found():
+    from app.workbench.extract import read_structured_data
+
+    phone, _, _, evidence = read_structured_data(
+        "<html><body><p>Call us on (469) 664-0100 to book.</p></body></html>")
+    assert phone == "(469) 664-0100"
+    assert "Call us on" in evidence["phone"]["quote"]
+
+
+# Ten digits in a row turn up all over a business's website and almost none of
+# them are the number to ring. A number qualifies by being written the way a
+# person writes one, or by having a word beside it saying what it is.
+@pytest.mark.parametrize(("body", "expected"), [
+    # Written as a number: accepted wherever it appears.
+    ("<p>Call us on (469) 664-0100 to book.</p>", "(469) 664-0100"),
+    ("<p>Phone 469.664.0100</p>", "469.664.0100"),
+    ("<p>469-664-0100</p>", "469-664-0100"),
+    # Unpunctuated, but introduced by a word that says what it is.
+    ("<p>Reservations: 4696640100</p>", "4696640100"),
+    # Unpunctuated and unexplained: an identifier that happens to be ten long.
+    ("<p>Order #4696640100 shipped today.</p>", None),
+    ("<p>Licence 1234567890 issued 2019.</p>", None),
+    # Inside a longer token — the WordPress timestamp, a tracking number.
+    ("<p>See logo_Black1-e1568175315.png</p>", None),
+    ("<p>Tracking 1Z9876543210 in transit.</p>", None),
+    ("<p>Serving 4,696,640,100 meals since 1996.</p>", None),
+])
+def test_only_a_number_written_or_introduced_as_one_is_a_phone_number(
+        body, expected):
+    from app.workbench.extract import read_structured_data
+
+    phone, _, _, _ = read_structured_data(f"<html><body>{body}</body></html>")
+    assert phone == expected

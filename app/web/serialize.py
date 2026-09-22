@@ -57,6 +57,10 @@ def published_to_dict(site: ExtractedSite) -> dict:
         "socials": site.socials,
         "emails": site.emails,
         "has_locations_page": site.has_locations_page,
+        # What the self-published phone, address and hours were read out
+        # of. Carried so a correction made on the operator screen is a
+        # judgement about evidence, not about a value from nowhere.
+        "evidence": site.evidence,
         "blocks": site.blocks,
     }
 

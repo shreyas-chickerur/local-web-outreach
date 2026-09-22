@@ -153,17 +153,32 @@ def source_type_for(directory_name: str) -> SourceType:
 
 
 def _claims_from_place(place: DirectoryPlace, source_type: SourceType) -> list[RawClaim]:
+    """A directory's claims, each carrying what the directory actually returned.
+
+    A listing has no sentences. What it has is the field it answered with, so
+    that is what gets quoted — the value before any normalising, under the name
+    of the listing it came from. For hours that matters most: the brief stores
+    one canonical schedule, and this keeps the seven lines the directory
+    published next to it.
+    """
+    listing = f"{source_type.value} listing"
     claims: list[RawClaim] = []
     if place.address:
         claims.append(RawClaim(field="address", value=place.address,
-                               source_url=place.source_url, source_type=source_type))
+                               source_url=place.source_url, source_type=source_type,
+                               quote=place.address,
+                               found_in=f"{listing} \u00b7 address"))
     if place.phone:
         claims.append(RawClaim(field="phone", value=place.phone,
-                               source_url=place.source_url, source_type=source_type))
+                               source_url=place.source_url, source_type=source_type,
+                               quote=place.phone,
+                               found_in=f"{listing} \u00b7 phone"))
     schedule = canonical_hours(list(place.hours))
     if schedule:
         claims.append(RawClaim(field="hours", value=schedule,
-                               source_url=place.source_url, source_type=source_type))
+                               source_url=place.source_url, source_type=source_type,
+                               quote=" \u00b7 ".join(place.hours) or schedule,
+                               found_in=f"{listing} \u00b7 opening hours"))
     return claims
 
 
@@ -368,7 +383,11 @@ def build_brief(
                     field="services",
                     value=", ".join(i["name"] for i in published.menu_items[:4]),
                     source_url=brief.website_url,
-                    source_type=SourceType.EXISTING_SITE))
+                    source_type=SourceType.EXISTING_SITE,
+                    quote=" \u00b7 ".join(
+                        f"{i['name']}{(' — ' + i['description']) if i.get('description') else ''}"
+                        for i in published.menu_items[:4])[:300],
+                    found_in="their menu"))
     else:
         brief.site_reachable = None
 
@@ -419,14 +438,22 @@ def build_brief(
     # number was printed on their own homepage.
     def _claims_from_site(site: ExtractedSite, url: str) -> list[RawClaim]:
         out: list[RawClaim] = []
+
+        def seen(name: str) -> dict:
+            return site.evidence.get(name) or {}
+
         for name, value in (("phone", site.phone), ("address", site.address)):
             if value:
                 out.append(RawClaim(field=name, value=value, source_url=url,
-                                    source_type=SourceType.EXISTING_SITE))
+                                    source_type=SourceType.EXISTING_SITE,
+                                    quote=seen(name).get("quote", ""),
+                                    found_in=seen(name).get("found_in", "")))
         schedule = canonical_hours(site.hours)
         if schedule:
             out.append(RawClaim(field="hours", value=schedule, source_url=url,
-                                source_type=SourceType.EXISTING_SITE))
+                                source_type=SourceType.EXISTING_SITE,
+                                quote=seen("hours").get("quote", ""),
+                                found_in=seen("hours").get("found_in", "")))
         return out
 
     # A website discovered by a directory still needs reading.

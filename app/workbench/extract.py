@@ -272,6 +272,11 @@ class ExtractedSite:
     # it is what lets a directory's claim reach two-source confirmation.
     phone: str | None = None
     address: str | None = None
+    # What each self-published fact was read out of: {field: {quote, found_in}}.
+    # Carried so the operator screen can show the sentence beside the value,
+    # and so a correction is a judgement about evidence rather than about a
+    # number that appeared from nowhere.
+    evidence: dict[str, dict] = field(default_factory=dict)
     # Two things about a site that decide whether it needs replacing, both free
     # from HTML we already have: a page with no viewport meta tag was never
     # made responsive, and a site still on plain http is one browsers now warn
@@ -378,8 +383,62 @@ _LD_RE = re.compile(
     r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
     re.IGNORECASE | re.DOTALL)
 _TEL_HREF_RE = re.compile(r'href=["\']tel:([^"\']+)["\']', re.IGNORECASE)
-_PHONE_SHAPE_RE = re.compile(r"(\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4})")
+# Ten digits in a row are not a phone number, and this pattern used to say they
+# were. Two things were missing.
+#
+# It had no boundaries, so it matched *inside* a longer token: WordPress writes
+# an edited image as "logo_Black1-e1568175315.png", and the ten digits of that
+# Unix timestamp were published as the number to call. `(?<![\w-])` and
+# `(?![\w-])` mean a match has to start and end at a real edge, which is the
+# whole fix for that class — order numbers, licence numbers, tracking numbers
+# and timestamps all live inside a longer run of characters.
+#
+# And it accepted a bare, unpunctuated run of ten digits anywhere on a page.
+# A number a business wants rung is written the way people read numbers, with
+# brackets or separators; an unpunctuated run needs a word nearby saying what
+# it is. `_PHONE_WRITTEN_RE` is the first, `_PHONE_WORD_RE` supplies the second.
+_PHONE_SHAPE_RE = re.compile(
+    r"(?<![\w-])(\+?1[-.\s]?)?(\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4})(?![\w-])")
+# The same number as a person would write it: brackets, or a separator between
+# the groups. "(469) 664-0100" and "469.664.0100" qualify; "4696640100" does not.
+_PHONE_WRITTEN_RE = re.compile(r"\(\d{3}\)|\d{3}[-.\s]\d{3}[-.\s]\d{4}")
+# What a page says next to a number it wants rung.
+_PHONE_WORD_RE = re.compile(
+    r"\b(call|calling|phone|telephone|tel|mobile|cell|text|dial|reach us|"
+    r"speak to|ring|reservations?|book|contact)\b", re.IGNORECASE)
 _DAY_RE = re.compile(r"^(mo|tu|we|th|fr|sa|su)", re.IGNORECASE)
+
+# A street address as a person writes one: a house number, a street name, the
+# word that says what kind of street it is, then the town and the state. The
+# state is not optional — "500 Main Street" alone appears in prose about
+# somewhere else far too often to be read as where this business is.
+_STREET_SUFFIX = (
+    r"(?:st|street|ave|avenue|blvd|boulevard|rd|road|dr|drive|ln|lane|way|"
+    r"ct|court|cir|circle|pkwy|parkway|hwy|highway|ter|terrace|pl|place|"
+    r"trl|trail|sq|square|loop|row|pike|expy|expressway)"
+)
+_ADDRESS_RE = re.compile(
+    r"\b(?P<num>\d{1,6}[A-Za-z]?)\s+"                       # house number
+    r"(?:[NSEW]\.?\s+|North\s+|South\s+|East\s+|West\s+)?"   # optional quarter
+    # The street's name, in words. A bare number is not one of them: allowing
+    # one let the tail of a phone number ("…0100  7110 Main St.") be read as
+    # the house number, with the real house number inside the street name.
+    r"(?:(?:[A-Z][\w'.-]*|\d{1,3}(?:st|nd|rd|th))\s+){0,4}"
+    rf"(?i:{_STREET_SUFFIX})\.?"                            # what kind of street
+    r"(?:\s*,?\s*(?i:ste|suite|unit|apt|bldg|#)\s*[\w-]+)?"  # optional unit
+    # A footer writes "7110 Main St. Frisco, TX 75033" and an about page writes
+    # "7110 Main Street in Frisco, TX" — neither puts a comma before the town,
+    # and requiring one meant the only two places this business states its own
+    # address both went unread.
+    r"\s*,?\s*(?:in\s+)?"
+    r"(?P<city>[A-Z][\w'.-]*(?:\s+[A-Z][\w'.-]*){0,2})"     # the town
+    r"\s*,\s*(?P<state>[A-Z]{2})"                           # the state
+    r"(?:\s+(?P<zip>\d{5}(?:-\d{4})?))?"                    # and a postcode
+)
+# What a page says around the address it means as its own.
+_ADDRESS_WORD_RE = re.compile(
+    r"\b(address|located|location|find us|visit us|come see us|directions|"
+    r"stop by|see us at|we(?:'re| are) at|map)\b", re.IGNORECASE)
 
 
 def _ld_nodes(html: str):
@@ -438,14 +497,26 @@ def _ld_hours(node: dict) -> list[str]:
     return out[:7]
 
 
-def read_structured_data(html: str) -> tuple[str | None, str | None, list[str]]:
-    """(phone, address, hours) as the business publishes them about itself.
+def read_structured_data(
+        html: str) -> tuple[str | None, str | None, list[str], dict[str, dict]]:
+    """(phone, address, hours, evidence) as the business publishes them.
 
     Prefers schema.org, which is what a business tells search engines it is,
     and falls back to a tel: link — the number a visitor would actually tap.
+
+    The fourth return is what each of the three was read out of: the schema
+    type and property, or the surrounding line of the page. A fact without its
+    evidence can be scored but it cannot be checked, and checking is the whole
+    job of the screen this feeds.
     """
     phone = address = None
     hours: list[str] = []
+    evidence: dict[str, dict] = {}
+
+    def note(name: str, quote: str, found_in: str) -> None:
+        if name not in evidence and quote:
+            evidence[name] = {"quote": _text(str(quote))[:300], "found_in": found_in}
+
     for node in _ld_nodes(html):
         types = node.get("@type")
         types = types if isinstance(types, list) else [types]
@@ -453,16 +524,98 @@ def read_structured_data(html: str) -> tuple[str | None, str | None, list[str]]:
                 "Business" in t or "Store" in t or "Restaurant" in t
                 or "Organization" in t or "Service" in t) for t in types):
             continue
-        phone = phone or (_text(str(node.get("telephone"))) if node.get("telephone") else None)
-        address = address or _ld_address(node)
-        hours = hours or _ld_hours(node)
+        named = next((t for t in types if isinstance(t, str)), "Thing")
+        where = f"schema.org {named}"
+        if phone is None and node.get("telephone"):
+            phone = _text(str(node["telephone"]))
+            note("phone", node["telephone"], f"{where} \u00b7 telephone")
+        if address is None:
+            found_address = _ld_address(node)
+            if found_address:
+                address = found_address
+                raw = node.get("address")
+                note("address",
+                     json.dumps(raw, ensure_ascii=False) if isinstance(raw, dict)
+                     else str(raw or found_address),
+                     f"{where} \u00b7 address")
+        if not hours:
+            found_hours = _ld_hours(node)
+            if found_hours:
+                hours = found_hours
+                note("hours", "; ".join(found_hours),
+                     f"{where} \u00b7 openingHours")
+
     if phone is None:
-        found = _TEL_HREF_RE.search(html) or _PHONE_SHAPE_RE.search(html)
+        found = _TEL_HREF_RE.search(html)
         if found:
             phone = _text(found.group(1))
+            note("phone", _line_around(html, found.start()),
+                 "a telephone link on the page")
+    if phone is None:
+        # Ten digits in a row are not a phone number. WordPress appends a Unix
+        # timestamp to an edited image — "…logo_Black1-e1568175315.png" — and
+        # that string sits in the page's own structured data, where the shape
+        # check found it and published it as the number to call. So the
+        # fallback reads only what a visitor can see: a number nobody can read
+        # off the page is not a number anybody will ring.
+        visible = _ANY_TAG_RE.sub(" ", _TAG_RE.sub(" ", html))
+        for found in _PHONE_SHAPE_RE.finditer(visible):
+            written = found.group(2)
+            nearby = visible[max(0, found.start() - 90): found.end() + 40]
+            # Punctuated the way a person writes a number, or introduced by a
+            # word that says what it is. Neither, and it is an identifier that
+            # happens to be ten digits long.
+            if not (_PHONE_WRITTEN_RE.search(written)
+                    or _PHONE_WORD_RE.search(nearby)):
+                continue
+            phone = _text(written)
+            note("phone", _line_around(visible, found.start(), already_text=True),
+                 "the page's own words")
+            break
     if phone and not _PHONE_SHAPE_RE.search(phone):
         phone = None              # an extension or a short code, not a number
-    return phone, address, hours
+        evidence.pop("phone", None)
+
+    if address is None:
+        # Same reasoning as the phone: read only what a visitor can see, and
+        # only where the page is plainly saying where it is. A site that
+        # publishes no PostalAddress still writes its address in the footer,
+        # and without this the address has one source forever — Google — and
+        # can never reach the two-source agreement the screen is built on.
+        visible = _ANY_TAG_RE.sub(" ", _TAG_RE.sub(" ", html))
+        found_all = list(_ADDRESS_RE.finditer(visible))
+        # One place written twice is still one place: the footer's "7110 Main
+        # St. Frisco, TX 75033" and the about page's "7110 Main Street in
+        # Frisco, TX" differ as text and agree on everything that matters.
+        places = {(m.group("num"), m.group("city").lower(), m.group("state"))
+                  for m in found_all}
+        introduced = [m for m in found_all if _ADDRESS_WORD_RE.search(
+            visible[max(0, m.start() - 120): m.end() + 40])]
+        # Introduced as an address, or the only place on the page — either way
+        # it is this business's. Several different ones, none of them
+        # introduced, could be a list of somebody else's.
+        pool = introduced or (found_all if len(places) == 1 else [])
+        if pool:
+            found = max(pool, key=lambda m: bool(m.group("zip")))
+            address = _text(found.group(0))
+            note("address", _line_around(visible, found.start(), already_text=True),
+                 "the page's own words")
+    return phone, address, hours, evidence
+
+
+def _line_around(html: str, at: int, width: int = 140, *,
+                 already_text: bool = False) -> str:
+    """The readable sentence a match sits in, markup removed.
+
+    Quoting the raw markup would technically be the source's own words and
+    would be unreadable, which defeats the point: somebody has to recognise
+    this on the page they are looking at. `already_text` is for a caller that
+    searched the stripped text, where the offset means nothing in the markup.
+    """
+    window = html[max(0, at - width): at + width]
+    if already_text:
+        return _text(window)
+    return _text(_ANY_TAG_RE.sub(" ", _TAG_RE.sub(" ", window)))
 
 
 # Words a business uses when it talks about itself, and words it uses when it
@@ -835,7 +988,7 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
     out.products = out.products[:_PRODUCT_LIMIT]
 
     out.blocks = read_blocks(clean, base_url)
-    out.phone, out.address, ld_hours = read_structured_data(html)
+    out.phone, out.address, ld_hours, out.evidence = read_structured_data(html)
     out.mobile_ready = bool(_VIEWPORT_RE.search(html))
     # _TAG_RE strips script and style bodies; _ANY_TAG_RE strips the markup.
     out.text_words = len(_ANY_TAG_RE.sub(" ", _TAG_RE.sub(" ", html)).split())
@@ -856,8 +1009,16 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
     page_text = _text(clean)
     # Structured data first: it is what the business tells search engines, and
     # it survives a footer whose opening times are drawn as an image.
-    out.hours = _dedupe_hours(
-        ld_hours + [m.group(0).strip() for m in _HOURS_RE.finditer(page_text)])[:7]
+    written_hours = [m.group(0).strip() for m in _HOURS_RE.finditer(page_text)]
+    out.hours = _dedupe_hours(ld_hours + written_hours)[:7]
+    # read_structured_data only sees schema.org, so hours found in the page's
+    # own text arrived with nothing to check them against. Record them here,
+    # where they are read, in the same shape.
+    if written_hours and "hours" not in out.evidence:
+        out.evidence["hours"] = {
+            "quote": _text(" · ".join(written_hours[:7]))[:300],
+            "found_in": "the page's own words",
+        }
 
     base_host = urlparse(base_url).netloc.lower().replace("www.", "")
     action_seen: set[str] = set()
@@ -918,6 +1079,8 @@ def merge(primary: ExtractedSite, extra: ExtractedSite) -> ExtractedSite:
         if block["heading"].lower() not in known and len(primary.blocks) < _BLOCK_LIMIT:
             primary.blocks.append(block)
     primary.address = primary.address or extra.address
+    for name, found in extra.evidence.items():
+        primary.evidence.setdefault(name, found)
     primary.description = primary.description or extra.description
     for svc in extra.services:
         if (svc.lower() not in {s.lower() for s in primary.services}
