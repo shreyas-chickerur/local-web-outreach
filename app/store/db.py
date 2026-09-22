@@ -158,6 +158,51 @@ CREATE TABLE IF NOT EXISTS preferences (
 );
 
 CREATE INDEX IF NOT EXISTS preferences_by_phrase ON preferences (phrase);
+
+-- The approval stage. One review per version of a site, opened when somebody
+-- has finished iterating and wants to ship. A correction produces a new
+-- version, which opens a new review, so an approval always names exactly what
+-- was approved and can never quietly outlive it.
+CREATE TABLE IF NOT EXISTS reviews (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id       INTEGER NOT NULL REFERENCES leads(id),
+    version       INTEGER NOT NULL,
+    opened_at     TEXT NOT NULL,
+    opened_by     TEXT NOT NULL,
+    stage         TEXT NOT NULL DEFAULT 'open',  -- open | approved | sent back
+    decided_at    TEXT,
+    decided_by    TEXT,
+    decision_note TEXT NOT NULL DEFAULT '',
+    -- What the page was checked against. A review taken against a stale
+    -- capture is worth knowing about later.
+    brief_hash    TEXT NOT NULL DEFAULT '',
+    capture_hash  TEXT NOT NULL DEFAULT '',
+    UNIQUE (lead_id, version)
+);
+
+-- One row per thing the checks found, and what a person decided about it.
+-- The verdict is the machine's; the status and the note are the person's.
+CREATE TABLE IF NOT EXISTS findings (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    review_id  INTEGER NOT NULL REFERENCES reviews(id),
+    stage      TEXT NOT NULL,                  -- claim | technical
+    verdict    TEXT NOT NULL,                  -- corroborated | assembled |
+                                               -- unsourced | contradicted |
+                                               -- defect | unmeasured
+    title      TEXT NOT NULL,
+    detail     TEXT NOT NULL DEFAULT '',
+    locator    TEXT NOT NULL DEFAULT '',   -- where, for a person to read
+    anchor     TEXT NOT NULL DEFAULT 'page', -- where, for the pin to land
+    quote      TEXT NOT NULL DEFAULT '',       -- the page's own words
+    evidence   TEXT NOT NULL DEFAULT '',       -- the source's words
+    resources  TEXT NOT NULL DEFAULT '[]',     -- [{label, url}] to go and check
+    status     TEXT NOT NULL DEFAULT 'open',   -- open | confirmed | corrected |
+                                               -- dismissed
+    note       TEXT NOT NULL DEFAULT '',
+    decided_at TEXT,
+    decided_by TEXT
+);
+CREATE INDEX IF NOT EXISTS findings_by_review ON findings (review_id, id);
 """
 
 
@@ -172,6 +217,13 @@ _LATER_COLUMNS = (
     # colours sampled from the picture, where the subject sits. Per-photograph
     # and per-lead, so it lives here rather than in a version's spec.
     ("photo_labels", "vision_json", "TEXT NOT NULL DEFAULT '{}'"),
+    # Where on the page a finding is. Added after the first reviews were
+    # written; those rows keep an empty locator rather than being lost.
+    ("findings", "locator", "TEXT NOT NULL DEFAULT ''"),
+    # Where the annotation layer pins this finding on the rendered page:
+    # "css:<selector>", "text:<needle>", or "page" for something in the
+    # head with nothing visible to point at.
+    ("findings", "anchor", "TEXT NOT NULL DEFAULT 'page'"),
 )
 
 

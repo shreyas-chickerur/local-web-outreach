@@ -185,10 +185,43 @@
   .prow dt{color:var(--faint);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;
     font-weight:600;padding-top:2px}
   .prow dd{margin:0;font-size:14.5px}
+  .ev{border-left:2px solid var(--line);padding-left:10px;margin-top:8px}
+  .ev-head{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .ev-where{font-size:11.5px;color:var(--faint);font-family:var(--mono)}
+  .ev-go{font-size:11.5px;color:var(--accent);text-decoration:none;white-space:nowrap}
+  .ev-go:hover{text-decoration:underline}
+  .ev-quote{margin:5px 0 0;font-size:13px;line-height:1.5;color:var(--dim);
+    font-style:italic}
+  .ev-quote::before{content:"\201c"}
+  .ev-quote::after{content:"\201d"}
+  .buildprog{position:fixed;right:22px;bottom:22px;z-index:60;width:min(360px,92vw);
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    box-shadow:var(--shadow-lift);padding:15px 17px;display:grid;gap:11px}
+  .bhead{display:flex;justify-content:space-between;align-items:baseline;font-size:14px}
+  .belapsed{font-family:var(--mono);font-size:12px;color:var(--faint);
+    font-variant-numeric:tabular-nums}
+  .bstep{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:start}
+  .bmark{width:18px;height:18px;display:grid;place-items:center;border-radius:50%;
+    border:1px solid var(--line);font-size:11px;color:var(--faint);margin-top:1px}
+  .bstep.done .bmark{background:var(--ok);border-color:var(--ok);color:#fff}
+  .bstep.failed .bmark{background:var(--bad);border-color:var(--bad);color:#fff}
+  .bstep.running .bmark{border-color:var(--accent)}
+  .bstep .bwhat{font-size:13px;line-height:1.35}
+  .bstep .bwhat span{display:block;color:var(--faint);font-size:12px}
+  .bstep.waiting .bwhat{color:var(--faint)}
+  .bfoot{font-size:12px;color:var(--faint);border-top:1px solid var(--line);
+    padding-top:9px}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:60;
+    background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:8px;
+    font-size:13.5px;max-width:min(560px,92vw);box-shadow:var(--shadow-lift);
+    animation:toastin .18s ease-out}
+  @keyframes toastin{from{opacity:0;transform:translate(-50%,8px)}}
   .chips{display:flex;gap:6px;flex-wrap:wrap}
   .chip{background:var(--raise);border:1px solid var(--line);border-radius:6px;
     padding:4px 10px;font-size:12.5px;color:var(--dim);transition:all .15s}
-  .chip:hover{border-color:var(--accent);color:var(--accent)}
+  /* No hover state: a chip is a label, not a control. The lift read as
+     "click me", and clicking a service did nothing. */
+  a.chip:hover{border-color:var(--accent);color:var(--accent)}
 
   .shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px}
   .shots img{width:100%;height:108px;object-fit:cover;border-radius:6px;
@@ -202,9 +235,12 @@
      sources argue about, so they get no badge and no confidence bar. */
   .rates{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:11px}
   .rate{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
-    padding:14px 16px;box-shadow:var(--shadow);text-decoration:none;display:block;
-    transition:border-color .18s,box-shadow .18s,transform .18s}
-  .rate:hover{border-color:var(--accent);box-shadow:var(--shadow-lift);transform:translateY(-2px)}
+    padding:14px 16px;box-shadow:var(--shadow);display:block;position:relative}
+  .rate .go{position:absolute;top:10px;right:10px;width:26px;height:26px;
+    display:grid;place-items:center;border:1px solid var(--line);border-radius:6px;
+    color:var(--faint);text-decoration:none;font-size:12px;line-height:1;
+    background:var(--raise);transition:border-color .15s,color .15s}
+  .rate .go:hover{border-color:var(--accent);color:var(--accent)}
   .rate .who{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;
     color:var(--faint);font-weight:700}
   .rate .n{font-size:27px;font-weight:800;letter-spacing:-.02em;line-height:1.25;
@@ -367,6 +403,10 @@
   .ws-top h2{margin:0;font-size:16px;font-weight:650;letter-spacing:-.01em}
   .ws-top .sub{color:var(--faint);font-size:12.5px;font-family:var(--mono)}
   .ws-top .close{margin-left:auto}
+  .workspace.reviewing{grid-template-columns:1fr}
+  .workspace.reviewing > .ws-pane:not(.ws-preview){display:none}
+  .workspace.reviewing .device.wide{height:calc(100vh - 118px)}
+  .workspace.reviewing .device.phone{max-height:calc(100vh - 128px)}
   .ws-pane{display:flex;flex-direction:column;min-height:0;overflow:hidden}
   .ws-pane+.ws-pane{border-left:1px solid var(--line)}
   .ws-head{padding:12px 16px 9px;font-size:11px;letter-spacing:.13em;
@@ -500,6 +540,63 @@
     background:var(--surface);color:var(--ink);font:inherit;font-size:13px;
     padding:7px 8px}
   .lab-count{font-family:var(--mono);font-size:12px;color:var(--faint)}
+  /* the approval stage */
+  .review{position:fixed;inset:0;z-index:60;background:var(--bg,#fff);
+    display:flex;flex-direction:column;overflow:hidden}
+  .rv-top{display:flex;align-items:center;gap:12px;padding:12px 18px;
+    border-bottom:1px solid #e3e3e0;flex-wrap:wrap}
+  .rv-top h2{margin:0;font-size:17px}
+  .rv-top .sub{color:#77736b;font-size:13px}
+  .rv-scroll{overflow:auto;padding:16px 18px 40px}
+  .rv-band{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .rv-band .pill{font-size:12px;letter-spacing:.04em;padding:4px 10px;border-radius:999px;
+    border:1px solid #d9d6cf;color:#55524b}
+  .rv-band .pill.stop{border-color:#a33;color:#a33;background:#fbeeee}
+  .rv-band .pill.warn{border-color:#96601a;color:#96601a;background:#fbf2e6}
+  .rv-band .pill.ok{border-color:#2c6a46;color:#2c6a46;background:#eaf4ee}
+  .rv-group{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#8a867d;
+    margin:22px 0 8px}
+  .finding{border:1px solid #e3e3e0;border-left:3px solid #c9c6bf;border-radius:6px;
+    padding:12px 14px;margin-bottom:10px;background:#fff}
+  .finding.contradicted{border-left-color:#a33}
+  .finding.defect{border-left-color:#96601a}
+  .finding.unsourced{border-left-color:#c08a2e}
+  .finding.assembled{border-left-color:#7a6fae}
+  .finding.unmeasured{border-left-color:#8a867d}
+  .finding.done{opacity:.55}
+  .finding .vd{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#77736b}
+  .finding .ttl{font-weight:600;margin:3px 0 4px;font-size:14.5px}
+  .finding .dt{color:#5a574f;font-size:13.5px;margin:0 0 8px}
+  .finding blockquote{margin:0 0 8px;padding:7px 11px;border-left:2px solid #ddd9d2;
+    background:#faf9f6;font-size:13.5px;color:#3d3a34}
+  .finding blockquote em{display:block;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;color:#8a867d;font-style:normal;margin-bottom:3px}
+  .finding .where{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+    color:#6c6860;background:#f4f2ee;border:1px solid #e6e3dc;border-radius:4px;
+    padding:5px 9px;margin:0 0 9px;overflow-x:auto;white-space:pre}
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 10px}
+  @media (max-width:820px){.compare{grid-template-columns:1fr}}
+  .compare > div{border:1px solid #e6e3dc;border-radius:5px;overflow:hidden;min-width:0}
+  .compare em{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:#8a867d;font-style:normal;padding:6px 10px;background:#f7f5f1;
+    border-bottom:1px solid #e6e3dc}
+  .compare pre{margin:0;padding:9px 10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:12.5px;line-height:1.5;color:#3d3a34;white-space:pre-wrap;word-break:break-word;
+    max-height:260px;overflow:auto}
+  .finding .res{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:9px}
+  .finding .res a{font-size:12.5px;color:#2d5f9a;text-decoration:none;
+    border:1px solid #d5e0ee;border-radius:999px;padding:3px 10px}
+  .finding .res a:hover{background:#eef4fb}
+  .finding .act{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+  .finding .act input{flex:1;min-width:200px;font:inherit;font-size:13px;padding:6px 9px;
+    border:1px solid #d9d6cf;border-radius:5px}
+  .finding .said{font-size:12.5px;color:#2c6a46;margin:7px 0 0}
+  .finding .said b{color:#3d3a34}
+  .rv-decide{border-top:1px solid #e3e3e0;padding:14px 18px;display:flex;gap:10px;
+    align-items:center;flex-wrap:wrap;background:#faf9f6}
+  .rv-decide input{flex:1;min-width:240px;font:inherit;padding:8px 10px;
+    border:1px solid #d9d6cf;border-radius:5px}
+  .rv-blocked{color:#a33;font-size:13px}
   .lab-strip{display:flex;gap:6px;padding:10px 18px;overflow-x:auto;
     border-top:1px solid var(--line);background:var(--surface)}
   .lab-strip button{flex:0 0 auto;width:62px;height:46px;padding:0;
@@ -541,6 +638,12 @@
     border-radius:8px;padding:11px 13px;color:var(--dim);margin:0 0 14px}
 
   .asks{display:grid;gap:9px}
+  .confirm.long{display:grid;gap:6px}
+  .confirm.long textarea{width:100%;font:inherit;font-size:13px;padding:7px 9px;
+    border:1px solid var(--line);border-radius:6px;background:var(--surface);
+    color:var(--ink);resize:vertical}
+  .fact-head{display:flex;align-items:baseline;gap:9px;justify-content:space-between}
+  .fact .val{font-size:13.5px;white-space:pre-wrap;margin-top:5px;line-height:1.45}
   .ask{display:flex;gap:12px;background:var(--surface);border:1px solid var(--line);
     border-left:3px solid var(--accent);border-radius:6px;padding:13px 16px;font-size:14.5px}
   .ask .q{color:var(--accent);font-weight:700;flex:0 0 auto}
@@ -842,7 +945,19 @@ function paint(data) {
 
 const COLOR = {verified: "var(--ok)", unverified: "var(--warn)",
                conflict: "var(--bad)", operator_verified: "var(--accent-2)"};
-const VERIFIABLE = ["address", "phone", "hours", "website"];
+const VERIFIABLE = ["address", "phone", "hours", "website",
+  "name", "tagline", "about", "services", "email", "photos",
+  "menu_items", "socials"];
+// What a correction to each one is typed as, so the box can say so.
+// Fields whose value is a paragraph or a list, not a line.
+const LONG = ["about", "services", "menu_items", "socials", "photos", "tagline"];
+const FIELD_HINT = {
+  hours: "any way you like — \u201cMon-Fri 9-5, Sat 10-2, closed Sun\u201d",
+  services: "one per line", email: "one per line", photos: "one URL per line",
+  menu_items: "one per line — Short Rib — $32 — braised overnight",
+  socials: "one per line — Facebook https://\u2026",
+  about: "their story, in their own words", tagline: "one sentence",
+};
 let LEAD = null;   // the lead currently on screen
 
 const when = iso => {
@@ -863,8 +978,18 @@ function byline(f) {
 function confirmRow(f) {
   if (!LEAD || !VERIFIABLE.includes(f.field)) return "";
   const start = f.confidence === "conflict" ? "" : esc(f.value ?? "");
+  const hint = FIELD_HINT[f.field] || "what they actually told you";
+  if (LONG.includes(f.field)) {
+    return `<div class="confirm long">
+      <textarea rows="4" placeholder="${esc(hint)}"
+        data-v="${esc(f.field)}">${start}</textarea>
+      <input placeholder="how do you know?" data-n="${esc(f.field)}"
+        onkeydown="if(event.key==='Enter')confirmField('${esc(f.field)}')">
+      <button class="mini primary" onclick="confirmField('${esc(f.field)}')">Confirm</button>
+    </div>`;
+  }
   return `<div class="confirm">
-    <input placeholder="what they actually told you" value="${start}"
+    <input placeholder="${esc(hint)}" value="${start}"
            data-v="${esc(f.field)}" onkeydown="if(event.key==='Enter')confirmField('${esc(f.field)}')">
     <input placeholder="how do you know?" data-n="${esc(f.field)}"
            onkeydown="if(event.key==='Enter')confirmField('${esc(f.field)}')">
@@ -887,7 +1012,41 @@ async function confirmField(field) {
   const note = document.querySelector(`[data-n="${field}"]`).value.trim();
   if (!value) { alert("Enter what they told you."); return; }
   const data = await post("/api/verify", {field, value, note});
-  if (data) { $("#out").innerHTML = render(data); window.scrollTo({top: 0, behavior: "smooth"}); }
+  if (data) {
+    $("#out").innerHTML = render(data);
+    window.scrollTo({top: 0, behavior: "smooth"});
+    sayReading(data.reading);
+    sayRebuild(data.rebuilt);
+  }
+}
+
+// Hours can be written a dozen ways and all of them are fine — but the tool
+// has to prove it understood, because a week it misread is a week the page
+// prints wrong. So it says back what it made of it, in plain words.
+function sayReading(reading) {
+  if (!reading) return;
+  if (reading.read) { toast(`Read as ${reading.read}`); return; }
+  toast("Saved exactly as you typed it — I could not read that as a weekly "
+      + "schedule, so the page will print your words verbatim.", 7000);
+}
+
+function toast(text, ms) {
+  const box = document.createElement("div");
+  box.className = "toast";
+  box.textContent = text;
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), ms || 4200);
+}
+
+// A correction changes the page, so the page is rebuilt. Say which it was,
+// and say plainly when the rebuild failed that the correction itself is safe.
+function sayRebuild(r) {
+  if (!r) return;
+  if (r.built) { alert(`Corrected, and rebuilt as version ${r.version}.`); return; }
+  if (r.correction_saved) {
+    alert(`The correction is saved, but the rebuild failed:\n${r.why}\n\n` +
+          `Nothing is lost — rebuild from the workbench when you are ready.`);
+  }
 }
 
 // One click writes the correction into the trail, attributed like any other.
@@ -965,7 +1124,8 @@ async function openWorkspace(leadId, name) {
 function closeWorkspace() {
   WS = null;
   document.body.classList.remove("workspace-open");
-  for (const id of ["#workspace", "#labeller"]) {
+  RV = null;
+  for (const id of ["#workspace", "#labeller", "#review"]) {
     const frame = $(id);
     if (frame) frame.remove();
   }
@@ -1182,14 +1342,29 @@ function drawWorkspace() {
     ` : `<p class="hint">Send an instruction and what it was understood to mean
          will appear here.</p>`;
 
-  const src = WS.active ? `/site/${WS.lead_id}/${WS.active}` : "";
-  const html = `<div class="workspace" id="workspace">
+  // With a review open the preview is served with its findings drawn on it.
+  const src = WS.active
+    ? `/site/${WS.lead_id}/${WS.active}` +
+      (WS.review && WS.review.version === WS.active
+        ? `?review=${WS.review.id}` : "")
+    : "";
+  // Reviewing gives the page the whole window: the findings are pinned to it,
+  // and reading them in a 390px column beside two other panes is no better
+  // than the separate page this replaced.
+  const reviewing = WS.review && WS.review.version === WS.active;
+  const html = `<div class="workspace${reviewing ? " reviewing" : ""}" id="workspace">
     <div class="ws-top">
       <h2>${esc(WS.name)}</h2>
       <span class="sub">${WS.active ? "v" + WS.active : "no version yet"}</span>
       <button class="mini" onclick="relabel()">Photos${
         (() => { const p = labelProgress();
                  return p.total ? ` ${p.done}/${p.total}` : ""; })()}</button>
+      ${WS.active ? `<button class="mini primary" onclick="openReview()">${
+        WS.review && WS.review.version === WS.active
+          ? "Reviewing v" + WS.active : "Review v" + WS.active + " →"}</button>
+        <button class="mini" onclick="openReview(true)">List view</button>${
+        WS.review && WS.review.version === WS.active
+          ? `<button class="mini" onclick="refreshChecks()">Re-run checks</button>` : ""}` : ""}
       <button class="mini close" onclick="closeWorkspace()">← back to leads</button>
     </div>
 
@@ -1207,7 +1382,7 @@ function drawWorkspace() {
       </form>
     </section>
 
-    <section class="ws-pane">
+    <section class="ws-pane ws-preview">
       <div class="ws-toolbar">
         <button class="vchip" aria-pressed="${WS.device === "phone"}"
           onclick="setDevice('phone')">Phone</button>
@@ -1219,7 +1394,9 @@ function drawWorkspace() {
       </div>
       <div class="ws-stage">
         ${src ? `<div class="device ${WS.device}"><iframe src="${src}"
-            title="Site preview" sandbox="allow-scripts"></iframe></div>`
+            title="Site preview"
+            sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+            ></iframe></div>`
           : `<div class="empty">
              <h3>${WS.pending.length ? "Say what the photos show" : "Ready to build"}</h3>
              <p>${WS.pending.length
@@ -1251,6 +1428,56 @@ function drawWorkspace() {
 // The opening version, once the photographs have been described. Deliberately
 // a button rather than something that happens on open: the design is made from
 // what the operator said the pictures show, so it waits for them to say it.
+// Building takes half a minute and used to show nothing at all: the button
+// changed its own label — which is off-screen the moment you scroll — and then
+// the workspace appeared, as if the click had done nothing until it suddenly
+// did everything. This says which step is running, what it is for, how long it
+// has been going, and that finished steps stay finished.
+const STAGE_WHY = {
+  photographs: "Reading their photographs and your descriptions of them",
+  direction: "Choosing a direction — type, colour and structure for this trade",
+  page: "Writing the page itself",
+};
+
+let BUILD_CLOCK = null;
+
+function drawBuild(build, running, failedAt) {
+  const stages = build.stages || [];
+  const done = build.done || [];
+  const rows = stages.map(stage => {
+    const state = done.includes(stage) ? "done"
+      : stage === failedAt ? "failed"
+      : stage === running ? "running" : "waiting";
+    const mark = {done: "\u2713", failed: "!", running: "", waiting: ""}[state];
+    return `<div class="bstep ${state}">
+      <span class="bmark">${state === "running" ? `<span class="spin"></span>` : mark}</span>
+      <span class="bwhat"><b>${esc((build.says || {})[stage] || stage)}</b>
+        <span>${esc(STAGE_WHY[stage] || "")}</span></span></div>`;
+  }).join("");
+  const html = `<div class="buildprog" id="buildprog">
+    <div class="bhead"><b>Building the first version</b>
+      <span class="belapsed" id="belapsed">0s</span></div>
+    ${rows}
+    <div class="bfoot">${failedAt
+      ? "The steps that finished are kept. Pressing the button again picks up "
+        + "from the one that failed."
+      : "About half a minute. Each step is saved as it finishes."}</div>
+  </div>`;
+  const existing = $("#buildprog");
+  if (existing) existing.outerHTML = html;
+  else document.body.insertAdjacentHTML("beforeend", html);
+}
+
+function stopBuildClock() {
+  if (BUILD_CLOCK) { clearInterval(BUILD_CLOCK); BUILD_CLOCK = null; }
+}
+
+function clearBuild() {
+  stopBuildClock();
+  const panel = $("#buildprog");
+  if (panel) panel.remove();
+}
+
 async function buildFirst() {
   // The button lives in two places — the labelling step and the empty
   // workspace — so it is found by id rather than by whichever layout is up.
@@ -1264,9 +1491,18 @@ async function buildFirst() {
   // because each one's answer is stored as it finishes.
   const build = WS.build || {stages: ["photographs", "direction", "page"],
                              done: [], says: {}};
+  const began = Date.now();
+  drawBuild(build, build.stages.find(s => !(build.done || []).includes(s)));
+  stopBuildClock();
+  BUILD_CLOCK = setInterval(() => {
+    const clock = $("#belapsed");
+    if (clock) clock.textContent = Math.round((Date.now() - began) / 1000) + "s";
+  }, 1000);
+
   for (const stage of build.stages) {
     if ((build.done || []).includes(stage)) continue;
     say((build.says[stage] || stage) + "…");
+    drawBuild(build, stage);
     let data;
     try {
       const res = await fetch("/api/build", {method: "POST",
@@ -1274,6 +1510,8 @@ async function buildFirst() {
         body: JSON.stringify({lead_id: WS.lead_id, stage})});
       data = await res.json();
     } catch (err) {
+      drawBuild(build, null, stage);
+      stopBuildClock();
       alert("The build could not run: " + err);
       if (button) { button.disabled = false; say("Build the first version"); }
       return;
@@ -1281,16 +1519,22 @@ async function buildFirst() {
     if (data.error) {
       // Named, not swallowed. The stages already finished stay finished, so
       // pressing the button again resumes rather than starting over.
-      alert(data.error);
       WS.build = data.progress || WS.build;
+      drawBuild(WS.build || build, null, data.stage || stage);
+      stopBuildClock();
+      alert(data.error);
       if (button) { button.disabled = false; say("Try again"); }
       if (data.stage === "photographs") { WS.stage = "label"; drawWorkspace(); }
       return;
     }
     WS.build = data.progress || WS.build;
+    drawBuild(WS.build || build, null);
   }
+  const panel = $("#buildprog");
+  if (panel) panel.querySelector(".bfoot").textContent = "Done — opening the workspace.";
   const {lead_id, name} = WS;
   await openWorkspace(lead_id, name);
+  clearBuild();
 }
 
 // ---------------------------------------------------------------- labelling
@@ -1603,15 +1847,50 @@ async function addNote() {
   if (data) $("#out").innerHTML = render(data);
 }
 
+// A browser can be told to scroll to a sentence and highlight it. That turns
+// "go and check this on their site" from a hunt through a page into one click
+// that lands on the words themselves. Supported by Chrome, Edge and Safari;
+// where it is not, the link still opens the right page and does no harm.
+function jumpTo(url, text) {
+  if (!url || !text) return "";
+  const words = String(text).replace(/\s+/g, " ").trim().split(" ");
+  // Long enough to be unique on the page, short enough that one stray
+  // character — a curly apostrophe, a line break — does not stop it matching.
+  const needle = words.slice(0, 8).join(" ").replace(/[.,;:!?]+$/, "");
+  if (needle.length < 4 || url.includes("#")) return url;
+  return `${url}#:~:text=${encodeURIComponent(needle)}`;
+}
+
+// One source's contribution: who said it, where in their page, their own
+// words, and the way to go and look at it.
+function srcLine(s, value) {
+  const quote = s.quote || "";
+  const target = jumpTo(s.source_url, quote || value);
+  const head = s.source_url
+    ? `<a class="src" href="${esc(s.source_url)}" target="_blank" rel="noopener"><i></i>${
+        esc(s.source_type)}</a>`
+    : `<span class="src"><i></i>${esc(s.source_type)}</span>`;
+  if (!quote && !s.found_in) return head;
+  return `<div class="ev">
+    <div class="ev-head">${head}${s.found_in
+      ? `<span class="ev-where">${esc(s.found_in)}</span>` : ""}
+      ${target && quote ? `<a class="ev-go" href="${esc(target)}" target="_blank"
+        rel="noopener" title="Open their page at these words">show me where \u2197</a>` : ""}
+    </div>
+    ${quote ? `<blockquote class="ev-quote">${esc(quote)}</blockquote>` : ""}
+  </div>`;
+}
+
 function fact(f) {
   // A conflict has no single value: showing one would pick a winner the
   // evidence does not support, so name each source and what it claimed.
   const body = f.confidence === "conflict"
-    ? `<div class="cands">${f.candidates.map(c =>
-        `<div class="cand"><b>${esc(c.source_type)}</b><span>${esc(c.value)}</span></div>`).join("")}</div>`
-    : `<div class="srcs">${f.sources.map(s => s.source_url
-        ? `<a class="src" href="${esc(s.source_url)}" target="_blank" rel="noopener"><i></i>${esc(s.source_type)}</a>`
-        : `<span class="src"><i></i>${esc(s.source_type)}</span>`).join("")}</div>`
+    ? `<div class="cands">${f.candidates.map(c => `
+        <div class="cand"><b>${esc(c.source_type)}</b><span>${esc(c.value)}</span>
+        ${c.source_url ? `<a class="ev-go" href="${esc(jumpTo(c.source_url, c.quote || c.value))}"
+          target="_blank" rel="noopener">check \u2197</a>` : ""}</div>
+        ${c.quote ? `<blockquote class="ev-quote">${esc(c.quote)}</blockquote>` : ""}`).join("")}</div>`
+    : `<div class="srcs">${f.sources.map(s => srcLine(s, f.value)).join("")}</div>`
       + (f.dissent || []).map(d =>
         `<div class="dissent"><b>${esc(d.source_type)}</b> disagrees — says ${esc(d.value)}</div>`).join("");
   return `<div class="fact ${f.confidence} in">
@@ -1681,7 +1960,21 @@ function render(d) {
   // and the difference is usually the reason to walk in — so it gets said
   // plainly, with the correction next to it.
   const u = d.url_check;
-  const listing = u ? `<div class="listing in ${
+  // A warning you have already answered is noise, and worse than noise: it
+  // says the tool did not notice what you told it. The crawl's `url_check` is
+  // whatever was true when it ran; your correction outranks it.
+  const fixedSite = (d.facts || []).find(
+    f => f.field === "website" && f.confidence === "operator_verified");
+  const settled = fixedSite ? `<div class="listing in mild">
+    <b>Website confirmed</b>
+    <div class="urls"><span>you recorded</span>
+      <a href="${esc(fixedSite.value)}" target="_blank" rel="noopener">${
+        esc(fixedSite.value)}</a></div>
+    <div style="margin-top:9px;font-size:13px;color:var(--dim)">${
+      esc(fixedSite.verified_by || "you")} confirmed this ${when(fixedSite.verified_at)}${
+      fixedSite.superseded ? ` — their listing still publishes ${esc(fixedSite.superseded)}`
+        : ""}.</div></div>` : "";
+  const listing = fixedSite ? settled : u ? `<div class="listing in ${
       u.blocked ? "unknown" : ["http-link", "redirected"].includes(u.fault) ? "mild" : ""}">
     <b>${u.blocked ? "We could not check their site"
          : "The link on their Google listing is broken"}</b>
@@ -1718,13 +2011,16 @@ function render(d) {
     <div class="rates">${d.ratings.map(r => {
       const full = Math.round(r.value);
       const thin = r.reviews != null && r.reviews < 15;
-      return `<a class="rate" href="${esc(r.source_url || "#")}" target="_blank" rel="noopener">
+      return `<div class="rate">
+        ${r.source_url ? `<a class="go" href="${esc(r.source_url)}" target="_blank"
+          rel="noopener" title="Open ${esc(r.source)} in a new tab"
+          aria-label="Open ${esc(r.source)} in a new tab">\u2197</a>` : ""}
         <div class="who">${esc(r.source)}</div>
         <div class="n">${esc(r.value)}<s>/ 5</s></div>
         <div class="stars">${"★".repeat(full)}${"☆".repeat(Math.max(0, 5 - full))}</div>
         ${r.reviews != null ? `<div class="thin">${r.reviews} review${r.reviews === 1 ? "" : "s"}${
           thin ? " — too few to lean on" : ""}</div>` : ""}
-      </a>`;
+      </div>`;
     }).join("")}</div></section>` : "";
 
   const STATUSES = ["new", "to visit", "visited", "interested", "not interested"];
@@ -1755,6 +2051,33 @@ function render(d) {
           onkeydown="if(event.key==='Enter')addNote()">
           <button class="mini" onclick="addNote()">Add note</button></div></section>` : "");
 
+  // Everything the page says that no source ever corroborated. It was taken
+  // off their site on trust and, until now, could not be corrected at all.
+  const theirs = (d.confirmable || []).filter(r => r.value || r.confidence === "missing");
+  const ownWords = theirs.length ? `<section class="in">
+    <h3 class="head">From their site — nobody corroborated any of this</h3>
+    <div class="asks">${theirs.map(r => `
+      <div class="fact ${r.confidence === "operator_verified" ? "verified"
+          : r.confidence === "missing" ? "conflict" : "unverified"}">
+        <div class="fact-head">
+          <b>${esc(r.label)}</b>
+          <span class="badge">${
+            r.confidence === "operator_verified" ? "you confirmed this"
+              : r.confidence === "missing" ? "nothing found" : "one source, unchecked"}${
+            r.count !== null && r.count !== undefined ? ` · ${r.count}` : ""}</span>
+        </div>
+        <div class="val">${esc((r.value || "—").slice(0, 400))}${
+          (r.value || "").length > 400 ? "…" : ""}</div>
+        ${r.value && d.website_url ? `<div class="ev-head" style="margin-top:6px">
+          <span class="ev-where">read off their own site</span>
+          <a class="ev-go" href="${esc(jumpTo(d.website_url, r.value))}"
+             target="_blank" rel="noopener">show me where \u2197</a></div>` : ""}
+        ${r.superseded ? `<div class="was">their site said <s>${
+          esc(r.superseded.slice(0, 160))}</s></div>` : ""}
+        ${byline(r)}
+        ${confirmRow(r)}
+      </div>`).join("")}</div></section>` : "";
+
   const asks = d.open_questions.length ? `<section class="in">
     <h3 class="head">Ask them</h3><div class="asks">${d.open_questions.map(q =>
       `<div class="ask"><span class="q">?</span><span>${esc(q)}</span></div>`).join("")}</div></section>` : "";
@@ -1775,9 +2098,257 @@ function render(d) {
       ${scores ? `<div class="scorecard">${scores}</div>` : ""}
     </div>
     ${statusbar}${listing}${chain}${facts}${ratings}${published(d.published)}
-    ${buildPanel(d)}${asks}${notes}${trail}
+    ${buildPanel(d)}${ownWords}${asks}${notes}${trail}
     <footer><span>sources consulted</span>${
       (d.sources_consulted.length ? d.sources_consulted : ["none"])
         .map(s => `<span class="chip">${esc(s)}</span>`).join("")}</footer>`;
 }
+
+// ---------------------------------------------------------------- approval
+//
+// The last stage. Iterating is done; this asks whether the version is true
+// and whether it works, shows every finding one at a time with somewhere to
+// go and check it, and records what was decided. Approving is bound to a
+// version: correct something and the fix becomes a new version, which needs
+// its own review. An approval can never outlive the page it approved.
+
+let RV = null;
+
+// Opening the review does not leave the page: it re-serves the preview with
+// the findings pinned to the things they are about. The list view is still
+// there for reading the whole set at once, but the page itself is the surface.
+async function openReview(listView) {
+  if (!WS || !WS.active) return;
+  if (WS.review && WS.review.version === WS.active && !listView) {
+    RV = WS.review; drawWorkspace(); return;
+  }
+  if (listView && WS.review && WS.review.version === WS.active) {
+    RV = WS.review; drawReview(); return;
+  }
+  RV = {loading: true, lead_id: WS.lead_id, version: WS.active};
+  if (listView) drawReview();
+  // post() surfaces an API error itself and answers null, so a failure here
+  // is a null, not a throw.
+  const data = await post("/api/review", {version: WS.active});
+  RV = data
+    ? Object.assign(data, {lead_id: WS.lead_id})
+    : {error: "The review could not be opened. Nothing was recorded."};
+  if (data) {
+    WS.review = RV;
+    // The rail and the cards need room; a phone-width preview has none.
+    if (!listView) WS.device = "wide";
+  }
+  if (listView || !data) drawReview(); else drawWorkspace();
+}
+
+// Findings are frozen when a review opens, on purpose. This is the deliberate
+// way to take them again — after the checks themselves have improved, or after
+// the page has been edited outside the loop. Anything already decided keeps its
+// note and is not asked about twice.
+async function refreshChecks() {
+  if (!WS || !WS.review) return;
+  const data = await post("/api/review/refresh", {version: WS.review.version});
+  if (!data) return;
+  WS.review = Object.assign(data, {lead_id: WS.lead_id});
+  RV = WS.review;
+  drawWorkspace();
+}
+
+// A decision made on a pin inside the preview. The frame is sandboxed and
+// cannot call the API itself, so the workbench makes the request and hands the
+// answer back.
+addEventListener("message", async ev => {
+  const msg = ev.data;
+  // A source link clicked on a pin card. The preview frame is sandboxed and
+  // its popups are unreliable; this page is not sandboxed and can just open it.
+  if (msg && msg.kind === "review:open" && typeof msg.url === "string") {
+    if (/^https?:\/\//i.test(msg.url)) window.open(msg.url, "_blank", "noopener");
+    return;
+  }
+  if (!msg || msg.kind !== "review:mark") return;
+  const frame = document.querySelector(".device iframe");
+  const reply = payload => frame && frame.contentWindow &&
+    frame.contentWindow.postMessage(Object.assign({kind: "review:marked",
+      ticket: msg.ticket}, payload), "*");
+  try {
+    const res = await fetch("/api/review/finding", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({lead_id: WS ? WS.lead_id : LEAD,
+                            finding_id: msg.finding_id,
+                            status: msg.status, note: msg.note})});
+    const data = await res.json();
+    if (data.error) { reply({error: data.error}); return; }
+    reply({finding: data});
+    if (WS && WS.review) {
+      WS.review.findings = (WS.review.findings || []).map(
+        f => f.id === data.id ? data : f);
+      WS.review.blocking = WS.review.findings.filter(
+        f => f.verdict === "contradicted" && f.status === "open");
+    }
+    refreshSaved();
+  } catch (err) {
+    reply({error: String(err && err.message || err)});
+  }
+});
+
+function closeReview() {
+  RV = null;
+  const gone = $("#review");
+  if (gone) gone.remove();
+}
+
+const VERDICT_SAYS = {
+  contradicted: "the source says otherwise",
+  defect: "something on the page is broken",
+  unsourced: "nothing says this either way",
+  assembled: "the parts are sourced, the sentence is not",
+  wording: "the page\u2019s own phrasing — nothing to check it against",
+  unmeasured: "could not be checked",
+  corroborated: "the source says this",
+};
+
+function findingCard(f) {
+  const done = f.status && f.status !== "open";
+  const resources = (f.resources || []).map(r =>
+    `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.label)} ↗</a>`).join("");
+  // Side by side, always in the same order: what is there now on the left,
+  // what it should be on the right. A finding that only says what is wrong
+  // leaves the reader to work out what right would look like.
+  const mine = f.stage === "technical" ? "on the page now" : "the page says";
+  const theirs = f.stage === "technical"
+    ? (f.verdict === "corroborated" ? "and the brief says" : "what it should be")
+    : "the source says";
+  const compare = (f.quote || f.evidence)
+    ? `<div class="compare">
+         <div><em>${mine}</em><pre>${esc(f.quote || "(nothing)")}</pre></div>
+         ${f.evidence
+           ? `<div><em>${theirs}</em><pre>${esc(f.evidence)}</pre></div>` : ""}
+       </div>` : "";
+  const where = f.locator
+    ? `<div class="where">${esc(f.locator)}</div>` : "";
+  const said = done
+    ? `<p class="said"><b>${esc(f.status)}</b>${f.note ? " — " + esc(f.note) : ""}
+       <span class="sub">${esc((f.decided_by || "") + " " + (f.decided_at || ""))}</span></p>`
+    : "";
+  return `<div class="finding ${esc(f.verdict)}${done ? " done" : ""}" id="f${f.id}">
+    <div class="vd">${esc(f.verdict)} · ${esc(VERDICT_SAYS[f.verdict] || "")}</div>
+    <div class="ttl">${esc(f.title)}</div>
+    ${f.detail ? `<p class="dt">${esc(f.detail)}</p>` : ""}
+    ${where}${compare}
+    ${resources ? `<div class="res">${resources}</div>` : ""}
+    <div class="act">
+      <input id="n${f.id}" placeholder="what you checked, and what you concluded"
+             value="${esc(f.note || "")}">
+      <button class="mini" onclick="markFinding(${f.id},'confirmed')">Correct as is</button>
+      <button class="mini" onclick="markFinding(${f.id},'corrected')">Needs a change</button>
+      <button class="mini" onclick="markFinding(${f.id},'dismissed')">Not worth it</button>
+    </div>${said}
+  </div>`;
+}
+
+async function markFinding(id, status) {
+  const box = $("#n" + id);
+  const note = box ? box.value.trim() : "";
+  if (!note) {
+    box && box.focus();
+    box && (box.placeholder = "say what you checked — the note is the point");
+    return;
+  }
+  const updated = await post("/api/review/finding",
+                             {finding_id: id, status, note});
+  if (!updated) return;
+  RV.findings = (RV.findings || []).map(f => f.id === id ? updated : f);
+  RV.blocking = (RV.findings || []).filter(
+    f => f.verdict === "contradicted" && f.status === "open");
+  RV.open_count = (RV.findings || []).filter(
+    f => f.status === "open" && f.verdict !== "corroborated").length;
+  drawReview();
+}
+
+async function decideReview(decision) {
+  const box = $("#rv-note");
+  const note = box ? box.value.trim() : "";
+  if (decision === "approved" && !note) {
+    box && box.focus();
+    box && (box.placeholder = "say what you are approving, and on what basis");
+    return;
+  }
+  // Approving over an unresolved contradiction is refused by the store, and
+  // post() has already said so. Keep the review on screen as it was.
+  const data = await post("/api/review/decide",
+                          {review_id: RV.id, decision, note});
+  if (data) RV = Object.assign({lead_id: WS.lead_id}, data);
+  drawReview();
+}
+
+function drawReview() {
+  if (!RV) return;
+  let body;
+  if (RV.loading) {
+    body = `<div class="rv-scroll"><p class="hint">Reading the page against the
+      brief and the capture…</p></div>`;
+  } else if (RV.error) {
+    body = `<div class="rv-scroll"><p class="rv-blocked">${esc(RV.error)}</p></div>`;
+  } else {
+    const all = RV.findings || [];
+    const order = ["contradicted", "defect", "unsourced", "assembled",
+                   "wording", "unmeasured", "corroborated"];
+    const groups = order.map(v => {
+      const rows = all.filter(f => f.verdict === v);
+      if (!rows.length) return "";
+      const heading = {
+        contradicted: "Contradicted — the source disagrees. These block approval.",
+        defect: "Defects — mechanics, not facts",
+        unsourced: "Unsourced — nothing says this either way. Check each one.",
+        assembled: "Assembled — every part is sourced, the sentence is not",
+        wording: "Wording — the page\u2019s own phrasing. Nothing to check; decide if it stays.",
+        unmeasured: "Could not be checked",
+        corroborated: "Corroborated — the source's own words are attached",
+      }[v];
+      return `<div class="rv-group">${esc(heading)} · ${rows.length}</div>` +
+             rows.map(findingCard).join("");
+    }).join("");
+    const counts = order.map(v => {
+      const open = all.filter(f => f.verdict === v && f.status === "open").length;
+      if (!open) return "";
+      const tone = v === "contradicted" ? "stop"
+                 : v === "corroborated" ? "ok" : "warn";
+      return `<span class="pill ${tone}">${open} ${esc(v)}</span>`;
+    }).join("");
+    body = `<div class="rv-scroll"><div class="rv-band">${counts ||
+      `<span class="pill ok">everything has been looked at</span>`}</div>${groups}</div>`;
+  }
+
+  const decided = RV.stage && RV.stage !== "open";
+  const blocked = (RV.blocking || []).length;
+  const footer = RV.loading || RV.error ? "" : decided
+    ? `<div class="rv-decide"><b>${esc(RV.stage)}</b>
+         <span class="sub">${esc((RV.decided_by || "") + " · " + (RV.decided_at || ""))}</span>
+         <span class="sub">${esc(RV.decision_note || "")}</span>
+         <span class="hint">A change from here builds a new version, which gets
+           its own review.</span></div>`
+    : `<div class="rv-decide">
+         <input id="rv-note" placeholder="what you are approving, and on what basis">
+         <button class="mini" onclick="decideReview('sent back')">Send back to the workbench</button>
+         <button class="mini primary" onclick="decideReview('approved')"
+           ${blocked ? "disabled" : ""}>Approve v${RV.version}</button>
+         ${blocked ? `<span class="rv-blocked">${blocked} contradicted finding(s)
+           still open — resolve those first.</span>` : ""}
+       </div>`;
+
+  const html = `<div class="review" id="review">
+    <div class="rv-top">
+      <h2>Approve — ${esc(WS ? WS.name : "")}</h2>
+      <span class="sub">v${esc(String(RV.version || ""))}${
+        RV.open_count ? " · " + RV.open_count + " still open" : ""}</span>
+      <span class="sub">brief ${esc(RV.brief_hash || "—")} · capture ${esc(RV.capture_hash || "—")}</span>
+      <button class="mini close" onclick="closeReview()">← back to the workbench</button>
+    </div>
+    ${body}${footer}</div>`;
+
+  const existing = $("#review");
+  if (existing) existing.outerHTML = html;
+  else document.body.insertAdjacentHTML("beforeend", html);
+}
+
 </script>

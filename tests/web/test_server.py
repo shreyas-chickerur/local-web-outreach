@@ -127,7 +127,8 @@ def test_every_function_the_page_calls_actually_exists():
         called |= set(re.findall(r"(?<![.\w])(\w+)\s*\(", body))
     called |= set(re.findall(r"\$\{(\w+)\(", page))
     builtin = {"if", "for", "return", "esc", "String", "Math", "JSON", "alert",
-               "parseInt", "parseFloat", "fetch", "event", "scrollTo"}
+               "parseInt", "parseFloat", "fetch", "event", "scrollTo",
+               "encodeURIComponent"}
     missing = sorted(name for name in called - defined - builtin)
     assert not missing, f"called but never defined: {missing}"
 

@@ -18,6 +18,7 @@ from app.adapters.gplaces import PlacesError, search
 from app.adapters.photos import fetch as fetch_photo
 from app.cli import available_directories
 from app.core.config import DEFAULT_PORT, google_places_api_key
+from app.review import run as review_run
 from app.site.census import measure as measure_census
 from app.site.pipeline import (
     STAGE_SAYS as STAGES_SAY,
@@ -33,8 +34,9 @@ from app.site.pipeline import (
 from app.site.pipeline import iterate as run_iteration
 from app.site.render import build as build_site
 from app.site.render import material_from_brief, plan_for
-from app.store import brief_archive, db, leads, messages, photos, sites
+from app.store import brief_archive, db, leads, messages, photos, reviews, sites
 from app.web.serialize import brief_to_dict
+from app.workbench import hours
 from app.workbench.brief import build_brief
 from app.workbench.categories import BY_KEY, CATEGORIES
 from app.workbench.discover import find_all
@@ -284,6 +286,140 @@ def iteration(lead_id: int, sentence: str, parent: object) -> dict:
         return payload
 
 
+_ANNOTATE = Path(__file__).with_name("annotate.js")
+
+
+def _annotated(page: str, lead_id: int, review: dict) -> str:
+    """The generated page plus the review layer, for this request only."""
+    payload = json.dumps({
+        "lead_id": lead_id, "review_id": review["id"], "version": review["version"],
+        "findings": review["findings"]}).replace("</", "<\\/")
+    layer = (f"<script>window.__REVIEW__ = {payload};</script>\n"
+             f"<script>{_ANNOTATE.read_text()}</script>")
+    if "</body>" in page:
+        return page.replace("</body>", layer + "\n</body>", 1)
+    return page + layer
+
+
+def how_it_was_read(field: str, value: str) -> dict | None:
+    """What the tool made of what you typed, in the words you would use.
+
+    Opening times are written a dozen ways and every one of them is correct —
+    "Mon-Fri 9-5", "Tuesday through Saturday, 11am to 9pm", "Closed Sundays".
+    Any of them can be stored, so the box asks for no particular format. What
+    it owes you instead is proof that it understood: a week the tool misread is
+    a week the finished page prints wrong, and nothing on the screen would have
+    said so.
+
+    A schedule it cannot read is not refused either. It is kept verbatim and
+    the screen says it will appear exactly as typed, which is honest and is
+    sometimes what you want ("by appointment, call ahead").
+    """
+    if field != "hours":
+        return None
+    read = hours.readable([value])
+    return {"read": read} if read else {"read": ""}
+
+
+def rebuild_after(conn, lead_id: int, field: str, outcome: dict) -> dict:
+    """A correction changes the page, so the page is rebuilt.
+
+    Confirming what the sources already said is not a correction and costs
+    nothing: no instruction is sent and no version is written. A correction
+    sends one instruction naming the field, the new value and the old one, so
+    the trail shows plainly why the version exists.
+
+    A rebuild that fails never loses the correction: it is already recorded in
+    the audit trail by the time this runs, and the failure is reported instead
+    of raised.
+    """
+    if outcome.get("kind") != "corrected":
+        return {"built": False, "why": "nothing changed, so nothing to rebuild"}
+    if not sites.versions(conn, lead_id):
+        return {"built": False, "why": "no version yet — the correction "
+                                       "will be in the first build"}
+    label = leads.FIELD_LABELS.get(field, field)
+    was = outcome.get("was")
+    sentence = (
+        f"{label} is {outcome.get('value')!r}."
+        + (f" The page was built from {was!r}, which was wrong." if was else
+           " The page was built without it.")
+        + " Correct every place the page shows it, and change nothing else.")
+    try:
+        result = run_iteration(conn, lead_id, sentence, actor="correction")
+    except Exception as exc:                                   # noqa: BLE001
+        # Deliberately broad: a generation failure is a bad afternoon, and a
+        # correction that raises out of the endpoint looks to the operator
+        # like the correction itself did not save. It did.
+        return {"built": False, "why": f"{type(exc).__name__}: {exc}",
+                "correction_saved": True}
+    return {"built": True, "version": result.version, "field": field}
+
+
+def _review_brief(conn, lead_id: int, name: str) -> tuple[dict, str, dict]:
+    """What the checks should judge the page against.
+
+    `material` reads the archived crawl, which is the right provenance record
+    and the wrong thing to check against: it predates every correction the
+    operator has made. What you were told at the door outranks what a directory
+    published, and a check that does not know that reports a fact you fixed
+    yourself as a contradiction.
+
+    The archive still supplies the capture and both hashes, so the record of
+    which crawl this review belongs to is unchanged.
+    """
+    archived, capture, where = review_run.material(name)
+    try:
+        brief = leads.brief_with_overrides(conn, lead_id)
+    except ValueError:
+        return archived, capture, where
+    if not brief.get("facts") and archived.get("facts"):
+        return archived, capture, where
+    where = {**where, "checked_against": "the lead's brief, with your corrections"}
+    return brief, capture, where
+
+
+def refresh_review(conn, lead_id: int, version: int) -> dict:
+    """Run the checks again over a version whose review is already open."""
+    current = reviews.for_version(conn, lead_id, version)
+    if current is None:
+        return open_review(conn, lead_id, version)
+    lead = conn.execute("SELECT name FROM leads WHERE id = ?",
+                        (lead_id,)).fetchone()
+    html = sites.html_for(conn, lead_id, version)
+    if lead is None or html is None:
+        raise ValueError("nothing to re-check")
+    brief, capture, where = _review_brief(conn, lead_id, str(lead["name"]))
+    return reviews.refresh(conn, current["id"],
+                           review_run.findings(html, brief, capture))
+
+
+def open_review(conn, lead_id: int, version: int) -> dict:
+    """The approval stage for one version: run the checks once, then keep them.
+
+    Findings are generated the first time somebody opens the review and never
+    again, because from that moment they carry notes. Re-running would look
+    like a refresh and would be a deletion.
+    """
+    existing = reviews.for_version(conn, lead_id, version)
+    if existing:
+        return existing
+    lead = conn.execute("SELECT name FROM leads WHERE id = ?",
+                        (lead_id,)).fetchone()
+    if lead is None:
+        raise ValueError("no such lead")
+    html = sites.html_for(conn, lead_id, version)
+    if html is None:
+        raise ValueError(f"there is no version {version} to review")
+    brief, capture, where = _review_brief(conn, lead_id, str(lead["name"]))
+    found = review_run.findings(html, brief, capture)
+    opened = reviews.open_review(conn, lead_id, version, found,
+                                 brief_hash=where["brief_hash"],
+                                 capture_hash=where["capture_hash"])
+    opened["material"] = where
+    return opened
+
+
 class Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
 
@@ -318,13 +454,17 @@ class Handler(BaseHTTPRequestHandler):
         if not lead_id:
             self._json({"error": "lead_id is required"}, 400)
             return
+        rebuilt: dict | None = None
+        reading: dict | None = None
         try:
             with db.session() as conn:
                 if route == "/api/verify":
-                    leads.verify(conn, lead_id,
-                                 str(body.get("field", "")),
-                                 str(body.get("value", "")),
-                                 note=(body.get("note") or None))
+                    field = str(body.get("field", ""))
+                    outcome = leads.verify(conn, lead_id, field,
+                                           str(body.get("value", "")),
+                                           note=(body.get("note") or None))
+                    rebuilt = rebuild_after(conn, lead_id, field, outcome)
+                    reading = how_it_was_read(field, outcome["value"])
                 elif route == "/api/status":
                     leads.set_status(conn, lead_id, str(body.get("status", "")),
                                      note=(body.get("note") or None))
@@ -397,6 +537,26 @@ class Handler(BaseHTTPRequestHandler):
                         self._json({"saved": saved, "failed": failed,
                                     "photos": photos.described(conn, lead_id)})
                     return
+                elif route == "/api/review":
+                    self._json(open_review(conn, lead_id,
+                                           int(body.get("version") or 0)))
+                    return
+                elif route == "/api/review/refresh":
+                    self._json(refresh_review(
+                        conn, lead_id, int(body.get("version") or 0)))
+                    return
+                elif route == "/api/review/finding":
+                    self._json(reviews.mark(
+                        conn, int(body.get("finding_id") or 0),
+                        str(body.get("status", "")),
+                        str(body.get("note", "")).strip()))
+                    return
+                elif route == "/api/review/decide":
+                    self._json(reviews.decide(
+                        conn, int(body.get("review_id") or 0),
+                        str(body.get("decision", "")),
+                        str(body.get("note", "")).strip()))
+                    return
                 elif route == "/api/note":
                     text = str(body.get("note", "")).strip()
                     if not text:
@@ -406,7 +566,15 @@ class Handler(BaseHTTPRequestHandler):
                 else:
                     self._json({"error": "not found"}, 404)
                     return
-                self._json(leads.brief_with_overrides(conn, lead_id))
+                payload = leads.brief_with_overrides(conn, lead_id)
+                if reading is not None:
+                    payload["reading"] = reading
+                if rebuilt is not None:
+                    # What the correction did to the page, said on the screen
+                    # that made it rather than found later in the version list.
+                    payload["rebuilt"] = rebuilt
+                    payload["versions"] = sites.versions(conn, lead_id)
+                self._json(payload)
         except ValueError as exc:
             self._json({"error": str(exc)}, 400)
 
@@ -468,10 +636,22 @@ class Handler(BaseHTTPRequestHandler):
                 return
             with db.session() as conn:
                 page = sites.html_for(conn, lead_id, version)
+                # ?review=<id> draws the findings on the page itself. The layer
+                # is added here, at serve time, and never stored: the version in
+                # the database stays the page that would be sent to a client.
+                wanted = (parse_qs(route.query).get("review") or [""])[0]
+                marks = None
+                if page is not None and wanted:
+                    try:
+                        marks = reviews.review(conn, int(wanted))
+                    except (TypeError, ValueError):
+                        marks = None
             if page is None:
                 self._send(404, b"no site generated for this lead yet",
                            "text/plain; charset=utf-8")
                 return
+            if marks:
+                page = _annotated(page, lead_id, marks)
             self._send(200, page.encode(), "text/html; charset=utf-8")
             return
         # The photographs worth labelling: everything we might place, with
@@ -515,6 +695,19 @@ class Handler(BaseHTTPRequestHandler):
                 lead_id = 0
             self._json(workspace(lead_id))
             return
+        if route.path == "/api/review":
+            params = parse_qs(route.query)
+            try:
+                lead_id = int((params.get("id") or ["0"])[0])
+                version = int((params.get("version") or ["0"])[0])
+                with db.session() as conn:
+                    found = reviews.for_version(conn, lead_id, version)
+                    history = reviews.history(conn, lead_id)
+                self._json({"review": found, "history": history})
+            except ValueError as exc:
+                self._json({"error": str(exc)}, 400)
+            return
+
         if route.path == "/api/sites":
             try:
                 lead_id = int((parse_qs(route.query).get("id") or ["0"])[0])
