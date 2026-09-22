@@ -61,3 +61,11 @@ artifacts/
 # pages and the index are small (linked, not inlined) and stay committed; a
 # few hundred photographs at full width are not.
 .reviews/review/photos/
+
+# Left behind by the virtual machine a cloud session reached these files
+# through: files deleted while the machine still held them open.
+.fuse_hidden*
+
+# graphify's per-file parse cache and its backup of settings it rewrote.
+graphify-out/cache/
+*.graphify-bak
