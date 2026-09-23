@@ -64,6 +64,10 @@ long menu may show its signature section first and fold the rest.
 ## 4. Forbidden for this trade
 
 - A stock photograph of food, or of any room that is not theirs.
+- Anything carried over from the business's existing site except its facts.
+  That site is usually the old one being replaced: take its menu, prices,
+  hours and words, never its decorations, symbols or formatting. Fish Shack's
+  version 5 turned the owner's hand-typed "======>" into a neon ornament.
 - A menu shown only as an image or a PDF link when the text exists.
 - Hours, a price or a dish the brief does not hold.
 - The look of the last site this system made. Each restaurant's page takes
