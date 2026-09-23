@@ -15,6 +15,9 @@ dependencies = [
     # scanned/image-only PDF correctly comes back empty rather than an OCR
     # guess, which app.adapters.pdf_read treats as "unreadable", not "no menu".
     "pypdf>=4.0,<7.0",
+    # The design bridge (app/design/bridge.py): one design run per lead, with
+    # the tools it may use, a spending ceiling and its cost reported back.
+    "claude-agent-sdk>=0.2.158,<0.3",
 ]
 
 [project.optional-dependencies]

@@ -74,3 +74,7 @@ graphify-out/cache/
 # builds is regenerated, and the versions themselves live in workbench.db.
 /sites/*/workbench.html
 /sites/*/project/
+
+# Design-run workspaces (app/design/bridge.py): photographs and a draft page,
+# regenerated per run; what matters is saved as a version in workbench.db.
+/runs/
