@@ -438,6 +438,9 @@
   @keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
   .device iframe.incoming{position:absolute;inset:0;opacity:0;transition:opacity .35s ease}
   .device iframe.incoming.shown{opacity:1}
+  .master-mark{color:#c8900a;margin-left:5px;font-size:1.15em;line-height:1}
+  .master-set{margin-top:10px}
+  .master-note{margin:10px 0 0;font-size:12.5px;color:var(--dim)}
   details.history{margin-top:16px}
   details.history summary{cursor:pointer;font-size:11px;letter-spacing:.13em;
     text-transform:uppercase;color:var(--faint);font-weight:700}
@@ -1133,6 +1136,7 @@ async function openWorkspace(leadId, name) {
         pending: data.pending_labels || [], canBuild: !!data.can_build,
         build: data.build || null, trouble: data.trouble || [],
         thread: data.thread || [],
+        master: data.master || null,
         photos, labelOptions: shots.options || [], shot: 0,
         // A lead with no site and unlabelled photographs starts on the
         // labelling step, not on a workspace that will refuse to build. The
@@ -1194,6 +1198,10 @@ function eventLine(e) {
     return {cls: "rejected", version: null,
             what: `<b>blocked</b> — ${esc(e.new_value)}`};
   }
+  if (e.kind === "master") {
+    const version = parseInt(String(e.new_value || ""), 10);
+    return {cls: "site pick", version, what: `marked <b>v${esc(e.new_value)}</b> as the master`};
+  }
   if (e.kind === "status") return {cls: "", version: null,
     what: `status → <b>${esc(e.new_value)}</b>`};
   if (e.kind === "note") return {cls: "", version: null, what: "note"};
@@ -1248,7 +1256,12 @@ function drawWorkspace(into) {
     `<button class="vchip" aria-pressed="${v.version === WS.active}"
       onclick="pickVersion(${v.version})"
       title="${esc((v.parent_version ? `built on v${v.parent_version} · ` : "")
-        + (v.spec || "no instructions"))}">v${v.version}</button>`).join("");
+        + (v.spec || "no instructions"))}">v${v.version}${v.version === WS.master
+        ? `<span class="master-mark" title="Master: the last version marked as a good site">★</span>`
+        : ""}</button>`).join("");
+  const master = !WS.active ? "" : WS.active === WS.master
+    ? `<p class="master-note">★ v${WS.active} is the master</p>`
+    : `<button class="mini master-set" onclick="markMaster()">Mark v${WS.active} as master</button>`;
 
   // What the site was decided to be, before it was emitted. Reading this is a
   // different and much cheaper activity than reading a rendered page.
@@ -1449,6 +1462,7 @@ function drawWorkspace(into) {
       <div class="ws-head">Versions</div>
       <div class="ws-body" id="ws-versions">
         <div class="diag">${chips}</div>
+        ${master}
         <details class="history"><summary>History</summary>
           <div style="margin-top:12px">${trail}</div></details>
         ${designed ? "" : `${trouble}${why}${signature}${unlocks}${outline}${census}${diag}${labeller}`}
@@ -1461,6 +1475,19 @@ function drawWorkspace(into) {
   if (existing) existing.outerHTML = html;
   else document.body.insertAdjacentHTML("beforeend", html);
   scrollChat();
+}
+
+// The last version judged a good site. One per lead; marking another moves
+// it, and History keeps where it was.
+async function markMaster() {
+  const res = await fetch("/api/master", {method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({lead_id: WS.lead_id, version: WS.active})});
+  const data = await res.json();
+  if (data.error) { alert(data.error); return; }
+  WS.master = data.master;
+  WS.events = data.events || WS.events;
+  refreshAfterSend();
 }
 
 function scrollChat() {

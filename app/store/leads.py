@@ -182,6 +182,32 @@ def record(conn: sqlite3.Connection, lead_id: int, kind: str, *,
          new_value, note))
 
 
+def master_version(conn: sqlite3.Connection, lead_id: int) -> int | None:
+    """The version Shreyas last marked as a good site, or `None`."""
+    row = conn.execute(
+        "SELECT new_value FROM events WHERE lead_id = ? AND kind = 'master'"
+        " ORDER BY id DESC LIMIT 1", (lead_id,)).fetchone()
+    return int(row["new_value"]) if row else None
+
+
+def mark_master(conn: sqlite3.Connection, lead_id: int, version: int,
+                actor: str | None = None) -> int:
+    """Mark a version as the last checkpoint judged good.
+
+    An event rather than a column: the mark moves as the site improves, and
+    where it was is part of the record of what was decided, like a status.
+    """
+    exists = conn.execute("SELECT 1 FROM sites WHERE lead_id = ? AND version = ?",
+                          (lead_id, version)).fetchone()
+    if not exists:
+        raise ValueError(f"there is no version {version} to mark")
+    previous = master_version(conn, lead_id)
+    record(conn, lead_id, "master", field="version",
+           old_value=None if previous is None else str(previous),
+           new_value=str(version), actor=actor)
+    return version
+
+
 def events(conn: sqlite3.Connection, lead_id: int) -> list[dict]:
     rows = conn.execute(
         "SELECT * FROM events WHERE lead_id = ? ORDER BY id DESC", (lead_id,))

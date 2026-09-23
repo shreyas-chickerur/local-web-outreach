@@ -148,3 +148,27 @@ def test_a_corrected_logo_reaches_what_the_page_is_built_from(conn):
     leads.verify(conn, lead_id, "logo", "https://acme.test/brand/logo.png")
     assert leads.brief_with_overrides(conn, lead_id)["published"]["logo"] == (
         "https://acme.test/brand/logo.png")
+
+
+def test_the_master_version_is_the_last_one_marked_and_the_marks_are_kept(conn):
+    """Shreyas marks the last version he judged good, so an edit that goes wrong
+    has a known place to return to. The mark moves; where it was stays in the
+    trail, like any other decision on a lead."""
+    from app.store import sites
+
+    lead_id = _lead(conn)
+    for n in range(3):
+        sites.save(conn, lead_id, f"<p>{n}</p>", spec="")
+    assert leads.master_version(conn, lead_id) is None
+    leads.mark_master(conn, lead_id, 2)
+    leads.mark_master(conn, lead_id, 3)
+    assert leads.master_version(conn, lead_id) == 3
+    marks = [e for e in leads.events(conn, lead_id) if e["kind"] == "master"]
+    assert [(m["old_value"], m["new_value"]) for m in marks][-2:] in (
+        [(None, "2"), ("2", "3")], [("2", "3"), (None, "2")])
+
+
+def test_a_version_that_does_not_exist_cannot_be_the_master(conn):
+    lead_id = _lead(conn)
+    with pytest.raises(ValueError):
+        leads.mark_master(conn, lead_id, 7)

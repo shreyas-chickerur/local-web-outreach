@@ -257,6 +257,9 @@ def workspace(lead_id: int) -> dict:
             # The conversation, oldest first. It opens on what was decided and
             # why rather than on an empty box.
             "thread": messages.thread(conn, lead_id),
+            # The version Shreyas last marked as a good site: the checkpoint an
+            # edit that goes wrong comes back to.
+            "master": leads.master_version(conn, lead_id),
         }
 
 
@@ -525,6 +528,11 @@ class Handler(BaseHTTPRequestHandler):
                                            note=(body.get("note") or None))
                     rebuilt = rebuild_after(conn, lead_id, field, outcome)
                     reading = how_it_was_read(field, outcome["value"])
+                elif route == "/api/master":
+                    leads.mark_master(conn, lead_id, int(body.get("version") or 0))
+                    self._json({"master": leads.master_version(conn, lead_id),
+                                "events": leads.events(conn, lead_id)})
+                    return
                 elif route == "/api/status":
                     leads.set_status(conn, lead_id, str(body.get("status", "")),
                                      note=(body.get("note") or None))
