@@ -78,3 +78,6 @@ graphify-out/cache/
 # Design-run workspaces (app/design/bridge.py): photographs and a draft page,
 # regenerated per run; what matters is saved as a version in workbench.db.
 /runs/
+
+# Proposal files: generated per lead from a stored version; large, and regenerated.
+/proposals/
