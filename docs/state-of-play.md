@@ -61,16 +61,24 @@ page scrolled to the exact sentence, using a text fragment.
 
 ## Stale, and known to be
 
-- **`captures/<slug>/live-site.md` has no writer anywhere in the codebase.** It
-  is hand-made, dated 16 September, and the claim inventory judges every
-  historical claim against it. This is the most misleading thing in the
-  repository right now: it produces confident answers from a two-week-old copy.
+- **`captures/<slug>/live-site.md` is no longer read by anything** (22
+  September, `checks-read-crawl`). The checks search the page text the crawl
+  stores in the brief. Judged that way, Heritage version 14 goes from 7
+  unsourced claims to 127: almost all drinks and wines, which the hand-made
+  copy held as text and today's crawl cannot read (the wine list is an image).
+  Its 160 "corroborated" in review 2 rested on that copy. `read-ladder` is the
+  fix.
 - Version 14 has its review (review 2, opened 22 September, against crawl
   `72fe0c4a`). Re-running the checks in memory on 22 September gave the
   identical 187 findings, and nothing is decided on it yet. Review 1, against
   version 13, is still open and holds the only decisions made so far.
 - A second lead exists, Oishii Sushi & Pan-Asian in Plano (lead 7), created 21
   September with no site built. It is not in the trade either.
+- **Fish Shack, Plano (lead 8)**, drawn at random from the discovery cache on 22
+  September: versions 1 to 4, built on the Claude Design canvas from
+  `prompts/fish-shack/`. Checked in memory against its crawl: nothing
+  unsourced or contradicted; 4 assembled sentences and 1 wording note for
+  Shreyas. No review opened yet.
 - The Heritage Table's versions were written by hand, not by `pipeline.py`. A
   correction now triggers `iterate()`, which may not cope with a hand-authored
   page. The failure path is handled and the correction is never lost, but the
