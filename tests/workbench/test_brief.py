@@ -694,7 +694,7 @@ def test_a_menu_published_only_as_an_image_is_read_once_and_kept(monkeypatch):
                         lambda url, timeout=15.0: (b"\xff\xd8same-bytes", ""))
     calls = []
     monkeypatch.setattr(brief_module.image_text, "read",
-                        lambda data, media_type="image/jpeg": calls.append(data)
+                        lambda data, media_type=None: calls.append(data)
                         or ("Cabernet Sauvignon, Napa Valley", ""))
     for _ in range(2):
         images = [p for p in _pages(build_brief("craftwaykitchen.com",

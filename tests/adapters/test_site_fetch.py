@@ -106,3 +106,34 @@ def test_http_fetcher_is_unaffected_by_any_of_this():
     with httpx.Client() as client:
         fetcher = HttpSiteFetcher(client=client)
         assert fetcher._client is client
+
+
+def test_a_render_that_fails_still_tries_a_plain_fetch(monkeypatch):
+    """The Heritage Table's history page timed out in Chrome and was recorded as
+    unreadable without a plain fetch ever being tried: a failed render came
+    back as a result, not an error, so the fallback never ran."""
+    from app.adapters import site_fetch
+
+    failed = site_fetch.FetchResult(ok=False, status=None, final_url="u", html="",
+                                    elapsed_ms=1, error="timed out")
+    monkeypatch.setattr(site_fetch, "render_document", lambda *a, **k: failed)
+
+    class Plain:
+        def __init__(self, result):
+            self.result = result
+
+        def fetch(self, url):
+            return self.result
+
+    good = site_fetch.FetchResult(ok=True, status=200, final_url="u", html="<p>1911</p>",
+                                  elapsed_ms=1)
+    fetcher = site_fetch.ChromeSiteFetcher(fallback=Plain(good))
+    fetcher._binary = "chrome"
+    assert fetcher.fetch("u").html == "<p>1911</p>"
+
+    refused = site_fetch.FetchResult(ok=False, status=406, final_url="u", html="",
+                                     elapsed_ms=1)
+    fetcher = site_fetch.ChromeSiteFetcher(fallback=Plain(refused))
+    fetcher._binary = "chrome"
+    result = fetcher.fetch("u")
+    assert not result.ok and "timed out" in result.error and "406" in result.error

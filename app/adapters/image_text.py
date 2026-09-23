@@ -39,8 +39,21 @@ _TOOL = {
 }
 
 
-def read(data: bytes, media_type: str = "image/jpeg") -> tuple[str | None, str]:
+def _media_type(data: bytes) -> str:
+    """What the bytes are, whatever the address says. Every image used to be
+    sent as a JPEG, and the API refused The Heritage Table's PNG drinks list."""
+    if data.startswith(b"\x89PNG"):
+        return "image/png"
+    if data.startswith(b"GIF8"):
+        return "image/gif"
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        return "image/webp"
+    return "image/jpeg"
+
+
+def read(data: bytes, media_type: str | None = None) -> tuple[str | None, str]:
     """The text printed in an image, or `None` and the reason it was not read."""
+    media_type = media_type or _media_type(data)
     key = hashlib.sha256(data).hexdigest()
     cached = CACHE / f"{key}.json"
     if cached.exists():

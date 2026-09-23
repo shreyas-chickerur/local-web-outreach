@@ -8,7 +8,7 @@ network.
 from __future__ import annotations
 
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Protocol
 
 import httpx
@@ -156,9 +156,22 @@ class ChromeSiteFetcher:
         if self._binary is None:
             return self._fallback.fetch(url)
         try:
-            return render_document(self._binary, url, self._timeout)
+            rendered = render_document(self._binary, url, self._timeout)
         except Exception:  # noqa: BLE001 — a render bug must not lose the fetch
             return self._fallback.fetch(url)
+        if rendered.ok and rendered.html:
+            return rendered
+        # A render that fails comes back as a result, not an error, so the plain
+        # fetch was never tried: The Heritage Table's history page timed out in
+        # Chrome and was recorded unreadable. Try it, and if it fails too, say
+        # what each attempt ran into.
+        plain = self._fallback.fetch(url)
+        if plain.ok and plain.html:
+            return plain
+        def why(result: FetchResult) -> str:
+            return result.error or (f"status {result.status}" if result.status
+                                    else "empty response")
+        return replace(rendered, error=f"browser: {why(rendered)}; plain fetch: {why(plain)}")
 
 
 def default_fetcher() -> SiteFetcher:

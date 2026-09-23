@@ -40,3 +40,17 @@ def test_an_image_the_model_cannot_read_says_so(tmp_path, monkeypatch):
     monkeypatch.setattr(image_text.claude, "structured",
                         lambda *a, **k: {"legible": False, "text": ""})
     assert image_text.read(b"\xff\xd8blur") == (None, "the model could not read it")
+
+
+def test_a_png_is_sent_as_a_png(tmp_path, monkeypatch):
+    """The Heritage Table's bourbon, scotch and beer list is a PNG. Every image
+    was labelled JPEG, the API refused it, and every whisky on the page came
+    back unsourced."""
+    monkeypatch.setattr(image_text, "CACHE", tmp_path)
+    monkeypatch.setattr(image_text.claude, "available", lambda: True)
+    sent = []
+    monkeypatch.setattr(image_text.claude, "structured",
+                        lambda *a, **k: sent.append(k["blocks"][0])
+                        or {"legible": True, "text": "x"})
+    image_text.read(b"\x89PNG\r\n\x1a\nrest")
+    assert sent[0]["source"]["media_type"] == "image/png"
