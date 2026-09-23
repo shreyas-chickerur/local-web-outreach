@@ -20,8 +20,8 @@ from __future__ import annotations
 import sqlite3
 from dataclasses import dataclass, field
 
-from app.adapters import claude, vision
-from app.adapters.claude import ClaudeError
+from app.adapters import language_model, vision
+from app.adapters.language_model import ModelError
 from app.site.audit import audit
 from app.site.iterate import DEFAULT_SPEC, parse_iteration_instruction
 from app.site.provenance import unexplained_sentences
@@ -246,7 +246,7 @@ def current_config(conn: sqlite3.Connection, lead_id: int,
 def read_instruction(sentence: str, base: dict) -> dict:
     """One instruction, read as well as we can read it.
 
-    Claude first, because a table of phrases understands about a fifth of what
+    The model first, because a table of phrases understands about a fifth of what
     an operator actually types. The phrase parser is the fallback rather than
     the fallback being nothing: no key, a timeout, or a refusal must not lose
     the instruction, and offline the tool still works with a smaller vocabulary.
@@ -255,12 +255,12 @@ def read_instruction(sentence: str, base: dict) -> dict:
     downstream — the renderer, the audit, the content gate — can tell which one
     it got.
     """
-    if claude.available():
+    if language_model.available():
         try:
             answer = understand(sentence, base)
-            answer["read_by"] = "claude"
+            answer["read_by"] = "model"
             return answer
-        except ClaudeError as exc:
+        except ModelError as exc:
             # Worth carrying rather than swallowing: an operator whose
             # instructions suddenly stop being understood should be told the
             # model is unreachable, not left guessing.

@@ -25,7 +25,7 @@
     "lead_with": "gallery",
     "mood": "warm",
     "rationale": "Whisk Cr\u00eapes Caf\u00e9 is a food-hall stall whose ten strong photographs of crepes, the griddle, and the counter are the real argument \u2014 visitors should see the food and room before anything else, with Julien's Paris-to-Dallas story as a warm second beat. The low review counts and mixed ratings mean stats would undercut rather than help, so the gallery and his own story carry the page instead.",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "corner_inset",
     "signature_why": "A warm type block tucked into the corner of a crepe photo lets the food fill the screen while still naming the caf\u00e9, which suits a place whose pictures do the selling.",
     "suppress": [

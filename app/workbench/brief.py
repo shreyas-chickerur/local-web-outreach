@@ -406,7 +406,7 @@ def build_brief(
     # site that draws itself with JavaScript. `default_fetcher()` renders
     # through a real headless Chrome when one is on this machine and falls
     # back to a plain GET per-page otherwise — the same "the degraded path
-    # still works" shape as `app.site.opening`'s Claude-then-trade-table
+    # still works" shape as `app.site.opening`'s model-then-trade-table
     # fallback.
     fetcher = fetcher or default_fetcher()
     directories = directories or []

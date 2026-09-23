@@ -63,7 +63,7 @@
     "lead_with": "credentials",
     "mood": "industrial",
     "rationale": "Bert Roofing's real case is 37 years in business, a 4.8 rating over 136 reviews, and a dozen industry awards \u2014 a homeowner deciding who gets on their roof needs proof of credibility before pictures, so the page opens on the numbers (facts) rather than photography, since only two of their fourteen photos are strong enough to carry a lead image. To avoid duplicating the recent industrial/ledger/stamped/proof/oswald-barlow site, I kept the trade's honest industrial mood and ledger rhythm (the ruled",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "none",
     "signature_why": "A 12x Golden Hammer winner since 1988 with an A+ BBB rating earns a repeated licence-style mark more than a moving strip or a big photo ever would \u2014 it says 'we're certified, check for yourself' at a glance.",
     "suppress": [

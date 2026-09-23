@@ -7,7 +7,7 @@ that looks like it was made for this business, and the moment it looks generic
 the conversation is over.
 
 So the opening version is a decision, taken from the evidence, before anyone
-types anything. Claude reads the brief and chooses a direction; the renderer,
+types anything. The model reads the brief and chooses a direction; the renderer,
 the theme and the audit enforce the craft — 60-30-10, the type scale, the
 padding floors, contrast, the two-family limit — exactly as they do for every
 other version. The model is not being asked to design a page. It is being asked
@@ -30,7 +30,7 @@ import hashlib
 
 import httpx
 
-from app.adapters import claude
+from app.adapters import language_model
 from app.site import architecture, firstscreen, palette, signature, typetreatment
 from app.site.architecture import ARRANGEMENTS
 from app.site.firstscreen import POSITIONS
@@ -573,13 +573,13 @@ def opening_spec(brief: dict, *, client: httpx.Client | None = None,
     frozen = brief.get("design_direction")
     if isinstance(frozen, dict) and frozen and not avoid:
         return {**frozen, "read_by": "frozen"}
-    if not claude.available():
+    if not language_model.available():
         return fallback_opening(brief)
     try:
-        answer = claude.structured(
+        answer = language_model.structured(
             SYSTEM, _prompt(brief, avoid, preferences=preferences), _tool(),
             client=client)
-    except claude.ClaudeError:
+    except language_model.ModelError:
         return fallback_opening(brief)
     rationale = answer.get("rationale")
     rationale = rationale.strip()[:500] if isinstance(rationale, str) else ""
@@ -615,5 +615,5 @@ def opening_spec(brief: dict, *, client: httpx.Client | None = None,
     face = answer.get("typeface")
     config["typeface"] = face if face in TYPEFACE_NAMES else ""
     config["rationale"] = rationale
-    config["read_by"] = "claude"
+    config["read_by"] = "model"
     return config

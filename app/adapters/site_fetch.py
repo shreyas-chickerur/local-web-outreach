@@ -141,7 +141,7 @@ class ChromeSiteFetcher:
 
     Falls back to a plain HTTP GET, per URL, when Chrome is not installed
     or a render attempt errors — the same "a real answer is better, but a
-    degraded one is not nothing" shape `app.site.opening`'s Claude-then-
+    degraded one is not nothing" shape `app.site.opening`'s model-then-
     trade-table fallback already uses. A page that genuinely needs no
     JavaScript loses nothing by falling back; a JS-built page that fails
     to render still gets *a* result rather than none.
@@ -179,7 +179,7 @@ class ChromeSiteFetcher:
 def default_fetcher() -> SiteFetcher:
     """The best fetcher this machine can actually run.
 
-    Mirrors `app.adapters.claude.available()`'s own pattern: prefer the
+    Mirrors `app.adapters.language_model.available()`'s own pattern: prefer the
     real capability, degrade to the simpler one rather than failing, and
     let the caller stay ignorant of which it got.
     """

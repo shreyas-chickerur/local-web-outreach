@@ -72,7 +72,7 @@
     "lead_with": "credentials",
     "mood": "industrial",
     "rationale": "This is a trade sale, not a showroom \u2014 a homeowner with hail damage wants proof of legitimacy (5.0 from 218 reviews, W2 employees, BBB A+, four-state reach) before they want pretty roof pictures, so the first screen leads with those facts rather than photography. To stay clear of the recent industrial/ledger/stamped/proof site, this one keeps the industrial trade mood but sets it calmer \u2014 quiet type, stacked rhythm instead of a printed-ledger feel, and a repeated credential stamp instead of the ",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "none",
     "signature_why": "A W2-insured, BBB A+ roofing outfit working four states earns a repeated licence/credential mark more than a moving strip or a big quote \u2014 it's the thing a homeowner checks before they call.",
     "suppress": [],

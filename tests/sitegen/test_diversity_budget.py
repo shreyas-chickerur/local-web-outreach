@@ -107,7 +107,7 @@ def test_without_a_key_the_gate_perturbs_rather_than_asking(conn, other,
     """Asking would fall through to the trade table, which is not a different
     answer — it is a worse one. Perturbation is the degraded path and it still
     varies by business, which is what the brief requires of it."""
-    monkeypatch.setattr(identity.claude, "available", lambda: False)
+    monkeypatch.setattr(identity.language_model, "available", lambda: False)
     brief = {k: v for k, v in brief_of("barbecue").items()
              if k != "design_direction"}
     lead = leads.save_brief(conn, brief)

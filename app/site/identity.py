@@ -35,7 +35,7 @@ import hashlib
 import sqlite3
 from dataclasses import dataclass, field
 
-from app.adapters import claude
+from app.adapters import language_model
 from app.site import fingerprint as fp
 from app.site import firstscreen, opening
 from app.site.pipeline import spec_from_config
@@ -144,7 +144,7 @@ def decide(conn: sqlite3.Connection, lead_id: int, brief: dict) -> Decision:
         hit = fp.collisions(print_of(brief, config), prints)
         if not hit:
             return Decision(config=config, attempts=attempt)
-        if attempt > MAX_RETRIES or not claude.available():
+        if attempt > MAX_RETRIES or not language_model.available():
             # Without a key there is nobody to ask again, and asking would
             # fall through to the trade table — which is not a different
             # answer, it is a worse one. Perturbation is the degraded path,

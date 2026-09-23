@@ -417,7 +417,7 @@
     border-bottom:1px solid var(--line-soft)}
   .ws-body{flex:1;overflow-y:auto;padding:14px 16px}
 
-  /* left: the conversation and nothing else, like a chat with Claude. The
+  /* left: the conversation and nothing else, like a chat with an assistant. The
      trail of builds, crawls and reviews lives under Versions, folded away:
      Shreyas found the chat pushed below it and could not follow the talk. */
   .chat{display:flex;flex-direction:column;gap:16px;min-height:100%;justify-content:flex-end}
@@ -1690,7 +1690,7 @@ function drawLabeller() {
           <p class="hint">Your words become the alt text on the finished page,
              and the category is read out of them. One line is plenty.</p>
           ${photo.by_machine ? `<p class="hint" style="margin-top:6px">
-             Described by Claude${photo.quality
+             Described by the model${photo.quality
                ? ` · quality ${photo.quality}/5` : ""}. Correct it and yours
              replaces it.</p>` : ""}
           ${photo.why_not ? `<div class="diag" style="margin-top:6px">

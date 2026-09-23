@@ -25,7 +25,7 @@ from __future__ import annotations
 
 import httpx
 
-from app.adapters import claude, photos
+from app.adapters import language_model, photos
 from app.adapters.imageinfo import dimensions_of, media_type_of
 from app.core import config
 from app.core.claims import reads_as_claim
@@ -134,10 +134,10 @@ def thumbnail(url: str, place_photos: tuple[str, ...]) -> bytes | None:
     if response.status_code != 200 or not response.content:
         return None
     data = response.content
-    if len(data) > claude.MAX_IMAGE_BYTES:
+    if len(data) > language_model.MAX_IMAGE_BYTES:
         return None
     size = dimensions_of(data)
-    if size and max(size) > claude.MAX_IMAGE_EDGE * 2:
+    if size and max(size) > language_model.MAX_IMAGE_EDGE * 2:
         # The API resizes past 1568px anyway; well beyond that we are paying to
         # upload pixels that are discarded before the model sees them.
         return None
@@ -200,7 +200,7 @@ def look(urls: list[str], place_photos: tuple[str, ...] = (),
     the result, and every caller already handles an absent answer because the
     keyless path has always had to.
     """
-    if not claude.available() or not urls:
+    if not language_model.available() or not urls:
         return {}
     seen: dict[str, dict] = {}
     for start in range(0, len(urls), BATCH):
@@ -217,7 +217,7 @@ def look(urls: list[str], place_photos: tuple[str, ...] = (),
                 # under a guessed type fails the whole batch rather than that
                 # one picture.
                 continue
-            blocks.append(claude.image_block(data, kind))
+            blocks.append(language_model.image_block(data, kind))
             sent.append(url)
         if not blocks:
             continue
@@ -238,13 +238,13 @@ def _ask(sent: list[str], blocks: list[dict],
         return {}
     listing = "\n".join(f"  image {i}: {u}" for i, u in enumerate(sent))
     try:
-        answer = claude.structured(
+        answer = language_model.structured(
             SYSTEM,
             f"{len(sent)} images, in this order:\n{listing}\n\n"
             f"Describe each one.",
             _tool(len(sent)), client=client, blocks=blocks,
             max_tokens=4096, timeout=TIMEOUT)
-    except claude.ClaudeError:
+    except language_model.ModelError:
         if len(sent) == 1:
             return {}
         half = len(sent) // 2

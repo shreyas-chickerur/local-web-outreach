@@ -25,7 +25,7 @@ LABELS = ("dish", "room", "exterior", "people", "team", "work", "product",
 # operator's judgement outranks the machine's and has to stay attributed —
 # a machine label unblocks the first build, and is replaced the moment a
 # person disagrees with it.
-MACHINE_ACTOR = "claude-vision"
+MACHINE_ACTOR = "machine-vision"
 
 SKIPPED = "unclear"
 

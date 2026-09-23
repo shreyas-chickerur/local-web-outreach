@@ -25,7 +25,7 @@
     "lead_with": "gallery",
     "mood": "fresh",
     "rationale": "Drybar is a bright, styled, photogenic room with six strong images and a loyal following \u2014 the visitor's first question is \"will my hair look like that,\" so a full-bleed photo opener with a moving gallery of results answers it before anything else, and gold pulled from their own warm lighting feels like their actual space rather than a generic salon palette. I've moved away from the recent site's split-screen wide-type layout toward a photo-led, centred, gallery-architecture page with a scrollin",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "scroll_gallery",
     "signature_why": "A blowout bar sells the finished hair itself, so letting the photos scroll off the side keeps the strip of gorgeous results moving past the visitor like a look-book rather than a static grid.",
     "suppress": [],

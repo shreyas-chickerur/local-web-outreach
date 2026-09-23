@@ -58,7 +58,7 @@
     "lead_with": "gallery",
     "mood": "warm",
     "rationale": "This is a family-run Texas pit barbecue place with strong, plentiful photography (six shots big enough to lead with) and a huge, glowing review base \u2014 the room and the food are the argument, so let the pictures and the crowd's own words do the selling, and send people through the door to eat.",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "duotone",
     "signature_why": "A strip of the smoker and platter photos in warm duotone with one full-colour break makes the brisket the thing people remember, without turning the whole page into a slideshow.",
     "suppress": [],

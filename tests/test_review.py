@@ -552,7 +552,7 @@ def test_a_correction_on_a_designed_page_is_made_by_an_edit_not_the_old_generato
         tmp_path, monkeypatch):
     """A correction rewrote the page with the old generator whatever had built
     it, so correcting Fish Shack's phone would have run it over version 13, a
-    page from Claude Design. A designed page is corrected the way its chat
+    page from the design tool. A designed page is corrected the way its chat
     changes it: an edit run on the page as it stands."""
     import app.web.server as server
     from app.store import db, leads, sites

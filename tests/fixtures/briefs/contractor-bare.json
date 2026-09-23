@@ -26,7 +26,7 @@
     "lead_with": "stats",
     "mood": "industrial",
     "rationale": "Someone calling a plumber is checking competence and trust before anything else \u2014 the rating and mixed reviews need to be visible immediately, not the handful of small work photos, which only support the story here rather than lead it. A trade-shop stamped wordmark and ledger rhythm read as a working outfit, not a boutique, which is exactly the impression this business earns.",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "ticker",
     "signature_why": "A thin running line of rating, review count, and years-on-the-job gives a nervous emergency caller the proof they need before they ever scroll to a photo.",
     "suppress": [],

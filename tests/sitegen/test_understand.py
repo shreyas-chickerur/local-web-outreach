@@ -6,8 +6,8 @@ import httpx
 import pytest
 import respx
 
-from app.adapters import claude
-from app.adapters.claude import ClaudeError
+from app.adapters import language_model
+from app.adapters.language_model import ModelError
 from app.site.iterate import DEFAULT_SPEC
 from app.site.understand import (
     SECTIONS,
@@ -139,9 +139,9 @@ def test_every_section_the_model_may_name_is_one_the_plan_knows():
 
 @respx.mock
 def test_understand_calls_the_api_and_validates_the_answer(monkeypatch):
-    monkeypatch.setattr(claude.config, "anthropic_api_key",
+    monkeypatch.setattr(language_model.config, "anthropic_api_key",
                         lambda: "test-key")  # pragma: allowlist secret
-    route = respx.post(claude.MESSAGES_URL).mock(
+    route = respx.post(language_model.MESSAGES_URL).mock(
         return_value=answered({"kind": "style", "accent": "blue",
                                "understood": ["accented blue"]}))
     out = understand("the page should have more blue", dict(DEFAULT_SPEC))
@@ -156,28 +156,28 @@ def test_understand_calls_the_api_and_validates_the_answer(monkeypatch):
 
 @respx.mock
 def test_prose_instead_of_a_tool_call_is_an_error_not_a_guess(monkeypatch):
-    monkeypatch.setattr(claude.config, "anthropic_api_key",
+    monkeypatch.setattr(language_model.config, "anthropic_api_key",
                         lambda: "test-key")  # pragma: allowlist secret
-    respx.post(claude.MESSAGES_URL).mock(return_value=httpx.Response(
+    respx.post(language_model.MESSAGES_URL).mock(return_value=httpx.Response(
         200, json={"content": [{"type": "text", "text": "Sure! Here you go."}]}))
-    with pytest.raises(ClaudeError):
+    with pytest.raises(ModelError):
         understand("more blue", dict(DEFAULT_SPEC))
 
 
 @respx.mock
 def test_an_api_refusal_is_reported_rather_than_swallowed(monkeypatch):
-    monkeypatch.setattr(claude.config, "anthropic_api_key",
+    monkeypatch.setattr(language_model.config, "anthropic_api_key",
                         lambda: "test-key")  # pragma: allowlist secret
-    respx.post(claude.MESSAGES_URL).mock(
+    respx.post(language_model.MESSAGES_URL).mock(
         return_value=httpx.Response(429, text="rate limited"))
-    with pytest.raises(ClaudeError):
+    with pytest.raises(ModelError):
         understand("more blue", dict(DEFAULT_SPEC))
 
 
 def test_no_key_is_an_error_the_caller_can_fall_back_from(monkeypatch):
-    monkeypatch.setattr(claude.config, "anthropic_api_key", lambda: None)
-    assert claude.available() is False
-    with pytest.raises(ClaudeError):
+    monkeypatch.setattr(language_model.config, "anthropic_api_key", lambda: None)
+    assert language_model.available() is False
+    with pytest.raises(ModelError):
         understand("more blue", dict(DEFAULT_SPEC))
 
 
@@ -185,4 +185,4 @@ def test_the_suite_never_has_a_live_key():
     """Guards the guard: without this, a key in the developer's environment
     silently turns every pipeline test into a billable network call that passes
     only because the fallback catches it."""
-    assert claude.available() is False
+    assert language_model.available() is False

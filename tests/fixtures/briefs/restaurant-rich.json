@@ -39,7 +39,7 @@
     "lead_with": "about",
     "mood": "warm",
     "rationale": "The Heritage Table is a house-turned-restaurant with a real story \u2014 building history, whole-animal sourcing, a named chef \u2014 and only four photographs are strong enough to carry a gallery-led opening, so the first screen should split evenly between a photo and the story rather than let imagery alone do the work. Leading with about and pulling reviews and gallery up as secondary emphasis gives a visitor the narrative and the social proof a fine-dining-but-neighbourly spot needs before they book, w",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "margin_note",
     "signature_why": "A short line of their own philosophy set beside the story text lets the farm-to-table ethos speak in the owner's own words without staging another photo spread.",
     "suppress": [

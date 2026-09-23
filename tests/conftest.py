@@ -39,9 +39,13 @@ def no_api_calls(monkeypatch):
     """No test uses a real key unless it deliberately arranges one.
 
     A test that wants the model path stubs the transport (respx) or patches
-    `claude.available` itself, which overrides this.
+    `language_model.available` itself, which overrides this.
     """
     monkeypatch.setattr(config, "anthropic_api_key", lambda: None)
+    # The models are named only in `.env`. A test sees stand-in names, so no
+    # result depends on which model this machine happens to be set to.
+    monkeypatch.setenv("ANTHROPIC_MODEL", "test-model")
+    monkeypatch.setenv("DESIGN_MODEL", "test-design-model")
 
 
 @pytest.fixture(autouse=True)

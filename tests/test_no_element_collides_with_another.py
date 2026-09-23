@@ -7,7 +7,7 @@ Runs the real rendered corpus through a live Chrome at genuine viewports
 (`tests/layout_probe.py`) and reads element geometry directly, rather than
 reading it back off a screenshot a vision model has to interpret. The pages
 are the old generator's, which the workbench's build button still makes;
-`test_designed_pages_do_not_collide.py` holds pages from Claude Design to
+`test_designed_pages_do_not_collide.py` holds pages from the design tool to
 the same probe.
 
 Two checks:

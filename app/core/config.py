@@ -43,7 +43,7 @@ def preview_base_url() -> str:
 
 
 def anthropic_api_key() -> str | None:
-    """Claude — reads an instruction and returns decisions, never copy.
+    """The language model's key: it reads an instruction and returns decisions, never copy.
 
     Optional. Without it the deterministic phrase parser handles instructions
     on its own, understanding less and saying so.
@@ -51,5 +51,16 @@ def anthropic_api_key() -> str | None:
     return os.environ.get("ANTHROPIC_API_KEY", "").strip() or None
 
 
-def anthropic_model() -> str:
-    return os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5").strip()
+def anthropic_model() -> str | None:
+    """The model that reads instructions and photographs, named in `.env`.
+
+    The code names no model: which one is used is a setting, changed without a
+    commit. Unset with a key present, a call fails with a reason and the phrase
+    parser takes over, exactly as it does when the key is missing.
+    """
+    return os.environ.get("ANTHROPIC_MODEL", "").strip() or None
+
+
+def design_model() -> str | None:
+    """The model a design run and a chat edit use, named in `.env`."""
+    return os.environ.get("DESIGN_MODEL", "").strip() or None

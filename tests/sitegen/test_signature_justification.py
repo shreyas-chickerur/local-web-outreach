@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from app.adapters import claude
+from app.adapters import language_model
 from app.site import opening, pipeline
 from app.store import db, leads, sites
 
@@ -56,8 +56,8 @@ def lead(conn):
 
 @pytest.fixture
 def answered(monkeypatch):
-    monkeypatch.setattr(claude, "available", lambda: True)
-    monkeypatch.setattr(opening.claude, "structured", lambda *a, **kw: dict(ANSWER))
+    monkeypatch.setattr(language_model, "available", lambda: True)
+    monkeypatch.setattr(opening.language_model, "structured", lambda *a, **kw: dict(ANSWER))
     monkeypatch.setattr(pipeline.vision, "look", lambda urls, names: {
         url: {"subject": "dish", "quality": 4, "is_hero_candidate": True,
               "alt_text": "A plate of food"} for url in urls})

@@ -49,7 +49,7 @@
     "AND A SIGNATURE DEVICE counts when it changes the page's proportions, on the same test the type-setting rule uses. A full screen of display quotation does; a hairline of running facts, a row of stamps or a strip of pictures does not, on its own. Added 2026-09-08 when the device became an axis, and stated before the pairs it decides were looked at.",
     "",
     "",
-    "Claude's readings on 2026-09-08, from artifacts/contact-sheet/pages.html.",
+    "the model's readings on 2026-09-08, from artifacts/contact-sheet/pages.html.",
     "Shreyas sells these pages and should overwrite any of them.",
     "",
     "REBUILT 2026-09-10, Round 4 Phase 3b — the set had sat at 0 live for two",
@@ -1239,7 +1239,7 @@
       "held_out": false
     }
   ],
-  "_judged_against": "Whole-page renderings of the corpus after re-deciding to corroborate signature.py's stamp device (BRIEF §4 — see .reviews/slice-c-credential-claims.md). Ruler a762bcc9, gate rule 254e171b — unchanged, this redecide re-asked every direction because signature availability changed for some businesses, not because a weight or an axis definition moved. From artifacts/contact-sheet/pages.html. Claude's readings on 2026-09-09.",
+  "_judged_against": "Whole-page renderings of the corpus after re-deciding to corroborate signature.py's stamp device (BRIEF §4 — see .reviews/slice-c-credential-claims.md). Ruler a762bcc9, gate rule 254e171b — unchanged, this redecide re-asked every direction because signature availability changed for some businesses, not because a weight or an axis definition moved. From artifacts/contact-sheet/pages.html. the model's readings on 2026-09-09.",
   "_held_out": "One verdict in three, chosen by a hash of the two slugs so that nobody picks which evidence survives. A held-out verdict is never used to choose a rule or a weighting, only to score one afterwards, and it is never re-judged — when the page under it changes it is retired with a reason and the set gets smaller. It starts here, so it says nothing about the rule this commit lands: the first rule it can honestly score is the next one.",
   "_retired": "A retired verdict is scored by nothing and re-judged by nobody. Retiring is what happens to a held-out pair when the page under it changes, and to any pair whose subject turns out not to be judgeable — the set shrinks, which is the honest cost of the number meaning anything."
 }

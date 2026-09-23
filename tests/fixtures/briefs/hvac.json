@@ -56,7 +56,7 @@
     "lead_with": "reviews",
     "mood": "industrial",
     "rationale": "With 6,203 Google reviews and named-technician testimonials as the strongest asset, the first screen should put that trust proof front and centre rather than repeat the stats-led, stamped-and-ledgered look already used elsewhere; a calmer quiet type treatment with a banded rhythm and a single full-size quote still reads as a trade site but avoids duplicating the near-identical recent design.",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "quote",
     "signature_why": "A plumber's real proof is what a named customer said about a named tech, so setting one review at full size does more work than a stat band ever could.",
     "suppress": [

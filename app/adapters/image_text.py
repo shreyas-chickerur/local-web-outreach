@@ -14,7 +14,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from app.adapters import claude
+from app.adapters import language_model
 
 CACHE = Path(".cache/image-text")
 
@@ -59,14 +59,14 @@ def read(data: bytes, media_type: str | None = None) -> tuple[str | None, str]:
     if cached.exists():
         stored = json.loads(cached.read_text())
         return stored["text"] or None, stored["reason"]
-    if not claude.available():
+    if not language_model.available():
         # Not cached: once a key is set the same image should be read.
         return None, "no Anthropic key configured"
     try:
-        answer = claude.structured(_SYSTEM, _PROMPT, _TOOL, max_tokens=4096,
+        answer = language_model.structured(_SYSTEM, _PROMPT, _TOOL, max_tokens=4096,
                                    timeout=90.0,
-                                   blocks=[claude.image_block(data, media_type)])
-    except claude.ClaudeError as exc:
+                                   blocks=[language_model.image_block(data, media_type)])
+    except language_model.ModelError as exc:
         # A refusal or a timeout is not an answer about the image; try again next crawl.
         return None, f"the model call failed ({exc})"
     text = str(answer.get("text") or "").strip()

@@ -5,7 +5,7 @@ wrote) with one invented claim per class planted among the business's real
 material: a founding year, a credential, a review count, an award, a ranking,
 a paraphrase that inflates. Each page's manifest names the sentence and why it
 is false. Built to test the old generator's gates, it is the harder test of the
-current checks: a page from Claude Design is exactly such foreign markup.
+current checks: a page from the design tool is exactly such foreign markup.
 
 The old gates missed twelve of these. The current checks flag every one: a
 planted sentence may be unsourced, assembled or contradicted, never

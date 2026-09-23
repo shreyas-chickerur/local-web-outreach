@@ -69,7 +69,7 @@
     "lead_with": "credentials",
     "mood": "refined",
     "rationale": "Someone landing here just had an accident and needs to see proof of results and trust \u2014 a 4.9 rating, case wins, and a real named lawyer \u2014 before anything decorative; the office photography is thin (only a handful of shots are big enough to lead with) so competence and credibility, not atmosphere, should open the page.",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "none",
     "signature_why": "A repeated Super Lawyer / trial-lawyer mark reinforces the credential a worried client checks before calling, without turning the page into a brochure.",
     "suppress": [

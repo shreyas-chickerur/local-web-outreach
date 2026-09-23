@@ -572,7 +572,7 @@ def test_whitespace_padded_href_does_not_smuggle_an_external_page():
     the whole string onto base_url as if it were a relative path. The
     resulting garbage URL's netloc still matches base_host, so the malformed,
     guaranteed-to-404 URL slipped into the crawl alongside the real link.
-    Carried over from the branch claude/pensive-cohen-55d9d2. Python's urljoin
+    Carried over from the tag archive/whitespace-href-2026-09-15. Python's urljoin
     now strips leading whitespace itself (the fix for CVE-2023-24329), so this
     passes with no change here; it guards against an interpreter without it.
     """

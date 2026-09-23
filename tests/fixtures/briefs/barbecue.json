@@ -67,7 +67,7 @@
     "lead_with": "gallery",
     "mood": "warm",
     "rationale": "Hutchins has real photography of the smoke, the crowd, and the trays, plus a near-perfect review record (4.8 from nearly 14,000 people) \u2014 the site should open on that food and prove its popularity fast, then move visitors straight to ordering or booking catering, which is the actual business.",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "duotone",
     "signature_why": "A strip of the smoked-meat spread rendered in warm duotone with one full-colour break reads like the pitmaster's own photo of the tray, not a stock food shot.",
     "suppress": [

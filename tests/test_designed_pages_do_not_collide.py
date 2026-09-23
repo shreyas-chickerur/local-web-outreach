@@ -1,6 +1,6 @@
-"""Pages designed by Claude Design, held to the same layout probe.
+"""Pages designed by the design tool, held to the same layout probe.
 
-The committed fixtures are real pages from Claude Design runs (three home
+The committed fixtures are real pages from design-tool runs (three home
 services businesses, first pass and revision, and one exported design). A page
 the design bridge writes has the same shape: free-form markup, its own fixed
 chrome, photographs placed as the design chose.
@@ -16,7 +16,7 @@ from layout_probe import WIDTHS, chrome, measure
 pytestmark = pytest.mark.unit
 
 DESIGNED = sorted(Path("tests/fixtures/design").glob("*.html")) + [
-    Path("tests/fixtures/seam/hvac-claude-design.html")]
+    Path("tests/fixtures/seam/hvac-designed.html")]
 
 
 @pytest.mark.skipif(chrome() is None, reason="needs a real Chrome")

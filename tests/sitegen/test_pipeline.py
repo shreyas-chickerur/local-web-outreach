@@ -301,7 +301,7 @@ def test_the_same_words_rebuild_when_the_brief_moved(conn, lead, monkeypatch):
 def model_says(monkeypatch, payload):
     """Stand in for the whole adapter: these tests are about routing, and the
     transport has its own tests."""
-    monkeypatch.setattr(pipeline.claude, "available", lambda: True)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: True)
     monkeypatch.setattr(pipeline, "understand",
                         lambda sentence, base, **kw:
                         apply_answer(payload, base))
@@ -309,7 +309,7 @@ def model_says(monkeypatch, payload):
 
 def test_without_a_key_the_phrase_parser_still_runs(conn, lead, monkeypatch):
     """Offline the tool works with a smaller vocabulary. It does not stop."""
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     result = iterate(conn, lead, "warm and rustic")
     assert result.read_by == "phrases"
     assert result.version is not None
@@ -317,10 +317,10 @@ def test_without_a_key_the_phrase_parser_still_runs(conn, lead, monkeypatch):
 
 def test_a_model_failure_falls_back_rather_than_losing_the_instruction(
         conn, lead, monkeypatch):
-    monkeypatch.setattr(pipeline.claude, "available", lambda: True)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: True)
 
     def boom(sentence, base, **kw):
-        raise pipeline.ClaudeError("unreachable")
+        raise pipeline.ModelError("unreachable")
 
     monkeypatch.setattr(pipeline, "understand", boom)
     result = iterate(conn, lead, "warm and rustic")
@@ -373,7 +373,7 @@ def test_a_style_answer_from_the_model_builds_a_version(conn, lead, monkeypatch)
     model_says(monkeypatch, {"kind": "style", "accent": "navy",
                              "understood": ["accented navy"]})
     result = iterate(conn, lead, "could we try something cooler and more coastal")
-    assert result.read_by == "claude"
+    assert result.read_by == "model"
     assert result.version is not None
     assert result.version != first.version
     assert sites.html_for(conn, lead, result.version) != \
@@ -408,7 +408,7 @@ def test_the_first_build_waits_for_the_photographs_to_be_looked_at(
         conn, lead, monkeypatch):
     """Where a photograph goes depends on what it shows, and that is the one
     thing this cannot see. It waits rather than guessing."""
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     result = pipeline.open_site(conn, lead)
     assert result.kind == "needs_labels"
     assert result.version is None
@@ -420,13 +420,13 @@ def test_marking_one_unclear_counts_as_having_looked(conn, lead, monkeypatch):
     """"I cannot tell what this is" is a decision. A blank field is not, and
     without somewhere to record the difference the build cannot know whether
     the operator is finished."""
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     review_every_photo(conn, lead)
     assert pipeline.open_site(conn, lead).version is not None
 
 
 def test_a_new_lead_opens_on_a_site_not_on_nothing(conn, lead, monkeypatch):
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     review_every_photo(conn, lead)
     result = pipeline.open_site(conn, lead)
     assert result.version is not None
@@ -441,10 +441,10 @@ def test_the_workspace_opens_on_the_rationale_not_an_empty_box(
     from app.site import opening
     from app.store import messages
 
-    monkeypatch.setattr(pipeline.claude, "available", lambda: True)
-    monkeypatch.setattr(opening.claude, "available", lambda: True)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: True)
+    monkeypatch.setattr(opening.language_model, "available", lambda: True)
     monkeypatch.setattr(
-        opening.claude, "structured",
+        opening.language_model, "structured",
         lambda *a, **kw: {"mood": "warm", "accent": "gold", "cta": "book",
                           "rationale": "Opened warm, led with the gallery."})
     review_every_photo(conn, lead)
@@ -458,7 +458,7 @@ def test_the_workspace_opens_on_the_rationale_not_an_empty_box(
 
 def test_opening_twice_does_not_build_twice(conn, lead, monkeypatch):
     """The workspace opens on every click. That is not a request to rebuild."""
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     review_every_photo(conn, lead)
     first = pipeline.open_site(conn, lead)
     again = pipeline.open_site(conn, lead)
@@ -470,7 +470,7 @@ def test_opening_twice_does_not_build_twice(conn, lead, monkeypatch):
 def test_the_content_gate_applies_to_the_opening_version(conn, lead, monkeypatch):
     """A first draft that invents something is not a better first impression
     than none."""
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     review_every_photo(conn, lead)
     monkeypatch.setattr(pipeline, "unsupported", lambda page, material: ["voted"])
     result = pipeline.open_site(conn, lead)
@@ -480,7 +480,7 @@ def test_the_content_gate_applies_to_the_opening_version(conn, lead, monkeypatch
 
 
 def test_an_instruction_builds_on_the_opening_version(conn, lead, monkeypatch):
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     review_every_photo(conn, lead)
     opened = pipeline.open_site(conn, lead)
     nudged = iterate(conn, lead, "make it darker")
@@ -490,7 +490,7 @@ def test_an_instruction_builds_on_the_opening_version(conn, lead, monkeypatch):
 def test_a_brand_new_lead_needs_no_human_labelling(conn, lead, monkeypatch):
     """Waiting for a person to describe thirty photographs per lead directly
     contradicts opening on something worth showing."""
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     from app.site.render import material_from_brief
     material = material_from_brief(leads.brief_with_overrides(conn, lead))
     monkeypatch.setattr(pipeline.vision, "look", lambda urls, names: {
@@ -528,7 +528,7 @@ def test_without_a_key_the_labelling_step_still_guards_the_build(
         conn, lead, monkeypatch):
     """Nothing looked, so designing blind around photographs is worse than
     asking. The keyless path keeps the step."""
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     monkeypatch.setattr(pipeline.vision, "look", lambda urls, names: {})
     assert pipeline.open_site(conn, lead).kind == "needs_labels"
 
@@ -537,7 +537,7 @@ def test_a_correction_after_the_first_build_can_reach_the_page(
         conn, lead, monkeypatch):
     """`open_site` is idempotent, so once v1 exists a corrected description
     would otherwise change nothing at all."""
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     monkeypatch.setattr(pipeline.vision, "look", lambda urls, names: {
         url: {"subject": "other", "quality": 2, "alt_text": "something"}
         for url in urls})

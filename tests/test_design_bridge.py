@@ -24,14 +24,14 @@ def test_a_design_run_can_touch_nothing_outside_its_workspace(tmp_path):
     """A design run is an agent with file tools, spending real money. It must
     read the prompt and the photographs and write its page, and nothing else:
     no commands, no network, no file outside its own folder, none of the
-    operator's own Claude settings or hooks steering it, and a ceiling."""
+    operator's own coding-assistant settings or hooks steering it, and a ceiling."""
     options = bridge.options(tmp_path)
     assert sorted(options.tools) == ["Edit", "Glob", "Read", "Write"]
     # Anything auto-approved would skip the path check below entirely.
     assert options.allowed_tools == []
     assert options.setting_sources == []
     assert options.cwd == str(tmp_path)
-    assert (options.model, options.max_budget_usd) == ("claude-opus-5-5", 5.0)
+    assert (options.model, options.max_budget_usd) == ("test-design-model", 5.0)
     # The first real run died after reading four photographs: each comes back
     # base64-encoded in one message, and the kit refuses any over 1 MB by default.
     assert options.max_buffer_size >= 16 * 1024 * 1024
@@ -102,7 +102,7 @@ def test_a_finished_run_becomes_a_version_with_its_cost_and_photographs(lead, mo
     assert f'src="/photo/{lead_id}/1?w=1600"' in page
     notes = json.loads(conn.execute(
         "SELECT notes FROM sites WHERE lead_id=? AND version=1", (lead_id,)).fetchone()[0])
-    assert notes["model"] == "claude-opus-5-5"
+    assert notes["model"] == "test-design-model"
     assert notes["cost_usd"] == 1.25 and notes["turns"] == 7
     assert notes["prompt_file"] == str(prompt) and notes["prompt_sha256"]
 

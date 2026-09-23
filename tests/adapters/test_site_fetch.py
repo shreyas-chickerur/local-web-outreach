@@ -51,7 +51,7 @@ def test_without_chrome_the_fetcher_falls_straight_back(monkeypatch):
     """No Chrome installed must not be a build-time or run-time failure —
     it degrades to the plain HTTP fetcher, the same "everything degrades,
     the degraded path still works" invariant `app.site.opening`'s
-    Claude-then-trade-table fallback already relies on."""
+    model-then-trade-table fallback already relies on."""
     calls = []
 
     class FakeFallback:

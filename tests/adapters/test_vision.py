@@ -13,7 +13,7 @@ import re
 import httpx
 import pytest
 
-from app.adapters import claude, vision
+from app.adapters import language_model, vision
 
 pytestmark = pytest.mark.unit
 
@@ -74,27 +74,27 @@ def test_unknown_positions_and_luminances_fall_back():
 # --- the call ------------------------------------------------------------ #
 
 def test_no_key_means_no_answer_and_no_crash(monkeypatch):
-    monkeypatch.setattr(claude, "available", lambda: False)
+    monkeypatch.setattr(language_model, "available", lambda: False)
     assert vision.look(["/photo/1/0"]) == {}
 
 
 def test_a_failed_call_loses_the_batch_not_the_build(monkeypatch):
     """A lead whose photographs cannot be looked at has fewer facts, not a
     broken build."""
-    monkeypatch.setattr(claude, "available", lambda: True)
+    monkeypatch.setattr(language_model, "available", lambda: True)
     monkeypatch.setattr(vision, "thumbnail", lambda url, names: JPEG)
 
     def boom(*a, **kw):
-        raise claude.ClaudeError("rate limited")
+        raise language_model.ModelError("rate limited")
 
-    monkeypatch.setattr(claude, "structured", boom)
+    monkeypatch.setattr(language_model, "structured", boom)
     assert vision.look(["/photo/1/0"]) == {}
 
 
 def test_answers_are_matched_to_images_by_index(monkeypatch):
-    monkeypatch.setattr(claude, "available", lambda: True)
+    monkeypatch.setattr(language_model, "available", lambda: True)
     monkeypatch.setattr(vision, "thumbnail", lambda url, names: JPEG)
-    monkeypatch.setattr(claude, "structured", lambda *a, **kw: {"images": [
+    monkeypatch.setattr(language_model, "structured", lambda *a, **kw: {"images": [
         {**ENTRY, "index": 1, "subject": "room"},
         {**ENTRY, "index": 0, "subject": "dish"},
     ]})
@@ -104,9 +104,9 @@ def test_answers_are_matched_to_images_by_index(monkeypatch):
 
 
 def test_an_index_pointing_nowhere_is_discarded(monkeypatch):
-    monkeypatch.setattr(claude, "available", lambda: True)
+    monkeypatch.setattr(language_model, "available", lambda: True)
     monkeypatch.setattr(vision, "thumbnail", lambda url, names: JPEG)
-    monkeypatch.setattr(claude, "structured", lambda *a, **kw: {"images": [
+    monkeypatch.setattr(language_model, "structured", lambda *a, **kw: {"images": [
         {**ENTRY, "index": 7}, {**ENTRY, "index": -1}, {**ENTRY, "index": "0"},
     ]})
     assert vision.look(["/photo/1/0"]) == {}
@@ -114,7 +114,7 @@ def test_an_index_pointing_nowhere_is_discarded(monkeypatch):
 
 def test_an_image_we_cannot_thumbnail_is_skipped_not_sent(monkeypatch):
     sent = {}
-    monkeypatch.setattr(claude, "available", lambda: True)
+    monkeypatch.setattr(language_model, "available", lambda: True)
     monkeypatch.setattr(vision, "thumbnail",
                         lambda url, names: None if url.endswith("0") else JPEG)
 
@@ -122,7 +122,7 @@ def test_an_image_we_cannot_thumbnail_is_skipped_not_sent(monkeypatch):
         sent["blocks"] = len(kw.get("blocks") or [])
         return {"images": [{**ENTRY, "index": 0}]}
 
-    monkeypatch.setattr(claude, "structured", capture)
+    monkeypatch.setattr(language_model, "structured", capture)
     seen = vision.look(["/photo/1/0", "/photo/1/1"])
     assert sent["blocks"] == 1
     assert "/photo/1/1" in seen and "/photo/1/0" not in seen
@@ -143,14 +143,14 @@ def test_an_oversized_scraped_image_is_not_uploaded(monkeypatch):
 
 
 def test_the_request_carries_images_and_forces_the_tool(monkeypatch):
-    monkeypatch.setattr(claude.config, "anthropic_api_key",
+    monkeypatch.setattr(language_model.config, "anthropic_api_key",
                         lambda: "k")  # pragma: allowlist secret
     import respx
     with respx.mock:
-        route = respx.post(claude.MESSAGES_URL).mock(
+        route = respx.post(language_model.MESSAGES_URL).mock(
             return_value=answered({"images": [ENTRY]}))
-        claude.structured("sys", "go", vision._tool(1),
-                          blocks=[claude.image_block(b"bytes")])
+        language_model.structured("sys", "go", vision._tool(1),
+                          blocks=[language_model.image_block(b"bytes")])
         body = route.calls[0].request.content.decode()
     assert '"type": "image"' in body or '"type":"image"' in body
     assert "tool_choice" in body
@@ -164,23 +164,23 @@ def test_the_media_type_comes_from_the_bytes_not_the_file_name(monkeypatch):
     undescribed because four of them were PNGs behind a .jpg-shaped guess."""
     sent = {}
     png = b"\x89PNG\r\n\x1a\n" + b"\x00" * 40
-    monkeypatch.setattr(claude, "available", lambda: True)
+    monkeypatch.setattr(language_model, "available", lambda: True)
     monkeypatch.setattr(vision, "thumbnail", lambda url, names: png)
 
     def capture(system, prompt, tool, **kw):
         sent["type"] = (kw["blocks"][0]["source"]["media_type"])
         return {"images": [{**ENTRY, "index": 0}]}
 
-    monkeypatch.setattr(claude, "structured", capture)
+    monkeypatch.setattr(language_model, "structured", capture)
     vision.look(["/photo/1/0"])
     assert sent["type"] == "image/png"
 
 
 def test_a_format_the_api_cannot_read_is_skipped_not_guessed(monkeypatch):
     avif = b"\x00\x00\x00 ftypavif" + b"\x00" * 40
-    monkeypatch.setattr(claude, "available", lambda: True)
+    monkeypatch.setattr(language_model, "available", lambda: True)
     monkeypatch.setattr(vision, "thumbnail", lambda url, names: avif)
-    monkeypatch.setattr(claude, "structured",
+    monkeypatch.setattr(language_model, "structured",
                         lambda *a, **kw: pytest.fail("should not have asked"))
     assert vision.look(["/photo/1/0"]) == {}
 
@@ -188,7 +188,7 @@ def test_a_format_the_api_cannot_read_is_skipped_not_guessed(monkeypatch):
 def test_a_failing_batch_is_split_so_the_good_pictures_survive(monkeypatch):
     """The failure that lost both law firms: one unusable block, eighteen
     photographs undescribed, and the build blocked on all of them."""
-    monkeypatch.setattr(claude, "available", lambda: True)
+    monkeypatch.setattr(language_model, "available", lambda: True)
     monkeypatch.setattr(vision, "thumbnail",
                         lambda url, names: b"\xff\xd8\xff" + url.encode())
 
@@ -198,25 +198,25 @@ def test_a_failing_batch_is_split_so_the_good_pictures_survive(monkeypatch):
         calls["n"] += 1
         urls = re.findall(r"image \d+: (\S+)", prompt)
         if any(u.endswith("/2") for u in urls) and len(urls) > 1:
-            raise claude.ClaudeError("could not process image 2")
+            raise language_model.ModelError("could not process image 2")
         if any(u.endswith("/2") for u in urls):
-            raise claude.ClaudeError("could not process image 2")
+            raise language_model.ModelError("could not process image 2")
         return {"images": [{**ENTRY, "index": i} for i in range(len(urls))]}
 
-    monkeypatch.setattr(claude, "structured", flaky)
+    monkeypatch.setattr(language_model, "structured", flaky)
     seen = vision.look([f"/photo/1/{i}" for i in range(4)])
     assert set(seen) == {"/photo/1/0", "/photo/1/1", "/photo/1/3"}
     assert calls["n"] > 1, "the batch was never split"
 
 
 def test_a_single_bad_picture_gives_up_rather_than_recursing(monkeypatch):
-    monkeypatch.setattr(claude, "available", lambda: True)
+    monkeypatch.setattr(language_model, "available", lambda: True)
     monkeypatch.setattr(vision, "thumbnail", lambda url, names: b"\xff\xd8\xffx")
 
     def always(*a, **kw):
-        raise claude.ClaudeError("no")
+        raise language_model.ModelError("no")
 
-    monkeypatch.setattr(claude, "structured", always)
+    monkeypatch.setattr(language_model, "structured", always)
     assert vision.look(["/photo/1/0"]) == {}
 
 
@@ -224,9 +224,9 @@ def test_an_answer_that_is_not_shaped_like_the_schema_is_survived(monkeypatch):
     """A schema is not a guarantee. Bare strings came back in this array for
     two of eleven fixtures, and an unguarded `.get` took the whole lead down at
     the first stage."""
-    monkeypatch.setattr(claude, "available", lambda: True)
+    monkeypatch.setattr(language_model, "available", lambda: True)
     monkeypatch.setattr(vision, "thumbnail", lambda url, names: JPEG)
-    monkeypatch.setattr(claude, "structured", lambda *a, **kw: {"images": [
+    monkeypatch.setattr(language_model, "structured", lambda *a, **kw: {"images": [
         "a plate of food", None, 42, {**ENTRY, "index": 0}]})
     seen = vision.look(["/photo/1/0"])
     assert seen["/photo/1/0"]["subject"] == "dish"

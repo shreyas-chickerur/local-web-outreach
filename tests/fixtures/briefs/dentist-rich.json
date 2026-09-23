@@ -63,7 +63,7 @@
     "lead_with": "stats",
     "mood": "refined",
     "rationale": "People choose a dentist on trust and reviews, not on photos of a waiting room, and with only 3 usable images the site should open on the rating and review count rather than a weak photo-led first screen. A calm, clinical-but-warm mood with a single blue accent (sampled from their own photography) reads as competent and reassuring, and closing on a real patient's words does more work than another stock-feeling image.",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "quote",
     "signature_why": "A single warm patient review set large does more to calm a nervous new patient than another stock photo of teeth ever could.",
     "suppress": [

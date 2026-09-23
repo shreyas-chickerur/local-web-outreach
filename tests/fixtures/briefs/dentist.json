@@ -68,7 +68,7 @@
     "lead_with": "reviews",
     "mood": "refined",
     "rationale": "People choosing a dentist want to see ratings and what other patients experienced before anything else, and with only 2 photographs large enough to use well, the site should be built around proof of care and reputation rather than a gallery that has little material. A calm, ledger-like rhythm with a quiet name and a trustworthy teal reads as competent and reassuring, which is exactly what someone anxious about a dental visit needs to feel first.",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "none",
     "signature_why": "A dental office earns trust through credentials and reviews laid out plainly, not through a flourish that would distract from that proof.",
     "suppress": [

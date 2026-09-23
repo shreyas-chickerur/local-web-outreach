@@ -44,7 +44,7 @@ def lead(conn):
 @pytest.fixture
 def looked(conn, lead, monkeypatch):
     """Vision answered, without a key or a call."""
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     monkeypatch.setattr(pipeline.vision, "look", lambda urls, names: {
         url: {"subject": "dish", "quality": 4, "is_hero_candidate": True,
               "alt_text": "A plate of food"} for url in urls})
@@ -86,7 +86,7 @@ def test_a_stage_already_answered_is_not_asked_again(conn, looked):
 
 def test_a_failure_names_the_stage_rather_than_blanking_the_screen(conn, lead,
                                                                    monkeypatch):
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     monkeypatch.setattr(pipeline.vision, "look", lambda urls, names: {})
     with pytest.raises(BuildFailed) as raised:
         run_stage(conn, lead, "photographs")
@@ -166,7 +166,7 @@ def test_a_photograph_that_cannot_be_fetched_does_not_block_the_build(
     """A scraped image that 404s, hotlink protection, one too large to send —
     the build must not wait forever on a dead URL. It is recorded as looked-at
     and unusable, and never leads."""
-    monkeypatch.setattr(pipeline.claude, "available", lambda: True)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: True)
     monkeypatch.setattr(pipeline.vision, "look", lambda urls, names: {
         urls[0]: {"subject": "dish", "quality": 4, "is_hero_candidate": True,
                   "alt_text": "A plate"}})
@@ -182,7 +182,7 @@ def test_without_a_key_nothing_is_filled_in_on_its_behalf(conn, lead,
                                                           monkeypatch):
     """Filling every photograph in as "could not fetch" would silently unblock
     a build nobody has looked at, which is what the keyless gate exists for."""
-    monkeypatch.setattr(pipeline.claude, "available", lambda: False)
+    monkeypatch.setattr(pipeline.language_model, "available", lambda: False)
     monkeypatch.setattr(pipeline.vision, "look", lambda urls, names: {})
     with pytest.raises(BuildFailed):
         run_stage(conn, lead, "photographs")

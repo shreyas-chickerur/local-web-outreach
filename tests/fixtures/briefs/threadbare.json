@@ -24,7 +24,7 @@
     "lead_with": "contact",
     "mood": "industrial",
     "rationale": "With only one small photo to work with, the page should lead with the name set like a trade mark and get straight to the phone number and address \u2014 a visitor googling a handyman wants to know who they are and how to reach them, not to look at a picture too small to matter.",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "none",
     "signature_why": "A single trade name set heavy and tight reads like a truck door or a work van, which is exactly the trust signal a handyman needs, without borrowing a photo that isn't strong enough to carry the page.",
     "suppress": [],

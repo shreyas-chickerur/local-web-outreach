@@ -77,7 +77,7 @@
     "lead_with": "stats",
     "mood": "refined",
     "rationale": "Someone hiring an injury lawyer after a wreck or a death in the family needs proof of results and credibility before they need atmosphere, so the page opens on ratings, verdicts, and reviews rather than a picture of the building. Navy and a ledger-like structure read as a serious, established firm, and a single repeated credential mark keeps that trust signal present as they read.",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "none",
     "signature_why": "A repeated Board Certified / verdict-figure mark reinforces credibility every time a visitor scrolls, which is exactly what someone vetting a personal injury lawyer is looking to confirm.",
     "suppress": [],

@@ -39,7 +39,7 @@ from __future__ import annotations
 
 import httpx
 
-from app.adapters import claude
+from app.adapters import language_model
 from app.site.iterate import CTA_PHRASES, DEFAULT_SPEC, MOODS
 from app.site.plan import SECTION_RULES
 from app.site.theme import ACCENT_NAMES
@@ -283,10 +283,10 @@ def understand(sentence: str, current: dict, *,
                client: httpx.Client | None = None) -> dict:
     """One instruction, read by the model, validated, folded in.
 
-    Raises `ClaudeError` when there is no key or the call fails, so the caller
+    Raises `ModelError` when there is no key or the call fails, so the caller
     can fall back to the phrase parser rather than losing the instruction.
     """
-    answer = claude.structured(SYSTEM + _sections_note(),
+    answer = language_model.structured(SYSTEM + _sections_note(),
                                _prompt(sentence, current), _tool(),
                                client=client)
     return apply_answer(answer, current)

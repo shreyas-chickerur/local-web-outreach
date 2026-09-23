@@ -1,8 +1,8 @@
 """The design bridge: a lead and a design prompt become a new version of its site.
 
 Until this existed, every version of The Heritage Table and Fish Shack was
-written by hand in a Claude session and loaded into the database by hand. Here
-one run of the Claude Agent Software Development Kit does it, in a folder of its
+written by hand in a separate session and loaded into the database by hand. Here
+one run of the Agent Software Development Kit does it, in a folder of its
 own, with a spending ceiling, and the version it produces records the model, the
 prompt and what the run cost. The claim checks then read it like any other page.
 
@@ -32,11 +32,10 @@ from claude_agent_sdk import (
 )
 
 from app.adapters import logos, photos
-from app.core.config import google_places_api_key
+from app.core.config import design_model, google_places_api_key
 from app.store import brief_archive, leads, sites
 
 # Shreyas's decisions, 23 September 2026 (SPEC-design-bridge.md).
-MODEL = "claude-opus-5-5"
 CEILING_USD = 5.0
 EDIT_CEILING_USD = 1.0
 MAX_TURNS = 40
@@ -75,6 +74,11 @@ def _inside(folder: Path, path: str) -> bool:
 
 def options(folder: Path, ceiling: float = CEILING_USD) -> ClaudeAgentOptions:
     """The one configuration every design run uses."""
+    model = design_model()
+    if not model:
+        # Left to the kit, an unset model silently becomes whatever its default
+        # is that month, billed at that model's price.
+        raise RuntimeError("DESIGN_MODEL is not set in .env; a design run needs one")
 
     async def only_here(tool: str, tool_input: dict[str, Any],
                         _context: Any) -> PermissionResultAllow | PermissionResultDeny:
@@ -88,10 +92,10 @@ def options(folder: Path, ceiling: float = CEILING_USD) -> ClaudeAgentOptions:
 
     return ClaudeAgentOptions(
         tools=list(TOOLS), allowed_tools=[], can_use_tool=only_here,
-        # Not the operator's own Claude settings: their hooks and plugins would
+        # Not the operator's own coding-assistant settings: their hooks and plugins would
         # steer a design run the way they steer a coding session.
         setting_sources=[],
-        cwd=str(folder), model=MODEL, max_budget_usd=ceiling, max_turns=MAX_TURNS,
+        cwd=str(folder), model=model, max_budget_usd=ceiling, max_turns=MAX_TURNS,
         # Every photograph the agent reads comes back base64-encoded in one
         # message, and the kit refuses any over 1 MB by default: the first real
         # run died after its fourth photograph.
@@ -185,9 +189,9 @@ def design(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> dict:
     brief = leads.load_brief(conn, lead_id)
     current = brief_archive.current(str(brief["name"])) or {}
     previous = sites.versions(conn, lead_id)
-    version = sites.save(conn, lead_id, html, spec="", actor="claude-design", notes={
-        "generator": "claude-agent-sdk (app/design/bridge.py)",
-        "model": MODEL, "cost_usd": cost, "turns": result.num_turns,
+    version = sites.save(conn, lead_id, html, spec="", actor="design-run", notes={
+        "generator": "agent design run (app/design/bridge.py)",
+        "model": design_model(), "cost_usd": cost, "turns": result.num_turns,
         "ended": result.subtype, "run_folder": str(folder),
         "prompt_file": str(prompt_path),
         "prompt_sha256": hashlib.sha256(prompt_text.encode()).hexdigest()[:16],
@@ -242,8 +246,8 @@ def edit(conn: sqlite3.Connection, lead_id: int, sentence: str,
         return {"version": None, "cost_usd": cost, "reply": reply or "Nothing changed.",
                 "why": "unchanged", "flags": []}
     version = sites.save(conn, lead_id, _to_addresses(after, lead_id), spec="",
-                         actor="claude-edit", parent_version=parent, notes={
-        "generator": "claude-agent-sdk edit (app/design/bridge.py)", "model": MODEL,
+                         actor="chat-edit", parent_version=parent, notes={
+        "generator": "agent edit (app/design/bridge.py)", "model": design_model(),
         "instruction": sentence.strip(), "reply": reply, "cost_usd": cost,
         "turns": result.num_turns, "ended": result.subtype, "run_folder": str(folder)})
     return {"version": version, "cost_usd": cost, "reply": reply, "why": "", "flags": []}

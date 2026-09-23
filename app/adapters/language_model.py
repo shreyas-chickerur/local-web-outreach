@@ -1,4 +1,4 @@
-"""Claude — one request, one structured answer.
+"""The language model: one request, one structured answer.
 
 Raw httpx for the same reason every other adapter here uses it: the SDK is a
 dependency this project does not otherwise need, and the Messages API is one
@@ -28,7 +28,7 @@ API_VERSION = "2023-06-01"
 TIMEOUT = 20.0
 
 
-class ClaudeError(RuntimeError):
+class ModelError(RuntimeError):
     """The API refused, timed out, or answered in a shape we cannot use."""
 
 
@@ -78,7 +78,10 @@ def structured(system: str, prompt: str, tool: dict, *,
     """
     key = config.anthropic_api_key()
     if not key:
-        raise ClaudeError("no ANTHROPIC_API_KEY set")
+        raise ModelError("no ANTHROPIC_API_KEY set")
+    model = model or config.anthropic_model()
+    if not model:
+        raise ModelError("no ANTHROPIC_MODEL set in .env")
 
     content: list[dict] = list(blocks or [])
     content.append({"type": "text", "text": prompt})
@@ -91,7 +94,7 @@ def structured(system: str, prompt: str, tool: dict, *,
             headers={"x-api-key": key, "anthropic-version": API_VERSION,
                      "content-type": "application/json"},
             json={
-                "model": model or config.anthropic_model(),
+                "model": model,
                 "max_tokens": max_tokens,
                 "system": system,
                 "tools": [tool],
@@ -99,21 +102,21 @@ def structured(system: str, prompt: str, tool: dict, *,
                 "messages": [{"role": "user", "content": content}],
             })
     except httpx.HTTPError as exc:
-        raise ClaudeError(f"could not reach the API: {exc}") from exc
+        raise ModelError(f"could not reach the API: {exc}") from exc
     finally:
         if owned:
             http.close()
 
     if response.status_code != 200:
-        raise ClaudeError(f"HTTP {response.status_code}: {response.text[:300]}")
+        raise ModelError(f"HTTP {response.status_code}: {response.text[:300]}")
     try:
         payload = response.json()
     except json.JSONDecodeError as exc:
-        raise ClaudeError("the API returned something that is not JSON") from exc
+        raise ModelError("the API returned something that is not JSON") from exc
 
     for block in payload.get("content") or []:
         if block.get("type") == "tool_use" and block.get("name") == tool["name"]:
             found = block.get("input")
             if isinstance(found, dict):
                 return found
-    raise ClaudeError("the answer contained no tool call")
+    raise ModelError("the answer contained no tool call")

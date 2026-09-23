@@ -89,7 +89,7 @@
     "lead_with": "credentials",
     "mood": "industrial",
     "rationale": "This is a 24/7 emergency HVAC contractor with only 3 photos strong enough to carry a layout, so the page should open on proof of competence \u2014 credentials and the 4.9/1226-review record \u2014 rather than the stats-led facts screen the last job used; the ledger rhythm and stamp mark read as a licensed trade outfit, and yellow is pulled straight from their own vans and branding rather than invented.",
-    "read_by": "claude",
+    "read_by": "model",
     "signature": "none",
     "signature_why": "A repeated licence/registration-style mark reassures a homeowner that a 24/7 emergency call-out is going to a properly credentialed outfit, not a stranger with a van.",
     "suppress": [
