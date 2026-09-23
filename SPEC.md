@@ -21,10 +21,10 @@ excluded. It is not yet a lead.
 
 | Module id | Responsibility | Depends on | Spec |
 |---|---|---|---|
-| `page-text` | The crawl keeps the visible text of every page and menu PDF it read, with its address and, when it failed, the reason. Stored inside the brief. | — | `SPEC-page-text.md` |
+| `page-text` | The crawl keeps the visible text of every page and menu PDF it read, with its address and, when it failed, the reason. Stored inside the brief. | — | `SPEC-page-text.md`, built |
 | `checks-read-crawl` | The checks search that stored text instead of `live-site.md`. An unreadable page becomes an `unmeasured` finding naming the reason. A correction wins for its fact. | `page-text` | `SPEC-checks-read-crawl.md`, built |
-| `read-ladder` | Every tool is tried before a page is called unreadable: plain fetch, browser, PDF reader, then a model reading images, each image read once and remembered by a fingerprint of its content. | `page-text` | not yet written |
-| `claim-mapping` | Each claim points at its fact, the page address and the exact sentence, with a "show me where" link. | `checks-read-crawl` | not yet written |
+| `read-ladder` | Every tool is tried before a page is called unreadable: plain fetch, browser, PDF reader, then a model reading images, each image read once and remembered by a fingerprint of its content. | `page-text` | `SPEC-read-ladder.md`, built |
+| `claim-mapping` | Each claim points at its fact, the page address and the exact sentence, with a "show me where" link. | `checks-read-crawl` | built with `read-ladder`'s checks; no separate spec |
 
 Build order: `page-text` → `checks-read-crawl` → `read-ladder` → `claim-mapping`.
 

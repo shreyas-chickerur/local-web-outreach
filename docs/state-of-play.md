@@ -1,4 +1,4 @@
-# State of play — 22 September 2026
+# State of play — 22 September 2026 (evening)
 
 Where the work actually stands, what is stale, and what is next. Update this
 file when any of it changes; a stale status document is worse than none.
@@ -92,6 +92,17 @@ page scrolled to the exact sentence, using a text fragment.
   correction now triggers `iterate()`, which may not cope with a hand-authored
   page. The failure path is handled and the correction is never lost, but the
   path has not been exercised.
+
+## Built on 22 September: the crawl is the source
+
+All four modules of `SPEC.md` are built. The crawl keeps every page's text
+(`pages`); the checks search it instead of `live-site.md`; menu images are
+read by a model once, cached by their bytes; every corroborated claim links to
+the page and the words, or the directory fact, that back it. A correction now
+outranks the crawl in the checks too. Also fixed: evidence under each fact was
+drawn with the history timeline's grid; the listing warning called a working
+link broken; quotes were cut mid-word; the menu reader missed prices with no
+dollar sign; the workbench prompted for a town on opening.
 
 ## Next
 
