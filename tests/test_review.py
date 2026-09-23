@@ -494,3 +494,52 @@ def test_a_plural_in_ies_and_a_thousands_comma_are_still_found_in_the_source():
             "<p>Fish Shack Specialties, six of them.</p><p>4.5 from 3,351 Google reviews.</p>")
     unsourced = [f.title for f in inventory(page, brief, text) if f.verdict == "unsourced"]
     assert unsourced == []
+
+
+# ------------------- each claim points at where it was said ------------------- #
+_MAPPED_BRIEF = {
+    "name": "Fish Shack",
+    "facts": [{"field": "phone", "label": "Phone", "value": "(469) 229-0838",
+               "confidence": "verified",
+               "sources": [{"source_type": "google", "source_url": "https://maps.test/fs"}]}],
+    "ratings": [{"source": "google", "value": 4.5, "reviews": 3351,
+                 "source_url": "https://maps.test/fs"}],
+    "pages": [
+        {"url": "http://fish.test/", "kind": "page", "read": True, "reason": "",
+         "text": "Welcome to Fish Shack"},
+        {"url": "http://fish.test/menu.htm", "kind": "page", "read": True, "reason": "",
+         "text": "Salmon 18.95\nRainbow Trout 16.95"},
+    ],
+}
+
+
+def test_a_corroborated_claim_links_to_the_page_and_the_words_that_back_it():
+    """Every finding carried the same links (the site, and one source per fact),
+    so a reviewer checking "Salmon, 18.95" was sent to the homepage to hunt for
+    it. The link now opens the page it was read from, at the words."""
+    import json
+
+    from app.review.run import findings, page_text
+
+    rows = findings("<p>Salmon, 18.95.</p>", _MAPPED_BRIEF, page_text(_MAPPED_BRIEF))
+    salmon = next(r for r in rows if "Salmon" in r["quote"])
+    assert salmon["verdict"] == "corroborated"
+    first = json.loads(salmon["resources"])[0]
+    assert first["url"].startswith("http://fish.test/menu.htm#:~:text=Salmon")
+
+
+def test_a_claim_backed_by_a_directory_fact_points_at_that_fact():
+    """"4.5 from 3,351 Google reviews" came back "assembled": the rating is in
+    the brief, not in any page's text, so no single passage carried it. A
+    rating or a verified fact is itself something a source said."""
+    import json
+
+    from app.review.run import findings, page_text
+
+    rows = findings("<p>4.5 from 3,351 Google reviews.</p><p>Phone (469) 229-0838.</p>",
+                    _MAPPED_BRIEF, page_text(_MAPPED_BRIEF))
+    rating = next(r for r in rows if "3,351" in r["quote"])
+    phone = next(r for r in rows if "229-0838" in r["quote"])
+    for row in (rating, phone):
+        assert row["verdict"] == "corroborated", row
+        assert json.loads(row["resources"])[0]["url"] == "https://maps.test/fs"

@@ -79,7 +79,7 @@ def material(name: str, *, root: Path | None = None) -> tuple[dict, str, dict]:
     }
 
 
-def _without_superseded(brief: dict, text: str) -> tuple[dict, str]:
+def _without_superseded(brief: dict, text: str) -> tuple[dict, str, list[dict] | None]:
     """The brief and page text with every value a correction replaced removed.
 
     A correction outranks the crawl, but the crawl's page text still prints the
@@ -91,20 +91,25 @@ def _without_superseded(brief: dict, text: str) -> tuple[dict, str]:
     # "(111) 111-1111" also catches "111-111-1111"; an abbreviated address
     # ("E" for "East") still gets through. Normalise per field if that bites.
     old = [str(f["superseded"]) for f in brief.get("facts") or [] if f.get("superseded")]
-    for value in old:
-        words = re.findall(r"[A-Za-z0-9]+", value)
-        if words:
-            text = re.sub(r"\W*".join(map(re.escape, words)), " ", text, flags=re.IGNORECASE)
+    patterns = [r"\W*".join(map(re.escape, words)) for words in
+                (re.findall(r"[A-Za-z0-9]+", value) for value in old) if words]
+
+    def clean(words: str) -> str:
+        for pattern in patterns:
+            words = re.sub(pattern, " ", words, flags=re.IGNORECASE)
+        return words
+
+    pages = brief.get("pages")
     judged = {k: v for k, v in brief.items() if k != "pages"}
     judged["facts"] = [{k: v for k, v in f.items() if k != "superseded"}
                        for f in brief.get("facts") or []]
-    return judged, text
+    return judged, clean(text), (None if pages is None
+                                 else [{**p, "text": clean(p.get("text", ""))} for p in pages])
 
 
 def findings(html: str, brief: dict, capture: str) -> list[dict]:
     """Everything the checks can see, ordered so the sharp end is first."""
-    pages = brief.get("pages")
-    brief, capture = _without_superseded(brief, capture)
+    brief, capture, pages = _without_superseded(brief, capture)
     where = []
     if brief.get("website_url"):
         where.append({"label": "The business's own site", "url": brief["website_url"]})
@@ -118,7 +123,7 @@ def findings(html: str, brief: dict, capture: str) -> list[dict]:
 
     found = list(checks.contradictions(html, brief, where))
     found += checks.mechanics(html, brief)
-    found += checks.inventory(html, brief, capture, where)
+    found += checks.inventory(html, brief, capture, where, pages)
     for page in pages or []:
         if not page.get("read"):
             found.insert(0, checks.Finding(

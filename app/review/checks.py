@@ -26,6 +26,7 @@ import re
 import unicodedata
 from dataclasses import dataclass, field
 from html import unescape
+from urllib.parse import quote
 
 # Text that carries a factual assertion: a number, a date, a credential, an
 # award, a superlative, a span of years. Prose without one of these is style,
@@ -266,19 +267,62 @@ def _verified_fields(brief: dict) -> dict[str, str]:
     return out
 
 
+def _at_words(url: str, passage: str) -> str:
+    """A link that opens the page scrolled to these words, where browsers can."""
+    needle = " ".join(passage.split()[:8]).rstrip(".,;:!?")
+    return f"{url}#:~:text={quote(needle, safe='')}" if len(needle) >= 4 else url
+
+
+def _passages(capture: str, brief: dict,
+              pages: list[dict] | None) -> list[tuple[str, dict | None]]:
+    """Everything a source said, one passage at a time, with where it said it.
+
+    A passage is a line, three neighbouring lines (a menu entry and its dietary
+    tag often sit apart), or a blank-line separated block. Each carries the page
+    it came from, so a corroborated claim can open that page at those words
+    rather than send the reviewer to the homepage to hunt. A verified fact and
+    a directory rating are passages too: "4.5 from 3,351 Google reviews" was
+    called assembled because the rating lived in the brief, not on any page.
+    """
+    def cut(text: str, where: dict | None, url: str = "") -> list[tuple[str, dict | None]]:
+        lines = [ln for ln in text.splitlines() if ln.strip()]
+        chunks = list(lines) + [" ".join(lines[i:i + 3]) for i in range(len(lines) - 1)]
+        chunks += [b for b in re.split(r"\n\s*\n", text) if b.strip()]
+        return [(c, {**where, "url": _at_words(url, c)} if where and url else where)
+                for c in chunks]
+
+    out: list[tuple[str, dict | None]] = []
+    if pages is None:
+        out += cut(capture, None)
+    for page in pages or []:
+        if page.get("read") and page.get("text"):
+            url = str(page.get("url", ""))
+            label = {"label": f"Their {page.get('kind', 'page')}: {url}"}
+            out += (cut(page["text"], label, url) if page.get("kind") == "page"
+                    else [(c, {**label, "url": url}) for c, _ in cut(page["text"], None)])
+    for fact in brief.get("facts") or []:
+        if fact.get("value") and fact.get("confidence") in ("verified", "operator_verified"):
+            first = next((s for s in fact.get("sources") or [] if s.get("source_url")), None)
+            name = fact.get("label") or fact.get("field")
+            out.append((f"{name}: {fact['value']}",
+                        {"label": f"{name}, from {first['source_type']}",
+                         "url": first["source_url"]} if first else None))
+    for rating in brief.get("ratings") or []:
+        if rating.get("value") and rating.get("reviews"):
+            out.append((f"{rating['value']} from {rating['reviews']} reviews on "
+                        f"{rating.get('source', '')}",
+                        {"label": f"{str(rating.get('source', '')).title()} rating",
+                         "url": rating.get("source_url", "")}
+                        if rating.get("source_url") else None))
+    return out
+
+
 def inventory(html: str, brief: dict, capture: str,
-              sources: list[dict] | None = None) -> list[Finding]:
+              sources: list[dict] | None = None,
+              pages: list[dict] | None = None) -> list[Finding]:
     """Every claim the page makes, with the source's own words where there is one."""
     haystack = _fold(capture) + " " + _fold(json.dumps(brief, default=str))
-    # A passage is a line, or a blank-line separated block: a claim split over
-    # two printed lines of the same paragraph is still one thing somebody said.
-    lines = [ln for ln in capture.splitlines() if ln.strip()]
-    passages = list(lines)
-    # A menu entry and its dietary tag often sit on neighbouring lines. Three
-    # consecutive lines still count as one thing somebody wrote; the whole
-    # capture does not.
-    passages += [" ".join(lines[i:i + 3]) for i in range(len(lines) - 1)]
-    passages += [b for b in re.split(r"\n\s*\n", capture) if b.strip()]
+    passages = _passages(capture, brief, pages)
     links = sources or []
 
     findings: list[Finding] = []
@@ -303,10 +347,10 @@ def inventory(html: str, brief: dict, capture: str,
             # something nobody said. So the sentence only counts as
             # corroborated when one passage carries all of it; when the parts
             # are scattered, it is assembled, and a person decides.
-            quote = ""
-            for passage in passages:
+            quote, said_at = "", None
+            for passage, where in passages:
                 if all(a in _fold(passage) for a in atoms):
-                    quote = passage.strip()
+                    quote, said_at = passage.strip(), where
                     break
             if quote:
                 findings.append(Finding(
@@ -315,7 +359,9 @@ def inventory(html: str, brief: dict, capture: str,
                     detail="One passage in the source carries every figure and name "
                            "in this sentence.",
                     anchor="text:" + sentence[:80],
-                    quote=sentence, evidence=quote[:400], resources=links))
+                    quote=sentence, evidence=quote[:400],
+                    resources=([said_at] if said_at else [])
+                    + [r for r in links if not said_at or r["url"] != said_at["url"]]))
             else:
                 findings.append(Finding(
                     stage="claim", verdict="assembled",
