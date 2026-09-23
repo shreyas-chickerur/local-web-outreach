@@ -68,6 +68,15 @@ page scrolled to the exact sentence, using a text fragment.
   copy held as text and today's crawl cannot read (the wine list is an image).
   Its 160 "corroborated" in review 2 rested on that copy. `read-ladder` is the
   fix.
+- **`read-ladder` (22 September):** menu images are found and read by a model
+  once, cached by their bytes. The Heritage Table's crawl now reads four menu
+  images (dinner, dietary, beverages, wine) and records the rest with reasons.
+  Heritage version 14, judged against the live crawl, went from 127
+  unsourced claims to 9, with 159 corroborated. The 9 are wording the page
+  chose: the wine list prints "Cab. Sauv." and "Rijoa" where the page says
+  "Cabernet Sauvignon" and "Rioja", plus "Non-alcoholic", "forty-eight" and a
+  Tripleseat sentence. They are for Shreyas, not bugs. No review has been
+  re-opened; review 2 still holds the old, hand-copy results.
 - Version 14 has its review (review 2, opened 22 September, against crawl
   `72fe0c4a`). Re-running the checks in memory on 22 September gave the
   identical 187 findings, and nothing is decided on it yet. Review 1, against
