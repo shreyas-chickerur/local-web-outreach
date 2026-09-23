@@ -226,3 +226,27 @@ def test_every_fault_the_address_check_reports_has_its_own_headline():
     assert table, "the page has no headline per fault"
     named = set(re.findall(r'"([a-z-]+)":', table.group(1)))
     assert set(FAULTS) <= named, sorted(set(FAULTS) - named)
+
+
+@pytest.mark.skipif(__import__("app.adapters.chrome_cdp", fromlist=["chrome"]).chrome() is None,
+                    reason="needs a real Chrome")
+def test_opening_the_workbench_never_opens_a_dialog_nobody_asked_for():
+    """Opening the workbench with no saved town asked the browser for its
+    location and, when that was declined, went straight to a "Which town?"
+    prompt. A dialog nobody asked for blocks the page and freezes any browser
+    driving it: it is why every automated look at the workbench hung."""
+    import json
+    import time
+
+    from app.adapters import chrome_cdp
+
+    with chrome_cdp.cdp_session(chrome_cdp.chrome(), "about:blank", 1200, 800, 1.0,
+                                timeout=30) as call:
+        call("Page.addScriptToEvaluateOnNewDocument", {"source": (
+            "window.__dialogs=[];['alert','confirm','prompt'].forEach(k=>"
+            "window[k]=(m)=>{window.__dialogs.push(k+': '+m);return null;});")})
+        call("Page.navigate", {"url": server._UI.resolve().as_uri()})
+        time.sleep(9)  # the geolocation request gives up after eight seconds
+        seen = call("Runtime.evaluate", {"expression": "JSON.stringify(window.__dialogs)",
+                                         "returnByValue": True})
+    assert json.loads(seen["result"]["result"]["value"]) == []

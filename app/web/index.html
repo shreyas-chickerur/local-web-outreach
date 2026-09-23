@@ -679,7 +679,7 @@
         onclick="showTab('leads')">My leads <span class="n" id="leadcount"></span></button>
     </div>
     <span id="near">near</span> <b id="place">…</b>
-    <button class="pick" onclick="askLocation()">Use my location</button>
+    <button class="pick" onclick="askLocation(true)">Use my location</button>
     <button class="pick" onclick="changePlace()">Change</button>
     <button class="pick" onclick="loadLanding(true)">Refresh</button>
   </div>
@@ -721,14 +721,19 @@ function savePlace(place) {
   try { localStorage.setItem("workbench.place", JSON.stringify(place)); } catch {}
 }
 
-function askLocation() {
-  if (!navigator.geolocation) { changePlace(); return; }
+// `clicked` is true only when the operator pressed "Use my location". On
+// opening, a declined location used to fall straight into a "Which town?"
+// prompt nobody asked for, which blocks the page and hung every browser that
+// drove it; now the page just says so, and "Change" is one click away.
+function askLocation(clicked = false) {
+  const fallBack = () => { if (clicked) changePlace(); };
+  if (!navigator.geolocation) { fallBack(); return; }
   $("#place").textContent = "asking your browser…";
   navigator.geolocation.getCurrentPosition(
     pos => { savePlace({latitude: pos.coords.latitude,
                         longitude: pos.coords.longitude, label: "your location"});
              loadLanding(); },
-    () => { $("#place").textContent = "location declined"; changePlace(); },
+    () => { $("#place").textContent = "location declined"; fallBack(); },
     {timeout: 8000});
 }
 
