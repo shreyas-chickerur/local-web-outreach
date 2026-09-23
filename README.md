@@ -11,8 +11,6 @@ person**: nothing here sends email.
 - **Where to read more**
   - [`CLAUDE.md`](CLAUDE.md) — the working context and the rules.
   - [`docs/architecture.md`](docs/architecture.md) — every module and the data flow.
-  - [`docs/state-of-play.md`](docs/state-of-play.md) — where the work stands today.
-  - [`docs/working-agreement.md`](docs/working-agreement.md) — how to work here.
 
 ## Set up
 

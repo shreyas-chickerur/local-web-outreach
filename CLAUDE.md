@@ -2,9 +2,12 @@
 
 Read this first. It is the whole picture: what the product is, how the code is
 arranged, the rules that are not negotiable, and how to work here without
-wasting the owner's money or trust. `docs/architecture.md` has the module map,
-`docs/state-of-play.md` has where the work actually stands today, and
-`docs/working-agreement.md` has the conventions.
+wasting the owner's money or trust. `docs/architecture.md` has the module map.
+
+Only what the platform needs is kept in git. Reviews, specifications, task
+lists and the older planning documents were removed on 23 September 2026 and
+are under the tag `archive/generated-docs-2026-09-23`; a comment that names a
+`.reviews/` file resolves with `git show archive/generated-docs-2026-09-23:<path>`.
 
 ## What this is
 
@@ -107,8 +110,8 @@ So: name the producer and the consumer for every file, table and key the change
 touches. Grep for the other consumers. Write one round-trip test per seam, with
 nothing hand-made in between. Open the real stored artifact for a real lead.
 Run the real command. Ask what regenerates the artifact. Name what is now
-downstream and stale. `docs/wiring-check.md` and the `wiring-check` skill in
-`.claude/skills/` carry the full version.
+downstream and stale. The `wiring-check` skill in `.claude/skills/` carries the
+full version.
 
 Never report a fix as done on the strength of a passing test. Report it on the
 strength of having watched the real system produce the right value.
@@ -163,7 +166,9 @@ checks used to read; nothing reads it now.
 Generated and cached, all gitignored: `runs/<slug>/<timestamp>/` (a design or
 edit run's workspace), `proposals/` (files for owners), `.cache/photos`,
 `.cache/logos`, `.cache/image-text` (a menu image's text, keyed by its bytes).
-A site's hand-written source, when it has one, is kept under `sites/<slug>/`.
+`sites/<slug>/` and `prompts/<slug>/` hold one business's files on this machine
+only; both are gitignored, because nothing that belongs to a business goes to
+GitHub.
 
 ## Style
 

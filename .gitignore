@@ -81,3 +81,7 @@ graphify-out/cache/
 
 # Proposal files: generated per lead from a stored version; large, and regenerated.
 /proposals/
+
+# One folder per business, on this machine only. Nothing that belongs to a business is kept in git.
+/sites/
+/prompts/
