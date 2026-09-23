@@ -318,6 +318,31 @@ def test_a_sentence_on_a_designed_page_goes_to_an_edit_and_the_reply_comes_back(
     assert "$0.07" in payload["thread"][-1]["text"]
 
 
+def test_opening_a_designed_page_measures_no_photographs(tmp_path, monkeypatch):
+    """Opening the workspace drew the older generator's plan and counted what
+    reached its page, which fetches and measures every photograph. After a
+    re-crawl none is on disk, so "Open workspace" sat for as long as thirty
+    downloads took, for panels a designed page never shows."""
+    from pathlib import Path
+
+    from app.store import db, leads, sites
+
+    monkeypatch.setattr(db, "DEFAULT_PATH", tmp_path / "workbench.db")
+    fixture = json.loads(Path("tests/fixtures/briefs/law-rich.json").read_text())
+    with db.session() as conn:
+        lead_id = leads.save_brief(conn, fixture)
+        sites.save(conn, lead_id, "<p>designed</p>", spec="")
+
+    def measured(*_args, **_kwargs):
+        raise AssertionError("a designed page's workspace measured the photographs")
+
+    monkeypatch.setattr(server, "plan_for", measured)
+    monkeypatch.setattr(server, "measure_census", measured)
+    data = server.workspace(lead_id)
+    assert data["trouble"] == [] and data["versions"]
+    assert (data["outline"], data["plan"], data["census"]) == ("", {}, [])
+
+
 def _session(path):
     import contextlib
 

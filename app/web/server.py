@@ -195,7 +195,13 @@ def workspace(lead_id: int) -> dict:
                                    f"{type(exc).__name__}: {exc}")
         outline = ""
         plan: dict = {}
-        if history and brief:
+        # The plan and the census below describe a page the old renderer built,
+        # and drawing them fetches and measures every photograph. A designed
+        # page has neither, and after a re-crawl none of its photographs is on
+        # disk yet: "Open workspace" waited on thirty downloads for panels the
+        # screen hides.
+        rendered = bool(history) and bool((history[0].get("spec") or "").strip())
+        if rendered and brief:
             try:
                 spec = spec_from_config(history[0].get("spec_json") or {})
                 resolved = plan_for(brief, spec)
@@ -211,7 +217,7 @@ def workspace(lead_id: int) -> dict:
         # reimplemented, against the opening version's own frozen
         # direction — the same version `plan`/`outline` above describe.
         census: list[dict] = []
-        if history and brief:
+        if rendered and brief:
             try:
                 dropped = measure_census(conn, brief.get("name") or str(lead_id),
                                          lead_id).dropped()
