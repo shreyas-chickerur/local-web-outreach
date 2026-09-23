@@ -1,168 +1,146 @@
-# Lead & Site Workbench
+# Ironplains Web Co. — Lead & Site Workbench
 
-Research a local business, build a website for it, track where the lead stands.
-Outreach happens **in person** — nothing here sends email.
+Research a local business from public sources, design a website for it, check
+every claim on the page, and hand the owner a proposal. Outreach happens **in
+person**: nothing here sends email.
 
-See [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) for the full spec and the
-slice order.
+- **Who sees what**
+  - You: the command line and the workbench at `http://127.0.0.1:8099`.
+  - The owner: the finished page (or a proposal file) and nothing else. A
+    `?review=` link carries every doubt the checks have; never send one.
+- **Where to read more**
+  - [`CLAUDE.md`](CLAUDE.md) — the working context and the rules.
+  - [`docs/architecture.md`](docs/architecture.md) — every module and the data flow.
+  - [`docs/state-of-play.md`](docs/state-of-play.md) — where the work stands today.
+  - [`docs/working-agreement.md`](docs/working-agreement.md) — how to work here.
 
-## Slice 1 — the brief (built)
+## Set up
 
-Give it a company name or a website URL, plus anything you already know:
+1. Install Python 3.11 or newer, and Google Chrome (the crawl renders pages in it).
+2. Install the project:
+   ```bash
+   make install
+   ```
+3. Copy the keys file and fill it in:
+   ```bash
+   cp .env.example .env
+   ```
+   - `GOOGLE_PLACES_API_KEY` — finds a business's website, rating and photographs.
+   - `YELP_API_KEY` — covers service businesses OpenStreetMap misses (free).
+   - `ANTHROPIC_API_KEY` — design runs, chat edits and reading menu images.
+   - OpenStreetMap needs no key.
+4. Optional settings:
+   - `WORKBENCH_DB` — where the database lives (default `./workbench.db`).
+   - `WORKBENCH_OPERATOR` — your name on the audit trail (default `$USER`); a
+     label, not authentication.
+   - `ANTHROPIC_MODEL` — the model for menu images and the older generator's
+     instruction reader (default `claude-sonnet-5`). Design runs and edits
+     always use Claude Opus 5.5.
 
-```bash
-make install
-.venv/bin/python -m app.cli brief "Craftway Kitchen, Frisco, TX" --notes "owner is Allison"
-.venv/bin/python -m app.cli brief craftwaykitchen.com
-```
+## Commands
 
-You get back what could be established about the business, with a confidence and
-its sources on every line:
+| Command | What it does | Costs |
+|---|---|---|
+| `make brief Q="Name, City, ST"` | Research one business; save its brief | a few directory lookups; a model read per new menu image |
+| `make ui` | Start the workbench at `http://127.0.0.1:8099` | — |
+| `make design LEAD=8 PROMPT=prompts/<slug>/v1.md` | One design run: a new version of the lead's site | up to $5 |
+| `make proposal LEAD=8` | The current version as one file for the owner | — |
+| `make check` | Lint, type check and the whole test suite | — |
 
-```
-Ryno Lawn Care
-  Frisco, TX
-  https://www.rynolawncare.com/  (reachable)
+- `make brief` takes `Q`, not `NAME`. A URL works too: `make brief Q=fishshackplano.com`.
+- After changing `app/web/server.py`, restart `make ui`; `index.html` is re-read on
+  every request, the server is not.
 
-WHAT WE ESTABLISHED
-  [conflict  ] rating     30%  sources disagree:
-                        google: 4.8
-                          yelp: 2.4
-  [verified  ] phone      90%  (469) 496-2778
-                              <- google: https://www.google.com/maps/place/?q=...
-                              <- yelp:   https://www.yelp.com/biz/ryno-lawn-care-frisco
+## From a name to a proposal
 
-WHAT THEIR SITE PUBLISHES
-  services: Sustainable Lawn Care, Premium Sod Installation, Weed Control ...
-  hours:    Mon-Fri 8:00am - 5:00pm | Sat-Sun Closed
-```
+1. **Find a business**
+   - Open the workbench; the landing page lists local businesses by trade,
+     ranked by how much they look like they need a website.
+   - Or search by name or URL in the header.
+2. **Research it** — `make brief Q="Fish Shack, Plano, TX"`.
+   - Every source's claim about a field is compared; two independent sources
+     agreeing makes a fact **verified**, a disagreement is a **conflict**.
+   - The crawl reads up to 24 of the business's own pages, their menu PDFs and
+     menu images, and keeps the text of each, with a reason for any it could
+     not read.
+   - It picks the business's logo by one rule (structured data, then an image
+     called a logo that names the business, then a large site icon).
+3. **Correct what you know** — on the lead's screen, type what the owner told
+   you into a field and say how you know.
+   - Your value outranks every source; the source's value is kept and shown
+     as superseded.
+   - A logo the crawl missed is corrected the same way, with its address.
+4. **Design the site**
+   - Write the design prompt at `prompts/<slug>/v1.md` from the brief and
+     `app/design/playbooks/restaurant.md`.
+   - Run `make design LEAD=<id> PROMPT=prompts/<slug>/v1.md`.
+   - The run prints its cost and the new version's address; a missing logo is
+     flagged.
+5. **Refine it in the workbench chat** — open the lead's workspace.
+   - Type a change ("make the menu tabs bigger"); press Enter.
+   - Each change is a new version with its parent, up to $1, and the reply
+     says what changed, what it cost and whether the claim checks moved.
+   - Facts only come from the brief: ask for one it does not hold and the edit
+     says so and changes nothing.
+6. **Mark the master** — select the version you judge good and click
+   "Mark vN as master"; a ★ marks it. It is the checkpoint to return to.
+7. **Review every claim** — click "Review vN" in the workspace.
+   - Each claim is pinned on the page with a verdict: `corroborated`,
+     `unsourced`, `assembled`, `wording`, `contradicted`, `defect`, `unmeasured`.
+   - Every corroborated claim links to the exact page and words that back it.
+   - Only `contradicted` blocks approval. A person approves; always.
+8. **Make the proposal** — `make proposal LEAD=<id>` writes
+   `proposals/<slug>-v<N>.html`: every photograph and the logo inside one file,
+   openable offline and sendable as an attachment.
 
-### The rules it works by
+## The rules it works by
 
-- **A fact needs two independent sources.** One source is `unverified`;
-  disagreement is a `conflict` and is never presented as fact.
-- **A conflict names its sources.** Knowing Google says 4.8 while Yelp says 2.4
-  is the useful part; two values joined by a pipe tells you nothing.
-- **Nothing is guessed.** Gaps become questions to ask in person.
-- **Assumptions are stated**, so you can correct them.
+- **A fact needs two independent sources.** One source is unverified; a
+  disagreement is a conflict and names both sources.
+- **What you were told outranks every source**, and never erases it.
+- **The claim check is an inventory, not a veto.** Generation is free; every
+  claim is listed afterwards and a person decides.
+- **Nothing is guessed.** A gap becomes a question to ask in person; a missing
+  logo is flagged, never drawn.
+- **Money is spent only on real change.** Confirming what the sources already
+  said costs nothing; each menu image is read once; every run has a ceiling.
 
-## The landing page — prospects near you
+## The website check
 
-The first screen is a list of local businesses grouped by trade, ranked by how
-much they look like they need a website. Location comes from the browser, or
-you can type a town. Search stays in the header for when you already know who
-you are looking at.
+The address on a Google listing is not always the one that works. Each fault is
+a different sentence at the door:
 
-**The prospect score** is a heuristic, not a measurement, so every point of it
-is shown with its reason attached — if you disagree with a reason, ignore the
-number. It answers "who should I walk into today?", which is a *different*
-question from confidence (how sure we are the data is right). They pull in
-opposite directions: a business with no website is a prime prospect and has
-almost nothing we can confirm.
-
-Cost: one Google Places request per category (eight per town), cached for 24
-hours, plus one page fetch per business.
-
-## The UI
-
-```bash
-make ui        # http://127.0.0.1:8099
-```
-
-One page: type a company name or a URL and read the brief. It calls the same
-`build_brief()` the CLI does, so the screen cannot drift from the terminal.
-The example chips across the top are the stress cases — a chain, a business
-with no website, one whose sources disagree, and one that does not exist.
-
-## Slice 2 — the lead store (built)
-
-Every lookup is saved to `workbench.db` (SQLite, gitignored). Re-running the
-research refreshes what the sources say and leaves your history alone.
-
-**Confirming a field.** After you talk to a business, type what they actually
-told you into the field's card, with a line on how you know. That value
-replaces the corroborated one, is marked `operator verified`, and carries your
-name, the timestamp, and your note. What the sources said is kept and shown
-underneath as `sources said …` — you outrank a directory, but the directory's
-disagreement is not erased.
-
-**The trail** at the bottom of a lead is append-only: nothing is ever updated
-or deleted, so a correction to a correction is another row and the history
-reads backwards intact.
-
-Attribution comes from `WORKBENCH_OPERATOR`, falling back to `$USER`. This
-labels changes so you can read the trail later — it is **not** authentication,
-and anyone with access to this machine can write under that name.
-
-```bash
-WORKBENCH_DB=/path/to/workbench.db   # optional, defaults to ./workbench.db
-WORKBENCH_OPERATOR="Shreyas"         # optional, defaults to $USER
-```
-
-## Validating the address a directory publishes
-
-The URL on a Google listing is not always the URL that works, and the ways it
-fails are worth telling apart because each is a different sentence at the door:
-
-| fault | what it means |
+| Fault | What it means |
 |---|---|
-| `certificate` | TLS fails on that exact hostname — every visitor who follows the listing gets a full-page security warning |
-| `not-found` | the domain answers, that page is gone |
+| `certificate` | the listing's address throws a browser security warning |
+| `not-found` | the domain answers; that page is gone |
 | `parked` | the domain lapsed and shows a registrar's for-sale page |
-| `no-https` | no working https at all |
-| `http-link` | the listing links http; the site itself serves https |
-| `redirected` | it lands on a different domain (often a Facebook page) |
-| `dead` | nothing answers anywhere |
-| *blocked* | their bot filter refused us — **not** a fault, and nothing is concluded |
+| `no-https` | the site works, but every browser marks it not secure |
+| `http-link` | the listing links the old http address; the site serves https |
+| `redirected` | the listing's link lands on a different domain |
+| `dead` | nothing answers at all |
+| *blocked* | their bot filter refused the check: **not** a fault, nothing concluded |
 
-The correction is the spelling that works; the fault is kept next to it, because
-the fault is usually the reason to walk in. One click records the correction
-into the lead's trail, attributed like any other change.
+## Where things live
 
-## Slice 3 — building them a site
-
-Open a lead and describe what you want in plain words: *"warm and rustic, lead
-with the gallery, book a table"*. Six moods, section ordering, and a call to
-action are read out of the sentence; the panel then tells you which parts
-landed, which could not be honoured (and why), and which words it ignored — a
-half-understood instruction is how you end up rebuilding the same thing three
-times.
-
-**The rule that shapes the generator: no unverified fact ships.** The site gets
-shown to the owner, so one sentence they know to be false ends the meeting.
-Only their own published content, facts two independent sources agreed on, and
-things you confirmed yourself reach the page. A section with no data is absent
-rather than filled with a placeholder. `unsupported()` re-checks every
-generated page against the allowed material and the tests run it, so a future
-section cannot quietly start inventing.
-
-Generation is deterministic — the same brief and words give the same page — so
-any difference between two versions is something you asked for. Every build is
-a new version, kept forever, and logged on the lead's trail. Sites are served
-at `/site/<lead>/<version>` so you can open one on a phone.
-
-## Keys
-
-Copy `.env.example` to `.env`. OpenStreetMap needs no key but finds little on its
-own; `GOOGLE_PLACES_API_KEY` is what finds their website, and a free
-`YELP_API_KEY` covers service businesses.
+- **Database** — `workbench.db`: leads, the audit trail, versions, reviews,
+  findings, the chat. Additive migrations only.
+- **Briefs** — `briefs/<slug>/<timestamp>.json`, one per crawl, never
+  overwritten; `current.json` is a pointer to the newest.
+- **Prompts** — `prompts/<slug>/vN.md`, one per design run.
+- **Generated, gitignored**
+  - `runs/<slug>/<timestamp>/` — a design or edit run's workspace.
+  - `proposals/` — files for owners.
+  - `.cache/photos`, `.cache/logos`, `.cache/image-text` — paid for once, kept.
 
 ## Development
 
-```bash
-make check     # lint + typecheck + tests
-```
-
-611 tests, no network, no database — the suite refuses both by
-default (`tests/conftest.py`), so a real API key or a slow DNS lookup on the
-developer's machine cannot change what the tests mean.
-
-## Next
-
-Slices 3-5: generating a site from a brief, chat iteration with versioning, and
-the single screen that ties the lead list to a live preview.
-
-## Notes
-
-Slice 2 is the lead store and tracking; then site generation, chat iteration,
-and one screen that ties them together.
+1. Run the gate before every commit:
+   ```bash
+   make check
+   ```
+2. Tests never reach the network, a real database or a paid agent run;
+   `tests/conftest.py` refuses all three.
+3. Browser tests (layout, rendering) need Chrome and are skipped without it.
+4. After changing code, refresh the knowledge graph: `graphify update .`.
+5. Removed code is archived by git tag first; see `CLAUDE.md`.
