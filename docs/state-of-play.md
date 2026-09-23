@@ -75,8 +75,9 @@ page scrolled to the exact sentence, using a text fragment.
   unsourced claims to 9, with 159 corroborated. The 9 are wording the page
   chose: the wine list prints "Cab. Sauv." and "Rijoa" where the page says
   "Cabernet Sauvignon" and "Rioja", plus "Non-alcoholic", "forty-eight" and a
-  Tripleseat sentence. They are for Shreyas, not bugs. No review has been
-  re-opened; review 2 still holds the old, hand-copy results.
+  Tripleseat sentence. They are for Shreyas, not bugs. Review 2 was
+  refreshed on 23 September; its record of what it was checked against
+  still names the old brief and the hand-made copy.
 - Version 14 has its review (review 2, opened 22 September, against crawl
   `72fe0c4a`). Re-running the checks in memory on 22 September gave the
   identical 187 findings, and nothing is decided on it yet. Review 1, against
@@ -103,6 +104,15 @@ outranks the crawl in the checks too. Also fixed: evidence under each fact was
 drawn with the history timeline's grid; the listing warning called a working
 link broken; quotes were cut mid-word; the menu reader missed prices with no
 dollar sign; the workbench prompted for a town on opening.
+
+## The design bridge (23 September)
+
+`make design LEAD=<id> PROMPT=prompts/<slug>/vN.md` runs one design through
+the Claude Agent Software Development Kit: Claude Opus 5.5, a $5 ceiling, one
+pass, four file tools confined to its own folder. Fish Shack version 5 was the
+first real page from it ($0.96). Versions 1 to 4 were written in a session;
+Shreyas has not yet chosen between them and version 5. Review 3 is open on
+version 4.
 
 ## Next
 

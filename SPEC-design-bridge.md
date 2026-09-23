@@ -61,9 +61,22 @@ Fish Shack); writing the prompt itself (still `prompts/<slug>/vN.md`); hosting.
 
 ## Success criteria
 
-- [ ] `make design` on Fish Shack with `prompts/fish-shack/v2.md` produces a new
+- [x] `make design` on Fish Shack with `prompts/fish-shack/v2.md` produces a new
       version that the workbench serves, with its photographs loading.
-- [ ] Its notes carry the cost, the model and the prompt hash.
-- [ ] A run given a tiny ceiling stops, saves nothing, and reports what it spent.
-- [ ] The agent cannot write outside its workspace (a test proves the options).
-- [ ] `make check` passes.
+- [x] Its notes carry the cost, the model and the prompt hash.
+- [x] (tested with a stand-in run, not a real one) A run given a tiny ceiling stops, saves nothing, and reports what it spent.
+- [x] The agent cannot write outside its workspace (a test proves the options).
+- [x] `make check` passes.
+
+## First real runs, 23 September 2026
+
+1. Died after reading four photographs, $0.15, nothing saved: the kit refuses
+   any message over 1 MB, and each photograph comes back in one. Fixed
+   (`fe53be9`): 800-wide photographs for the agent, a 32 MB limit, and a
+   crash that names its error.
+2. Fish Shack version 5 from `prompts/fish-shack/v2.md`: 20 turns, $0.96 by
+   the kit's estimate. Serves in the workbench with all nine photographs;
+   no sideways scroll at 390 or 1440 wide. Checks in memory: nothing
+   contradicted, 5 unsourced (the page's own phrasing, and "Market price"
+   where the menu says "Mkt Price"), 4 assembled. The agent tried to look at
+   other runs' pages (`../*/index.html`) and the path guard refused it.
