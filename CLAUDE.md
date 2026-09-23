@@ -39,9 +39,13 @@ every doubt the system has about their business.
    independent sources agree makes a fact VERIFIED. `app/workbench/corroborate.py`.
 4. **Brief** — the result, archived permanently and stored on the lead.
    `app/store/brief_archive.py`, `app/store/leads.py`.
-5. **Build** — photographs, direction, page. `app/site/pipeline.py`.
-6. **Workbench** — iterate on the page in conversation; every instruction makes
-   a new version with a parent. `app/web/`.
+5. **Build** — one design run from a prompt written from the brief and the
+   playbook, through the Claude Agent Software Development Kit.
+   `app/design/bridge.py` (`make design`). The workbench's build button still
+   uses the older generator in `app/site/pipeline.py`.
+6. **Workbench** — change the page in conversation; every sentence becomes an
+   edit run and a new version with a parent. A person marks the master version,
+   the last one judged good. `app/web/`, `bridge.edit()`.
 7. **Claim inventory and approval** — the final gate, after iteration, not
    before. Every claim on the page is enumerated with a verdict, annotated in
    place on the page itself, and decided by a person. `app/review/`.
@@ -65,9 +69,12 @@ A correction is an event row. The source's own claim stays in the stored brief
 and is shown as `superseded`. Overrides are applied on read by
 `leads.brief_with_overrides()`; they survive a re-crawl.
 
-**Never delete code. Archive it.** The old design layer (`app/site/render.py`,
-`plan.py`, `fingerprint.py`, `agreement.py`, `palette.py`, all of
-`app/design/`) is to be archived by tag, not removed.
+**Never delete code without a tag. Archive it.** Code is removed only after the
+commit holding it is tagged `archive/<what>-<date>`, so every file stays
+recoverable (`git show <tag>:<path>`). On 23 September 2026 everything nothing
+live reached was archived under `archive/before-cleanup-2026-09-23`. The older
+generator in `app/site/` stays while the workbench's build button, photo
+labelling and correction path for its pages still call it.
 
 **Minimise credits.** A rebuild costs a generation run. Confirming a value that
 did not change must cost nothing. Never run the model twice to learn the same
@@ -111,9 +118,15 @@ strength of having watched the real system produce the right value.
 ```
 make check                 # ruff + mypy + the full suite. The gate.
 make brief Q="Name, City, ST 75033"   # research one company (note: Q, not NAME)
+make design LEAD=8 PROMPT=prompts/fish-shack/v2.md   # one design run: $5 ceiling
+make proposal LEAD=8       # the current version as one file an owner can open
 make ui                    # the workbench on http://127.0.0.1:8099
 make install               # python3.11 -m venv .venv && pip install -e ".[dev]"
 ```
+
+A design run and a chat edit spend money on the project's Anthropic key, which
+the agent's own process reads from the environment. No test may reach one:
+`tests/conftest.py` makes any unpatched `bridge.query` fail.
 
 `make ui` imports `server.py` once at start, while `index.html` is read per
 request. After changing `server.py`, restart it or the new routes will not
@@ -129,7 +142,8 @@ exist and the screen will report an error that looks like a bug in the page.
   `GOOGLE_PLACES_API_KEY`, `YELP_API_KEY`, `ANTHROPIC_API_KEY`. OpenStreetMap
   needs none. Without an Anthropic key the deterministic phrase parser handles
   instructions and reports what it ignored.
-- Seven tests need a real Chrome and are skipped without one.
+- The browser tests (layout, rendering, the no-dialog check) need a real Chrome and
+  are skipped without one.
 - The workbench serves previews from `PREVIEW_BASE_URL`, defaulting to the port
   it listens on (`app/core/config.py`, `DEFAULT_PORT = 8099`).
 
@@ -142,9 +156,14 @@ only, through `_SCHEMA` plus `_LATER_COLUMNS`.
 
 On disk: `briefs/<slug>/<ISO-timestamp>.json` is one crawl, never overwritten;
 `briefs/<slug>/current.json` is a **pointer** to the newest one, not a brief.
-`captures/<slug>/live-site.md` is a reading of the business's own site — and
-**nothing in the codebase writes it**. It is hand-made and goes stale silently
-while the claim inventory judges against it.
+The text of every page the crawl read is inside the brief (`pages`); the claim
+checks search that. `captures/<slug>/live-site.md` was a hand-made copy the
+checks used to read; nothing reads it now.
+
+Generated and cached, all gitignored: `runs/<slug>/<timestamp>/` (a design or
+edit run's workspace), `proposals/` (files for owners), `.cache/photos`,
+`.cache/logos`, `.cache/image-text` (a menu image's text, keyed by its bytes).
+A site's hand-written source, when it has one, is kept under `sites/<slug>/`.
 
 ## Style
 

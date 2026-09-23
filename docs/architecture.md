@@ -1,152 +1,156 @@
 # Architecture
 
 Every module, what it is for, and which way the data flows. Read alongside
-`CLAUDE.md`.
+`CLAUDE.md`. Current as of 23 September 2026.
 
 ## The flow, end to end
 
 ```
-a name / a URL / "Name, City, ST"
+a name / a URL / "Name, City, ST"                    make brief Q="…"
         |
         v
-app/workbench/resolve.py      name, town, website URL — and an assumption list
-        |
-        v
+app/workbench/resolve.py      name, town, website URL, and an assumption list
 app/workbench/discover.py     which directories to ask
-app/adapters/gplaces.py
-app/adapters/yelp.py          one Place per source
-app/adapters/osm.py
-app/adapters/site_fetch.py    the business's own site, crawled to depth 2
-app/adapters/pdf_read.py      a menu or price list that is a PDF
+app/adapters/places.py, yelp.py, osm.py     one listing per source
+app/adapters/site_fetch.py    their own site: Chrome render, then plain fetch
+app/adapters/pdf_read.py      a menu PDF's text
+app/adapters/image_text.py    a menu image's text, read by a model once per image
         |
         v
-app/workbench/extract.py      one page -> ExtractedSite (+ evidence quotes)
-app/workbench/brief.py        every source -> RawClaim list -> Brief
+app/workbench/extract.py      one page -> ExtractedSite (+ evidence, logo candidates)
+app/workbench/brief.py        every source -> RawClaims -> Brief (+ pages, logo)
 app/workbench/corroborate.py  RawClaims -> Facts with a confidence and a score
-app/workbench/hours.py        three ways of writing a week -> one comparable form
         |
         v
 app/store/brief_archive.py    briefs/<slug>/<timestamp>.json   (permanent)
-app/store/leads.py            leads.brief_json                 (what screens read)
+app/store/leads.py            leads.brief_json, and corrections applied on read
         |
         v
-app/site/pipeline.py          photographs -> direction -> page
-app/design/master_prompt.py   the prompt the model is given
-        |
-        v
+prompts/<slug>/vN.md          the design prompt, written from the brief and the playbook
+app/design/bridge.py          one design run (make design), or one chat edit
 app/store/sites.py            one row per version, each with a parent
-app/web/server.py             the workbench, and /site/<lead>/<version>
         |
         v
-app/review/run.py             assemble the material a review judges
-app/review/checks.py          every claim on the page, with a verdict
-app/store/reviews.py          reviews + findings, decided once, kept forever
+app/web/server.py             the workbench: chat, versions, master, /site/, /photo/, /logo/
+app/review/run.py, checks.py  every claim on the page against the crawl's own text
+app/store/reviews.py          reviews and findings, decided by a person
 app/web/annotate.js           the findings pinned onto the page itself
+        |
+        v
+app/design/proposal.py        one self-contained file for the owner (make proposal)
 ```
+
+The workbench can still build a first version with the older generator in
+`app/site/` (the "Build the first version" button). Pages from Claude Design and
+from the design bridge are the current path; see `app/site/` below.
 
 ## By package
 
 ### `app/workbench/` — research and corroboration
 
-- `resolve.py` — free text into a company. Deliberately biased: anything
-  ambiguous is read as a name, never a URL, because reading a name as a URL
-  loses the name and everything downstream builds a site for "S". Splits a
-  trailing "City, ST 75033" off the name, postcode included.
+- `resolve.py` — free text into a company. Anything ambiguous is read as a name,
+  never a URL. Splits a trailing "City, ST 75033" off the name.
 - `discover.py`, `categories.py`, `prospect.py` — finding candidate businesses
-  and deciding which directories can answer for a trade.
-- `extract.py` — the largest and most bug-prone file. One page of markup into
-  services, products, hours, blocks of prose, photographs, menu items, socials,
-  emails, phone, address. Also records the **evidence**: the source's own
-  sentence and where it was found. Every reader here is conservative on
-  purpose; each guard names the false positive that forced it (a WordPress
-  timestamp read as a phone number; a directory listing read as this business's
-  address).
+  near a point, and ranking them by how much they need a website.
+- `brief.py` — the crawl and the brief. Reads up to 24 pages of the business's
+  own site, keeps every page's text (`pages`, with a reason for each one it
+  could not read), reads menu PDFs and menu images, and ranks the logo
+  candidates (`_pick_logo`).
+- `extract.py` — one page of markup into services, hours, prose blocks,
+  photographs, menu items, socials, phone, address, the **evidence** (the
+  source's own sentence and where it was found) and logo candidates. Every
+  reader is conservative; each guard names the false positive that forced it.
 - `corroborate.py` — RawClaims to Facts. Two independent sources agreeing is
-  VERIFIED; a solo Google Business Profile is enough for address and phone
-  (`_GBP_ALONE_IS_ENOUGH`); a tie is a CONFLICT and ships nothing. Normalises
-  per field, so "7110 Main St. Frisco, TX 75033" and "7110 Main St, Frisco, TX
-  75033, USA" are one answer, not two.
-- `hours.py` — a week, comparable. Handles "Mon-Fri 9-5" (which is not five in
-  the morning), a whole week on one line, and both meridiem conventions.
-- `match.py`, `weburl.py`, `types.py` — name matching, URL checking, and the
-  `RawClaim` / `SourceType` vocabulary everything else speaks.
+  verified; a tie is a conflict and ships nothing.
+- `hours.py`, `match.py`, `weburl.py`, `types.py` — hours in comparable form,
+  name matching, the website address check (`FAULTS`), and the `RawClaim`
+  vocabulary.
 
 ### `app/adapters/` — the outside world
 
-One module per source, each returning the same shape. `site_fetch.py` is an
-ordinary HTTP client and runs no JavaScript, which is why a site whose menu is
-drawn by a script reads as having no menu. `chrome_cdp.py` drives a real
-browser and is the way out of that, when a Chrome is available.
+One module per source. `site_fetch.py` renders a page in Chrome and falls back to
+a plain fetch, recording each attempt's reason when both fail; `download()`
+returns bytes or the reason there are none. `image_text.py` reads a menu image
+with a model once and caches the text by the image's bytes. `photos.py` and
+`logos.py` fetch a lead's photographs and logo once and cache them. `claude.py`
+is the one place a structured model call is made.
 
 ### `app/store/` — everything that persists
 
 - `db.py` — schema and connection. Additive migrations only.
-- `leads.py` — the lead, its brief, and its audit trail. `brief_with_overrides()`
-  is the function almost everything should call: the stored brief with the
-  operator's corrections applied on read, into both `facts` and `published`.
-  `VERIFIABLE` is what may be corrected; `PUBLISHED_FIELDS` maps a field to
-  where it lives and how typed text is read back into it.
-- `brief_archive.py` — the permanent trail. `save()` writes a new timestamped
-  file every crawl and rewrites `current.json` as a **pointer** to it.
-- `sites.py` — versions, each with a parent and the instruction that made it.
-- `reviews.py` — reviews and findings. A finding that has been decided survives
-  a re-run of the checks.
+- `leads.py` — the lead, its brief and its audit trail. `brief_with_overrides()`
+  is what almost everything should call: the stored brief with the operator's
+  corrections applied on read, into both `facts` and `published`. The master
+  version (`mark_master`, `master_version`) is an event in the same trail.
+- `brief_archive.py` — every crawl kept; `current.json` is a **pointer**.
+- `sites.py` — versions, each with a parent, its notes (model, cost, prompt) and
+  the instruction that made it.
+- `reviews.py` — reviews and findings; a decided finding survives a re-run.
 - `photos.py`, `messages.py`, `preferences.py`, `fingerprints.py` — photograph
-  labels and descriptions, the workbench conversation, style preferences learned
-  from instructions, and the archived sameness instrument.
+  labels, the workbench conversation, style preferences, and the old
+  generator's sameness records.
 
-### `app/site/` — generation
+### `app/design/` — pages from Claude
 
-`pipeline.py` is the live path: `run_stage()` for one stage, `open_site()` for
-the first version, `iterate()` for an instruction. Each stage is idempotent and
-stores its answer, so a retry costs only the stage that failed.
-
-Everything else in this package is the **older deterministic renderer** —
-`render.py`, `plan.py`, `theme.py`, `palette.py`, `fingerprint.py`,
-`agreement.py` and the rest. It is live code that little calls, kept until it is
-archived by tag. Do not extend it; do not delete it either.
+- `bridge.py` — the design bridge. `design()` runs one design from a prompt;
+  `edit()` makes one change a person asked for in the chat. Both run the Claude
+  Agent Software Development Kit (Claude Opus 5.5) in a folder of their own,
+  with four file tools approved by path, a spending ceiling ($5 a design, $1 an
+  edit), and the photographs and logo as files. The page is saved as a new
+  version with its cost.
+- `proposal.py` — the current version as one file with every photograph and the
+  logo inside it, for an owner to open before anything is hosted.
+- `playbooks/restaurant.md` — what a restaurant page is scored against, and the
+  list of devices each earlier site used and the next may not repeat.
 
 ### `app/review/` — the final gate
 
-- `run.py` — assembles what a review judges: the brief (with corrections), the
-  capture of the business's own site, and their hashes.
+- `run.py` — assembles what a review judges: the brief with corrections, the
+  text the crawl stored for every page it read (`page_text`), and the values
+  corrections replaced, removed so they cannot support a claim.
 - `checks.py` — `inventory()`, `contradictions()`, `mechanics()`,
-  `structured_data()`. Pure functions over text, no database, so they can be
-  tested directly. Produces `Finding` rows carrying a verdict, a quote, an
-  anchor and the resources a person needs to check it.
+  `structured_data()`. Pure functions over text. Every corroborated claim links
+  to the page and the words that back it, or the directory fact.
+
+### `app/site/` — the older generator, and two readers the current path uses
+
+`visible.py` (a page's visible text) is used by the crawl. Everything else here
+is the older generator the workbench's build button still uses: `pipeline.py`
+(`run_stage`, `iterate`), `render.py`, `theme.py`, `styles.py` and the rest. Do
+not extend it; it is archived when the workbench no longer calls it. Modules
+nothing reached were removed on 23 September 2026 and are recoverable from the
+tag `archive/before-cleanup-2026-09-23`.
 
 ### `app/web/` — the workbench
 
-- `server.py` — a plain standard-library HTTP server. Routes are a chain of
-  `elif`s on the path; `POST /api/verify` is the one that records a correction,
-  rebuilds the page and reports how the hours were read.
-- `index.html` — one file, around 1,900 lines: the dashboard, the lead detail,
-  the workspace, the labeller and the review panel.
-- `annotate.js` — injected at serve time only for `?review=<id>`. Pins each
-  finding onto the thing it is about, outlines it, and talks to the workbench by
-  `postMessage`, because the preview frame is sandboxed.
-- `serialize.py` — the brief as the front end receives it.
+- `server.py` — a standard-library HTTP server. `iteration()` sends a chat
+  sentence to an edit run on a designed page, or to the old generator on one
+  it built; `rebuild_after()` does the same for a correction.
+- `index.html` — one file: the dashboard, the lead detail, the workspace (chat
+  on the left, the page in the middle, versions and history on the right), the
+  labeller and the review panel.
+- `annotate.js` — injected at serve time only for `?review=<id>`.
+- `serialize.py` — a brief as JSON.
 
 ## The data shapes
 
-**RawClaim** — one source saying one thing about one field:
-`field, value, source_url, source_type, quote, found_in`. The last two are the
-evidence, and everything the approval screen does depends on them existing.
+**RawClaim** — `field, value, source_url, source_type, quote, found_in`.
 
-**Fact** — a corroborated claim: `field, label, value, confidence, score,
-corroborations, sources, candidates, dissent`. `confidence` is one of
-`verified`, `unverified`, `conflict`, `operator_verified`.
+**Fact** — `field, label, value, confidence, score, corroborations, sources,
+candidates, dissent`. `confidence` is `verified`, `unverified`, `conflict` or
+`operator_verified`; a corrected fact keeps the value it replaced as
+`superseded`.
 
-**Brief** — `name, location, website_url, site_reachable, url_check, facts,
-published, assumptions, open_questions, sources_consulted`, and after
-`brief_with_overrides()` also `events`, `confirmable`, `published_superseded`,
-`photo_labels`, `photo_vision`, `photo_notes`.
+**Brief** — `name, location, website_url, url_check, facts, published, pages,
+ratings, testimonials, place_photos, assumptions, open_questions`.
 
-`published` is what the business says about itself with nothing corroborating
-it: `tagline, about, services, products, hours, menu_items, menu_media, photos,
-socials, emails, has_locations_page, blocks, evidence`. **This is where a
-generated page's words come from.** An override that does not reach here changes
-nothing a visitor sees.
+`published` is what the business says about itself: `tagline, about, services,
+hours, menu_items, menu_media, photos, socials, emails, logo, blocks,
+evidence`. **This is where a page's words come from.** An override that does
+not reach here changes nothing a visitor sees.
+
+`pages` is every document the crawl attempted: `url, kind (page, pdf or image),
+read, reason, text`. The claim checks search it.
 
 **Finding** — `stage, verdict, title, detail, locator, anchor, quote, evidence,
-resources`. `anchor` is `css:<selector>`, `text:<needle>` or `page`.
+resources`. Only `contradicted` blocks approval.
