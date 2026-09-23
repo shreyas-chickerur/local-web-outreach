@@ -42,3 +42,21 @@ def no_api_calls(monkeypatch):
     `claude.available` itself, which overrides this.
     """
     monkeypatch.setattr(config, "anthropic_api_key", lambda: None)
+
+
+@pytest.fixture(autouse=True)
+def no_agent_runs(monkeypatch):
+    """No test starts a real design or edit run.
+
+    `no_api_calls` blanks the key inside this process, but the agent kit starts
+    its own process, which reads ANTHROPIC_API_KEY from the environment. A test
+    whose page counted as designed once went through to a real edit run, billed
+    to the project's key. A test that exercises a run replaces `bridge.query`
+    with its own, which overrides this.
+    """
+    from app.design import bridge
+
+    def refuse(*_args, **_kwargs):
+        raise AssertionError("a test reached a real, paid agent run; replace bridge.query")
+
+    monkeypatch.setattr(bridge, "query", refuse)

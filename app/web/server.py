@@ -392,7 +392,17 @@ def rebuild_after(conn, lead_id: int, field: str, outcome: dict) -> dict:
         + (f" The page was built from {was!r}, which was wrong." if was else
            " The page was built without it.")
         + " Correct every place the page shows it, and change nothing else.")
+    latest = sites.versions(conn, lead_id)[0]
     try:
+        if not (latest.get("spec") or "").strip():
+            # A designed page has no spec for the old generator to restyle: it
+            # would have rebuilt Fish Shack's version 13 as one of its own.
+            edited = bridge.edit(conn, lead_id, sentence,
+                                 parent_version=int(latest["version"]))
+            if not edited["version"]:
+                return {"built": False, "why": edited["why"] or edited["reply"],
+                        "correction_saved": True}
+            return {"built": True, "version": edited["version"], "field": field}
         result = run_iteration(conn, lead_id, sentence, actor="correction")
     except Exception as exc:                                   # noqa: BLE001
         # Deliberately broad: a generation failure is a bad afternoon, and a
@@ -484,6 +494,7 @@ def open_review(conn, lead_id: int, version: int) -> dict:
 
 
 class Handler(BaseHTTPRequestHandler):
+    """The workbench's HTTP interface: its pages, its JSON routes, photographs and logos."""
     protocol_version = "HTTP/1.1"
 
     def _send(self, status: int, body: bytes, content_type: str) -> None:
