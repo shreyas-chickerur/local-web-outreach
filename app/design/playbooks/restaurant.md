@@ -87,8 +87,14 @@ built.
 | The Heritage Table | a "visit" block: a one-line headline over labelled columns of hours, address, contact and social links, with one button |
 | Fish Shack, rejected | a dark "visit" block led by the address as a giant headline, an hours list and two buttons, which read as The Heritage Table's |
 | The Heritage Table | cream and deep green, editorial serif |
-| Fish Shack | a drawing of the business's own roadside sign, its marquee reading the hours |
-| Fish Shack | a not-to-scale street sketch built from the business's own directions |
-| Fish Shack | the footer as a call-ahead order ticket with a torn edge |
-| Fish Shack | a letterboard of weekday specials with today's row lit |
-| Fish Shack | harbor navy, sign red and kraft; a sign-painter slab with a typewriter face for prices |
+| Fish Shack, version 4 (not chosen) | a drawing of the business's own roadside sign, its marquee reading the hours |
+| Fish Shack, version 4 (not chosen) | a not-to-scale street sketch built from the business's own directions |
+| Fish Shack, version 4 (not chosen) | the footer as a call-ahead order ticket with a torn edge |
+| Fish Shack, version 4 (not chosen) | a letterboard of weekday specials with today's row lit |
+| Fish Shack, version 4 (not chosen) | harbor navy, sign red and kraft; a sign-painter slab with a typewriter face for prices |
+| Fish Shack, chosen (versions 5 to 9) | butter yellow and charcoal, with a red-orange accent and a condensed grotesque headline |
+| Fish Shack, chosen | a neon "OPEN" sign that reads the clock and says CLOSED after hours |
+| Fish Shack, chosen | ordering ahead as three numbered steps: call, head for the address, the register |
+| Fish Shack, chosen | the menu in tabs, one per section |
+| Fish Shack, chosen | a family-pack price ticket |
+| Fish Shack, chosen | a polaroid of a signature dish overlapping the opening photograph |

@@ -110,9 +110,11 @@ dollar sign; the workbench prompted for a town on opening.
 `make design LEAD=<id> PROMPT=prompts/<slug>/vN.md` runs one design through
 the Claude Agent Software Development Kit: Claude Opus 5.5, a $5 ceiling, one
 pass, four file tools confined to its own folder. Fish Shack version 5 was the
-first real page from it ($0.96). Versions 1 to 4 were written in a session;
-Shreyas has not yet chosen between them and version 5. Review 3 is open on
-version 4.
+first real page from it ($0.96). Shreyas chose it over the hand-written
+versions 1 to 4. Versions 6 to 9 are hand edits of it at no model cost: a solid
+navbar (it blended into the photograph), every photo caption removed, and
+three layout faults found checking at phone and desktop widths. Version 9 is
+current. Review 3 is still open on version 4; no review exists on version 9.
 
 ## Next
 
