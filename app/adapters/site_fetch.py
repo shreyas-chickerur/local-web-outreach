@@ -200,17 +200,29 @@ class HttpSiteFetcher:
         )
 
 
-def fetch_bytes(url: str, timeout: float = 15.0) -> bytes | None:
-    """The raw bytes behind a URL — a menu PDF, never text. `None` on any
-    failure; the caller (`app.workbench.brief`) is the one that knows
-    whether "could not fetch" and "fetched, unreadable" mean different
-    things worth recording differently."""
+def download(url: str, timeout: float = 15.0) -> tuple[bytes | None, str]:
+    """The raw bytes behind a URL — a menu PDF or image — or why there are none.
+
+    The reason is the specific one. The Heritage Table's dinner menu PDF was
+    recorded as "could not download" when the server had plainly said 404,
+    which reads the same as a timeout or a refusal.
+    """
     try:
         with httpx.Client(follow_redirects=True, timeout=timeout,
                           headers={"User-Agent": "lwo-qualifier/0.1"}) as client:
             resp = client.get(url)
-        if resp.status_code >= 400:
-            return None
-        return resp.content
-    except httpx.HTTPError:
-        return None
+    except httpx.TimeoutException:
+        return None, "timed out"
+    except httpx.HTTPError as exc:
+        return None, f"could not download ({type(exc).__name__})"
+    if resp.status_code >= 400:
+        return None, f"status {resp.status_code}"
+    if not resp.content:
+        return None, "empty response"
+    return resp.content, ""
+
+
+def fetch_bytes(url: str, timeout: float = 15.0) -> bytes | None:
+    """The bytes from `download`, without the reason, for callers that only
+    need to know whether there were any."""
+    return download(url, timeout)[0]

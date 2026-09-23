@@ -1151,15 +1151,34 @@ _MEDIA_RE = re.compile(r"\.(pdf|png|jpe?g|webp)(\?|$)", re.IGNORECASE)
 # as if it were the menu, purely because the filename contains "menu".
 _ASSET_RE = re.compile(r"\.(css|js|json|xml|svg|ico|woff2?|ttf|map)(\?|$)",
                        re.IGNORECASE)
-_MENU_WORD_RE = re.compile(r"menu|drinks?|dinner|lunch|brunch|breakfast|price",
+# "wine", "cocktail" and "beer" were missing, so The Heritage Table's wine
+# list, published as an image, was never recognised as a menu at all.
+_MENU_WORD_RE = re.compile(r"menu|drinks?|dinner|lunch|brunch|breakfast|price|wine|"
+                           r"cocktails?|beers?",
                            re.IGNORECASE)
+
+
+_IMG_TAG_RE = re.compile(r"<img\b[^>]*>", re.IGNORECASE)
+
+
+def _attr_value(tag: str, name: str) -> str:
+    found = re.search(rf'\s{name}=["\']([^"\']*)["\']', tag, re.IGNORECASE)
+    return found.group(1).strip() if found else ""
 
 
 def extract_menu_media(html: str, base_url: str) -> list[dict]:
     """Menu PDFs / photos they publish, to embed rather than link away to."""
     base_host = urlparse(base_url).netloc.lower()
     out: list[dict] = []
-    for href, label_html in _LINK_RE.findall(html or ""):
+    # A menu can be a link to a file, or an image on the page itself. The
+    # image's address may sit in data-src until it scrolls into view, with a
+    # placeholder in src, and its only label in alt or title.
+    candidates = list(_LINK_RE.findall(html or ""))
+    for tag in _IMG_TAG_RE.findall(html or ""):
+        src = _attr_value(tag, "data-src") or _attr_value(tag, "src")
+        if src and not src.startswith("data:"):
+            candidates.append((src, f"{_attr_value(tag, 'title')} {_attr_value(tag, 'alt')}"))
+    for href, label_html in candidates:
         absolute = urljoin(base_url, href)
         if urlparse(absolute).netloc.lower() != base_host:
             continue
@@ -1350,7 +1369,11 @@ def _pages_matching(html: str, base_url: str, paths: tuple[str, ...],
 _JUNK_PAGE_RE = re.compile(
     r"/(cart|checkout|account|my-account|login|wp-admin|wp-login|wp-json|"
     r"feed|rss|tag|category|author|page/\d+|search|sitemap)(/|$|[.?]|php)"
-    r"|[?&]s=",
+    r"|[?&]s="
+    # WordPress short links repeat a page already reached by its real address,
+    # and xmlrpc.php is an interface, not a page: together they took nine of
+    # The Heritage Table's eighteen crawl slots.
+    r"|[?&]p=\d+|xmlrpc\.php",
     re.IGNORECASE)
 
 # The keyword lists are a PRIORITY ORDERING now, not a gate — see

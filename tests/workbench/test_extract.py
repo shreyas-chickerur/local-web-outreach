@@ -539,3 +539,27 @@ def test_a_bare_number_in_prose_is_not_a_price():
     column prints it."""
     html = "<p>Rated 4.50 by our regulars since 2013.</p><p>Open 10.30 daily</p>"
     assert extract_menu_items(html) == []
+
+
+def test_a_menu_image_is_found_in_an_img_tag_even_when_lazy_loaded():
+    """The Heritage Table's wine list is an <img> whose address sits in
+    data-src until it scrolls into view. Only links were ever looked at, and
+    "wine" was not a menu word."""
+    from app.workbench.extract import extract_menu_media
+
+    html = ('<img decoding="async" data-src="/dev/uploads/Wine-List-Web-5-pdf.jpg" '
+            'alt="" title="Wine List Web (5)" src="data:image/gif;base64,R0lGOD">'
+            '<img src="/dev/uploads/logo.png" alt="The Heritage Table">')
+    media = extract_menu_media(html, "https://heritage.test/dev/menu-wine/")
+    assert [m["url"] for m in media] == ["https://heritage.test/dev/uploads/Wine-List-Web-5-pdf.jpg"]
+    assert media[0]["kind"] == "image"
+
+
+def test_wordpress_short_links_and_xmlrpc_are_not_crawled():
+    """Seven of the Heritage Table's eighteen page slots went to `?p=2673`
+    style short links that duplicate pages already read, and two to
+    xmlrpc.php, which is not a page at all."""
+    html = ('<a href="/dev/?p=2673">x</a><a href="/dev/xmlrpc.php">x</a>'
+            '<a href="/dev/xmlrpc.php?rsd">x</a><a href="/dev/menu-wine/">Wine</a>')
+    assert content_page_urls(html, "https://heritage.test/dev/") == [
+        "https://heritage.test/dev/menu-wine/"]

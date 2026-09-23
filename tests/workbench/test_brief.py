@@ -122,7 +122,7 @@ def test_a_menu_pdf_is_read_not_just_linked(monkeypatch):
     import app.workbench.brief as brief_module
 
     data = _pdf_bytes("BT /F1 18 Tf 20 100 Td (Short Rib $32) Tj ET")
-    monkeypatch.setattr(brief_module, "fetch_bytes", lambda url, timeout=15.0: data)
+    monkeypatch.setattr(brief_module, "download", lambda url, timeout=15.0: (data, ""))
     brief = build_brief("craftwaykitchen.com", fetcher=_Fetcher(_PDF_MENU_SITE))
     pub = brief.published
     assert pub is not None
@@ -224,7 +224,8 @@ def test_an_unreadable_menu_pdf_is_disclosed_not_silent(monkeypatch):
     says plainly that a PDF was found and could not be read."""
     import app.workbench.brief as brief_module
 
-    monkeypatch.setattr(brief_module, "fetch_bytes", lambda url, timeout=15.0: None)
+    monkeypatch.setattr(brief_module, "download",
+                        lambda url, timeout=15.0: (None, "could not download"))
     brief = build_brief("craftwaykitchen.com", fetcher=_Fetcher(_PDF_MENU_SITE))
     pub = brief.published
     assert pub is not None
@@ -643,7 +644,7 @@ def test_a_menu_pdf_keeps_its_text_not_only_its_items(monkeypatch):
     import app.workbench.brief as brief_module
 
     data = _pdf_bytes("BT /F1 18 Tf 20 100 Td (Short Rib $32) Tj ET")
-    monkeypatch.setattr(brief_module, "fetch_bytes", lambda url, timeout=15.0: data)
+    monkeypatch.setattr(brief_module, "download", lambda url, timeout=15.0: (data, ""))
     pdfs = [p for p in _pages(build_brief("craftwaykitchen.com",
                                           fetcher=_Fetcher(_PDF_MENU_SITE)))
             if p["kind"] == "pdf"]
@@ -656,8 +657,49 @@ def test_a_menu_pdf_keeps_its_text_not_only_its_items(monkeypatch):
 def test_a_menu_pdf_that_cannot_be_read_says_which_way_it_failed(monkeypatch):
     import app.workbench.brief as brief_module
 
-    monkeypatch.setattr(brief_module, "fetch_bytes", lambda url, timeout=15.0: None)
+    monkeypatch.setattr(brief_module, "download",
+                        lambda url, timeout=15.0: (None, "could not download"))
     pdfs = [p for p in _pages(build_brief("craftwaykitchen.com",
                                           fetcher=_Fetcher(_PDF_MENU_SITE)))
             if p["kind"] == "pdf"]
     assert (pdfs[0]["read"], pdfs[0]["reason"]) == (False, "could not download")
+
+
+def test_a_pdf_the_server_says_is_gone_is_recorded_as_exactly_that(monkeypatch):
+    """The Heritage Table's dinner menu PDF returns 404. It was recorded as
+    "could not download", which could equally mean a timeout or a refusal."""
+    import app.workbench.brief as brief_module
+
+    monkeypatch.setattr(brief_module, "download", lambda url, timeout=15.0: (None, "status 404"))
+    pdfs = [p for p in _pages(build_brief("craftwaykitchen.com",
+                                          fetcher=_Fetcher(_PDF_MENU_SITE)))
+            if p["kind"] == "pdf"]
+    assert pdfs[0]["reason"] == "status 404"
+
+
+_IMAGE_MENU_SITE = """
+<html><head><title>Home | Craftway Kitchen | Frisco TX</title></head><body>
+<img decoding="async" data-src="/uploads/Wine-List-Web-5-pdf.jpg" title="Wine List Web (5)">
+</body></html>
+"""
+
+
+def test_a_menu_published_only_as_an_image_is_read_once_and_kept(monkeypatch):
+    """The Heritage Table's wine list is an image. It was never recognised as a
+    menu, so every wine on the page came back unsourced. Reading it costs a
+    model call, so the same image is read once, however often it is crawled."""
+    import app.workbench.brief as brief_module
+
+    monkeypatch.setattr(brief_module, "download",
+                        lambda url, timeout=15.0: (b"\xff\xd8same-bytes", ""))
+    calls = []
+    monkeypatch.setattr(brief_module.image_text, "read",
+                        lambda data, media_type="image/jpeg": calls.append(data)
+                        or ("Cabernet Sauvignon, Napa Valley", ""))
+    for _ in range(2):
+        images = [p for p in _pages(build_brief("craftwaykitchen.com",
+                                                fetcher=_Fetcher(_IMAGE_MENU_SITE)))
+                  if p["kind"] == "image"]
+    assert images and images[0]["read"] and "Cabernet" in images[0]["text"]
+    assert images[0]["url"].endswith("/uploads/Wine-List-Web-5-pdf.jpg")
+    assert len(calls) == 2  # the reader is asked; its own cache decides the cost

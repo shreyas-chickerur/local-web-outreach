@@ -20,9 +20,10 @@ import re
 from collections.abc import Callable
 from dataclasses import dataclass, field, replace
 
+from app.adapters import image_text
 from app.adapters.directory import DirectoryPlace, DirectorySource
 from app.adapters.pdf_read import read_pdf_text
-from app.adapters.site_fetch import FetchResult, SiteFetcher, default_fetcher, fetch_bytes
+from app.adapters.site_fetch import FetchResult, SiteFetcher, default_fetcher, download
 from app.site.visible import visible_text_runs
 from app.workbench.corroborate import Fact, corroborate
 from app.workbench.extract import (
@@ -82,7 +83,7 @@ class Brief:
     latitude: float | None = None
     longitude: float | None = None
     # Every document the crawl attempted on their own site, in the order it
-    # read them: {url, kind (page | pdf), read, reason, text}. Kept so the
+    # read them: {url, kind (page | pdf | image), read, reason, text}. Kept so the
     # claim checks can search the business's own words as they stood on the
     # day of this crawl, instead of a hand-made copy nothing keeps current.
     pages: list[dict] = field(default_factory=list)
@@ -235,6 +236,23 @@ def _page_entry(url: str, result: FetchResult) -> dict:
     return {"url": url, "kind": "page", "read": False, "reason": reason, "text": ""}
 
 
+def _read_menu_images(extracted: ExtractedSite, pages: list[dict]) -> None:
+    """Read every menu published only as an image, and keep its text as a page.
+
+    The Heritage Table's wine list is a photograph of a printed page, so every
+    wine on the generated page came back unsourced. `image_text.read` spends a
+    model call on an image once and remembers the answer by its bytes.
+    """
+    for media in extracted.menu_media:
+        if media.get("kind") != "image":
+            continue
+        data, failed = download(media["url"])
+        text, why = image_text.read(data) if data else (None, failed)
+        media["readable"] = text is not None
+        pages.append({"url": media["url"], "kind": "image", "read": bool(text),
+                      "reason": "" if text else why, "text": text or ""})
+
+
 def _read_menu_pdfs(extracted: ExtractedSite, pages: list[dict]) -> None:
     """Read the text out of every PDF menu already found, in place.
 
@@ -254,15 +272,14 @@ def _read_menu_pdfs(extracted: ExtractedSite, pages: list[dict]) -> None:
     for media in extracted.menu_media:
         if media.get("kind") != "pdf":
             continue
-        data = fetch_bytes(media["url"])
+        data, failed = download(media["url"])
         text = read_pdf_text(data) if data else None
         media["readable"] = text is not None
         # The text is kept whole, not only the priced lines read out of it
         # below: a wine list names wines without prices on the same line, and
         # a claim naming one needs the list itself to be checked against.
         pages.append({"url": media["url"], "kind": "pdf", "read": bool(text),
-                      "reason": ("" if text else "no text layer" if data
-                                 else "could not download"),
+                      "reason": "" if text else "no text layer" if data else failed,
                       "text": text or ""})
         if not text:
             continue
@@ -362,6 +379,7 @@ def _read_their_site(url: str, fetcher: SiteFetcher, *,
     if any(m.get("kind") == "pdf" for m in extracted.menu_media):
         report("reading menu PDF(s)")
     _read_menu_pdfs(extracted, pages)
+    _read_menu_images(extracted, pages)
     return (extracted, True, ("insecure" if check.fault == "certificate" else "ok"),
             check, pages)
 
