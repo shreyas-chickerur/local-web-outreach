@@ -36,6 +36,9 @@ when there is nothing behind it.
   primary follows the place: reservations for a dining room that takes them,
   ordering for a place with a to-go or online-ordering page, a call
   otherwise. Pinned at narrow widths.
+- **The business's own logo, top-left and as the tab icon**, from the brief.
+  When the brief has none, no logo and no tab icon: nothing drawn or invented
+  in its place (Shreyas, 23 September 2026).
 - **Real food or room as the opening photograph**, from the business's own
   site or its labelled place photographs. Never stock.
 - **The menu, readable on the page**, from the stored page text, with prices

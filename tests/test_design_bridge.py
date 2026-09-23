@@ -55,6 +55,7 @@ def lead(tmp_path, monkeypatch):
         "name": "Fish Shack", "location": "Plano, TX", "website_url": "http://fish.test/",
         "facts": [], "published": {}, "assumptions": [], "open_questions": [],
         "sources_consulted": [], "place_photos": ["places/x/photos/a", "places/x/photos/b"]})
+    monkeypatch.setattr(bridge.logos, "fetch", lambda url: None)
     asked: list[int] = []
     monkeypatch.setattr(bridge.photos, "fetch", lambda key, name, width=1600:
                         asked.append(width) or f"jpeg of {name}".encode())
@@ -132,3 +133,43 @@ def test_a_run_that_crashes_says_why_and_saves_nothing(lead, monkeypatch):
     monkeypatch.setattr(bridge, "query", fake_query)
     outcome = bridge.design(conn, lead_id, prompt)
     assert outcome["version"] is None and "buffer exceeded" in outcome["why"]
+
+
+def test_the_logo_goes_in_as_a_file_and_comes_out_as_the_workbench_address(lead, monkeypatch):
+    """No generated page carried the business's logo, top-left or in the tab.
+    The agent gets the logo as a file and is told where it goes; the page it
+    writes names the file, which becomes /logo/<lead> in the workbench."""
+    conn, lead_id, prompt, _asked = lead
+    leads.verify(conn, lead_id, "logo", "http://fish.test/graphics/fslogo2.jpg")
+    monkeypatch.setattr(bridge.logos, "fetch", lambda url: (b"\xff\xd8logo", "image/jpeg"))
+    seen = {}
+
+    async def fake_query(*, prompt, options):
+        seen["logo"] = Path(options.cwd, "logo.jpg").read_bytes()
+        seen["told"] = prompt
+        Path(options.cwd, "index.html").write_text(
+            '<link rel="icon" href="logo.jpg"><img src="logo.jpg" alt="Fish Shack">')
+        yield _result()
+
+    monkeypatch.setattr(bridge, "query", fake_query)
+    outcome = bridge.design(conn, lead_id, prompt)
+    assert seen["logo"] == b"\xff\xd8logo" and "logo.jpg" in seen["told"]
+    page = sites.html_for(conn, lead_id, outcome["version"])
+    assert page.count(f"/logo/{lead_id}") == 2 and "logo.jpg" not in page
+    assert outcome["flags"] == []
+
+
+def test_a_run_with_no_logo_is_flagged_and_told_not_to_invent_one(lead, monkeypatch):
+    """Shreyas, 23 September: with no usable logo, flag it and wait for him."""
+    conn, lead_id, prompt, _asked = lead
+    told = {}
+
+    async def fake_query(*, prompt, options):
+        told["text"] = prompt
+        Path(options.cwd, "index.html").write_text("<p>Fish Shack</p>")
+        yield _result()
+
+    monkeypatch.setattr(bridge, "query", fake_query)
+    outcome = bridge.design(conn, lead_id, prompt)
+    assert "no logo" in told["text"].lower() and "invent" in told["text"].lower()
+    assert any("logo" in f.lower() for f in outcome["flags"])

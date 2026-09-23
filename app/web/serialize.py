@@ -53,6 +53,7 @@ def published_to_dict(site: ExtractedSite) -> dict:
         "hours": site.hours[:7],
         "menu_items": site.menu_items,
         "menu_media": site.menu_media[:4],
+        "logo": site.logo,
         "photos": site.images[:8],
         "socials": site.socials,
         "emails": site.emails,

@@ -262,3 +262,23 @@ def test_a_version_button_names_the_version_and_nothing_else():
     button = re.search(r"\">v\$\{v\.version\}(.*?)</button>", page, re.S)
     assert button, "the version button markup moved; find it and re-point this test"
     assert "parent_version" not in button.group(1)
+
+
+def test_the_workbench_serves_the_logo_the_brief_names_after_corrections(tmp_path, monkeypatch):
+    """A page asks for /logo/<lead>. It must be the logo the operator settled on,
+    not the crawl's first guess, or a correction changes a screen and nothing a
+    visitor would see."""
+    from app.store import db, leads
+
+    conn = db.connect(tmp_path / "t.db")
+    lead = leads.save_brief(conn, {
+        "name": "Fish Shack", "location": "Plano, TX", "website_url": "http://fish.test/",
+        "facts": [], "published": {"logo": "http://fish.test/wrong.png"},
+        "assumptions": [], "open_questions": [], "sources_consulted": []})
+    leads.verify(conn, lead, "logo", "http://fish.test/graphics/fslogo2.jpg")
+    asked = []
+    monkeypatch.setattr(server.logos, "fetch",
+                        lambda url: asked.append(url) or (b"\xff\xd8jpeg", "image/jpeg"))
+    assert server.logo_for(conn, lead) == (b"\xff\xd8jpeg", "image/jpeg")
+    assert asked == ["http://fish.test/graphics/fslogo2.jpg"]
+    conn.close()

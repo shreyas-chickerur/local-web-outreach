@@ -30,7 +30,7 @@ from claude_agent_sdk import (
     query,
 )
 
-from app.adapters import photos
+from app.adapters import logos, photos
 from app.core.config import google_places_api_key
 from app.store import brief_archive, leads, sites
 
@@ -46,9 +46,24 @@ _INSTRUCTION = """Read prompt.md in this folder and do what it asks.
 The photographs it names are files in photos/ (photos/0.jpg, photos/1.jpg, ...).
 Look at them before you design. Reference each by that relative path.
 
+{logo}
+
 Write the finished page to index.html in this folder: one self-contained HTML
 file, its CSS inline, fonts from Google Fonts allowed. When index.html is
 complete, stop."""
+
+_WITH_LOGO = ("The business's own logo is {name}. Look at it. Put it top-left in the "
+              "page's header, and use it as the tab icon: "
+              '<link rel="icon" href="{name}">. Reference it by that relative path.')
+# Shreyas, 23 September 2026: with no usable logo, flag it and wait for him.
+_NO_LOGO = ("There is no logo file: none was found on their site. Do not draw, "
+            "invent or imitate a logo, and add no tab icon.")
+_EXTENSIONS = {"image/png": "png", "image/jpeg": "jpg", "image/gif": "gif",
+               "image/webp": "webp"}
+
+
+def _logo_file(folder: Path) -> str | None:
+    return next((f.name for f in sorted(folder.glob("logo.*"))), None)
 
 
 def _inside(folder: Path, path: str) -> bool:
@@ -88,7 +103,9 @@ def prepare(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> Path:
     which exists only while the server runs on this machine. The agent gets the
     files instead, from the cache the workbench already paid for.
     """
-    brief = leads.load_brief(conn, lead_id)
+    # With corrections: a logo or photograph Shreyas corrected must be the one
+    # the design sees. This read the stored crawl and would never have seen it.
+    brief = leads.brief_with_overrides(conn, lead_id)
     stamp = datetime.now(UTC).strftime("%Y-%m-%dT%H-%M-%S")
     folder = RUNS / brief_archive._slug(str(brief["name"])) / stamp
     (folder / "photos").mkdir(parents=True)
@@ -99,6 +116,10 @@ def prepare(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> Path:
         data = photos.fetch(google_places_api_key() or "", name, width=800)
         if data:
             (folder / "photos" / f"{n}.jpg").write_bytes(data)
+    logo_url = (brief.get("published") or {}).get("logo")
+    logo = logos.fetch(str(logo_url)) if logo_url else None
+    if logo and logo[1] in _EXTENSIONS:
+        (folder / f"logo.{_EXTENSIONS[logo[1]]}").write_bytes(logo[0])
     text = re.sub(rf"/photo/{lead_id}/(\d+)(?:\?w=\d+)?", r"photos/\1.jpg",
                   prompt_path.read_text())
     (folder / "prompt.md").write_text(text)
@@ -113,7 +134,9 @@ async def _run(folder: Path) -> tuple[ResultMessage | None, str]:
     """
     result, error = None, ""
     try:
-        async for message in query(prompt=_INSTRUCTION, options=options(folder)):
+        logo = _logo_file(folder)
+        told = _INSTRUCTION.format(logo=_WITH_LOGO.format(name=logo) if logo else _NO_LOGO)
+        async for message in query(prompt=told, options=options(folder)):
             if isinstance(message, ResultMessage):
                 result = message
     except Exception as exc:  # noqa: BLE001 — a failed run still reports what it spent
@@ -125,13 +148,17 @@ def design(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> dict:
     """Run one design and save it as a new version, or say why not."""
     folder = prepare(conn, lead_id, prompt_path)
     result, error = asyncio.run(_run(folder))
+    flags = [] if _logo_file(folder) else [
+        "No logo found for this business. Correct the Logo field on the workbench "
+        "with its address, then run the design again."]
     cost = (result.total_cost_usd or 0.0) if result else 0.0
     page = folder / "index.html"
     if result is None or result.is_error or not page.exists():
         why = result.subtype if result else (error or "the run produced no result")
         return {"version": None, "cost_usd": cost, "folder": str(folder),
-                "why": f"{why}; nothing was saved"}
+                "why": f"{why}; nothing was saved", "flags": flags}
     html = re.sub(r"photos/(\d+)\.jpg", rf"/photo/{lead_id}/\1?w=1600", page.read_text())
+    html = re.sub(r"\blogo\.(?:png|jpg|gif|webp)\b", f"/logo/{lead_id}", html)
     prompt_text = prompt_path.read_text()
     brief = leads.load_brief(conn, lead_id)
     current = brief_archive.current(str(brief["name"])) or {}
@@ -145,7 +172,8 @@ def design(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> dict:
         "brief_file": current.get("path", ""), "brief_hash": current.get("hash", ""),
         "constraints": "none applied at generation; claim inventory runs at the final gate",
     }, parent_version=max((v["version"] for v in previous), default=None))
-    return {"version": version, "cost_usd": cost, "folder": str(folder), "why": ""}
+    return {"version": version, "cost_usd": cost, "folder": str(folder), "why": "",
+            "flags": flags}
 
 
 if __name__ == "__main__":
@@ -157,6 +185,8 @@ if __name__ == "__main__":
     with db.session() as connection:
         outcome = design(connection, lead_arg, prompt_arg)
     spent = f"${outcome['cost_usd']:.2f} (the kit's estimate)"
+    for flag in outcome["flags"]:
+        print(f"FLAG: {flag}")
     if outcome["version"]:
         print(f"saved as version {outcome['version']} of lead {lead_arg}, {spent}: "
               f"http://127.0.0.1:8099/site/{lead_arg}/{outcome['version']}")

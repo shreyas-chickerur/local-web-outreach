@@ -13,6 +13,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+from app.adapters import logos
 from app.adapters import photos as photos_api
 from app.adapters.gplaces import PlacesError, search
 from app.adapters.photos import fetch as fetch_photo
@@ -356,6 +357,15 @@ def rebuild_after(conn, lead_id: int, field: str, outcome: dict) -> dict:
     return {"built": True, "version": result.version, "field": field}
 
 
+def logo_for(conn, lead_id: int) -> tuple[bytes, str] | None:
+    """The logo a lead's pages show, as the brief names it after corrections."""
+    try:
+        url = (leads.brief_with_overrides(conn, lead_id).get("published") or {}).get("logo")
+    except ValueError:
+        return None
+    return logos.fetch(str(url)) if url else None
+
+
 def _review_brief(conn, lead_id: int, name: str) -> tuple[dict, str, dict]:
     """What the checks should judge the page against.
 
@@ -632,6 +642,24 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Cache-Control", "public, max-age=604800")
             self.end_headers()
             self.wfile.write(image)
+            return
+        if route.path.startswith("/logo/"):
+            try:
+                logo_lead = int(route.path.strip("/").split("/")[1])
+            except (IndexError, ValueError):
+                self._send(404, b"not found", "text/plain; charset=utf-8")
+                return
+            with db.session() as conn:
+                logo = logo_for(conn, logo_lead)
+            if logo is None:
+                self._send(404, b"no logo", "text/plain; charset=utf-8")
+                return
+            self.send_response(200)
+            self.send_header("Content-Type", logo[1])
+            self.send_header("Content-Length", str(len(logo[0])))
+            self.send_header("Cache-Control", "public, max-age=86400")
+            self.end_headers()
+            self.wfile.write(logo[0])
             return
         if route.path.startswith("/site/"):
             bits = route.path.strip("/").split("/")

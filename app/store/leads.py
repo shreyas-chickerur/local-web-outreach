@@ -42,6 +42,7 @@ PUBLISHED_FIELDS: dict[str, tuple[str, str]] = {
     "photos": ("photos", "lines"),
     "menu_items": ("menu_items", "dishes"),
     "socials": ("socials", "links"),
+    "logo": ("logo", "text"),
 }
 VERIFIABLE = VERIFIABLE_FACTS + tuple(PUBLISHED_FIELDS)
 
@@ -51,6 +52,7 @@ FIELD_LABELS = {
     "about": "Their story", "services": "What they sell",
     "email": "Email address", "photos": "Photographs",
     "menu_items": "Menu items", "socials": "Social profiles",
+    "logo": "Logo",
 }
 
 _PRICE = re.compile(r"\$\s?\d[\d,.]*")

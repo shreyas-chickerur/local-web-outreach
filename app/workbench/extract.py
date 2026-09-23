@@ -289,6 +289,11 @@ class ExtractedSite:
     # Restaurants very often publish the menu as a PDF or photo. Embedding it
     # keeps the visitor on the new page; linking out defeats the replacement.
     menu_media: list[dict] = field(default_factory=list)   # {url, kind, label}
+    # Every image or icon that might be the business's logo, in page order:
+    # {url, source, label}. Ranked once the business's name is known
+    # (`app.workbench.brief._pick_logo`); `logo` holds the winner.
+    logo_candidates: list[dict] = field(default_factory=list)
+    logo: str | None = None
     # A dedicated locations page is the clearest sign of more than one branch.
     has_locations_page: bool = False
     # A business publishing its own phone and address is an independent source:
@@ -323,8 +328,10 @@ class ExtractedSite:
     blocks: list[dict] = field(default_factory=list)
 
     def is_empty(self) -> bool:
+        # The logo counts: a site whose one usable thing was its logo lost it
+        # here, because nothing else made `published` worth serializing.
         return not any((self.about, self.services, self.products, self.hours, self.actions,
-                        self.images, self.menu_items))
+                        self.images, self.menu_items, self.logo))
 
 
 def _hours_key(text: str) -> str:
@@ -1038,6 +1045,7 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
     )
     out.menu_items = extract_menu_items(clean)
     out.menu_media = extract_menu_media(clean, base_url)
+    out.logo_candidates = extract_logo_candidates(html, base_url)
 
     page_text = _text(clean)
     # Structured data first: it is what the business tells search engines, and
@@ -1099,6 +1107,8 @@ def extract_from_html(html: str, base_url: str) -> ExtractedSite:
 
 def merge(primary: ExtractedSite, extra: ExtractedSite) -> ExtractedSite:
     """Fold a secondary page (contact/about/menu) into the homepage's extraction."""
+    known = {c["url"] for c in primary.logo_candidates}
+    primary.logo_candidates += [c for c in extra.logo_candidates if c["url"] not in known]
     primary.site_host = primary.site_host or extra.site_host
     primary.has_locations_page = primary.has_locations_page or extra.has_locations_page
     # An /about page beats the homepage when its text reads more like a story.
@@ -1164,6 +1174,47 @@ _IMG_TAG_RE = re.compile(r"<img\b[^>]*>", re.IGNORECASE)
 def _attr_value(tag: str, name: str) -> str:
     found = re.search(rf'\s{name}=["\']([^"\']*)["\']', tag, re.IGNORECASE)
     return found.group(1).strip() if found else ""
+
+
+# Never a logo, whatever the file is called: The Heritage Table's sharing image
+# is a James Beard seal, and Fish Shack's page carries a farm-raised badge.
+_NOT_A_LOGO_RE = re.compile(r"seal|badge|award|medal|certif|winner|nominee",
+                            re.IGNORECASE)
+
+
+def extract_logo_candidates(html: str, base_url: str) -> list[dict]:
+    """Everything on a page that might be the business's logo, in page order.
+
+    Logos were filtered out with the other non-photographs, so no generated
+    page ever carried the business's own mark. Three kinds are kept, ranked
+    later against the business's name: a logo the page's structured data
+    names, an image whose address, class or text says "logo", and a site icon
+    large enough to stand in (a touch icon, or one declared 180 pixels or more).
+    """
+    out: list[dict] = []
+
+    def add(url: str, source: str, label: str = "") -> None:
+        url = urljoin(base_url, url.strip())
+        if url.startswith("data:") or _NOT_A_LOGO_RE.search(url + " " + label):
+            return
+        if url not in {c["url"] for c in out}:
+            out.append({"url": url, "source": source, "label": label})
+
+    for found in re.finditer(r'"logo"\s*:\s*(?:"([^"]+)"|\{[^}]*?"url"\s*:\s*"([^"]+)")',
+                             html or ""):
+        add(found.group(1) or found.group(2), "structured data")
+    for tag in _IMG_TAG_RE.findall(html or ""):
+        src = _attr_value(tag, "data-src") or _attr_value(tag, "src")
+        label = " ".join(_attr_value(tag, a) for a in ("alt", "title", "class"))
+        if src and re.search(r"logo", f"{src} {label}", re.IGNORECASE):
+            add(src, "logo image", label.strip())
+    for tag in re.findall(r"<link\b[^>]*>", html or "", re.IGNORECASE):
+        rel = _attr_value(tag, "rel").lower()
+        sizes = re.findall(r"(\d+)x\d+", _attr_value(tag, "sizes"))
+        big = "apple-touch-icon" in rel or (sizes and int(sizes[0]) >= 180)
+        if "icon" in rel and big and _attr_value(tag, "href"):
+            add(_attr_value(tag, "href"), "site icon")
+    return out
 
 
 def extract_menu_media(html: str, base_url: str) -> list[dict]:

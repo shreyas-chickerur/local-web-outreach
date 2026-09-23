@@ -138,3 +138,13 @@ def test_an_unknown_field_is_still_refused(conn):
     lead = _lead(conn)
     with pytest.raises(ValueError):
         leads.verify(conn, lead, "favourite_colour", "blue")
+
+
+def test_a_corrected_logo_reaches_what_the_page_is_built_from(conn):
+    """When the crawl picks the wrong logo, or finds none, the operator supplies
+    it the same way as any other field, and it must reach `published`, where
+    the design run and the workbench's /logo/ address read it."""
+    lead_id = _lead(conn)
+    leads.verify(conn, lead_id, "logo", "https://acme.test/brand/logo.png")
+    assert leads.brief_with_overrides(conn, lead_id)["published"]["logo"] == (
+        "https://acme.test/brand/logo.png")

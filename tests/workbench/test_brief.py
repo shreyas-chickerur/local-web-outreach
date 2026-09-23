@@ -703,3 +703,53 @@ def test_a_menu_published_only_as_an_image_is_read_once_and_kept(monkeypatch):
     assert images and images[0]["read"] and "Cabernet" in images[0]["text"]
     assert images[0]["url"].endswith("/uploads/Wine-List-Web-5-pdf.jpg")
     assert len(calls) == 2  # the reader is asked; its own cache decides the cost
+
+
+# ------------------------------- their logo -------------------------------- #
+_FISH_SHACK_HOME = """
+<html><head><title>Fish Shack - Plano, Texas</title></head><body>
+<img src="graphics/fslogo2.jpg" alt="Fish Shack - Plano, Texas" class="scalable">
+<p>Fantastic Grilled, Boiled, and Fried Seafood</p>
+<img src="graphics/logo_farm_raised.jpg" width="175" alt="100% U.S. Farm Raised Catfish">
+</body></html>"""
+
+_HERITAGE_HOME = """
+<html><head><title>The Heritage Table | Downtown Frisco Restaurants</title>
+<meta property="og:image" content="https://heritage.test/uploads/JBA_SEAL_SEMI_2024_HIRES.png">
+<link rel="icon" href="https://heritage.test/uploads/cropped-outside-32x32.jpg" sizes="32x32">
+<link rel="apple-touch-icon" href="https://heritage.test/uploads/cropped-outside-180x180.jpg">
+</head><body>
+<img class="lazy" data-src="https://heritage.test/uploads/the-heritage-table-logo_black.png"
+     src="data:image/gif;base64,R0lGOD">
+</body></html>"""
+
+
+def _logo(site_html: str, url: str) -> str | None:
+    from app.web.serialize import brief_to_dict
+    return (brief_to_dict(build_brief(url, fetcher=_Fetcher(site_html)))["published"]
+            or {}).get("logo")
+
+
+def test_the_businesss_own_logo_is_found_and_a_badge_is_not():
+    """Every generated page lacked the business's logo, top-left and in the tab:
+    the crawl filtered logos out as "not a photograph of the business". Fish
+    Shack's page carries two images named logo; only one is theirs."""
+    assert _logo(_FISH_SHACK_HOME, "fishshackplano.com").endswith("/graphics/fslogo2.jpg")
+
+
+def test_an_award_seal_is_never_taken_for_the_logo():
+    """The Heritage Table's sharing image is a James Beard seal, and its logo is
+    lazy-loaded: its address sits in data-src until it scrolls into view."""
+    assert _logo(_HERITAGE_HOME, "heritage.test") == (
+        "https://heritage.test/uploads/the-heritage-table-logo_black.png")
+
+
+def test_a_large_site_icon_stands_in_when_there_is_no_logo_image():
+    html = _HERITAGE_HOME.replace("the-heritage-table-logo_black.png", "dining-room.png")
+    assert _logo(html, "heritage.test") == "https://heritage.test/uploads/cropped-outside-180x180.jpg"
+
+
+def test_no_logo_is_no_logo_rather_than_a_guess():
+    """Shreyas, 23 September: with no usable logo, flag it and wait for him."""
+    assert _logo("<html><head><title>Plain</title></head><body><p>Hi</p></body></html>",
+                 "plain.test") is None

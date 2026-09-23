@@ -602,7 +602,31 @@ def build_brief(
         else:
             brief.open_questions.append(question)
 
+    if brief.published is not None:
+        brief.published.logo = _pick_logo(brief.published.logo_candidates, brief.name)
     return brief
+
+
+def _pick_logo(candidates: list[dict], name: str) -> str | None:
+    """The business's logo, by one rule, or `None` rather than a guess.
+
+    A logo named in structured data wins. Then an image called a logo that
+    names the business in its address or text, earliest first: Fish Shack's
+    page also carries "logo_farm_raised.jpg", a supplier's badge. Then a site
+    icon large enough to stand in. With none of those, nothing: Shreyas asked
+    for a missing logo to be flagged for him, not filled in.
+    """
+    words = {w for w in re.findall(r"[a-z]{3,}", (name or "").lower())} - {"the", "and"}
+
+    def names_them(c: dict) -> bool:
+        said = f"{c['url']} {c['label']}".lower()
+        return bool(words & set(re.findall(r"[a-z]{3,}", said)))
+
+    for source in ("structured data", "logo image", "site icon"):
+        for candidate in candidates:
+            if candidate["source"] == source and (source != "logo image" or names_them(candidate)):
+                return str(candidate["url"])
+    return None
 
 
 def format_brief(brief: Brief) -> str:

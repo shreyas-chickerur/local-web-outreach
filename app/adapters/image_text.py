@@ -39,7 +39,7 @@ _TOOL = {
 }
 
 
-def _media_type(data: bytes) -> str:
+def media_type_of(data: bytes) -> str:
     """What the bytes are, whatever the address says. Every image used to be
     sent as a JPEG, and the API refused The Heritage Table's PNG drinks list."""
     if data.startswith(b"\x89PNG"):
@@ -53,7 +53,7 @@ def _media_type(data: bytes) -> str:
 
 def read(data: bytes, media_type: str | None = None) -> tuple[str | None, str]:
     """The text printed in an image, or `None` and the reason it was not read."""
-    media_type = media_type or _media_type(data)
+    media_type = media_type or media_type_of(data)
     key = hashlib.sha256(data).hexdigest()
     cached = CACHE / f"{key}.json"
     if cached.exists():
