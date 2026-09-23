@@ -41,7 +41,7 @@ app/design/proposal.py        one self-contained file for the owner (make propos
 ```
 
 The workbench can still build a first version with the older generator in
-`app/site/` (the "Build the first version" button). Pages from Claude Design and
+`app/site/` (the "Build the first version" button). Pages from the design tool and
 from the design bridge are the current path; see `app/site/` below.
 
 ## By package
@@ -72,7 +72,7 @@ One module per source. `site_fetch.py` renders a page in Chrome and falls back t
 a plain fetch, recording each attempt's reason when both fail; `download()`
 returns bytes or the reason there are none. `image_text.py` reads a menu image
 with a model once and caches the text by the image's bytes. `photos.py` and
-`logos.py` fetch a lead's photographs and logo once and cache them. `claude.py`
+`logos.py` fetch a lead's photographs and logo once and cache them. `language_model.py`
 is the one place a structured model call is made.
 
 ### `app/store/` — everything that persists
@@ -90,12 +90,12 @@ is the one place a structured model call is made.
   labels, the workbench conversation, style preferences, and the old
   generator's sameness records.
 
-### `app/design/` — pages from Claude
+### `app/design/` — pages from the design model
 
 - `bridge.py` — the design bridge. `design()` runs one design from a prompt;
-  `edit()` makes one change a person asked for in the chat. Both run the Claude
-  Agent Software Development Kit (Claude Opus 5.5) in a folder of their own,
-  with four file tools approved by path, a spending ceiling ($5 a design, $1 an
+  `edit()` makes one change a person asked for in the chat. Both run the Agent
+  Software Development Kit with the model named in `DESIGN_MODEL`, in a folder of
+  their own, with four file tools approved by path, a spending ceiling ($5 a design, $1 an
   edit), and the photographs and logo as files. The page is saved as a new
   version with its cost.
 - `proposal.py` — the current version as one file with every photograph and the

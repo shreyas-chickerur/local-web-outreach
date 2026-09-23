@@ -29,7 +29,7 @@ copyselect.py`: a real model call selects and orders sentences by INDEX
 into the exact candidates offered, never by retyping — verbatim provenance
 is true by construction, not by luck. Frozen per lead alongside vision and
 the design direction, matching BRIEF §4's own invariant list. Caught and
-fixed before any fixture was frozen wrong: Claude's tool-use schema
+fixed before any fixture was frozen wrong: the model API's tool-use schema
 rejects a colon in a property name (`feature:0` → `feature_0`), found on
 the first live call. 100% (687/687) verbatim provenance across the real
 19-fixture corpus; 85% (389/459) selection ratio. Content-only — no axis

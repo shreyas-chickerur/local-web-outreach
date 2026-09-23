@@ -1659,7 +1659,7 @@ using the deterministic fallback path (no `copy_selection` present yet).
 
 **One correction, made before trusting the design further:** the group
 naming in this file's own pre-registration (`feature:0`) does not survive
-contact with the API — Claude's tool-use schema rejects property keys
+contact with the API — the model API's tool-use schema rejects property keys
 containing a colon (`HTTP 400: ... Property keys should match pattern
 '^[a-zA-Z0-9_.-]{1,64}$'`), found on the very first live call against
 `barbecue`'s real groups. Renamed to `feature_0` throughout
@@ -2180,7 +2180,7 @@ structurally unreachable.** `opening_spec()` returns `{**frozen,
 read_by:"frozen"}` for any brief carrying a `design_direction` — every
 fixture — before it ever calls `_prompt()` or looks at `preferences` at
 all. `test_a_frozen_brief_ignores_preferences_entirely`
-(`tests/sitegen/test_opening.py`) proves this directly: a Claude call
+(`tests/sitegen/test_opening.py`) proves this directly: a model call
 that raises if reached at all, and identical output with an empty versus
 a four-item preferences list. No redecide follows from this phase — the
 full suite, `render_snapshots.json` and `test_the_instrument_reproduces.py`

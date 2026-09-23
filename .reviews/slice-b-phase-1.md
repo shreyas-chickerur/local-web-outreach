@@ -121,7 +121,7 @@ isn't `"none"` and the why-text is non-empty. Never reaches the rendered page
 ## The redecide
 
 One `--redecide` covering 1a + 1d + 1e together, per the batching rule. All 19
-fixtures resolved `read_by=claude`, no claims-gate rejection, ruler and rule
+fixtures resolved `read_by=model`, no claims-gate rejection, ruler and rule
 unchanged (`a762bcc9` / `254e171b` — neither moved, since none of the three
 changes touches a weight or an axis's own definition; the corpus was
 re-decided because the gate's history and the typeface choice both feed the

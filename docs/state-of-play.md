@@ -85,7 +85,7 @@ page scrolled to the exact sentence, using a text fragment.
 - A second lead exists, Oishii Sushi & Pan-Asian in Plano (lead 7), created 21
   September with no site built. It is not in the trade either.
 - **Fish Shack, Plano (lead 8)**, drawn at random from the discovery cache on 22
-  September: versions 1 to 4, built on the Claude Design canvas from
+  September: versions 1 to 4, built on the design canvas from
   `prompts/fish-shack/`. Checked in memory against its crawl: nothing
   unsourced or contradicted; 4 assembled sentences and 1 wording note for
   Shreyas. No review opened yet.
@@ -108,7 +108,7 @@ dollar sign; the workbench prompted for a town on opening.
 ## The design bridge (23 September)
 
 `make design LEAD=<id> PROMPT=prompts/<slug>/vN.md` runs one design through
-the Claude Agent Software Development Kit: Claude Opus 5.5, a $5 ceiling, one
+the Agent Software Development Kit: the model named in `DESIGN_MODEL`, a $5 ceiling, one
 pass, four file tools confined to its own folder. Fish Shack version 5 was the
 first real page from it ($0.96). Shreyas chose it over the hand-written
 versions 1 to 4. Versions 6 to 9 are hand edits of it at no model cost: a solid
@@ -127,7 +127,7 @@ current. Review 3 is still open on version 4; no review exists on version 9.
   photograph and the logo inside it (Fish Shack version 13: 4.8 MB). Fonts
   still load from Google, so offline it falls back to the phone's own fonts.
 - **Chat edits:** the workbench chat box edits a designed page in a sentence
-  (Claude Opus 5.5, $1 ceiling) and replies in the thread with the cost and
+  (the model named in `DESIGN_MODEL`, $1 ceiling) and replies in the thread with the cost and
   whether the checks moved. First real run: "add our brunch hours" was
   refused because the brief has none; $0.16, nothing saved.
 - Fish Shack is at **version 13**: the logo top-left and in the tab (11), and

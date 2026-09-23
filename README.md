@@ -34,8 +34,8 @@ person**: nothing here sends email.
    - `WORKBENCH_OPERATOR` — your name on the audit trail (default `$USER`); a
      label, not authentication.
    - `ANTHROPIC_MODEL` — the model for menu images and the older generator's
-     instruction reader (default `claude-sonnet-5`). Design runs and edits
-     always use Claude Opus 5.5.
+     instruction reader (named in `ANTHROPIC_MODEL`). Design runs and edits
+     use the model named in `DESIGN_MODEL`.
 
 ## Commands
 

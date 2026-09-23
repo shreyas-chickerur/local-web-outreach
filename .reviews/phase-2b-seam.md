@@ -22,7 +22,7 @@ touched any gate:
    reviews</p>` against real `material.reviews = 6203`: every gate
    returned `[]`.
 3. **The design page.** Nothing in the tree referenced
-   `tests/fixtures/seam/hvac-claude-design.html` — Phase 2's 40-finding
+   `tests/fixtures/seam/hvac-designed.html` — Phase 2's 40-finding
    classification existed only as prose in `.reviews/phase-2-seam.md`.
 
 ## §1 — Numbers
@@ -185,7 +185,7 @@ None of the round's own seam work is implicated in any of the 15.
 The port's three gaps are closed, closed by rule rather than by list,
 and proven not weakened by an actual superset test — not just asserted
 — against every planted page. The real 19-fixture corpus is clean, and
-that zero is earned and documented, not tuned. The real Claude Design
+that zero is earned and documented, not tuned. The real designed
 page is reproducible without a browser and fully classified: zero
 fabrications, one changed-specific claim, everything else true or
 verbatim. Wiring the fixed gate into the pipeline today would reject

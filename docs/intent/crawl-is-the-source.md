@@ -26,5 +26,5 @@ Confirmed with Shreyas on 22 September 2026. Replaces the hand-made
 - **Constraint:** credits are spent only on images not read before, never twice
   on the same image.
 - **Out of scope:** re-generating the page; any design change (that goes
-  through Claude Design); crawling sites other than the business's own; the
+  through the design tool); crawling sites other than the business's own; the
   lead-detail screen (C1–C4).

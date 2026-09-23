@@ -3,7 +3,7 @@
 One question: given a page whose markup our renderer did not write, does
 every gate still catch a fabrication? Answered by building a planted-
 fabrication corpus, a shared rendered-DOM reader, a port of the three
-gates onto it, and one real Claude Design page for `hvac` — in that
+gates onto it, and one real designed page for `hvac` — in that
 order, one commit per step (`0ec0920`, `e52a2b5`, `dc7b273`, `80b5b21`,
 `81061b7`, `2977b1a`).
 
@@ -27,7 +27,7 @@ order, one commit per step (`0ec0920`, `e52a2b5`, `dc7b273`, `80b5b21`,
                                   second copy of both
   tests/fixtures/seam/           NEW — 2 planted-fabrication pages + 2
                                   control pages + manifests (Step 1); 1
-                                  real Claude Design page (Step 4)
+                                  real designed page (Step 4)
   tests/sitegen/test_seam_*.py   NEW — the baseline reproduction, the
                                   Step 1 red baseline, the ported-gate
                                   tests, visible.py's own tests
@@ -40,7 +40,7 @@ order, one commit per step (`0ec0920`, `e52a2b5`, `dc7b273`, `80b5b21`,
 
   Read the RENDERED DOM, never source markup — the roadmap's locked
   decision, confirmed necessary by the round's own reproduction: a
-  script-injected fabrication and an entire bundled Claude Design canvas
+  script-injected fabrication and an entire bundled design-tool canvas
   are both invisible to source-markup regex, present the moment a real
   browser runs the page. — forecloses any gate design that reads
   `page: str` from `build_from_spec()`'s return value directly.
@@ -69,7 +69,7 @@ order, one commit per step (`0ec0920`, `e52a2b5`, `dc7b273`, `80b5b21`,
   provenance.py's own own_words() (used by the OLD gate) is untouched;
   the widening lives only where the new surface is actually read.
 
-  The real Claude Design page was NOT told about the gates, and was
+  The real designed page was NOT told about the gates, and was
   given the WHOLE brief rather than a summary — the round's own
   instruction, held to exactly, so the 40-finding result reflects a real
   design session's ordinary output, not one primed to avoid detection or
@@ -78,7 +78,7 @@ order, one commit per step (`0ec0920`, `e52a2b5`, `dc7b273`, `80b5b21`,
   No conversion pipeline for the bundled canvas export — one regex to
   locate the `srcdoc` attribute the editor's own JS set at runtime,
   `html.unescape()`, then the SAME `visible_text_runs()` every other page
-  in this round used. — forecloses building any general Claude-Design-
+  in this round used. — forecloses building any general design-tool-
   canvas-to-page extractor as part of this round; if Phase 3 needs one,
   it is new, deliberate work, not something this round backed into.
 
@@ -172,7 +172,7 @@ Phase 3's problem, not proof the seam does not hold.
 ## Assumptions I could not verify
 
 - That `srcdoc` unwrapping is a reliable extraction method for every
-  Claude Design canvas export, not just this one page — verified once,
+  design-tool canvas export, not just this one page — verified once,
   on one page, in this round's own resource budget (no second design
   session to cross-check against).
 - That a real design session, asked with a different framing or a
@@ -190,7 +190,7 @@ Phase 3's problem, not proof the seam does not hold.
   design-session output, or does Phase 3 build a real
   provenance/selection mechanism for it (something like
   `copyselect.py`'s index-into-candidates guarantee, adapted to
-  whatever Claude Design's own output shape turns out to be)? The 40-of-
+  whatever the design tool's own output shape turns out to be)? The 40-of-
   40 result is a real number today; it should not still be 40-of-40 once
   Phase 3 exists.
 - Should `unsupported_sentences`/`unexplained_prose`/

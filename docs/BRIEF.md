@@ -908,7 +908,7 @@ Close to Lovable, with one difference: the photographs are already
 labelled and the site is already sellable when the screen opens, so
 every exchange is a preference rather than a repair.
 
-The conversation opens with Claude's rationale (`app/site/pipeline.py`'s
+The conversation opens with the model's rationale (`app/site/pipeline.py`'s
 `_build_opening()` — this was already built, since Slice F; it had no
 standing test before this round). Every reply is grounded in the
 `IterationResult` (`app/site/reply.py`, `reply_for()`) — the model sees

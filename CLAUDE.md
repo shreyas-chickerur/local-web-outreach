@@ -40,7 +40,7 @@ every doubt the system has about their business.
 4. **Brief** — the result, archived permanently and stored on the lead.
    `app/store/brief_archive.py`, `app/store/leads.py`.
 5. **Build** — one design run from a prompt written from the brief and the
-   playbook, through the Claude Agent Software Development Kit.
+   playbook, through the Agent Software Development Kit.
    `app/design/bridge.py` (`make design`). The workbench's build button still
    uses the older generator in `app/site/pipeline.py`.
 6. **Workbench** — change the page in conversation; every sentence becomes an

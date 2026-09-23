@@ -24,7 +24,7 @@ known-open.
 **Phase 2 — Slice H, the conversational workspace, BRIEF §5's last
 unbuilt slice.** Nothing already built was rebuilt: reading
 `pipeline.py`'s `_build_opening()` before starting found item 2a (the
-workspace opens on Claude's rationale) already fully working since
+workspace opens on the model's rationale) already fully working since
 Slice F, just untested — a standing test was added instead of a feature
 that already existed. `app/site/reply.py`'s `reply_for(result:
 IterationResult) -> str` is the new work: structurally proven never to

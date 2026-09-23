@@ -64,7 +64,7 @@ via `git checkout` (safe -- Phase 1's widening had never touched them, and
 HEAD reflected exactly that state). The eight new fixtures from Phase 1 could
 not be recovered the same way (untracked, no snapshot taken before the
 attempt) -- the user added credit, and the whole corpus was re-decided again,
-cleanly, from the restored baseline. All nineteen came back `read_by=claude`,
+cleanly, from the restored baseline. All nineteen came back `read_by=model`,
 no fallback, no gate rejection.
 
 ## A second real bug found and fixed along the way

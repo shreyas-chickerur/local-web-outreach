@@ -1,6 +1,6 @@
-# Phase 2b, Step 4 — the real Claude Design page, classified
+# Phase 2b, Step 4 — the real designed page, classified
 
-`tests/fixtures/seam/hvac-claude-design.html`, extracted via
+`tests/fixtures/seam/hvac-designed.html`, extracted via
 `content.files["Main.dc.html"]` in its own `<script id="appifact-doc">`
 state block (`tests/sitegen/test_seam_design_page.py`), against the
 real brief `tests/fixtures/briefs/hvac.json`. The fixed gate

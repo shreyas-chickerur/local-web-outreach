@@ -26,7 +26,7 @@ openable offline and sendable as an attachment. No review markup, ever.
 ## 3. Editing in conversation
 
 The workbench's chat box, on a page built by the design bridge or by hand,
-sends the instruction to an edit run: Claude Opus 5.5, a $1 ceiling, the same
+sends the instruction to an edit run: the model named in `DESIGN_MODEL`, a $1 ceiling, the same
 four file tools confined to their own folder, given the current page, the
 photographs, the logo and the brief. It changes only what was asked, saves a
 new version with its parent, and replies with what it changed, what it cost

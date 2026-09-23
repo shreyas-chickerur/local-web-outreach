@@ -1,7 +1,7 @@
 # Spec: the design bridge
 
 Status: decided 23 September 2026; building. Roadmap phase 3, the half not
-built: "Claude Design runs per lead through the Agent SDK, returning HTML to
+built: "The design tool runs per lead through the Agent SDK, returning HTML to
 disk" (`Claude outputs/pivot-to-claude-design-roadmap.pdf`, locked).
 
 ## Objective
@@ -9,7 +9,7 @@ disk" (`Claude outputs/pivot-to-claude-design-roadmap.pdf`, locked).
 One command turns a lead and a design prompt into a new version of its site,
 with no person writing markup: `make design LEAD=8 PROMPT=prompts/fish-shack/v2.md`.
 Today every version of The Heritage Table and Fish Shack was written by hand in
-a Claude session and loaded into the database by hand. The bridge makes that a
+a separate session and loaded into the database by hand. The bridge makes that a
 run with a recorded cost, a recorded prompt, and the checks run on its output.
 
 ## How a run works
@@ -49,12 +49,12 @@ A run that hits its ceiling or fails saves nothing and says what it spent.
 
 ## Out of scope
 
-Publishing to the Claude Design canvas (still done from a session, as for
+Publishing to the design canvas (still done from a session, as for
 Fish Shack); writing the prompt itself (still `prompts/<slug>/vN.md`); hosting.
 
 ## Decisions (Shreyas, 23 September 2026)
 
-1. **Model:** Claude Opus 5.5 (`claude-opus-5-5`).
+1. **Model:** the model named in `DESIGN_MODEL`.
 2. **Ceiling:** $5 per run (`max_budget_usd=5.0`).
 3. **One pass.** No automatic revision; each change Shreyas asks for is its
    own run with a parent.

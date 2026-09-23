@@ -26,7 +26,7 @@ read.
 |---|---|---|
 | Menu images found | `extract_menu_media` (links only; now also `<img>` by `src` or `data-src`, by filename or `alt`/`title`) | `ExtractedSite.menu_media` → `_read_menu_images` |
 | Bytes and why they failed | new `site_fetch.download` → `(bytes, reason)`; `fetch_bytes` keeps its shape | `_read_menu_pdfs`, `_read_menu_images` |
-| Text of an image | new `app/adapters/image_text.read` → `claude.structured`, cache `.cache/image-text/<sha256>.json` | a `kind: "image"` entry in `brief.pages` → the checks |
+| Text of an image | new `app/adapters/image_text.read` → `language_model.structured`, cache `.cache/image-text/<sha256>.json` | a `kind: "image"` entry in `brief.pages` → the checks |
 | Pages worth crawling | `content_page_urls` (`_JUNK_PAGE_RE` gains `xmlrpc.php` and `?p=<number>`) | `_read_their_site` |
 
 ## Cost

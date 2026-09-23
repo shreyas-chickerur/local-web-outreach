@@ -71,7 +71,7 @@ Both matched the round's own description exactly. Nothing differed.
 
   `tests/sitegen/test_seam_design_page.py`,
     `.reviews/phase-2-design-page-findings.md`  the credential fix
-    reaches the real Claude Design page too — pin moved 42 → 48, all 6
+    reaches the real designed page too — pin moved 42 → 48, all 6
     new findings classified (all real; 0 invented).
 
   `.reviews/phase-2b-seam.md`  corrected in place, dated, original

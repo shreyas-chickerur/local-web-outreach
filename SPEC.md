@@ -47,7 +47,7 @@ Found by that crawl, for `read-ladder`:
    already exist.
 2. "Could not read" reuses the existing `unmeasured` verdict, with the reason in
    its detail. The screen already shows it and it already does not block.
-3. Image reading reuses `app/adapters/claude.py`, cached under `.cache/` by a
+3. Image reading reuses `app/adapters/language_model.py`, cached under `.cache/` by a
    fingerprint of the image's content.
 4. `live-site.md` stays on disk and is no longer read. The design prompt for
    version 1 keeps its citation of it as history.

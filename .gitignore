@@ -19,7 +19,7 @@ coverage.xml
 .DS_Store
 build/
 dist/
-# Frontend design artifacts (managed in Claude design; not source)
+# Frontend design artifacts (managed in the design tool; not source)
 /design/
 
 # Dry-run send output (real .eml files, may contain recipient addresses)

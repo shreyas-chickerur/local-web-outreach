@@ -39,7 +39,7 @@ in any of the four verdicts' own text separates `roofer`/`hvac-rich`
 from the three "different" pairs while still joining it to itself.
 
 **Deliberately not re-judged this round**, on your own instruction: a
-fresh Claude verdict would replace one Claude judgment with another and
+fresh model verdict would replace one model judgment with another and
 read as "settled" rather than as what it would actually be — the same
 model reconsidering itself, not independent confirmation. You are going
 to look at these two pages yourself; that is the actual second opinion
@@ -389,9 +389,9 @@ existing nineteen were.
 ## 7. What 85% agreement actually is evidence of
 
 **Stated plainly, because the number is easy to over-read.** The 85%
-full / 82% held-out agreement figure is Claude judging, blind, from
-screenshots — whether Claude's OWN fingerprint distance calculation
-ranks two pages the way Claude's OWN visual read of them does. Both
+full / 82% held-out agreement figure is the model judging, blind, from
+screenshots — whether the model's OWN fingerprint distance calculation
+ranks two pages the way the model's OWN visual read of them does. Both
 halves of that comparison were produced by this same model, in
 different roles, at different points in the project.
 
@@ -408,8 +408,8 @@ finding, not yet resolved).
 **What it is NOT evidence of:** whether a human visitor, or you, would
 agree with either the vector OR the blind judgment. Every "same" or
 "different" verdict in `tests/fixtures/pairs.json` was written by
-Claude looking at Claude-generated pages, using resolving rules ALSO
-written by Claude (with your review at each round's close-out, not
+The model looking at model-generated pages, using resolving rules ALSO
+written by the model (with your review at each round's close-out, not
 independent human judging of the underlying pairs themselves). A
 number built entirely from one model's own two ways of looking at its
 own output can be internally consistent and still be systematically

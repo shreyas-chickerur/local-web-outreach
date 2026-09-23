@@ -90,7 +90,7 @@ One cheap Anthropic ping plus a report of which directory APIs
 path or `--redecide` spends anything. Verified: with the key present it
 prints "reachable, has credit"; the failure path was exercised for real
 earlier in the same session (a genuine "credit balance is too low" error, not
-a synthetic test) and confirmed to raise `claude.ClaudeError` on the first
+a synthetic test) and confirmed to raise `language_model.ModelError` on the first
 call rather than eight fixtures in.
 
 ## 0e — refuse to redecide over untracked fixtures
