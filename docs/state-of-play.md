@@ -116,6 +116,24 @@ navbar (it blended into the photograph), every photo caption removed, and
 three layout faults found checking at phone and desktop widths. Version 9 is
 current. Review 3 is still open on version 4; no review exists on version 9.
 
+## Logos, proposals and editing in conversation (23 September)
+
+- **Logos:** the crawl ranks logo candidates by one rule (structured data, then
+  an image called a logo that names the business, then a large site icon;
+  seals and awards never). Stored in `published.logo`, correctable, served at
+  `/logo/<lead>`, given to every design run. None found: the run is flagged.
+  Fish Shack has `fslogo2.jpg`; The Heritage Table a 150×100 PNG.
+- **Proposals:** `make proposal LEAD=<id>` writes one file with every
+  photograph and the logo inside it (Fish Shack version 13: 4.8 MB). Fonts
+  still load from Google, so offline it falls back to the phone's own fonts.
+- **Chat edits:** the workbench chat box edits a designed page in a sentence
+  (Claude Opus 5.5, $1 ceiling) and replies in the thread with the cost and
+  whether the checks moved. First real run: "add our brunch hours" was
+  refused because the brief has none; $0.16, nothing saved.
+- Fish Shack is at **version 13**: the logo top-left and in the tab (11), and
+  two images stretched since version 10 fixed (12, 13). Review 5 is on
+  version 10; none on 13.
+
 ## Next
 
 From the backlog (the live copy is an artifact; this is the summary):
