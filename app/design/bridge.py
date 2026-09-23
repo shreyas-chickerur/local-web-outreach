@@ -74,7 +74,11 @@ def options(folder: Path) -> ClaudeAgentOptions:
         # Not the operator's own Claude settings: their hooks and plugins would
         # steer a design run the way they steer a coding session.
         setting_sources=[],
-        cwd=str(folder), model=MODEL, max_budget_usd=CEILING_USD, max_turns=MAX_TURNS)
+        cwd=str(folder), model=MODEL, max_budget_usd=CEILING_USD, max_turns=MAX_TURNS,
+        # Every photograph the agent reads comes back base64-encoded in one
+        # message, and the kit refuses any over 1 MB by default: the first real
+        # run died after its fourth photograph.
+        max_buffer_size=32 * 1024 * 1024)
 
 
 def prepare(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> Path:
@@ -89,7 +93,10 @@ def prepare(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> Path:
     folder = RUNS / brief_archive._slug(str(brief["name"])) / stamp
     (folder / "photos").mkdir(parents=True)
     for n, name in enumerate(brief.get("place_photos") or []):
-        data = photos.fetch(google_places_api_key() or "", name, width=1600)
+        # 800 wide is enough to judge a photograph by, a quarter of the bytes,
+        # and cheaper for the model to look at. The page still asks the
+        # workbench for 1600.
+        data = photos.fetch(google_places_api_key() or "", name, width=800)
         if data:
             (folder / "photos" / f"{n}.jpg").write_bytes(data)
     text = re.sub(rf"/photo/{lead_id}/(\d+)(?:\?w=\d+)?", r"photos/\1.jpg",
@@ -98,26 +105,30 @@ def prepare(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> Path:
     return folder
 
 
-async def _run(folder: Path) -> ResultMessage | None:
-    result = None
+async def _run(folder: Path) -> tuple[ResultMessage | None, str]:
+    """The run's result, if one arrived, and the error that ended it, if any.
+
+    A crash before the result used to surface only as a traceback, cut off by
+    the terminal, with no word of what went wrong.
+    """
+    result, error = None, ""
     try:
         async for message in query(prompt=_INSTRUCTION, options=options(folder)):
             if isinstance(message, ResultMessage):
                 result = message
-    except Exception:  # noqa: BLE001 — a failed run still reports what it spent
-        if result is None:
-            raise
-    return result
+    except Exception as exc:  # noqa: BLE001 — a failed run still reports what it spent
+        error = f"{type(exc).__name__}: {exc}"
+    return result, error
 
 
 def design(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> dict:
     """Run one design and save it as a new version, or say why not."""
     folder = prepare(conn, lead_id, prompt_path)
-    result = asyncio.run(_run(folder))
+    result, error = asyncio.run(_run(folder))
     cost = (result.total_cost_usd or 0.0) if result else 0.0
     page = folder / "index.html"
     if result is None or result.is_error or not page.exists():
-        why = result.subtype if result else "the run produced no result"
+        why = result.subtype if result else (error or "the run produced no result")
         return {"version": None, "cost_usd": cost, "folder": str(folder),
                 "why": f"{why}; nothing was saved"}
     html = re.sub(r"photos/(\d+)\.jpg", rf"/photo/{lead_id}/\1?w=1600", page.read_text())

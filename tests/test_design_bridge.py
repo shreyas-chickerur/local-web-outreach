@@ -32,6 +32,9 @@ def test_a_design_run_can_touch_nothing_outside_its_workspace(tmp_path):
     assert options.setting_sources == []
     assert options.cwd == str(tmp_path)
     assert (options.model, options.max_budget_usd) == ("claude-opus-5-5", 5.0)
+    # The first real run died after reading four photographs: each comes back
+    # base64-encoded in one message, and the kit refuses any over 1 MB by default.
+    assert options.max_buffer_size >= 16 * 1024 * 1024
 
     assert _allowed(options, "Write", file_path=str(tmp_path / "index.html"))
     assert _allowed(options, "Read", file_path=str(tmp_path / "photos" / "0.jpg"))
@@ -52,12 +55,13 @@ def lead(tmp_path, monkeypatch):
         "name": "Fish Shack", "location": "Plano, TX", "website_url": "http://fish.test/",
         "facts": [], "published": {}, "assumptions": [], "open_questions": [],
         "sources_consulted": [], "place_photos": ["places/x/photos/a", "places/x/photos/b"]})
-    monkeypatch.setattr(bridge.photos, "fetch",
-                        lambda key, name, width=1600: f"jpeg of {name}".encode())
+    asked: list[int] = []
+    monkeypatch.setattr(bridge.photos, "fetch", lambda key, name, width=1600:
+                        asked.append(width) or f"jpeg of {name}".encode())
     monkeypatch.setattr(bridge, "RUNS", tmp_path / "runs")
     prompt = tmp_path / "v2.md"
     prompt.write_text(f"Use `/photo/{lead_id}/1?w=1600` for the hero.")
-    yield conn, lead_id, prompt
+    yield conn, lead_id, prompt, asked
     conn.close()
 
 
@@ -65,11 +69,13 @@ def test_the_workspace_holds_the_prompt_and_the_photographs_as_files(lead):
     """The agent cannot reach the workbench's /photo/ addresses: they only exist
     while the server runs, on this machine. It gets the files, and the prompt
     is rewritten to name them."""
-    conn, lead_id, prompt = lead
+    conn, lead_id, prompt, asked = lead
     work = bridge.prepare(conn, lead_id, prompt)
     assert (work / "photos" / "1.jpg").read_bytes() == b"jpeg of places/x/photos/b"
     assert "photos/1.jpg" in (work / "prompt.md").read_text()
     assert f"/photo/{lead_id}/" not in (work / "prompt.md").read_text()
+    # 800 wide is enough to judge a photograph by, and a quarter of the bytes.
+    assert set(asked) == {800}
 
 
 def _result(**kw) -> ResultMessage:
@@ -82,7 +88,7 @@ def test_a_finished_run_becomes_a_version_with_its_cost_and_photographs(lead, mo
     """The page the agent wrote names local files. Saved as it is, every
     photograph would be broken in the workbench; and a version with no record
     of its model, prompt and cost cannot be judged or repeated."""
-    conn, lead_id, prompt = lead
+    conn, lead_id, prompt, asked = lead
 
     async def fake_query(*, prompt, options):
         Path(options.cwd, "index.html").write_text('<img src="photos/1.jpg"><p>Fish</p>')
@@ -101,7 +107,7 @@ def test_a_finished_run_becomes_a_version_with_its_cost_and_photographs(lead, mo
 
 
 def test_a_run_stopped_by_its_ceiling_saves_nothing_and_says_what_it_spent(lead, monkeypatch):
-    conn, lead_id, prompt = lead
+    conn, lead_id, prompt, asked = lead
 
     async def fake_query(*, prompt, options):
         Path(options.cwd, "index.html").write_text("<p>half a page")
@@ -112,3 +118,17 @@ def test_a_run_stopped_by_its_ceiling_saves_nothing_and_says_what_it_spent(lead,
     assert outcome["version"] is None and outcome["cost_usd"] == 5.02
     assert "error_max_budget_usd" in outcome["why"]
     assert sites.html_for(conn, lead_id, 1) is None
+
+
+def test_a_run_that_crashes_says_why_and_saves_nothing(lead, monkeypatch):
+    """The first real run crashed before its result arrived, and all that
+    reached the operator was a traceback cut off by the terminal."""
+    conn, lead_id, prompt, _asked = lead
+
+    async def fake_query(*, prompt, options):
+        raise RuntimeError("buffer exceeded")
+        yield  # pragma: no cover
+
+    monkeypatch.setattr(bridge, "query", fake_query)
+    outcome = bridge.design(conn, lead_id, prompt)
+    assert outcome["version"] is None and "buffer exceeded" in outcome["why"]
