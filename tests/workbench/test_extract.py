@@ -563,3 +563,20 @@ def test_a_stylesheet_is_never_crawled_as_a_page():
     html = ('<a href="/wp-content/plugins/kadence/mega-menu/menu-addon.css">x</a>'
             '<a href="/menus/">Menus</a>')
     assert content_page_urls(html, "https://example.com/") == ["https://example.com/menus/"]
+
+
+def test_whitespace_padded_href_does_not_smuggle_an_external_page():
+    """theheritagetable.com had `<a href=" https://www.comebackcreek.com/">`.
+
+    The leading space stops urljoin from recognizing the scheme, so it joins
+    the whole string onto base_url as if it were a relative path. The
+    resulting garbage URL's netloc still matches base_host, so the malformed,
+    guaranteed-to-404 URL slipped into the crawl alongside the real link.
+    Carried over from the branch claude/pensive-cohen-55d9d2. Python's urljoin
+    now strips leading whitespace itself (the fix for CVE-2023-24329), so this
+    passes with no change here; it guards against an interpreter without it.
+    """
+    html = ('<a href=" https://www.comebackcreek.com/about">External</a>'
+            '<a href="/menu">Menu</a>')
+    assert content_page_urls(html, "https://www.theheritagetable.com/") == [
+        "https://www.theheritagetable.com/menu"]
