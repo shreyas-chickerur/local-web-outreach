@@ -1222,8 +1222,8 @@ function drawWorkspace() {
   const chips = WS.versions.map(v =>
     `<button class="vchip" aria-pressed="${v.version === WS.active}"
       onclick="pickVersion(${v.version})"
-      title="${esc(v.spec || "no instructions")}">v${v.version}${
-        v.parent_version ? `←${v.parent_version}` : ""}</button>`).join("");
+      title="${esc((v.parent_version ? `built on v${v.parent_version} · ` : "")
+        + (v.spec || "no instructions"))}">v${v.version}</button>`).join("");
 
   // What the site was decided to be, before it was emitted. Reading this is a
   // different and much cheaper activity than reading a rendered page.

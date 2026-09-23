@@ -250,3 +250,15 @@ def test_opening_the_workbench_never_opens_a_dialog_nobody_asked_for():
         seen = call("Runtime.evaluate", {"expression": "JSON.stringify(window.__dialogs)",
                                          "returnByValue": True})
     assert json.loads(seen["result"]["result"]["value"]) == []
+
+
+def test_a_version_button_names_the_version_and_nothing_else():
+    """Version buttons read "v10←9": the version with an arrow to its parent.
+    Shreyas reads the list to pick a version, and the arrow made each one read
+    as a transition. The parent belongs in the hover text."""
+    import re
+
+    page = server._UI.read_text()
+    button = re.search(r"\">v\$\{v\.version\}(.*?)</button>", page, re.S)
+    assert button, "the version button markup moved; find it and re-point this test"
+    assert "parent_version" not in button.group(1)
