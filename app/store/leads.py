@@ -175,6 +175,7 @@ def record(conn: sqlite3.Connection, lead_id: int, kind: str, *,
            field: str | None = None, old_value: str | None = None,
            new_value: str | None = None, note: str | None = None,
            actor: str | None = None) -> None:
+    """Append one event to a lead's audit trail."""
     conn.execute(
         "INSERT INTO events (lead_id, at, actor, kind, field, old_value,"
         " new_value, note) VALUES (?,?,?,?,?,?,?,?)",
@@ -216,6 +217,7 @@ def events(conn: sqlite3.Connection, lead_id: int) -> list[dict]:
 
 def set_status(conn: sqlite3.Connection, lead_id: int, status: str,
                note: str | None = None) -> None:
+    """Move a lead to another stage of the pipeline, and record the move."""
     if status not in STATUSES:
         raise ValueError(f"unknown status {status!r} — one of {', '.join(STATUSES)}")
     row = conn.execute("SELECT status FROM leads WHERE id = ?", (lead_id,)).fetchone()
@@ -266,6 +268,7 @@ def verify(conn: sqlite3.Connection, lead_id: int, field: str, value: str,
 
 
 def load_brief(conn: sqlite3.Connection, lead_id: int) -> dict:
+    """The lead's brief as stored, before any correction is applied."""
     row = conn.execute("SELECT brief_json FROM leads WHERE id = ?",
                        (lead_id,)).fetchone()
     if row is None:

@@ -51,6 +51,7 @@ from app.workbench.weburl import UrlCheck, validate
 
 @dataclass
 class Brief:
+    """Everything established about one business, and where each piece came from."""
     name: str
     location: str | None
     website_url: str | None

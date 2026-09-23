@@ -236,6 +236,7 @@ def _widen(conn: sqlite3.Connection) -> None:
 
 
 def connect(path: Path | str | None = None) -> sqlite3.Connection:
+    """Open the workbench database, creating any table or column it lacks."""
     target = Path(path) if path is not None else DEFAULT_PATH
     if target.parent != Path(""):
         target.parent.mkdir(parents=True, exist_ok=True)

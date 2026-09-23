@@ -77,8 +77,6 @@ class AuditReport:
 # Rules
 # --------------------------------------------------------------------------- #
 
-_VAR_RE = re.compile(r"--(on-[a-z]+|bg|surface|raise|accent|ink|dim):\s*([^;]+);")
-
 
 def check_contrast(page: str, theme: Theme, report: AuditReport) -> None:
     """Every ground/foreground pair the page actually uses.

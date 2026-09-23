@@ -31,8 +31,6 @@ _GENERIC = {
 }
 
 MATCH_THRESHOLD = 0.6
-# Kept for callers that imported the old name.
-NAME_MATCH_THRESHOLD = MATCH_THRESHOLD
 
 
 def name_tokens(value: str | None) -> set[str]:

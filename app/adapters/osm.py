@@ -45,6 +45,7 @@ class NominatimSource:
             NominatimSource._last_call = time.monotonic()
 
     def lookup(self, name: str, location: str) -> DirectoryPlace | None:
+        """The OpenStreetMap place matching a name near a location, or None."""
         self._throttle()
         params = {
             "q": f"{name} {location}".strip(),

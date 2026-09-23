@@ -30,6 +30,7 @@ class GooglePlacesDirectory:
         self._client = client or httpx.Client(timeout=timeout)
 
     def lookup(self, name: str, location: str) -> DirectoryPlace | None:
+        """The Google Places listing matching a name near a location, or None."""
         if not self._api_key or not name:
             return None
         try:

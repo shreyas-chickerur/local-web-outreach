@@ -71,6 +71,7 @@ _STATES = {
 
 @dataclass(frozen=True)
 class Fact:
+    """One field's value, how confident it is, and every source that said it."""
     field: str
     value: str | None
     confidence: Confidence
@@ -113,6 +114,7 @@ def _norm_address(value: str) -> str:
 
 
 def normalize(value: str, field_name: str = "") -> str:
+    """A value reduced to what two sources must share to agree on it."""
     if field_name == "phone":
         return _norm_phone(value)
     if field_name == "address":

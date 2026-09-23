@@ -12,7 +12,6 @@ from app.workbench.extract import (
     content_page_urls,
     extract_from_html,
     extract_menu_items,
-    menu_page_urls,
     merge,
     social_belongs_to,
     story_score,
@@ -242,14 +241,6 @@ def test_more_than_eight_products_are_kept():
     html = "".join(f"<h2>Bottled Sauce {i}</h2>" for i in range(_PRODUCT_LIMIT + 5))
     site = extract_from_html(html, "https://example.com/")
     assert len(site.products) == _PRODUCT_LIMIT
-
-
-def test_stylesheet_is_not_followed_as_a_page():
-    """A theme shipped "menu-addon.css"; the crawler fetched it as the menu."""
-    html = ('<a href="/wp-content/plugins/kadence/mega-menu/menu-addon.css">x</a>'
-            '<a href="/menus/">Menus</a>')
-    assert menu_page_urls(html, "https://example.com/") == [
-        "https://example.com/menus/"]
 
 
 def test_a_page_named_nothing_the_keyword_lists_anticipated_is_still_found():
@@ -563,3 +554,12 @@ def test_wordpress_short_links_and_xmlrpc_are_not_crawled():
             '<a href="/dev/xmlrpc.php?rsd">x</a><a href="/dev/menu-wine/">Wine</a>')
     assert content_page_urls(html, "https://heritage.test/dev/") == [
         "https://heritage.test/dev/menu-wine/"]
+
+
+def test_a_stylesheet_is_never_crawled_as_a_page():
+    """A theme shipped "menu-addon.css" and the crawler fetched it as the menu.
+    Adapted from the retired menu-page finder: the crawl that replaced it uses
+    the same asset rule and must hold to it."""
+    html = ('<a href="/wp-content/plugins/kadence/mega-menu/menu-addon.css">x</a>'
+            '<a href="/menus/">Menus</a>')
+    assert content_page_urls(html, "https://example.com/") == ["https://example.com/menus/"]

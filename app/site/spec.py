@@ -99,6 +99,7 @@ def _words(text: str) -> list[str]:
 
 
 def parse_spec(text: str, *, default_cta: str | None = None) -> SiteSpec:
+    """Read a free-text site description into the old generator's settings."""
     spec = SiteSpec(text=text.strip())
     words = set(_words(text))
     if not words:

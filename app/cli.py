@@ -38,6 +38,7 @@ def available_directories() -> list:
 
 
 def cmd_brief(args: argparse.Namespace) -> int:
+    """Research one company and save the brief to the archive and the database."""
     directories = available_directories()
     if len(directories) == 1:
         print("note: only OpenStreetMap is configured. Set GOOGLE_PLACES_API_KEY "
@@ -73,6 +74,7 @@ def cmd_brief(args: argparse.Namespace) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """The command line: `python -m app.cli brief "Name, City, ST"`."""
     parser = argparse.ArgumentParser(prog="app.cli")
     sub = parser.add_subparsers(dest="command", required=True)
 

@@ -44,6 +44,7 @@ def _is_tls_failure(exc: Exception) -> bool:
 
 
 class SiteFetcher(Protocol):
+    """Anything that can fetch a page; tests pass a fake, the crawl a real browser."""
     def fetch(self, url: str) -> FetchResult: ...
 
 
@@ -153,6 +154,7 @@ class ChromeSiteFetcher:
         self._binary = chrome_cdp.chrome()
 
     def fetch(self, url: str) -> FetchResult:
+        """The page as a browser draws it, falling back to a plain fetch when that fails."""
         if self._binary is None:
             return self._fallback.fetch(url)
         try:
@@ -194,6 +196,7 @@ class HttpSiteFetcher:
         )
 
     def fetch(self, url: str) -> FetchResult:
+        """The page as the server sent it, with the status, timing and any error."""
         start = time.perf_counter()
         try:
             resp = self._client.get(url)

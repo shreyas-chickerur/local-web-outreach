@@ -77,6 +77,7 @@ def open_review(conn: sqlite3.Connection, lead_id: int, version: int,
 
 
 def review(conn: sqlite3.Connection, review_id: int) -> dict:
+    """One review with its findings, in the order a person should read them."""
     row = conn.execute("SELECT * FROM reviews WHERE id=?", (review_id,)).fetchone()
     if row is None:
         raise ValueError(f"no review {review_id}")
@@ -101,6 +102,7 @@ def for_version(conn: sqlite3.Connection, lead_id: int, version: int) -> dict | 
 
 
 def history(conn: sqlite3.Connection, lead_id: int) -> list[dict]:
+    """Every review a lead has had, newest version first."""
     return [dict(r) for r in conn.execute(
         "SELECT id, version, stage, opened_at, decided_at, decided_by,"
         " decision_note FROM reviews WHERE lead_id=? ORDER BY version DESC",

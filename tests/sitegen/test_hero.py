@@ -13,7 +13,6 @@ import app.site.render as render
 from app.site.render import (
     HERO_MIN_WIDTH,
     hero_scores,
-    hero_table,
     pick_hero,
     trade_kind,
 )
@@ -112,15 +111,6 @@ def test_an_unmeasurable_pool_still_produces_a_hero():
 
 def test_no_photographs_is_no_hero():
     assert pick_hero((), size_of=lambda url: None) is None
-
-
-def test_the_ranking_is_printable_as_reasons():
-    """A score nobody can read is a tier with extra steps."""
-    look = sizes({"/a": (3200, 1800), "/b": (900, 600)})
-    table = hero_table(hero_scores(("/a", "/b"), size_of=look))
-    assert "resolution" in table and "aspect" in table and "subject" in table
-    assert "3200x1800" in table
-    assert table.index("/a") < table.index("/b")
 
 
 @pytest.mark.parametrize("trade,kind", [

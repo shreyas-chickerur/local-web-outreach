@@ -76,6 +76,7 @@ def remember_stage(conn: sqlite3.Connection, lead_id: int, stage: str,
 
 def recall_stage(conn: sqlite3.Connection, lead_id: int,
                  stage: str) -> dict | None:
+    """What an earlier build stage decided for this lead, if it ran."""
     row = conn.execute(
         "SELECT payload FROM build_state WHERE lead_id = ? AND stage = ?",
         (lead_id, stage)).fetchone()
@@ -95,6 +96,7 @@ def forget_stages(conn: sqlite3.Connection, lead_id: int) -> None:
 
 
 def versions(conn: sqlite3.Connection, lead_id: int) -> list[dict]:
+    """Every version of a lead's site, newest first, without the pages themselves."""
     rows = conn.execute(
         "SELECT version, parent_version, spec, spec_json, notes, actor,"
         " created_at, LENGTH(html) AS size"
@@ -113,6 +115,7 @@ def versions(conn: sqlite3.Connection, lead_id: int) -> list[dict]:
 
 def html_for(conn: sqlite3.Connection, lead_id: int,
              version: int | None = None) -> str | None:
+    """The page for one version, or the newest when no version is given."""
     if version is None:
         row = conn.execute(
             "SELECT html FROM sites WHERE lead_id = ? ORDER BY version DESC LIMIT 1",

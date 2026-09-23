@@ -589,10 +589,6 @@ def _headline_term(seen: dict | None) -> float:
         str(seen.get("headline_region_luminance")), 0.0)
 
 
-# The three terms that only exist because somebody looked at the picture.
-_SEEN_TERMS = ("quality", "usable", "headline")
-
-
 def unlooked_at() -> float:
     """What those three are worth when nobody has looked.
 
@@ -692,12 +688,6 @@ def hero_scores(images: tuple[str, ...], labels: dict | None = None,
                 f"keys are for different photographs — proxied URLs carry the "
                 f"lead id, so labels frozen under one do not match another")
     return sorted(scored, key=lambda c: (-c.total, c.position))
-
-
-def hero_table(scores: list[HeroScore]) -> str:
-    """The ranking as something a person can read and disagree with."""
-    header = f"{'total':>6}  {'size':>11}  {'label':>10}  reasons"
-    return "\n".join([header] + [s.line() for s in scores])
 
 
 def pick_hero(images: tuple[str, ...], offset: int = 0,

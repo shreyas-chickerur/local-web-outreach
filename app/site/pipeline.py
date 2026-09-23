@@ -37,14 +37,6 @@ from app.site.understand import understand
 from app.store import fingerprints, leads, messages, photos, sites
 
 
-class ContentSafetyError(RuntimeError):
-    """The rendered page asserted something the brief does not support."""
-
-    def __init__(self, findings: list[str]) -> None:
-        super().__init__("; ".join(findings))
-        self.findings = findings
-
-
 @dataclass(frozen=True)
 class IterationResult:
     """What one instruction did, in the shape the UI binds to.

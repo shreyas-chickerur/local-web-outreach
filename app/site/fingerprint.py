@@ -237,23 +237,6 @@ def weight_of(axis: str) -> float:
     return min(VISIBILITY.get(axis, 1.0), DECIDEDNESS.get(axis, 1.0))
 
 
-def rule_version() -> str:
-    """What the GATE was set to, as against what the distance was measured with.
-
-    Separate from `metric_version` on purpose: the distance is unchanged by a
-    rule change, but the corpus is not. Every fixture's frozen direction is an
-    answer this rule accepted, so a baseline taken under one rule is not
-    comparable to a corpus frozen under another — and without this the census
-    would go on printing the old baseline against a corpus the gate had rebuilt
-    underneath it, which is the invalid baseline again in a third costume.
-    """
-    import hashlib
-
-    material = (f"axes={REQUIRED_AXES}|structural={sorted(STRUCTURAL)}"
-                f"|high={sorted(required_high())}")
-    return hashlib.sha256(material.encode()).hexdigest()[:8]
-
-
 def metric_version() -> str:
     """What the numbers were measured with.
 

@@ -12,6 +12,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Category:
+    """A kind of business the prospect search looks for."""
     key: str
     label: str
     query: str          # what to ask Google

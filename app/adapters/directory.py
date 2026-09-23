@@ -59,10 +59,3 @@ class DirectorySource(Protocol):
     def lookup(self, name: str, location: str) -> DirectoryPlace | None: ...
 
 
-class NullDirectorySource:
-    """Yields no match — used to keep tests off the network."""
-
-    name = "null"
-
-    def lookup(self, name: str, location: str) -> DirectoryPlace | None:  # noqa: ARG002
-        return None

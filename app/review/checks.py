@@ -190,9 +190,6 @@ class Finding:
                 "evidence": self.evidence, "resources": json.dumps(self.resources)}
 
 
-_FIGURE = re.compile(r"^\d|^[A-Z0-9]")
-
-
 def _unsourced(sentence: str, missing: dict[str, str],
                links: list[dict]) -> Finding:
     """Say what to check, not just that something is wrong.
@@ -700,6 +697,3 @@ def markup(html: str) -> list[Finding]:
     return mechanics(html, {})
 
 
-def external_hosts(html: str) -> list[str]:
-    return sorted({re.sub(r"^https?://([^/]+).*", r"\1", h)
-                   for h in _HREF.findall(html) if h.startswith("http")})

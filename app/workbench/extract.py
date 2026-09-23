@@ -26,7 +26,6 @@ from urllib.parse import urljoin, urlparse
 
 _TAG_RE = re.compile(r"<(script|style|noscript)[^>]*>.*?</\1>", re.IGNORECASE | re.DOTALL)
 _ANY_TAG_RE = re.compile(r"<[^>]+>")
-_EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 _TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.IGNORECASE | re.DOTALL)
 _META_DESC_RE = re.compile(
     r'<meta[^>]+name=["\']description["\'][^>]+content=["\']([^"\']+)["\']', re.IGNORECASE)
@@ -70,7 +69,6 @@ def _img_sources(html: str) -> list[tuple[str, str]]:
 _LINK_RE = re.compile(r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
                       re.IGNORECASE | re.DOTALL)
 _P_RE = re.compile(r"<p[^>]*>(.*?)</p>", re.IGNORECASE | re.DOTALL)
-_ANY_EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 
 _DAYS = r"(?:mon|tue|wed|thu|fri|sat|sun)[a-z]*"
 _HOURS_RE = re.compile(
@@ -1267,148 +1265,12 @@ _STORY_PATHS = (
     "specials", "wine", "wine-list", "bar", "drinks",
     "experience", "dining", "visit", "faq", "sourcing", "partners", "farms",
 )
-_CONTACT_LINK_RE = re.compile(r'href=["\']([^"\']+)["\']', re.IGNORECASE)
-
-
-def contact_page_urls(html: str, base_url: str, limit: int = 3) -> list[str]:
-    """Absolute URLs of likely contact/about pages linked from ``html``."""
-    from urllib.parse import urljoin, urlparse
-
-    base_host = urlparse(base_url).netloc.lower()
-    found: list[str] = []
-    for href in _CONTACT_LINK_RE.findall(html or ""):
-        if href.startswith(("mailto:", "tel:", "#", "javascript:")):
-            continue
-        absolute = urljoin(base_url, href)
-        if _ASSET_RE.search(absolute):
-            continue
-        parsed = urlparse(absolute)
-        if parsed.netloc.lower() != base_host:  # stay on their own site
-            continue
-        path = parsed.path.strip("/").lower()
-        if not path:
-            continue
-        last = path.split("/")[-1]
-        if any(last == c or last.startswith(c) for c in _CONTACT_PATHS):
-            if absolute not in found:
-                found.append(absolute)
-        if len(found) >= limit:
-            break
-    return found
-
-
-# A directory's category titles describe what the business *is*. For food we want
-# "South Indian Restaurant", not a list of dishes; for trades, "Landscaping".
-_BASE_NOUNS = {
-    "restaurants": "Restaurant", "food": "Restaurant", "fast food": "Fast Food",
-    "cafes": "Cafe", "coffee & tea": "Cafe", "bakeries": "Bakery", "bars": "Bar",
-    "food trucks": "Food Truck", "delis": "Deli", "pizza": "Pizza Restaurant",
-}
-# Titles that are a venue type rather than a cuisine/speciality.
-_GENERIC_TITLES = {"restaurants", "food", "fast food", "cafes", "coffee & tea",
-                   "bakeries", "bars", "food trucks", "delis", "breakfast & brunch"}
-
-
-_FOOD_CATEGORIES = {"restaurant", "cafe", "diner", "bakery", "bar", "food"}
-# Titles that already name a venue, so appending "Restaurant" would read wrong
-# ("Steakhouses Restaurant").
-_VENUE_NOUNS = ("restaurant", "cafe", "bar", "bakery", "grill", "house", "pizzeria",
-                "diner", "deli", "pub", "kitchen", "buffet", "bbq", "steakhouse",
-                "creamery", "parlor", "lounge", "bistro", "brasserie", "taqueria")
-
-
-def service_label(categories: tuple[str, ...] | list[str],
-                  category_hint: str | None = None) -> str | None:
-    """Turn directory category titles into one human label.
-
-    ``("Indian", "Fast Food")`` -> ``"Indian Fast Food"``; ``("Greek",)`` for a
-    restaurant -> ``"Greek Restaurant"``; ``("Landscaping", "Lawn Services")`` ->
-    ``"Landscaping"``. Returns None when there is nothing to say — we never
-    invent a description.
-    """
-    titles = [t.strip() for t in (categories or []) if t and t.strip()]
-    if not titles:
-        return None
-    speciality = [t for t in titles if t.lower() not in _GENERIC_TITLES]
-    generic = [t for t in titles if t.lower() in _GENERIC_TITLES]
-    if speciality and generic:
-        return f"{speciality[0]} {_BASE_NOUNS.get(generic[0].lower(), generic[0])}"
-    if speciality:
-        label = speciality[0]
-        # A bare cuisine ("Greek") reads as an adjective; name the venue type.
-        if (category_hint or "").lower() in _FOOD_CATEGORIES and not any(
-            noun in label.lower() for noun in _VENUE_NOUNS
-        ):
-            return f"{label} Restaurant"
-        return label
-    return _BASE_NOUNS.get(generic[0].lower(), generic[0])
-
-
-def tidy_address(address: str | None) -> str | None:
-    """Drop the trailing country on a display address (Google appends ', USA')."""
-    if not address:
-        return address
-    text = address.strip()
-    for suffix in (", USA", ", United States", ", US"):
-        if text.endswith(suffix):
-            text = text[: -len(suffix)]
-    return text.strip().rstrip(",")
-
-
-_EMAIL_BLOCKLIST = ("example.com", "sentry.io", "wixpress.com", "godaddy.com",
-                    "squarespace.com", "@2x", ".png", ".jpg", ".webp")
 
 
 def html_to_text(html: str) -> str:
     """Crude but dependency-free text extraction — enough to find contact info."""
     without_code = _TAG_RE.sub(" ", html or "")
     return re.sub(r"\s+", " ", _ANY_TAG_RE.sub(" ", without_code)).strip()
-
-
-def find_contact_email(html: str) -> str | None:
-    """The most plausible public contact address on the page, or None.
-
-    Prefers role addresses an owner actually reads (info@, contact@, hello@)
-    over whatever appears first.
-    """
-    candidates = []
-    for match in _EMAIL_RE.findall(html or ""):
-        addr = match.strip().lower()
-        if any(bad in addr for bad in _EMAIL_BLOCKLIST):
-            continue
-        candidates.append(addr)
-    if not candidates:
-        return None
-    preferred = ("info@", "contact@", "hello@", "office@", "sales@")
-    for pref in preferred:
-        for addr in candidates:
-            if addr.startswith(pref):
-                return addr
-    return candidates[0]
-
-
-
-def _pages_matching(html: str, base_url: str, paths: tuple[str, ...],
-                    limit: int) -> list[str]:
-    """Same-host links whose last path segment names one of `paths`."""
-    base_host = urlparse(base_url).netloc.lower()
-    found: list[str] = []
-    for href in re.findall(r'href=["\']([^"\']+)["\']', html or "", re.IGNORECASE):
-        if href.startswith(("mailto:", "tel:", "#", "javascript:")):
-            continue
-        absolute = urljoin(base_url, href)
-        parsed = urlparse(absolute)
-        if parsed.netloc.lower() != base_host:
-            continue
-        if _MEDIA_RE.search(absolute) or _ASSET_RE.search(absolute):
-            continue
-        last = parsed.path.strip("/").lower().split("/")[-1]
-        if any(last == p or last.startswith(p) for p in paths):
-            if absolute not in found:
-                found.append(absolute)
-        if len(found) >= limit:
-            break
-    return found
 
 
 # Same-host paths that are real pages on the site but never worth reading:
@@ -1485,25 +1347,3 @@ def content_page_urls(html: str, base_url: str, limit: int = 20) -> list[str]:
     return found[:limit]
 
 
-def menu_page_urls(html: str, base_url: str, limit: int = 3) -> list[str]:
-    """Links to their menu / price-list pages, so the new site can carry them."""
-    base_host = urlparse(base_url).netloc.lower()
-    found: list[str] = []
-    for href in re.findall(r'href=["\']([^"\']+)["\']', html or "", re.IGNORECASE):
-        if href.startswith(("mailto:", "tel:", "#", "javascript:")):
-            continue
-        absolute = urljoin(base_url, href)
-        parsed = urlparse(absolute)
-        if parsed.netloc.lower() != base_host:
-            continue
-        if _MEDIA_RE.search(absolute):     # a PDF/photo menu is media, not a page
-            continue
-        if _ASSET_RE.search(absolute):     # stylesheets and scripts are not pages
-            continue
-        last = parsed.path.strip("/").lower().split("/")[-1]
-        if any(last == m or last.startswith(m) for m in _MENU_PATHS):
-            if absolute not in found:
-                found.append(absolute)
-        if len(found) >= limit:
-            break
-    return found

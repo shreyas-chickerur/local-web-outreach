@@ -27,12 +27,6 @@ LABELS = ("dish", "room", "exterior", "people", "team", "work", "product",
 # person disagrees with it.
 MACHINE_ACTOR = "claude-vision"
 
-# "I looked at this one and cannot tell what it is" — a decision, and a
-# different thing from never having looked. Without somewhere to record it,
-# a blank field means both, and the build cannot know whether the operator is
-# finished. It never leads: an unidentifiable photograph is the worst possible
-# first impression.
-UNREVIEWED = ""
 SKIPPED = "unclear"
 
 # What a description means, longest phrase first so "award badge" beats "badge"

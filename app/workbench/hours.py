@@ -56,12 +56,6 @@ def _read_time(text: str) -> tuple[str, str] | None:
     return f"{hour:02d}{minute:02d}", meridiem
 
 
-def _minutes(text: str) -> str | None:
-    """'5:00 PM' -> '1700'. Twelve-hour and 24-hour clocks both appear."""
-    read = _read_time(text)
-    return read[0] if read else None
-
-
 _TIME_TOKEN = re.compile(r"\d{1,2}(?::\d{2})?\s*(?:am|pm)?", re.IGNORECASE)
 
 

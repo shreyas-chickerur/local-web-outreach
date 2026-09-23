@@ -36,9 +36,6 @@ _PARKED_RE = re.compile(
     r"sedoparking|hugedomains|afternic|dan\.com/buy-domain|"
     r"the domain .{0,40} may be for sale)", re.IGNORECASE)
 
-FAULTS = ("certificate", "not-found", "no-https", "http-link", "parked", "dead",
-          "redirected")
-
 
 @dataclass
 class UrlCheck:
@@ -201,6 +198,12 @@ def _classify(result: FetchResult, url: str) -> str | None:
         return "dead"
     return "not-found" if 400 <= (result.status or 0) < 500 else "dead"
 
+
+# Every fault `validate` can report. Not read by the check itself: it is the
+# list the workbench must have a headline for (tests/web/test_server.py), so a
+# new fault cannot reach the screen as "broken" by default.
+FAULTS = ("certificate", "not-found", "no-https", "http-link", "parked", "dead",
+          "redirected")
 
 def _explain(check: UrlCheck) -> str:
     """The finding, in the words you would use at the door."""

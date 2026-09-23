@@ -77,6 +77,7 @@ def _inspect(prospect: Prospect, fetcher: SiteFetcher) -> Prospect:
 def find(conn: sqlite3.Connection, api_key: str, latitude: float, longitude: float,
          category: Category, *, limit: int = 12, radius_m: float = 15000.0,
          fetcher: SiteFetcher | None = None, refresh: bool = False) -> list[dict]:
+    """Local businesses of one category near a point, ranked by need for a website."""
     key = f"{category.key}|{latitude:.3f},{longitude:.3f}|{int(radius_m)}"
     if not refresh:
         hit = _cached(conn, key)

@@ -97,6 +97,7 @@ def looks_like_url(text: str) -> bool:
 
 
 def normalize_url(text: str) -> str:
+    """A typed address as a full https URL."""
     candidate = (text or "").strip()
     if not candidate.lower().startswith(("http://", "https://")):
         candidate = "https://" + candidate.lstrip("/")

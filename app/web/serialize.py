@@ -19,6 +19,7 @@ _LABELS = {
 
 
 def fact_to_dict(fact: Fact) -> dict:
+    """One corroborated fact, with its sources, as the brief stores it."""
     return {
         "field": fact.field,
         "label": _LABELS.get(fact.field, fact.field.replace("_", " ").title()),
@@ -33,6 +34,7 @@ def fact_to_dict(fact: Fact) -> dict:
 
 
 def published_to_dict(site: ExtractedSite) -> dict:
+    """What the business's own site publishes, as the brief stores it."""
     # services/products/menu_items are NOT re-sliced here. This function
     # used to cap them at 8/8/12 — smaller, in every case, than
     # `app.workbench.extract`'s own caps (raised to 20/15/24 as part of
@@ -67,6 +69,7 @@ def published_to_dict(site: ExtractedSite) -> dict:
 
 
 def brief_to_dict(brief: Brief) -> dict:
+    """A brief as JSON: what the archive, the database and the workbench read."""
     published = brief.published
     # An extraction with nothing in it is not worth a panel on the page.
     show_published = published is not None and not published.is_empty()

@@ -32,6 +32,7 @@ class YelpSource:
         self._client = client or httpx.Client(timeout=timeout)
 
     def lookup(self, name: str, location: str) -> DirectoryPlace | None:
+        """The Yelp listing matching a name near a location, or None."""
         if not self._key:
             return None
         try:

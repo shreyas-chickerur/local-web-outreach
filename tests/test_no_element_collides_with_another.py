@@ -3,11 +3,12 @@ class of defect a sampled Slice G design review found and no test here
 could — a control clipped by the viewport edge, or one element's text
 painted over by another's, at any of the three review widths.
 
-Runs the real rendered corpus through a live, CDP-driven Chrome (see
-`tools.contact_sheet.evaluate_in_page` — genuine narrow viewports, not the
-`--screenshot` CLI flag's ~500px floor) and reads element geometry
-directly, rather than reading it back off a screenshot a vision model has
-to interpret.
+Runs the real rendered corpus through a live Chrome at genuine viewports
+(`tests/layout_probe.py`) and reads element geometry directly, rather than
+reading it back off a screenshot a vision model has to interpret. The pages
+are the old generator's, which the workbench's build button still makes;
+`test_designed_pages_do_not_collide.py` holds pages from Claude Design to
+the same probe.
 
 Two checks:
 
@@ -36,68 +37,15 @@ Two checks:
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pytest
+from layout_probe import WIDTHS, chrome, link_photographs, measure
 
-from tools.contact_sheet import FIXTURES, OUT, _link_photographs, chrome
-from tools.contact_sheet import evaluate_in_page as _evaluate
+FIXTURES = Path("tests/fixtures/briefs")
+OUT = Path("artifacts/layout-probe")
 
 pytestmark = pytest.mark.unit
-
-# (label, width, height) — matching the three widths a Slice G design
-# review judges (`tools/design_review.py`'s own `WIDTHS`), so this test
-# holds the corpus to the same viewports a review is read against.
-WIDTHS = (("desktop", 1440, 1100), ("mobile", 390, 844), ("page", 1440, 6000))
-
-_PROBE = """
-(function() {
-  const vw = window.innerWidth, vh = window.innerHeight;
-  const clipped = [], collided = [];
-  for (const el of document.querySelectorAll('a, button')) {
-    const text = (el.textContent || '').trim();
-    if (!text) continue;
-    const style = getComputedStyle(el);
-    if (style.visibility === 'hidden' || style.display === 'none') continue;
-    const rect = el.getBoundingClientRect();
-    if (rect.width === 0 && rect.height === 0) continue;
-    if (rect.top >= vh || rect.bottom <= 0) continue;
-    if (rect.right > vw + 1 || rect.left < -1) {
-      clipped.push(text.slice(0, 60) + ` (right=${Math.round(rect.right)}, `
-        + `left=${Math.round(rect.left)}, viewport=${vw})`);
-    }
-  }
-  const textEls = document.querySelectorAll(
-    'p, h1, h2, h3, span, a, button, li, figcaption, dt, dd');
-  for (const el of textEls) {
-    let hasDirectText = false;
-    for (const node of el.childNodes) {
-      if (node.nodeType === 3 && node.textContent.trim()) {
-        hasDirectText = true;
-        break;
-      }
-    }
-    if (!hasDirectText) continue;
-    const text = (el.textContent || '').trim();
-    const style = getComputedStyle(el);
-    if (style.visibility === 'hidden' || style.display === 'none'
-        || parseFloat(style.opacity) === 0) continue;
-    const rect = el.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) continue;
-    const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-    if (cx < 0 || cx > vw || cy < 0 || cy > vh) continue;
-    const topEl = document.elementFromPoint(cx, cy);
-    if (!topEl) continue;
-    if (topEl !== el && !el.contains(topEl) && !topEl.contains(el)) {
-      if (topEl.closest('.bar, .callbar, .progress')) continue;
-      const label = topEl.className && typeof topEl.className === 'string'
-        ? topEl.tagName + '.' + topEl.className.split(' ').join('.')
-        : topEl.tagName;
-      collided.push(`"${text.slice(0, 40)}" covered by ${label}`);
-    }
-  }
-  return JSON.stringify({clipped, collided});
-})()
-"""
 
 
 @pytest.mark.skipif(chrome() is None, reason="no Chrome/Chromium on this machine")
@@ -106,7 +54,6 @@ def test_no_control_is_clipped_and_no_text_is_covered_at_any_review_width():
     from app.site.render import build_from_spec
     from app.store import db, leads, sites
 
-    binary = chrome()
     OUT.mkdir(parents=True, exist_ok=True)
     offenders: dict[str, dict[str, list[str]]] = {}
     with db.session(":memory:") as conn:
@@ -123,11 +70,10 @@ def test_no_control_is_clipped_and_no_text_is_covered_at_any_review_width():
             spec = spec_from_config(config)
             page = build_from_spec(brief, spec)
             site_file = OUT / f"{slug}.html"
-            site_file.write_text(_link_photographs(page, brief))
+            site_file.write_text(link_photographs(page, brief, OUT))
 
             for label, width, height in WIDTHS:
-                result = json.loads(
-                    _evaluate(binary, site_file, width, height, _PROBE))
+                result = measure(site_file, width, height)
                 if result["clipped"] or result["collided"]:
                     offenders[f"{slug}:{label}"] = result
 

@@ -116,6 +116,7 @@ def media_type_of(data: bytes) -> str | None:
 
 
 def dimensions_of(data: bytes) -> tuple[int, int] | None:
+    """Width and height read from an image's own header bytes, or None if unrecognised."""
     for reader in (_png, _jpeg, _gif, _webp):
         size = reader(data)
         if size and all(size):
