@@ -1,6 +1,6 @@
 # Spec: `checks-read-crawl`
 
-Module 2 of 4 in `SPEC.md`. Depends on `page-text`, which is built.
+Module 2 of 4 in `docs/specs/SPEC-crawl-is-the-source.md`. Depends on `page-text`, which is built.
 
 ## Objective
 

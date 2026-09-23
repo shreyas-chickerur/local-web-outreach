@@ -1,6 +1,6 @@
 # Spec: `page-text`
 
-Module 1 of 4 in `SPEC.md`. Status: draft, awaiting approval.
+Module 1 of 4 in `docs/specs/SPEC-crawl-is-the-source.md`. Status: draft, awaiting approval.
 
 ## Objective
 

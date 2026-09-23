@@ -1,6 +1,6 @@
 # Implementation plan: `page-text`
 
-Module 1 of 4 in `SPEC.md`; specification in `SPEC-page-text.md`. Task list in
+Module 1 of 4 in `docs/specs/SPEC-crawl-is-the-source.md`; specification in `docs/specs/SPEC-page-text.md`. Task list in
 `tasks/todo.md`.
 
 ## Overview

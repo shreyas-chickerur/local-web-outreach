@@ -1,6 +1,6 @@
 # Tasks: `page-text`
 
-Plan: `tasks/plan.md`. Specification: `SPEC-page-text.md`.
+Plan: `tasks/plan.md`. Specification: `docs/specs/SPEC-page-text.md`.
 
 ## Task 1: Web pages the crawl attempts reach the stored brief
 
@@ -98,7 +98,7 @@ same in the archive (`2026-09-22T21-44-35`) and in lead 1's database row.
 Three failed with reasons: `xmlrpc.php` status 405, `?p=2703` timed out, the
 dinner menu PDF could not download (the server returns 404). "Cabernet",
 "Sauvignon", "Non-alcoholic" and "forty-eight" appear in none of it: the wine
-list is an image. See `SPEC.md` for what this hands to `read-ladder`.
+list is an image. See `docs/specs/SPEC-crawl-is-the-source.md` for what this hands to `read-ladder`.
 
 ## Checkpoint: review with Shreyas
 

@@ -96,7 +96,7 @@ page scrolled to the exact sentence, using a text fragment.
 
 ## Built on 22 September: the crawl is the source
 
-All four modules of `SPEC.md` are built. The crawl keeps every page's text
+All four modules of `docs/specs/SPEC-crawl-is-the-source.md` are built. The crawl keeps every page's text
 (`pages`); the checks search it instead of `live-site.md`; menu images are
 read by a model once, cached by their bytes; every corroborated claim links to
 the page and the words, or the directory fact, that back it. A correction now

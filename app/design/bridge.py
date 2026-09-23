@@ -35,7 +35,7 @@ from app.adapters import logos, photos
 from app.core.config import design_model, google_places_api_key
 from app.store import brief_archive, leads, sites
 
-# Shreyas's decisions, 23 September 2026 (SPEC-design-bridge.md).
+# Shreyas's decisions, 23 September 2026 (docs/specs/SPEC-design-bridge.md).
 CEILING_USD = 5.0
 EDIT_CEILING_USD = 1.0
 MAX_TURNS = 40

@@ -1,6 +1,6 @@
 # Spec: `read-ladder`
 
-Module 3 of 4 in `SPEC.md`. Depends on `page-text`, which is built.
+Module 3 of 4 in `docs/specs/SPEC-crawl-is-the-source.md`. Depends on `page-text`, which is built.
 
 ## Objective
 
