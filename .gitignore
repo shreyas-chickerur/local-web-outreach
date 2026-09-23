@@ -69,3 +69,8 @@ artifacts/
 # graphify's per-file parse cache and its backup of settings it rewrote.
 graphify-out/cache/
 *.graphify-bak
+
+# A site's generated outputs. The source under sites/<slug>/ is kept; what it
+# builds is regenerated, and the versions themselves live in workbench.db.
+/sites/*/workbench.html
+/sites/*/project/
