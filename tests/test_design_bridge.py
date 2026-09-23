@@ -173,3 +173,52 @@ def test_a_run_with_no_logo_is_flagged_and_told_not_to_invent_one(lead, monkeypa
     outcome = bridge.design(conn, lead_id, prompt)
     assert "no logo" in told["text"].lower() and "invent" in told["text"].lower()
     assert any("logo" in f.lower() for f in outcome["flags"])
+
+
+# ------------------------------ editing in conversation ------------------------------ #
+def test_an_edit_changes_the_current_page_and_saves_it_with_its_parent(lead, monkeypatch):
+    """Shreyas wants to say "make the menu tabs bigger" on the workbench and see
+    the new version, without asking anyone to open a session. The edit works on
+    the page as it stands, with the photographs and logo as files, and the
+    saved version names them by the workbench's addresses again."""
+    conn, lead_id, prompt, _asked = lead
+    leads.verify(conn, lead_id, "logo", "http://fish.test/logo.jpg")
+    monkeypatch.setattr(bridge.logos, "fetch", lambda url: (b"\xff\xd8logo", "image/jpeg"))
+    sites.save(conn, lead_id, f'<img src="/logo/{lead_id}"><img src="/photo/{lead_id}/1?w=1600">'
+                              '<nav class="tabs">Menu</nav>', spec="")
+    seen = {}
+
+    async def fake_query(*, prompt, options):
+        page = Path(options.cwd, "index.html")
+        seen["before"] = page.read_text()
+        seen["told"] = prompt
+        seen["ceiling"] = options.max_budget_usd
+        page.write_text(seen["before"].replace('class="tabs"', 'class="tabs big"'))
+        yield _result(result="Made the menu tabs larger.", total_cost_usd=0.08)
+
+    monkeypatch.setattr(bridge, "query", fake_query)
+    outcome = bridge.edit(conn, lead_id, "make the menu tabs bigger", parent_version=1)
+    assert 'src="logo.jpg"' in seen["before"] and 'src="photos/1.jpg"' in seen["before"]
+    assert "make the menu tabs bigger" in seen["told"] and seen["ceiling"] == 1.0
+    assert outcome["version"] == 2 and outcome["reply"] == "Made the menu tabs larger."
+    page = sites.html_for(conn, lead_id, 2)
+    assert 'class="tabs big"' in page and f"/logo/{lead_id}" in page
+    assert f"/photo/{lead_id}/1?w=1600" in page
+    parent = next(v for v in sites.versions(conn, lead_id) if v["version"] == 2)["parent_version"]
+    assert parent == 1
+
+
+def test_an_edit_that_changes_nothing_saves_nothing_and_says_why(lead, monkeypatch):
+    """Asked for a fact the brief does not hold, the edit must leave the page
+    alone and say so; a new version identical to its parent is noise."""
+    conn, lead_id, prompt, _asked = lead
+    sites.save(conn, lead_id, "<p>Fish Shack</p>", spec="")
+
+    async def fake_query(*, prompt, options):
+        yield _result(result="The brief has no brunch hours, so I changed nothing.",
+                      total_cost_usd=0.03)
+
+    monkeypatch.setattr(bridge, "query", fake_query)
+    outcome = bridge.edit(conn, lead_id, "add our brunch hours", parent_version=1)
+    assert outcome["version"] is None and "brunch" in outcome["reply"]
+    assert len(sites.versions(conn, lead_id)) == 1

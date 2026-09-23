@@ -282,3 +282,53 @@ def test_the_workbench_serves_the_logo_the_brief_names_after_corrections(tmp_pat
     assert server.logo_for(conn, lead) == (b"\xff\xd8jpeg", "image/jpeg")
     assert asked == ["http://fish.test/graphics/fslogo2.jpg"]
     conn.close()
+
+
+def test_a_sentence_on_a_designed_page_goes_to_an_edit_and_the_reply_comes_back(
+        tmp_path, monkeypatch):
+    """The chat box only understood pages the old renderer built, so every
+    version of Fish Shack from 5 on could not be edited from the workbench.
+    A page with no renderer spec now goes to an edit run, and the reply is in
+    the thread the screen redraws, with what it cost."""
+    from app.store import db, leads, sites
+
+    monkeypatch.setattr(server.db, "DB_PATH", tmp_path / "t.db", raising=False)
+    conn = db.connect(tmp_path / "t.db")
+    lead = leads.save_brief(conn, {
+        "name": "Fish Shack", "location": "Plano, TX", "website_url": "http://fish.test/",
+        "facts": [], "published": {}, "assumptions": [], "open_questions": [],
+        "sources_consulted": []})
+    sites.save(conn, lead, "<p>Fish Shack</p>", spec="")
+    conn.close()
+    monkeypatch.setattr(server.db, "session", lambda: _session(tmp_path / "t.db"))
+    asked = {}
+
+    def fake_edit(conn, lead_id, sentence, parent_version=None):
+        asked.update(sentence=sentence, parent=parent_version)
+        version = sites.save(conn, lead_id, "<p>Fish Shack!</p>", spec="",
+                             parent_version=parent_version)
+        return {"version": version, "cost_usd": 0.07, "reply": "Added an exclamation mark.",
+                "why": "", "flags": []}
+
+    monkeypatch.setattr(server.bridge, "edit", fake_edit)
+    payload = server.iteration(lead, "make it louder", 1)
+    assert asked == {"sentence": "make it louder", "parent": 1}
+    assert payload["version"] == 2 and not payload["rejected"]
+    assert "Added an exclamation mark." in payload["thread"][-1]["text"]
+    assert "$0.07" in payload["thread"][-1]["text"]
+
+
+def _session(path):
+    import contextlib
+
+    from app.store import db
+
+    @contextlib.contextmanager
+    def opened():
+        conn = db.connect(path)
+        try:
+            yield conn
+            conn.commit()
+        finally:
+            conn.close()
+    return opened()

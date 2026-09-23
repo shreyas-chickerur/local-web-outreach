@@ -19,6 +19,7 @@ from app.adapters.gplaces import PlacesError, search
 from app.adapters.photos import fetch as fetch_photo
 from app.cli import available_directories
 from app.core.config import DEFAULT_PORT, google_places_api_key
+from app.design import bridge
 from app.review import run as review_run
 from app.site.census import measure as measure_census
 from app.site.pipeline import (
@@ -275,6 +276,13 @@ def iteration(lead_id: int, sentence: str, parent: object) -> dict:
         except ValueError:
             parent_version = None
     with db.session() as conn:
+        versions = sites.versions(conn, lead_id)
+        base = next((v for v in versions if v["version"] == parent_version),
+                    versions[0] if versions else None)
+        # A page the old renderer did not build has no spec to restyle: the
+        # chat box could not touch a single designed version of Fish Shack.
+        if base is not None and not (base.get("spec") or "").strip():
+            return _edit(conn, lead_id, sentence, int(base["version"]))
         try:
             result = run_iteration(conn, lead_id, sentence,
                                    parent_version=parent_version)
@@ -284,7 +292,42 @@ def iteration(lead_id: int, sentence: str, parent: object) -> dict:
         payload["lead_id"] = lead_id
         payload["versions"] = sites.versions(conn, lead_id)
         payload["events"] = leads.events(conn, lead_id)
+        payload["thread"] = messages.thread(conn, lead_id)
         return payload
+
+
+def _claim_counts(conn, lead_id: int, version: int) -> dict[str, int]:
+    brief, text, _where = _review_brief(conn, lead_id, str(
+        conn.execute("SELECT name FROM leads WHERE id = ?", (lead_id,)).fetchone()["name"]))
+    counts: dict[str, int] = {}
+    for row in review_run.findings(sites.html_for(conn, lead_id, version) or "", brief, text):
+        counts[row["verdict"]] = counts.get(row["verdict"], 0) + 1
+    return counts
+
+
+def _edit(conn, lead_id: int, sentence: str, parent: int) -> dict:
+    """A sentence about a designed page, made into a new version by an edit run.
+
+    The reply goes into the thread with what the edit cost and whether the
+    claim checks moved, so a wording change that invents a fact is visible in
+    the same place the change was asked for.
+    """
+    outcome = bridge.edit(conn, lead_id, sentence, parent_version=parent)
+    said = outcome["reply"]
+    if outcome["version"]:
+        before, after = _claim_counts(conn, lead_id, parent), _claim_counts(
+            conn, lead_id, outcome["version"])
+        moved = [f"{verdict} {before.get(verdict, 0)} → {after.get(verdict, 0)}"
+                 for verdict in ("contradicted", "unsourced", "defect")
+                 if before.get(verdict, 0) != after.get(verdict, 0)]
+        said += (f" Saved as v{outcome['version']}. Checks: "
+                 + ("; ".join(moved) if moved else "unchanged") + ".")
+    said += f" (${outcome['cost_usd']:.2f})"
+    messages.add(conn, lead_id, "assistant", said, version=outcome["version"])
+    return {"lead_id": lead_id, "version": outcome["version"], "rejected": False,
+            "unchanged": outcome["version"] is None, "cost_usd": outcome["cost_usd"],
+            "versions": sites.versions(conn, lead_id), "events": leads.events(conn, lead_id),
+            "thread": messages.thread(conn, lead_id)}
 
 
 _ANNOTATE = Path(__file__).with_name("annotate.js")

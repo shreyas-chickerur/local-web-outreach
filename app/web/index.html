@@ -1774,6 +1774,9 @@ async function sendInstruction() {
 
   WS.versions = data.versions || WS.versions;
   WS.events = data.events || WS.events;
+  // The reply to what was just said: without this it appeared only after the
+  // workspace was opened again.
+  WS.thread = data.thread || WS.thread;
   // A rejected instruction writes no version, so the preview must stay on the
   // one that is still live rather than jumping to nothing.
   if (!data.rejected && data.version) WS.active = data.version;

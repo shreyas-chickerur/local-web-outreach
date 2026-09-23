@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import json
 import re
 import sqlite3
 from datetime import UTC, datetime
@@ -37,6 +38,7 @@ from app.store import brief_archive, leads, sites
 # Shreyas's decisions, 23 September 2026 (SPEC-design-bridge.md).
 MODEL = "claude-opus-5-5"
 CEILING_USD = 5.0
+EDIT_CEILING_USD = 1.0
 MAX_TURNS = 40
 TOOLS = ["Read", "Write", "Edit", "Glob"]
 RUNS = Path("runs")
@@ -71,7 +73,7 @@ def _inside(folder: Path, path: str) -> bool:
     return target.resolve().is_relative_to(folder.resolve())
 
 
-def options(folder: Path) -> ClaudeAgentOptions:
+def options(folder: Path, ceiling: float = CEILING_USD) -> ClaudeAgentOptions:
     """The one configuration every design run uses."""
 
     async def only_here(tool: str, tool_input: dict[str, Any],
@@ -89,20 +91,15 @@ def options(folder: Path) -> ClaudeAgentOptions:
         # Not the operator's own Claude settings: their hooks and plugins would
         # steer a design run the way they steer a coding session.
         setting_sources=[],
-        cwd=str(folder), model=MODEL, max_budget_usd=CEILING_USD, max_turns=MAX_TURNS,
+        cwd=str(folder), model=MODEL, max_budget_usd=ceiling, max_turns=MAX_TURNS,
         # Every photograph the agent reads comes back base64-encoded in one
         # message, and the kit refuses any over 1 MB by default: the first real
         # run died after its fourth photograph.
         max_buffer_size=32 * 1024 * 1024)
 
 
-def prepare(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> Path:
-    """A fresh folder with the prompt and the lead's photographs as files.
-
-    The prompt names photographs by the workbench's `/photo/<lead>/<n>` address,
-    which exists only while the server runs on this machine. The agent gets the
-    files instead, from the cache the workbench already paid for.
-    """
+def _workspace(conn: sqlite3.Connection, lead_id: int) -> tuple[Path, dict]:
+    """A fresh folder holding the lead's photographs and logo as files."""
     # With corrections: a logo or photograph Shreyas corrected must be the one
     # the design sees. This read the stored crawl and would never have seen it.
     brief = leads.brief_with_overrides(conn, lead_id)
@@ -120,13 +117,38 @@ def prepare(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> Path:
     logo = logos.fetch(str(logo_url)) if logo_url else None
     if logo and logo[1] in _EXTENSIONS:
         (folder / f"logo.{_EXTENSIONS[logo[1]]}").write_bytes(logo[0])
+    return folder, brief
+
+
+def _to_files(html: str, lead_id: int, folder: Path) -> str:
+    """The workbench's addresses as the files the agent can open."""
+    html = re.sub(rf"/photo/{lead_id}/(\d+)(?:\?w=\d+)?", r"photos/\1.jpg", html)
+    logo = _logo_file(folder)
+    return html.replace(f"/logo/{lead_id}", logo) if logo else html
+
+
+def _to_addresses(html: str, lead_id: int) -> str:
+    """The files named in a finished page as the workbench's addresses."""
+    html = re.sub(r"photos/(\d+)\.jpg", rf"/photo/{lead_id}/\1?w=1600", html)
+    return re.sub(r"\blogo\.(?:png|jpg|gif|webp)\b", f"/logo/{lead_id}", html)
+
+
+def prepare(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> Path:
+    """A fresh folder with the prompt, the photographs and the logo as files.
+
+    The prompt names photographs by the workbench's `/photo/<lead>/<n>` address,
+    which exists only while the server runs on this machine. The agent gets the
+    files instead, from the cache the workbench already paid for.
+    """
+    folder, _brief = _workspace(conn, lead_id)
     text = re.sub(rf"/photo/{lead_id}/(\d+)(?:\?w=\d+)?", r"photos/\1.jpg",
                   prompt_path.read_text())
     (folder / "prompt.md").write_text(text)
     return folder
 
 
-async def _run(folder: Path) -> tuple[ResultMessage | None, str]:
+async def _run(folder: Path, told: str | None = None,
+               ceiling: float = CEILING_USD) -> tuple[ResultMessage | None, str]:
     """The run's result, if one arrived, and the error that ended it, if any.
 
     A crash before the result used to surface only as a traceback, cut off by
@@ -135,8 +157,9 @@ async def _run(folder: Path) -> tuple[ResultMessage | None, str]:
     result, error = None, ""
     try:
         logo = _logo_file(folder)
-        told = _INSTRUCTION.format(logo=_WITH_LOGO.format(name=logo) if logo else _NO_LOGO)
-        async for message in query(prompt=told, options=options(folder)):
+        told = told or _INSTRUCTION.format(
+            logo=_WITH_LOGO.format(name=logo) if logo else _NO_LOGO)
+        async for message in query(prompt=told, options=options(folder, ceiling)):
             if isinstance(message, ResultMessage):
                 result = message
     except Exception as exc:  # noqa: BLE001 — a failed run still reports what it spent
@@ -157,8 +180,7 @@ def design(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> dict:
         why = result.subtype if result else (error or "the run produced no result")
         return {"version": None, "cost_usd": cost, "folder": str(folder),
                 "why": f"{why}; nothing was saved", "flags": flags}
-    html = re.sub(r"photos/(\d+)\.jpg", rf"/photo/{lead_id}/\1?w=1600", page.read_text())
-    html = re.sub(r"\blogo\.(?:png|jpg|gif|webp)\b", f"/logo/{lead_id}", html)
+    html = _to_addresses(page.read_text(), lead_id)
     prompt_text = prompt_path.read_text()
     brief = leads.load_brief(conn, lead_id)
     current = brief_archive.current(str(brief["name"])) or {}
@@ -175,6 +197,56 @@ def design(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> dict:
     return {"version": version, "cost_usd": cost, "folder": str(folder), "why": "",
             "flags": flags}
 
+
+
+_EDIT = """index.html in this folder is the current page of a website proposal for
+{name}. Make exactly this change and nothing else:
+
+    {sentence}
+
+Keep everything the request does not touch identical. The photographs are in
+photos/ and the logo, if there is one, is the logo file here; use them by those
+relative paths. Facts (names, dishes, prices, hours, addresses, phone numbers,
+reviews) come only from brief.json: never add or alter one. If the change needs a
+fact brief.json does not hold, leave the page as it is and say so.
+
+When you are done, reply in one or two plain sentences saying what you changed."""
+
+
+def edit(conn: sqlite3.Connection, lead_id: int, sentence: str,
+         parent_version: int | None = None) -> dict:
+    """One change to the page as it stands, said in a sentence, as a new version.
+
+    The chat box understood only pages the old renderer built, so Fish Shack's
+    designed versions could not be edited from the workbench at all. This works
+    on the page itself: the same confined agent, a $1 ceiling (Shreyas, 23
+    September 2026), and a reply saying what it changed.
+    """
+    versions = sites.versions(conn, lead_id)
+    parent = parent_version or max(v["version"] for v in versions)
+    folder, brief = _workspace(conn, lead_id)
+    before = _to_files(sites.html_for(conn, lead_id, parent) or "", lead_id, folder)
+    (folder / "index.html").write_text(before)
+    facts = {k: brief.get(k) for k in ("name", "facts", "published", "ratings", "testimonials")}
+    (folder / "brief.json").write_text(json.dumps(facts, indent=1, default=str))
+    told = _EDIT.format(name=brief.get("name", "the business"), sentence=sentence.strip())
+    result, error = asyncio.run(_run(folder, told, EDIT_CEILING_USD))
+    cost = (result.total_cost_usd or 0.0) if result else 0.0
+    reply = (result.result or "").strip() if result else ""
+    after = (folder / "index.html").read_text()
+    if result is None or result.is_error:
+        why = result.subtype if result else (error or "the run produced no result")
+        return {"version": None, "cost_usd": cost, "reply": reply or f"The edit failed: {why}.",
+                "why": why, "flags": []}
+    if after == before:
+        return {"version": None, "cost_usd": cost, "reply": reply or "Nothing changed.",
+                "why": "unchanged", "flags": []}
+    version = sites.save(conn, lead_id, _to_addresses(after, lead_id), spec="",
+                         actor="claude-edit", parent_version=parent, notes={
+        "generator": "claude-agent-sdk edit (app/design/bridge.py)", "model": MODEL,
+        "instruction": sentence.strip(), "reply": reply, "cost_usd": cost,
+        "turns": result.num_turns, "ended": result.subtype, "run_folder": str(folder)})
+    return {"version": version, "cost_usd": cost, "reply": reply, "why": "", "flags": []}
 
 if __name__ == "__main__":
     import sys
