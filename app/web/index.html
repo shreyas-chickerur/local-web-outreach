@@ -417,15 +417,32 @@
     border-bottom:1px solid var(--line-soft)}
   .ws-body{flex:1;overflow-y:auto;padding:14px 16px}
 
-  /* left: the trail, newest first, with the chat pinned under it */
-  .thread{display:grid;gap:10px;margin:0 0 18px}
-  .turn{border-radius:10px;padding:9px 11px;font-size:13px;line-height:1.55}
-  .turn .who{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
-    font-weight:700;color:var(--faint);margin-bottom:4px}
-  .turn.assistant{background:var(--raise);border:1px solid var(--line)}
-  .turn.user{background:var(--accent-bg);border:1px solid var(--accent);
-    color:var(--ink)}
-  .turn.user .who{color:var(--accent)}
+  /* left: the conversation and nothing else, like a chat with Claude. The
+     trail of builds, crawls and reviews lives under Versions, folded away:
+     Shreyas found the chat pushed below it and could not follow the talk. */
+  .chat{display:flex;flex-direction:column;gap:16px;min-height:100%;justify-content:flex-end}
+  .turn{max-width:90%;font-size:13.5px;line-height:1.6;animation:rise .28s ease both}
+  .turn.user{align-self:flex-end;background:var(--accent-bg);border:1px solid var(--line);
+    padding:9px 13px;border-radius:16px 16px 4px 16px;color:var(--ink)}
+  .turn.assistant{align-self:flex-start;color:var(--ink)}
+  .turn .meta{font-size:11px;color:var(--faint);margin-top:5px;font-family:var(--mono)}
+  .turn .meta button{all:unset;cursor:pointer;color:var(--accent);text-decoration:underline;
+    text-underline-offset:2px}
+  .turn.working{display:flex;align-items:center;gap:10px;color:var(--faint);font-size:12.5px}
+  .dots{display:inline-flex;gap:4px}
+  .dots i{width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.3;
+    animation:blink 1.1s infinite ease-in-out}
+  .dots i:nth-child(2){animation-delay:.18s}.dots i:nth-child(3){animation-delay:.36s}
+  .chat-empty{margin:auto 0 0;color:var(--faint);font-size:13px;line-height:1.6}
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+  .device iframe.incoming{position:absolute;inset:0;opacity:0;transition:opacity .35s ease}
+  .device iframe.incoming.shown{opacity:1}
+  details.history{margin-top:16px}
+  details.history summary{cursor:pointer;font-size:11px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--faint);font-weight:700}
+  @media (prefers-reduced-motion: reduce){.turn,.dots i{animation:none}
+    .device iframe.incoming{transition:none}}
   .ws-event{display:grid;grid-template-columns:18px 1fr;gap:10px;padding:0 0 13px;
     cursor:default}
   .ws-event.pick{cursor:pointer;border-radius:8px;margin:0 -8px 13px;padding:6px 8px 13px}
@@ -444,7 +461,7 @@
     font-family:var(--mono)}
   .ws-event q{color:var(--dim);font-style:italic}
   .chatbox{border-top:1px solid var(--line);padding:12px 14px;background:var(--surface)}
-  .chatbox textarea{width:100%;min-height:60px;resize:vertical;border-radius:9px;
+  .chatbox textarea{width:100%;min-height:44px;max-height:180px;resize:none;border-radius:12px;
     border:1px solid var(--line);background:var(--bg);color:var(--ink);
     font:inherit;font-size:13.5px;padding:10px 12px}
   .chatbox textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
@@ -455,7 +472,7 @@
   /* centre: the preview, at phone width by default */
   .ws-stage{flex:1;display:grid;place-items:center;padding:20px;overflow:auto;
     background:repeating-linear-gradient(45deg,var(--raise) 0 10px,transparent 10px 20px)}
-  .device{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  .device{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;
     box-shadow:var(--shadow-lift);overflow:hidden;transition:width .3s ease}
   .device iframe{display:block;border:0;width:100%;height:100%;background:#fff}
   .device.phone{width:390px;height:750px;max-height:calc(100vh - 190px)}
@@ -1189,16 +1206,19 @@ function eventLine(e) {
 // by a model and reaches the operator only; it has no path to a generated
 // page. See `app/store/messages.py`.
 function drawThread() {
-  if (!(WS.thread || []).length) return "";
-  return `<div class="thread">${WS.thread.map(turn => `
+  const turns = (WS.thread || []).map(turn => `
     <div class="turn ${turn.role}">
-      <div class="who">${turn.role === "user" ? "You" : "Claude"}${
-        turn.version ? ` · v${turn.version}` : ""}</div>
       <div class="what">${esc(turn.text)}</div>
-    </div>`).join("")}</div>`;
+      ${turn.role === "assistant" && turn.version
+        ? `<div class="meta"><button onclick="pickVersion(${turn.version})">v${turn.version}</button></div>`
+        : ""}
+    </div>`).join("");
+  return `<div class="chat">${turns || `<p class="chat-empty">Say what to change on
+    this page — “make the menu tabs bigger”, “move the reviews above the menu”.
+    Each change becomes a new version on the right.</p>`}</div>`;
 }
 
-function drawWorkspace() {
+function drawWorkspace(into) {
   if (WS.stage === "label") {
     const shell = $("#workspace");
     if (shell) shell.remove();
@@ -1219,6 +1239,11 @@ function drawWorkspace() {
         <div class="who">${esc(e.actor)} · ${when(e.at)}</div></div></div>`;
   }).join("") : `<p class="hint">Nothing built yet. Describe the site below.</p>`;
 
+  // The plan, the census and the rest describe what the old renderer decided.
+  // A designed page has none of that, and showing the last renderer build's
+  // panels beside it read as if they were about the page on screen.
+  const activeRow = WS.versions.find(v => v.version === WS.active);
+  const designed = !!activeRow && !(activeRow.spec || "").trim();
   const chips = WS.versions.map(v =>
     `<button class="vchip" aria-pressed="${v.version === WS.active}"
       onclick="pickVersion(${v.version})"
@@ -1377,15 +1402,16 @@ function drawWorkspace() {
     </div>
 
     <section class="ws-pane">
-      <div class="ws-head">History</div>
-      <div class="ws-body" id="ws-trail">${said}${trail}</div>
+      <div class="ws-head">Chat</div>
+      <div class="ws-body" id="ws-chat">${said}</div>
       <form class="chatbox" onsubmit="event.preventDefault();sendInstruction()">
-        <textarea id="ws-input" placeholder="warm and rustic, lead with the gallery, book a table"
-          onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey))sendInstruction()"></textarea>
+        <textarea id="ws-input" rows="1" placeholder="Ask for a change to this page"
+          oninput="growInput(this)"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendInstruction()}"></textarea>
         <div class="row">
           <button class="mini primary" type="submit">Send</button>
           <span class="basis">${WS.active
-            ? `builds on <b>v${WS.active}</b>` : "first build"} · ⌘↵</span>
+            ? `changes <b>v${WS.active}</b>` : "first build"} · Enter to send</span>
         </div>
       </form>
     </section>
@@ -1421,16 +1447,57 @@ function drawWorkspace() {
 
     <section class="ws-pane">
       <div class="ws-head">Versions</div>
-      <div class="ws-body">
+      <div class="ws-body" id="ws-versions">
         <div class="diag">${chips}</div>
-        ${trouble}${why}${signature}${unlocks}${outline}${census}${diag}${labeller}
+        <details class="history"><summary>History</summary>
+          <div style="margin-top:12px">${trail}</div></details>
+        ${designed ? "" : `${trouble}${why}${signature}${unlocks}${outline}${census}${diag}${labeller}`}
       </div>
     </section>
   </div>`;
 
+  if (into) { into.innerHTML = html; return; }
   const existing = $("#workspace");
   if (existing) existing.outerHTML = html;
   else document.body.insertAdjacentHTML("beforeend", html);
+  scrollChat();
+}
+
+function scrollChat() {
+  const chat = $("#ws-chat");
+  if (chat) chat.scrollTop = chat.scrollHeight;
+}
+
+function growInput(box) {
+  box.style.height = "auto";
+  box.style.height = Math.min(box.scrollHeight, 180) + "px";
+}
+
+// After a send, only the parts that changed are replaced: the conversation,
+// the versions pane and the page. Redrawing the whole workspace reloaded the
+// preview and flashed white; the new page now fades in over the old one.
+function refreshAfterSend() {
+  const scratch = document.createElement("div");
+  drawWorkspace(scratch);
+  for (const id of ["ws-chat", "ws-versions"]) {
+    const fresh = scratch.querySelector("#" + id), live = $("#" + id);
+    if (fresh && live) live.innerHTML = fresh.innerHTML;
+  }
+  const basis = scratch.querySelector(".chatbox .basis"), liveBasis = $(".chatbox .basis");
+  if (basis && liveBasis) liveBasis.innerHTML = basis.innerHTML;
+  const nextFrame = scratch.querySelector(".device iframe");
+  const device = $("#workspace .device");
+  const current = device && device.querySelector("iframe:not(.incoming)");
+  if (nextFrame && device && current && current.getAttribute("src") !== nextFrame.getAttribute("src")) {
+    const incoming = nextFrame.cloneNode();
+    incoming.classList.add("incoming");
+    incoming.onload = () => {
+      incoming.classList.add("shown");
+      setTimeout(() => { current.remove(); incoming.classList.remove("incoming", "shown"); }, 380);
+    };
+    device.appendChild(incoming);
+  }
+  scrollChat();
 }
 
 // The opening version, once the photographs have been described. Deliberately
@@ -1748,11 +1815,28 @@ function setDevice(kind) { WS.device = kind; drawWorkspace(); }
 async function sendInstruction() {
   const box = $("#ws-input");
   const sentence = (box.value || "").trim();
-  if (!sentence) return;
+  if (!sentence || box.disabled) return;
   const button = document.querySelector(".chatbox .mini");
-  const say = (text) => { if (button) button.textContent = text; };
+  box.value = "";
+  growInput(box);
+  box.disabled = true;
   if (button) button.disabled = true;
-  say("Building…");
+  // What was said shows at once, and a working line under it with the time
+  // it has taken: an edit runs for a minute or more, and a silent box read
+  // as a chat that had stopped.
+  WS.thread = [...(WS.thread || []), {role: "user", text: sentence}];
+  const chat = $("#ws-chat");
+  if (chat) chat.innerHTML = drawThread();
+  const started = Date.now();
+  const inner = chat && chat.querySelector(".chat");
+  if (inner) inner.insertAdjacentHTML("beforeend",
+    `<div class="turn working" id="ws-working"><span class="dots"><i></i><i></i><i></i></span>
+     <span>Working on it · <span id="ws-elapsed">0s</span></span></div>`);
+  scrollChat();
+  const tick = setInterval(() => {
+    const clock = $("#ws-elapsed");
+    if (clock) clock.textContent = Math.round((Date.now() - started) / 1000) + "s";
+  }, 1000);
 
   let data;
   try {
@@ -1762,15 +1846,18 @@ async function sendInstruction() {
                             parent_version: activeVersion()})});
     data = await res.json();
   } catch (err) {
-    // A build that dies server-side must say so. Silence here is what made
-    // this bug invisible in the first place.
-    alert("The build failed to run: " + err);
-    return;
+    data = {error: "The edit failed to run: " + err};
   } finally {
+    clearInterval(tick);
+    box.disabled = false;
     if (button) button.disabled = false;
-    say("Send");
   }
-  if (data.error) { alert(data.error); return; }
+  if (data.error) {
+    WS.thread = [...WS.thread, {role: "assistant", text: data.error}];
+    refreshAfterSend();
+    box.focus();
+    return;
+  }
 
   WS.versions = data.versions || WS.versions;
   WS.events = data.events || WS.events;
@@ -1790,9 +1877,8 @@ async function sendInstruction() {
                     unsupported: data.unsupported, defect: data.defect,
                     read_by: data.read_by, reader_error: data.reader_error,
                     spec: sentence, version: data.version};
-  if (!data.unchanged) box.value = "";
-  drawWorkspace();
-  if (!data.rejected) box.focus();
+  refreshAfterSend();
+  box.focus();
 }
 
 // A label is a fact about the picture, not about this build, so it is stored
