@@ -384,6 +384,38 @@ def test_town_is_read_out_of_a_location_or_an_address(text, town):
     assert _town_of(text) == town
 
 
+
+_BRANCHES_SITE = """<html><head><title>Yama Izakaya &amp; Sushi</title></head><body>
+<h2>LOCATIONS</h2>
+<p>DALLAS <a href="tel:9722343474">(972) 234-3474</a> 8989 Forest Ln #112, Dallas, TX 75243</p>
+<p>PRESTON <a href="tel:2146188379">(214) 618-8379</a> 8600 Preston Rd #120, Plano, TX 75024</p>
+<p>LEGACY <a href="tel:9725172079">(972) 517-2079</a> 240 Legacy Dr #100, Plano, TX 75023</p>
+</body></html>"""
+
+
+def test_the_branch_the_prospect_list_flagged_is_the_one_researched():
+    """Yama Izakaya is six restaurants. The prospect list flagged the one on
+    Preston Road, but research was given only the town: OpenStreetMap matched
+    the Legacy branch in the same town, their site's first number was the
+    Dallas one, and address and phone both came back as conflicts that nobody
+    could settle from the workbench."""
+    preston = _Dir("google", _place(
+        name="Yama Izakaya & Sushi", address="8600 Preston Rd #120, Plano, TX 75024, USA",
+        phone="(214) 618-8379", website="https://yama.test/"))
+    legacy = _Dir("openstreetmap", _place(
+        name="Yama Izakaya & Sushi", address="240 Legacy Drive, Plano, Texas, 75023",
+        phone="+1-972-517-2079"))
+    brief = build_brief("Yama Izakaya & Sushi",
+                        location="8600 Preston Rd #120, Plano, TX 75024, USA",
+                        directories=[preston, legacy], fetcher=_Fetcher(html=_BRANCHES_SITE))
+    facts = {f.field: f for f in brief.facts}
+    assert facts["address"].confidence is Confidence.VERIFIED
+    assert facts["address"].value.startswith("8600 Preston Rd")
+    assert facts["phone"].confidence is Confidence.VERIFIED
+    assert facts["phone"].value == "(214) 618-8379"
+    assert any("240 Legacy" in a and "different branch" in a for a in brief.assumptions)
+
+
 # ------------------------------ chains -------------------------------------- #
 def test_several_branches_are_called_a_chain_not_a_disagreement():
     """Sources naming different street addresses are not disagreeing about one

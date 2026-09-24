@@ -105,6 +105,65 @@ def _same_town(location: str, address: str) -> bool:
 
 
 _HOUSE_NUMBER_RE = re.compile(r"^\s*(\d+)\b")
+
+
+def _other_branch(location: str, address: str) -> bool:
+    """Whether a listing is a different branch from the street address we were given.
+
+    Only a location with a street number can say so. Yama Izakaya has two
+    restaurants in Plano: the town matched, and OpenStreetMap's Legacy Drive
+    listing was taken for the Preston Road one the prospect list had flagged.
+    """
+    ours, theirs = _HOUSE_NUMBER_RE.match(location or ""), _HOUSE_NUMBER_RE.match(address or "")
+    return bool(ours and theirs and ours.group(1) != theirs.group(1))
+
+
+_PHONE_RE = re.compile(r"\+?1?[\s.-]*\(?\d{3}\)?[\s.-]*\d{3}[\s.-]*\d{4}")
+
+
+def _digits(value: str) -> str:
+    return re.sub(r"\D", "", value or "")[-10:]
+
+
+def _street_key(value: str) -> str:
+    """The house number and the first word of the street: "8600 preston"."""
+    words = re.findall(r"[a-z0-9]+", (value or "").lower())
+    return " ".join(words[:2])
+
+
+def _branch_values(site_claims: list[RawClaim], listed: list[RawClaim],
+                   pages: list[dict], url: str) -> list[RawClaim]:
+    """The site's phone and address for the branch the directories found, when it prints them.
+
+    A site for several restaurants prints a phone and an address for each, and
+    the reader keeps the first. On Yama's that was the Dallas number, which
+    disagreed with the Preston Road listing although the site printed Preston's
+    number two lines further down. Where the site prints the listed value, that
+    is what the site says about this branch.
+    """
+    text = "\n".join(p.get("text", "") for p in pages if p.get("read"))
+    lines = text.splitlines()
+    printed_phones = {_digits(m) for m in _PHONE_RE.findall(text)}
+    flat = " ".join(re.findall(r"[a-z0-9]+", text.lower()))
+    out = [c for c in site_claims if c.field not in ("phone", "address")]
+    for name in ("phone", "address"):
+        own = next((c for c in site_claims if c.field == name), None)
+        values = [c.value for c in listed if c.field == name]
+        key = _digits if name == "phone" else _street_key
+        if own and any(key(own.value) == key(v) for v in values):
+            out.append(own)
+            continue
+        found = next((v for v in values if key(v) and (
+            key(v) in printed_phones if name == "phone" else key(v) in flat)), None)
+        if found is None:
+            out += [own] if own else []
+            continue
+        line = next((ln for ln in lines if (key(found) in re.sub(r"\D", "", ln) if name == "phone"
+                                             else key(found) in ln.lower())), "")
+        out.append(RawClaim(field=name, value=found, source_url=url,
+                            source_type=SourceType.EXISTING_SITE, quote=line.strip(),
+                            found_in="their site, among several branches"))
+    return out
 _LOCATOR_HINTS = ("store-locator", "storelocator", "/locations", "/stores",
                   "/find-a", "/our-locations")
 
@@ -485,6 +544,11 @@ def build_brief(
         # Matching on name alone can pick up the same-named business one town
         # over. That may still be the right company — a lawn service in Plano
         # covers Frisco — but the reader has to be told, not left to notice.
+        if brief.location and place.address and _other_branch(brief.location, place.address):
+            brief.assumptions.append(
+                f"ignored a {source_name} listing at {place.address} — a different branch "
+                f"from {brief.location}")
+            continue
         if brief.location and place.address and not _same_town(brief.location, place.address):
             brief.assumptions.append(
                 f"{source_name} matched a listing in a different town: {place.address}")
@@ -548,7 +612,8 @@ def build_brief(
         if reachable:
             brief.sources_consulted.append("their website")
     if brief.published is not None and brief.website_url:
-        raw_claims.extend(_claims_from_site(brief.published, brief.website_url))
+        raw_claims.extend(_branch_values(_claims_from_site(brief.published, brief.website_url),
+                                         raw_claims, brief.pages, brief.website_url))
 
     if brief.website_url is None:
         brief.open_questions.append(

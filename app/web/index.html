@@ -888,7 +888,10 @@ function card(p) {
 
 function openProspect(name, address) {
   $("#q").value = name;
-  $("#loc").value = (address || "").split(",").slice(1, 3).join(",").trim();
+  // The whole address, not only its town: the prospect list flagged one
+  // restaurant, and Yama Izakaya has two in Plano. With the town alone the
+  // research could not tell which one it was looking at.
+  $("#loc").value = (address || "").trim();
   $("#f").requestSubmit();
 }
 
