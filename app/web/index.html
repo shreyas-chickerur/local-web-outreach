@@ -197,23 +197,6 @@
     font-style:italic}
   .ev-quote::before{content:"\201c"}
   .ev-quote::after{content:"\201d"}
-  .buildprog{position:fixed;right:22px;bottom:22px;z-index:60;width:min(360px,92vw);
-    background:var(--surface);border:1px solid var(--line);border-radius:10px;
-    box-shadow:var(--shadow-lift);padding:15px 17px;display:grid;gap:11px}
-  .bhead{display:flex;justify-content:space-between;align-items:baseline;font-size:14px}
-  .belapsed{font-family:var(--mono);font-size:12px;color:var(--faint);
-    font-variant-numeric:tabular-nums}
-  .bstep{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:start}
-  .bmark{width:18px;height:18px;display:grid;place-items:center;border-radius:50%;
-    border:1px solid var(--line);font-size:11px;color:var(--faint);margin-top:1px}
-  .bstep.done .bmark{background:var(--ok);border-color:var(--ok);color:#fff}
-  .bstep.failed .bmark{background:var(--bad);border-color:var(--bad);color:#fff}
-  .bstep.running .bmark{border-color:var(--accent)}
-  .bstep .bwhat{font-size:13px;line-height:1.35}
-  .bstep .bwhat span{display:block;color:var(--faint);font-size:12px}
-  .bstep.waiting .bwhat{color:var(--faint)}
-  .bfoot{font-size:12px;color:var(--faint);border-top:1px solid var(--line);
-    padding-top:9px}
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:60;
     background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:8px;
     font-size:13.5px;max-width:min(560px,92vw);box-shadow:var(--shadow-lift);
@@ -501,8 +484,6 @@
   .design-step.now{color:var(--ink)}
   .diag-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;
     color:var(--faint);font-weight:700;margin:0 0 7px}
-  .census-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-  .census-row{padding:4px 0;font-size:13px;cursor:help}
   .vchip{background:var(--raise);border:1px solid var(--line);border-radius:6px;
     padding:4px 10px;font-size:12px;cursor:pointer;font:inherit;color:var(--dim);
     font-family:var(--mono)}
@@ -663,9 +644,6 @@
     padding:2px 5px}
   .shot-card.labelled{border-color:var(--accent)}
   .shot-card.labelled .tag{color:var(--accent)}
-  .planout{font-family:var(--mono);font-size:11.5px;line-height:1.75;
-    white-space:pre-wrap;background:var(--raise);border:1px solid var(--line);
-    border-radius:8px;padding:11px 13px;color:var(--dim);margin:0 0 14px}
 
   .asks{display:grid;gap:9px}
   .confirm.long{display:grid;gap:6px}
@@ -1178,13 +1156,7 @@ async function openWorkspace(leadId, name) {
   WS = {lead_id: leadId, name: name || `Lead ${leadId}`,
         versions: data.versions || [], events: data.events || [],
         active: (data.versions || [])[0]?.version ?? null,
-        diagnostics: null, device: "phone", outline: data.outline || "",
-        census: data.census || [],
-        rationale: data.rationale || "",
-        signatureDevice: data.signature_device || "",
-        signatureWhy: data.signature_why || "", unlocks: data.unlocks || [],
-        pending: data.pending_labels || [], canBuild: !!data.can_build,
-        build: data.build || null, trouble: data.trouble || [],
+        device: "phone", canBuild: !!data.can_build, trouble: data.trouble || [],
         thread: data.thread || [],
         master: data.master || null,
         designing: data.designing || null,
@@ -1227,14 +1199,6 @@ function activeVersion() { return WS && WS.active; }
 
 function pickVersion(version) {
   WS.active = version;
-  const row = WS.versions.find(v => v.version === version);
-  WS.diagnostics = row ? {understood: row.notes?.understood || [],
-                          ignored_tokens: row.notes?.ignored || [],
-                          unmet: row.notes?.unmet || [],
-                          contradictions: row.notes?.contradictions || [],
-                          changed: row.notes?.changed || [],
-                          blast_radius: row.notes?.blast_radius || [],
-                          spec: row.spec, version} : null;
   drawWorkspace();
 }
 
@@ -1279,17 +1243,6 @@ function drawThread() {
     Each change becomes a new version on the right.</p>`}</div>`;
 }
 
-// A census field name as a person would say it.
-function plainField(field) {
-  const known = {"fact:hours": "Opening hours", "fact:phone": "Phone", "fact:address":
-    "Address", menu_media: "Menu files", menu_items: "Menu items", photos: "Photographs",
-    testimonials: "Reviews", services: "Services", about: "About text", tagline: "Tagline",
-    socials: "Social links", blocks: "Sections of their site", products: "Products"};
-  if (known[field]) return known[field];
-  const words = String(field).replace(/^fact:/, "").replace(/_/g, " ");
-  return words.charAt(0).toUpperCase() + words.slice(1);
-}
-
 function drawWorkspace(into) {
   if (WS.stage === "label") {
     const shell = $("#workspace");
@@ -1311,9 +1264,8 @@ function drawWorkspace(into) {
         <div class="who">${esc(e.actor)} · ${when(e.at)}</div></div></div>`;
   }).join("") : `<p class="hint">Nothing built yet. Describe the site below.</p>`;
 
-  // The plan, the census and the rest describe what the old renderer decided.
-  // A designed page has none of that, and showing the last renderer build's
-  // panels beside it read as if they were about the page on screen.
+  // A version the older generator built can be redesigned from the brief; a
+  // designed one is changed in the chat.
   const activeRow = WS.versions.find(v => v.version === WS.active);
   const designed = !!activeRow && !(activeRow.spec || "").trim();
   const chips = WS.versions.map(v =>
@@ -1327,41 +1279,10 @@ function drawWorkspace(into) {
     ? `<p class="master-note">★ v${WS.active} is the master</p>`
     : `<button class="mini master-set" onclick="markMaster()">Mark v${WS.active} as master</button>`;
 
-  // What the site was decided to be, before it was emitted. Reading this is a
-  // different and much cheaper activity than reading a rendered page.
-  const unlocks = (WS.unlocks || []).length
-    ? `<p class="diag-label">What one visit would unlock</p>
-       <p class="hint">These are single-source or missing. Confirm them on the
-          brief and they can appear on the page.</p>
-       <div class="diag">${WS.unlocks.map(q =>
-         `<span class="skip">${esc(q)}</span>`).join("")}</div>` : "";
   const trouble = (WS.trouble || []).length
     ? `<p class="diag-label">Could not be loaded</p>
        <div class="diag">${WS.trouble.map(t =>
          `<span class="stop">${esc(t)}</span>`).join("")}</div>` : "";
-  const why = WS.rationale
-    ? `<p class="diag-label">Why it opens this way</p>
-       <p class="hint">${esc(WS.rationale)}</p>` : "";
-  // §2.3: the signature device is exactly one mark and the justification is
-  // for the operator, not the visitor — it never reaches the generated page,
-  // only this panel, the same boundary `rationale` already keeps.
-  const signature = (WS.signatureDevice && WS.signatureDevice !== "none"
-                     && WS.signatureWhy)
-    ? `<p class="diag-label">The signature device — ${esc(WS.signatureDevice)}</p>
-       <p class="hint">${esc(WS.signatureWhy)}</p>` : "";
-  const outline = WS.outline
-    ? `<p class="diag-label">The plan</p><pre class="planout">${esc(WS.outline)}</pre>`
-    : "";
-  // BRIEF §5, Slice D item 3: what of their own material never reached the
-  // page, and why — the identical measurement a corpus-wide census runs
-  // (app.site.census), read for this one lead instead of all nineteen.
-  // In plain words: "Photographs: 13 of 18 used". The generator's own reason
-  // is written for whoever debugs it, so it waits behind a hover.
-  const census = (WS.census || []).length ? `
-    <p class="diag-label">What they published that the page doesn't use</p>
-    <div class="census-list">${WS.census.map(c => `
-      <div class="census-row" title="${esc(c.why)}">
-        ${esc(plainField(c.field))}: ${c.reached} of ${c.of} used</div>`).join("")}</div>` : "";
   const untagged = (WS.photos || []).filter(p => !p.label).length;
   const labeller = (WS.photos || []).length ? `
     <p class="hint">Optional. Your words become the photograph's description on
@@ -1388,63 +1309,6 @@ function drawWorkspace(into) {
             </select>
           </div>
         </div></div>`).join("")}</div>` : "";
-
-  const d = WS.diagnostics;
-  const diag = d ? `
-    ${d.spec ? `<div class="said">“${esc(d.spec)}”</div>` : ""}
-    ${d.blocked ? `<p class="diag-label">Blocked by the content gate</p>
-      <div class="diag">${(d.findings || []).map(f =>
-        `<span class="stop">${esc(f)}</span>`).join("")}</div>
-      <p class="hint">Nothing was saved. The previous version is still live.</p>` : ""}
-    ${d.kind === "defect" ? `<p class="diag-label">Read as a bug report</p>
-      <p class="hint">${d.defect ? esc(d.defect) : "Something looks wrong."}
-         Nothing was restyled — describing a fault is not an instruction to
-         change the design. What the audit says about the page you are looking
-         at is below.</p>` : ""}
-    ${d.kind === "content" ? `<p class="diag-label">That would change what the site says</p>
-      <p class="hint">Facts about the business come from corroborated sources,
-         not from instructions. Correct it on the brief and it will appear
-         here.</p>` : ""}
-    ${(d.unsupported || []).length ? `<p class="diag-label">Asked for, and not possible yet</p>
-      <div class="diag">${d.unsupported.map(x =>
-        `<span class="no">${esc(x)}</span>`).join("")}</div>
-      <p class="hint">This is the build queue, in your words.</p>` : ""}
-    ${(d.defects || []).length ? `<p class="diag-label">What the audit finds</p>
-      <div class="diag">${d.defects.map(x =>
-        `<span class="no">${esc(x)}</span>`).join("")}</div>` : ""}
-    ${d.unchanged ? `<p class="diag-label">Nothing to change</p>
-      <p class="hint">This asked for the page you already have, so no version
-         was written. If a word below is greyed out, that is the part with no
-         rule behind it yet.</p>` : ""}
-    ${(d.understood || []).length ? `<p class="diag-label">Understood</p>
-      <div class="diag">${d.understood.map(x =>
-        `<span class="got">${esc(x)}</span>`).join("")}</div>` : ""}
-    ${(d.changed || []).length ? `<p class="diag-label">What moved</p>
-      <div class="diag">${d.changed.map(x =>
-        `<span class="got">${esc(x)}</span>`).join("")}</div>` : ""}
-    ${(d.blast_radius || []).length ? `<p class="diag-label">Moved, but not asked for</p>
-      <div class="diag">${d.blast_radius.map(x =>
-        `<span class="stop">${esc(x)}</span>`).join("")}</div>
-      <p class="hint">These facets changed too, and nothing in what was
-         understood explains why. Worth a second look before trusting this
-         version.</p>` : ""}
-    ${(d.ignored_tokens || []).length ? `<p class="diag-label">Ignored — not understood</p>
-      <div class="diag">${d.ignored_tokens.map(x =>
-        `<span class="skip">${esc(x)}</span>`).join("")}</div>` : ""}
-    ${(d.unmet || []).length ? `<p class="diag-label">Could not be done</p>
-      <div class="diag">${d.unmet.map(x =>
-        `<span class="no">${esc(x)}</span>`).join("")}</div>` : ""}
-    ${(d.contradictions || []).length ? `<p class="diag-label">Conflicting</p>
-      <div class="diag">${d.contradictions.map(x =>
-        `<span class="no">${esc(x)}</span>`).join("")}</div>` : ""}
-    ${d.reader_error ? `<p class="diag-label">Fell back to the phrase list</p>
-      <div class="diag"><span class="stop">${esc(d.reader_error)}</span></div>
-      <p class="hint">The instruction was still read, with a smaller
-         vocabulary. Fix the above and it goes back to the fuller reading.</p>`
-      : d.read_by === "phrases" ? `<p class="hint">Read with the built-in phrase
-       list. Set ANTHROPIC_API_KEY for the fuller reading.</p>` : ""}
-    ` : `<p class="hint">Send an instruction and what it was understood to mean
-         will appear here.</p>`;
 
   // With a review open the preview is served with its findings drawn on it.
   const src = WS.active
@@ -1531,9 +1395,7 @@ function drawWorkspace(into) {
         ${labeller ? `<details class="history"><summary>Photographs
             (${WS.photos.length - untagged} of ${WS.photos.length} described)</summary>
             ${labeller}</details>` : ""}
-        ${designed || !(why + signature + unlocks + outline + census + diag).trim() ? ""
-          : `<details class="history"><summary>The older generator's notes</summary>
-            ${why}${signature}${unlocks}${outline}${census}${diag}</details>`}
+
       </div>
     </section>
   </div>`;
@@ -1595,59 +1457,6 @@ function refreshAfterSend() {
   scrollChat();
 }
 
-// The opening version, once the photographs have been described. Deliberately
-// a button rather than something that happens on open: the design is made from
-// what the operator said the pictures show, so it waits for them to say it.
-// Building takes half a minute and used to show nothing at all: the button
-// changed its own label — which is off-screen the moment you scroll — and then
-// the workspace appeared, as if the click had done nothing until it suddenly
-// did everything. This says which step is running, what it is for, how long it
-// has been going, and that finished steps stay finished.
-const STAGE_WHY = {
-  photographs: "Reading their photographs and your descriptions of them",
-  direction: "Choosing a direction — type, colour and structure for this trade",
-  page: "Writing the page itself",
-};
-
-let BUILD_CLOCK = null;
-
-function drawBuild(build, running, failedAt) {
-  const stages = build.stages || [];
-  const done = build.done || [];
-  const rows = stages.map(stage => {
-    const state = done.includes(stage) ? "done"
-      : stage === failedAt ? "failed"
-      : stage === running ? "running" : "waiting";
-    const mark = {done: "\u2713", failed: "!", running: "", waiting: ""}[state];
-    return `<div class="bstep ${state}">
-      <span class="bmark">${state === "running" ? `<span class="spin"></span>` : mark}</span>
-      <span class="bwhat"><b>${esc((build.says || {})[stage] || stage)}</b>
-        <span>${esc(STAGE_WHY[stage] || "")}</span></span></div>`;
-  }).join("");
-  const html = `<div class="buildprog" id="buildprog">
-    <div class="bhead"><b>Building the first version</b>
-      <span class="belapsed" id="belapsed">0s</span></div>
-    ${rows}
-    <div class="bfoot">${failedAt
-      ? "The steps that finished are kept. Pressing the button again picks up "
-        + "from the one that failed."
-      : "About half a minute. Each step is saved as it finishes."}</div>
-  </div>`;
-  const existing = $("#buildprog");
-  if (existing) existing.outerHTML = html;
-  else document.body.insertAdjacentHTML("beforeend", html);
-}
-
-function stopBuildClock() {
-  if (BUILD_CLOCK) { clearInterval(BUILD_CLOCK); BUILD_CLOCK = null; }
-}
-
-function clearBuild() {
-  stopBuildClock();
-  const panel = $("#buildprog");
-  if (panel) panel.remove();
-}
-
 // A design run takes minutes and belongs to the server, not to this page: the
 // page starts it, then asks every few seconds whether it has finished. Leaving
 // and coming back finds it still running, with the clock counting from when it
@@ -1703,65 +1512,6 @@ function watchDesign() {
   let n = 0;
   tick(false);
   DESIGN_WATCH = setInterval(() => tick(++n % 2 === 0), 1000);
-}
-
-async function buildFirst() {
-  // The button lives in two places — the labelling step and the empty
-  // workspace — so it is found by id rather than by whichever layout is up.
-  const button = $("#build-first");
-  const say = (text) => { if (button) button.textContent = text; };
-  if (button) button.disabled = true;
-
-  // One stage at a time — photographs, direction, page — so the wait says what
-  // it is doing and a failure says which part failed. Roughly twenty-five
-  // seconds all told, and a retry costs only the stage that went wrong,
-  // because each one's answer is stored as it finishes.
-  const build = WS.build || {stages: ["photographs", "direction", "page"],
-                             done: [], says: {}};
-  const began = Date.now();
-  drawBuild(build, build.stages.find(s => !(build.done || []).includes(s)));
-  stopBuildClock();
-  BUILD_CLOCK = setInterval(() => {
-    const clock = $("#belapsed");
-    if (clock) clock.textContent = Math.round((Date.now() - began) / 1000) + "s";
-  }, 1000);
-
-  for (const stage of build.stages) {
-    if ((build.done || []).includes(stage)) continue;
-    say((build.says[stage] || stage) + "…");
-    drawBuild(build, stage);
-    let data;
-    try {
-      const res = await fetch("/api/build", {method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({lead_id: WS.lead_id, stage})});
-      data = await res.json();
-    } catch (err) {
-      drawBuild(build, null, stage);
-      stopBuildClock();
-      alert("The build could not run: " + err);
-      if (button) { button.disabled = false; say("Build the first version"); }
-      return;
-    }
-    if (data.error) {
-      // Named, not swallowed. The stages already finished stay finished, so
-      // pressing the button again resumes rather than starting over.
-      WS.build = data.progress || WS.build;
-      drawBuild(WS.build || build, null, data.stage || stage);
-      stopBuildClock();
-      alert(data.error);
-      if (button) { button.disabled = false; say("Try again"); }
-      if (data.stage === "photographs") { WS.stage = "label"; drawWorkspace(); }
-      return;
-    }
-    WS.build = data.progress || WS.build;
-    drawBuild(WS.build || build, null);
-  }
-  const panel = $("#buildprog");
-  if (panel) panel.querySelector(".bfoot").textContent = "Done — opening the workspace.";
-  const {lead_id, name} = WS;
-  await openWorkspace(lead_id, name);
-  clearBuild();
 }
 
 // ---------------------------------------------------------------- labelling
@@ -1842,11 +1592,8 @@ function drawLabeller() {
         </div>
         <p class="hint lab-count">${at + 1} / ${total} · ← → to move ·
            ⏎ saves and moves on</p>
-        ${WS.versions.length
-          ? `<button class="mini primary" id="rebuild" onclick="rebuildOpening()"
-               style="margin-top:auto">Rebuild from these descriptions →</button>`
-          : `<button class="mini primary" onclick="WS.stage = 'work'; drawWorkspace()"
-               style="margin-top:auto">Back to the workspace →</button>`}
+        <button class="mini primary" onclick="WS.stage = 'work'; drawWorkspace()"
+          style="margin-top:auto">Back to the workspace →</button>
       </div>
     </div>
 
@@ -1929,33 +1676,6 @@ function labellerKeys(event) {
 }
 document.addEventListener("keydown", labellerKeys);
 
-// The opening design again, from the corrected descriptions. A new version
-// rather than an edit, so the trail still says what happened — and without it
-// a correction made after the first build reaches nothing, because open_site
-// is idempotent by design.
-async function rebuildOpening() {
-  await saveShot(false);
-  const button = $("#rebuild");
-  if (button) { button.disabled = true; button.textContent = "Rebuilding…"; }
-  let data;
-  try {
-    const res = await fetch("/api/rebuild", {method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({lead_id: WS.lead_id})});
-    data = await res.json();
-  } catch (err) {
-    alert("The rebuild failed to run: " + err);
-    if (button) {
-      button.disabled = false;
-      button.textContent = "Rebuild from these descriptions →";
-    }
-    return;
-  }
-  if (data.error) { alert(data.error); return; }
-  const {lead_id, name} = WS;
-  await openWorkspace(lead_id, name);
-}
-
 function setDevice(kind) { WS.device = kind; drawWorkspace(); }
 
 // One instruction becomes one version. Deleted by a bulk edit and unnoticed
@@ -2026,16 +1746,6 @@ async function sendInstruction() {
   // A rejected instruction writes no version, so the preview must stay on the
   // one that is still live rather than jumping to nothing.
   if (!data.rejected && data.version) WS.active = data.version;
-  WS.outline = data.outline || WS.outline;
-  WS.diagnostics = {understood: data.understood, ignored_tokens: data.ignored_tokens,
-                    unmet: data.unmet, contradictions: data.contradictions,
-                    changed: data.changed, blast_radius: data.blast_radius,
-                    blocked: data.rejected, findings: data.findings,
-                    defects: data.defects,
-                    unchanged: data.unchanged, kind: data.kind,
-                    unsupported: data.unsupported, defect: data.defect,
-                    read_by: data.read_by, reader_error: data.reader_error,
-                    spec: sentence, version: data.version};
   refreshAfterSend();
   box.focus();
 }

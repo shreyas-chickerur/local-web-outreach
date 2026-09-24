@@ -369,9 +369,6 @@ def test_a_failed_rebuild_never_loses_the_correction(tmp_path, monkeypatch):
     def explode(*_args, **_kw):
         raise RuntimeError("no model key")
 
-    # The page is a designed one (no renderer spec), so its correction goes to
-    # an edit run; the old generator's path is covered by the renderer's own tests.
-    monkeypatch.setattr(server, "run_iteration", explode)
     monkeypatch.setattr(server.bridge, "edit", explode)
     answer = server.rebuild_after(conn, lead, "phone",
                                   {"kind": "corrected", "was": "x", "value": "y"})
@@ -548,7 +545,7 @@ def test_a_claim_backed_by_a_directory_fact_points_at_that_fact():
         assert json.loads(row["resources"])[0]["url"] == "https://maps.test/fs"
 
 
-def test_a_correction_on_a_designed_page_is_made_by_an_edit_not_the_old_generator(
+def test_a_correction_is_made_by_an_edit_of_the_page_as_it_stands(
         tmp_path, monkeypatch):
     """A correction rewrote the page with the old generator whatever had built
     it, so correcting Fish Shack's phone would have run it over version 13, a
@@ -563,7 +560,6 @@ def test_a_correction_on_a_designed_page_is_made_by_an_edit_not_the_old_generato
         "facts": [{"field": "phone", "value": "(469) 229-0838", "confidence": "verified"}],
         "published": {}, "assumptions": [], "open_questions": [], "sources_consulted": []})
     sites.save(conn, lead, "<p>Call (469) 229-0838</p>", spec="")
-    monkeypatch.setattr(server, "run_iteration", lambda *a, **k: pytest.fail("old generator ran"))
     asked = {}
 
     def fake_edit(conn, lead_id, sentence, parent_version=None):

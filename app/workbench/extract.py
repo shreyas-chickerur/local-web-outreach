@@ -1267,10 +1267,6 @@ _STORY_PATHS = (
 )
 
 
-def html_to_text(html: str) -> str:
-    """Crude but dependency-free text extraction — enough to find contact info."""
-    without_code = _TAG_RE.sub(" ", html or "")
-    return re.sub(r"\s+", " ", _ANY_TAG_RE.sub(" ", without_code)).strip()
 
 
 # Same-host paths that are real pages on the site but never worth reading:

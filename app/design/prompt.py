@@ -17,7 +17,7 @@ import re
 import sqlite3
 from pathlib import Path
 
-from app.store import brief_archive, folders, leads
+from app.store import brief_archive, folders, leads, photos
 
 PLAYBOOKS = Path(__file__).parent / "playbooks"
 
@@ -69,6 +69,17 @@ def _earlier_sites(conn: sqlite3.Connection, lead_id: int) -> list[str]:
         "SELECT DISTINCT l.name, l.location FROM sites s JOIN leads l ON l.id = s.lead_id"
         " WHERE s.lead_id != ? AND TRIM(COALESCE(s.spec, '')) = ''", (lead_id,))
     return [f"{r['name']} ({r['location']})" for r in rows]
+
+
+def operator_descriptions(conn: sqlite3.Connection, lead_id: int) -> dict[int, str]:
+    """What a person said each photograph shows, by its number."""
+    out: dict[int, str] = {}
+    for url, seen in photos.described(conn, lead_id).items():
+        match = re.fullmatch(rf"/photo/{lead_id}/(\d+)", url)
+        words = str(seen.get("description") or "").strip()
+        if match and words and not seen.get("by_machine"):
+            out[int(match.group(1))] = words
+    return out
 
 
 def render(conn: sqlite3.Connection, lead_id: int, brief: dict, revision: int) -> str:
@@ -151,7 +162,12 @@ def render(conn: sqlite3.Connection, lead_id: int, brief: dict, revision: int) -
             "The business's own place photographs, served by the workbench so no key appears "
             "in the page. Look at each one before choosing where it goes. Use these paths as "
             "given; `w` may be 800, 1600, 2400 or 3200.", ""]
-    out += [f"- `/photo/{lead_id}/{n}?w=1600`" for n in range(count)] or ["- none"]
+    # What the operator said a photograph shows outranks what a model can see
+    # in it: "tonkotsu ramen" from someone who asked the owner is a fact.
+    said = operator_descriptions(conn, lead_id)
+    out += [f"- `/photo/{lead_id}/{n}?w=1600`"
+            + (f" — the operator says: {said[n]}" if n in said else "")
+            for n in range(count)] or ["- none"]
 
     out += ["", "## The playbook this page will be scored against", "", playbook_text,
             "", "## Appendix: the brief, verbatim", "",

@@ -32,14 +32,6 @@ def yelp_api_key() -> str | None:
 DEFAULT_PORT = 8099
 
 
-def preview_base_url() -> str:
-    """Where generated site previews are served from.
-
-    Used for anything that must be fetchable from somewhere other than this
-    process: a phone rendering the link preview when the operator texts it.
-    """
-    return os.environ.get(
-        "PREVIEW_BASE_URL", f"http://127.0.0.1:{DEFAULT_PORT}").rstrip("/")
 
 
 def anthropic_api_key() -> str | None:

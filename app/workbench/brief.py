@@ -26,7 +26,6 @@ from app.adapters.directory import DirectoryPlace, DirectorySource
 from app.adapters.imageinfo import dimensions_of
 from app.adapters.pdf_read import read_pdf_text
 from app.adapters.site_fetch import FetchResult, SiteFetcher, default_fetcher, download
-from app.site.visible import visible_text_runs
 from app.workbench.corroborate import Fact, corroborate
 from app.workbench.extract import (
     ExtractedSite,
@@ -48,6 +47,7 @@ from app.workbench.resolve import (
     town_of,
 )
 from app.workbench.types import Confidence, RawClaim, SourceType
+from app.workbench.visible import visible_text_runs
 from app.workbench.weburl import UrlCheck, validate
 
 

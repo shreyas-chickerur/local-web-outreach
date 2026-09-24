@@ -17,7 +17,6 @@ from pathlib import Path
 
 import pytest
 
-from app.site.render import material_from_brief
 from app.web.serialize import brief_to_dict
 from app.workbench.brief import Brief
 from app.workbench.extract import ExtractedSite
@@ -53,20 +52,6 @@ def test_a_business_with_its_own_photographs_is_in_the_corpus():
     assert len(with_own) >= 3, with_own
 
 
-def test_every_fixture_is_readable_as_material():
-    for slug, brief in fixtures():
-        # A fixture carries no lead id — proxied photo URLs are built from one,
-        # and a frozen id would point at whichever business happened to hold it
-        # in somebody else's database. The tools assign one when they load it.
-        material = material_from_brief({**brief, "lead_id": 1})
-        assert material.name, slug
-        # Both pools reach the renderer: proxied Google photographs and, after
-        # them, whatever the business publishes itself.
-        assert len(material.images) == (
-            len(brief.get("place_photos") or [])
-            + len((brief.get("published") or {}).get("photos") or [])), slug
-
-
 def test_a_fixture_carries_no_lead_id():
     """It would point at whichever business held that id elsewhere, and the
     proxied photographs would be someone else's pictures."""
@@ -96,51 +81,10 @@ def test_the_serialiser_does_not_re_cap_below_the_extractors_own_limit():
     assert len(pub["menu_items"]) == _SERVICE_LIMIT
 
 
-def test_the_serialiser_puts_photographs_where_the_renderer_reads_them():
+def test_the_serialiser_puts_photographs_where_a_design_reads_them():
     """The bug itself, pinned. Two functions have to agree about one field."""
     site = ExtractedSite()
     site.images = [f"https://x/{n}.jpg" for n in range(3)]
     stored = brief_to_dict(Brief(name="X", location=None, website_url="https://x",
                                  notes=None, published=site))
     assert (stored.get("published") or {}).get("photos") == site.images
-    material = material_from_brief({**stored, "lead_id": 1})
-    for url in site.images:
-        assert url in material.images
-
-
-def test_every_fixture_carries_what_the_vision_pass_saw():
-    """Without this a census depends on `artifacts/fixtures.db`, which is not
-    committed — so a clean clone measures a different system, `hero_subject` is
-    constant, and the fingerprints move. The ruler was versioned and its inputs
-    were not, which makes the versioning worth less than it looks."""
-    for slug, brief in fixtures():
-        # Read through Material, which re-keys proxied photographs onto the
-        # lead they are loaded under — the URLs carry the id, so the raw
-        # fixture keys never match.
-        material = material_from_brief({**brief, "lead_id": 1})
-        if not material.images:
-            continue
-        assert material.photo_vision, f"{slug} carries no vision labels"
-        missing = [url for url in material.images
-                   if url not in material.photo_vision]
-        assert not missing, f"{slug}: {len(missing)} photographs unaccounted for"
-
-
-def test_a_fixture_is_enough_on_its_own_to_score_a_hero():
-    """The specific thing the missing labels hid: with no vision in the brief,
-    every candidate scores the same and the sweep cannot tell axes apart."""
-    from app.site.render import hero_scores
-
-    subjects = set()
-    for slug, brief in fixtures():
-        loaded = {**brief, "lead_id": 1}
-        material = material_from_brief(loaded)
-        if not material.images:
-            continue
-        scored = hero_scores(material.images, material.photo_labels,
-                             material.trade_kind, lambda url: None,
-                             material.photo_vision)
-        assert len({s.total for s in scored}) > 1 or len(scored) == 1, slug
-        subjects.add(scored[0].label)
-    assert len(subjects) > 1, \
-        "every fixture's hero has the same subject — the corpus cannot vary"

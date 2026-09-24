@@ -64,32 +64,23 @@ def test_the_thread_knows_whether_it_has_been_opened(conn, lead):
 
 # --- the boundary --------------------------------------------------------- #
 
-def test_the_generator_cannot_reach_the_conversation():
+def test_what_builds_pages_cannot_reach_the_conversation():
     """The structural half of the rule. Model prose is allowed in a message and
-    forbidden on a page, and the way that survives is that the renderer has no
-    path to this table at all — not that someone remembers.
+    forbidden on a page, and the way that survives is that nothing which writes
+    a page has a path to this table at all, not that someone remembers. Pages
+    are written by `app/design` now; the older generator held this rule before.
     """
-    site = Path("app/site")
     offenders = []
-    for path in site.glob("*.py"):
+    for path in Path("app/design").glob("*.py"):
         tree = ast.parse(path.read_text())
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom) and node.module:
                 names = {alias.name for alias in node.names}
-                if node.module == "app.store" and "messages" in names:
-                    offenders.append(path.name)
-                elif node.module == "app.store.messages":
+                if (node.module == "app.store" and "messages" in names) \
+                        or node.module == "app.store.messages":
                     offenders.append(path.name)
             elif isinstance(node, ast.Import):
-                for alias in node.names:
-                    if alias.name == "app.store.messages":
-                        offenders.append(path.name)
-    # `pipeline` writes the opening turn, which is the one place a message is
-    # created from a build. Nothing that renders may.
-    assert set(offenders) <= {"pipeline.py"}, offenders
-
-
-def test_the_renderer_specifically_does_not_import_it():
-    source = Path("app/site/render.py").read_text()
-    assert "messages" not in source.replace("# ", ""), \
-        "render.py must have no path to operator-facing prose"
+                offenders += [path.name for alias in node.names
+                              if alias.name == "app.store.messages"]
+    assert list(Path("app/design").glob("*.py")), "app/design moved; point this test at it"
+    assert offenders == [], offenders

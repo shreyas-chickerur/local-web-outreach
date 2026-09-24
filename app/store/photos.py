@@ -91,46 +91,6 @@ def tag_for(description: str) -> str:
             return tag
     return "other"
 
-# How well each label works as a hero, per kind of business. A roofer's hero is
-# finished work; a restaurant's is a plate or the room.
-# How well each subject leads, per kind of business, best first. One literal:
-# the seven assignments that used to sit below this overwrote every key except
-# `default`, so the reasoning in the comments described values that never took
-# effect and editing the literal did nothing.
-HERO_PREFERENCE: dict[str, tuple[str, ...]] = {
-    # The plate first: nobody books a table because of the carpet.
-    "food": ("dish", "room", "drink", "detail", "people", "exterior"),
-    # Finished work, then the crew. A roofer sells competence, not premises.
-    "trade": ("work", "exterior", "people", "team", "room"),
-    # The practitioner, then the room. A waiting room is not a reason to go,
-    # but a face is, and the equipment photograph is actively off-putting.
-    "care": ("people", "team", "room", "exterior"),
-    # The room sells the treatment here in a way it does not in a clinic.
-    "groom": ("room", "work", "people", "exterior"),
-    # Bodies moving in the space, then the space.
-    "body": ("people", "room", "work", "exterior"),
-    # Professional services rarely have a photograph worth leading with, which
-    # is a fact about the trade rather than about the business — the identity
-    # call should be free to reach for type instead.
-    "desk": ("people", "team", "exterior", "room"),
-    # What is on the shelves, then the shopfront.
-    "retail": ("product", "room", "detail", "exterior", "people"),
-    "default": ("room", "exterior", "people", "dish"),
-}
-
-# Never the lead image, for different reasons: a wordmark is not a photograph,
-# an award badge belongs in the recognition band at size, raw produce does not
-# make anyone want dinner, and "can't tell" is the operator saying so.
-NEVER_LEADS = ("logo", "award", "ingredients", "unclear")
-
-# Not a veto, and this is the difference that matters. `tag_for` returns
-# "other" for any description it cannot categorise, so a perfectly good
-# photograph described in words the phrase table does not know was silently
-# made ineligible to lead. A weak signal must not act as a veto — the same
-# mistake as letting any label outrank measured quality.
-WEAK_LEADS = ("other",)
-
-
 def _now() -> str:
     return datetime.now(UTC).isoformat(timespec="seconds")
 

@@ -36,11 +36,6 @@ def available() -> bool:
     return config.anthropic_api_key() is not None
 
 
-# What the API will accept. Anything above the byte ceiling is rejected
-# outright; anything wider than the pixel ceiling is resized server-side
-# anyway, so sending more is paying to have it thrown away.
-MAX_IMAGE_BYTES = 5 * 1024 * 1024
-MAX_IMAGE_EDGE = 1568
 
 
 def image_block(data: bytes, media_type: str = "image/jpeg") -> dict:

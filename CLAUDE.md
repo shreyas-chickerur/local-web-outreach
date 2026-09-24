@@ -75,9 +75,9 @@ and is shown as `superseded`. Overrides are applied on read by
 **Never delete code without a tag. Archive it.** Code is removed only after the
 commit holding it is tagged `archive/<what>-<date>`, so every file stays
 recoverable (`git show <tag>:<path>`). On 23 September 2026 everything nothing
-live reached was archived under `archive/before-cleanup-2026-09-23`. The older
-generator in `app/site/` stays while the workbench's build button, photo
-labelling and correction path for its pages still call it.
+live reached was archived under `archive/before-cleanup-2026-09-23`; on 24
+September the older page generator (`app/site/`) and everything only it used,
+under `archive/older-generator-2026-09-24`.
 
 **Minimise credits.** A rebuild costs a generation run. Confirming a value that
 did not change must cost nothing. Never run the model twice to learn the same
@@ -147,14 +147,15 @@ exist and the screen will report an error that looks like a bug in the page.
   instructions and reports what it ignored.
 - The browser tests (layout, rendering, the no-dialog check) need a real Chrome and
   are skipped without one.
-- The workbench serves previews from `PREVIEW_BASE_URL`, defaulting to the port
-  it listens on (`app/core/config.py`, `DEFAULT_PORT = 8099`).
+- The workbench listens on port 8099 (`app/core/config.py`, `DEFAULT_PORT`).
 
 ## Storage
 
 SQLite at `workbench.db` (`app/store/db.py`). Tables: `leads`, `events`,
 `sites`, `fingerprints`, `messages`, `build_state`, `photo_labels`,
-`discovery_cache`, `preferences`, `reviews`, `findings`. Migrations are additive
+`discovery_cache`, `preferences`, `reviews`, `findings`; `fingerprints`,
+`build_state` and `preferences` belonged to the archived generator and are
+no longer written. Migrations are additive
 only, through `_SCHEMA` plus `_LATER_COLUMNS`.
 
 On disk, one folder per business, `sites/<slug>/`, gitignored because the

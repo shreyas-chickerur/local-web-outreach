@@ -238,7 +238,3 @@ def download(url: str, timeout: float = 15.0) -> tuple[bytes | None, str]:
     return resp.content, ""
 
 
-def fetch_bytes(url: str, timeout: float = 15.0) -> bytes | None:
-    """The bytes from `download`, without the reason, for callers that only
-    need to know whether there were any."""
-    return download(url, timeout)[0]

@@ -190,35 +190,6 @@ def test_labelling_saves_as_you_move_rather_than_at_the_end():
         assert "await saveShot(" in body, mover
 
 
-def test_workspace_surfaces_what_did_not_reach_the_page(monkeypatch, tmp_path):
-    """BRIEF §5, Slice D item 3: the operator sees what of the business's own
-    material never reached the page, and why — reading `app.site.census`'s
-    `measure()` directly rather than a second implementation of it, so this
-    can only drift from the corpus-wide report (`tools/content_census.py`)
-    if `workspace()` stops calling it at all."""
-    from pathlib import Path
-
-    from app.site.pipeline import STAGES, run_stage
-    from app.store import db, leads
-
-    monkeypatch.setattr(db, "DEFAULT_PATH", tmp_path / "workbench.db")
-    fixture = json.loads(
-        Path("tests/fixtures/briefs/law-rich.json").read_text())
-    with db.session() as conn:
-        lead_id = leads.save_brief(conn, fixture)
-        for stage in STAGES:
-            run_stage(conn, lead_id, stage)
-
-    data = server.workspace(lead_id)
-    assert data["census"], "law-rich should have at least one dropped field"
-    for row in data["census"]:
-        assert set(row) == {"field", "reached", "of", "why"}
-        assert row["of"] > row["reached"]
-    # `fact:hours` drops on every fixture with published hours already
-    # scraped — the fallback fact is never consulted once that happens.
-    assert "fact:hours" in {row["field"] for row in data["census"]}
-
-
 def test_no_class_is_styled_by_two_unrelated_rules():
     """The evidence block under each fact reused `.ev`, a name the history
     timeline already owned. The timeline's grid (a 20px rail, then the text)
@@ -346,13 +317,14 @@ def test_a_sentence_on_a_designed_page_goes_to_an_edit_and_the_reply_comes_back(
     assert "$0.07" in payload["thread"][-1]["text"]
 
 
-def test_opening_a_designed_page_measures_no_photographs(tmp_path, monkeypatch):
+def test_opening_a_workspace_downloads_no_photographs(tmp_path, monkeypatch):
     """Opening the workspace drew the older generator's plan and counted what
-    reached its page, which fetches and measures every photograph. After a
+    reached its page, which fetched and measured every photograph. After a
     re-crawl none is on disk, so "Open workspace" sat for as long as thirty
-    downloads took, for panels a designed page never shows."""
+    downloads took."""
     from pathlib import Path
 
+    from app.adapters import photos as photos_api
     from app.store import db, leads, sites
 
     monkeypatch.setattr(db, "DEFAULT_PATH", tmp_path / "workbench.db")
@@ -361,15 +333,12 @@ def test_opening_a_designed_page_measures_no_photographs(tmp_path, monkeypatch):
         lead_id = leads.save_brief(conn, fixture)
         sites.save(conn, lead_id, "<p>designed</p>", spec="")
 
-    def measured(*_args, **_kwargs):
-        raise AssertionError("a designed page's workspace measured the photographs")
+    def downloaded(*_args, **_kwargs):
+        raise AssertionError("opening the workspace downloaded a photograph")
 
-    monkeypatch.setattr(server, "plan_for", measured)
-    monkeypatch.setattr(server, "measure_census", measured)
+    monkeypatch.setattr(photos_api, "fetch", downloaded)
     data = server.workspace(lead_id)
     assert data["trouble"] == [] and data["versions"]
-    assert (data["outline"], data["plan"], data["census"]) == ("", {}, [])
-
 
 def _session(path):
     import contextlib

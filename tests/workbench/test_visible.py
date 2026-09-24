@@ -7,7 +7,7 @@ from __future__ import annotations
 import pytest
 
 from app.adapters.chrome_cdp import cdp_session, chrome
-from app.site.visible import needs_render, render, visible_text_runs
+from app.workbench.visible import needs_render, render, visible_text_runs
 
 pytestmark = pytest.mark.unit
 

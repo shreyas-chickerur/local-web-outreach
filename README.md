@@ -31,9 +31,8 @@ person**: nothing here sends email.
    - `WORKBENCH_DB` — where the database lives (default `./workbench.db`).
    - `WORKBENCH_OPERATOR` — your name on the audit trail (default `$USER`); a
      label, not authentication.
-   - `ANTHROPIC_MODEL` — the model for menu images and the older generator's
-     instruction reader (named in `ANTHROPIC_MODEL`). Design runs and edits
-     use the model named in `DESIGN_MODEL`.
+   - `DESIGN_MODEL` — the model design runs and chat edits use.
+   - `ANTHROPIC_MODEL` — the model that reads menus published as images.
 
 ## Commands
 

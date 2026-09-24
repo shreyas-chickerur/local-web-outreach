@@ -27,21 +27,6 @@ from app.design import bridge
 from app.design import prompt as design_prompt
 from app.review import layout
 from app.review import run as review_run
-from app.site.census import measure as measure_census
-from app.site.pipeline import (
-    STAGE_SAYS as STAGES_SAY,
-)
-from app.site.pipeline import (
-    STAGES,
-    BuildFailed,
-    build_progress,
-    rebuild_opening,
-    run_stage,
-    spec_from_config,
-)
-from app.site.pipeline import iterate as run_iteration
-from app.site.render import build as build_site
-from app.site.render import material_from_brief, plan_for
 from app.store import brief_archive, db, leads, messages, photos, reviews, sites
 from app.web.serialize import brief_to_dict
 from app.workbench import hours
@@ -193,22 +178,6 @@ def prospects(latitude: float, longitude: float, refresh: bool = False,
     return {"groups": groups}
 
 
-def generate(lead_id: int, spec_text: str) -> dict:
-    """Build a site for a saved lead and keep it as a new version."""
-    with db.session() as conn:
-        brief = leads.brief_with_overrides(conn, lead_id)
-        html, spec = build_site(brief, spec_text)
-        notes = {"mood": spec.mood, "understood": spec.understood,
-                 "unmet": spec.unmet, "ignored": spec.ignored,
-                 "lead_with": spec.lead_with}
-        version = sites.save(conn, lead_id, html, spec_text, notes)
-        payload = leads.brief_with_overrides(conn, lead_id)
-        payload["site"] = {"version": version, "notes": notes,
-                           "url": f"/site/{lead_id}/{version}"}
-        payload["site_versions"] = sites.versions(conn, lead_id)
-        return payload
-
-
 def _worst_first(urls: list[str], known: dict) -> list[str]:
     """Least confident first, so attention goes where it is worth spending.
 
@@ -229,111 +198,27 @@ def _worst_first(urls: list[str], known: dict) -> list[str]:
 
 
 def workspace(lead_id: int) -> dict:
-    """Everything the iteration screen needs, in one round trip.
+    """Everything the workspace needs, in one round trip.
 
-    Includes the plan for the version currently on screen: the plan is the
-    cheap thing to review, so it should be there when the screen opens rather
-    than only after the next instruction.
+    Only what the screen shows: it once drew the older generator's plan and
+    counted what reached its page, which downloaded every photograph first.
     """
     with db.session() as conn:
         history = sites.versions(conn, lead_id)
-        # What the first build is waiting for. Placing a photograph well needs
-        # to know what it shows, so the design waits for a person rather than
-        # guessing — see `pipeline.open_site`.
         # Anything that goes wrong here is said out loud. Swallowing it gave a
-        # screen that looked finished and was not: no photographs to describe,
-        # a Build button that would fail, and nothing to explain either.
+        # screen that looked finished and was not.
         trouble: list[str] = []
-        pending: list[str] = []
-        unlocks: list[str] = []
         try:
-            brief = leads.brief_with_overrides(conn, lead_id)
+            leads.brief_with_overrides(conn, lead_id)
         except Exception as exc:                               # noqa: BLE001
-            brief = {}
-            trouble.append(f"Could not read the brief: "
-                           f"{type(exc).__name__}: {exc}")
-        if brief:
-            unlocks = list(brief.get("open_questions") or [])
-            if not history:
-                try:
-                    material = material_from_brief(brief)
-                    pending = photos.unreviewed(conn, lead_id,
-                                                list(material.images))
-                except Exception as exc:                       # noqa: BLE001
-                    trouble.append(f"Could not list the photographs: "
-                                   f"{type(exc).__name__}: {exc}")
-        outline = ""
-        plan: dict = {}
-        # The plan and the census below describe a page the old renderer built,
-        # and drawing them fetches and measures every photograph. A designed
-        # page has neither, and after a re-crawl none of its photographs is on
-        # disk yet: "Open workspace" waited on thirty downloads for panels the
-        # screen hides.
-        rendered = bool(history) and bool((history[0].get("spec") or "").strip())
-        if rendered and brief:
-            try:
-                spec = spec_from_config(history[0].get("spec_json") or {})
-                resolved = plan_for(brief, spec)
-                outline, plan = resolved.outline(), resolved.as_dict()
-            except Exception as exc:                           # noqa: BLE001
-                # A plan we cannot draw must not blank the screen — but it must
-                # not pretend the section is simply empty either.
-                trouble.append(f"Could not draw the plan: "
-                               f"{type(exc).__name__}: {exc}")
-        # What of the business's own material never reached the page, and
-        # why — BRIEF §5, Slice D item 3. The identical function a corpus-
-        # wide report calls (`tools/content_census.py`), reused rather than
-        # reimplemented, against the opening version's own frozen
-        # direction — the same version `plan`/`outline` above describe.
-        census: list[dict] = []
-        if rendered and brief:
-            try:
-                dropped = measure_census(conn, brief.get("name") or str(lead_id),
-                                         lead_id).dropped()
-                census = [{"field": name, "reached": reached, "of": raw,
-                          "why": rule} for name, raw, reached, rule in dropped]
-            except Exception as exc:                           # noqa: BLE001
-                trouble.append(f"Could not measure what reached the page: "
-                               f"{type(exc).__name__}: {exc}")
-        rationale = ""
-        signature_why = ""
-        signature_device = ""
-        if history:
-            first = history[-1]
-            opening_notes = first.get("notes") or {}
-            rationale = str(opening_notes.get("rationale") or "")
-            # §2.3: one sentence justifying the signature device against
-            # this specific business. Recorded at opening time, read back
-            # here rather than re-asked — the same replay guarantee as
-            # `rationale`. Model prose, and it stops here: never reaches
-            # `render`, which cannot see `notes` at all.
-            signature_why = str(opening_notes.get("signature_why") or "")
-            signature_device = str(opening_notes.get("signature") or "")
+            trouble.append(f"Could not read the brief: {type(exc).__name__}: {exc}")
         return {
             "lead_id": lead_id,
             "versions": history,
             "events": leads.events(conn, lead_id),
-            "outline": outline,
-            "plan": plan,
-            "census": census,
-            "rationale": rationale,
-            "signature_device": signature_device,
-            "signature_why": signature_why,
-            # What one visit would unlock. A business with no website arrives
-            # here with little corroborated material, so its opening version is
-            # thin — and the honest response is to say which questions would
-            # thicken it, not to publish a single source as though it were a
-            # fact.
-            "unlocks": unlocks,
-            "pending_labels": pending,
-            # A design run looks at the photographs itself; labelling them is
-            # the older generator's requirement, and no longer stands in front
-            # of the first version.
             "can_build": not history,
-            "build": build_progress(conn, lead_id),
             "trouble": trouble,
-            # The conversation, oldest first. It opens on what was decided and
-            # why rather than on an empty box.
+            # The conversation, oldest first.
             "thread": messages.thread(conn, lead_id),
             # The version Shreyas last marked as a good site: the checkpoint an
             # edit that goes wrong comes back to.
@@ -373,12 +258,7 @@ def _undo(conn, lead_id: int, current: dict | None) -> dict:
 
 
 def iteration(lead_id: int, sentence: str, parent: object) -> dict:
-    """Run one chat instruction and return the result plus the refreshed panes.
-
-    A rejection is a result, not an error: the operator has to see which words
-    tripped the content gate, and an exception would tell them only that
-    something went wrong.
-    """
+    """Run one chat sentence on the version on screen: an edit run, or an undo."""
     if not sentence.strip():
         return {"error": "Type an instruction first."}
     parent_version: int | None = None
@@ -393,21 +273,11 @@ def iteration(lead_id: int, sentence: str, parent: object) -> dict:
                     versions[0] if versions else None)
         if _UNDO.fullmatch(sentence):
             return _undo(conn, lead_id, base)
-        # A page the old renderer did not build has no spec to restyle: the
-        # chat box could not touch a single designed version of Fish Shack.
-        if base is not None and not (base.get("spec") or "").strip():
-            return _edit(conn, lead_id, sentence, int(base["version"]))
-        try:
-            result = run_iteration(conn, lead_id, sentence,
-                                   parent_version=parent_version)
-        except ValueError as exc:
-            return {"error": str(exc)}
-        payload = result.as_dict()
-        payload["lead_id"] = lead_id
-        payload["versions"] = sites.versions(conn, lead_id)
-        payload["events"] = leads.events(conn, lead_id)
-        payload["thread"] = messages.thread(conn, lead_id)
-        return payload
+        if base is None:
+            return {"error": "There is no page yet. Design the first version, then change it."}
+        # Every page is edited as a page, whichever way it was made: the older
+        # generator's chat restyled only pages it had built itself.
+        return _edit(conn, lead_id, sentence, int(base["version"]))
 
 
 def _claim_counts(conn, lead_id: int, version: int) -> dict[str, int]:
@@ -578,23 +448,17 @@ def rebuild_after(conn, lead_id: int, field: str, outcome: dict) -> dict:
         + " Correct every place the page shows it, and change nothing else.")
     latest = sites.versions(conn, lead_id)[0]
     try:
-        if not (latest.get("spec") or "").strip():
-            # A designed page has no spec for the old generator to restyle: it
-            # would have rebuilt Fish Shack's version 13 as one of its own.
-            edited = bridge.edit(conn, lead_id, sentence,
-                                 parent_version=int(latest["version"]))
-            if not edited["version"]:
-                return {"built": False, "why": edited["why"] or edited["reply"],
-                        "correction_saved": True}
-            return {"built": True, "version": edited["version"], "field": field}
-        result = run_iteration(conn, lead_id, sentence, actor="correction")
+        edited = bridge.edit(conn, lead_id, sentence, parent_version=int(latest["version"]))
     except Exception as exc:                                   # noqa: BLE001
-        # Deliberately broad: a generation failure is a bad afternoon, and a
+        # Deliberately broad: a failed edit is a bad afternoon, and a
         # correction that raises out of the endpoint looks to the operator
         # like the correction itself did not save. It did.
         return {"built": False, "why": f"{type(exc).__name__}: {exc}",
                 "correction_saved": True}
-    return {"built": True, "version": result.version, "field": field}
+    if not edited["version"]:
+        return {"built": False, "why": edited["why"] or edited["reply"],
+                "correction_saved": True}
+    return {"built": True, "version": edited["version"], "field": field}
 
 
 def logo_for(conn, lead_id: int) -> tuple[bytes, str] | None:
@@ -732,44 +596,8 @@ class Handler(BaseHTTPRequestHandler):
                 elif route == "/api/status":
                     leads.set_status(conn, lead_id, str(body.get("status", "")),
                                      note=(body.get("note") or None))
-                elif route == "/api/generate":
-                    self._json(generate(lead_id, str(body.get("spec", ""))))
-                    return
                 elif route == "/api/design":
                     self._json(start_design(lead_id))
-                    return
-                elif route == "/api/build":
-                    # One stage at a time, so the screen can say which one is
-                    # running and a failure can say which one failed. A stage
-                    # already answered returns its answer without asking again,
-                    # so a retry costs only the stage that went wrong.
-                    stage = str(body.get("stage") or "")
-                    progress = build_progress(conn, lead_id)
-                    stage = stage or progress["next"] or STAGES[-1]
-                    try:
-                        answer = run_stage(conn, lead_id, stage)
-                    except BuildFailed as failure:
-                        self._json({"error": f"{STAGES_SAY[failure.stage]} "
-                                             f"did not finish: {failure.reason}",
-                                    "stage": failure.stage,
-                                    "progress": build_progress(conn, lead_id)},
-                                   400)
-                        return
-                    payload = {"stage": stage, "answer": answer,
-                               "progress": build_progress(conn, lead_id),
-                               "versions": sites.versions(conn, lead_id),
-                               "events": leads.events(conn, lead_id)}
-                    self._json(payload)
-                    return
-                elif route == "/api/rebuild":
-                    # A correction to a photo description has to be able to
-                    # reach the page. `open_site` is idempotent, so once v1
-                    # exists it would otherwise do nothing at all.
-                    result = rebuild_opening(conn, lead_id)
-                    payload = result.as_dict()
-                    payload["versions"] = sites.versions(conn, lead_id)
-                    payload["events"] = leads.events(conn, lead_id)
-                    self._json(payload)
                     return
                 elif route == "/api/iterate":
                     said = str(body.get("sentence", "")).strip()
@@ -953,11 +781,9 @@ class Handler(BaseHTTPRequestHandler):
                     self._json({"error": "no such lead"}, 400)
                     return
                 known = photos.described(conn, lead_id)
-            # Exactly what the first build waits on, from the same function
-            # that decides it. Two lists built two ways can disagree, and the
-            # failure is the worst kind: every photo on screen is labelled and
-            # the build still refuses.
-            urls = list(material_from_brief(brief).images)
+            # The photographs a design run is given, by the addresses the page
+            # uses for them, so a description attaches to the picture it names.
+            urls = [f"/photo/{lead_id}/{n}" for n in range(len(brief.get("place_photos") or []))]
             hints = photos.suggest_all(urls)
             self._json({"lead_id": lead_id, "labels": known,
                         "options": list(photos.LABELS),

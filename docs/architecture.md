@@ -40,9 +40,9 @@ app/web/annotate.js           the findings pinned onto the page itself
 app/design/proposal.py        one self-contained file for the owner (make proposal)
 ```
 
-The workbench can still build a first version with the older generator in
-`app/site/` (the "Build the first version" button). Pages from the design tool and
-from the design bridge are the current path; see `app/site/` below.
+Every page comes from a design run or a chat edit. The older generator that
+once built pages from a spec (`app/site/`) was archived on 24 September 2026
+under the tag `archive/older-generator-2026-09-24`.
 
 ## By package
 
@@ -89,9 +89,8 @@ is the one place a structured model call is made.
 - `sites.py` — versions, each with a parent, its notes (model, cost, prompt) and
   the instruction that made it.
 - `reviews.py` — reviews and findings; a decided finding survives a re-run.
-- `photos.py`, `messages.py`, `preferences.py`, `fingerprints.py` — photograph
-  labels, the workbench conversation, style preferences, and the old
-  generator's sameness records.
+- `photos.py`, `messages.py` — what the operator said each photograph shows,
+  and the workbench conversation.
 
 ### `app/design/` — pages from the design model
 
@@ -115,20 +114,18 @@ is the one place a structured model call is made.
   `structured_data()`. Pure functions over text. Every corroborated claim links
   to the page and the words that back it, or the directory fact.
 
-### `app/site/` — the older generator, and two readers the current path uses
-
-`visible.py` (a page's visible text) is used by the crawl. Everything else here
-is the older generator the workbench's build button still uses: `pipeline.py`
-(`run_stage`, `iterate`), `render.py`, `theme.py`, `styles.py` and the rest. Do
-not extend it; it is archived when the workbench no longer calls it. Modules
-nothing reached were removed on 23 September 2026 and are recoverable from the
-tag `archive/before-cleanup-2026-09-23`.
+- `layout.py` — every version measured in Chrome at four screen sizes: text
+  covered by something else, a control running off the screen, and text that
+  runs past the bottom of its section. Findings are `defect`s in the review,
+  and each design run's and chat edit's reply says whether the layout holds.
 
 ### `app/web/` — the workbench
 
-- `server.py` — a standard-library HTTP server. `iteration()` sends a chat
-  sentence to an edit run on a designed page, or to the old generator on one
-  it built; `rebuild_after()` does the same for a correction.
+- `server.py` — a standard-library HTTP server. Research is a preview until
+  "Make this a lead" (`make_lead`). `start_design()` runs a design as a job the
+  server owns, with its steps reported. `iteration()` sends a chat sentence to
+  an edit run, or goes back a version on "undo"; `rebuild_after()` sends a
+  correction to an edit.
 - `index.html` — one file: the dashboard, the lead detail, the workspace (chat
   on the left, the page in the middle, versions and history on the right), the
   labeller and the review panel.

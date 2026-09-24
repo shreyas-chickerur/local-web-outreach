@@ -37,6 +37,7 @@ from claude_agent_sdk import (
 
 from app.adapters import logos, photos
 from app.core.config import design_model, google_places_api_key
+from app.design import prompt as design_prompt
 from app.store import brief_archive, leads, sites
 
 # Shreyas's decisions, 23 September 2026.
@@ -279,6 +280,11 @@ def edit(conn: sqlite3.Connection, lead_id: int, sentence: str,
     # The text of every page the crawl read, the menu among them. Leaving these
     # out, an edit asked to name Yama's dishes from its menu said there was none.
     facts["pages"] = [p for p in brief.get("pages") or [] if p.get("read")]
+    # What the operator said each photograph shows, by its file: this outranks
+    # anything a model can see in it.
+    facts["photographs_described_by_the_operator"] = {
+        f"photos/{n}.jpg": words
+        for n, words in design_prompt.operator_descriptions(conn, lead_id).items()}
     (folder / "brief.json").write_text(json.dumps(facts, indent=1, default=str))
     told = _EDIT.format(name=brief.get("name", "the business"), sentence=sentence.strip())
     result, error = asyncio.run(_run(folder, told, EDIT_CEILING_USD))
