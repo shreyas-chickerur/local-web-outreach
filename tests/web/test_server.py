@@ -142,15 +142,37 @@ def test_rendering_failures_are_shown_rather_than_swallowed():
     assert "could not be drawn" in page
 
 
-def test_the_labeller_and_the_gate_are_fed_by_one_list():
-    """Two lists built two ways can disagree, and the failure is the worst
-    kind: every photo on screen is labelled and the build still refuses."""
-    source = server._UI.read_text()
-    assert "material_from_brief(brief).images" in \
-        (server.__file__ and open(server.__file__).read())
-    # The page starts on the labelling step rather than a workspace that will
-    # refuse — the requirement is visible before it is enforced.
-    assert 'stage: (!(data.versions || []).length' in source
+def test_a_new_lead_is_designed_from_a_prompt_written_from_its_brief(tmp_path, monkeypatch):
+    """The build button reached only the older generator, behind a labelling
+    step, because nothing but a hand-written prompt could start a design run.
+    Yama Izakaya's first page came out of that generator. Now the button writes
+    the prompt from the stored brief into the business's folder and hands that
+    file to the design run; no photograph needs a label first."""
+    from pathlib import Path
+
+    from app.store import db, folders, leads, sites
+
+    monkeypatch.setattr(db, "DEFAULT_PATH", tmp_path / "workbench.db")
+    fixture = json.loads(Path("tests/fixtures/briefs/restaurant-rich.json").read_text())
+    with db.session() as conn:
+        lead_id = leads.save_brief(conn, fixture)
+    assert server.workspace(lead_id)["can_build"]
+
+    handed = {}
+
+    def fake_design(conn, lead, prompt_path):
+        handed["prompt"] = Path(prompt_path).read_text()
+        handed["path"] = Path(prompt_path)
+        return {"version": sites.save(conn, lead, "<p>designed</p>", spec=""),
+                "cost_usd": 3.1, "folder": "", "why": "", "flags": []}
+
+    monkeypatch.setattr(server.bridge, "design", fake_design)
+    with db.session() as conn:
+        payload = server.design_first(conn, lead_id)
+    assert payload["version"] == 1 and not payload["error"]
+    assert handed["path"] == folders.of(fixture["name"]) / "prompts" / "v1.md"
+    assert fixture["name"] in handed["prompt"] and "Restaurant playbook" in handed["prompt"]
+    assert "$3.10" in payload["thread"][-1]["text"]
 
 
 def test_labelling_saves_as_you_move_rather_than_at_the_end():
@@ -358,3 +380,22 @@ def _session(path):
         finally:
             conn.close()
     return opened()
+
+
+def test_research_says_what_it_is_doing_while_it_runs(monkeypatch, tmp_path):
+    """Opening a prospect showed four spinners that never changed for a minute
+    or more, so a slow run and a stuck one looked the same. Each step the crawl
+    reports is kept under the page's token for the page to ask about."""
+    from app.store import db
+
+    monkeypatch.setattr(db, "DEFAULT_PATH", tmp_path / "workbench.db")
+    seen = []
+
+    def research(*_args, on_progress=None, **_kwargs):
+        on_progress("read page 3/24: https://yama.test/menu")
+        seen.extend(server.progress("abc"))
+        return _brief(name="Yama Izakaya & Sushi")
+
+    monkeypatch.setattr(server, "build_brief", research)
+    assert "error" not in server.lookup("Yama Izakaya", None, None, "abc")
+    assert seen == ["read page 3/24: https://yama.test/menu"]

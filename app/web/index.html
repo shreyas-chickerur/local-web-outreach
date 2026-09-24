@@ -936,14 +936,33 @@ $("#f").onsubmit = async e => {
   const q = $("#q").value.trim();
   if (!q) return;
   $("#go").disabled = true;
-  $("#out").innerHTML = `<div class="load in">
-    <div class="step"><span class="spin"></span>Reading their website</div>
-    <div class="step"><span class="spin"></span>Checking Google</div>
-    <div class="step"><span class="spin"></span>Checking Yelp and OpenStreetMap</div>
-    <div class="step"><span class="spin"></span>Corroborating what each source claims</div></div>`;
+  // Research takes a minute or more, in one request. The server keeps what it
+  // has done under this token, and the page asks every second: a clock and the
+  // latest step show it is moving, where four fixed spinners looked stuck.
+  const t = Math.random().toString(36).slice(2);
+  const began = Date.now();
+  const draw = (steps) => {
+    const s = Math.round((Date.now() - began) / 1000);
+    const shown = steps.length ? steps.slice(-5) : ["starting"];
+    $("#out").innerHTML = `<div class="load in">
+      <p class="hint">Researching ${esc(q)} — ${Math.floor(s / 60)}m
+        ${String(s % 60).padStart(2, "0")}s. Usually one to three minutes.</p>
+      ${shown.map((step, i) => `<div class="step">${i === shown.length - 1
+        ? '<span class="spin"></span>' : "✓"}${esc(step)}</div>`).join("")}</div>`;
+  };
+  let steps = [], done = false;
+  draw(steps);
+  // `done` as well as clearInterval: a poll already in flight when the result
+  // lands would otherwise draw the progress back over it.
+  const poll = setInterval(async () => {
+    try { steps = (await (await fetch("/api/progress?t=" + t)).json()).steps || steps; }
+    catch {}
+    if (!done) draw(steps);
+  }, 1000);
+  const stop = () => { done = true; clearInterval(poll); };
   try {
-    const p = new URLSearchParams({q, location: $("#loc").value, notes: $("#notes").value});
-    const data = await (await fetch("/api/brief?" + p)).json();
+    const p = new URLSearchParams({q, location: $("#loc").value, notes: $("#notes").value, t});
+    const data = await (await fetch("/api/brief?" + p)).json().finally(stop);
     LEAD = data.lead_id || null;
     SITE = null;
     if (LEAD) {
@@ -954,6 +973,7 @@ $("#f").onsubmit = async e => {
     else paint(data);
     window.scrollTo({top: 0, behavior: "smooth"});
   } catch (err) {
+    stop();
     $("#out").innerHTML = `<div class="err in">${esc(err.message)}</div>`;
   }
   $("#go").disabled = false;
@@ -1138,11 +1158,9 @@ async function openWorkspace(leadId, name) {
         thread: data.thread || [],
         master: data.master || null,
         photos, labelOptions: shots.options || [], shot: 0,
-        // A lead with no site and unlabelled photographs starts on the
-        // labelling step, not on a workspace that will refuse to build. The
-        // requirement should be visible before it is enforced.
-        stage: (!(data.versions || []).length
-                && (data.pending_labels || []).length) ? "label" : "work"};
+        // A design run looks at the photographs itself, so a new lead opens on
+        // the workspace, not on labelling. Labels stay one click away.
+        stage: "work"};
   // Start where the work is, not at the beginning of a list already done.
   const first = photos.findIndex(p => !p.label);
   WS.shot = first < 0 ? 0 : first;
@@ -1445,15 +1463,13 @@ function drawWorkspace(into) {
             sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
             ></iframe></div>`
           : `<div class="empty">
-             <h3>${WS.pending.length ? "Say what the photos show" : "Ready to build"}</h3>
-             <p>${WS.pending.length
-               ? `${WS.pending.length} still to go. Where a photograph goes
-                  depends on what it shows, and that is the one thing this
-                  cannot see — so it waits for you rather than guessing.
-                  Mark any you cannot identify as “can't tell”.`
-               : "Every photo has been looked at. Build the opening version."}</p>
-             <button class="mini primary" id="build-first" onclick="buildFirst()"
-               ${WS.canBuild ? "" : "disabled"}>Build the first version</button>
+             <h3>Ready to design</h3>
+             <p>A design run writes a prompt from this business's brief and the
+                playbook, looks at its photographs, and builds the page. It
+                takes several minutes and costs up to $5.</p>
+             <button class="mini primary" id="design-first" onclick="designFirst()"
+               ${WS.canBuild ? "" : "disabled"}>Design the first version</button>
+             <p class="hint" id="design-wait"></p>
              </div>`}
       </div>
     </section>
@@ -1465,7 +1481,12 @@ function drawWorkspace(into) {
         ${master}
         <details class="history"><summary>History</summary>
           <div style="margin-top:12px">${trail}</div></details>
-        ${designed ? "" : `${trouble}${why}${signature}${unlocks}${outline}${census}${diag}${labeller}`}
+        ${designed ? "" : `<div class="diag-label">This version came from the older
+             generator.</div>
+           <button class="mini primary" id="design-first" onclick="designFirst()">Design
+             a new version (up to $5)</button>
+           <p class="hint" id="design-wait"></p>
+           ${trouble}${why}${signature}${unlocks}${outline}${census}${diag}${labeller}`}
       </div>
     </section>
   </div>`;
@@ -1578,6 +1599,39 @@ function clearBuild() {
   stopBuildClock();
   const panel = $("#buildprog");
   if (panel) panel.remove();
+}
+
+// One design run: minutes, not seconds, and a single request, so the wait is
+// shown as a running clock and a sentence saying what is happening. Without
+// them a long run looks exactly like a stuck one.
+async function designFirst() {
+  const button = $("#design-first"), wait = $("#design-wait");
+  if (button) button.disabled = true;
+  const began = Date.now();
+  const tick = () => {
+    const s = Math.round((Date.now() - began) / 1000);
+    if (wait) wait.innerHTML = `<span class="spin"></span> Designing — ${Math.floor(s / 60)}m
+      ${String(s % 60).padStart(2, "0")}s. Writing the prompt, looking at the photographs,
+      building the page. Usually three to eight minutes.`;
+  };
+  tick();
+  const clock = setInterval(tick, 1000);
+  let data;
+  try {
+    const res = await fetch("/api/design", {method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({lead_id: WS.lead_id})});
+    data = await res.json();
+  } catch (err) {
+    data = {error: "The design request failed: " + err};
+  }
+  clearInterval(clock);
+  if (!data.version) {
+    if (wait) wait.textContent = data.error || "The design run did not finish.";
+    if (button) { button.disabled = false; button.textContent = "Try again"; }
+    return;
+  }
+  await openWorkspace(WS.lead_id, WS.name);
 }
 
 async function buildFirst() {
@@ -1720,11 +1774,8 @@ function drawLabeller() {
         ${WS.versions.length
           ? `<button class="mini primary" id="rebuild" onclick="rebuildOpening()"
                style="margin-top:auto">Rebuild from these descriptions →</button>`
-          : done === total && total
-          ? `<button class="mini primary" id="build-first" onclick="buildFirst()"
-               style="margin-top:auto">Build the first version →</button>`
-          : `<p class="hint" style="margin-top:auto">${total - done} still to go
-               before the first build.</p>`}
+          : `<button class="mini primary" onclick="WS.stage = 'work'; drawWorkspace()"
+               style="margin-top:auto">Back to the workspace →</button>`}
       </div>
     </div>
 

@@ -20,6 +20,7 @@ from app.adapters.photos import fetch as fetch_photo
 from app.cli import available_directories
 from app.core.config import DEFAULT_PORT, google_places_api_key
 from app.design import bridge
+from app.design import prompt as design_prompt
 from app.review import run as review_run
 from app.site.census import measure as measure_census
 from app.site.pipeline import (
@@ -50,15 +51,31 @@ _UI = Path(__file__).parent / "index.html"
 _lock = threading.Lock()
 
 
-def lookup(query: str, location: str | None, notes: str | None) -> dict:
+# What each research run in flight has done so far, by the token the page sent
+# with it. A run takes minutes; four spinners that never change looked exactly
+# like a run that had stopped.
+_progress: dict[str, list[str]] = {}
+
+
+def progress(token: str) -> list[str]:
+    return list(_progress.get(token, []))
+
+
+def lookup(query: str, location: str | None, notes: str | None, token: str = "") -> dict:
     """Run a brief, store it, and return it with anything you have confirmed
     already applied on top. Never raises."""
     if not query.strip():
         return {"error": "Give a company name or a website URL."}
+    steps = _progress.setdefault(token, []) if token else None
+    say = steps.append if steps is not None else None
+    if say and _lock.locked():
+        # A second business opened while one is being researched waits here,
+        # and said nothing about it.
+        say("waiting for the research already running to finish")
     try:
         with _lock:
             brief = build_brief(query, location=location or None,
-                                notes=notes or None,
+                                notes=notes or None, on_progress=say,
                                 directories=available_directories())
     except ValueError as exc:          # a bad input is the operator's typo
         return {"error": str(exc)}
@@ -257,7 +274,10 @@ def workspace(lead_id: int) -> dict:
             # fact.
             "unlocks": unlocks,
             "pending_labels": pending,
-            "can_build": not history and not pending,
+            # A design run looks at the photographs itself; labelling them is
+            # the older generator's requirement, and no longer stands in front
+            # of the first version.
+            "can_build": not history,
             "build": build_progress(conn, lead_id),
             "trouble": trouble,
             # The conversation, oldest first. It opens on what was decided and
@@ -335,6 +355,25 @@ def _edit(conn, lead_id: int, sentence: str, parent: int) -> dict:
     messages.add(conn, lead_id, "assistant", said, version=outcome["version"])
     return {"lead_id": lead_id, "version": outcome["version"], "rejected": False,
             "unchanged": outcome["version"] is None, "cost_usd": outcome["cost_usd"],
+            "versions": sites.versions(conn, lead_id), "events": leads.events(conn, lead_id),
+            "thread": messages.thread(conn, lead_id)}
+
+
+def design_first(conn, lead_id: int) -> dict:
+    """A lead's site from a design run: a prompt written from its brief, then the run.
+
+    The build button used to reach only the older generator, because the design
+    runs had no prompt unless someone wrote one by hand. Yama Izakaya's first
+    page came out of that generator, looking nothing like the two designed ones.
+    """
+    path = design_prompt.write(conn, lead_id)
+    outcome = bridge.design(conn, lead_id, path)
+    said = (f"Designed v{outcome['version']} from {path.name}." if outcome["version"]
+            else f"The design run did not finish: {outcome['why']}.")
+    said = " ".join([said, *outcome["flags"], f"(${outcome['cost_usd']:.2f})"])
+    messages.add(conn, lead_id, "assistant", said, version=outcome["version"])
+    return {"lead_id": lead_id, "version": outcome["version"],
+            "error": "" if outcome["version"] else said, "cost_usd": outcome["cost_usd"],
             "versions": sites.versions(conn, lead_id), "events": leads.events(conn, lead_id),
             "thread": messages.thread(conn, lead_id)}
 
@@ -555,6 +594,9 @@ class Handler(BaseHTTPRequestHandler):
                                      note=(body.get("note") or None))
                 elif route == "/api/generate":
                     self._json(generate(lead_id, str(body.get("spec", ""))))
+                    return
+                elif route == "/api/design":
+                    self._json(design_first(conn, lead_id))
                     return
                 elif route == "/api/build":
                     # One stage at a time, so the screen can say which one is
@@ -849,13 +891,23 @@ class Handler(BaseHTTPRequestHandler):
             except ValueError as exc:
                 self._json({"error": str(exc)}, 400)
             return
+        if route.path == "/api/progress":
+            token = (parse_qs(route.query).get("t") or [""])[0]
+            self._send(200, json.dumps({"steps": progress(token)}).encode(),
+                       "application/json")
+            return
         if route.path == "/api/brief":
             params = parse_qs(route.query)
-            payload = lookup(
-                (params.get("q") or [""])[0],
-                (params.get("location") or [""])[0],
-                (params.get("notes") or [""])[0],
-            )
+            token = (params.get("t") or [""])[0]
+            try:
+                payload = lookup(
+                    (params.get("q") or [""])[0],
+                    (params.get("location") or [""])[0],
+                    (params.get("notes") or [""])[0],
+                    token,
+                )
+            finally:
+                _progress.pop(token, None)
             body = json.dumps(payload).encode()
             self._send(200 if "error" not in payload else 400, body,
                        "application/json; charset=utf-8")
