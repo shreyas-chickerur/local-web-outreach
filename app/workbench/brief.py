@@ -19,6 +19,7 @@ from __future__ import annotations
 import re
 from collections.abc import Callable
 from dataclasses import dataclass, field, replace
+from urllib.parse import urlparse
 
 from app.adapters import image_text
 from app.adapters.directory import DirectoryPlace, DirectorySource
@@ -297,6 +298,43 @@ def _page_entry(url: str, result: FetchResult) -> dict:
     return {"url": url, "kind": "page", "read": False, "reason": reason, "text": ""}
 
 
+# A link to a menu kept on another site: yelp.com/menu/..., a menu platform's
+# /menus/ page. Written as it appears anywhere in the markup, including inside
+# a script with escaped slashes, which is where Yama's menu buttons keep theirs.
+_OFFSITE_MENU_RE = re.compile(r"https?:(?:\\?/){2}[^\s\"'<>]+?(?:\\?/)menus?(?:\\?/)[^\s\"'<>]*")
+# What a listing site adds to each dish: counts, not menu.
+_LISTING_NOISE_RE = re.compile(r"^(?:\d+ (?:reviews?|photos?)\s*)+$", re.I)
+_MAX_OFFSITE_MENUS = 2
+
+
+def _offsite_menu_links(html: str, base: str) -> list[str]:
+    own = urlparse(base).hostname or ""
+    found: list[str] = []
+    for raw in _OFFSITE_MENU_RE.findall(html or ""):
+        link = raw.replace("\\/", "/")
+        host = urlparse(link).hostname or ""
+        if host and host.removeprefix("www.") != own.removeprefix("www.") and link not in found:
+            found.append(link)
+    return found
+
+
+def _read_offsite_menus(links: list[str], pages: list[dict]) -> None:
+    """Read a menu the business keeps on another site, and keep it as a page.
+
+    Their own site is the source; where it sends a visitor for the menu is part
+    of what it says. Yama's four menu buttons all open Yelp, so its design had
+    no dish to name and captioned every photograph by sight.
+    """
+    for link in links[:_MAX_OFFSITE_MENUS]:
+        data, why = download(link)
+        text = ""
+        if data:
+            runs = visible_text_runs(data.decode("utf-8", "replace"))
+            text = "\n".join(r.text for r in runs if not _LISTING_NOISE_RE.match(r.text.strip()))
+        pages.append({"url": link, "kind": "menu", "read": bool(text),
+                      "reason": "" if text else (why or "no text on the page"), "text": text})
+
+
 # The long edge, in pixels, below which a picture cannot be a readable menu.
 _SMALLEST_MENU_EDGE = 400
 
@@ -415,6 +453,7 @@ def _read_their_site(url: str, fetcher: SiteFetcher, *,
     base = result.final_url or url
     extracted = extract_from_html(result.html, base)
     pages = [_page_entry(base, result)]
+    menus_elsewhere = _offsite_menu_links(result.html, base)
     report(f"read homepage: {base}")
 
     visited = {base}
@@ -440,6 +479,8 @@ def _read_their_site(url: str, fetcher: SiteFetcher, *,
         if not (sub.ok and sub.html):
             continue
         extracted = merge(extracted, extract_from_html(sub.html, page))
+        menus_elsewhere += [m for m in _offsite_menu_links(sub.html, base)
+                            if m not in menus_elsewhere]
         if depth_of[page] >= CRAWL_DEPTH:
             continue
         remaining = CRAWL_PAGE_BUDGET - len(queue)
@@ -450,6 +491,9 @@ def _read_their_site(url: str, fetcher: SiteFetcher, *,
                 depth_of[link] = depth_of[page] + 1
                 queue.append(link)
 
+    if menus_elsewhere:
+        report(f"reading their menu at {urlparse(menus_elsewhere[0]).hostname}")
+    _read_offsite_menus(menus_elsewhere, pages)
     if any(m.get("kind") == "pdf" for m in extracted.menu_media):
         report("reading menu PDF(s)")
     _read_menu_pdfs(extracted, pages)

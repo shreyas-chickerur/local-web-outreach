@@ -759,6 +759,35 @@ def test_an_icon_named_like_a_menu_is_not_sent_to_the_model(monkeypatch):
     assert not images[0]["read"] and "230" in images[0]["reason"]
 
 
+
+_OFFSITE_MENU_SITE = """<html><head><title>Yama Izakaya &amp; Sushi</title></head><body>
+<h2>EXPLORE MENU</h2><div class="et_clickable">Dallas</div>
+<script>var et_link_options_data = [{"class":"et_pb_column_4",
+"url":"https:\\/\\/www.yelp.com\\/menu\\/yama-sushi-dallas-2","target":"_blank"}];</script>
+</body></html>"""
+
+_YELP_MENU = """<html><body><nav>Yelp for Business</nav><h2>Appetizers</h2>
+<h4>Takoyaki</h4><p>Baked octopus balls.</p><p>19 reviews 17 photos</p><p>4 photos</p><p>$9.50</p>
+</body></html>"""
+
+
+def test_a_menu_their_site_links_to_elsewhere_is_read(monkeypatch):
+    """Yama's own site has no menu: its menu buttons open the menu on Yelp,
+    through a link kept in a script. The design had no dish to name, so every
+    photograph was captioned by sight: "A bowl of ramen"."""
+    import app.workbench.brief as brief_module
+
+    asked = []
+    monkeypatch.setattr(brief_module, "download", lambda url, timeout=15.0: (
+        asked.append(url) or (_YELP_MENU.encode(), "")))
+    pages = _pages(build_brief("craftwaykitchen.com", fetcher=_Fetcher(_OFFSITE_MENU_SITE)))
+    menus = [p for p in pages if p["kind"] == "menu"]
+    assert asked == ["https://www.yelp.com/menu/yama-sushi-dallas-2"]
+    assert menus and menus[0]["read"] and "Takoyaki" in menus[0]["text"]
+    assert "$9.50" in menus[0]["text"]
+    assert "reviews" not in menus[0]["text"] and "photos" not in menus[0]["text"]
+
+
 # ------------------------------- their logo -------------------------------- #
 _FISH_SHACK_HOME = """
 <html><head><title>Fish Shack - Plano, Texas</title></head><body>

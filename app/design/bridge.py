@@ -251,7 +251,10 @@ Keep everything the request does not touch identical. The photographs are in
 photos/ and the logo, if there is one, is the logo file here; use them by those
 relative paths. Facts (names, dishes, prices, hours, addresses, phone numbers,
 reviews) come only from brief.json: never add or alter one. If the change needs a
-fact brief.json does not hold, leave the page as it is and say so.
+fact brief.json does not hold, leave the page as it is and say so. Any words
+you write are the business speaking on its own site: never quote it back to itself
+or say where a fact came from, and no stock phrases. A dish on the menu in
+brief.json is named exactly as the menu names it.
 
 When you are done, reply in one or two plain sentences saying what you changed."""
 
@@ -270,7 +273,11 @@ def edit(conn: sqlite3.Connection, lead_id: int, sentence: str,
     folder, brief = _workspace(conn, lead_id)
     before = _to_files(sites.html_for(conn, lead_id, parent) or "", lead_id, folder)
     (folder / "index.html").write_text(before)
-    facts = {k: brief.get(k) for k in ("name", "facts", "published", "ratings", "testimonials")}
+    facts = {k: brief.get(k) for k in ("name", "location", "trade", "facts", "published",
+                                       "ratings", "testimonials")}
+    # The text of every page the crawl read, the menu among them. Leaving these
+    # out, an edit asked to name Yama's dishes from its menu said there was none.
+    facts["pages"] = [p for p in brief.get("pages") or [] if p.get("read")]
     (folder / "brief.json").write_text(json.dumps(facts, indent=1, default=str))
     told = _EDIT.format(name=brief.get("name", "the business"), sentence=sentence.strip())
     result, error = asyncio.run(_run(folder, told, EDIT_CEILING_USD))

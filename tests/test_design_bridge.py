@@ -222,3 +222,27 @@ def test_an_edit_that_changes_nothing_saves_nothing_and_says_why(lead, monkeypat
     outcome = bridge.edit(conn, lead_id, "add our brunch hours", parent_version=1)
     assert outcome["version"] is None and "brunch" in outcome["reply"]
     assert len(sites.versions(conn, lead_id)) == 1
+
+
+def test_an_edit_can_read_the_menu_and_every_page_the_crawl_kept(lead, monkeypatch):
+    """Asked to name each photographed dish from Yama's menu, an edit replied
+    that brief.json held no menu: the edit's copy of the brief kept five keys and
+    dropped the crawl's pages, so the menu the crawl had read never reached it."""
+    conn, lead_id, _prompt, _asked = lead
+    brief = leads.load_brief(conn, lead_id)
+    brief["pages"] = [{"url": "https://www.yelp.com/menu/fish", "kind": "menu", "read": True,
+                       "reason": "", "text": "Takoyaki\nBaked octopus balls.\n$9.50"},
+                      {"url": "http://fish.test/gone", "kind": "page", "read": False,
+                       "reason": "status 404", "text": ""}]
+    leads.save_brief(conn, brief)
+    sites.save(conn, lead_id, "<p>Fish Shack</p>", spec="")
+    given = {}
+
+    async def fake_query(*, prompt, options):
+        given.update(json.loads(Path(options.cwd, "brief.json").read_text()))
+        yield _result(result="Nothing changed.", total_cost_usd=0.01)
+
+    monkeypatch.setattr(bridge, "query", fake_query)
+    bridge.edit(conn, lead_id, "name the dishes", parent_version=1)
+    assert [p["kind"] for p in given["pages"]] == ["menu"]
+    assert "Takoyaki" in given["pages"][0]["text"]

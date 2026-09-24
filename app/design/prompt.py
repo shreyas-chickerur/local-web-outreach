@@ -32,7 +32,20 @@ your own words.
 
 Every factual claim the finished page makes will be enumerated and checked afterwards
 against this brief, and anything unsupported comes back to you as a comment. That check
-happens after you build, not while. Build the best page."""
+happens after you build, not while. Build the best page.
+
+Write as the business, in its own voice: this is their website. Never quote the business
+back to itself or say where a fact came from ("from their own website", "as listed on
+Google"). Use the plain, specific words the owner would use. No stock phrases: "you're in
+luck", "look no further", "nestled", "elevate", "a feast for the senses", "whether you're
+... or ...", questions as headings, lists of three for rhythm.
+
+Look at every photograph. Where one shows a dish on the menu, name it exactly as the menu
+does, in its caption and its alt text. Where it matches nothing on the menu, name the dish
+by its usual name if the photograph makes it plain ("chicken yakitori", "tonkotsu ramen");
+the claim check lists that name for the operator to confirm. Never describe a photograph
+as a photograph ("A bowl of ramen."). A menu kept on a listing site sometimes carries that
+site's own filler as a description ("Ray-finned fish" for salmon): never print those."""
 
 # A trade names a restaurant in many ways; a brief with a menu is one whatever it says.
 _FOOD = re.compile(r"restaurant|cafe|café|bar\b|grill|bakery|food|diner|sushi|pizz|izakaya"
@@ -83,8 +96,12 @@ def render(conn: sqlite3.Connection, lead_id: int, brief: dict, revision: int) -
         out += ["", "Verified facts (backed by two independent sources, or by the operator):"]
         out += [f"- {f.get('label') or f['field']}: {f.get('value')}" for f in sure]
     if unsure:
-        out += ["", "Not confirmed. Do not state these as fact; the sources disagree or only "
-                "one says so:"]
+        # Told "do not state these as fact", Yama's design hedged in the page
+        # itself ("per Google's listing", "please call to confirm"). The claim
+        # inventory lists these for the operator; the visitor never hears of it.
+        out += ["", "Found by one source only, or disagreed on. Use one if the page needs it, "
+                "stated plainly, or leave it out; never tell the visitor it is unconfirmed "
+                "or where it came from. The claim check lists these for the operator:"]
         out += [f"- {f.get('label') or f['field']} ({f.get('confidence')}): {f.get('value')}"
                 for f in unsure]
     for rating in brief.get("ratings") or []:
@@ -93,7 +110,7 @@ def render(conn: sqlite3.Connection, lead_id: int, brief: dict, revision: int) -
 
     pages = brief.get("pages") or []
     site = [p for p in pages if p.get("kind") == "page" and p.get("read")]
-    menus = [p for p in pages if p.get("kind") in ("pdf", "image") and p.get("read")]
+    menus = [p for p in pages if p.get("kind") in ("pdf", "image", "menu") and p.get("read")]
     unread = [p for p in pages if not p.get("read")]
     if site:
         out += ["", "## What their own site says"]
@@ -103,7 +120,9 @@ def render(conn: sqlite3.Connection, lead_id: int, brief: dict, revision: int) -
         out += ["", "## The menu, in full, as their site prints it", "",
                 "Prices are theirs; print them exactly, in one format."]
         for page in menus:
-            out += ["", f"{page['url']}:", page.get("text", "")]
+            where = ("the menu their site links to, kept on another site"
+                     if page.get("kind") == "menu" else "their site")
+            out += ["", f"{page['url']} ({where}):", page.get("text", "")]
     elif published.get("menu_items"):
         out += ["", "## Menu items their site lists", ""]
         out += [f"- {json.dumps(item, ensure_ascii=False)}" for item in published["menu_items"]]
