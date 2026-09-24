@@ -26,7 +26,6 @@ def lead(tmp_path, monkeypatch):
     monkeypatch.setattr(proposal.photos, "fetch",
                         lambda key, name, width=1600: b"\xff\xd8" + name.encode())
     monkeypatch.setattr(proposal.logos, "fetch", lambda url: (b"\xff\xd8logo", "image/jpeg"))
-    monkeypatch.setattr(proposal, "OUT", tmp_path / "proposals")
     yield conn, lead_id
     conn.close()
 
@@ -38,7 +37,7 @@ def test_a_proposal_is_one_file_with_nothing_it_has_to_fetch_from_us(lead):
     conn, lead_id = lead
     path = proposal.export(conn, lead_id)
     page = path.read_text()
-    assert path.name == "fish-shack-v2.html"
+    assert path == proposal.folders.of("Fish Shack") / "proposals" / "v2.html"
     assert f"/photo/{lead_id}/" not in page and f"/logo/{lead_id}" not in page
     assert page.count("data:image/jpeg;base64,") == 4
 

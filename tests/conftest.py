@@ -64,3 +64,16 @@ def no_agent_runs(monkeypatch):
         raise AssertionError("a test reached a real, paid agent run; replace bridge.query")
 
     monkeypatch.setattr(bridge, "query", refuse)
+
+
+@pytest.fixture(autouse=True)
+def business_folders_in_a_temporary_place(monkeypatch, tmp_path):
+    """No test writes into the real `sites/` folder.
+
+    Every saved version, crawl, master mark and proposal is also written to the
+    business's folder, and the suite saves thousands of versions for businesses
+    that do not exist.
+    """
+    from app.store import folders
+
+    monkeypatch.setattr(folders, "ROOT", tmp_path / "sites")

@@ -15,12 +15,7 @@ import re
 from pathlib import Path
 
 from app.review import checks
-
-BRIEFS = Path("briefs")
-
-
-def _slug(name: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", (name or "").lower()).strip("-") or "unnamed"
+from app.store import brief_archive, folders
 
 
 def _hash(text: str) -> str:
@@ -47,8 +42,10 @@ def material(name: str, *, root: Path | None = None) -> tuple[dict, str, dict]:
     without the business's own words can only ever return "unsourced".
     """
     base = root or Path()
-    slug = _slug(name)
-    brief_path = base / BRIEFS / slug / "current.json"
+    # Through the archive's own layout: this module once built its own path
+    # to the crawls and would have gone on reading a folder nothing wrote.
+    brief_path = brief_archive.directory(
+        name, None if root is None else base / folders.ROOT) / "current.json"
 
     brief: dict = {}
     if brief_path.exists():

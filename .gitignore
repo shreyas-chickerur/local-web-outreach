@@ -70,18 +70,11 @@ artifacts/
 graphify-out/cache/
 *.graphify-bak
 
-# A site's generated outputs. The source under sites/<slug>/ is kept; what it
-# builds is regenerated, and the versions themselves live in workbench.db.
-/sites/*/workbench.html
-/sites/*/project/
-
 # Design-run workspaces (app/design/bridge.py): photographs and a draft page,
 # regenerated per run; what matters is saved as a version in workbench.db.
 /runs/
 
-# Proposal files: generated per lead from a stored version; large, and regenerated.
-/proposals/
-
-# One folder per business, on this machine only. Nothing that belongs to a business is kept in git.
+# One folder per business, on this machine only (app/store/folders.py): its
+# crawls, prompts, versions, master and proposals. The repository is public, and
+# nothing that belongs to a business is kept in git.
 /sites/
-/prompts/

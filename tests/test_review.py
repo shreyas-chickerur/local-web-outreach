@@ -229,7 +229,7 @@ def test_the_pointer_current_json_is_followed_to_the_crawl_it_names(tmp_path):
 
     from app.review.run import material
 
-    slug = tmp_path / "briefs" / "the-heritage-table"
+    slug = tmp_path / "sites" / "the-heritage-table" / "briefs"
     slug.mkdir(parents=True)
     crawl = slug / "2026-09-21T20-32-53.585561+00-00.json"
     crawl.write_text(json.dumps({
@@ -238,7 +238,7 @@ def test_the_pointer_current_json_is_followed_to_the_crawl_it_names(tmp_path):
         "facts": [{"field": "phone", "value": "(469) 664-0100"}],
     }))
     (slug / "current.json").write_text(json.dumps({
-        "path": "briefs/the-heritage-table/2026-09-21T20-32-53.585561+00-00.json",
+        "path": "sites/the-heritage-table/briefs/2026-09-21T20-32-53.585561+00-00.json",
         "hash": "f04131b0bbdbfe9a",
         "captured_at": "2026-09-21T20:32:53+00:00",
     }))
@@ -254,10 +254,10 @@ def test_a_pointer_to_a_crawl_that_is_gone_reports_no_brief(tmp_path):
 
     from app.review.run import material
 
-    slug = tmp_path / "briefs" / "acme-roofing"
+    slug = tmp_path / "sites" / "acme-roofing" / "briefs"
     slug.mkdir(parents=True)
     (slug / "current.json").write_text(json.dumps(
-        {"path": "briefs/acme-roofing/deleted.json", "hash": "x"}))
+        {"path": "sites/acme-roofing/briefs/deleted.json", "hash": "x"}))
 
     brief, _capture, meta = material("Acme Roofing", root=tmp_path)
     assert brief == {}
@@ -271,7 +271,7 @@ def test_a_brief_written_straight_into_current_json_still_loads(tmp_path):
 
     from app.review.run import material
 
-    slug = tmp_path / "briefs" / "acme-roofing"
+    slug = tmp_path / "sites" / "acme-roofing" / "briefs"
     slug.mkdir(parents=True)
     (slug / "current.json").write_text(json.dumps(
         {"name": "Acme Roofing", "facts": [{"field": "phone", "value": "1"}]}))
@@ -385,11 +385,11 @@ def test_a_failed_rebuild_never_loses_the_correction(tmp_path, monkeypatch):
 def _archive(tmp_path, brief: dict) -> None:
     import json
 
-    slug = tmp_path / "briefs" / "fish-shack"
+    slug = tmp_path / "sites" / "fish-shack" / "briefs"
     slug.mkdir(parents=True)
     (slug / "2026-09-22T21-59-02.000000+00-00.json").write_text(json.dumps(brief))
     (slug / "current.json").write_text(json.dumps({
-        "path": "briefs/fish-shack/2026-09-22T21-59-02.000000+00-00.json", "hash": "x"}))
+        "path": "sites/fish-shack/briefs/2026-09-22T21-59-02.000000+00-00.json", "hash": "x"}))
 
 
 _PAGES = [

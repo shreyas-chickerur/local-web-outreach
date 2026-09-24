@@ -11,6 +11,7 @@ import json
 import sqlite3
 from datetime import UTC, datetime
 
+from app.store import folders
 from app.store.db import operator
 from app.store.leads import record
 
@@ -49,6 +50,9 @@ def save(conn: sqlite3.Connection, lead_id: int, html: str, spec: str,
     record(conn, lead_id, "site", new_value=f"v{version}",
            old_value=f"v{parent_version}" if parent_version else None,
            note=spec.strip() or "no instructions given", actor=who)
+    # Every path that makes a version comes through here, so this is the one
+    # place the business's folder has to be told.
+    folders.write_version(conn, lead_id, version, html)
     return version
 
 

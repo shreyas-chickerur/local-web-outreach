@@ -22,11 +22,11 @@ app/workbench/brief.py        every source -> RawClaims -> Brief (+ pages, logo)
 app/workbench/corroborate.py  RawClaims -> Facts with a confidence and a score
         |
         v
-app/store/brief_archive.py    briefs/<slug>/<timestamp>.json   (permanent)
+app/store/brief_archive.py    sites/<slug>/briefs/<timestamp>.json   (permanent)
 app/store/leads.py            leads.brief_json, and corrections applied on read
         |
         v
-prompts/<slug>/vN.md          the design prompt, written from the brief and the playbook
+sites/<slug>/prompts/vN.md    the design prompt, written from the brief and the playbook
 app/design/bridge.py          one design run (make design), or one chat edit
 app/store/sites.py            one row per version, each with a parent
         |
@@ -82,7 +82,10 @@ is the one place a structured model call is made.
   is what almost everything should call: the stored brief with the operator's
   corrections applied on read, into both `facts` and `published`. The master
   version (`mark_master`, `master_version`) is an event in the same trail.
-- `brief_archive.py` — every crawl kept; `current.json` is a **pointer**.
+- `folders.py` — one folder per business on this machine, `sites/<slug>/`:
+  crawls, prompts, every version, the master and proposals. Gitignored.
+- `brief_archive.py` — every crawl kept, in the business's folder;
+  `current.json` is a **pointer**.
 - `sites.py` — versions, each with a parent, its notes (model, cost, prompt) and
   the instruction that made it.
 - `reviews.py` — reviews and findings; a decided finding survives a re-run.

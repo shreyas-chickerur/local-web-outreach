@@ -121,7 +121,7 @@ strength of having watched the real system produce the right value.
 ```
 make check                 # ruff + mypy + the full suite. The gate.
 make brief Q="Name, City, ST 75033"   # research one company (note: Q, not NAME)
-make design LEAD=8 PROMPT=prompts/fish-shack/v2.md   # one design run: $5 ceiling
+make design LEAD=8 PROMPT=sites/fish-shack/prompts/v2.md   # one design run: $5 ceiling
 make proposal LEAD=8       # the current version as one file an owner can open
 make ui                    # the workbench on http://127.0.0.1:8099
 make install               # python3.11 -m venv .venv && pip install -e ".[dev]"
@@ -157,18 +157,18 @@ SQLite at `workbench.db` (`app/store/db.py`). Tables: `leads`, `events`,
 `discovery_cache`, `preferences`, `reviews`, `findings`. Migrations are additive
 only, through `_SCHEMA` plus `_LATER_COLUMNS`.
 
-On disk: `briefs/<slug>/<ISO-timestamp>.json` is one crawl, never overwritten;
-`briefs/<slug>/current.json` is a **pointer** to the newest one, not a brief.
-The text of every page the crawl read is inside the brief (`pages`); the claim
-checks search that. `captures/<slug>/live-site.md` was a hand-made copy the
-checks used to read; nothing reads it now.
+On disk, one folder per business, `sites/<slug>/`, gitignored because the
+repository is public (`app/store/folders.py`): `briefs/` (one crawl per file,
+never overwritten; `current.json` is a **pointer** to the newest, not a brief),
+`prompts/vN.md`, `versions/vN.html` (written by `sites.save`, so every path
+that makes a version fills it), `master.txt`, `proposals/`, and `source/` for a
+hand-written site. The text of every page the crawl read is inside the brief
+(`pages`); the claim checks search that. `python -m app.store.folders` writes
+any version the database has and the folder lacks.
 
 Generated and cached, all gitignored: `runs/<slug>/<timestamp>/` (a design or
-edit run's workspace), `proposals/` (files for owners), `.cache/photos`,
-`.cache/logos`, `.cache/image-text` (a menu image's text, keyed by its bytes).
-`sites/<slug>/` and `prompts/<slug>/` hold one business's files on this machine
-only; both are gitignored, because nothing that belongs to a business goes to
-GitHub.
+edit run's workspace), `.cache/photos`, `.cache/logos`, `.cache/image-text` (a
+menu image's text, keyed by its bytes).
 
 ## Style
 

@@ -4,7 +4,7 @@
 which is correct for a fast "what do we currently believe" read, but it
 means the fact of an EARLIER crawl disappears the moment a new one
 lands. This archive is the permanent trail alongside it:
-`briefs/<lead-slug>/<ISO-timestamp>.json`, one new file per crawl, never
+`sites/<lead-slug>/briefs/<ISO-timestamp>.json`, one new file per crawl, never
 overwritten, plus its own content hash — so a later review can always
 answer "what did the model actually see" by naming the exact file and
 hash the design prompt was built from, not a row that has since been
@@ -26,17 +26,20 @@ from __future__ import annotations
 
 import hashlib
 import json
-import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-ARCHIVE_ROOT = Path("briefs")
+from app.store import folders
+
+# Unset, crawls go in each business's own folder (`app.store.folders`). A
+# test or a caller that sets this gets `<root>/<slug>/briefs/` instead.
+ARCHIVE_ROOT: Path | None = None
+_slug = folders.slug
 
 
-def _slug(name: str) -> str:
-    """A filesystem-safe directory name for this business."""
-    lowered = re.sub(r"[^a-z0-9]+", "-", (name or "").lower()).strip("-")
-    return lowered or "unnamed"
+def directory(name: str, root: Path | None = None) -> Path:
+    """Where one business's crawls are kept."""
+    return folders.of(name, root if root is not None else ARCHIVE_ROOT) / "briefs"
 
 
 def _content_hash(brief_json: dict) -> str:
@@ -59,10 +62,9 @@ def save(brief_json: dict, *, root: Path | None = None) -> dict:
     # kind of bug this project's own `_stage_direction`/gate story (BRIEF
     # §1) already warns about with mutable module state. Read fresh here
     # instead, so monkeypatching `ARCHIVE_ROOT` actually works.
-    root = ARCHIVE_ROOT if root is None else root
     name = brief_json.get("name") or "unnamed"
-    directory = root / _slug(str(name))
-    directory.mkdir(parents=True, exist_ok=True)
+    folder = directory(str(name), root)
+    folder.mkdir(parents=True, exist_ok=True)
 
     now = datetime.now(UTC)
     captured_at = now.isoformat(timespec="seconds")
@@ -75,19 +77,18 @@ def save(brief_json: dict, *, root: Path | None = None) -> dict:
     # in an ISO timestamp are also not a safe filename character on every
     # filesystem this project might run on.
     stamp = now.isoformat(timespec="microseconds").replace(":", "-")
-    path = directory / f"{stamp}.json"
+    path = folder / f"{stamp}.json"
     path.write_text(json.dumps(brief_json, indent=2, sort_keys=False) + "\n")
 
     pointer = {"path": str(path), "hash": content_hash, "captured_at": captured_at}
-    (directory / "current.json").write_text(json.dumps(pointer, indent=2) + "\n")
+    (folder / "current.json").write_text(json.dumps(pointer, indent=2) + "\n")
     return pointer
 
 
 def current(name: str, *, root: Path | None = None) -> dict | None:
     """The most recently archived brief's own pointer, or `None` if this
     business has never been crawled before."""
-    root = ARCHIVE_ROOT if root is None else root
-    path = root / _slug(name) / "current.json"
+    path = directory(name, root) / "current.json"
     if not path.exists():
         return None
     return json.loads(path.read_text())

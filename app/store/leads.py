@@ -206,6 +206,9 @@ def mark_master(conn: sqlite3.Connection, lead_id: int, version: int,
     record(conn, lead_id, "master", field="version",
            old_value=None if previous is None else str(previous),
            new_value=str(version), actor=actor)
+    from app.store import folders  # folders reads leads to fill; imported here to avoid a cycle
+
+    folders.write_master(conn, lead_id, version)
     return version
 
 

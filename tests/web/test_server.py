@@ -68,17 +68,18 @@ def test_a_successful_lookup_archives_the_crawl(monkeypatch, tmp_path):
     crawl through the actual production entry point gets a permanent,
     never-overwritten copy, not just a DB row the next re-crawl will
     replace."""
-    from app.store import brief_archive, db
+    from pathlib import Path
+
+    from app.store import brief_archive, db, folders
 
     monkeypatch.setattr(db, "DEFAULT_PATH", tmp_path / "workbench.db")
-    monkeypatch.setattr(brief_archive, "ARCHIVE_ROOT", tmp_path / "briefs")
     monkeypatch.setattr(server, "build_brief",
                         lambda *a, **kw: _brief(name="Craftway Kitchen"))
     result = server.lookup("craftwaykitchen.com", None, None)
     assert "error" not in result
-    pointer = brief_archive.current("Craftway Kitchen", root=tmp_path / "briefs")
+    pointer = brief_archive.current("Craftway Kitchen")
     assert pointer is not None
-    assert (tmp_path / "briefs" / pointer["path"].split("/")[-2]).is_dir()
+    assert Path(pointer["path"]).parent == folders.of("Craftway Kitchen") / "briefs"
 
 
 def test_routes(monkeypatch):

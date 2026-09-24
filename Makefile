@@ -22,7 +22,7 @@ brief:
 	$(PY) -m app.cli brief "$(Q)"
 
 # One design run for a lead from a prompt; a new version, its cost recorded.
-# make design LEAD=8 PROMPT=prompts/fish-shack/v2.md
+# make design LEAD=8 PROMPT=sites/fish-shack/prompts/v2.md
 design:
 	$(PY) -m app.design.bridge $(LEAD) "$(PROMPT)"
 

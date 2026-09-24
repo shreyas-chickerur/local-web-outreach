@@ -41,7 +41,7 @@ person**: nothing here sends email.
 |---|---|---|
 | `make brief Q="Name, City, ST"` | Research one business; save its brief | a few directory lookups; a model read per new menu image |
 | `make ui` | Start the workbench at `http://127.0.0.1:8099` | — |
-| `make design LEAD=8 PROMPT=prompts/<slug>/v1.md` | One design run: a new version of the lead's site | up to $5 |
+| `make design LEAD=8 PROMPT=sites/<slug>/prompts/v1.md` | One design run: a new version of the lead's site | up to $5 |
 | `make proposal LEAD=8` | The current version as one file for the owner | — |
 | `make check` | Lint, type check and the whole test suite | — |
 
@@ -69,9 +69,9 @@ person**: nothing here sends email.
      as superseded.
    - A logo the crawl missed is corrected the same way, with its address.
 4. **Design the site**
-   - Write the design prompt at `prompts/<slug>/v1.md` from the brief and
+   - Write the design prompt at `sites/<slug>/prompts/v1.md` from the brief and
      `app/design/playbooks/restaurant.md`.
-   - Run `make design LEAD=<id> PROMPT=prompts/<slug>/v1.md`.
+   - Run `make design LEAD=<id> PROMPT=sites/<slug>/prompts/v1.md`.
    - The run prints its cost and the new version's address; a missing logo is
      flagged.
 5. **Refine it in the workbench chat** — open the lead's workspace.
@@ -88,7 +88,7 @@ person**: nothing here sends email.
    - Every corroborated claim links to the exact page and words that back it.
    - Only `contradicted` blocks approval. A person approves; always.
 8. **Make the proposal** — `make proposal LEAD=<id>` writes
-   `proposals/<slug>-v<N>.html`: every photograph and the logo inside one file,
+   `sites/<slug>/proposals/v<N>.html`: every photograph and the logo inside one file,
    openable offline and sendable as an attachment.
 
 ## The rules it works by
@@ -123,12 +123,17 @@ a different sentence at the door:
 
 - **Database** — `workbench.db`: leads, the audit trail, versions, reviews,
   findings, the chat. Additive migrations only.
-- **Briefs** — `briefs/<slug>/<timestamp>.json`, one per crawl, never
-  overwritten; `current.json` is a pointer to the newest.
-- **Prompts** — `prompts/<slug>/vN.md`, one per design run.
+- **One folder per business** — `sites/<slug>/`, on this machine only
+  (gitignored; nothing that belongs to a business goes to GitHub):
+  - `briefs/` — one file per crawl, never overwritten; `current.json` points
+    at the newest.
+  - `prompts/vN.md` — the design prompts.
+  - `versions/vN.html` — every version, written as it is saved.
+  - `master.txt` — the version last marked good.
+  - `proposals/vN.html` — files for owners.
+  - `source/` — a hand-written site's own source, when it has one.
 - **Generated, gitignored**
   - `runs/<slug>/<timestamp>/` — a design or edit run's workspace.
-  - `proposals/` — files for owners.
   - `.cache/photos`, `.cache/logos`, `.cache/image-text` — paid for once, kept.
 
 ## Development

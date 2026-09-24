@@ -51,3 +51,17 @@ def test_the_crawls_page_text_survives_to_the_corrected_brief(tmp_path: Path):
     for brief in (archived, corrected):
         texts = {p["url"]: p["text"] for p in brief["pages"]}
         assert "Cabernet Sauvignon, Napa Valley" in texts["https://craftwaykitchen.com/wine/"]
+
+
+def test_the_checks_find_a_crawl_where_make_brief_put_it(tmp_path: Path):
+    """The checks once built their own path to the crawls, so moving where
+    `make brief` writes would have left them reading a folder nothing wrote,
+    reporting every claim unsourced while the screen said a brief loaded."""
+    from app.review.run import material
+    from app.store import folders
+
+    payload = brief_to_dict(build_brief("craftwaykitchen.com", fetcher=_Site()))
+    pointer = brief_archive.save(payload)
+    assert Path(pointer["path"]).parent == folders.of(payload["name"]) / "briefs"
+    brief, text, _meta = material(payload["name"])
+    assert "Cabernet Sauvignon, Napa Valley" in text

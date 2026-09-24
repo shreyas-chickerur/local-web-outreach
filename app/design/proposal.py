@@ -20,9 +20,7 @@ from pathlib import Path
 
 from app.adapters import logos, photos
 from app.core.config import google_places_api_key
-from app.store import brief_archive, leads, sites
-
-OUT = Path("proposals")
+from app.store import folders, leads, sites
 
 
 def _inline(data: bytes, media_type: str) -> str:
@@ -53,8 +51,8 @@ def export(conn: sqlite3.Connection, lead_id: int, version: int | None = None) -
         html = html.replace(f"/logo/{lead_id}", _inline(*logo))
     if "annotate.js" in html or "?review=" in html:
         raise ValueError("this version carries review markup and must never be sent")
-    OUT.mkdir(parents=True, exist_ok=True)
-    path = OUT / f"{brief_archive._slug(str(brief['name']))}-v{version}.html"
+    path = folders.of(str(brief["name"])) / "proposals" / f"v{version}.html"
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(html)
     return path
 
