@@ -491,11 +491,13 @@
   .diag .skip{background:var(--raise);color:var(--faint)}
   .diag .no{background:var(--warn-bg);color:var(--warn)}
   .diag .stop{background:var(--bad-bg);color:var(--bad);font-weight:600}
+  .ws-group{margin:14px 0;padding:12px;border:1px solid var(--line);border-radius:8px}
+  .design-step{display:block;margin-top:4px;color:var(--faint);font-size:12px}
+  .design-step.now{color:var(--ink)}
   .diag-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;
     color:var(--faint);font-weight:700;margin:0 0 7px}
   .census-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-  .census-row{display:flex;flex-direction:column;gap:3px}
-  .census-row .hint{margin:0}
+  .census-row{padding:4px 0;font-size:13px;cursor:help}
   .vchip{background:var(--raise);border:1px solid var(--line);border-radius:6px;
     padding:4px 10px;font-size:12px;cursor:pointer;font:inherit;color:var(--dim);
     font-family:var(--mono)}
@@ -1160,6 +1162,8 @@ async function openWorkspace(leadId, name) {
         build: data.build || null, trouble: data.trouble || [],
         thread: data.thread || [],
         master: data.master || null,
+        designing: data.designing || null,
+        designSteps: data.design_steps || [],
         photos, labelOptions: shots.options || [], shot: 0,
         // A design run looks at the photographs itself, so a new lead opens on
         // the workspace, not on labelling. Labels stay one click away.
@@ -1169,6 +1173,7 @@ async function openWorkspace(leadId, name) {
   WS.shot = first < 0 ? 0 : first;
   document.body.classList.add("workspace-open");
   drawWorkspace();
+  if (WS.designing) watchDesign();
 }
 
 function closeWorkspace() {
@@ -1247,6 +1252,17 @@ function drawThread() {
     Each change becomes a new version on the right.</p>`}</div>`;
 }
 
+// A census field name as a person would say it.
+function plainField(field) {
+  const known = {"fact:hours": "Opening hours", "fact:phone": "Phone", "fact:address":
+    "Address", menu_media: "Menu files", menu_items: "Menu items", photos: "Photographs",
+    testimonials: "Reviews", services: "Services", about: "About text", tagline: "Tagline",
+    socials: "Social links", blocks: "Sections of their site", products: "Products"};
+  if (known[field]) return known[field];
+  const words = String(field).replace(/^fact:/, "").replace(/_/g, " ");
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
 function drawWorkspace(into) {
   if (WS.stage === "label") {
     const shell = $("#workspace");
@@ -1312,23 +1328,17 @@ function drawWorkspace(into) {
   // BRIEF §5, Slice D item 3: what of their own material never reached the
   // page, and why — the identical measurement a corpus-wide census runs
   // (app.site.census), read for this one lead instead of all nineteen.
+  // In plain words: "Photographs: 13 of 18 used". The generator's own reason
+  // is written for whoever debugs it, so it waits behind a hover.
   const census = (WS.census || []).length ? `
-    <p class="diag-label">What didn't reach the page</p>
-    <p class="hint">Everything they published, checked against what actually
-       rendered. Only what was dropped is listed here — the rest reached
-       the page.</p>
+    <p class="diag-label">What they published that the page doesn't use</p>
     <div class="census-list">${WS.census.map(c => `
-      <div class="census-row">
-        <span class="stop">${esc(c.field)} (${c.reached} of ${c.of})</span>
-        <span class="hint">${esc(c.why)}</span>
-      </div>`).join("")}</div>` : "";
+      <div class="census-row" title="${esc(c.why)}">
+        ${esc(plainField(c.field))}: ${c.reached} of ${c.of} used</div>`).join("")}</div>` : "";
   const untagged = (WS.photos || []).filter(p => !p.label).length;
   const labeller = (WS.photos || []).length ? `
-    <p class="diag-label">What each photo shows</p>
-    <p class="hint">Describe them in your own words — that becomes the alt text,
-       and the tag is read out of it. If you cannot identify one, pick
-       “can’t tell”: it still appears in the gallery, it just never leads.
-       The first build waits until every photo has one or the other.</p>
+    <p class="hint">Optional. Your words become the photograph's description on
+       the page. Pick “can’t tell” for one you cannot identify.</p>
     <div class="row" style="margin:8px 0 4px;gap:8px">
       <button class="mini primary" onclick="saveDescriptions()">Save all</button>
       <button class="mini" onclick="prefillDescriptions()">Fill from filenames</button>
@@ -1471,7 +1481,7 @@ function drawWorkspace(into) {
                 playbook, looks at its photographs, and builds the page. It
                 takes several minutes and costs up to $5.</p>
              <button class="mini primary" id="design-first" onclick="designFirst()"
-               ${WS.canBuild ? "" : "disabled"}>Design the first version</button>
+               ${WS.canBuild && !WS.designing ? "" : "disabled"}>Design the first version</button>
              <p class="hint" id="design-wait"></p>
              </div>`}
       </div>
@@ -1482,14 +1492,21 @@ function drawWorkspace(into) {
       <div class="ws-body" id="ws-versions">
         <div class="diag">${chips}</div>
         ${master}
+        ${trouble}
+        ${designed ? "" : `<div class="ws-group">
+           <p class="hint">This version came from the older generator. A design
+              run builds a new one from the brief and the photographs.</p>
+           <button class="mini primary" id="design-first" onclick="designFirst()"
+             ${WS.designing ? "disabled" : ""}>Design a new version (up to $5)</button>
+           <p class="hint" id="design-wait"></p></div>`}
         <details class="history"><summary>History</summary>
           <div style="margin-top:12px">${trail}</div></details>
-        ${designed ? "" : `<div class="diag-label">This version came from the older
-             generator.</div>
-           <button class="mini primary" id="design-first" onclick="designFirst()">Design
-             a new version (up to $5)</button>
-           <p class="hint" id="design-wait"></p>
-           ${trouble}${why}${signature}${unlocks}${outline}${census}${diag}${labeller}`}
+        ${labeller ? `<details class="history"><summary>Photographs
+            (${WS.photos.length - untagged} of ${WS.photos.length} described)</summary>
+            ${labeller}</details>` : ""}
+        ${designed || !(why + signature + unlocks + outline + census + diag).trim() ? ""
+          : `<details class="history"><summary>The older generator's notes</summary>
+            ${why}${signature}${unlocks}${outline}${census}${diag}</details>`}
       </div>
     </section>
   </div>`;
@@ -1604,37 +1621,61 @@ function clearBuild() {
   if (panel) panel.remove();
 }
 
-// One design run: minutes, not seconds, and a single request, so the wait is
-// shown as a running clock and a sentence saying what is happening. Without
-// them a long run looks exactly like a stuck one.
+// A design run takes minutes and belongs to the server, not to this page: the
+// page starts it, then asks every few seconds whether it has finished. Leaving
+// and coming back finds it still running, with the clock counting from when it
+// began, and the button stays off so a second click cannot start a second run.
+let DESIGN_WATCH = null;
+
 async function designFirst() {
-  const button = $("#design-first"), wait = $("#design-wait");
+  const button = $("#design-first");
   if (button) button.disabled = true;
-  const began = Date.now();
-  const tick = () => {
-    const s = Math.round((Date.now() - began) / 1000);
-    if (wait) wait.innerHTML = `<span class="spin"></span> Designing — ${Math.floor(s / 60)}m
-      ${String(s % 60).padStart(2, "0")}s. Writing the prompt, looking at the photographs,
-      building the page. Usually three to eight minutes.`;
-  };
-  tick();
-  const clock = setInterval(tick, 1000);
   let data;
   try {
-    const res = await fetch("/api/design", {method: "POST",
+    data = await (await fetch("/api/design", {method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({lead_id: WS.lead_id})});
-    data = await res.json();
+      body: JSON.stringify({lead_id: WS.lead_id})})).json();
   } catch (err) {
-    data = {error: "The design request failed: " + err};
+    data = {error: "The design could not be started: " + err};
   }
-  clearInterval(clock);
-  if (!data.version) {
-    if (wait) wait.textContent = data.error || "The design run did not finish.";
-    if (button) { button.disabled = false; button.textContent = "Try again"; }
+  if (!data.designing) {
+    const wait = $("#design-wait");
+    if (wait) wait.textContent = data.error || "The design could not be started.";
+    if (button) button.disabled = false;
     return;
   }
-  await openWorkspace(WS.lead_id, WS.name);
+  WS.designing = data.designing;
+  watchDesign();
+}
+
+function watchDesign() {
+  if (DESIGN_WATCH) clearInterval(DESIGN_WATCH);
+  const lead = WS && WS.lead_id, began = Date.parse(WS.designing);
+  const tick = async (ask) => {
+    // The workspace was closed or another lead opened: stop watching this one.
+    if (!WS || WS.lead_id !== lead) { clearInterval(DESIGN_WATCH); DESIGN_WATCH = null; return; }
+    const button = $("#design-first"), wait = $("#design-wait");
+    if (button) button.disabled = true;
+    const s = Math.max(0, Math.round((Date.now() - began) / 1000));
+    const steps = WS.designSteps || [];
+    if (wait) wait.innerHTML = `<span class="spin"></span> Designing — ${Math.floor(s / 60)}m
+      ${String(s % 60).padStart(2, "0")}s. Usually three to eight minutes; it keeps running
+      if you leave this page.
+      ${steps.map((step, i) => `<span class="design-step${i === steps.length - 1
+        ? " now" : ""}">${i === steps.length - 1 ? "→" : "✓"} ${esc(step)}</span>`).join("")}`;
+    if (!ask) return;
+    try {
+      const data = await (await fetch("/api/workspace?id=" + lead)).json();
+      if (WS && WS.lead_id === lead) WS.designSteps = data.design_steps || WS.designSteps;
+      if (!data.designing && WS && WS.lead_id === lead) {
+        clearInterval(DESIGN_WATCH); DESIGN_WATCH = null;
+        await openWorkspace(lead, WS.name);
+      }
+    } catch {}
+  };
+  let n = 0;
+  tick(false);
+  DESIGN_WATCH = setInterval(() => tick(++n % 2 === 0), 1000);
 }
 
 async function buildFirst() {

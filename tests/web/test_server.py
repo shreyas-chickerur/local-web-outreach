@@ -160,7 +160,7 @@ def test_a_new_lead_is_designed_from_a_prompt_written_from_its_brief(tmp_path, m
 
     handed = {}
 
-    def fake_design(conn, lead, prompt_path):
+    def fake_design(conn, lead, prompt_path, on_step=None):
         handed["prompt"] = Path(prompt_path).read_text()
         handed["path"] = Path(prompt_path)
         return {"version": sites.save(conn, lead, "<p>designed</p>", spec=""),
@@ -399,3 +399,59 @@ def test_research_says_what_it_is_doing_while_it_runs(monkeypatch, tmp_path):
     monkeypatch.setattr(server, "build_brief", research)
     assert "error" not in server.lookup("Yama Izakaya", None, None, "abc")
     assert seen == ["read page 3/24: https://yama.test/menu"]
+
+
+def test_a_design_run_outlives_the_page_and_a_second_click_starts_nothing(
+        tmp_path, monkeypatch):
+    """Yama's design was tied to the request that started it. Leaving the page
+    left no sign of it and a live button, and coming back and clicking started
+    a second paid run. The run now belongs to the server: the workspace shows
+    it running, a second start is refused, and the outcome lands in the thread."""
+    import threading
+    from pathlib import Path
+
+    from app.store import db, leads, sites
+
+    monkeypatch.setattr(db, "DEFAULT_PATH", tmp_path / "workbench.db")
+    fixture = json.loads(Path("tests/fixtures/briefs/restaurant-rich.json").read_text())
+    with db.session() as conn:
+        lead_id = leads.save_brief(conn, fixture)
+    release, runs = threading.Event(), []
+
+    def slow_design(conn, lead, prompt_path, on_step=None):
+        runs.append(prompt_path)
+        on_step("looking at photograph 3")
+        release.wait(5)
+        return {"version": sites.save(conn, lead, "<p>designed</p>", spec=""),
+                "cost_usd": 2.0, "folder": "", "why": "", "flags": []}
+
+    monkeypatch.setattr(server.bridge, "design", slow_design)
+    first = server.start_design(lead_id)
+    assert first["designing"] and not first["already"]
+    assert server.start_design(lead_id)["already"]
+    for _ in range(100):
+        if runs:
+            break
+        threading.Event().wait(0.05)
+    during = server.workspace(lead_id)
+    assert during["designing"] == first["designing"]
+    assert "looking at photograph 3" in during["design_steps"]
+    release.set()
+    for _ in range(100):
+        if not server.workspace(lead_id)["designing"]:
+            break
+        threading.Event().wait(0.05)
+    after = server.workspace(lead_id)
+    assert after["designing"] is None and after["versions"] and len(runs) == 1
+    assert "Designed v1" in after["thread"][-1]["text"]
+
+
+def test_research_fetches_the_photographs_together_at_both_widths(monkeypatch):
+    """A re-crawl gives every photograph a new address, and opening the
+    workspace then downloaded them one at a time before it could draw."""
+    fetched = []
+    monkeypatch.setattr(server, "google_places_api_key", lambda: "key")
+    monkeypatch.setattr(server, "fetch_photo",
+                        lambda key, name, width: fetched.append((name, width)))
+    server._fetch_photographs(["a", "b"])
+    assert sorted(fetched) == [("a", 1600), ("a", 2400), ("b", 1600), ("b", 2400)]

@@ -19,15 +19,19 @@ import hashlib
 import json
 import re
 import sqlite3
+from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from claude_agent_sdk import (
+    AssistantMessage,
     ClaudeAgentOptions,
     PermissionResultAllow,
     PermissionResultDeny,
     ResultMessage,
+    TextBlock,
+    ToolUseBlock,
     query,
 )
 
@@ -151,8 +155,38 @@ def prepare(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> Path:
     return folder
 
 
-async def _run(folder: Path, told: str | None = None,
-               ceiling: float = CEILING_USD) -> tuple[ResultMessage | None, str]:
+def say_step(block: ToolUseBlock | TextBlock) -> str:
+    """One step of a run in words a person watching the clock can follow.
+
+    A design run is minutes of silence otherwise: the screen could say only
+    that it was running, never what it was doing.
+    """
+    if isinstance(block, TextBlock):
+        first = block.text.strip().split("\n")[0]
+        return first[:140] + ("…" if len(first) > 140 else "")
+    target = str(block.input.get("file_path") or block.input.get("path")
+                 or block.input.get("pattern") or "")
+    name = Path(target).name
+    if block.name == "Read":
+        if name.endswith(".jpg"):
+            return f"looking at photograph {name.split('.')[0]}"
+        if name == "prompt.md":
+            return "reading the brief and the playbook"
+        if name.startswith("logo"):
+            return "looking at the logo"
+        return f"reading {name}"
+    if block.name == "Write":
+        return f"writing {name}" if name != "index.html" else "writing the page"
+    if block.name == "Edit":
+        return f"revising {name}" if name != "index.html" else "revising the page"
+    if block.name == "Glob":
+        return "listing the files it was given"
+    return block.name
+
+
+async def _run(folder: Path, told: str | None = None, ceiling: float = CEILING_USD,
+               on_step: Callable[[str], None] | None = None,
+               ) -> tuple[ResultMessage | None, str]:
     """The run's result, if one arrived, and the error that ended it, if any.
 
     A crash before the result used to surface only as a traceback, cut off by
@@ -166,15 +200,20 @@ async def _run(folder: Path, told: str | None = None,
         async for message in query(prompt=told, options=options(folder, ceiling)):
             if isinstance(message, ResultMessage):
                 result = message
+            elif on_step and isinstance(message, AssistantMessage):
+                for block in message.content:
+                    if isinstance(block, ToolUseBlock | TextBlock):
+                        on_step(say_step(block))
     except Exception as exc:  # noqa: BLE001 — a failed run still reports what it spent
         error = f"{type(exc).__name__}: {exc}"
     return result, error
 
 
-def design(conn: sqlite3.Connection, lead_id: int, prompt_path: Path) -> dict:
+def design(conn: sqlite3.Connection, lead_id: int, prompt_path: Path,
+           on_step: Callable[[str], None] | None = None) -> dict:
     """Run one design and save it as a new version, or say why not."""
     folder = prepare(conn, lead_id, prompt_path)
-    result, error = asyncio.run(_run(folder))
+    result, error = asyncio.run(_run(folder, on_step=on_step))
     flags = [] if _logo_file(folder) else [
         "No logo found for this business. Correct the Logo field on the workbench "
         "with its address, then run the design again."]

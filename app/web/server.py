@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import json
 import threading
+from concurrent.futures import ThreadPoolExecutor
+from datetime import UTC, datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
@@ -61,6 +63,15 @@ def progress(token: str) -> list[str]:
     return list(_progress.get(token, []))
 
 
+def _fetch_photographs(names: list[str]) -> None:
+    key = google_places_api_key() or ""
+    if not key or not names:
+        return
+    jobs = [(name, width) for name in names for width in (1600, photos_api.MAX_WIDTH)]
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        list(pool.map(lambda job: fetch_photo(key, job[0], width=job[1]), jobs))
+
+
 def lookup(query: str, location: str | None, notes: str | None, token: str = "") -> dict:
     """Run a brief, store it, and return it with anything you have confirmed
     already applied on top. Never raises."""
@@ -82,6 +93,13 @@ def lookup(query: str, location: str | None, notes: str | None, token: str = "")
     except Exception as exc:           # a source being down must not blank the UI
         return {"error": f"Lookup failed: {type(exc).__name__}: {exc}"}
 
+    # Every re-crawl gives the photographs new addresses, so none is on disk
+    # yet, and whatever needed one next downloaded them one at a time: opening
+    # Yama's workspace waited on ten. They are fetched here, together, where a
+    # wait is expected and shown, at the two widths the workbench asks for.
+    if say:
+        say("fetching their photographs")
+    _fetch_photographs(list(brief.place_photos or []))
     payload = brief_to_dict(brief)
     # A permanent, never-overwritten copy of THIS crawl, before the DB's own
     # cached row (which the next re-crawl will overwrite) ever sees it — so
@@ -286,6 +304,9 @@ def workspace(lead_id: int) -> dict:
             # The version Shreyas last marked as a good site: the checkpoint an
             # edit that goes wrong comes back to.
             "master": leads.master_version(conn, lead_id),
+            # When this lead's design run started, while one is running.
+            "designing": _designing.get(lead_id),
+            "design_steps": list(_design_steps.get(lead_id, []))[-6:],
         }
 
 
@@ -359,7 +380,7 @@ def _edit(conn, lead_id: int, sentence: str, parent: int) -> dict:
             "thread": messages.thread(conn, lead_id)}
 
 
-def design_first(conn, lead_id: int) -> dict:
+def design_first(conn, lead_id: int, on_step=None) -> dict:
     """A lead's site from a design run: a prompt written from its brief, then the run.
 
     The build button used to reach only the older generator, because the design
@@ -367,7 +388,9 @@ def design_first(conn, lead_id: int) -> dict:
     page came out of that generator, looking nothing like the two designed ones.
     """
     path = design_prompt.write(conn, lead_id)
-    outcome = bridge.design(conn, lead_id, path)
+    if on_step:
+        on_step("gathering the photographs and the logo")
+    outcome = bridge.design(conn, lead_id, path, on_step=on_step)
     said = (f"Designed v{outcome['version']} from {path.name}." if outcome["version"]
             else f"The design run did not finish: {outcome['why']}.")
     said = " ".join([said, *outcome["flags"], f"(${outcome['cost_usd']:.2f})"])
@@ -376,6 +399,44 @@ def design_first(conn, lead_id: int) -> dict:
             "error": "" if outcome["version"] else said, "cost_usd": outcome["cost_usd"],
             "versions": sites.versions(conn, lead_id), "events": leads.events(conn, lead_id),
             "thread": messages.thread(conn, lead_id)}
+
+
+# Design runs in progress: lead id to when the run started. A run takes minutes
+# and was tied to the request that started it, so leaving the page left the
+# screen with no sign of it and a live button: Yama's second click started a
+# second paid run forty seconds after the first. The run now belongs to the
+# server; the page starts it, and any page can see it and wait for it. A run
+# dies with the server process, so restarting the workbench ends it.
+_designing: dict[int, str] = {}
+_design_steps: dict[int, list[str]] = {}
+_designing_lock = threading.Lock()
+
+
+def start_design(lead_id: int) -> dict:
+    """Start a design run for this lead, unless one is already running."""
+    with _designing_lock:
+        if lead_id in _designing:
+            return {"designing": _designing[lead_id], "already": True}
+        started = datetime.now(UTC).isoformat(timespec="seconds")
+        _designing[lead_id] = started
+        _design_steps[lead_id] = ["writing the prompt from the brief"]
+
+    def run() -> None:
+        try:
+            with db.session() as conn:
+                design_first(conn, lead_id, on_step=_design_steps[lead_id].append)
+        except Exception as exc:                               # noqa: BLE001
+            # Said in the conversation, where the page looks for the outcome.
+            with db.session() as conn:
+                messages.add(conn, lead_id, "assistant",
+                             f"The design run failed: {type(exc).__name__}: {exc}")
+        finally:
+            with _designing_lock:
+                _designing.pop(lead_id, None)
+                _design_steps.pop(lead_id, None)
+
+    threading.Thread(target=run, name=f"design-{lead_id}", daemon=True).start()
+    return {"designing": started, "already": False}
 
 
 _ANNOTATE = Path(__file__).with_name("annotate.js")
@@ -596,7 +657,7 @@ class Handler(BaseHTTPRequestHandler):
                     self._json(generate(lead_id, str(body.get("spec", ""))))
                     return
                 elif route == "/api/design":
-                    self._json(design_first(conn, lead_id))
+                    self._json(start_design(lead_id))
                     return
                 elif route == "/api/build":
                     # One stage at a time, so the screen can say which one is

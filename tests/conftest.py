@@ -77,3 +77,12 @@ def business_folders_in_a_temporary_place(monkeypatch, tmp_path):
     from app.store import folders
 
     monkeypatch.setattr(folders, "ROOT", tmp_path / "sites")
+
+
+@pytest.fixture(autouse=True)
+def no_photograph_downloads(monkeypatch):
+    """Research fetches a lead's photographs from Google as it finishes. With a
+    real key in the environment every lookup test would pay for them."""
+    from app.web import server
+
+    monkeypatch.setattr(server, "fetch_photo", lambda key, name, width=2400: None)
