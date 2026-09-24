@@ -8,7 +8,9 @@ the browser cannot drift from what the terminal prints.
 from __future__ import annotations
 
 import json
+import re
 import threading
+import uuid
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -23,6 +25,7 @@ from app.cli import available_directories
 from app.core.config import DEFAULT_PORT, google_places_api_key
 from app.design import bridge
 from app.design import prompt as design_prompt
+from app.review import layout
 from app.review import run as review_run
 from app.site.census import measure as measure_census
 from app.site.pipeline import (
@@ -101,6 +104,23 @@ def lookup(query: str, location: str | None, notes: str | None, token: str = "")
         say("fetching their photographs")
     _fetch_photographs(list(brief.place_photos or []))
     payload = brief_to_dict(brief)
+    with db.session() as conn:
+        known = leads.find(conn, payload)
+    if known is None:
+        # A preview until the operator says otherwise. Opening a prospect used
+        # to save it as a lead on the spot, so a card clicked out of curiosity
+        # became a lead nobody chose (Oishii Sushi). Kept here, so making it a
+        # lead saves this research rather than paying for it again.
+        preview = uuid.uuid4().hex
+        _previews[preview] = payload
+        while len(_previews) > _MAX_PREVIEWS:
+            _previews.pop(next(iter(_previews)))
+        return {**payload, "preview_id": preview}
+    return _keep(payload)
+
+
+def _keep(payload: dict) -> dict:
+    """Store research on its lead, creating the lead if it is new."""
     # A permanent, never-overwritten copy of THIS crawl, before the DB's own
     # cached row (which the next re-crawl will overwrite) ever sees it — so
     # "what did the model actually see" always has a real file and hash to
@@ -112,6 +132,20 @@ def lookup(query: str, location: str | None, notes: str | None, token: str = "")
     with db.session() as conn:
         lead_id = leads.save_brief(conn, payload)
         return leads.brief_with_overrides(conn, lead_id)
+
+
+# Research not yet made a lead, by the id the page holds; the newest few only.
+_previews: dict[str, dict] = {}
+_MAX_PREVIEWS = 20
+
+
+def make_lead(preview_id: str) -> dict:
+    """Make the research on screen a lead, without researching it again."""
+    payload = _previews.pop(preview_id, None)
+    if payload is None:
+        return {"error": "That research is no longer held (the workbench restarted). "
+                         "Research the business again, then make it a lead."}
+    return _keep(payload)
 
 
 def locate(query: str) -> dict:
@@ -310,6 +344,34 @@ def workspace(lead_id: int) -> dict:
         }
 
 
+# "undo", "undo that", "go back", "revert": the whole sentence, nothing more, so
+# "undo the colour change and make the menu bigger" still reaches an edit.
+_UNDO = re.compile(r"\s*(undo( that| it| the last change)?|go back|revert( that)?)[.!]?\s*",
+                   re.IGNORECASE)
+
+
+def _undo(conn, lead_id: int, current: dict | None) -> dict:
+    """The version the one on screen was made from, shown again. No model, no cost.
+
+    An edit that went wrong could only be put right by asking for another edit,
+    paid for, of a page that had just been made worse. The version stays in the
+    history; the next change simply starts from the one before it.
+    """
+    back = current.get("parent_version") if current else None
+    if current is None:
+        said = "There is no version yet, so there is nothing to undo."
+    elif not back:
+        said = f"v{current['version']} is the first version; there is nothing before it."
+    else:
+        said = (f"Back to v{back}, the version v{current['version']} was made from. "
+                f"v{current['version']} is kept in the history; your next change starts "
+                f"from v{back}.")
+    messages.add(conn, lead_id, "assistant", said, version=back)
+    return {"lead_id": lead_id, "version": back, "rejected": False, "unchanged": not back,
+            "cost_usd": 0.0, "versions": sites.versions(conn, lead_id),
+            "events": leads.events(conn, lead_id), "thread": messages.thread(conn, lead_id)}
+
+
 def iteration(lead_id: int, sentence: str, parent: object) -> dict:
     """Run one chat instruction and return the result plus the refreshed panes.
 
@@ -329,6 +391,8 @@ def iteration(lead_id: int, sentence: str, parent: object) -> dict:
         versions = sites.versions(conn, lead_id)
         base = next((v for v in versions if v["version"] == parent_version),
                     versions[0] if versions else None)
+        if _UNDO.fullmatch(sentence):
+            return _undo(conn, lead_id, base)
         # A page the old renderer did not build has no spec to restyle: the
         # chat box could not touch a single designed version of Fish Shack.
         if base is not None and not (base.get("spec") or "").strip():
@@ -371,13 +435,26 @@ def _edit(conn, lead_id: int, sentence: str, parent: int) -> dict:
                  for verdict in ("contradicted", "unsourced", "defect")
                  if before.get(verdict, 0) != after.get(verdict, 0)]
         said += (f" Saved as v{outcome['version']}. Checks: "
-                 + ("; ".join(moved) if moved else "unchanged") + ".")
+                 + ("; ".join(moved) if moved else "unchanged") + ". "
+                 + _layout_line(conn, lead_id, outcome["version"]))
     said += f" (${outcome['cost_usd']:.2f})"
     messages.add(conn, lead_id, "assistant", said, version=outcome["version"])
     return {"lead_id": lead_id, "version": outcome["version"], "rejected": False,
             "unchanged": outcome["version"] is None, "cost_usd": outcome["cost_usd"],
             "versions": sites.versions(conn, lead_id), "events": leads.events(conn, lead_id),
             "thread": messages.thread(conn, lead_id)}
+
+
+def _layout_line(conn, lead_id: int, version: int) -> str:
+    """Whether a new version's layout holds, measured in Chrome at every screen size.
+
+    Yama's opening section spilled over the hours below at most widths, and
+    the only check that could have seen it ran in the test suite, never on a
+    version anyone made.
+    """
+    brief = leads.brief_with_overrides(conn, lead_id)
+    return layout.summary(layout.defects(sites.html_for(conn, lead_id, version) or "",
+                                         brief, lead_id))
 
 
 def design_first(conn, lead_id: int, on_step=None) -> dict:
@@ -391,7 +468,8 @@ def design_first(conn, lead_id: int, on_step=None) -> dict:
     if on_step:
         on_step("gathering the photographs and the logo")
     outcome = bridge.design(conn, lead_id, path, on_step=on_step)
-    said = (f"Designed v{outcome['version']} from {path.name}." if outcome["version"]
+    said = (f"Designed v{outcome['version']} from {path.name}. "
+            + _layout_line(conn, lead_id, outcome["version"]) if outcome["version"]
             else f"The design run did not finish: {outcome['why']}.")
     said = " ".join([said, *outcome["flags"], f"(${outcome['cost_usd']:.2f})"])
     messages.add(conn, lead_id, "assistant", said, version=outcome["version"])
@@ -569,8 +647,8 @@ def refresh_review(conn, lead_id: int, version: int) -> dict:
     if lead is None or html is None:
         raise ValueError("nothing to re-check")
     brief, capture, where = _review_brief(conn, lead_id, str(lead["name"]))
-    return reviews.refresh(conn, current["id"],
-                           review_run.findings(html, brief, capture))
+    return reviews.refresh(conn, current["id"], review_run.findings(html, brief, capture)
+                           + [f.as_row() for f in layout.defects(html, brief, lead_id)])
 
 
 def open_review(conn, lead_id: int, version: int) -> dict:
@@ -591,7 +669,8 @@ def open_review(conn, lead_id: int, version: int) -> dict:
     if html is None:
         raise ValueError(f"there is no version {version} to review")
     brief, capture, where = _review_brief(conn, lead_id, str(lead["name"]))
-    found = review_run.findings(html, brief, capture)
+    found = (review_run.findings(html, brief, capture)
+             + [f.as_row() for f in layout.defects(html, brief, lead_id)])
     opened = reviews.open_review(conn, lead_id, version, found,
                                  brief_hash=where["brief_hash"],
                                  capture_hash=where["capture_hash"])
@@ -951,6 +1030,12 @@ class Handler(BaseHTTPRequestHandler):
                     self._json(leads.brief_with_overrides(conn, lead_id))
             except ValueError as exc:
                 self._json({"error": str(exc)}, 400)
+            return
+        if route.path == "/api/lead":
+            params = parse_qs(route.query)
+            payload = make_lead((params.get("preview") or [""])[0])
+            self._send(200 if "error" not in payload else 400, json.dumps(payload).encode(),
+                       "application/json")
             return
         if route.path == "/api/progress":
             token = (parse_qs(route.query).get("t") or [""])[0]

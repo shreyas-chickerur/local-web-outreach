@@ -492,6 +492,11 @@
   .diag .no{background:var(--warn-bg);color:var(--warn)}
   .diag .stop{background:var(--bad-bg);color:var(--bad);font-weight:600}
   .ws-group{margin:14px 0;padding:12px;border:1px solid var(--line);border-radius:8px}
+  .keep{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    margin:0 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:8px;
+    background:var(--raise)}
+  .keep span{display:block;color:var(--dim);font-size:13px;margin-top:2px}
+  .preview-mode .confirm, .preview-mode .fixit, .preview-mode .statusbar{display:none}
   .design-step{display:block;margin-top:4px;color:var(--faint);font-size:12px}
   .design-step.now{color:var(--ink)}
   .diag-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;
@@ -986,7 +991,27 @@ $("#f").onsubmit = async e => {
 
 // Rendering is the one place a thrown exception is invisible: the loading
 // message simply stays forever. Say what broke instead.
+async function makeLead(previewId) {
+  const button = $("#make-lead");
+  if (button) { button.disabled = true; button.textContent = "Saving…"; }
+  let data;
+  try {
+    data = await (await fetch("/api/lead?preview=" + encodeURIComponent(previewId))).json();
+  } catch (err) {
+    data = {error: "Could not make it a lead: " + err};
+  }
+  if (data.error) {
+    if (button) { button.disabled = false; button.textContent = "Make this a lead"; }
+    $("#out").insertAdjacentHTML("afterbegin", `<div class="err in">${esc(data.error)}</div>`);
+    return;
+  }
+  LEAD = data.lead_id;
+  SITE = null;
+  paint(data);
+}
+
 function paint(data) {
+  $("#out").classList.toggle("preview-mode", !!data.preview_id);
   try {
     $("#out").innerHTML = render(data);
   } catch (err) {
@@ -1244,7 +1269,9 @@ function drawThread() {
     <div class="turn ${turn.role}">
       <div class="what">${esc(turn.text)}</div>
       ${turn.role === "assistant" && turn.version
-        ? `<div class="meta"><button onclick="pickVersion(${turn.version})">v${turn.version}</button></div>`
+        ? `<div class="meta"><button onclick="pickVersion(${turn.version})">v${turn.version}</button>
+           <button onclick="undoFrom(${turn.version})" title="Go back to the version this was
+             made from. Free; nothing is deleted.">Undo</button></div>`
         : ""}
     </div>`).join("");
   return `<div class="chat">${turns || `<p class="chat-empty">Say what to change on
@@ -1934,6 +1961,16 @@ function setDevice(kind) { WS.device = kind; drawWorkspace(); }
 // One instruction becomes one version. Deleted by a bulk edit and unnoticed
 // because a missing handler fails silently: the form submits, nothing throws
 // anywhere visible, and the page simply sits there.
+// Undo from a reply: show that version, then say "undo", so the server goes back
+// to the version it was made from and says so in the thread.
+function undoFrom(version) {
+  WS.active = version;
+  const box = $("#ws-input");
+  if (!box || box.disabled) return;
+  box.value = "undo";
+  sendInstruction();
+}
+
 async function sendInstruction() {
   const box = $("#ws-input");
   const sentence = (box.value || "").trim();
@@ -2319,7 +2356,16 @@ function render(d) {
       d.assumptions.map(a => `<div class="note"><span class="m">·</span><span>${esc(a)}</span></div>`).join("")
     }</div></section>` : "";
 
-  return `${BACK}<div class="hero in">
+  // Research is a preview until the operator chooses the business; nothing is
+  // saved, and the button keeps this research rather than running it again.
+  const keep = d.preview_id ? `<div class="keep in">
+      <div><b>Preview — not a lead yet</b>
+        <span>Nothing is saved. Make it a lead to keep this research and design its
+          site.</span></div>
+      <button class="mini primary" id="make-lead"
+        onclick="makeLead('${esc(d.preview_id)}')">Make this a lead</button></div>` : "";
+
+  return `${BACK}${keep}<div class="hero in">
       <div>
         <h2>${esc(d.name)}</h2>
         <div class="meta">

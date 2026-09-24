@@ -44,6 +44,7 @@ markers = [
     "functional: end-to-end spine flow, may use SQLite and/or Postgres.",
     "performance: throughput/latency benchmarks (slower).",
     "postgres: requires a reachable PostgreSQL server (skipped otherwise).",
+    "layout: measures a page in a real Chrome (skipped without one).",
 ]
 addopts = "-ra"
 

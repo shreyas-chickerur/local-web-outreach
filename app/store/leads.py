@@ -129,6 +129,24 @@ def site_host(url: str | None) -> str:
     return host[4:] if host.startswith("www.") else host
 
 
+def find(conn: sqlite3.Connection, brief_json: dict) -> int | None:
+    """The lead this brief is about, if it is one already."""
+    key = lead_key(brief_json["name"], brief_json.get("location"))
+    row = conn.execute("SELECT id FROM leads WHERE key = ?", (key,)).fetchone()
+    if row is not None:
+        return int(row["id"])
+    # A business looked up by name and by URL must land on the same lead. Two
+    # rows would split its history, and the confirmation you recorded after
+    # talking to them would silently stop applying.
+    host = site_host(brief_json.get("website_url"))
+    if host:
+        for other in conn.execute(
+                "SELECT id, website_url FROM leads WHERE website_url IS NOT NULL"):
+            if site_host(other["website_url"]) == host:
+                return int(other["id"])
+    return None
+
+
 def save_brief(conn: sqlite3.Connection, brief_json: dict) -> int:
     """Insert or refresh a lead. Returns its id.
 
@@ -137,17 +155,8 @@ def save_brief(conn: sqlite3.Connection, brief_json: dict) -> int:
     """
     key = lead_key(brief_json["name"], brief_json.get("location"))
     now = _now()
-    row = conn.execute("SELECT id FROM leads WHERE key = ?", (key,)).fetchone()
-    # A business looked up by name and by URL must land on the same lead. Two
-    # rows would split its history, and the confirmation you recorded after
-    # talking to them would silently stop applying.
-    host = site_host(brief_json.get("website_url"))
-    if row is None and host:
-        for other in conn.execute(
-                "SELECT id, website_url FROM leads WHERE website_url IS NOT NULL"):
-            if site_host(other["website_url"]) == host:
-                row = other
-                break
+    found = find(conn, brief_json)
+    row = None if found is None else {"id": found}
     payload = json.dumps(brief_json)
     if row is None:
         cur = conn.execute(

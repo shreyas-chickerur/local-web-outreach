@@ -86,3 +86,15 @@ def no_photograph_downloads(monkeypatch):
     from app.web import server
 
     monkeypatch.setattr(server, "fetch_photo", lambda key, name, width=2400: None)
+
+
+@pytest.fixture(autouse=True)
+def no_layout_measuring(request, monkeypatch):
+    """The layout check starts Chrome four times per version. A test that
+    measures layout says so with the `layout` marker; the rest see a clean page."""
+    if request.node.get_closest_marker("layout"):
+        return
+    from app.review import layout
+
+    monkeypatch.setattr(layout, "defects", lambda html, brief, lead_id: [])
+

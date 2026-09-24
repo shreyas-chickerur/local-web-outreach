@@ -70,15 +70,20 @@ def test_a_successful_lookup_archives_the_crawl(monkeypatch, tmp_path):
     replace."""
     from pathlib import Path
 
-    from app.store import brief_archive, db, folders
+    from app.store import brief_archive, db, folders, leads
 
     monkeypatch.setattr(db, "DEFAULT_PATH", tmp_path / "workbench.db")
     monkeypatch.setattr(server, "build_brief",
                         lambda *a, **kw: _brief(name="Craftway Kitchen"))
     result = server.lookup("craftwaykitchen.com", None, None)
-    assert "error" not in result
+    assert "error" not in result and result["preview_id"]
+    # A preview saves nothing: no crawl archived, no lead.
+    assert brief_archive.current("Craftway Kitchen") is None
+    with db.session() as conn:
+        assert leads.all_leads(conn) == []
+    kept = server.make_lead(result["preview_id"])
     pointer = brief_archive.current("Craftway Kitchen")
-    assert pointer is not None
+    assert kept["lead_id"] and pointer is not None
     assert Path(pointer["path"]).parent == folders.of("Craftway Kitchen") / "briefs"
 
 
@@ -455,3 +460,57 @@ def test_research_fetches_the_photographs_together_at_both_widths(monkeypatch):
                         lambda key, name, width: fetched.append((name, width)))
     server._fetch_photographs(["a", "b"])
     assert sorted(fetched) == [("a", 1600), ("a", 2400), ("b", 1600), ("b", 2400)]
+
+
+def test_undo_goes_back_to_the_version_an_edit_started_from_and_costs_nothing(
+        tmp_path, monkeypatch):
+    """An edit that made the page worse could only be put right by paying for
+    another edit of the worse page. "undo" goes back to the version it was made
+    from, without a model, and a sentence that only starts with "undo" is still
+    an edit."""
+    from app.store import db, leads, sites
+
+    conn = db.connect(tmp_path / "t.db")
+    lead = leads.save_brief(conn, {
+        "name": "Fish Shack", "location": "Plano, TX", "website_url": "http://fish.test/",
+        "facts": [], "published": {}, "assumptions": [], "open_questions": [],
+        "sources_consulted": []})
+    sites.save(conn, lead, "<p>good</p>", spec="")
+    sites.save(conn, lead, "<p>worse</p>", spec="", parent_version=1)
+    conn.close()
+    monkeypatch.setattr(server.db, "session", lambda: _session(tmp_path / "t.db"))
+    edits = []
+    monkeypatch.setattr(server.bridge, "edit", lambda conn, lead_id, sentence, parent_version=None:
+                        edits.append(sentence) or {"version": None, "cost_usd": 0.02,
+                                                   "reply": "Nothing changed.", "why": "",
+                                                   "flags": []})
+
+    payload = server.iteration(lead, "Undo that.", 2)
+    assert payload["version"] == 1 and payload["cost_usd"] == 0.0 and edits == []
+    assert "Back to v1" in payload["thread"][-1]["text"]
+    assert server.iteration(lead, "undo", 1)["version"] is None
+    server.iteration(lead, "undo the colour and make the menu bigger", 2)
+    assert edits == ["undo the colour and make the menu bigger"]
+
+
+def test_a_prospect_becomes_a_lead_only_when_chosen_and_is_not_researched_twice(
+        tmp_path, monkeypatch):
+    """Opening a prospect card saved it as a lead on the spot: Oishii Sushi
+    became a lead nobody chose. Research is now a preview; making it a lead
+    keeps that research without paying for it again, and researching a lead
+    that already exists refreshes it as before."""
+    from app.store import db, leads
+
+    monkeypatch.setattr(db, "DEFAULT_PATH", tmp_path / "workbench.db")
+    crawls = []
+    monkeypatch.setattr(server, "build_brief", lambda *a, **kw: crawls.append(1)
+                        or _brief(name="Yama Izakaya & Sushi"))
+    preview = server.lookup("Yama Izakaya & Sushi", "Plano, TX", None)
+    with db.session() as conn:
+        assert leads.all_leads(conn) == []
+    lead = server.make_lead(preview["preview_id"])
+    assert lead["lead_id"] and len(crawls) == 1
+    assert "error" in server.make_lead(preview["preview_id"])
+    again = server.lookup("Yama Izakaya & Sushi", "Plano, TX", None)
+    assert again["lead_id"] == lead["lead_id"] and "preview_id" not in again
+
