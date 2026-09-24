@@ -705,6 +705,28 @@ def test_a_menu_published_only_as_an_image_is_read_once_and_kept(monkeypatch):
     assert len(calls) == 2  # the reader is asked; its own cache decides the cost
 
 
+
+def test_an_icon_named_like_a_menu_is_not_sent_to_the_model(monkeypatch):
+    """Yama's four "menus" were 230 by 136 pictures of a piece of sushi on
+    buttons linking to Yelp. Each cost a model call and came back "the model
+    could not read it", which reads as a failure to read a real menu."""
+    import struct
+
+    import app.workbench.brief as brief_module
+
+    icon = (b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR" + struct.pack(">II", 230, 136)
+            + b"\x08\x06\x00\x00\x00" + b"\x00" * 8)
+    monkeypatch.setattr(brief_module, "download", lambda url, timeout=15.0: (icon, ""))
+    calls = []
+    monkeypatch.setattr(brief_module.image_text, "read",
+                        lambda data, media_type=None: calls.append(data) or ("x", ""))
+    images = [p for p in _pages(build_brief("craftwaykitchen.com",
+                                            fetcher=_Fetcher(_IMAGE_MENU_SITE)))
+              if p["kind"] == "image"]
+    assert calls == []
+    assert not images[0]["read"] and "230" in images[0]["reason"]
+
+
 # ------------------------------- their logo -------------------------------- #
 _FISH_SHACK_HOME = """
 <html><head><title>Fish Shack - Plano, Texas</title></head><body>

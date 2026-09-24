@@ -22,6 +22,7 @@ from dataclasses import dataclass, field, replace
 
 from app.adapters import image_text
 from app.adapters.directory import DirectoryPlace, DirectorySource
+from app.adapters.imageinfo import dimensions_of
 from app.adapters.pdf_read import read_pdf_text
 from app.adapters.site_fetch import FetchResult, SiteFetcher, default_fetcher, download
 from app.site.visible import visible_text_runs
@@ -237,6 +238,10 @@ def _page_entry(url: str, result: FetchResult) -> dict:
     return {"url": url, "kind": "page", "read": False, "reason": reason, "text": ""}
 
 
+# The long edge, in pixels, below which a picture cannot be a readable menu.
+_SMALLEST_MENU_EDGE = 400
+
+
 def _read_menu_images(extracted: ExtractedSite, pages: list[dict]) -> None:
     """Read every menu published only as an image, and keep its text as a page.
 
@@ -248,7 +253,16 @@ def _read_menu_images(extracted: ExtractedSite, pages: list[dict]) -> None:
         if media.get("kind") != "image":
             continue
         data, failed = download(media["url"])
-        text, why = image_text.read(data) if data else (None, failed)
+        size = dimensions_of(data) if data else None
+        if size and max(size) < _SMALLEST_MENU_EDGE:
+            # Yama's "menus" were sushi icons on buttons, named menu_dallas.png
+            # and so on. A picture this small cannot hold a menu, so it is not
+            # paid for, and the reason says what it was rather than that a
+            # real menu could not be read.
+            text, why = None, (f"a {size[0]} by {size[1]} picture, too small to be "
+                               "a menu; not read")
+        else:
+            text, why = image_text.read(data) if data else (None, failed)
         media["readable"] = text is not None
         pages.append({"url": media["url"], "kind": "image", "read": bool(text),
                       "reason": "" if text else why, "text": text or ""})
@@ -380,6 +394,8 @@ def _read_their_site(url: str, fetcher: SiteFetcher, *,
     if any(m.get("kind") == "pdf" for m in extracted.menu_media):
         report("reading menu PDF(s)")
     _read_menu_pdfs(extracted, pages)
+    if any(m.get("kind") == "image" for m in extracted.menu_media):
+        report("reading menu images")
     _read_menu_images(extracted, pages)
     return (extracted, True, ("insecure" if check.fault == "certificate" else "ok"),
             check, pages)
@@ -554,6 +570,7 @@ def build_brief(
                 f"{claim.value}")
         raw_claims = [c for c in raw_claims if c not in vague]
 
+    report("corroborating what each source claims")
     brief.facts = corroborate(raw_claims)
     # "mon:0800-1700 tue:..." exists so two sources can be compared. Nobody
     # should have to read it, so put the human phrasing back afterwards.
