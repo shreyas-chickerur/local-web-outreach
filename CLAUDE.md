@@ -43,9 +43,9 @@ every doubt the system has about their business.
 4. **Brief** — the result, archived permanently and stored on the lead.
    `app/store/brief_archive.py`, `app/store/leads.py`.
 5. **Build** — one design run from a prompt written from the brief and the
-   playbook, through the Agent Software Development Kit.
-   `app/design/bridge.py` (`make design`). The workbench's build button still
-   uses the older generator in `app/site/pipeline.py`.
+   playbook (`app/design/prompt.py`), through the Agent Software Development
+   Kit (`app/design/bridge.py`). The workbench's design button runs it as a job
+   the server owns; `make design` runs it from the command line.
 6. **Workbench** — change the page in conversation; every sentence becomes an
    edit run and a new version with a parent. A person marks the master version,
    the last one judged good. `app/web/`, `bridge.edit()`.

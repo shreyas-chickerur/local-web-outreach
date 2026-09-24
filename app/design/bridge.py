@@ -254,7 +254,8 @@ reviews) come only from brief.json: never add or alter one. If the change needs 
 fact brief.json does not hold, leave the page as it is and say so. Any words
 you write are the business speaking on its own site: never quote it back to itself
 or say where a fact came from, and no stock phrases. A dish on the menu in
-brief.json is named exactly as the menu names it.
+brief.json is named exactly as the menu names it; name a dish from a photograph only
+when it is unmistakable, and never more specifically than the photograph shows.
 
 When you are done, reply in one or two plain sentences saying what you changed."""
 

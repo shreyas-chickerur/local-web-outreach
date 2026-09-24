@@ -40,12 +40,18 @@ Google"). Use the plain, specific words the owner would use. No stock phrases: "
 luck", "look no further", "nestled", "elevate", "a feast for the senses", "whether you're
 ... or ...", questions as headings, lists of three for rhythm.
 
-Look at every photograph. Where one shows a dish on the menu, name it exactly as the menu
-does, in its caption and its alt text. Where it matches nothing on the menu, name the dish
-by its usual name if the photograph makes it plain ("chicken yakitori", "tonkotsu ramen");
-the claim check lists that name for the operator to confirm. Never describe a photograph
-as a photograph ("A bowl of ramen."). A menu kept on a listing site sometimes carries that
-site's own filler as a description ("Ray-finned fish" for salmon): never print those."""
+Look at every photograph. Name a dish only with high confidence: when the photograph
+shows it unmistakably. Where it is a dish on the menu, use the menu's exact name. Where it
+matches nothing on the menu but is unmistakable, use its usual name ("tonkotsu ramen");
+the claim check lists that name for the operator to confirm with the business. Name no
+more than you can see: "yakitori", not which cuts. When you are not sure, a short plain
+caption, or none. A wrong dish name is worse than a plain caption. A menu kept on a
+listing site sometimes carries that site's own filler as a description ("Ray-finned
+fish" for salmon): never print those.
+
+Anything that depends on the day or the time (today's hours picked out, "open now") is
+worked out in the visitor's browser, in the business's own time zone, and the hours
+after midnight belong to the evening before. Never write a day into the page."""
 
 # A trade names a restaurant in many ways; a brief with a menu is one whatever it says.
 _FOOD = re.compile(r"restaurant|cafe|café|bar\b|grill|bakery|food|diner|sushi|pizz|izakaya"
